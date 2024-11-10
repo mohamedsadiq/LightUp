@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=K2D:wght@400;500;600;700&display=swap');
+
+body {
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  font-family: 'K2D', sans-serif;
+}
+
+/* Optional: Add some global styles */
+* {
+  box-sizing: border-box;
+  font-family: 'K2D', sans-serif;
+}
+
+code {
+  background-color: #e5e5e5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* Add smooth scrolling to the page */
+html {
+  scroll-behavior: smooth;
+} 

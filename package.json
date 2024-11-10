@@ -28,13 +28,18 @@
     "typescript": "5.3.3"
   },
   "manifest": {
+    "background": {
+      "service_worker": "src/background.ts"
+    },
     "host_permissions": [
       "http://127.0.0.1:1234/*"
     ],
     "permissions": [
       "tabs",
       "activeTab",
-      "scripting"
+      "scripting",
+      "storage"
     ]
+  
   }
 }

@@ -26,7 +26,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
         messages: [
           {
             role: "system",
-            content: `You are a helpful assistant that can explain and summarize text.`
+            content: `You are a helpful assistant that can explain and summarize text. Always complete your thoughts`
           },
           {
             role: "user",
