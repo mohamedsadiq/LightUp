@@ -1,4 +1,4 @@
-# LightUp - AI-Powered Text & Code Assistant
+# LightUp - Instant Insights on Any Text
 
 <p align="center">
   <img src="assets/intro.png" width="100%" height="100%" alt="LightUp Logo">
@@ -105,5 +105,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ---
 
 <p align="center">
-  Made with ❤️ by [@moesadiq](https://twitter.com/sadiq_moo)
+  Made by [@moesadiq](https://twitter.com/sadiq_moo)
 </p>

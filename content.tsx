@@ -179,6 +179,37 @@ function Content() {
     loadSettings();
   }, []);
 
+  const calculatePosition = (clientX: number, clientY: number) => {
+    const padding = 20;
+    const viewportHeight = window.innerHeight;
+    const viewportWidth = window.innerWidth;
+    const popupHeight = 400; // Maximum height of our popup
+    const popupWidth = 300;  // Width of our popup
+
+    // Calculate available space below and to the right
+    const spaceBelow = viewportHeight - clientY;
+    const spaceRight = viewportWidth - clientX;
+
+    // Calculate final position
+    let top = clientY + padding;
+    let left = clientX;
+
+    // If not enough space below, position above
+    if (spaceBelow < popupHeight + padding) {
+      top = clientY - popupHeight - padding;
+    }
+
+    // If not enough space to the right, position to the left
+    if (spaceRight < popupWidth + padding) {
+      left = clientX - popupWidth - padding;
+    }
+
+    return {
+      top: Math.max(padding, Math.min(viewportHeight - popupHeight - padding, top)),
+      left: Math.max(padding, Math.min(viewportWidth - popupWidth - padding, left))
+    };
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const popup = document.querySelector('[data-plasmo-popup]')
@@ -197,10 +228,11 @@ function Content() {
       const text = selection?.toString().trim()
 
       if (text && text.length > 0 && /[a-zA-Z0-9]/.test(text)) {
+        const { top, left } = calculatePosition(event.clientX, event.clientY);
         setSelectedText(text)
         setPosition({
-          x: event.pageX,
-          y: event.pageY
+          x: left,
+          y: top
         })
         setIsVisible(true)
         setError(null)
@@ -372,7 +404,7 @@ function Content() {
       background: "#E9E9E9",
       border: "1px solid #D5D5D5",
       borderRadius: 12,
-      boxShadow: "0 2px 20px rgba(0,0,0,0.08)",
+      boxShadow: "0 2px 20px rgba(0,0,0,0.15)",
       maxWidth: 500,
       fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       maxHeight: "400px",
@@ -620,6 +652,23 @@ function Content() {
     }
   }
 
+  // Add this to handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (isVisible) {
+        // Recalculate position when window is resized
+        const { top, left } = calculatePosition(position.x, position.y);
+        setPosition({
+          x: parseInt(left),
+          y: parseInt(top)
+        });
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isVisible, position]);
+
   return (
     <AnimatePresence mode="wait">
       {isVisible && (
@@ -633,10 +682,12 @@ function Content() {
           zIndex: 9999,
         }}>
           <div style={{
-            position: 'absolute',
+            position: 'fixed',
             left: `${position.x}px`,
-            top: `${position.y + 20}px`,
+            top: `${position.y}px`,
             pointerEvents: 'auto',
+            maxHeight: '80vh',
+            // overflowY: 'auto',
           }}>
             <motion.div 
               style={styles.popup}
