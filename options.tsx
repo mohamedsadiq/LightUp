@@ -46,6 +46,9 @@ function IndexOptions() {
     apiKey: ""
   });
 
+  // Add error state
+  const [error, setError] = useState("");
+
   // Load settings
   useEffect(() => {
     const loadSettings = async () => {
@@ -78,12 +81,16 @@ function IndexOptions() {
         }
       }
 
-      // Save settings
-      await storage.set("settings", settings);
+      // Save settings with await and proper error handling
+      await storage.set("settings", settings).catch(err => {
+        throw new Error(`Storage error: ${err.message}`);
+      });
       
+      setError(""); // Clear any previous errors
       alert("Settings saved successfully!");
     } catch (error) {
       console.error("Save error:", error);
+      setError(error.message || "Failed to save settings");
       alert(error.message || "Failed to save settings");
     }
   };
