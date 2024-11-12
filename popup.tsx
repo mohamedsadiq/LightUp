@@ -149,12 +149,12 @@ function IndexPopup() {
       <div>
         <h3 style={styles.sectionTitle}>Available actions</h3>
         <div style={styles.buttonContainer}>
-          <ActionButton
+          {/* <ActionButton
             mode="translate"
             activeMode={activeMode}
             onClick={() => handleModeChange("translate")}>
             Translate
-          </ActionButton>
+          </ActionButton> */}
           <ActionButton
             mode="summarize"
             activeMode={activeMode}
@@ -165,14 +165,14 @@ function IndexPopup() {
             mode="explain"
             activeMode={activeMode}
             onClick={() => handleModeChange("explain")}>
-            Explain code
+            Explain 
           </ActionButton>
-          <ActionButton
+          {/* <ActionButton
             mode="grammar"
             activeMode={activeMode}
             onClick={() => handleModeChange("grammar")}>
             Grammar Correction
-          </ActionButton>
+          </ActionButton> */}
           <ActionButton
             mode="analyze"
             activeMode={activeMode}
@@ -181,9 +181,18 @@ function IndexPopup() {
           </ActionButton>
         </div>
       </div>
-
+{/* 
       <div>
-        <p style={styles.customizeText}>Customize an action</p>
+        <p style={{
+          fontSize: "14px",
+          color: "#666",
+          marginBottom: "12px",
+          fontFamily: "'K2D', sans-serif"
+        }}>Customize an action <span style={{
+          color: "#999",
+          fontStyle: "italic",
+          fontSize: "12px"
+        }}>(Soon)</span></p>
         <motion.textarea
           style={styles.textArea}
           value={customInstruction}
@@ -255,7 +264,7 @@ function IndexPopup() {
             )}
           </AnimatePresence>
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }

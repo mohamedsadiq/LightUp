@@ -43,7 +43,8 @@ function IndexOptions() {
   const [settings, setSettings] = useState({
     modelType: "",
     serverUrl: "",
-    apiKey: ""
+    apiKey: "",
+    maxTokens: 1000
   });
 
   // Add error state
@@ -221,6 +222,37 @@ function IndexOptions() {
             />
           </>
         )}
+
+        <label style={{ 
+          display: "block", 
+          marginBottom: "8px",
+          color: "#333333",
+          fontFamily: "'K2D', sans-serif",
+          fontWeight: "500"
+        }}>
+          Max Tokens:
+        </label>
+        <input
+          type="number"
+          value={settings.maxTokens}
+          onChange={(e) => setSettings(prev => ({
+            ...prev,
+            maxTokens: parseInt(e.target.value) || 1000
+          }))}
+          style={{
+            width: "100%",
+            padding: "8px",
+            marginBottom: "16px",
+            borderRadius: "4px",
+            border: "1px solid #e0e0e0",
+            backgroundColor: "#ffffff",
+            color: "#333333",
+            fontFamily: "'K2D', sans-serif"
+          }}
+          placeholder="1000"
+          min="1"
+          max="4096"
+        />
 
         <button
           onClick={handleSave}

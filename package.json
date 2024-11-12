@@ -1,8 +1,8 @@
 {
-  "name": "illuminate",
-  "displayName": "Illuminate",
+  "name": "lightup",
+  "displayName": "LightUp",
   "version": "0.0.1",
-  "description": "an ai chrome extention",
+  "description": "Your AI-powered reading companion that instantly clarifies and explains any text with precision and insight",
   "author": "mosadiq",
   "scripts": {
     "dev": "plasmo dev",

@@ -55,7 +55,7 @@ export async function handleExplainText(req: PlasmoMessaging.Request) {
               content: `Analyze this text briefly but thoroughly. Focus on the most important aspects:\n${req.body.text}\n\nRemember to complete all explanations.`
             }
           ],
-          max_tokens: req.body.maxTokens || 1536,
+          max_tokens: req.body.maxTokens || 2048,
           temperature: 0.5,
           repeat_penalty: 1.1,
           presence_penalty: 0.1,
@@ -91,7 +91,7 @@ export async function handleExplainText(req: PlasmoMessaging.Request) {
               content: `Analyze this text briefly but thoroughly. Focus on the most important aspects:\n${req.body.text}\n\nRemember to complete all explanations.`
             }
           ],
-          max_tokens: req.body.maxTokens || 1536,
+          max_tokens: req.body.maxTokens || 2048,
           temperature: 0.5,
         }),
       });
