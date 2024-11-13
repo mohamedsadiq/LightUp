@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from "react"
 import { Storage } from "@plasmohq/storage"
-import "./options.css"
+import "../styles/options.css"
+import "../style.css"
 
 // Add the Logo component
 const Logo = () => (
@@ -110,41 +111,16 @@ function IndexOptions() {
   };
 
   return (
-    <div style={{
-      padding: "20px",
-      maxWidth: "600px",
-      margin: "0 auto",
-      fontFamily: "'K2D', sans-serif",
-      backgroundColor: "#ffffff",
-      color: "#333333",
-      minHeight: "100vh",
-      borderRadius: "8px",
-      boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
-    }}>
-      <div style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "12px",
-        marginBottom: "24px"
-      }}>
+    <div className="p-5 max-w-[600px] mx-auto font-k2d bg-white text-gray-800 min-h-screen rounded-lg shadow-sm">
+      <div className="flex items-center gap-3 mb-6">
         <Logo />
-        <h1 style={{ 
-          color: "#333333",
-          fontSize: "24px",
-          margin: 0,
-          fontFamily: "'K2D', sans-serif",
-          fontWeight: "600"
-        }}>LightUp Settings</h1>
+        <h1 className="text-gray-800 text-2xl m-0 font-k2d font-semibold">
+          LightUp Settings
+        </h1>
       </div>
       
-      <div style={{ marginBottom: "20px" }}>
-        <label style={{ 
-          display: "block", 
-          marginBottom: "8px",
-          color: "#333333",
-          fontFamily: "'K2D', sans-serif",
-          fontWeight: "500"
-        }}>
+      <div className="mb-5">
+        <label className="block mb-2 text-gray-800 font-k2d font-medium">
           Model Type:
         </label>
         <select 
@@ -153,16 +129,7 @@ function IndexOptions() {
             ...prev,
             modelType: e.target.value
           }))}
-          style={{
-            width: "100%",
-            padding: "8px",
-            marginBottom: "16px",
-            borderRadius: "4px",
-            border: "1px solid #e0e0e0",
-            backgroundColor: "#ffffff",
-            color: "#333333",
-            fontFamily: "'K2D', sans-serif"
-          }}
+          className="w-full p-2 mb-4 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
         >
           <option value="local">Local LLM</option>
           <option value="openai">OpenAI</option>
@@ -170,35 +137,20 @@ function IndexOptions() {
 
         {settings.modelType === "local" ? (
           <>
-            <label style={{ 
-              display: "block", 
-              marginBottom: "8px",
-              color: "#333333",
-              fontFamily: "'K2D', sans-serif",
-              fontWeight: "500"
-            }}>
+            <label className="block mb-2 text-gray-800 font-k2d font-medium">
               Llama Server URL:
             </label>
             <input
               type="text"
               value={settings.serverUrl}
               onChange={handleServerUrlChange}
-              style={{
-                width: "100%",
-                padding: "8px",
-                marginBottom: "8px",
-                borderRadius: "4px",
-                border: "1px solid #e0e0e0",
-                backgroundColor: "#ffffff",
-                color: "#333333",
-                fontFamily: "'K2D', sans-serif"
-              }}
+              className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
               placeholder="http://127.0.0.1:1234"
             />
           </>
         ) : (
           <>
-            <label style={{ display: "block", marginBottom: "8px", fontFamily: "'K2D', sans-serif", fontWeight: "500" }}>
+            <label className="block mb-2 font-k2d font-medium">
               OpenAI API Key:
             </label>
             <input
@@ -208,28 +160,13 @@ function IndexOptions() {
                 ...prev,
                 apiKey: e.target.value
               }))}
-              style={{
-                width: "100%",
-                padding: "8px",
-                marginBottom: "8px",
-                borderRadius: "4px",
-                border: "1px solid #e0e0e0",
-                backgroundColor: "#ffffff",
-                color: "#333333",
-                fontFamily: "'K2D', sans-serif"
-              }}
+              className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
               placeholder="Enter your OpenAI API key"
             />
           </>
         )}
 
-        <label style={{ 
-          display: "block", 
-          marginBottom: "8px",
-          color: "#333333",
-          fontFamily: "'K2D', sans-serif",
-          fontWeight: "500"
-        }}>
+        <label className="block mb-2 text-gray-800 font-k2d font-medium">
           Max Tokens:
         </label>
         <input
@@ -239,16 +176,7 @@ function IndexOptions() {
             ...prev,
             maxTokens: parseInt(e.target.value) || 1000
           }))}
-          style={{
-            width: "100%",
-            padding: "8px",
-            marginBottom: "16px",
-            borderRadius: "4px",
-            border: "1px solid #e0e0e0",
-            backgroundColor: "#ffffff",
-            color: "#333333",
-            fontFamily: "'K2D', sans-serif"
-          }}
+          className="w-full p-2 mb-4 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
           placeholder="1000"
           min="1"
           max="4096"
@@ -256,44 +184,18 @@ function IndexOptions() {
 
         <button
           onClick={handleSave}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#10a37f",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontWeight: "500",
-            transition: "background-color 0.2s",
-            fontFamily: "'K2D', sans-serif"
-          }}
+          className="px-4 py-2 bg-[#10a37f] text-white border-none rounded cursor-pointer font-medium transition-colors duration-200 font-k2d hover:bg-[#0d8c6d]"
         >
           Save Settings
         </button>
       </div>
 
       {settings.modelType === "local" && (
-        <div style={{ 
-          marginTop: "20px",
-          backgroundColor: "#f8f8f8",
-          padding: "16px",
-          borderRadius: "8px",
-          border: "1px solid #e0e0e0",
-          fontFamily: "'K2D', sans-serif"
-        }}>
-          <h2 style={{
-            fontSize: "18px",
-            marginBottom: "12px",
-            fontFamily: "'K2D', sans-serif",
-            fontWeight: "600"
-          }}>
+        <div className="mt-5 bg-gray-50 p-4 rounded-lg border border-gray-200 font-k2d">
+          <h2 className="text-lg mb-3 font-k2d font-semibold">
             How to find your Llama server URL:
           </h2>
-          <ol style={{ 
-            lineHeight: "1.6",
-            paddingLeft: "20px",
-            fontFamily: "'K2D', sans-serif"
-          }}>
+          <ol className="leading-relaxed pl-5 font-k2d">
             <li>If you're running Llama locally, the URL is typically <code>http://localhost:PORT</code></li>
             <li>The default port depends on your setup:
               <ul>
