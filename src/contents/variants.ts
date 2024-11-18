@@ -32,10 +32,29 @@ export const loadingVariants = {
 }
 
 export const iconButtonVariants = {
-  initial: { scale: 1 },
+  initial: { 
+    opacity: 0,
+    scale: 0.1
+  },
+  animate: { 
+    opacity: 1,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 10,
+      mass: 0.8
+    }
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.8,
+    transition: {
+      duration: 0.2
+    }
+  },
   hover: { 
-    scale: 1.2,
-    rotate: 10,
+    scale: 1.1,
     transition: {
       type: "spring",
       stiffness: 300,
@@ -47,25 +66,90 @@ export const iconButtonVariants = {
 export const popupVariants = {
   initial: {
     opacity: 0,
-    scale: 0.9,
+    filter: {
+      blur: '1px'
+    },
+    y: 10,
     transition: {
-      type: "spring",
-      duration: 0.3,
+      duration: 0.2,
     }
   },
   animate: {
+    filter: {
+      blur: '0px'
+    },
     opacity: 1,
-    scale: 1,
+    
+    y: 0,
     transition: {
-      type: "spring",
-      duration: 0.3,
+      duration: 0.2,
     }
   },
   exit: {
     opacity: 0,
-    scale: 0.9,
+    filter: {
+      blur: '1px'
+    },
+    y: 10,
     transition: {
-      duration: 0.2,
+      duration: 0.15,
+    }
+  }
+}
+
+export const tooltipVariants = {
+  initial: { 
+    opacity: 0,
+    y: 10,
+    scale: 0.8
+  },
+  animate: { 
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 20
+    }
+  },
+  exit: {
+    opacity: 0,
+    y: 10,
+    scale: 0.8,
+    transition: {
+      duration: 0.2
+    }
+  }
+}
+
+export const feedbackButtonVariants = {
+  initial: { 
+    scale: 1 
+  },
+  hover: { 
+    scale: 1.2,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 10
+    }
+  },
+  tap: { 
+    scale: 0.8,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 10
+    }
+  },
+  bounce: {
+    scale: [1, 1.3, 1],
+    transition: {
+      duration: 0.5,
+      type: "spring",
+      stiffness: 300,
+      damping: 10
     }
   }
 } 

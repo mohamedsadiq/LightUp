@@ -5,6 +5,7 @@ export interface ProcessTextRequest {
   mode: string;
   maxTokens: number;
   settings: Settings;
+  signal?: AbortSignal;
 }
 
 export interface ProcessTextResponse {

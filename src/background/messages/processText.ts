@@ -6,8 +6,13 @@ import type { ProcessTextRequest, ProcessTextResponse } from "~types/messages"
 
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   try {
-    const { text, mode } = req.body
+    const { text, mode, signal } = req.body
     console.log('Processing text in mode:', mode)
+
+    if (signal?.aborted) {
+      res.send({ error: 'Request cancelled' })
+      return
+    }
 
     const storage = new Storage()
     const settings = (await storage.get("settings")) || { modelType: "openai", maxTokens: 2048 }
@@ -19,8 +24,13 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
     const modelType = normalizedSettings.modelType as "local" | "openai"
     
     const response = modelType === "local" 
-      ? await processLocalText({ text, mode, maxTokens: normalizedSettings.maxTokens, settings: normalizedSettings })
-      : await processOpenAIText({ text, mode, maxTokens: normalizedSettings.maxTokens, settings: normalizedSettings })
+      ? await processLocalText({ text, mode, maxTokens: normalizedSettings.maxTokens, settings: normalizedSettings, signal })
+      : await processOpenAIText({ text, mode, maxTokens: normalizedSettings.maxTokens, settings: normalizedSettings, signal })
+
+    if (signal?.aborted) {
+      res.send({ error: 'Request cancelled' })
+      return
+    }
 
     res.send({
       result: response
@@ -28,7 +38,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   } catch (error) {
     console.error('Error:', error)
     res.send({
-      error: error.message
+      error: error.name === 'AbortError' ? 'Request cancelled' : error.message
     })
   }
 }

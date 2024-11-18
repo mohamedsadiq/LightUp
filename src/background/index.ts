@@ -9,6 +9,8 @@ interface Settings {
 }
 
 export async function handleExplainText(request: ProcessTextRequest) {
+  const { signal } = request;
+
   try {
     const storage = new Storage()
     const settings = await storage.get("settings") as Settings
@@ -28,8 +30,29 @@ export async function handleExplainText(request: ProcessTextRequest) {
       }
     }
 
-    // Rest of your existing code...
+    const response = await fetch(settings.serverUrl + "/api/generate", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+      signal
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server responded with ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+
   } catch (error) {
+    if (error.name === 'AbortError') {
+      console.log('Request was cancelled');
+      return {
+        error: 'Request cancelled by user'
+      };
+    }
     console.error('Error:', error)
     return {
       error: error.message

@@ -2,6 +2,7 @@
 
 <p align="center">
   <img src="assets/intro.png" width="100%" height="100%" alt="LightUp Logo">
+   <img src="assets/lightup.png" width="100%" height="100%" alt="LightUp popup">
 </p>
 
 Meet LightUp - Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights, explanations, and analysis. Whether you're diving into documentation, reviewing code, or working with content in any language, LightUp is there - elegantly integrated into your natural workflow. It's AI that works the way you do.

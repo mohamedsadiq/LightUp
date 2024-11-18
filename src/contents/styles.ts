@@ -4,27 +4,30 @@ export const styles = {
     height: "auto",
     padding: 20,
     background: "#E9E9E9",
-    border: "1px solid #D5D5D5",
-    borderRadius: 12,
+    border: "1px solid #d4d4d4",
+    borderRadius: 23,
     boxShadow: "0 2px 20px rgba(0,0,0,0.15)",
     maxWidth: 500,
     fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     maxHeight: "400px",
-    overflow: "auto"
+    overflow: "auto",
+  
   },
   buttonContainer: {
-    display: "flex",
-    justifyContent: "flex-end",
-    gap: 8,
-    position: "absolute" as const,
-    top: 12,
-    right: 12,
+    // display: "flex",
+    // justifyContent: "flex-end",
+    // gap: 8,
+    // position: "absolute" as const,
+    // top: 12,
+    // right: 12,
     height: "fit-content",
     minHeight: 40,
     zIndex: 9999
   },
   buttonContainerParent: {
-    marginBottom: 32
+    marginBottom: 32,
+    display: "flex",
+    justifyContent: "space-between"
   },
   button: {
     width: 19,
@@ -50,14 +53,14 @@ export const styles = {
     borderRadius: 8,
     marginTop: 16,
     fontFamily: "'K2D', sans-serif",
-    willChange: 'transform, opacity',
-    transformOrigin: 'top',
-    whiteSpace: 'pre-wrap',
-    overflow: 'hidden',
-    '& span': {
-      display: 'inline-block',
-      willChange: 'transform, opacity'
-    },
+    // willChange: 'transform, opacity',
+    // transformOrigin: 'top',
+    // whiteSpace: 'pre-wrap',
+    // overflow: 'hidden',
+    // '& span': {
+    //   display: 'inline-block',
+    //   willChange: 'transform, opacity'
+    // },
     marginBottom: 16
   },
   followUpQA: {
@@ -137,31 +140,42 @@ export const styles = {
     animation: 'blink 1s step-end infinite'
   },
   followUpContainer: {
-    marginTop: 16,
-    padding: 12,
-    borderTop: "1px solid #ddd",
-    background: "#f5f5f5",
-    borderRadius: 8,
+    marginTop: '12px',
+    width: '100%',
   },
   followUpQuestion: {
-    fontSize: 12,
-    fontWeight: "bold",
-    marginBottom: 8,
-    color: "#333",
+    backgroundColor: '#2C2C2C',
+    color: 'white',
+    padding: '8px 12px',
+    borderRadius: '18px',
+    borderBottomRightRadius: '4px',
+    maxWidth: '85%',
+    marginLeft: 'auto',
+    marginBottom: '8px',
+    fontSize: '12px',
     fontFamily: "'K2D', sans-serif",
+    boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
   },
   followUpAnswer: {
-    fontSize: 12,
+    backgroundColor: '#f5f5f5',
+    color: '#333',
+    padding: '8px 12px',
+    borderRadius: '18px',
+    borderBottomLeftRadius: '4px',
+    maxWidth: '85%',
+    marginRight: 'auto',
+    fontSize: '12px',
     lineHeight: 1.6,
-    color: "#333",
     fontFamily: "'K2D', sans-serif",
     whiteSpace: 'pre-wrap',
+    boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
   },
   feedbackContainer: {
     display: 'flex',
     gap: '8px',
     justifyContent: 'flex-start',
-    marginTop: '8px'
+    marginTop: '8px',
+    paddingLeft: '4px',
   },
   feedbackButton: {
     background: 'none',
