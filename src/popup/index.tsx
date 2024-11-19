@@ -56,7 +56,8 @@ function IndexPopup() {
   }
 
   return (
-    <div className="p-5 flex flex-col items-stretch w-[400px] font-sans bg-[#f5f5f5] rounded-lg">
+    <div className="p-5 flex flex-col items-stretch w-[500px] h-[300px] font-sans bg-[#ffffff] rounded-lg ">
+      <div className="p-5 bg-[#f5f5f5] rounded-lg h-[100%]">
       <h2 className="mb-5 text-base font-normal text-black">Define the purpose of LightUp</h2>
       
       <div>
@@ -82,6 +83,7 @@ function IndexPopup() {
           </ActionButton>
         </div>
       </div>
+    </div>
     </div>
   )
 }
