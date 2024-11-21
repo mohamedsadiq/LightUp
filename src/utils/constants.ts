@@ -11,4 +11,10 @@ export const SYSTEM_PROMPTS = {
   explain: "You are a concise expert who explains texts clearly. Keep explanations under 1500 tokens. Always complete your thoughts.",
   summarize: "You are a concise summarizer. Create clear, brief summaries focusing on key points.",
   analyze: "You are an analytical expert. Provide thorough analysis of the key aspects and implications."
+}
+
+export const USER_PROMPTS = {
+  explain: "Explain this text clearly and concisely:",
+  summarize: "Provide a brief but comprehensive summary of this text:",
+  analyze: "Analyze this text, focusing on key themes, patterns, and implications:"
 } 

@@ -18,21 +18,29 @@ export const PopupModeSelector = ({ activeMode, onModeChange, isLoading = false 
   return (
     <motion.div 
       style={styles.container}
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
+      initial={{  scale: 0.5 }}
+      animate={{  scale: 1 }}
+      transition={{ 
+        type: "spring",
+        bounce: 0.1,
+        stiffness: 120,
+        damping: 10
+      }}
+      layout
     >
       <motion.div 
         style={styles.modeButton}
         initial={{ filter: "blur(8px)" }}
         animate={{ filter: "blur(0)" }}
         transition={{ duration: 0.2 }}
+        layout
       >
         <motion.span 
           key={activeMode}
           initial={{ filter: "blur(8px)" }}
           animate={{ filter: "blur(0)" }}
           transition={{ duration: 0.2 }}
+          layout
         >
           {activeMode.charAt(0).toUpperCase() + activeMode.slice(1)} mode
         </motion.span>
@@ -50,7 +58,7 @@ export const PopupModeSelector = ({ activeMode, onModeChange, isLoading = false 
               exit={{ 
                 opacity: 0,
                 scale: 0.5,
-                transition: { duration: 0.2 }
+                transition: { duration: 0.2, }
               }}
               transition={{ 
                 rotate: { duration: 1, repeat: Infinity, ease: "linear" },

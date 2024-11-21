@@ -62,4 +62,16 @@ export interface StorageSettings {
   settings: Settings
   theme?: ThemeSettings
   feedbacks?: Feedback[]
+}
+
+// Add to existing types
+export interface FeedbackPattern {
+  pattern: string
+  frequency: number
+  lastUsed: number
+}
+
+export interface FeedbackContext {
+  positivePatterns: FeedbackPattern[]
+  negativePatterns: FeedbackPattern[]
 } 

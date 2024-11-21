@@ -16,11 +16,20 @@ export const ResultDisplay: React.FC<ResultDisplayProps> = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       style={styles.container}
+     
     >
       <TypewriterText text={result} />
-      <button onClick={onClose} style={styles.closeButton}>
+      <motion.button onClick={onClose} style={styles.closeButton} 
+       transition={{ 
+        type: "spring",
+        bounce: 0.1,
+        stiffness: 120,
+        damping: 10
+      }}
+      layout
+      >
         Close
-      </button>
+      </motion.button>
     </motion.div>
   )
 }

@@ -1,20 +1,22 @@
 import type { ProcessTextRequest } from "~types/messages"
+import { FeedbackProcessor } from "../feedback/feedbackProcessor"
+import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
 
 export const processLocalText = async (request: ProcessTextRequest) => {
   const { text, mode, settings } = request
+  const feedbackProcessor = new FeedbackProcessor()
   
-  // Define mode-specific prompts and system messages
-  const systemPrompts = {
-    explain: "You are a clear and concise expert at explaining complex topics. Keep explanations under 1500 tokens.",
-    summarize: "You are a skilled summarizer who captures key points concisely. Keep summaries under 1500 tokens.",
-    analyze: "You are an analytical expert who identifies patterns and insights. Keep analyses under 1500 tokens."
-  }
-
-  const userPrompts = {
-    explain: "Explain this text clearly and concisely:",
-    summarize: "Provide a brief but comprehensive summary of this text:",
-    analyze: "Analyze this text, focusing on key themes, patterns, and implications:"
-  }
+  // Get feedback context
+  const { positivePatterns, negativePatterns } = await feedbackProcessor.getFeedbackContext(text)
+  
+  // Create enhanced prompt using feedback patterns
+  const enhancedPrompt = `
+    ${SYSTEM_PROMPTS[mode]}
+    Based on user feedback:
+    - Include patterns like: ${positivePatterns.slice(0, 3).join(', ')}
+    - Avoid patterns like: ${negativePatterns.slice(0, 3).join(', ')}
+    Keep responses under 1500 tokens.
+  `
 
   try {
     const response = await fetch(`${settings.serverUrl}/v1/chat/completions`, {
@@ -27,11 +29,11 @@ export const processLocalText = async (request: ProcessTextRequest) => {
         messages: [
           {
             role: "system",
-            content: systemPrompts[mode]
+            content: enhancedPrompt
           },
           {
             role: "user",
-            content: `${userPrompts[mode]}\n${text}\n\nRemember to complete all explanations.`
+            content: `${USER_PROMPTS[mode]}\n${text}`
           }
         ],
         max_tokens: settings.maxTokens || 2048,
