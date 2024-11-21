@@ -8,8 +8,8 @@ interface Settings {
   serverUrl?: string
 }
 
-export async function handleExplainText(request: ProcessTextRequest) {
-  const { signal } = request;
+export async function handleProcessText(request: ProcessTextRequest) {
+  const { signal, mode, text } = request;
 
   try {
     const storage = new Storage()
@@ -30,12 +30,20 @@ export async function handleExplainText(request: ProcessTextRequest) {
       }
     }
 
-    const response = await fetch(settings.serverUrl + "/api/generate", {
+    // Add mode-specific endpoint handling
+    const endpoint = settings.modelType === "local" 
+      ? `/api/${mode.toLowerCase()}` // Use different endpoints based on mode
+      : "/api/generate";
+
+    const response = await fetch(settings.serverUrl + endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(request),
+      body: JSON.stringify({
+        ...request,
+        mode: mode.toLowerCase()
+      }),
       signal
     });
 
@@ -60,10 +68,10 @@ export async function handleExplainText(request: ProcessTextRequest) {
   }
 }
 
-// Handle messages from popup and content script
+// Update message listener to use new handler
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "PROCESS_TEXT") {
-    handleExplainText(message.payload)
+    handleProcessText(message.payload)
       .then(sendResponse)
     return true // Keep the message channel open for async response
   }

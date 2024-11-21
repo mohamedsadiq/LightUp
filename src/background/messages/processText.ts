@@ -9,6 +9,11 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
     const { text, mode, signal } = req.body
     console.log('Processing text in mode:', mode)
 
+    if (!['explain', 'summarize', 'analyze'].includes(mode)) {
+      res.send({ error: `Invalid mode: ${mode}` })
+      return
+    }
+
     if (signal?.aborted) {
       res.send({ error: 'Request cancelled' })
       return

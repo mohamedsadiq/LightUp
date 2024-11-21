@@ -5,7 +5,7 @@ export const styles = {
     padding: 20,
     background: "#E9E9E9",
     border: "1px solid #d4d4d4",
-    borderRadius: 23,
+    borderRadius: 13,
     boxShadow: "0 2px 20px rgba(0,0,0,0.15)",
     maxWidth: 500,
     fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
@@ -25,9 +25,14 @@ export const styles = {
     zIndex: 9999
   },
   buttonContainerParent: {
-    marginBottom: 32,
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
+    alignItems: "center",
+    // padding: "12px",
+    // borderBottom: "1px solid rgba(0,0,0,0.1)",
+    gap: "8px",
+    marginBottom: 43
+
   },
   button: {
     width: 19,
@@ -35,7 +40,8 @@ export const styles = {
     background: "none",
     cursor: "pointer",
     padding: 4,
-    fontFamily: "'K2D', sans-serif"
+    fontFamily: "'K2D', sans-serif",
+    // marginTop: 4
   },
   text: {
     fontSize: 14,

@@ -3,6 +3,19 @@ import type { ProcessTextRequest } from "~types/messages"
 export const processLocalText = async (request: ProcessTextRequest) => {
   const { text, mode, settings } = request
   
+  // Define mode-specific prompts and system messages
+  const systemPrompts = {
+    explain: "You are a clear and concise expert at explaining complex topics. Keep explanations under 1500 tokens.",
+    summarize: "You are a skilled summarizer who captures key points concisely. Keep summaries under 1500 tokens.",
+    analyze: "You are an analytical expert who identifies patterns and insights. Keep analyses under 1500 tokens."
+  }
+
+  const userPrompts = {
+    explain: "Explain this text clearly and concisely:",
+    summarize: "Provide a brief but comprehensive summary of this text:",
+    analyze: "Analyze this text, focusing on key themes, patterns, and implications:"
+  }
+
   try {
     const response = await fetch(`${settings.serverUrl}/v1/chat/completions`, {
       method: 'POST',
@@ -14,11 +27,11 @@ export const processLocalText = async (request: ProcessTextRequest) => {
         messages: [
           {
             role: "system",
-            content: "You are a concise expert who explains texts clearly. Keep explanations under 1500 tokens. Always complete your thoughts."
+            content: systemPrompts[mode]
           },
           {
             role: "user",
-            content: `Analyze this text briefly but thoroughly. Focus on the most important aspects:\n${text}\n\nRemember to complete all explanations.`
+            content: `${userPrompts[mode]}\n${text}\n\nRemember to complete all explanations.`
           }
         ],
         max_tokens: settings.maxTokens || 2048,

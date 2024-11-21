@@ -3,3 +3,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Add these styles */
+.resize-handle:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+
+.resize-handle:active {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Optional: Add a visual indicator for the resize handle */
+.resize-handle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+}

@@ -2,9 +2,11 @@ import type { Settings } from "./settings"
 
 export interface ProcessTextRequest {
   text: string;
-  mode: string;
-  maxTokens: number;
-  settings: Settings;
+  mode: "explain" | "summarize" | "analyze";
+  settings: {
+    serverUrl: string;
+    maxTokens?: number;
+  };
   signal?: AbortSignal;
 }
 

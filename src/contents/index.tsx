@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react"
+import { useState, useEffect, useMemo, useRef } from "react"
 import { sendToBackground } from "@plasmohq/messaging"
 import type { PlasmoCSConfig } from "plasmo"
 import { Storage } from "@plasmohq/storage"
@@ -9,10 +9,24 @@ import "../style.css"
 import { styles } from "./styles"
 import { textVariants, loadingVariants, iconButtonVariants, popupVariants, tooltipVariants, feedbackButtonVariants } from "./variants"
 
+import { useResizable } from '../hooks/useResizable';
+import LoadingGif from "../assets/loading.gif"
+import { PopupModeSelector } from "../components/content/PopupModeSelector"
+
 // Add this style block right after your imports
 const fontImportStyle = document.createElement('style');
 fontImportStyle.textContent = `
   @import url('https://fonts.googleapis.com/css2?family=K2D:wght@400;500;600;700&display=swap');
+  
+  ::selection {
+    background-color: #ff0 !important;
+    color: #000000 !important;
+  }
+  
+  ::-moz-selection {
+    background-color: #ff0 !important;
+    color: #000000 !important;
+  }
 `;
 document.head.appendChild(fontImportStyle);
 
@@ -28,6 +42,8 @@ interface Settings {
   apiKey?: string;
 }
 
+type Mode = "explain" | "summarize" | "analyze"
+
 function Content() {
   const [selectedText, setSelectedText] = useState("")
   const [position, setPosition] = useState({ x: 0, y: 0 })
@@ -36,7 +52,7 @@ function Content() {
   const [isExplanationComplete, setIsExplanationComplete] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [mode, setMode] = useState<"explain" | "summarize">("explain")
+  const [mode, setMode] = useState<Mode>("explain")
   const [followUpQuestion, setFollowUpQuestion] = useState("")
   const [isAskingFollowUp, setIsAskingFollowUp] = useState(false)
   const storage = new Storage()
@@ -55,13 +71,17 @@ function Content() {
   const [isHovered, setIsHovered] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isFollowUpResultVisible, setIsFollowUpResultVisible] = useState(false);
+  const { width, height, handleResizeStart } = useResizable({
+    initialWidth: 300,
+    initialHeight: 400
+  });
 
   // Load the mode when component mounts
   useEffect(() => {
     const loadMode = async () => {
       const savedMode = await storage.get("mode")
       if (savedMode) {
-        if (savedMode === "explain" || savedMode === "summarize") {
+        if (savedMode === "explain" || savedMode === "summarize" || savedMode === "analyze") {
           setMode(savedMode)
         }
       }
@@ -72,7 +92,7 @@ function Content() {
     const handleStorageChange = async (changes) => {
       const newMode = await storage.get("mode")
       if (newMode) {
-        if (newMode === "explain" || newMode === "summarize") {
+        if (newMode === "explain" || newMode === "summarize" || newMode === "analyze") {
           setMode(newMode)
         }
       }
@@ -447,6 +467,41 @@ function Content() {
   // Use a stable key for TypewriterText
   const explanationKey = useMemo(() => `explanation-${explanation}`, [explanation]);
 
+  const handleModeChange = async (newMode: Mode) => {
+    setMode(newMode as any)
+    await storage.set("mode", newMode)
+    
+    // Re-process text with new mode
+    if (selectedText) {
+      setIsLoading(true)
+      setError(null)
+      
+      try {
+        const response = await sendToBackground({
+          name: "processText",
+          body: {
+            text: selectedText,
+            mode: newMode,
+            maxTokens: 2048,
+            settings
+          }
+        })
+
+        if (response.result) {
+          setExplanation(response.result)
+          setIsExplanationComplete(true)
+        } else if (response.error) {
+          setError(response.error)
+        }
+      } catch (err) {
+        console.error('Error:', err)
+        setError('Failed to process text')
+      } finally {
+        setIsLoading(false)
+      }
+    }
+  }
+
   return (
     <AnimatePresence mode="sync" >
       
@@ -465,7 +520,13 @@ function Content() {
             top: `${position.y}px`,
           }}>
             <motion.div 
-              style={styles.popup}
+              style={{
+                ...styles.popup,
+                width: `${width}px`,
+                height: `${height}px`,
+                overflow: 'auto',
+                position: 'relative'
+              }}
               data-plasmo-popup
               className="no-select"
               onClick={(e) => e.stopPropagation()}
@@ -505,39 +566,94 @@ function Content() {
               }}
             >
               <div style={styles.buttonContainerParent}>
-                <div>
+                <div style={{ marginLeft: '-6px' }}>
                   {Logo()}
                 </div>
+                <PopupModeSelector 
+                  activeMode={mode}
+                  onModeChange={handleModeChange}
+                  isLoading={isLoading}
+                />
                 <div style={styles.buttonContainer}>
                   <div style={{ position: 'relative' }}>
                     <motion.button 
                       onClick={handleClose}
                       style={{...styles.button, color: 'black'}}
                       variants={iconButtonVariants}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                      whileHover="hover"
-                      onHoverStart={() => setIsHovered(true)}
-                      onHoverEnd={() => setIsHovered(false)}
                     >
                       {CloseIcon()}
-                     
                     </motion.button>
                   </div>
                 </div>
               </div>
-              <p style={{...styles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline'}}>{truncateText(selectedText)}</p>
+
+             
+
+              <p style={{...styles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline'}}>
+                {truncateText(selectedText)}
+              </p>
+
               <AnimatePresence mode="wait">
                 {isLoading ? (
-                  <motion.p
+                  <motion.div
                     key="loading"
-                    style={styles.loadingText}
+                    style={{
+                      ...styles.loadingText,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '16px',
+                      width: '100%'
+                    }}
                     variants={loadingVariants}
                     animate="animate"
                   >
-                    Generating {mode}...
-                  </motion.p>
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      style={{
+                        margin: 0,
+                        fontSize: '14px',
+                        color: '#666',
+                        fontWeight: 500
+                      }}
+                    >
+                      Generating {mode}...
+                    </motion.p>
+
+                    <motion.div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                        width: '100%',
+                        padding: '8px'
+                      }}
+                    >
+                      {/* Skeleton lines */}
+                      {[...Array(8)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          style={{
+                            height: '16px',
+                            background: 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
+                            borderRadius: '4px',
+                            width: i === 2 ? '70%' : '100%', // Last line shorter
+                          }}
+                          animate={{
+                            backgroundPosition: ['0px', '500px'],
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: 'linear',
+                          }}
+                        />
+                      ))}
+                      
+                   
+                    
+                    </motion.div>
+                  </motion.div>
                 ) : error ? (
                   <motion.p
                     key="error"
@@ -557,7 +673,13 @@ function Content() {
                     animate="animate"
                     exit="exit"
                   >
-                    <div style={styles.explanation} >
+                    <motion.div
+                      style={styles.explanation}
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1,  y: 0 }}
+                      transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5 }}
+                      exit={{ opacity: 0, y: 50 }}
+                    >
                       {explanation && (
                         <>
                           <TypewriterText 
@@ -624,7 +746,7 @@ function Content() {
                           </motion.div>
                         </>
                       )}
-                    </div>
+                    </motion.div>
 
                     {followUpQAs.map((qa) => (
                       <motion.div
@@ -708,7 +830,11 @@ function Content() {
                         ...styles.searchContainer,
                         flexDirection: "row" as const
                       }}
-                      initial={false}
+                     
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1,  y: 0 }}
+                      transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5, delay: 0.2 }}
+                      exit={{ opacity: 0, y: 50 }}
                     >
                       <input 
                         placeholder="Ask LightUp"
@@ -763,6 +889,19 @@ function Content() {
                   </motion.div>
                 )}
               </AnimatePresence>
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  right: 0,
+                  width: '15px',
+                  height: '15px',
+                  cursor: 'se-resize',
+                  background: 'transparent'
+                }}
+                onMouseDown={handleResizeStart}
+                className="resize-handle"
+              />
             </motion.div>
           </div>
         </motion.div>
