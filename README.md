@@ -7,7 +7,7 @@
 **Beta Version**: This project is currently in beta. Features and functionality may change as we continue to improve the extension.
 
 
-**Meet LightUp** - Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights, explanations, and analysis. Whether you're diving into documentation, reviewing code, or working with content in any language, LightUp is there - elegantly integrated into your natural workflow. It's AI that works the way you do.
+**Meet LightUp** - Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
 <p align="center">
   
    <img src="assets/lightup.png" width="100%" height="100%" alt="LightUp popup">
@@ -16,13 +16,12 @@
 ## ✨ Features
 
 - **Smart Text Analysis**: Get instant explanations for complex text passages
-- **Code Understanding**: Quickly grasp code snippets with AI-powered explanations
+
 - **Multiple Modes**:
   - 🔍 Explain - Detailed explanations of text or code
   - 📝 Summarize - Quick summaries of longer content
   - 📊 Analyze - Deep analysis of selected content
 - **Follow-up Questions**: Ask additional questions about the analyzed content to dive deeper
-
 - **Flexible AI Backend**:
   - Use OpenAI's GPT models
   - Connect to your local LLM (supports llama.cpp, LM Studio, Text Generation WebUI)
