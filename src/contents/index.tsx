@@ -644,7 +644,7 @@ function Content() {
                         flexDirection: 'column',
                         gap: '12px',
                         width: '100%',
-                        padding: '8px'
+                       
                       }}
                       layout
                     >
@@ -706,7 +706,7 @@ function Content() {
                             text={stripHtml(explanation)} 
                             speed={20}
                             stopAnimation={isFollowUpResultVisible}
-                         
+                            animationType="scale"
                           />
                           <motion.div 
                             style={styles.feedbackContainer}
@@ -792,6 +792,7 @@ function Content() {
                             text={stripHtml(qa.answer)}
                             speed={30}
                             stopAnimation={qa.isComplete}
+                            animationType="fade"
                           />
                           <motion.div 
                             style={styles.feedbackContainer}
