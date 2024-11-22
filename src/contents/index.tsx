@@ -3,7 +3,7 @@ import { sendToBackground } from "@plasmohq/messaging"
 import type { PlasmoCSConfig } from "plasmo"
 import { Storage } from "@plasmohq/storage"
 import { motion, AnimatePresence, usePresence } from "framer-motion"
-import TypewriterText from "../components/content/TypewriterText"
+import MarkdownText from "../components/content/MarkdownText"
 import { Logo, CloseIcon, PinIcon } from "../components/icons"
 import "../style.css"
 import { styles } from "./styles"
@@ -479,7 +479,7 @@ function Content() {
     setError(null);
   };
 
-  // Use a stable key for TypewriterText
+  // Use a stable key for MarkdownText
   const explanationKey = useMemo(() => `explanation-${explanation}`, [explanation]);
 
   const handleModeChange = async (newMode: Mode, translationSettings?: TranslationSettings) => {
@@ -709,19 +709,12 @@ function Content() {
                     >
                       {explanation && (
                         <>
-                          <TypewriterText 
-                            key={explanationKey}
-                            text={stripHtml(explanation)} 
-                            speed={20}
-                            stopAnimation={isFollowUpResultVisible}
-                            animationType="scale"
-                          />
-                          <motion.div 
+                         <MarkdownText text={stripHtml(explanation)} />
+                          <motion.div
                             style={styles.feedbackContainer}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.2 }}
-                           
                           >
                             <motion.button
                               onClick={() => handleCopy(stripHtml(explanation), 'initial')}
@@ -795,12 +788,10 @@ function Content() {
                       >
                         <div style={styles.followUpQuestion}>Q: {qa.question}</div>
                         <div style={styles.followUpAnswer}>
-                          <TypewriterText 
+                          <MarkdownText 
                             key={qa.id}
                             text={stripHtml(qa.answer)}
-                            speed={30}
-                            stopAnimation={qa.isComplete}
-                            animationType="fade"
+                         
                           />
                           <motion.div 
                             style={styles.feedbackContainer}
