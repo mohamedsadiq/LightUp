@@ -2,7 +2,7 @@
 export type ModelType = "local" | "openai"
 
 // Available modes for text processing
-export type Mode = "explain" | "summarize" | "analyze"
+export type Mode = "explain" | "summarize" | "analyze" | "translate"
 
 // Feedback types
 export type FeedbackType = "like" | "dislike"
@@ -74,4 +74,10 @@ export interface FeedbackPattern {
 export interface FeedbackContext {
   positivePatterns: FeedbackPattern[]
   negativePatterns: FeedbackPattern[]
+}
+
+// Add a new interface for translation settings
+export interface TranslationSettings {
+  fromLanguage: string
+  toLanguage: string
 } 

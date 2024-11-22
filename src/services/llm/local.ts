@@ -1,7 +1,7 @@
 import type { ProcessTextRequest } from "~types/messages"
 import { FeedbackProcessor } from "../feedback/feedbackProcessor"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
-
+import { LANGUAGES } from "../../utils/constants"
 export const processLocalText = async (request: ProcessTextRequest) => {
   const { text, mode, settings } = request
   const feedbackProcessor = new FeedbackProcessor()
@@ -33,7 +33,9 @@ export const processLocalText = async (request: ProcessTextRequest) => {
           },
           {
             role: "user",
-            content: `${USER_PROMPTS[mode]}\n${text}`
+            content: mode === "translate" 
+              ? `Translate to ${LANGUAGES[settings.translationSettings?.toLanguage || "es"]}:\n\n${text}`
+              : `${USER_PROMPTS[mode]}\n${text}`
           }
         ],
         max_tokens: settings.maxTokens || 2048,
@@ -46,7 +48,17 @@ export const processLocalText = async (request: ProcessTextRequest) => {
     }
 
     const data = await response.json()
+    const result = data.choices[0].message.content
+
+         // Clean up translation response
+         if (mode === "translate") {
+          return result.split("Translation:").pop()?.split("Note:")[0]?.trim() || result
+        }
+
     return data.choices[0].message.content
+ 
+    
+      
   } catch (error) {
     console.error("Local LLM Error:", error)
     throw error

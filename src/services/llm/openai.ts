@@ -1,4 +1,5 @@
 import type { ProcessTextRequest } from "~types/messages"
+import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
 
 export const processOpenAIText = async (request: ProcessTextRequest) => {
   const { text, mode, settings } = request
@@ -15,11 +16,16 @@ export const processOpenAIText = async (request: ProcessTextRequest) => {
         messages: [
           {
             role: "system",
-            content: "You are a concise expert who explains texts clearly. Keep explanations under 1500 tokens. Always complete your thoughts."
+            content: SYSTEM_PROMPTS[mode]
           },
           {
             role: "user",
-            content: `Analyze this text briefly but thoroughly. Focus on the most important aspects:\n${text}\n\nRemember to complete all explanations.`
+            content: mode === "translate"
+              ? USER_PROMPTS.translate(
+                  settings.translationSettings?.fromLanguage || "en",
+                  settings.translationSettings?.toLanguage || "es"
+                ) + "\n" + text
+              : USER_PROMPTS[mode] + "\n" + text
           }
         ],
         max_tokens: settings.maxTokens || 2048,

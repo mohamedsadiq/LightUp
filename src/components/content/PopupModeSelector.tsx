@@ -1,10 +1,11 @@
 import { motion, AnimatePresence } from "framer-motion"
-import type { Mode } from "~types/settings"
-
+import { useState } from "react"
+import { LanguageSelector } from "./LanguageSelector"
+import type { Mode, TranslationSettings } from "~types/settings"
 
 interface PopupModeSelectorProps {
   activeMode: Mode
-  onModeChange: (mode: Mode) => void
+  onModeChange: (mode: Mode, settings?: TranslationSettings) => void
   isLoading?: boolean
 }
 
@@ -12,9 +13,21 @@ const modeIcons: Record<Mode, string> = {
   explain: "✍️",
   summarize: "✏️",
   analyze: "💭",
+  translate: "🌐",
 }
 
 export const PopupModeSelector = ({ activeMode, onModeChange, isLoading = false }: PopupModeSelectorProps) => {
+  const [fromLanguage, setFromLanguage] = useState("en")
+  const [toLanguage, setToLanguage] = useState("es")
+
+  const handleModeClick = (mode: Mode) => {
+    if (mode === "translate") {
+      onModeChange(mode, { fromLanguage, toLanguage })
+    } else {
+      onModeChange(mode)
+    }
+  }
+
   return (
     <motion.div 
       style={styles.container}
@@ -111,5 +124,10 @@ const styles = {
     color: "#8e8e8e",
     lineHeight: 1,
     marginLeft: "0",
+  },
+  languageSelectors: {
+    display: "flex",
+    gap: "8px",
+    marginTop: "8px"
   }
 } as const 

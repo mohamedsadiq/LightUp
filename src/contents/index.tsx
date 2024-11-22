@@ -12,6 +12,7 @@ import { textVariants, loadingVariants, iconButtonVariants, popupVariants, toolt
 import { useResizable } from '../hooks/useResizable';
 import LoadingGif from "../assets/loading.gif"
 import { PopupModeSelector } from "../components/content/PopupModeSelector"
+import type { Mode } from "~types/settings"
 
 // Add this style block right after your imports
 const fontImportStyle = document.createElement('style');
@@ -41,8 +42,6 @@ interface Settings {
   serverUrl?: string;
   apiKey?: string;
 }
-
-type Mode = "explain" | "summarize" | "analyze"
 
 function Content() {
   const [selectedText, setSelectedText] = useState("")
@@ -82,7 +81,8 @@ function Content() {
     const loadMode = async () => {
       const savedMode = await storage.get("mode")
       if (savedMode) {
-        if (savedMode === "explain" || savedMode === "summarize" || savedMode === "analyze") {
+        if (savedMode === "explain" || savedMode === "summarize" || 
+            savedMode === "analyze" || savedMode === "translate") {
           setMode(savedMode)
         }
       }
@@ -93,7 +93,8 @@ function Content() {
     const handleStorageChange = async (changes) => {
       const newMode = await storage.get("mode")
       if (newMode) {
-        if (newMode === "explain" || newMode === "summarize" || newMode === "analyze") {
+        if (newMode === "explain" || newMode === "summarize" || 
+            newMode === "analyze" || newMode === "translate") {
           setMode(newMode)
         }
       }
@@ -481,9 +482,13 @@ function Content() {
   // Use a stable key for TypewriterText
   const explanationKey = useMemo(() => `explanation-${explanation}`, [explanation]);
 
-  const handleModeChange = async (newMode: Mode) => {
-    setMode(newMode as any)
+  const handleModeChange = async (newMode: Mode, translationSettings?: TranslationSettings) => {
+    setMode(newMode)
     await storage.set("mode", newMode)
+    
+    if (translationSettings) {
+      await storage.set("translationSettings", translationSettings)
+    }
     
     // Re-process text with new mode
     if (selectedText) {
@@ -497,7 +502,10 @@ function Content() {
             text: selectedText,
             mode: newMode,
             maxTokens: 2048,
-            settings
+            settings: {
+              ...settings,
+              translationSettings
+            }
           }
         })
 
