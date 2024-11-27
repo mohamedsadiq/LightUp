@@ -44,6 +44,9 @@ interface Settings {
 }
 
 function Content() {
+  // Add these new states after the existing useState declarations
+  const [streamingText, setStreamingText] = useState("")
+  const [port, setPort] = useState<chrome.runtime.Port | null>(null)
   const [selectedText, setSelectedText] = useState("")
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isVisible, setIsVisible] = useState(false)
@@ -213,9 +216,8 @@ function Content() {
         return false
       }
 
-      // If selection is within no-select areas, return
       if (checkSelectionForClass()) {
-        return
+        return;
       }
 
       if (!isConfigured) {
@@ -223,52 +225,40 @@ function Content() {
         return;
       }
 
-      const text = selection?.toString().trim()
+      const text = selection?.toString().trim();
 
       if (text && text.length > 0 && /[a-zA-Z0-9]/.test(text)) {
-        // Create new AbortController for this request
-        const controller = new AbortController();
-        setAbortController(controller);
-
+        setSelectedText(text);
         const { top, left } = calculatePosition(event.clientX, event.clientY);
-        setSelectedText(text)
         setPosition({
           x: left,
           y: top
-        })
-        setIsVisible(true)
-        setError(null)
-        setIsLoading(true)
-        setFollowUpQAs([])
-        setIsExplanationComplete(false)
-        
+        });
+        setIsVisible(true);
+        setError(null);
+        setIsLoading(true);
+        setFollowUpQAs([]);
+        setIsExplanationComplete(false);
+        setStreamingText('');
+
         try {
-          const response = await sendToBackground({
-            name: "processText",
-            body: {
+          if (!port) {
+            throw new Error('Connection not established');
+          }
+
+          port.postMessage({
+            type: "PROCESS_TEXT",
+            payload: {
               text,
               mode,
-              maxTokens: 2048,
-              settings,
-              signal: controller.signal // Add abort signal
+              settings
             }
-          })
+          });
 
-          if (response.result) {
-            setExplanation(response.result)
-            setIsExplanationComplete(true)
-          } else if (response.error) {
-            setError(response.error)
-          }
         } catch (err) {
-          // Only set error if it's not an abort error
-          if (err.name !== 'AbortError') {
-            console.error('Error:', err)
-            setError('Failed to process text')
-          }
-        } finally {
-          setIsLoading(false)
-          setAbortController(null)
+          console.error('Error:', err);
+          setError('Failed to process text');
+          setIsLoading(false);
         }
       }
     }
@@ -283,51 +273,54 @@ function Content() {
     }
   }, [mode, isConfigured])
 
-  const formatFollowUpQA = (question: string, answer: string) => {
-    return {
-      question,
-      answer,
-      id: Date.now(), // Unique ID for animation keys
-      isComplete: false // Track animation completion
-    }
-  }
+ 
 
   const handleAskFollowUp = async () => {
-    if (!followUpQuestion.trim()) return
+    if (!followUpQuestion.trim() || isAskingFollowUp) return;
 
-    setActiveAnswerId(null)
-    setIsAskingFollowUp(true)
-    setError(null)
+    console.log('Starting follow-up question:', followUpQuestion);
+    setIsAskingFollowUp(true);
+    const newId = Date.now();
+    
+    // Set the active answer ID first
+    setActiveAnswerId(newId);
+    
+    setFollowUpQAs(prev => {
+      console.log('Adding new QA with id:', newId);
+      return [...prev, { 
+        question: followUpQuestion, 
+        answer: '', 
+        id: newId,
+        isComplete: false 
+      }];
+    });
+    
+    setFollowUpQuestion('');
 
     try {
-      const response = await sendToBackground({
-        name: "processText",
-        body: {
-          text: `Based on this context: "${selectedText}", ${followUpQuestion}`,
-          mode: "explain",
-          maxTokens: 2048
-        }
-      })
-      if (response.result) {
-        setIsFollowUpResultVisible(true);
-        const newQA = formatFollowUpQA(followUpQuestion, response.result)
-        // Mark previous QAs as complete before adding new one
-        setFollowUpQAs(prev => [
-          ...prev.map(qa => ({ ...qa, isComplete: true })),
-          newQA
-        ])
-        setActiveAnswerId(newQA.id)
-        setFollowUpQuestion("")
-      } else if (response.error) {
-        setError(response.error)
+      if (!port) {
+        throw new Error('Connection not established');
       }
-    } catch (err) {
-      console.error('Error:', err)
-      setError('Failed to get answer')
-    } finally {
-      setIsAskingFollowUp(false)
+
+      console.log('Sending follow-up request with ID:', newId);
+      port.postMessage({
+        type: "PROCESS_TEXT",
+        payload: {
+          text: followUpQuestion,
+          context: selectedText,
+          mode: mode,
+          settings,
+          isFollowUp: true,
+          id: newId // Add the ID to the payload
+        }
+      });
+    } catch (error) {
+      console.error('Follow-up error:', error);
+      setError('Failed to process follow-up question');
+      setFollowUpQAs(prev => prev.filter(qa => qa.id !== newId));
+      setActiveAnswerId(null);
     }
-  }
+  };
 
   // Add this event listener
   document.addEventListener('mouseup', async () => {
@@ -524,6 +517,82 @@ function Content() {
     }
   }
 
+  useEffect(() => {
+    const newPort = chrome.runtime.connect({ name: "text-processing" });
+    
+    newPort.onMessage.addListener((message: StreamChunk) => {
+      switch (message.type) {
+        case 'chunk':
+          if (message.content) {
+            if (message.isFollowUp) {
+              setFollowUpQAs(prev => {
+                const lastQA = prev[prev.length - 1];
+                if (!lastQA) return prev;
+                
+                console.log('Processing chunk for QA:', lastQA.id);
+                return prev.map(qa => 
+                  qa.id === lastQA.id
+                    ? { ...qa, answer: qa.answer + message.content }
+                    : qa
+                );
+              });
+            } else {
+              setStreamingText(prev => prev + message.content);
+            }
+          }
+          break;
+        case 'done':
+          console.log('Stream completed');
+          if (message.isFollowUp) {
+            setFollowUpQAs(prev => {
+              const lastQA = prev[prev.length - 1];
+              console.log('Completing QA:', lastQA?.id);
+              
+              return prev.map(qa => {
+                if (qa === lastQA) {
+                  console.log(`Marking QA ${qa.id} as complete`);
+                  return { ...qa, isComplete: true };
+                }
+                return qa;
+              });
+            });
+            
+            // Log the state after update
+            setTimeout(() => {
+              console.log('Current followUpQAs after completion:', followUpQAs);
+            }, 0);
+            
+            setActiveAnswerId(null);
+            setIsAskingFollowUp(false);
+          } else {
+            setIsExplanationComplete(true);
+          }
+          setIsLoading(false);
+          break;
+        case 'error':
+          console.error('Stream error:', message.error);
+          setError(message.error || 'An unknown error occurred');
+          setIsLoading(false);
+          setActiveAnswerId(null);
+          setIsAskingFollowUp(false);
+          break;
+      }
+    });
+
+    setPort(newPort);
+
+    return () => {
+      newPort.disconnect();
+    };
+  }, []); // Remove activeAnswerId from dependencies as we're using the latest state
+
+  // Add this inside the Content component, near other useEffect hooks
+  useEffect(() => {
+    followUpQAs.forEach(qa => {
+      console.log(`Answer for question "${qa.question}":`, qa.answer);
+    });
+  }, [followUpQAs]);
+
   return (
     <AnimatePresence mode="sync" >
       
@@ -618,68 +687,36 @@ function Content() {
               </p>
 
               <AnimatePresence mode="wait">
-                {isLoading ? (
+                {isLoading && !streamingText ? (
                   <motion.div
-                    key="loading"
                     style={{
-                      ...styles.loadingText,
                       display: 'flex',
                       flexDirection: 'column',
-                      gap: '16px',
-                      width: '100%'
+                      gap: '12px',
+                      width: '100%',
                     }}
-                    variants={loadingVariants}
-                    animate="animate"
                     layout
                   >
-                    {/* <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      style={{
-                        margin: 0,
-                        fontSize: '10px',
-                        color: '#666',
-                        fontWeight: 500,
-                        alignSelf: 'flex-start'
-                      }}
-                    >
-                      Generating {mode}...
-                    </motion.p> */}
-
-                    <motion.div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px',
-                        width: '100%',
-                       
-                      }}
-                      layout
-                    >
-                      {/* Skeleton lines */}
-                      {[...Array(9)].map((_, i) => (
-                        <motion.div
-                          key={i}
-                          style={{
-                            height: '16px',
-                            background: 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
-                            borderRadius: '4px',
-                            width: i === 2 ? '70%' : '100%', // Last line shorter
-                          }}
-                          animate={{
-                            backgroundPosition: ['0px', '500px'],
-                          }}
-                          transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            ease: 'linear',
-                          }}
-                        />
-                      ))}
-                      
-                   
-                    
-                    </motion.div>
+                    {/* Skeleton lines */}
+                    {[...Array(9)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        style={{
+                          height: '16px',
+                          background: 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
+                          borderRadius: '4px',
+                          width: i === 2 ? '70%' : '100%',
+                        }}
+                        animate={{
+                          backgroundPosition: ['0px', '500px'],
+                        }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          ease: 'linear',
+                        }}
+                      />
+                    ))}
                   </motion.div>
                 ) : error ? (
                   <motion.p
@@ -707,218 +744,216 @@ function Content() {
                       transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5 }}
                       exit={{ opacity: 0, y: 50 }}
                     >
-                      {explanation && (
-                        <>
-                         <MarkdownText text={stripHtml(explanation)} />
-                          <motion.div
-                            style={styles.feedbackContainer}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.2 }}
+                      <div style={{ marginBottom: '8px' }}>
+                        <MarkdownText 
+                          text={streamingText} 
+                          isStreaming={isLoading}
+                          style={{
+                            opacity: isLoading ? 0.7 : 1,
+                            transition: 'opacity 0.2s'
+                          }}
+                        />
+                      </div>
+
+                      {isExplanationComplete && (
+                        <motion.div
+                          style={styles.feedbackContainer}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.2 }}
+                        >
+                          <motion.button
+                            onClick={() => handleCopy(stripHtml(streamingText), 'initial')}
+                            style={{
+                              ...styles.feedbackButton,
+                              color: copiedId === 'initial' ? '#666' : '#666'
+                            }}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
                           >
-                            <motion.button
-                              onClick={() => handleCopy(stripHtml(explanation), 'initial')}
-                              style={{
-                                ...styles.feedbackButton,
-                                color: copiedId === 'initial' ? '#666' : '#666'
-                              }}
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                            >
-                              {copiedId === 'initial' ? (
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                                </svg>
-                              ) : (
-                                <svg width="12" height="12" viewBox="0 0 62 61" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
-                                </svg>
-                              )}
-                            </motion.button>
-                            <motion.button
-                              onClick={() => handleFeedback('initial', explanation, 'like')}
-                              style={{
-                                ...styles.feedbackButton,
-                                color: feedbacks['initial'] === 'like' ? '#0F8A5F' : '#666'
-                              }}
-                              variants={feedbackButtonVariants}
-                              initial="initial"
-                              whileHover="hover"
-                              whileTap="tap"
-                              animate={feedbacks['initial'] === 'like' ? 'bounce' : 'initial'}
-                            >
-                              <svg width="12" height="12" viewBox="0 0 60 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M26.6108 5.3736C25.764 7.54084 25.3317 10.0211 24.6313 12.611C23.4279 17.0604 21.7389 21.5198 17.1143 24.4812C16.6115 23.4546 15.9293 22.5592 15.1098 21.8767C13.4022 20.4546 11.2762 19.8232 9.17144 19.8232C7.0667 19.8232 4.91561 20.4546 3.208 21.8767C1.5004 23.299 0.351562 25.5931 0.351562 28.2376V53.08C0.351562 55.7245 1.5004 57.9937 3.208 59.4158C4.91561 60.8381 7.0667 61.4944 9.17144 61.4944C11.2762 61.4944 13.4022 60.8381 15.1098 59.4158C15.5279 59.0677 15.9177 58.6566 16.2624 58.2137C17.4974 59.1358 18.7774 59.8227 19.9958 60.1667C26.3043 62.0641 30.1481 64.2363 42.672 65.05C45.6787 65.0908 48.8912 64.4278 51.2412 63.3468C53.8736 62.1009 56.277 59.8363 56.7536 56.5853C57.5593 51.0892 59.2318 42.9913 59.6101 36.2506C59.7649 33.4891 59.4837 30.721 57.8812 28.3871C56.2941 26.0758 53.4946 24.5999 49.813 24.1298C46.2134 23.6486 42.2725 23.6761 39.0888 23.8794C41.1656 19.0706 42.7735 14.4192 42.6969 10.3563C42.6489 7.80672 41.9122 5.31376 40.0409 3.54473C38.1852 1.79028 35.4935 0.97847 32.2484 0.965332C28.8408 0.981354 27.4411 3.36224 26.6108 5.3736ZM32.1733 5.77446C34.6886 5.77446 36.0097 6.34218 36.7336 7.02654C37.4574 7.71099 37.8536 8.73124 37.8862 10.4574C37.6607 13.8029 35.2552 21.8166 31.4717 29.1143C38.4625 29.0289 43.905 28.1964 49.1365 28.8889C52 29.2376 53.2121 30.0582 53.9223 31.0927C54.6326 32.127 54.924 33.7774 54.7993 36.0011C54.4543 42.1487 52.8368 50.1289 51.993 55.885C51.7966 57.2241 50.9224 58.1687 49.1866 58.9903C47.4703 59.8027 45.0549 60.2576 42.8975 60.2675C30.8373 59.4754 28.0705 57.5713 21.2487 55.5344C18.9022 54.7338 18.0362 53.0605 18.0164 51.4023C17.9897 44.0898 17.9914 36.7773 17.9914 29.4648C25.1227 25.7173 27.8483 19.1081 29.2668 13.8632C30.3578 10.3696 30.7803 5.78719 32.1733 5.77446Z" fill="currentColor"/>
+                            {copiedId === 'initial' ? (
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
                               </svg>
-                            </motion.button>
-                            <motion.button
-                              onClick={() => handleFeedback('initial', explanation, 'dislike')}
-                              style={{
-                                ...styles.feedbackButton,
-                                color: feedbacks['initial'] === 'dislike' ? '#ff4444' : '#666'
-                              }}
-                              variants={feedbackButtonVariants}
-                              initial="initial"
-                              whileHover="hover"
-                              whileTap="tap"
-                              animate={feedbacks['initial'] === 'dislike' ? 'bounce' : 'initial'}
-                            >
-                              <svg width="12" height="12" viewBox="0 0 57 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M31.5374 57.716C32.3451 55.6216 32.7575 53.2247 33.4256 50.7219C34.5735 46.422 36.1847 42.1125 40.596 39.2507C41.0757 40.2428 41.7264 41.108 42.5081 41.7676C44.137 43.142 46.165 43.7521 48.1727 43.7521C50.1804 43.7521 52.2323 43.142 53.8612 41.7676C55.4901 40.3932 56.5859 38.1762 56.5859 35.6205L56.5859 11.6132C56.5859 9.05756 55.4901 6.8647 53.8612 5.49035C52.2323 4.11592 50.1804 3.48165 48.1727 3.48165C46.165 3.48165 44.137 4.11584 42.5081 5.49035C42.1093 5.8268 41.7375 6.22409 41.4087 6.65204C40.2307 5.76099 39.0096 5.09715 37.8474 4.76473C31.8297 2.93107 28.1632 0.83196 16.2167 0.0455745C13.3486 0.00609211 10.2843 0.646858 8.0426 1.6915C5.53153 2.89554 3.23898 5.08399 2.78433 8.22573C2.0158 13.5371 0.420395 21.3628 0.0595847 27.8769C-0.0881129 30.5456 0.180144 33.2206 1.70877 35.4761C3.22269 37.7097 5.89311 39.1359 9.40496 39.5902C12.8386 40.0552 16.5977 40.0287 19.6347 39.8322C17.6536 44.4794 16.1199 48.9744 16.1929 52.9008C16.2387 55.3647 16.9415 57.7738 18.7265 59.4834C20.4967 61.1788 23.0643 61.9634 26.1597 61.9761C29.4102 61.9606 30.7453 59.6597 31.5374 57.716ZM26.2314 57.3286C23.8321 57.3286 22.5718 56.78 21.8813 56.1186C21.1908 55.4572 20.8129 54.4712 20.7819 52.8031C20.997 49.57 23.2915 41.8257 26.9006 34.7733C20.2322 34.8559 15.0406 35.6604 10.0502 34.9911C7.31877 34.6541 6.16259 33.8611 5.48509 32.8614C4.80758 31.8619 4.52961 30.2669 4.64854 28.118C4.97762 22.177 6.52059 14.4651 7.32549 8.9025C7.51276 7.60842 8.34671 6.69554 10.0024 5.90157C11.6396 5.1165 13.9436 4.67686 16.0016 4.66727C27.5057 5.43275 30.145 7.27283 36.6523 9.24135C38.8906 10.015 39.7166 11.632 39.7356 13.2345C39.761 20.3012 39.7594 27.3679 39.7594 34.4346C32.9569 38.0561 30.357 44.4431 29.0039 49.5118C27.9631 52.8879 27.5602 57.3163 26.2314 57.3286Z" fill="currentColor"/>
+                            ) : (
+                              <svg width="12" height="12" viewBox="0 0 62 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
                               </svg>
-                            </motion.button>
-                            
-                          </motion.div>
-                        </>
+                            )}
+                          </motion.button>
+                          <motion.button
+                            onClick={() => handleFeedback('initial', streamingText, 'like')}
+                            style={{
+                              ...styles.feedbackButton,
+                              color: feedbacks['initial'] === 'like' ? '#0F8A5F' : '#666'
+                            }}
+                            variants={feedbackButtonVariants}
+                            initial="initial"
+                            whileHover="hover"
+                            whileTap="tap"
+                            animate={feedbacks['initial'] === 'like' ? 'bounce' : 'initial'}
+                          >
+                            <svg width="12" height="12" viewBox="0 0 60 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M26.6108 5.3736C25.764 7.54084 25.3317 10.0211 24.6313 12.611C23.4279 17.0604 21.7389 21.5198 17.1143 24.4812C16.6115 23.4546 15.9293 22.5592 15.1098 21.8767C13.4022 20.4546 11.2762 19.8232 9.17144 19.8232C7.0667 19.8232 4.91561 20.4546 3.208 21.8767C1.5004 23.299 0.351562 25.5931 0.351562 28.2376V53.08C0.351562 55.7245 1.5004 57.9937 3.208 59.4158C4.91561 60.8381 7.0667 61.4944 9.17144 61.4944C11.2762 61.4944 13.4022 60.8381 15.1098 59.4158C15.5279 59.0677 15.9177 58.6566 16.2624 58.2137C17.4974 59.1358 18.7774 59.8227 19.9958 60.1667C26.3043 62.0641 30.1481 64.2363 42.672 65.05C45.6787 65.0908 48.8912 64.4278 51.2412 63.3468C53.8736 62.1009 56.277 59.8363 56.7536 56.5853C57.5593 51.0892 59.2318 42.9913 59.6101 36.2506C59.7649 33.4891 59.4837 30.721 57.8812 28.3871C56.2941 26.0758 53.4946 24.5999 49.813 24.1298C46.2134 23.6486 42.2725 23.6761 39.0888 23.8794C41.1656 19.0706 42.7735 14.4192 42.6969 10.3563C42.6489 7.80672 41.9122 5.31376 40.0409 3.54473C38.1852 1.79028 35.4935 0.97847 32.2484 0.965332C28.8408 0.981354 27.4411 3.36224 26.6108 5.3736Z" fill="currentColor"/>
+                            </svg>
+                          </motion.button>
+                          <motion.button
+                            onClick={() => handleFeedback('initial', streamingText, 'dislike')}
+                            style={{
+                              ...styles.feedbackButton,
+                              color: feedbacks['initial'] === 'dislike' ? '#ff4444' : '#666'
+                            }}
+                            variants={feedbackButtonVariants}
+                            initial="initial"
+                            whileHover="hover"
+                            whileTap="tap"
+                            animate={feedbacks['initial'] === 'dislike' ? 'bounce' : 'initial'}
+                          >
+                            <svg width="12" height="12" viewBox="0 0 57 62" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M31.5374 57.716C32.3451 55.6216 32.7575 53.2247 33.4256 50.7219C34.5735 46.422 36.1847 42.1125 40.596 39.2507C41.0757 40.2428 41.7264 41.108 42.5081 41.7676C44.137 43.142 46.165 43.7521 48.1727 43.7521C50.1804 43.7521 52.2323 43.142 53.8612 41.7676C55.4901 40.3932 56.5859 38.1762 56.5859 35.6205L56.5859 11.6132C56.5859 9.05756 55.4901 6.8647 53.8612 5.49035C52.2323 4.11592 50.1804 3.48165 48.1727 3.48165C46.165 3.48165 44.137 4.11584 42.5081 5.49035C42.1093 5.8268 41.7375 6.22409 41.4087 6.65204C40.2307 5.76099 39.0096 5.09715 37.8474 4.76473C31.8297 2.93107 28.1632 0.83196 16.2167 0.0455745C13.3486 0.00609211 10.2843 0.646858 8.0426 1.6915C5.53153 2.89554 3.23898 5.08399 2.78433 8.22573C2.0158 13.5371 0.420395 21.3628 0.0595847 27.8769C-0.0881129 30.5456 0.180144 33.2206 1.70877 35.4761C3.22269 37.7097 5.89311 39.1359 9.40496 39.5902C12.8386 40.0552 16.5977 40.0287 19.6347 39.8322C17.6536 44.4794 16.1199 48.9744 16.1929 52.9008C16.2387 55.3647 16.9415 57.7738 18.7265 59.4834C20.4967 61.1788 23.0643 61.9634 26.1597 61.9761C29.4102 61.9606 30.7453 59.6597 31.5374 57.716Z" fill="currentColor"/>
+                            </svg>
+                          </motion.button>
+                        </motion.div>
                       )}
                     </motion.div>
-
-                    {followUpQAs.map((qa) => (
+                    {followUpQAs.map(({ question, answer, id, isComplete }) => (
                       <motion.div
-                        key={qa.id}
-                        style={styles.followUpContainer}
+                        key={id}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ 
-                          type: "spring",
-                          stiffness: 100,
-                          damping: 20,
-                        }}
-                        layout
+                        style={styles.followUpQA}
                       >
-                        <div style={styles.followUpQuestion}>Q: {qa.question}</div>
-                        <div style={styles.followUpAnswer}>
-                          <MarkdownText 
-                            key={qa.id}
-                            text={stripHtml(qa.answer)}
-                         
-                          />
-                          <motion.div 
-                            style={styles.feedbackContainer}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.2 }}
-                          >
-                            <motion.button
-                              onClick={() => handleCopy(stripHtml(qa.answer), qa.id.toString())}
+                        
+                        {/* Question bubble */}
+                        <motion.div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-end',
+                            width: '100%'
+                          }}
+                        >
+                          <div style={styles.followUpQuestion}>
+                            {question}
+                          </div>
+                        </motion.div>
+
+                        {/* Answer bubble */}
+                        <motion.div
+                          style={{
+                            display: 'flex',
+                            justifyContent: 'flex-start',
+                            width: '100%'
+                          }}
+                        >
+                          <div style={styles.followUpAnswer}>
+                            <MarkdownText
+                              text={answer}
+                              isStreaming={activeAnswerId === id && !isComplete}
                               style={{
-                                ...styles.feedbackButton,
-                                color: copiedId === qa.id.toString() ? '#0F8A5F' : '#666'
+                                margin: 10,
+                                opacity: activeAnswerId === id && !isComplete ? 0.7 : 1
                               }}
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                            >
-                              {copiedId === qa.id.toString() ? (
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                                </svg>
-                              ) : (
-                                <svg width="12" height="12" viewBox="0 0 62 61" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                  <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
-                                </svg>
-                              )}
-                            </motion.button>
-                            <motion.button
-                              onClick={() => handleFeedback(qa.id.toString(), qa.answer, 'like')}
-                              style={{
-                                ...styles.feedbackButton,
-                                color: feedbacks[qa.id.toString()] === 'like' ? '#0F8A5F' : '#666'
-                              }}
-                              variants={feedbackButtonVariants}
-                              initial="initial"
-                              whileHover="hover"
-                              whileTap="tap"
-                              animate={feedbacks[qa.id.toString()] === 'like' ? 'bounce' : 'initial'}
-                            >
-                              <svg width="12" height="12" viewBox="0 0 60 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M26.6108 5.3736C25.764 7.54084 25.3317 10.0211 24.6313 12.611C23.4279 17.0604 21.7389 21.5198 17.1143 24.4812C16.6115 23.4546 15.9293 22.5592 15.1098 21.8767C13.4022 20.4546 11.2762 19.8232 9.17144 19.8232C7.0667 19.8232 4.91561 20.4546 3.208 21.8767C1.5004 23.299 0.351562 25.5931 0.351562 28.2376V53.08C0.351562 55.7245 1.5004 57.9937 3.208 59.4158C4.91561 60.8381 7.0667 61.4944 9.17144 61.4944C11.2762 61.4944 13.4022 60.8381 15.1098 59.4158C15.5279 59.0677 15.9177 58.6566 16.2624 58.2137C17.4974 59.1358 18.7774 59.8227 19.9958 60.1667C26.3043 62.0641 30.1481 64.2363 42.672 65.05C45.6787 65.0908 48.8912 64.4278 51.2412 63.3468C53.8736 62.1009 56.277 59.8363 56.7536 56.5853C57.5593 51.0892 59.2318 42.9913 59.6101 36.2506C59.7649 33.4891 59.4837 30.721 57.8812 28.3871C56.2941 26.0758 53.4946 24.5999 49.813 24.1298C46.2134 23.6486 42.2725 23.6761 39.0888 23.8794C41.1656 19.0706 42.7735 14.4192 42.6969 10.3563C42.6489 7.80672 41.9122 5.31376 40.0409 3.54473C38.1852 1.79028 35.4935 0.97847 32.2484 0.965332C28.8408 0.981354 27.4411 3.36224 26.6108 5.3736ZM32.1733 5.77446C34.6886 5.77446 36.0097 6.34218 36.7336 7.02654C37.4574 7.71099 37.8536 8.73124 37.8862 10.4574C37.6607 13.8029 35.2552 21.8166 31.4717 29.1143C38.4625 29.0289 43.905 28.1964 49.1365 28.8889C52 29.2376 53.2121 30.0582 53.9223 31.0927C54.6326 32.127 54.924 33.7774 54.7993 36.0011C54.4543 42.1487 52.8368 50.1289 51.993 55.885C51.7966 57.2241 50.9224 58.1687 49.1866 58.9903C47.4703 59.8027 45.0549 60.2576 42.8975 60.2675C30.8373 59.4754 28.0705 57.5713 21.2487 55.5344C18.9022 54.7338 18.0362 53.0605 18.0164 51.4023C17.9897 44.0898 17.9914 36.7773 17.9914 29.4648C25.1227 25.7173 27.8483 19.1081 29.2668 13.8632C30.3578 10.3696 30.7803 5.78719 32.1733 5.77446Z" fill="currentColor"/>
-                              </svg>
-                            </motion.button>
-                            <motion.button
-                              onClick={() => handleFeedback(qa.id.toString(), qa.answer, 'dislike')}
-                              style={{
-                                ...styles.feedbackButton,
-                                color: feedbacks[qa.id.toString()] === 'dislike' ? '#ff4444' : '#666'
-                              }}
-                              variants={feedbackButtonVariants}
-                              initial="initial"
-                              whileHover="hover"
-                              whileTap="tap"
-                              animate={feedbacks[qa.id.toString()] === 'dislike' ? 'bounce' : 'initial'}
-                            >
-                             <svg width="12" height="12" viewBox="0 0 57 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M31.5374 57.716C32.3451 55.6216 32.7575 53.2247 33.4256 50.7219C34.5735 46.422 36.1847 42.1125 40.596 39.2507C41.0757 40.2428 41.7264 41.108 42.5081 41.7676C44.137 43.142 46.165 43.7521 48.1727 43.7521C50.1804 43.7521 52.2323 43.142 53.8612 41.7676C55.4901 40.3932 56.5859 38.1762 56.5859 35.6205L56.5859 11.6132C56.5859 9.05756 55.4901 6.8647 53.8612 5.49035C52.2323 4.11592 50.1804 3.48165 48.1727 3.48165C46.165 3.48165 44.137 4.11584 42.5081 5.49035C42.1093 5.8268 41.7375 6.22409 41.4087 6.65204C40.2307 5.76099 39.0096 5.09715 37.8474 4.76473C31.8297 2.93107 28.1632 0.83196 16.2167 0.0455745C13.3486 0.00609211 10.2843 0.646858 8.0426 1.6915C5.53153 2.89554 3.23898 5.08399 2.78433 8.22573C2.0158 13.5371 0.420395 21.3628 0.0595847 27.8769C-0.0881129 30.5456 0.180144 33.2206 1.70877 35.4761C3.22269 37.7097 5.89311 39.1359 9.40496 39.5902C12.8386 40.0552 16.5977 40.0287 19.6347 39.8322C17.6536 44.4794 16.1199 48.9744 16.1929 52.9008C16.2387 55.3647 16.9415 57.7738 18.7265 59.4834C20.4967 61.1788 23.0643 61.9634 26.1597 61.9761C29.4102 61.9606 30.7453 59.6597 31.5374 57.716ZM26.2314 57.3286C23.8321 57.3286 22.5718 56.78 21.8813 56.1186C21.1908 55.4572 20.8129 54.4712 20.7819 52.8031C20.997 49.57 23.2915 41.8257 26.9006 34.7733C20.2322 34.8559 15.0406 35.6604 10.0502 34.9911C7.31877 34.6541 6.16259 33.8611 5.48509 32.8614C4.80758 31.8619 4.52961 30.2669 4.64854 28.118C4.97762 22.177 6.52059 14.4651 7.32549 8.9025C7.51276 7.60842 8.34671 6.69554 10.0024 5.90157C11.6396 5.1165 13.9436 4.67686 16.0016 4.66727C27.5057 5.43275 30.145 7.27283 36.6523 9.24135C38.8906 10.015 39.7166 11.632 39.7356 13.2345C39.761 20.3012 39.7594 27.3679 39.7594 34.4346C32.9569 38.0561 30.357 44.4431 29.0039 49.5118C27.9631 52.8879 27.5602 57.3163 26.2314 57.3286Z" fill="currentColor"/>
-                              </svg>
-                            </motion.button>
-                          </motion.div>
-                        </div>
+                              onMount={() => console.log('Follow-up Answer:', answer)}
+                            />
+                            
+                            {!isComplete && (
+                              <motion.div
+                                style={{
+                                  ...styles.feedbackContainer,
+                                  opacity: 0.8
+                                }}
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 0.8 }}
+                                transition={{ delay: 0.2 }}
+                              >
+                                {/* Copy button */}
+                                <motion.button
+                                  onClick={() => handleCopy(stripHtml(answer), `followup-${id}`)}
+                                  style={{
+                                    ...styles.feedbackButton,
+                                    color: copiedId === `followup-${id}` ? '#666' : '#666'
+                                  }}
+                                  whileHover={{ scale: 1.1 }}
+                                  whileTap={{ scale: 0.9 }}
+                                >
+                                  {copiedId === `followup-${id}` ? (
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                                    </svg>
+                                  ) : (
+                                    <svg width="12" height="12" viewBox="0 0 62 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
+                                    </svg>
+                                  )}
+                                </motion.button>
+                                {/* Like button */}
+                                <motion.button
+                                  onClick={() => handleFeedback(`followup-${id}`, answer, 'like')}
+                                  style={{
+                                    ...styles.feedbackButton,
+                                    color: feedbacks[`followup-${id}`] === 'like' ? '#0F8A5F' : '#666'
+                                  }}
+                                  variants={feedbackButtonVariants}
+                                  initial="initial"
+                                  whileHover="hover"
+                                  whileTap="tap"
+                                >
+                                  <svg width="12" height="12" viewBox="0 0 60 66" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M26.6108 5.3736C25.764 7.54084 25.3317 10.0211 24.6313 12.611C23.4279 17.0604 21.7389 21.5198 17.1143 24.4812C16.6115 23.4546 15.9293 22.5592 15.1098 21.8767C13.4022 20.4546 11.2762 19.8232 9.17144 19.8232C7.0667 19.8232 4.91561 20.4546 3.208 21.8767C1.5004 23.299 0.351562 25.5931 0.351562 28.2376V53.08C0.351562 55.7245 1.5004 57.9937 3.208 59.4158C4.91561 60.8381 7.0667 61.4944 9.17144 61.4944C11.2762 61.4944 13.4022 60.8381 15.1098 59.4158C15.5279 59.0677 15.9177 58.6566 16.2624 58.2137C17.4974 59.1358 18.7774 59.8227 19.9958 60.1667C26.3043 62.0641 30.1481 64.2363 42.672 65.05C45.6787 65.0908 48.8912 64.4278 51.2412 63.3468C53.8736 62.1009 56.277 59.8363 56.7536 56.5853C57.5593 51.0892 59.2318 42.9913 59.6101 36.2506C59.7649 33.4891 59.4837 30.721 57.8812 28.3871C56.2941 26.0758 53.4946 24.5999 49.813 24.1298C46.2134 23.6486 42.2725 23.6761 39.0888 23.8794C41.1656 19.0706 42.7735 14.4192 42.6969 10.3563C42.6489 7.80672 41.9122 5.31376 40.0409 3.54473C38.1852 1.79028 35.4935 0.97847 32.2484 0.965332C28.8408 0.981354 27.4411 3.36224 26.6108 5.3736Z" fill="currentColor"/>
+                                  </svg>
+                                </motion.button>
+                                {/* Dislike button */}
+                                <motion.button
+                                  onClick={() => handleFeedback(`followup-${id}`, answer, 'dislike')}
+                                  style={{
+                                    ...styles.feedbackButton,
+                                    color: feedbacks[`followup-${id}`] === 'dislike' ? '#ff4444' : '#666'
+                                  }}
+                                  variants={feedbackButtonVariants}
+                                  initial="initial"
+                                  whileHover="hover"
+                                  whileTap="tap"
+                                >
+                                  <svg width="12" height="12" viewBox="0 0 57 62" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M31.5374 57.716C32.3451 55.6216 32.7575 53.2247 33.4256 50.7219C34.5735 46.422 36.1847 42.1125 40.596 39.2507C41.0757 40.2428 41.7264 41.108 42.5081 41.7676C44.137 43.142 46.165 43.7521 48.1727 43.7521C50.1804 43.7521 52.2323 43.142 53.8612 41.7676C55.4901 40.3932 56.5859 38.1762 56.5859 35.6205L56.5859 11.6132C56.5859 9.05756 55.4901 6.8647 53.8612 5.49035C52.2323 4.11592 50.1804 3.48165 48.1727 3.48165C46.165 3.48165 44.137 4.11584 42.5081 5.49035C42.1093 5.8268 41.7375 6.22409 41.4087 6.65204C40.2307 5.76099 39.0096 5.09715 37.8474 4.76473C31.8297 2.93107 28.1632 0.83196 16.2167 0.0455745C13.3486 0.00609211 10.2843 0.646858 8.0426 1.6915C5.53153 2.89554 3.23898 5.08399 2.78433 8.22573C2.0158 13.5371 0.420395 21.3628 0.0595847 27.8769C-0.0881129 30.5456 0.180144 33.2206 1.70877 35.4761C3.22269 37.7097 5.89311 39.1359 9.40496 39.5902C12.8386 40.0552 16.5977 40.0287 19.6347 39.8322C17.6536 44.4794 16.1199 48.9744 16.1929 52.9008C16.2387 55.3647 16.9415 57.7738 18.7265 59.4834C20.4967 61.1788 23.0643 61.9634 26.1597 61.9761C29.4102 61.9606 30.7453 59.6597 31.5374 57.716Z" fill="currentColor"/>
+                                  </svg>
+                                </motion.button>
+                              </motion.div>
+                            )}
+                          </div>
+                        </motion.div>
                       </motion.div>
                     ))}
-
-                    <motion.div 
-                      style={{
-                        ...styles.searchContainer,
-                        flexDirection: "row" as const
-                      }}
-                     
-                      initial={{ opacity: 0, y: 50 }}
-                      animate={{ opacity: 1,  y: 0 }}
-                      transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5, delay: 0.2 }}
-                      exit={{ opacity: 0, y: 50 }}
+                    
+                    {/* Input section */}
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      style={styles.followUpInputContainer}
                     >
-                      <input 
-                        placeholder="Ask LightUp"
+                      <input
+                        type="text"
                         value={followUpQuestion}
-                        onChange={(e) => {
-                          e.stopPropagation();
-                          setFollowUpQuestion(e.target.value);
-                        }}
-                        style={styles.input}
-                        onKeyPress={(e) => {
-                          e.stopPropagation();
+                        onChange={(e) => setFollowUpQuestion(e.target.value)}
+                        onKeyDown={(e) => {
                           if (e.key === 'Enter') {
                             handleAskFollowUp();
                           }
                         }}
-                        onKeyDown={(e) => {
-                          e.stopPropagation();
-                        }}
-                        onFocus={(e) => {
-                          e.stopPropagation();
-                          setIsInputFocused(true);
-                          setIsInteractingWithPopup(true);
-                        }}
-                        onBlur={(e) => {
-                          e.stopPropagation();
-                          setIsInputFocused(false);
-                          setIsInteractingWithPopup(false);
-                        }}
+                        placeholder="Ask a follow-up question..."
+                        style={styles.followUpInput}
+                        disabled={isAskingFollowUp}
                       />
-                      <button  
+                      <motion.button
                         onClick={handleAskFollowUp}
-                        disabled={isAskingFollowUp || !followUpQuestion.trim()}
-                        style={{
-                          ...styles.askButton,
-                          opacity: isAskingFollowUp || !followUpQuestion.trim() ? 0.6 : 1
-                        }}
+                        disabled={!followUpQuestion.trim() || isAskingFollowUp}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={styles.followUpButton}
                       >
-                        {isAskingFollowUp ? '...' : 
-                        <svg width="11" height="11" viewBox="0 0 83 95" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path fillRule="evenodd" clipRule="evenodd" d="M82.1902 89.577C83.4829 92.5435 80.5274 95.5819 77.5277 94.3776L42.7522 80.4009C41.465 79.8705 40.0205 79.8733 38.7361 80.4065L5.06293 94.0487C2.06048 95.2668 -0.906041 92.2229 0.386647 89.2509L37.905 3.12456C39.1674 0.227115 43.2774 0.22704 44.5397 3.12455L82.1902 89.577Z" fill="#ffffff"/>
-                        </svg>}
-                      </button>
+                        Ask
+                      </motion.button>
                     </motion.div>
-                    
-                    {isAskingFollowUp && (
-                      <motion.p
-                        style={styles.followUpText}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                      >
-                        Getting your answer...
-                      </motion.p>
-                    )}
                   </motion.div>
                 )}
               </AnimatePresence>

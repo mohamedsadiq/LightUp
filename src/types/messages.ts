@@ -7,15 +7,25 @@ export interface ProcessTextRequest {
     serverUrl: string;
     apiKey: string;
     maxTokens?: number;
+    stream?: boolean;
     translationSettings?: {
       fromLanguage: string;
       toLanguage: string;
     };
   };
-  signal?: AbortSignal;
+  aborted?: boolean;
+  isFollowUp?: boolean;
+  context?: string;
 }
 
 export interface ProcessTextResponse {
   result?: string;
+  error?: string;
+  done?: boolean;
+}
+
+export interface StreamChunk {
+  type: 'chunk' | 'error' | 'done';
+  content?: string;
   error?: string;
 } 

@@ -24,3 +24,59 @@
   border-right: 2px solid rgba(0, 0, 0, 0.2);
   border-bottom: 2px solid rgba(0, 0, 0, 0.2);
 }
+
+.streaming-text {
+  position: relative;
+}
+
+.streaming-text::after {
+  content: '▋';
+  display: inline-block;
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+  font-weight: 100;
+  opacity: 0.7;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Add these markdown-specific styles */
+.markdown-content p {
+  margin: 0.5em 0;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  margin: 0 !important;
+  /* margin: 0.5em 0; */
+  padding-left: 1.5em;
+}
+
+.markdown-content li {
+  margin: 0.25em 0;
+}
+
+.markdown-content code {
+  background-color: #f0f0f0;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.markdown-content pre {
+  margin: 0.5em 0;
+  padding: 0.5em;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  overflow: auto;
+}
+
+.markdown-content blockquote {
+  margin: 0.5em 0;
+  padding-left: 1em;
+  border-left: 3px solid #e0e0e0;
+  color: #666;
+}

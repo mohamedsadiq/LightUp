@@ -2,20 +2,17 @@ import type { PlasmoMessaging } from "@plasmohq/messaging"
 import { Storage } from "@plasmohq/storage"
 import { processLocalText } from "~services/llm/local"
 import { processOpenAIText } from "~services/llm/openai"
-import type { ProcessTextRequest, ProcessTextResponse } from "~types/messages"
+import type { ProcessTextRequest } from "~types/messages"
 
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
+  const port = chrome.runtime.connect({ name: "text-processing" });
+  
   try {
-    const { text, mode, signal } = req.body
+    const { text, mode } = req.body
     console.log('Processing text in mode:', mode)
 
     if (!['explain', 'summarize', 'analyze', 'translate'].includes(mode)) {
       res.send({ error: `Invalid mode: ${mode}` })
-      return
-    }
-
-    if (signal?.aborted) {
-      res.send({ error: 'Request cancelled' })
       return
     }
 
@@ -26,24 +23,22 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
       ? { modelType: "openai" as const, maxTokens: 2048 } 
       : { ...settings, modelType: settings.modelType as "local" | "openai" }
     
-    const modelType = normalizedSettings.modelType as "local" | "openai"
-    
-    const response = modelType === "local" 
-      ? await processLocalText({ text, mode, maxTokens: normalizedSettings.maxTokens, settings: normalizedSettings, signal })
-      : await processOpenAIText({ text, mode, maxTokens: normalizedSettings.maxTokens, settings: normalizedSettings, signal })
+    port.postMessage({
+      type: "PROCESS_TEXT",
+      payload: {
+        text,
+        mode,
+        settings: normalizedSettings,
+        stream: true
+      }
+    });
 
-    if (signal?.aborted) {
-      res.send({ error: 'Request cancelled' })
-      return
-    }
+    res.send({ processing: true });
 
-    res.send({
-      result: response
-    })
   } catch (error) {
     console.error('Error:', error)
     res.send({
-      error: error.name === 'AbortError' ? 'Request cancelled' : error.message
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
     })
   }
 }

@@ -1,7 +1,7 @@
 import type { ProcessTextRequest } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
 
-export const processOpenAIText = async (request: ProcessTextRequest) => {
+export const processOpenAIText = async function*(request: ProcessTextRequest) {
   const { text, mode, settings } = request
   
   try {
@@ -30,6 +30,7 @@ export const processOpenAIText = async (request: ProcessTextRequest) => {
         ],
         max_tokens: settings.maxTokens || 2048,
         temperature: 0.5,
+        stream: true
       }),
     })
 
@@ -37,10 +38,51 @@ export const processOpenAIText = async (request: ProcessTextRequest) => {
       throw new Error(`OpenAI API Error: ${response.statusText}`)
     }
 
-    const data = await response.json()
-    return data.choices[0].message.content
+    const reader = response.body?.getReader()
+    if (!reader) {
+      throw new Error('Response body is not readable')
+    }
+
+    const decoder = new TextDecoder()
+    let buffer = ''
+
+    while (true) {
+      const { done, value } = await reader.read()
+      
+      if (done) {
+        if (buffer) {
+          yield { type: 'chunk', content: buffer }
+        }
+        yield { type: 'done' }
+        break
+      }
+
+      buffer += decoder.decode(value, { stream: true })
+      
+      const lines = buffer.split('\n')
+      buffer = lines.pop() || ''
+
+      for (const line of lines) {
+        if (line.trim() === '') continue
+        if (line.includes('[DONE]')) {
+          yield { type: 'done' }
+          continue
+        }
+        
+        try {
+          const data = JSON.parse(line.replace(/^data: /, ''))
+          if (data.choices?.[0]?.delta?.content) {
+            yield { type: 'chunk', content: data.choices[0].delta.content }
+          }
+        } catch (e) {
+          console.warn('Failed to parse line:', line)
+        }
+      }
+    }
   } catch (error) {
-    console.error("OpenAI Error:", error)
-    throw error
+    yield {
+      type: 'error',
+      error: error instanceof Error ? error.message : 'Unknown error occurred'
+    }
   }
 } 

@@ -70,9 +70,10 @@ export const styles = {
     marginBottom: 16
   },
   followUpQA: {
-    borderTop: "1px solid #ddd",
-    marginTop: 12,
-    paddingTop: 12
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+    width: '100%',
   },
   error: {
     color: 'red',
@@ -215,6 +216,57 @@ export const styles = {
     position: 'fixed' as const,
     maxHeight: '80vh',
     pointerEvents: 'auto' as const,
+  },
+  followUpSection: {
+    marginTop: '20px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
+    width: '100%',
+    padding: '8px 0',
+  },
+  followUpQA: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '12px',
+    width: '100%',
+  },
+  followUpInputContainer: {
+    display: 'flex',
+    gap: '8px',
+    marginTop: '12px',
+    padding: '8px',
+    backgroundColor: '#f5f5f5',
+    borderRadius: '12px',
+  },
+  followUpInput: {
+    flex: 1,
+    padding: '8px 12px',
+    borderRadius: '20px',
+    border: '1px solid #e0e0e0',
+    fontSize: '14px',
+    fontFamily: "'K2D', sans-serif",
+    backgroundColor: 'white',
+    outline: 'none',
+    transition: 'border-color 0.2s ease',
+    '&:focus': {
+      borderColor: '#2C2C2C',
+    }
+  },
+  followUpButton: {
+    padding: '8px 16px',
+    borderRadius: '20px',
+    border: 'none',
+    backgroundColor: '#2C2C2C',
+    color: 'white',
+    fontSize: '14px',
+    fontFamily: "'K2D', sans-serif",
+    cursor: 'pointer',
+    transition: 'all 0.2s ease',
+    '&:disabled': {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    }
   }
 } as const
 
