@@ -12,10 +12,32 @@ interface Settings {
   }
 }
 
-let activeConnections = new Map<string, AbortController>();
+let activeConnections = new Map<string, {
+  controller: AbortController;
+  timestamp: number;
+}>();
+
+// Clean up old connections periodically
+setInterval(() => {
+  const now = Date.now();
+  for (const [id, connection] of activeConnections.entries()) {
+    if (now - connection.timestamp > 1000 * 60 * 60) { // 1 hour timeout
+      connection.controller.abort();
+      activeConnections.delete(id);
+    }
+  }
+}, 1000 * 60 * 5); // Check every 5 minutes
 
 export async function handleProcessText(request: ProcessTextRequest, port: chrome.runtime.Port) {
   try {
+    const connectionId = port.name.split('text-processing-')[1];
+    const abortController = new AbortController();
+    
+    activeConnections.set(connectionId, {
+      controller: abortController,
+      timestamp: Date.now()
+    });
+
     const { mode, text, context, isFollowUp } = request;
     const storage = new Storage()
     const settings = await storage.get("settings") as Settings
@@ -43,9 +65,6 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
           : text;
 
     console.log('Sending message to LLM:', userMessage);
-
-    const abortController = new AbortController();
-    activeConnections.set(port.name, abortController);
 
     const response = await fetch(`${settings.serverUrl}${endpoint}`, {
       method: "POST",
@@ -131,7 +150,8 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       error: error instanceof Error ? error.message : 'Unknown error occurred'
     });
   } finally {
-    activeConnections.delete(port.name);
+    const connectionId = port.name.split('text-processing-')[1];
+    activeConnections.delete(connectionId);
   }
 }
 
@@ -141,12 +161,12 @@ chrome.runtime.onConnect.addListener((port) => {
   
   port.onMessage.addListener(async (msg) => {
     if (msg.type === "STOP_GENERATION") {
-      // Get the abort controller for this connection
-      const abortController = activeConnections.get(port.name);
-      if (abortController) {
-        // Abort the request
-        abortController.abort();
-        activeConnections.delete(port.name);
+      const connectionId = port.name.split('text-processing-')[1];
+      const connection = activeConnections.get(connectionId);
+      
+      if (connection) {
+        connection.controller.abort();
+        activeConnections.delete(connectionId);
       }
     }
     if (msg.type === "PROCESS_TEXT") {
@@ -155,11 +175,12 @@ chrome.runtime.onConnect.addListener((port) => {
   });
 
   port.onDisconnect.addListener(() => {
-    // Clean up when port disconnects
-    const abortController = activeConnections.get(port.name);
-    if (abortController) {
-      abortController.abort();
-      activeConnections.delete(port.name);
+    const connectionId = port.name.split('text-processing-')[1];
+    const connection = activeConnections.get(connectionId);
+    
+    if (connection) {
+      connection.controller.abort();
+      activeConnections.delete(connectionId);
     }
   });
 }); 

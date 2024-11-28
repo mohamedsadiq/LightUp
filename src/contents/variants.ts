@@ -125,19 +125,22 @@ export const tooltipVariants = {
 
 export const feedbackButtonVariants = {
   initial: { 
-    scale: 1 
+    scale: 1,
+   
   },
   hover: { 
     scale: 1.2,
     transition: {
       type: "spring",
-      stiffness: 400,
-      damping: 10
+      stiffness: 200,
+      damping: 10,
+      mass: 0.8
     }
   },
   tap: { 
     scale: 0.8,
     transition: {
+   
       type: "spring",
       stiffness: 400,
       damping: 10
@@ -146,10 +149,10 @@ export const feedbackButtonVariants = {
   bounce: {
     scale: [1, 1.3, 1],
     transition: {
-      duration: 0.5,
+     
       type: "spring",
       stiffness: 300,
       damping: 10
     }
   }
-} 
+}

@@ -192,7 +192,7 @@ export const styles = {
     fontSize: '12px',
     lineHeight: 1.6,
     fontFamily: "'K2D', sans-serif",
-    whiteSpace: 'pre-wrap',
+    // whiteSpace: 'pre-wrap',
     boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
   },
   feedbackContainer: {
@@ -208,7 +208,7 @@ export const styles = {
     cursor: 'pointer',
     padding: '4px',
     borderRadius: '4px',
-    transition: 'all 0.2s ease'
+   
   },
   configurationWarning: {
     position: 'fixed' as const,

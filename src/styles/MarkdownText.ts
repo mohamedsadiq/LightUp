@@ -1,5 +1,5 @@
 export const markdownStyles = {
-    whiteSpace: 'pre-wrap' as const,
+    // whiteSpace: 'pre-wrap' as const,
     wordBreak: 'break-word' as const,
     fontFamily: "'Inter', system-ui, sans-serif",
     fontSize: '13px',
