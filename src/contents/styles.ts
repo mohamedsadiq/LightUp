@@ -248,7 +248,7 @@ export const styles = {
     display: 'flex',
     gap: '8px',
     marginTop: '12px',
-    padding: '8px',
+   
     backgroundColor: 'transparent',
     borderRadius: '12px',
   },
