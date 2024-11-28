@@ -43,10 +43,15 @@ interface Settings {
   apiKey?: string;
 }
 
+// Add this type definition at the top with other interfaces
+interface Port extends chrome.runtime.Port {
+  postMessage: (message: any) => void;
+}
+
 function Content() {
   // Add these new states after the existing useState declarations
   const [streamingText, setStreamingText] = useState("")
-  const [port, setPort] = useState<chrome.runtime.Port | null>(null)
+  const [port, setPort] = useState<Port | null>(null)
   const [selectedText, setSelectedText] = useState("")
   const [position, setPosition] = useState({ x: 0, y: 0 })
   const [isVisible, setIsVisible] = useState(false)
@@ -479,13 +484,20 @@ function Content() {
   }, [isInteractingWithPopup]) // Re-run when visibility changes
 
   const handleClose = () => {
-    // Abort any ongoing request
-    if (abortController) {
-      abortController.abort();
+    // Send stop message to the server via port
+    if (port) {
+      port.postMessage({
+        type: "STOP_GENERATION"
+      });
     }
+    
     setIsVisible(false);
     setIsLoading(false);
     setError(null);
+    setStreamingText('');
+    setFollowUpQAs([]);
+    setActiveAnswerId(null);
+    setIsAskingFollowUp(false);
   };
 
   // Use a stable key for MarkdownText
@@ -534,9 +546,14 @@ function Content() {
   }
 
   useEffect(() => {
-    const newPort = chrome.runtime.connect({ name: "text-processing" });
+    const newPort = chrome.runtime.connect({ name: "text-processing" }) as Port;
     
-    newPort.onMessage.addListener((message: StreamChunk) => {
+    newPort.onMessage.addListener((message: {
+      type: string;
+      content?: string;
+      error?: string;
+      isFollowUp?: boolean;
+    }) => {
       switch (message.type) {
         case 'chunk':
           if (message.content) {
@@ -545,7 +562,6 @@ function Content() {
                 const lastQA = prev[prev.length - 1];
                 if (!lastQA) return prev;
                 
-                console.log('Processing chunk for QA:', lastQA.id);
                 return prev.map(qa => 
                   qa.id === lastQA.id
                     ? { ...qa, answer: qa.answer + message.content }
@@ -558,26 +574,15 @@ function Content() {
           }
           break;
         case 'done':
-          console.log('Stream completed');
           if (message.isFollowUp) {
             setFollowUpQAs(prev => {
-              const lastQA = prev[prev.length - 1];
-              console.log('Completing QA:', lastQA?.id);
-              
               return prev.map(qa => {
-                if (qa === lastQA) {
-                  console.log(`Marking QA ${qa.id} as complete`);
+                if (qa.id === activeAnswerId) {
                   return { ...qa, isComplete: true };
                 }
                 return qa;
               });
             });
-            
-            // Log the state after update
-            setTimeout(() => {
-              console.log('Current followUpQAs after completion:', followUpQAs);
-            }, 0);
-            
             setActiveAnswerId(null);
             setIsAskingFollowUp(false);
           } else {
@@ -598,9 +603,13 @@ function Content() {
     setPort(newPort);
 
     return () => {
+      // Send stop message before disconnecting
+      newPort.postMessage({
+        type: "STOP_GENERATION"
+      });
       newPort.disconnect();
     };
-  }, []); // Remove activeAnswerId from dependencies as we're using the latest state
+  }, []);
 
   // Add this inside the Content component, near other useEffect hooks
   useEffect(() => {

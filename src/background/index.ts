@@ -12,6 +12,8 @@ interface Settings {
   }
 }
 
+let activeConnections = new Map<string, AbortController>();
+
 export async function handleProcessText(request: ProcessTextRequest, port: chrome.runtime.Port) {
   try {
     const { mode, text, context, isFollowUp } = request;
@@ -42,6 +44,9 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
     console.log('Sending message to LLM:', userMessage);
 
+    const abortController = new AbortController();
+    activeConnections.set(port.name, abortController);
+
     const response = await fetch(`${settings.serverUrl}${endpoint}`, {
       method: "POST",
       headers: {
@@ -60,7 +65,8 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
           }
         ],
         stream: true
-      })
+      }),
+      signal: abortController.signal
     });
 
     if (!response.ok) {
@@ -124,16 +130,36 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       type: 'error', 
       error: error instanceof Error ? error.message : 'Unknown error occurred'
     });
+  } finally {
+    activeConnections.delete(port.name);
   }
 }
 
 // Update message listener to use port-based communication
 chrome.runtime.onConnect.addListener((port) => {
-  if (port.name === "text-processing") {
-    port.onMessage.addListener((message) => {
-      if (message.type === "PROCESS_TEXT") {
-        handleProcessText(message.payload, port);
+  console.log("Connection established", port.name);
+  
+  port.onMessage.addListener(async (msg) => {
+    if (msg.type === "STOP_GENERATION") {
+      // Get the abort controller for this connection
+      const abortController = activeConnections.get(port.name);
+      if (abortController) {
+        // Abort the request
+        abortController.abort();
+        activeConnections.delete(port.name);
       }
-    });
-  }
+    }
+    if (msg.type === "PROCESS_TEXT") {
+      handleProcessText(msg.payload, port);
+    }
+  });
+
+  port.onDisconnect.addListener(() => {
+    // Clean up when port disconnects
+    const abortController = activeConnections.get(port.name);
+    if (abortController) {
+      abortController.abort();
+      activeConnections.delete(port.name);
+    }
+  });
 }); 
