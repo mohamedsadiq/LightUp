@@ -12,6 +12,7 @@ export interface ProcessTextRequest {
       fromLanguage: string;
       toLanguage: string;
     };
+    modelType?: "local" | "openai";
   };
   aborted?: boolean;
   isFollowUp?: boolean;

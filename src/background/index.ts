@@ -38,28 +38,27 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       timestamp: Date.now()
     });
 
-    const { mode, text, context, isFollowUp } = request;
-    const storage = new Storage()
-    const settings = await storage.get("settings") as Settings
+    const { mode, text, context, isFollowUp, settings } = request;
     
-    if (!settings) {
-      port.postMessage({ type: 'error', error: "Extension not configured. Please visit the options page." });
-      return;
-    }
+    console.log('Processing request:', { 
+      mode, 
+      text, 
+      context, 
+      isFollowUp,
+      translationSettings: settings?.translationSettings 
+    });
 
-    console.log('Processing request:', { mode, text, context, isFollowUp });
-
-    const endpoint = settings.modelType === "local" 
+    const storage = new Storage();
+    const globalSettings = await storage.get("settings") as Settings;
+    
+    const endpoint = globalSettings?.modelType === "local" 
       ? `/v1/chat/completions`
       : "/api/generate";
 
     const userMessage = isFollowUp
       ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
-      : mode === "translate" && settings.translationSettings 
-        ? `${USER_PROMPTS.translate(
-            settings.translationSettings.fromLanguage,
-            settings.translationSettings.toLanguage
-          )}\n\nHere's the text to translate: "${text}"`
+      : mode === "translate" && settings?.translationSettings 
+        ? `Translate the following text from ${settings.translationSettings.fromLanguage} to ${settings.translationSettings.toLanguage}:\n\n${text}`
         : typeof USER_PROMPTS[mode] === 'function' 
           ? USER_PROMPTS[mode](text, context)
           : text;

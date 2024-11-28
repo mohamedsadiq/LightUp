@@ -125,19 +125,23 @@ function Content() {
     const loadSettings = async () => {
       const storage = new Storage();
       const savedSettings = await storage.get("settings") as Settings | null;
+      const translationSettings = await storage.get("translationSettings");
+      
+      console.log('📚 Loaded settings:', { savedSettings, translationSettings });
       setSettings(savedSettings);
       
       // Check if settings are properly configured
       if (savedSettings) {
         if (savedSettings.modelType === "local" && savedSettings.serverUrl) {
+          console.log('✅ Local model configured');
           setIsConfigured(true);
         } else if (savedSettings.modelType === "openai" && savedSettings.apiKey) {
+          console.log('✅ OpenAI configured');
           setIsConfigured(true);
         } else {
+          console.log('⚠️ Settings not properly configured');
           setIsConfigured(false);
         }
-      } else {
-        setIsConfigured(false);
       }
     };
 
@@ -188,24 +192,38 @@ function Content() {
       
       // If we're interacting with the popup, don't do anything
       if (isInteractingWithPopup) {
+        console.log('🚫 Ignoring mouseup - interacting with popup');
         return
       }
 
       // If clicking inside popup, just return
       if (popup?.contains(event.target as Node)) {
+        console.log('🚫 Ignoring mouseup - clicked inside popup');
         return
       }
 
       const selection = window.getSelection()
+      console.log('📝 Selected text:', selection?.toString());
       
       // Check if selection contains any elements with the no-select class
       const checkSelectionForClass = () => {
-        if (!selection || selection.rangeCount === 0) return false
+        if (!selection || selection.rangeCount === 0) {
+          console.log('⚠️ No selection found');
+          return false;
+        }
         
         const range = selection.getRangeAt(0)
         const container = document.createElement('div')
         container.appendChild(range.cloneContents())
         
+        // Add logging for selection details
+        console.log('🔍 Selection details:', {
+          text: selection.toString(),
+          rangeCount: selection.rangeCount,
+          anchorNode: selection.anchorNode?.textContent,
+          focusNode: selection.focusNode?.textContent
+        });
+
         // Check if the selection or any of its parents has the no-select class
         const hasNoSelectClass = (element: Element | null): boolean => {
           while (element) {
@@ -240,17 +258,26 @@ function Content() {
       }
 
       if (checkSelectionForClass()) {
+        console.log('🚫 Selection contains no-select class');
         return;
       }
 
       if (!isConfigured) {
+        console.log('⚠️ Extension not configured');
         setError("Please configure the extension in the options page first.");
         return;
       }
 
       const text = selection?.toString().trim();
+      console.log('✨ Processed text:', text);
 
       if (text && text.length > 0 && /[a-zA-Z0-9]/.test(text)) {
+        console.log('🎯 Valid text selected:', {
+          text,
+          mode,
+          settings
+        });
+
         setSelectedText(text);
         const { top, left } = calculatePosition(event.clientX, event.clientY);
         setPosition({
@@ -269,20 +296,39 @@ function Content() {
             throw new Error('Connection not established');
           }
 
+          const storage = new Storage();
+          const translationSettings = await storage.get("translationSettings");
+
+          console.log('📤 Sending text to process:', {
+            text,
+            mode,
+            settings: {
+              ...settings,
+              translationSettings
+            },
+            connectionId
+          });
+
           port.postMessage({
             type: "PROCESS_TEXT",
             payload: {
               text,
               mode,
-              settings
+              settings: {
+                ...settings,
+                translationSettings
+              },
+              connectionId
             }
           });
 
         } catch (err) {
-          console.error('Error:', err);
+          console.error('❌ Error processing text:', err);
           setError('Failed to process text');
           setIsLoading(false);
         }
+      } else {
+        console.log('⚠️ Invalid text selection:', text);
       }
     }
 
@@ -506,45 +552,79 @@ function Content() {
   // Use a stable key for MarkdownText
   const explanationKey = useMemo(() => `explanation-${explanation}`, [explanation]);
 
-  const handleModeChange = async (newMode: Mode, translationSettings?: TranslationSettings) => {
+  const handleModeChange = async (newMode: Mode, translationSettings?: any) => {
+    console.log('🔄 Mode Change Triggered:', { 
+      newMode, 
+      translationSettings,
+      currentText: selectedText,
+      currentMode: mode 
+    });
+
+    // Add validation for translation mode
+    if (newMode === 'translate' && (!translationSettings?.targetLanguage)) {
+      console.error('❌ Translation settings missing target language');
+      setError('Translation settings are incomplete');
+      return;
+    }
+
     setMode(newMode)
     await storage.set("mode", newMode)
     
     if (translationSettings) {
+      console.log('📝 Translation Settings:', {
+        ...translationSettings,
+        currentText: selectedText
+      });
       await storage.set("translationSettings", translationSettings)
     }
     
     // Re-process text with new mode
     if (selectedText) {
+      console.log('🎯 Starting text processing with new mode:', {
+        text: selectedText,
+        mode: newMode,
+        settings: translationSettings
+      });
+      
       setIsLoading(true)
       setError(null)
       
       try {
-        const response = await sendToBackground({
-          name: "processText",
-          body: {
+        if (!port) {
+          throw new Error('Port not connected');
+        }
+
+        console.log('📤 Sending to port:', {
+          type: "PROCESS_TEXT",
+          payload: {
             text: selectedText,
             mode: newMode,
-            maxTokens: 2048,
             settings: {
               ...settings,
               translationSettings
             }
           }
-        })
+        });
 
-        if (response.result) {
-          setExplanation(response.result)
-          setIsExplanationComplete(true)
-        } else if (response.error) {
-          setError(response.error)
-        }
+        port.postMessage({
+          type: "PROCESS_TEXT",
+          payload: {
+            text: selectedText,
+            mode: newMode,
+            settings: {
+              ...settings,
+              translationSettings
+            }
+          }
+        });
+
       } catch (err) {
-        console.error('Error:', err)
+        console.error('❌ Processing error:', err)
         setError('Failed to process text')
-      } finally {
         setIsLoading(false)
       }
+    } else {
+      console.log('⚠️ No text selected for processing');
     }
   }
 
@@ -559,9 +639,12 @@ function Content() {
       error?: string;
       isFollowUp?: boolean;
     }) => {
+      console.log('📨 Port message received:', message);
+      
       switch (message.type) {
         case 'chunk':
           if (message.content) {
+            console.log('📝 Received chunk:', message.content);
             if (message.isFollowUp) {
               setFollowUpQAs(prev => {
                 const lastQA = prev[prev.length - 1];
@@ -579,6 +662,7 @@ function Content() {
           }
           break;
         case 'done':
+          console.log('✅ Processing completed');
           if (message.isFollowUp) {
             setFollowUpQAs(prev => {
               return prev.map(qa => {
@@ -596,7 +680,7 @@ function Content() {
           setIsLoading(false);
           break;
         case 'error':
-          console.error('Stream error:', message.error);
+          console.error('❌ Stream error:', message.error);
           setError(message.error || 'An unknown error occurred');
           setIsLoading(false);
           setActiveAnswerId(null);
@@ -605,10 +689,11 @@ function Content() {
       }
     });
 
+    console.log('🔌 Port connected:', connectionId);
     setPort(newPort);
 
     return () => {
-      // Send stop message before disconnecting
+      console.log('🔌 Disconnecting port:', connectionId);
       newPort.postMessage({
         type: "STOP_GENERATION"
       });
@@ -841,7 +926,7 @@ function Content() {
                             animate={feedbacks['initial'] === 'dislike' ? 'bounce' : 'initial'}
                           >
                             <svg width="12" height="12" viewBox="0 0 57 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M31.5335 57.716C32.3412 55.6216 32.7536 53.2247 33.4217 50.7219C34.5696 46.422 36.1808 42.1125 40.5921 39.2507C41.0718 40.2428 41.7225 41.108 42.5042 41.7676C44.1331 43.142 46.1611 43.7521 48.1688 43.7521C50.1765 43.7521 52.2284 43.142 53.8573 41.7676C55.4862 40.3932 56.582 38.1762 56.582 35.6205L56.582 11.6132C56.582 9.05756 55.4862 6.86471 53.8573 5.49035C52.2284 4.11592 50.1765 3.48165 48.1688 3.48165C46.1611 3.48165 44.1331 4.11584 42.5042 5.49035C42.1054 5.8268 41.7335 6.22409 41.4047 6.65204C40.2267 5.76099 39.0057 5.09716 37.8435 4.76473C31.8258 2.93108 28.1593 0.83196 16.2128 0.0455745C13.3447 0.00609245 10.2804 0.646856 8.0387 1.6915C5.52762 2.89554 3.23507 5.08399 2.78042 8.22573C2.01189 13.5371 0.416494 21.3628 0.0556819 27.8769C-0.0920138 30.5456 0.176239 33.2206 1.70486 35.4761C3.21879 37.7097 5.88921 39.1359 9.40106 39.5902C12.8347 40.0552 16.5938 40.0287 19.6308 39.8322C17.6497 44.4794 16.116 48.9744 16.189 52.9008C16.2348 55.3647 16.9376 57.7738 18.7225 59.4834C20.4928 61.1788 23.0604 61.9634 26.1558 61.9761C29.4063 61.9606 30.7414 59.6597 31.5335 57.716ZM26.2275 57.3286C23.8281 57.3286 22.5679 56.78 21.8774 56.1186C21.1869 55.4572 20.809 54.4712 20.778 52.8031C20.9931 49.57 23.2876 41.8257 26.8967 34.7733C20.2283 34.8559 15.0367 35.6604 10.0463 34.9911C7.31486 34.6541 6.15869 33.8611 5.48118 32.8614C4.80368 31.8618 4.52571 30.2669 4.64464 28.118C4.97372 22.177 6.51669 14.4651 7.32158 8.9025C7.50886 7.60843 8.34281 6.69554 9.99852 5.90157C11.6357 5.11651 13.9397 4.67687 15.9977 4.66727C27.5018 5.43275 30.1411 7.27283 36.6484 9.24135C38.8867 10.015 39.7127 11.632 39.7317 13.2345C39.7571 20.3012 39.7555 27.3679 39.7555 34.4346C32.953 38.0561 30.3531 44.4431 28.9999 49.5118C27.9592 52.8879 27.5563 57.3163 26.2275 57.3286Z" fill="currentColor"/>
+<path d="M31.5335 57.716C32.3412 55.6216 32.7536 53.2247 33.4217 50.7219C34.5696 46.422 36.1808 42.1125 40.5921 39.2507C41.0718 40.2428 41.7225 41.108 42.5042 41.7676C44.1331 43.142 46.1611 43.7521 48.1688 43.7521C50.1765 43.7521 52.2284 43.142 53.8573 41.7676C55.4862 40.3932 56.582 38.1762 56.582 35.6205L56.582 11.6132C56.582 9.05756 55.4862 6.8647 53.8573 5.49035C52.2284 4.11592 50.1765 3.48165 48.1688 3.48165C46.1611 3.48165 44.1331 4.11584 42.5042 5.49035C42.1054 5.8268 41.7335 6.22409 41.4047 6.65204C40.2267 5.76099 39.0057 5.09715 37.8435 4.76473C31.8258 2.93107 28.1593 0.83196 16.2128 0.0455745C13.3447 0.00609211 10.2804 0.646858 8.03869 1.6915C5.52762 2.89554 3.23507 5.08399 2.78042 8.22573C2.01189 13.5371 0.416488 21.3628 0.0556785 27.8769C-0.0920192 30.5456 0.176238 33.2206 1.70486 35.4761C3.21879 37.7097 5.8892 39.1359 9.40106 39.5902C12.8347 40.0552 16.5938 40.0287 19.6308 39.8322C17.6497 44.4794 16.116 48.9744 16.189 52.9008C16.2348 55.3647 16.9376 57.7738 18.7225 59.4834C20.4928 61.1788 23.0604 61.9634 26.1558 61.9761C29.4063 61.9606 30.7414 59.6597 31.5335 57.716ZM26.2275 57.3286C23.8281 57.3286 22.5679 56.78 21.8774 56.1186C21.1869 55.4572 20.809 54.4712 20.778 52.8031C20.9931 49.57 23.2876 41.8257 26.8967 34.7733C20.2282 34.8559 15.0367 35.6604 10.0463 34.9911C7.31486 34.6541 6.15869 33.8611 5.48118 32.8614C4.80368 31.8619 4.5257 30.2669 4.64464 28.118C4.97371 22.177 6.51669 14.4651 7.32158 8.9025C7.50886 7.60842 8.3428 6.69554 9.99852 5.90157C11.6357 5.1165 13.9397 4.67686 15.9977 4.66727C27.5018 5.43275 30.1411 7.27283 36.6484 9.24135C38.8867 10.015 39.7127 11.632 39.7317 13.2345C39.7571 20.3012 39.7555 27.3679 39.7555 34.4346C32.953 38.0561 30.3531 44.4431 28.9999 49.5118C27.9592 52.8879 27.5563 57.3163 26.2275 57.3286Z" fill="currentColor"/>
 </svg>
 
                            
@@ -932,7 +1017,7 @@ function Content() {
                                   whileTap="tap"
                                 >
                                  <svg width="12" height="12" viewBox="0 0 60 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M26.6108 5.3736C25.764 7.54084 25.3317 10.0211 24.6313 12.611C23.4279 17.0604 21.7389 21.5198 17.1143 24.4812C16.6115 23.4546 15.9293 22.5592 15.1098 21.8767C13.4022 20.4546 11.2762 19.8232 9.17144 19.8232C7.0667 19.8232 4.91561 20.4546 3.208 21.8767C1.5004 23.299 0.351562 25.5931 0.351562 28.2376V53.08C0.351562 55.7245 1.5004 57.9937 3.208 59.4158C4.91561 60.8381 7.0667 61.4944 9.17144 61.4944C11.2762 61.4944 13.4022 60.8381 15.1098 59.4158C15.5279 59.0677 15.9177 58.6566 16.2624 58.2137C17.4974 59.1358 18.7774 59.8227 19.9958 60.1667C26.3043 62.0641 30.1481 64.2363 42.672 65.05C45.6787 65.0908 48.8912 64.4278 51.2412 63.3468C53.8736 62.1009 56.277 59.8363 56.7536 56.5853C57.5593 51.0892 59.2318 42.9913 59.6101 36.2506C59.7649 33.4891 59.4837 30.721 57.8812 28.3871C56.2941 26.0758 53.4946 24.5999 49.813 24.1298C46.2134 23.6486 42.2725 23.6761 39.0888 23.8794C41.1656 19.0706 42.7735 14.4192 42.6969 10.3563C42.6489 7.80672 41.9122 5.31376 40.0409 3.54473C38.1852 1.79028 35.4935 0.97847 32.2484 0.965332C28.8408 0.981354 27.4411 3.36224 26.6108 5.3736ZM32.1733 5.77446C34.6886 5.77446 36.0097 6.34218 36.7336 7.02654C37.4574 7.71099 37.8536 8.73124 37.8862 10.4574C37.6607 13.8029 35.2552 21.8166 31.4717 29.1143C38.4625 29.0289 43.905 28.1964 49.1365 28.8889C52 29.2376 53.2121 30.0582 53.9223 31.0927C54.6326 32.127 54.924 33.7774 54.7993 36.0011C54.4543 42.1487 52.8368 50.1289 51.993 55.885C51.7966 57.2241 50.9224 58.1687 49.1866 58.9903C47.4703 59.8027 45.0549 60.2576 42.8975 60.2675C30.8373 59.4754 28.0705 57.5713 21.2487 55.5344C18.9022 54.7338 18.0362 53.0605 18.0164 51.4023C17.9897 44.0898 17.9914 36.7773 17.9914 29.4648C25.1227 25.7173 27.8483 19.1081 29.2668 13.8632C30.3578 10.3696 30.7803 5.78719 32.1733 5.77446Z" fill="black"/>
+<path d="M26.6108 5.3736C25.764 7.54084 25.3317 10.0211 24.6313 12.611C23.4279 17.0604 21.7389 21.5198 17.1143 24.4812C16.6115 23.4546 15.9293 22.5592 15.1098 21.8767C13.4022 20.4546 11.2762 19.8232 9.17144 19.8232C7.0667 19.8232 4.91561 20.4546 3.208 21.8767C1.5004 23.299 0.351562 25.5931 0.351562 28.2376V53.08C0.351562 55.7245 1.5004 57.9937 3.208 59.4158C4.91561 60.8381 7.0667 61.4944 9.17144 61.4944C11.2762 61.4944 13.4022 60.8381 15.1098 59.4158C15.5279 59.0677 15.9177 58.6566 16.2624 58.2137C17.4974 59.1358 18.7774 59.8227 19.9958 60.1667C26.3043 62.0641 30.1481 64.2363 42.672 65.05C45.6787 65.0908 48.8912 64.4278 51.2412 63.3468C53.8736 62.1009 56.277 59.8363 56.7536 56.5853C57.5593 51.0892 59.2318 42.9913 59.6101 36.2506C59.7649 33.4891 59.4837 30.721 57.8812 28.3871C56.2941 26.0758 53.4946 24.5999 49.813 24.1298C46.2134 23.6486 42.2725 23.6761 39.0888 23.8794C41.1656 19.0706 42.7735 14.4192 42.6969 10.3563C42.6489 7.80672 41.9122 5.31376 40.0409 3.54473C38.1852 1.79028 35.4935 0.97847 32.2484 0.965332C28.8408 0.981354 27.4411 3.36224 26.6108 5.3736ZM32.1733 5.77446C34.6886 5.77446 36.0097 6.34218 36.7336 7.02654C37.4574 7.71099 37.8536 8.73124 37.8862 10.4574C37.6607 13.8029 35.2552 21.8166 31.4717 29.1143C38.4625 29.0289 43.905 28.1964 49.1365 28.8889C52 29.2376 53.2121 30.0582 53.9223 31.0927C54.6326 32.127 54.924 33.7774 54.7993 36.0011C54.4543 42.1487 52.8368 50.1289 51.993 55.885C51.7966 57.2241 50.9224 58.1687 49.1866 58.9903C47.4703 59.8027 45.0549 60.2576 42.8975 60.2675C30.8373 59.4754 28.0705 57.5713 21.2487 55.5344C18.9022 54.7338 18.0362 53.0605 18.0164 51.4023C17.9897 44.0898 17.9914 36.7773 17.9914 29.4648C25.1227 25.7173 27.8483 19.1081 29.2668 13.8632C30.3578 10.3696 30.7803 5.78719 32.1733 5.77446Z" fill="currentColor"/>
 </svg>
 
                                 </motion.button>
@@ -949,7 +1034,7 @@ function Content() {
                                   whileTap="tap"
                                 >
                                   <svg width="12" height="12" viewBox="0 0 57 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M31.5335 57.716C32.3412 55.6216 32.7536 53.2247 33.4217 50.7219C34.5696 46.422 36.1808 42.1125 40.5921 39.2507C41.0718 40.2428 41.7225 41.108 42.5042 41.7676C44.1331 43.142 46.1611 43.7521 48.1688 43.7521C50.1765 43.7521 52.2284 43.142 53.8573 41.7676C55.4862 40.3932 56.582 38.1762 56.582 35.6205L56.582 11.6132C56.582 9.05756 55.4862 6.8647 53.8573 5.49035C52.2284 4.11592 50.1765 3.48165 48.1688 3.48165C46.1611 3.48165 44.1331 4.11584 42.5042 5.49035C42.1054 5.8268 41.7335 6.22409 41.4047 6.65204C40.2267 5.76099 39.0057 5.09715 37.8435 4.76473C31.8258 2.93107 28.1593 0.83196 16.2128 0.0455745C13.3447 0.00609211 10.2804 0.646858 8.03869 1.6915C5.52762 2.89554 3.23507 5.08399 2.78042 8.22573C2.01189 13.5371 0.416488 21.3628 0.0556785 27.8769C-0.0920192 30.5456 0.176238 33.2206 1.70486 35.4761C3.21879 37.7097 5.8892 39.1359 9.40106 39.5902C12.8347 40.0552 16.5938 40.0287 19.6308 39.8322C17.6497 44.4794 16.116 48.9744 16.189 52.9008C16.2348 55.3647 16.9376 57.7738 18.7225 59.4834C20.4928 61.1788 23.0604 61.9634 26.1558 61.9761C29.4063 61.9606 30.7414 59.6597 31.5335 57.716ZM26.2275 57.3286C23.8281 57.3286 22.5679 56.78 21.8774 56.1186C21.1869 55.4572 20.809 54.4712 20.778 52.8031C20.9931 49.57 23.2876 41.8257 26.8967 34.7733C20.2282 34.8559 15.0367 35.6604 10.0463 34.9911C7.31486 34.6541 6.15869 33.8611 5.48118 32.8614C4.80368 31.8619 4.5257 30.2669 4.64464 28.118C4.97371 22.177 6.51669 14.4651 7.32158 8.9025C7.50886 7.60842 8.3428 6.69554 9.99852 5.90157C11.6357 5.1165 13.9397 4.67686 15.9977 4.66727C27.5018 5.43275 30.1411 7.27283 36.6484 9.24135C38.8867 10.015 39.7127 11.632 39.7317 13.2345C39.7571 20.3012 39.7555 27.3679 39.7555 34.4346C32.953 38.0561 30.3531 44.4431 28.9999 49.5118C27.9592 52.8879 27.5563 57.3163 26.2275 57.3286Z" fill="black"/>
+<path d="M31.5335 57.716C32.3412 55.6216 32.7536 53.2247 33.4217 50.7219C34.5696 46.422 36.1808 42.1125 40.5921 39.2507C41.0718 40.2428 41.7225 41.108 42.5042 41.7676C44.1331 43.142 46.1611 43.7521 48.1688 43.7521C50.1765 43.7521 52.2284 43.142 53.8573 41.7676C55.4862 40.3932 56.582 38.1762 56.582 35.6205L56.582 11.6132C56.582 9.05756 55.4862 6.8647 53.8573 5.49035C52.2284 4.11592 50.1765 3.48165 48.1688 3.48165C46.1611 3.48165 44.1331 4.11584 42.5042 5.49035C42.1054 5.8268 41.7335 6.22409 41.4047 6.65204C40.2267 5.76099 39.0057 5.09715 37.8435 4.76473C31.8258 2.93107 28.1593 0.83196 16.2128 0.0455745C13.3447 0.00609211 10.2804 0.646858 8.03869 1.6915C5.52762 2.89554 3.23507 5.08399 2.78042 8.22573C2.01189 13.5371 0.416488 21.3628 0.0556785 27.8769C-0.0920192 30.5456 0.176238 33.2206 1.70486 35.4761C3.21879 37.7097 5.8892 39.1359 9.40106 39.5902C12.8347 40.0552 16.5938 40.0287 19.6308 39.8322C17.6497 44.4794 16.116 48.9744 16.189 52.9008C16.2348 55.3647 16.9376 57.7738 18.7225 59.4834C20.4928 61.1788 23.0604 61.9634 26.1558 61.9761C29.4063 61.9606 30.7414 59.6597 31.5335 57.716ZM26.2275 57.3286C23.8281 57.3286 22.5679 56.78 21.8774 56.1186C21.1869 55.4572 20.809 54.4712 20.778 52.8031C20.9931 49.57 23.2876 41.8257 26.8967 34.7733C20.2282 34.8559 15.0367 35.6604 10.0463 34.9911C7.31486 34.6541 6.15869 33.8611 5.48118 32.8614C4.80368 31.8619 4.5257 30.2669 4.64464 28.118C4.97371 22.177 6.51669 14.4651 7.32158 8.9025C7.50886 7.60842 8.3428 6.69554 9.99852 5.90157C11.6357 5.1165 13.9397 4.67686 15.9977 4.66727C27.5018 5.43275 30.1411 7.27283 36.6484 9.24135C38.8867 10.015 39.7127 11.632 39.7317 13.2345C39.7571 20.3012 39.7555 27.3679 39.7555 34.4346C32.953 38.0561 30.3531 44.4431 28.9999 49.5118C27.9592 52.8879 27.5563 57.3163 26.2275 57.3286Z" fill="currentColor"/>
 </svg>
 
                                 </motion.button>

@@ -53,18 +53,24 @@ function IndexPopup() {
     setActiveMode(mode)
     await storage.set("mode", mode)
     
-    // Send any mode change to background
-    await sendToBackground({
-      name: "processText",
-      body: { 
-        mode,
-        // Include any mode-specific settings
-        settings: mode === "translate" 
-          ? { fromLanguage, toLanguage }
-          : undefined
-      }
-    })
+    if (mode === "translate") {
+      const translationSettings = {
+        fromLanguage,
+        toLanguage
+      };
+      console.log('Saving translation settings:', translationSettings);
+      await storage.set("translationSettings", translationSettings);
+    }
   }
+
+  useEffect(() => {
+    if (activeMode === "translate") {
+      storage.set("translationSettings", {
+        fromLanguage,
+        toLanguage
+      });
+    }
+  }, [fromLanguage, toLanguage, activeMode]);
 
   return (
     <div className="p-5 flex flex-col items-stretch w-[500px] h-[300px] font-kd2 bg-[#ffffff] rounded-lg ">
