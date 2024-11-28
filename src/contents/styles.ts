@@ -1,3 +1,5 @@
+import { color } from "framer-motion"
+
 export const styles = {
   popup: {
     width: "300px",
@@ -90,18 +92,35 @@ export const styles = {
     gap: '8px'
   },
   searchContainer: {
-    marginTop: 16,
-    width: "95%",
+    width: "100%",
     display: "flex",
     flexDirection: "row",
     gap: 8,
     fontFamily: "'K2D', sans-serif",
     backgroundColor: "#2C2C2C",
-    padding: "8px",
+    padding: "8px 12px",
     borderRadius: "31px",
+    alignItems: "center",
   },
   searchSendButton: {
-    backgroundColor: "#2C2C2C",
+    backgroundColor: "transparent",
+    border: "none",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "8px",
+    borderRadius: "50%",
+    transition: "all 0.2s ease",
+    width: "36px",
+    height: "36px",
+    "&:disabled": {
+      opacity: 0.5,
+      cursor: "not-allowed",
+    },
+    "&:hover:not(:disabled)": {
+      backgroundColor: "rgba(255, 255, 255, 0.1)",
+    }
   },
   input: {
     flex: 1,
@@ -157,6 +176,7 @@ export const styles = {
     borderRadius: '18px',
     borderBottomRightRadius: '4px',
     maxWidth: '85%',
+    marginTop: "17px",
     marginLeft: 'auto',
     marginBottom: '8px',
     fontSize: '12px',
@@ -225,21 +245,16 @@ export const styles = {
     width: '100%',
     padding: '8px 0',
   },
-  followUpQA: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '12px',
-    width: '100%',
-  },
+  
   followUpInputContainer: {
     display: 'flex',
     gap: '8px',
     marginTop: '12px',
-    padding: '8px',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'transparent',
     borderRadius: '12px',
   },
   followUpInput: {
+    color:"#000",
     flex: 1,
     padding: '8px 12px',
     borderRadius: '20px',

@@ -279,7 +279,7 @@ function Content() {
     if (!followUpQuestion.trim() || isAskingFollowUp) return;
 
     console.log('Starting follow-up question:', followUpQuestion);
-    setIsAskingFollowUp(true);
+    setIsAskingFollowUp(false);
     const newId = Date.now();
     
     // Set the active answer ID first
@@ -931,28 +931,38 @@ function Content() {
                       animate={{ opacity: 1 }}
                       style={styles.followUpInputContainer}
                     >
-                      <input
-                        type="text"
-                        value={followUpQuestion}
-                        onChange={(e) => setFollowUpQuestion(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            handleAskFollowUp();
-                          }
-                        }}
-                        placeholder="Ask a follow-up question..."
-                        style={styles.followUpInput}
-                        disabled={isAskingFollowUp}
-                      />
-                      <motion.button
-                        onClick={handleAskFollowUp}
-                        disabled={!followUpQuestion.trim() || isAskingFollowUp}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        style={styles.followUpButton}
-                      >
-                        Ask
-                      </motion.button>
+                      <div style={styles.searchContainer}>
+                        <input
+                          type="text"
+                          value={followUpQuestion}
+                          onChange={(e) => setFollowUpQuestion(e.target.value)}
+                          onKeyDown={(e) => {
+                            e.stopPropagation();
+                            if (e.key === 'Enter') {
+                              handleAskFollowUp();
+                            }
+                          }}
+                          onKeyUp={(e) => e.stopPropagation()}
+                          onKeyPress={(e) => e.stopPropagation()}
+                          placeholder="Ask a follow-up question..."
+                          style={styles.input}
+                          disabled={isAskingFollowUp}
+                          onFocus={() => setIsInputFocused(true)}
+                          onBlur={() => setIsInputFocused(false)}
+                        />
+                        <motion.button
+                          onClick={handleAskFollowUp}
+                          disabled={!followUpQuestion.trim() || isAskingFollowUp}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          style={styles.searchSendButton}
+                        >
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 2L11 13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </motion.button>
+                      </div>
                     </motion.div>
                   </motion.div>
                 )}

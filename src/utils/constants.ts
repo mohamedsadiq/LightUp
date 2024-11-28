@@ -9,18 +9,18 @@ export const DEFAULT_MAX_TOKENS = 2048
 export const DEFAULT_TEMPERATURE = 0.5
 
 export const SYSTEM_PROMPTS = {
-  explain: "You are a concise expert who explains texts clearly. Keep explanations under 1500 tokens. Always complete your thoughts.",
-  summarize: "You are a concise summarizer. Create clear, brief summaries focusing on key points.",
-  analyze: "You are an analytical expert. Provide thorough analysis of the key aspects and implications.",
-  translate: "You are a professional translator. Provide accurate and natural-sounding translations while preserving the original meaning and context."
+  explain: "You are a helpful assistant that explains text in a clear and concise way.",
+  summarize: "You are a helpful assistant that summarizes text in a clear and concise way.",
+  analyze: "You are a helpful assistant that analyzes text in detail.",
+  translate: "You are a professional translator. Translate the text accurately while maintaining its original meaning and tone."
 }
 
 export const USER_PROMPTS = {
-  explain: "Explain this text clearly and concisely:",
-  summarize: "Provide a brief but comprehensive summary of this text:",
-  analyze: "Analyze this text, focusing on key themes, patterns, and implications:",
-  translate: (from: string, to: string) => 
-    `Translate this text from ${LANGUAGES[from]} to ${LANGUAGES[to]}:`
+  explain: (text: string) => `Please explain this text: ${text}`,
+  summarize: (text: string) => `Please summarize this text: ${text}`,
+  analyze: (text: string) => `Please analyze this text: ${text}`,
+  translate: (fromLang: string, toLang: string) => 
+    `Please translate the following text from ${LANGUAGES[fromLang]} to ${LANGUAGES[toLang]}.`
 }
 
 export const LANGUAGES = {

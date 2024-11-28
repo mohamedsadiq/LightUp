@@ -57,10 +57,13 @@ export const markdownStyles = {
     '& ul, & ol': {
       paddingLeft: '1.5rem',
       margin: '0.75rem 0',
+      marginTop: '1em',
+      marginBottom: '1em',
     },
     '& li': {
       margin: '17px 0',
-    
+      marginTop: '0.5em',
+      marginBottom: '0.5em',
     },
     '& img': {
       maxWidth: '100%',

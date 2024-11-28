@@ -6,6 +6,10 @@ import { SYSTEM_PROMPTS, USER_PROMPTS } from "~utils/constants"
 interface Settings {
   modelType: "local" | "cloud"
   serverUrl?: string
+  translationSettings?: {
+    fromLanguage: string
+    toLanguage: string
+  }
 }
 
 export async function handleProcessText(request: ProcessTextRequest, port: chrome.runtime.Port) {
@@ -27,12 +31,19 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
     const userMessage = isFollowUp
       ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
-      : text;
+      : mode === "translate" && settings.translationSettings 
+        ? `${USER_PROMPTS.translate(
+            settings.translationSettings.fromLanguage,
+            settings.translationSettings.toLanguage
+          )}\n\nHere's the text to translate: "${text}"`
+        : typeof USER_PROMPTS[mode] === 'function' 
+          ? USER_PROMPTS[mode](text, context)
+          : text;
 
     console.log('Sending message to LLM:', userMessage);
 
-    const response = await fetch(settings.serverUrl + endpoint, {
-      method: 'POST',
+    const response = await fetch(`${settings.serverUrl}${endpoint}`, {
+      method: "POST",
       headers: {
         'Content-Type': 'application/json',
       },
