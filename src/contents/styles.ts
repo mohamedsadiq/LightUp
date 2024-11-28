@@ -112,13 +112,11 @@ export const styles = {
     padding: "8px",
     borderRadius: "50%",
     transition: "all 0.2s ease",
-    width: "36px",
-    height: "36px",
     "&:disabled": {
       opacity: 0.5,
       cursor: "not-allowed",
     },
-    "&:hover:not(:disabled)": {
+    "&:hover": {
       backgroundColor: "rgba(255, 255, 255, 0.1)",
     }
   },
@@ -250,6 +248,7 @@ export const styles = {
     display: 'flex',
     gap: '8px',
     marginTop: '12px',
+    padding: '8px',
     backgroundColor: 'transparent',
     borderRadius: '12px',
   },

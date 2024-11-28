@@ -209,9 +209,25 @@ function Content() {
           return false
         }
 
-        // Check the actual selected elements
-        if (selection.anchorNode && hasNoSelectClass(selection.anchorNode.parentElement)) return true
-        if (selection.focusNode && hasNoSelectClass(selection.focusNode.parentElement)) return true
+        // Check if selection is within the popup
+        const isWithinPopup = (node: Node | null): boolean => {
+          while (node) {
+            if (node === popup) return true
+            node = node.parentNode
+          }
+          return false
+        }
+
+        // Check both the anchor and focus nodes
+        if (selection.anchorNode && (
+          hasNoSelectClass(selection.anchorNode.parentElement) || 
+          isWithinPopup(selection.anchorNode)
+        )) return true
+        
+        if (selection.focusNode && (
+          hasNoSelectClass(selection.focusNode.parentElement) || 
+          isWithinPopup(selection.focusNode)
+        )) return true
         
         return false
       }
@@ -271,7 +287,7 @@ function Content() {
       document.removeEventListener("mouseup", handleMouseUp)
       document.removeEventListener("click", handleClickOutside)
     }
-  }, [mode, isConfigured])
+  }, [mode, isConfigured, isInteractingWithPopup])
 
  
 
@@ -938,6 +954,7 @@ function Content() {
                           onChange={(e) => setFollowUpQuestion(e.target.value)}
                           onKeyDown={(e) => {
                             e.stopPropagation();
+                            
                             if (e.key === 'Enter') {
                               handleAskFollowUp();
                             }
