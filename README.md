@@ -4,6 +4,13 @@
   <img src="assets/intro.png" width="100%" height="100%" alt="LightUp Logo">
 </p>
 
+<p align="center">
+  <video width="100%" height="100%" controls>
+    <source src="assets/LightUp.mov" type="video/quicktime">
+    Your browser does not support the video tag.
+  </video>
+</p>
+
 **Beta Version**: This project is currently in beta. Features and functionality may change as we continue to improve the extension.
 
 
