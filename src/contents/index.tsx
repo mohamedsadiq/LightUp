@@ -813,7 +813,7 @@ function Content() {
                     layout
                   >
                     {/* Skeleton lines */}
-                    {[...Array(9)].map((_, i) => (
+                    {[...Array(10)].map((_, i) => (
                       <motion.div
                         key={i}
                         style={{
