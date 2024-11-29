@@ -1,138 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { marked } from 'marked';
 import { motion } from 'framer-motion';
+import { AnimatedText } from "./AnimatedText";
+import DOMPurify from "dompurify";
 
 interface MarkdownTextProps {
   text: string;
   isStreaming?: boolean;
 }
 
-const styles = {
-  container: {
-   
-    wordBreak: 'break-word' as const,
-    fontFamily: "'Inter', system-ui, sans-serif",
-    fontSize: '13px',
-    lineHeight: 1.7,
-    color: '#1a1a1a',
-  },
-  paragraph: {
-    fontSize: '13px',
-    margin: '1rem 0',
-    lineHeight: 1.7,
-  },
-  heading1: {
-    fontSize: '1.875rem',
-    fontWeight: 600,
-    color: '#111111',
-    margin: '1.5rem 0 1rem',
-  },
-  heading2: {
-    fontSize: '1.5rem',
-    fontWeight: 600,
-    color: '#111111',
-    margin: '1.5rem 0 1rem',
-  },
-  heading3: {
-    fontSize: '1.25rem',
-    fontWeight: 600,
-    color: '#111111',
-    margin: '1.5rem 0 1rem',
-  },
-  heading4: {
-    fontSize: '1.125rem',
-    fontWeight: 600,
-    color: '#111111',
-    margin: '1.5rem 0 1rem',
-  },
-  code: {
-    backgroundColor: '#f3f4f6',
-    padding: '0.2em 0.4em',
-    borderRadius: '0.25rem',
-    fontFamily: 'ui-monospace, monospace',
-    fontSize: '0.875em',
-    color: '#ef4444',
-  },
-  pre: {
-    backgroundColor: '#f8fafc',
-    padding: '1rem',
-    borderRadius: '0.5rem',
-    overflow: 'auto' as const,
-    border: '1px solid #e2e8f0',
-  },
-  preCode: {
-    backgroundColor: 'transparent',
-    padding: 0,
-    color: '#334155',
-  },
-  blockquote: {
-    borderLeft: '4px solid #e2e8f0',
-    paddingLeft: '1rem',
-    color: '#4b5563',
-    fontStyle: 'italic' as const,
-    margin: '1rem 0',
-  },
-  list: {
-    paddingLeft: '1.5rem',
-    margin: '1rem 0',
-    listStylePosition: 'outside' as const,
-  },
-  unorderedList: {
-    listStyle: 'disc outside' as const,
-  },
-  orderedList: {
-    listStyle: 'decimal outside' as const,
-  },
-  listItem: {
-    margin: '0.25rem 0',
-    paddingLeft: '0.5rem',
-    lineHeight: 1.7,
-  },
-  nestedList: {
-    marginTop: '0.5rem',
-    marginLeft: '1.5rem',
-  },
-  link: {
-    color: '#2563eb',
-    textDecoration: 'none',
-  },
-  linkHover: {
-    textDecoration: 'underline',
-  },
-  hr: {
-    border: 'none',
-    borderTop: '1px solid #e2e8f0',
-    margin: '1.5rem 0',
-  },
-  table: {
-    width: '100%',
-    borderCollapse: 'collapse' as const,
-    margin: '1rem 0',
-  },
-  tableCell: {
-    border: '1px solid #e2e8f0',
-    padding: '0.5rem',
-    textAlign: 'left' as const,
-  },
-  tableHeader: {
-    backgroundColor: '#f8fafc',
-    fontWeight: 600,
-  },
-};
-
 const MarkdownText: React.FC<MarkdownTextProps> = ({ 
   text, 
-
   isStreaming = false 
 }) => {
   const [formattedText, setFormattedText] = useState('');
 
   useEffect(() => {
     marked.setOptions({
-      breaks: false,
+      breaks: true,
       gfm: true,
       pedantic: false,
-      sanitize: false,
       smartLists: true,
       smartypants: true,
       highlight: function(code, lang) {
@@ -141,51 +28,36 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
     });
 
     const cleanedText = text
-      .replace(/\n\s*\n/g, '\n')
+      .replace(/\n\s*\n/g, '\n\n')
       .replace(/<p>\s*<\/p>/g, '')
       .replace(/>\s+</g, '><')
       .trim();
     
-    let parsed = marked.parse(cleanedText) as string;
+    let parsed = marked.parse(cleanedText);
+    parsed = DOMPurify.sanitize(parsed);
+    
     parsed = parsed
-      .replace(/<p>\s*<\/p>/g, '')
-      .replace(/>\s+</g, '><')
-      .replace(/<p>/g, `<p style="margin: 1rem 0; line-height: 1.7;">`)
-      .replace(/<h1>/g, `<h1 style="font-size: 1.875rem; font-weight: 600; color: #111111; margin: 1.5rem 0 1rem;">`)
-      .replace(/<h2>/g, `<h2 style="font-size: 1.5rem; font-weight: 600; color: #111111; margin: 1.5rem 0 1rem;">`)
-      .replace(/<h3>/g, `<h3 style="font-size: 1.25rem; font-weight: 600; color: #111111; margin: 1.5rem 0 1rem;">`)
-      .replace(/<ul>/g, `<ul style="list-style: disc outside; padding-left: 1.5rem; margin: 1rem 0;">`)
-      .replace(/<ol>/g, `<ol style="list-style: decimal outside; padding-left: 1.5rem; margin: 1rem 0;">`)
-      .replace(/<li>/g, `<li style="margin: 0.25rem 0; padding-left: 0.5rem; line-height: 1.7;">`)
-      .replace(/<strong>/g, `<strong style="margin: 0 0.2rem;">`);
-
+      .replace(/<p>/g, '<p class="text-base leading-relaxed mb-4">')
+      .replace(/<h1>/g, '<h1 class="text-3xl font-bold mb-6 mt-8">')
+      .replace(/<h2>/g, '<h2 class="text-2xl font-semibold mb-4 mt-6">')
+      .replace(/<h3>/g, '<h3 class="text-xl font-medium mb-3 mt-5">')
+      .replace(/<ul>/g, '<ul class="list-disc pl-6 mb-4 space-y-2">')
+      .replace(/<ol>/g, '<ol class="list-decimal pl-6 mb-4 space-y-2">')
+      .replace(/<li>/g, '<li class="leading-relaxed">')
+      .replace(/<code>/g, '<code class="bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono">')
+      .replace(/<pre>/g, '<pre class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-4 overflow-x-auto">')
+      .replace(/<blockquote>/g, '<blockquote class="border-l-4 border-gray-300 dark:border-gray-600 pl-4 italic my-4">');
+    
     setFormattedText(parsed);
   }, [text]);
 
-
-    const parsed = marked.parse(text.trim());
-    
-    // Apply styles to HTML elements
-  //   const styledHtml = parsed
-  //     .replace(/<p>/g, `<p style="margin: 1rem 0; line-height: 1.7;">`)
-  //     .replace(/<h1>/g, `<h1 style="font-size: 1.875rem; font-weight: 600; color: #111111; margin: 1.5rem 0 1rem;">`)
-  //     .replace(/<h2>/g, `<h2 style="font-size: 1.5rem; font-weight: 600; color: #111111; margin: 1.5rem 0 1rem;">`)
-  //     .replace(/<h3>/g, `<h3 style="font-size: 1.25rem; font-weight: 600; color: #111111; margin: 1.5rem 0 1rem;">`)
-  //     .replace(/<ul>/g, `<ul style="list-style: disc outside; padding-left: 1.5rem; margin: 1rem 0;">`)
-  //     .replace(/<ol>/g, `<ol style="list-style: decimal outside; padding-left: 1.5rem; margin: 1rem 0;">`)
-  //     .replace(/<li>/g, `<li style="margin: 0.25rem 0; padding-left: 0.5rem; line-height: 1.7;">`);
-    
-  //   setFormattedText(styledHtml);
-  // }, [text]);
-
   return (
-    <motion.div
-      initial={false}
-      animate={{ opacity: 1 }}
-      style={styles.container}
-      className={isStreaming ? 'streaming-text' : ''}
-      dangerouslySetInnerHTML={{ __html: formattedText }}
-    />
+    <div className="prose dark:prose-invert max-w-none">
+      <AnimatedText 
+        text={formattedText} 
+        className="text-neutral-700 dark:text-neutral-300 space-y-4"
+      />
+    </div>
   );
 };
 

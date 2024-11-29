@@ -101,44 +101,57 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     let isFirstChunk = true;
 
     while (true) {
-      const { done, value } = await reader.read();
-      
-      if (done) {
-        if (buffer) {
-          port.postMessage({ type: 'chunk', content: buffer });
-        }
-        port.postMessage({ type: 'done' });
-        break;
-      }
-
-      buffer += decoder.decode(value, { stream: true });
-      const lines = buffer.split('\n');
-      buffer = lines.pop() || '';
-
-      for (const line of lines) {
-        if (line.trim() === '') continue;
+      try {
+        const { done, value } = await reader.read();
         
-        try {
-          const chunk = JSON.parse(line.replace(/^data: /, ''));
-          if (chunk.choices?.[0]?.delta?.content) {
-            const content = chunk.choices[0].delta.content;
-            
-            if (isFirstChunk) {
-              console.log('First chunk content:', content);
-              isFirstChunk = false;
-            }
-
-            port.postMessage({ 
-              type: 'chunk', 
-              content: content,
-              isFollowUp: isFollowUp
-            });
-          } else {
-            console.warn('Empty or invalid chunk received:', chunk);
+        if (done) {
+          if (buffer) {
+            port.postMessage({ type: 'chunk', content: buffer });
           }
-        } catch (e) {
-          console.warn('Failed to parse streaming response:', e);
+          port.postMessage({ type: 'done' });
+          break;
         }
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.trim() === '') continue;
+          
+          try {
+            const chunk = JSON.parse(line.replace(/^data: /, ''));
+            if (chunk.choices?.[0]?.delta?.content) {
+              const content = chunk.choices[0].delta.content;
+              
+              if (isFirstChunk) {
+                console.log('First chunk content:', content);
+                isFirstChunk = false;
+              }
+
+              port.postMessage({ 
+                type: 'chunk', 
+                content: content,
+                isFollowUp: isFollowUp
+              });
+            }
+          } catch (e) {
+            console.warn('Failed to parse streaming response:', e);
+          }
+        }
+      } catch (streamError) {
+        // Check if the error is due to an aborted stream
+        if (streamError.message?.includes('aborted') || 
+            streamError.name === 'AbortError' || 
+            streamError.message?.includes('BodyStreamBuffer was aborted')) {
+          console.log('Stream was intentionally aborted');
+          port.postMessage({ 
+            type: 'aborted',
+            error: 'Request was cancelled'
+          });
+          return;
+        }
+        throw streamError; // Re-throw other errors
       }
     }
 

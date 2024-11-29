@@ -21,12 +21,12 @@ fontImportStyle.textContent = `
   @import url('https://fonts.googleapis.com/css2?family=K2D:wght@400;500;600;700&display=swap');
   
   ::selection {
-    background-color: #ff0 !important;
+    background-color: #FFBF5A !important;
     color: #000000 !important;
   }
   
   ::-moz-selection {
-    background-color: #ff0 !important;
+    background-color: #FFBF5A !important;
     color: #000000 !important;
   }
 `;
@@ -85,6 +85,13 @@ function Content() {
   });
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [connectionId] = useState(() => uuidv4());
+
+  // Add this state to store the last successful result
+  const [lastResult, setLastResult] = useState({
+    text: "",
+    explanation: "",
+    isComplete: false
+  });
 
   // Load the mode when component mounts
   useEffect(() => {
@@ -205,6 +212,17 @@ function Content() {
       const selection = window.getSelection()
       console.log('📝 Selected text:', selection?.toString());
       
+      // Check if there's an ongoing request
+      if (port) {
+        console.log('🛑 Canceling previous request');
+        port.postMessage({
+          type: "STOP_GENERATION",
+          connectionId
+        });
+        
+        // Don't reset states here anymore
+      }
+
       // Check if selection contains any elements with the no-select class
       const checkSelectionForClass = () => {
         if (!selection || selection.rangeCount === 0) {
@@ -271,35 +289,51 @@ function Content() {
       const text = selection?.toString().trim();
       console.log('✨ Processed text:', text);
 
-      if (text && text.length > 0 && /[a-zA-Z0-9]/.test(text)) {
-        console.log('🎯 Valid text selected:', {
+      // If there's no valid text selected but popup is visible,
+      // keep showing the last result
+      if (!text || !/[a-zA-Z0-9]/.test(text)) {
+        if (isVisible && lastResult.text) {
+          console.log('📍 Keeping last result visible');
+          return;
+        }
+        setIsVisible(false);
+        return;
+      }
+
+      // Update position and show popup
+      const { top, left } = calculatePosition(event.clientX, event.clientY);
+      setPosition({
+        x: left,
+        y: top
+      });
+      setIsVisible(true);
+      setError(null);
+      setIsLoading(true);
+      setFollowUpQAs([]);
+      setStreamingText('');
+      setSelectedText(text);
+
+      try {
+        if (!port) {
+          throw new Error('Connection not established');
+        }
+
+        const storage = new Storage();
+        const translationSettings = await storage.get("translationSettings");
+
+        console.log('📤 Sending text to process:', {
           text,
           mode,
-          settings
+          settings: {
+            ...settings,
+            translationSettings
+          },
+          connectionId
         });
 
-        setSelectedText(text);
-        const { top, left } = calculatePosition(event.clientX, event.clientY);
-        setPosition({
-          x: left,
-          y: top
-        });
-        setIsVisible(true);
-        setError(null);
-        setIsLoading(true);
-        setFollowUpQAs([]);
-        setIsExplanationComplete(false);
-        setStreamingText('');
-
-        try {
-          if (!port) {
-            throw new Error('Connection not established');
-          }
-
-          const storage = new Storage();
-          const translationSettings = await storage.get("translationSettings");
-
-          console.log('📤 Sending text to process:', {
+        port.postMessage({
+          type: "PROCESS_TEXT",
+          payload: {
             text,
             mode,
             settings: {
@@ -307,28 +341,13 @@ function Content() {
               translationSettings
             },
             connectionId
-          });
+          }
+        });
 
-          port.postMessage({
-            type: "PROCESS_TEXT",
-            payload: {
-              text,
-              mode,
-              settings: {
-                ...settings,
-                translationSettings
-              },
-              connectionId
-            }
-          });
-
-        } catch (err) {
-          console.error('❌ Error processing text:', err);
-          setError('Failed to process text');
-          setIsLoading(false);
-        }
-      } else {
-        console.log('⚠️ Invalid text selection:', text);
+      } catch (err) {
+        console.error('❌ Error processing text:', err);
+        setError('Failed to process text');
+        setIsLoading(false);
       }
     }
 
@@ -708,6 +727,17 @@ function Content() {
     });
   }, [followUpQAs]);
 
+  // Update the useEffect that handles streaming text to store the last result
+  useEffect(() => {
+    if (streamingText && !isLoading) {
+      setLastResult({
+        text: selectedText,
+        explanation: streamingText,
+        isComplete: true
+      });
+    }
+  }, [streamingText, isLoading, selectedText]);
+
   return (
     <AnimatePresence mode="sync" >
       
@@ -854,10 +884,11 @@ function Content() {
                   >
                     <motion.div
                       style={styles.explanation}
-                      initial={{ opacity: 0, y: 50 }}
-                      animate={{ opacity: 1,  y: 0 }}
-                      transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5 }}
-                      exit={{ opacity: 0, y: 50 }}
+                      
+                      initial={{  y: 50 }}
+                      animate={{   y: 0 }}
+                      // transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5 }}
+                      // exit={{ opacity: 0, y: 50 }}
                     >
                       <div style={{ marginBottom: '8px' }}>
                         <MarkdownText 
@@ -937,8 +968,10 @@ function Content() {
                     {followUpQAs.map(({ question, answer, id, isComplete }) => (
                       <motion.div
                         key={id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
+                        
+                      initial={{ opacity: 0, y: 50 }}
+                      animate={{ opacity: 1,  y: 0 }}
+                      transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5 }}
                         style={styles.followUpQA}
                       >
                         

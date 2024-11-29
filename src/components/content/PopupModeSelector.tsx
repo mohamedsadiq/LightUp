@@ -9,12 +9,6 @@ interface PopupModeSelectorProps {
   isLoading?: boolean
 }
 
-const modeIcons: Record<Mode, string> = {
-  explain: "✍️",
-  summarize: "✏️",
-  analyze: "💭",
-  translate: "🌐",
-}
 
 export const PopupModeSelector = ({ activeMode, onModeChange, isLoading = false }: PopupModeSelectorProps) => {
   const [fromLanguage, setFromLanguage] = useState("en")
