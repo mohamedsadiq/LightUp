@@ -98,10 +98,11 @@ const styles = {
     color: "white",
     borderRadius: "20px",
     fontSize: "10px",
-    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    fontFamily: "'K2D', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     cursor: "default",
     height: "28px",
-    lineHeight: "16px"
+    lineHeight: "16px",
+    fontWeight: "500"
   },
   iconWrapper: {
     display: "flex",
