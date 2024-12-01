@@ -12,6 +12,7 @@
   
    <img src="assets/lightup.png" width="100%" height="100%" alt="LightUp popup">
 </p>
+![image](https://github.com/user-attachments/assets/accb6202-d341-4a44-bc18-19b0018f1134)
 
 ## ✨ Features
 
