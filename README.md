@@ -4,18 +4,10 @@
   <img src="assets/intro.png" width="100%" height="100%" alt="LightUp Logo">
 </p>
 
-## 🌐 Website
-
-Visit our [official website](https://www.lightup.com) for more information, updates, and support.
-
-## 📥 Download
-
-Download the latest version of LightUp from our [Releases page](https://github.com/lightup/releases). Choose the appropriate version for your browser and follow the installation instructions below.
+## 🌐 Meet LightUp
+Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
 
 
-
-
-**Meet LightUp** - Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
 
 
 <p align="center">
@@ -40,6 +32,11 @@ Download the latest version of LightUp from our [Releases page](https://github.c
   - Use OpenAI's GPT models
   - Connect to your local LLM (supports llama.cpp, LM Studio, Text Generation WebUI)
   - Use Gemini for advanced text processing (requires API key)
+
+
+## 📥 Download
+
+Download the latest version of LightUp from our [Releases page](https://github.com/lightup/releases). Choose the appropriate version for your browser and follow the installation instructions below.
 
 
 ## 🚀 Getting Started
