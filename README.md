@@ -14,8 +14,7 @@
 </p>
 <p align="center">
   
-   <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/65205272/391309697-accb6202-d341-4a44-bc18-19b0018f1134.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAVCODYLSA53PQK4ZA/20241201/us-east-1/s3/aws4_request&X-Amz-Date=20241201T060804Z&X-Amz-Expires=300&X-Amz-Signature=2b345281d0a44efb6169b0d6eef035dc7c3a2230eb2727958230016640f7095b&X-Amz-SignedHeaders=host" width="100%" height="100%" alt="LightUp popup">
-</p>
+  
 
 
 ## ✨ Features
