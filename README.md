@@ -4,7 +4,7 @@
   <img src="assets/intro.png" width="100%" height="100%" alt="LightUp Logo">
 </p>
 
-## 🌐 Meet LightUp
+## ✨  Meet LightUp
 Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
 
 
