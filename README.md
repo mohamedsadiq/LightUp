@@ -42,15 +42,14 @@ Download the latest version of LightUp from our [Releases page](https://github.c
   - Use Gemini for advanced text processing (requires API key)
 
 
-## 🚀 Getting Started
 
-## LightUp User Guide
+## 🚀LightUp User Guide
 
 ### Installation for users
 
 1. Download the Extension
-  - Go to the LightUp Releases
-  - Download the latest release ZIP file (lightup-vX.X.X.zip)
+  * Go to the LightUp Releases
+  * Download the latest release ZIP file (lightup-vX.X.X.zip)
 
 2. Install in Chrome/Brave
    - Open Chrome/Brave and go to chrome://extensions/
