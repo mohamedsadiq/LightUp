@@ -1,4 +1,4 @@
-# 🌟 LightUp : AI-Powered Annotations for every page on the web.
+# LightUp : AI-Powered Annotations for every page on the web.
 
 <p align="center">
   <img src="assets/intro.png" width="100%" height="100%" alt="LightUp Logo">
