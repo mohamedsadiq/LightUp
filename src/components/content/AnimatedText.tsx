@@ -10,7 +10,7 @@ interface AnimatedTextProps {
 export const AnimatedText = ({ 
   text, 
   className = "",
-  speed = 15 // default speed
+  speed = 40 // default speed
 }: AnimatedTextProps) => {
   // Calculate base timing values adjusted by speed
   const baseDuration = 2.75 / speed;
