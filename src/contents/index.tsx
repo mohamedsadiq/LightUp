@@ -14,7 +14,6 @@ import LoadingGif from "../assets/loading.gif"
 import { PopupModeSelector } from "../components/content/PopupModeSelector"
 import type { Mode } from "~types/settings"
 import { v4 as uuidv4 } from 'uuid';
-import type { Settings } from "~types/settings"
 
 // Add this style block right after your imports
 const fontImportStyle = document.createElement('style');
@@ -36,6 +35,13 @@ document.head.appendChild(fontImportStyle);
 // This tells Plasmo to inject this component into the webpage
 export const config: PlasmoCSConfig = {
   matches: ["<all_urls>"]
+}
+
+// Add this interface near the top of the file
+interface Settings {
+  modelType: "local" | "openai";
+  serverUrl?: string;
+  apiKey?: string;
 }
 
 // Add this type definition at the top with other interfaces
@@ -65,10 +71,7 @@ function Content() {
     isComplete: boolean;
   }>>([])
   const [activeAnswerId, setActiveAnswerId] = useState<number | null>(null)
-  const [settings, setSettings] = useState<Settings | null>({
-    modelType: "openai",
-    maxTokens: 2048
-  });
+  const [settings, setSettings] = useState<Settings | null>(null);
   const [isConfigured, setIsConfigured] = useState(false);
   const [feedbacks, setFeedbacks] = useState<Record<string, 'like' | 'dislike'>>({});
   const [isInteractingWithPopup, setIsInteractingWithPopup] = useState(false)
@@ -129,19 +132,23 @@ function Content() {
     const loadSettings = async () => {
       const storage = new Storage();
       const savedSettings = await storage.get("settings") as Settings | null;
+      const translationSettings = await storage.get("translationSettings");
       
-      console.log('📚 Loaded settings:', savedSettings);
+      console.log('📚 Loaded settings:', { savedSettings, translationSettings });
       setSettings(savedSettings);
       
-      // Update configuration check to include Gemini
+      // Check if settings are properly configured
       if (savedSettings) {
-        setIsConfigured(Boolean(
-          (savedSettings.modelType === "local" && savedSettings.serverUrl) ||
-          (savedSettings.modelType === "openai" && savedSettings.apiKey) ||
-          (savedSettings.modelType === "gemini" && savedSettings.apiKey)
-        ));
-      } else {
-        setIsConfigured(false);
+        if (savedSettings.modelType === "local" && savedSettings.serverUrl) {
+          console.log('✅ Local model configured');
+          setIsConfigured(true);
+        } else if (savedSettings.modelType === "openai" && savedSettings.apiKey) {
+          console.log('✅ OpenAI configured');
+          setIsConfigured(true);
+        } else {
+          console.log('⚠️ Settings not properly configured');
+          setIsConfigured(false);
+        }
       }
     };
 

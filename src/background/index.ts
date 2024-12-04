@@ -2,12 +2,9 @@ import { Storage } from "@plasmohq/storage"
 import { verifyServerConnection } from "~utils/storage"
 import type { ProcessTextRequest, StreamChunk } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "~utils/constants"
-import { processLocalText } from "~services/llm/local"
-import { processOpenAIText } from "~services/llm/openai"
-import { processGeminiText } from "~services/llm/gemini"
 
 interface Settings {
-  modelType: "local" | "openai" | "gemini"
+  modelType: "local" | "cloud"
   serverUrl?: string
   translationSettings?: {
     fromLanguage: string
@@ -54,38 +51,107 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     const storage = new Storage();
     const globalSettings = await storage.get("settings") as Settings;
     
-    let textProcessor;
-    switch (globalSettings?.modelType) {
-      case "local":
-        textProcessor = processLocalText;
-        break;
-      case "openai":
-        textProcessor = processOpenAIText;
-        break;
-      case "gemini":
-        textProcessor = processGeminiText;
-        break;
-      default:
-        textProcessor = processOpenAIText;
+    const endpoint = globalSettings?.modelType === "local" 
+      ? `/v1/chat/completions`
+      : "/api/generate";
+
+    const userMessage = isFollowUp
+      ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
+      : mode === "translate" && settings?.translationSettings 
+        ? `Translate the following text from ${settings.translationSettings.fromLanguage} to ${settings.translationSettings.toLanguage}:\n\n${text}`
+        : typeof USER_PROMPTS[mode] === 'function' 
+          ? USER_PROMPTS[mode](text, context)
+          : text;
+
+    console.log('Sending message to LLM:', userMessage);
+
+    const response = await fetch(`${settings.serverUrl}${endpoint}`, {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: "llama-3.2-3b-instruct",
+        messages: [
+          {
+            role: "system",
+            content: SYSTEM_PROMPTS[mode]
+          },
+          {
+            role: "user",
+            content: userMessage
+          }
+        ],
+        stream: true
+      }),
+      signal: abortController.signal
+    });
+
+    if (!response.ok) {
+      throw new Error(`Server responded with ${response.status}`);
     }
 
-    for await (const result of textProcessor(request)) {
-      if (result.type === 'chunk') {
-        port.postMessage({ 
-          type: 'chunk', 
-          content: result.content,
-          isFollowUp: request.isFollowUp
-        });
-      } else if (result.type === 'done') {
-        port.postMessage({ 
-          type: 'done',
-          isFollowUp: request.isFollowUp
-        });
-      } else if (result.type === 'error') {
-        port.postMessage({ 
-          type: 'error',
-          error: result.error
-        });
+    const reader = response.body?.getReader();
+    if (!reader) {
+      throw new Error('Response body is not readable');
+    }
+
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let isFirstChunk = true;
+
+    while (true) {
+      try {
+        const { done, value } = await reader.read();
+        
+        if (done) {
+          if (buffer) {
+            port.postMessage({ type: 'chunk', content: buffer });
+          }
+          port.postMessage({ type: 'done' });
+          break;
+        }
+
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+
+        for (const line of lines) {
+          if (line.trim() === '') continue;
+          
+          try {
+            const chunk = JSON.parse(line.replace(/^data: /, ''));
+            if (chunk.choices?.[0]?.delta?.content) {
+              const content = chunk.choices[0].delta.content;
+              
+              if (isFirstChunk) {
+                console.log('First chunk content:', content);
+                isFirstChunk = false;
+              }
+
+              port.postMessage({ 
+                type: 'chunk', 
+                content: content,
+                isFollowUp: isFollowUp
+              });
+            }
+          } catch (e) {
+            console.warn('Failed to parse streaming response:', e);
+          }
+        }
+      } catch (streamError) {
+        // Check if the error is due to an aborted stream
+        if (streamError.message?.includes('aborted') || 
+            streamError.name === 'AbortError' || 
+            streamError.message?.includes('BodyStreamBuffer was aborted')) {
+          console.log('Stream was intentionally aborted');
+          port.postMessage({ 
+            type: 'aborted',
+            error: 'Request was cancelled'
+          });
+          return;
+        }
+        throw streamError; // Re-throw other errors
       }
     }
 

@@ -133,7 +133,6 @@ function IndexOptions() {
         >
           <option value="local">Local LLM</option>
           <option value="openai">OpenAI</option>
-          <option value="gemini">Google Gemini</option>
         </select>
 
         {settings.modelType === "local" ? (
@@ -149,7 +148,7 @@ function IndexOptions() {
               placeholder="http://127.0.0.1:1234"
             />
           </>
-        ) : settings.modelType === "openai" ? (
+        ) : (
           <>
             <label className="block mb-2 font-k2d font-medium">
               OpenAI API Key:
@@ -164,25 +163,6 @@ function IndexOptions() {
               className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
               placeholder="Enter your OpenAI API key"
             />
-          </>
-        ) : (
-          <>
-            <label className="block mb-2 font-k2d font-medium">
-              Gemini API Key:
-            </label>
-            <input
-              type="password"
-              value={settings.apiKey}
-              onChange={(e) => setSettings(prev => ({
-                ...prev,
-                apiKey: e.target.value
-              }))}
-              className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
-              placeholder="Enter your Gemini API key"
-            />
-            <p className="text-sm text-gray-600 mt-1">
-              Get your API key from <a href="https://ai.google.dev/" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">Google AI Studio</a>
-            </p>
           </>
         )}
 

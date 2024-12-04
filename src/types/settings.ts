@@ -1,5 +1,5 @@
 // Model types available in the extension
-export type ModelType = "local" | "openai" | "gemini"
+export type ModelType = "local" | "openai"
 
 // Available modes for text processing
 export type Mode = "explain" | "summarize" | "analyze" | "translate"
@@ -21,7 +21,6 @@ export interface Settings {
   mode?: Mode
   temperature?: number
   customPrompt?: string
-  translationSettings?: TranslationSettings
 }
 
 // Extended settings state with additional properties
@@ -79,6 +78,6 @@ export interface FeedbackContext {
 
 // Add a new interface for translation settings
 export interface TranslationSettings {
-  fromLanguage: keyof typeof LANGUAGES;
-  toLanguage: keyof typeof LANGUAGES;
+  fromLanguage: string
+  toLanguage: string
 } 

@@ -2,7 +2,6 @@ import type { PlasmoMessaging } from "@plasmohq/messaging"
 import { Storage } from "@plasmohq/storage"
 import { processLocalText } from "~services/llm/local"
 import { processOpenAIText } from "~services/llm/openai"
-import { processGeminiText } from "~services/llm/gemini"
 import type { ProcessTextRequest } from "~types/messages"
 
 const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
@@ -22,7 +21,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
     
     const normalizedSettings = typeof settings === 'string' 
       ? { modelType: "openai" as const, maxTokens: 2048 } 
-      : { ...settings, modelType: settings.modelType as "local" | "openai" | "gemini" }
+      : { ...settings, modelType: settings.modelType as "local" | "openai" }
     
     port.postMessage({
       type: "PROCESS_TEXT",
