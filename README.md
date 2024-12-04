@@ -133,7 +133,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 🙏 Acknowledgments
 
 - Built with [Plasmo](https://docs.plasmo.com/)
-- Powered by OpenAI/Local LLM/Gemini 
+- Powered by OpenAI/Local LLM 
 
 ---
 
