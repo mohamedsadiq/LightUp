@@ -22,14 +22,15 @@ Seamless AI assistance that lives in your browser. No new tabs. No context switc
 - **Smart Text Analysis**: Get instant explanations for complex text passages
 
 - **Multiple Modes**:
-  - 🔍 Explain - Detailed explanations of text or code
+  - 🔍 Explain - Detailed explanations of text
   - 📝 Summarize - Quick summaries of longer content
   - 📊 Analyze - Deep analysis of selected content
+  - 🌐 Translate - Translate text into different languages
 - **Follow-up Questions**: Ask additional questions about the analyzed content to dive deeper
 - **Flexible AI Backend**:
   - Use OpenAI's GPT models
   - Connect to your local LLM (supports llama.cpp, LM Studio, Text Generation WebUI)
-  - Use Gemini for advanced text processing (requires API key)
+  
 
 
 ## 📥 Download
@@ -62,9 +63,8 @@ OR click "Load unpacked" and select the unzipped folder.
    - Right-click the LightUp icon and choose "Options" to go directly to Settings
   
 2. Choose your preferred AI backend:
-   - Local LLM (requires running local server) [Download Local LLM](https://example.com/local-llm-download)
-   - Gemini (requires API key) [Get Gemini API Key](https://example.com/gemini-api-key)
-   - OpenAI API (requires API key) [Get OpenAI API Key](https://example.com/openai-api-key)
+   - Local LLM (requires running local serverlocal-llm-download)
+   - OpenAI API (requires API key)
 
 3. Save your settings
 
@@ -84,7 +84,7 @@ If you want to change the mode, click on the LightUp icon in the toolbar to swit
 
 1. Clone this repository:
 ```bash
-git clone https://github.com/your-username/lightup-extension
+git clone https://github.com/mohamedsadiq/LightUp
 cd lightup-extension
 ```
 
@@ -138,5 +138,5 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ---
 
 <p align="center">
-  Made by [@moesadiq](https://twitter.com/sadiq_moo)
+  Made by [Moe Sadiq](https://twitter.com/sadiq_moo)  
 </p>
