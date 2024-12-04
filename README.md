@@ -117,7 +117,8 @@ This extension is built with:
 
 ## 📝 License
 
-[MIT License](LICENSE)
+
+This project is licensed under the Apache 2.0 License - see the [LICENSE](https://github.com/apache/.github/blob/main/LICENSE) file for details.
 
 ## 🤝 Contributing
 
