@@ -8,7 +8,10 @@
 Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
 
 
-https://github.com/user-attachments/assets/98f6fcba-d0d5-4eb1-901a-dd12efb5db9e
+
+https://github.com/user-attachments/assets/7a9d5cf0-ba4f-477c-8e73-525042fe68ed
+
+
 
 
 
