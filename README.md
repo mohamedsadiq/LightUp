@@ -15,13 +15,6 @@ https://github.com/user-attachments/assets/7a9d5cf0-ba4f-477c-8e73-525042fe68ed
 
 
 
-<p align="center">
-  
-   <img src="assets/lightup.png" width="100%" height="100%" alt="LightUp popup">
-</p>
-<p align="center">
-  
-  
 
 
 ## ✨ Features
