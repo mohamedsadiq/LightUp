@@ -125,7 +125,7 @@ This extension is built with:
 ## 📝 License
 
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE](https://github.com/apache/.github/blob/main/LICENSE) file for details.
+This project is licensed under the Apache 2.0 License - see the [LICENSE]([https://github.com/apache/.github/blob/main/LICENSE](https://github.com/mohamedsadiq/LightUp?tab=Apache-2.0-1-ov-file)) file for details.
 
 ## 🤝 Contributing
 
