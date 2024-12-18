@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { marked } from 'marked';
-import { motion } from 'framer-motion';
-import { AnimatedText } from "./AnimatedText";
 import DOMPurify from "dompurify";
 
 interface MarkdownTextProps {
@@ -52,12 +50,10 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
   }, [text]);
 
   return (
-    <div className="prose dark:prose-invert max-w-none">
-      <AnimatedText 
-        text={formattedText} 
-        className="text-neutral-700 dark:text-neutral-300 space-y-4"
-      />
-    </div>
+    <div 
+      className="prose dark:prose-invert max-w-none"
+      dangerouslySetInnerHTML={{ __html: formattedText }}
+    />
   );
 };
 
