@@ -1,5 +1,5 @@
 // Model types available in the extension
-export type ModelType = "local" | "openai"
+export type ModelType = "local" | "openai" | "gemini"
 
 // Available modes for text processing
 export type Mode = "explain" | "summarize" | "analyze" | "translate"
@@ -16,6 +16,8 @@ export interface Settings {
   // Optional fields depending on model type
   serverUrl?: string    // Required for local model
   apiKey?: string      // Required for OpenAI
+  geminiApiKey?: string
+  geminiModel?: GeminiModel
   
   // User preferences
   mode?: Mode
@@ -80,4 +82,6 @@ export interface FeedbackContext {
 export interface TranslationSettings {
   fromLanguage: string
   toLanguage: string
-} 
+}
+
+export type GeminiModel = "gemini-pro" | "gemini-pro-vision" | "gemini-1.0-pro" | "gemini-1.5-pro" | "gemini-1.5-flash-8b"; 

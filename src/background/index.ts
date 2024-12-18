@@ -2,14 +2,18 @@ import { Storage } from "@plasmohq/storage"
 import { verifyServerConnection } from "~utils/storage"
 import type { ProcessTextRequest, StreamChunk } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "~utils/constants"
+import { processGeminiText } from "~services/llm/gemini"
 
 interface Settings {
-  modelType: "local" | "cloud"
+  modelType: "local" | "openai" | "gemini"
   serverUrl?: string
   translationSettings?: {
     fromLanguage: string
     toLanguage: string
   }
+  geminiApiKey?: string
+  geminiModel?: string
+  maxTokens?: number
 }
 
 let activeConnections = new Map<string, {
@@ -53,7 +57,9 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     
     const endpoint = globalSettings?.modelType === "local" 
       ? `/v1/chat/completions`
-      : "/api/generate";
+      : globalSettings?.modelType === "gemini"
+        ? "/v1beta/models/gemini-pro:streamGenerateContent"
+        : "/api/generate";
 
     const userMessage = isFollowUp
       ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
@@ -65,25 +71,100 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
     console.log('Sending message to LLM:', userMessage);
 
-    const response = await fetch(`${settings.serverUrl}${endpoint}`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: "llama-3.2-3b-instruct",
-        messages: [
-          {
-            role: "system",
-            content: SYSTEM_PROMPTS[mode]
-          },
-          {
-            role: "user",
-            content: userMessage
+    let headers = { 'Content-Type': 'application/json' };
+    let requestBody;
+    let url = settings.serverUrl;
+
+    if (globalSettings?.modelType === "gemini") {
+      headers['x-goog-api-key'] = settings.geminiApiKey || '';
+      url = `https://generativelanguage.googleapis.com/v1beta/models/${globalSettings.geminiModel || "gemini-pro"}:generateContent`;
+      requestBody = {
+        contents: [{
+          parts: [{
+            text: userMessage
+          }]
+        }],
+        generationConfig: {
+          temperature: 0.7,
+          topK: 40,
+          topP: 0.95,
+          maxOutputTokens: settings.maxTokens || 2048
+        }
+      };
+
+      console.log('Using Gemini model:', globalSettings.geminiModel || "gemini-pro");
+
+      console.log('Sending Gemini request:', { url, requestBody });
+
+      const response = await fetch(url, {
+        method: "POST",
+        headers,
+        body: JSON.stringify(requestBody),
+        signal: abortController.signal
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('Gemini API error:', errorText);
+        throw new Error(`Server responded with ${response.status}: ${errorText}`);
+      }
+
+      // Handle non-streaming response for now
+      const data = await response.json();
+      console.log('Raw Gemini response:', data);
+
+      if (data.candidates && data.candidates.length > 0) {
+        const candidate = data.candidates[0];
+        if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+          const text = candidate.content.parts[0].text;
+          console.log('Extracted text:', text);
+          
+          // Split the text into smaller chunks for streaming-like behavior
+          const words = text.split(' ');
+          const chunkSize = 5; // Send 5 words at a time
+          
+          for (let i = 0; i < words.length; i += chunkSize) {
+            const chunk = words.slice(i, i + chunkSize).join(' ');
+            console.log('Sending chunk:', chunk);
+            port.postMessage({
+              type: 'chunk',
+              content: chunk + ' ',
+              isFollowUp: isFollowUp
+            });
+            // Add a small delay to simulate streaming
+            await new Promise(resolve => setTimeout(resolve, 50));
           }
-        ],
-        stream: true
-      }),
+        } else {
+          console.warn('No content in Gemini response:', data);
+        }
+      } else {
+        console.warn('No candidates in Gemini response:', data);
+      }
+
+      port.postMessage({ type: 'done' });
+      return;
+    }
+
+    url = settings.serverUrl + endpoint;
+    requestBody = {
+      model: "llama-3.2-3b-instruct",
+      messages: [
+        {
+          role: "system",
+          content: SYSTEM_PROMPTS[mode]
+        },
+        {
+          role: "user",
+          content: userMessage
+        }
+      ],
+      stream: true
+    };
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(requestBody),
       signal: abortController.signal
     });
 
@@ -120,20 +201,34 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
           if (line.trim() === '') continue;
           
           try {
-            const chunk = JSON.parse(line.replace(/^data: /, ''));
-            if (chunk.choices?.[0]?.delta?.content) {
-              const content = chunk.choices[0].delta.content;
-              
-              if (isFirstChunk) {
-                console.log('First chunk content:', content);
-                isFirstChunk = false;
+            if (globalSettings?.modelType === "gemini") {
+              // Handle Gemini response format
+              const data = JSON.parse(line);
+              if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
+                const content = data.candidates[0].content.parts[0].text;
+                port.postMessage({ 
+                  type: 'chunk', 
+                  content: content,
+                  isFollowUp: isFollowUp
+                });
               }
+            } else {
+              // Handle other models' response format
+              const chunk = JSON.parse(line.replace(/^data: /, ''));
+              if (chunk.choices?.[0]?.delta?.content) {
+                const content = chunk.choices[0].delta.content;
+                
+                if (isFirstChunk) {
+                  console.log('First chunk content:', content);
+                  isFirstChunk = false;
+                }
 
-              port.postMessage({ 
-                type: 'chunk', 
-                content: content,
-                isFollowUp: isFollowUp
-              });
+                port.postMessage({ 
+                  type: 'chunk', 
+                  content: content,
+                  isFollowUp: isFollowUp
+                });
+              }
             }
           } catch (e) {
             console.warn('Failed to parse streaming response:', e);

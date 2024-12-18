@@ -39,9 +39,11 @@ export const config: PlasmoCSConfig = {
 
 // Add this interface near the top of the file
 interface Settings {
-  modelType: "local" | "openai";
+  modelType: "local" | "openai" | "gemini";
   serverUrl?: string;
   apiKey?: string;
+  geminiApiKey?: string;
+  maxTokens: number;
 }
 
 // Add this type definition at the top with other interfaces
@@ -144,6 +146,9 @@ function Content() {
           setIsConfigured(true);
         } else if (savedSettings.modelType === "openai" && savedSettings.apiKey) {
           console.log('✅ OpenAI configured');
+          setIsConfigured(true);
+        } else if (savedSettings.modelType === "gemini" && savedSettings.geminiApiKey) {
+          console.log('✅ Gemini configured');
           setIsConfigured(true);
         } else {
           console.log('⚠️ Settings not properly configured');
@@ -737,6 +742,42 @@ function Content() {
       });
     }
   }, [streamingText, isLoading, selectedText]);
+
+  const handleStreamResponse = (msg: any) => {
+    console.log('Received message in UI:', msg);
+
+    if (msg.type === 'error') {
+      console.error('Stream error:', msg.error);
+      setError(msg.error);
+      setIsLoading(false);
+      return;
+    }
+
+    if (msg.type === 'chunk') {
+      if (msg.content) {
+        console.log('Adding chunk to UI:', msg.content);
+        setStreamingText(prev => {
+          const newText = prev + msg.content;
+          console.log('New streaming text:', newText);
+          return newText;
+        });
+      } else {
+        console.warn('Received chunk with no content:', msg);
+      }
+    }
+
+    if (msg.type === 'done') {
+      console.log('Stream completed');
+      setIsLoading(false);
+    }
+  };
+
+  // Reset streaming text when starting new request
+  useEffect(() => {
+    if (isLoading) {
+      setStreamingText('');
+    }
+  }, [isLoading]);
 
   return (
     <AnimatePresence mode="sync" >

@@ -6,13 +6,15 @@ export interface ProcessTextRequest {
   settings: {
     serverUrl: string;
     apiKey: string;
+    geminiApiKey?: string;
+    geminiModel?: "gemini-pro" | "gemini-1.5-flash-8b" | "gemini-1.5-pro" | string;
     maxTokens?: number;
     stream?: boolean;
     translationSettings?: {
       fromLanguage: string;
       toLanguage: string;
     };
-    modelType?: "local" | "openai";
+    modelType?: "local" | "openai" | "gemini";
   };
   aborted?: boolean;
   isFollowUp?: boolean;

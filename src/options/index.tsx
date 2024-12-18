@@ -2,6 +2,35 @@ import { useEffect, useState, useRef } from "react"
 import { Storage } from "@plasmohq/storage"
 import "../styles/options.css"
 import "../style.css"
+import type { Settings, GeminiModel } from "~types/settings"
+
+const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
+  {
+    value: "gemini-pro",
+    label: "Gemini Pro",
+    description: "Standard text model with balanced performance"
+  },
+  {
+    value: "gemini-pro-vision",
+    label: "Gemini Pro Vision",
+    description: "Handles both text and image inputs"
+  },
+  {
+    value: "gemini-1.0-pro",
+    label: "Gemini 1.0 Pro",
+    description: "First version of the model"
+  },
+  {
+    value: "gemini-1.5-pro",
+    label: "Gemini 1.5 Pro",
+    description: "Latest version with improved capabilities"
+  },
+  {
+    value: "gemini-1.5-flash-8b",
+    label: "Gemini 1.5 Flash",
+    description: "Faster, smaller model for quick responses"
+  }
+];
 
 // Add the Logo component
 const Logo = () => (
@@ -41,11 +70,9 @@ const Logo = () => (
 
 function IndexOptions() {
   const storage = useRef(new Storage()).current;
-  const [settings, setSettings] = useState({
-    modelType: "",
-    serverUrl: "",
-    apiKey: "",
-    maxTokens: 1000
+  const [settings, setSettings] = useState<Settings>({
+    modelType: "openai",
+    maxTokens: 2048
   });
 
   // Add error state
@@ -54,13 +81,11 @@ function IndexOptions() {
   // Load settings
   useEffect(() => {
     const loadSettings = async () => {
-      const savedSettings = await storage.get("settings") || {};
-      setSettings(prev => ({
-        ...prev,
-        ...savedSettings
-      }));
+      const savedSettings = await storage.get("settings");
+      if (savedSettings) {
+        setSettings(savedSettings);
+      }
     };
-
     loadSettings();
   }, []);
 
@@ -80,6 +105,10 @@ function IndexOptions() {
       } else if (settings.modelType === "openai") {
         if (!settings.apiKey) {
           throw new Error("API key is required for OpenAI");
+        }
+      } else if (settings.modelType === "gemini") {
+        if (!settings.geminiApiKey) {
+          throw new Error("API key is required for Google Gemini");
         }
       }
 
@@ -133,6 +162,7 @@ function IndexOptions() {
         >
           <option value="local">Local LLM</option>
           <option value="openai">OpenAI</option>
+          <option value="gemini">Google Gemini</option>
         </select>
 
         {settings.modelType === "local" ? (
@@ -148,7 +178,7 @@ function IndexOptions() {
               placeholder="http://127.0.0.1:1234"
             />
           </>
-        ) : (
+        ) : settings.modelType === "openai" ? (
           <>
             <label className="block mb-2 font-k2d font-medium">
               OpenAI API Key:
@@ -163,6 +193,44 @@ function IndexOptions() {
               className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
               placeholder="Enter your OpenAI API key"
             />
+          </>
+        ) : (
+          <>
+            <label className="block mb-2 font-k2d font-medium">
+              Google Gemini API Key:
+            </label>
+            <input
+              type="password"
+              value={settings.geminiApiKey}
+              onChange={(e) => setSettings(prev => ({
+                ...prev,
+                geminiApiKey: e.target.value
+              }))}
+              className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
+              placeholder="Enter your Gemini API key"
+            />
+
+            {/* Add Gemini Model Selector */}
+            <label className="block mb-2 font-k2d font-medium">
+              Gemini Model:
+            </label>
+            <select
+              value={settings.geminiModel || "gemini-pro"}
+              onChange={(e) => setSettings(prev => ({
+                ...prev,
+                geminiModel: e.target.value as GeminiModel
+              }))}
+              className="w-full p-2 mb-4 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
+            >
+              {GEMINI_MODELS.map((model) => (
+                <option key={model.value} value={model.value}>
+                  {model.label}
+                </option>
+              ))}
+            </select>
+            <p className="text-sm text-gray-500 mb-4">
+              {GEMINI_MODELS.find(m => m.value === (settings.geminiModel || "gemini-pro"))?.description}
+            </p>
           </>
         )}
 
