@@ -30,6 +30,12 @@ https://github.com/user-attachments/assets/7a9d5cf0-ba4f-477c-8e73-525042fe68ed
 - **Flexible AI Backend**:
   - Use OpenAI's GPT models
   - Connect to your local LLM (supports llama.cpp, LM Studio, Text Generation WebUI)
+  - Google Gemini Models
+    - Gemini Pro
+    - Gemini Pro Vision
+    - Gemini 1.0 Pro
+    - Gemini 1.5 Pro
+    - Gemini 1.5 Flash
   
 
 
@@ -65,6 +71,7 @@ OR click "Load unpacked" and select the unzipped folder.
 2. Choose your preferred AI backend:
    - Local LLM (requires running local serverlocal-llm-download)
    - OpenAI API (requires API key)
+   - Google Gemini (requires Gemini API key and model selection)
 
 3. Save your settings
 
