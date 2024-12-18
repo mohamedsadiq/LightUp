@@ -72,7 +72,10 @@ function IndexOptions() {
   const storage = useRef(new Storage()).current;
   const [settings, setSettings] = useState<Settings>({
     modelType: "openai",
-    maxTokens: 2048
+    maxTokens: 2048,
+    customization: {
+      showSelectedText: true
+    }
   });
 
   // Add error state
@@ -83,7 +86,14 @@ function IndexOptions() {
     const loadSettings = async () => {
       const savedSettings = await storage.get("settings");
       if (savedSettings) {
-        setSettings(savedSettings);
+        // Ensure customization settings are preserved
+        setSettings({
+          ...savedSettings,
+          customization: {
+            ...savedSettings.customization,
+            showSelectedText: savedSettings.customization?.showSelectedText ?? true
+          }
+        });
       }
     };
     loadSettings();
@@ -112,8 +122,17 @@ function IndexOptions() {
         }
       }
 
+      // Ensure customization settings are included
+      const settingsToSave = {
+        ...settings,
+        customization: {
+          ...settings.customization,
+          showSelectedText: settings.customization?.showSelectedText ?? true
+        }
+      };
+
       // Save settings with await and proper error handling
-      await storage.set("settings", settings).catch(err => {
+      await storage.set("settings", settingsToSave).catch(err => {
         throw new Error(`Storage error: ${err.message}`);
       });
       
@@ -276,6 +295,29 @@ function IndexOptions() {
           </ol>
         </div>
       )}
+
+      {/* Add Customization Section */}
+      <div className="mb-5">
+        <h2 className="text-lg font-semibold mb-4">Customization</h2>
+        <div className="flex items-center gap-2">
+          <input
+            type="checkbox"
+            id="showSelectedText"
+            checked={settings.customization?.showSelectedText ?? true}
+            onChange={(e) => setSettings(prev => ({
+              ...prev,
+              customization: {
+                ...prev.customization,
+                showSelectedText: e.target.checked
+              }
+            }))}
+            className="w-4 h-4 rounded border-gray-300"
+          />
+          <label htmlFor="showSelectedText" className="text-sm">
+            Show selected text in popup
+          </label>
+        </div>
+      </div>
     </div>
   )
 }

@@ -23,6 +23,9 @@ export interface Settings {
   mode?: Mode
   temperature?: number
   customPrompt?: string
+  customization?: {
+    showSelectedText: boolean;
+  };
 }
 
 // Extended settings state with additional properties

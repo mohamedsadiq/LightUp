@@ -46,7 +46,7 @@ export const styles = {
     // marginTop: 4
   },
   text: {
-    fontSize: 14,
+    fontSize: 12,
     lineHeight: 1.5,
     margin: "0 0 16px 0",
     color: "#000",
