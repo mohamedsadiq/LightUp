@@ -891,7 +891,9 @@ function Content() {
                         key={i}
                         style={{
                           height: '16px',
-                          background: 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
+                          background: settings?.customization?.theme === "dark" 
+                            ? 'linear-gradient(90deg, #2C2C2C 25%, #3D3D3D 50%, #2C2C2C 75%)'
+                            : 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
                           borderRadius: '4px',
                           width: i === 2 ? '70%' : '100%',
                         }}
