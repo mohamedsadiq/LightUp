@@ -14,6 +14,7 @@ import LoadingGif from "../assets/loading.gif"
 import { PopupModeSelector } from "../components/content/PopupModeSelector"
 import type { Mode } from "~types/settings"
 import { v4 as uuidv4 } from 'uuid';
+import { getStyles } from "./styles"
 
 // Add this style block right after your imports
 const fontImportStyle = document.createElement('style');
@@ -46,6 +47,7 @@ interface Settings {
   maxTokens: number;
   customization?: {
     showSelectedText: boolean;
+    theme: "light" | "dark";
   };
 }
 
@@ -78,7 +80,6 @@ function Content() {
   const [activeAnswerId, setActiveAnswerId] = useState<number | null>(null)
   const [settings, setSettings] = useState<Settings | null>(null);
   const [isConfigured, setIsConfigured] = useState(false);
-  const [feedbacks, setFeedbacks] = useState<Record<string, 'like' | 'dislike'>>({});
   const [isInteractingWithPopup, setIsInteractingWithPopup] = useState(false)
   const [abortController, setAbortController] = useState<AbortController | null>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -97,6 +98,9 @@ function Content() {
     explanation: "",
     isComplete: false
   });
+
+  const currentTheme = settings?.customization?.theme || "light";
+  const themedStyles = getStyles(currentTheme);
 
   // Load the mode when component mounts
   useEffect(() => {
@@ -295,7 +299,7 @@ function Content() {
       }
 
       const text = selection?.toString().trim();
-      console.log('✨ Processed text:', text);
+      console.log('����������� Processed text:', text);
 
       // If there's no valid text selected but popup is visible,
       // keep showing the last result
@@ -495,35 +499,6 @@ function Content() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, [isVisible, position]);
-
-  const handleFeedback = async (id: string, text: string, type: 'like' | 'dislike') => {
-    setFeedbacks(prev => {
-      // If clicking the same button, remove the feedback
-      if (prev[id] === type) {
-        const newFeedbacks = { ...prev };
-        delete newFeedbacks[id];
-        return newFeedbacks;
-      }
-      
-      // Otherwise, set the new feedback
-      return {
-        ...prev,
-        [id]: type
-      };
-    });
-
-    // Store in storage after state update
-    const feedback = {
-      id,
-      text,
-      feedback: type,
-      context: selectedText,
-      timestamp: Date.now()
-    };
-    
-    const existingFeedbacks = await storage.get('feedbacks') || [];
-    await storage.set('feedbacks', [...existingFeedbacks, feedback]);
-  };
 
   // Add this useEffect to handle popup interactions
   useEffect(() => {
@@ -787,7 +762,11 @@ function Content() {
       
       {isVisible && (
         <motion.div 
-          style={styles.popupContainer}
+          style={{
+            // ...themedStyles.popup,
+            left: `${position.x}px`,
+            top: `${position.y}px`,
+          }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -795,13 +774,13 @@ function Content() {
        
         >
           <div style={{
-            ...styles.popupPositioner,
+            ...themedStyles.popupPositioner,
             left: `${position.x}px`,
             top: `${position.y}px`,
           }}>
             <motion.div 
               style={{
-                ...styles.popup,
+                ...themedStyles.popup,
                 width: `${width}px`,
                 height: `${height}px`,
                 overflow: 'auto',
@@ -845,20 +824,25 @@ function Content() {
                 },
               }}
             >
-              <div style={styles.buttonContainerParent}>
+              <div style={themedStyles.buttonContainerParent}>
                 <motion.div style={{ marginLeft: '-6px' }} layout>
-                  {Logo()}
+                  {Logo(settings?.customization?.theme)}
                 </motion.div>
                 <PopupModeSelector 
                   activeMode={mode}
                   onModeChange={handleModeChange}
                   isLoading={isLoading}
+                  theme={settings?.customization?.theme || "light"}
                 />
-                <div style={styles.buttonContainer}>
+                <div style={themedStyles.buttonContainer}>
                   <div style={{ position: 'relative' }}>
                     <motion.button 
                       onClick={handleClose}
-                      style={{...styles.button, color: 'black', marginTop: '2px'}}
+                      style={{
+                        ...themedStyles.button, 
+                        color: settings?.customization?.theme === "dark" ? "#FFFFFF" : "#000000",
+                        marginTop: '2px'
+                      }}
                       variants={iconButtonVariants}
                        whileHover="hover"
                        
@@ -870,7 +854,7 @@ function Content() {
               </div>
 
               {settings?.customization?.showSelectedText !== false && (
-                <p style={{...styles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline'}}>
+                <p style={{...themedStyles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline'}}>
                   {truncateText(selectedText)}
                 </p>
               )}
@@ -910,7 +894,7 @@ function Content() {
                 ) : error ? (
                   <motion.p
                     key="error"
-                    style={styles.error}
+                    style={themedStyles.error}
                     variants={textVariants}
                     initial="initial"
                     animate="animate"
@@ -927,7 +911,7 @@ function Content() {
                     exit="exit"
                   >
                     <motion.div
-                      style={styles.explanation}
+                      style={themedStyles.explanation}
                       
                       initial={{  y: 50 }}
                       animate={{   y: 0 }}
@@ -947,7 +931,6 @@ function Content() {
 
                       {isExplanationComplete && (
                         <motion.div
-                          style={styles.feedbackContainer}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.2 }}
@@ -955,7 +938,11 @@ function Content() {
                           <motion.button
                             onClick={() => handleCopy(stripHtml(streamingText), 'initial')}
                             style={{
-                              ...styles.feedbackButton,
+                              background: 'none',
+                              border: 'none',
+                              cursor: 'pointer',
+                              padding: '4px',
+                              borderRadius: '4px',
                               color: copiedId === 'initial' ? '#666' : '#666'
                             }}
                             whileHover={{ scale: 1.1 }}
@@ -971,41 +958,6 @@ function Content() {
                               </svg>
                             )}
                           </motion.button>
-                          <motion.button
-                            onClick={() => handleFeedback('initial', streamingText, 'like')}
-                            style={{
-                              ...styles.feedbackButton,
-                              color: feedbacks['initial'] === 'like' ? '#0F8A5F' : '#666'
-                            }}
-                            variants={feedbackButtonVariants}
-                            initial="initial"
-                            whileHover="hover"
-                            whileTap="tap"
-                            animate={feedbacks['initial'] === 'like' ? 'bounce' : 'initial'}
-                          >
-                           <svg width="12" height="12" viewBox="0 0 60 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M26.6108 5.3736C25.764 7.54084 25.3317 10.0211 24.6313 12.611C23.4279 17.0604 21.7389 21.5198 17.1143 24.4812C16.6115 23.4546 15.9293 22.5592 15.1098 21.8767C13.4022 20.4546 11.2762 19.8232 9.17144 19.8232C7.0667 19.8232 4.91561 20.4546 3.208 21.8767C1.5004 23.299 0.351562 25.5931 0.351562 28.2376V53.08C0.351562 55.7245 1.5004 57.9937 3.208 59.4158C4.91561 60.8381 7.0667 61.4944 9.17144 61.4944C11.2762 61.4944 13.4022 60.8381 15.1098 59.4158C15.5279 59.0677 15.9177 58.6566 16.2624 58.2137C17.4974 59.1358 18.7774 59.8227 19.9958 60.1667C26.3043 62.0641 30.1481 64.2363 42.672 65.05C45.6787 65.0908 48.8912 64.4278 51.2412 63.3468C53.8736 62.1009 56.277 59.8363 56.7536 56.5853C57.5593 51.0892 59.2318 42.9913 59.6101 36.2506C59.7649 33.4891 59.4837 30.721 57.8812 28.3871C56.2941 26.0758 53.4946 24.5999 49.813 24.1298C46.2134 23.6486 42.2725 23.6761 39.0888 23.8794C41.1656 19.0706 42.7735 14.4192 42.6969 10.3563C42.6489 7.80672 41.9122 5.31376 40.0409 3.54473C38.1852 1.79028 35.4935 0.97847 32.2484 0.965332C28.8408 0.981354 27.4411 3.36224 26.6108 5.3736ZM32.1733 5.77446C34.6886 5.77446 36.0097 6.34218 36.7336 7.02654C37.4574 7.71099 37.8536 8.73124 37.8862 10.4574C37.6607 13.8029 35.2552 21.8166 31.4717 29.1143C38.4625 29.0289 43.905 28.1964 49.1365 28.8889C52 29.2376 53.2121 30.0582 53.9223 31.0927C54.6326 32.127 54.924 33.7774 54.7993 36.0011C54.4543 42.1487 52.8368 50.1289 51.993 55.885C51.7966 57.2241 50.9224 58.1687 49.1866 58.9903C47.4703 59.8027 45.0549 60.2576 42.8975 60.2675C30.8373 59.4754 28.0705 57.5713 21.2487 55.5344C18.9022 54.7338 18.0362 53.0605 18.0164 51.4023C17.9897 44.0898 17.9914 36.7773 17.9914 29.4648C25.1227 25.7173 27.8483 19.1081 29.2668 13.8632C30.3578 10.3696 30.7803 5.78719 32.1733 5.77446Z" fill="currentColor"/>
-                          </svg>
-
-                          </motion.button>
-                          <motion.button
-                            onClick={() => handleFeedback('initial', streamingText, 'dislike')}
-                            style={{
-                              ...styles.feedbackButton,
-                              color: feedbacks['initial'] === 'dislike' ? '#ff4444' : '#666'
-                            }}
-                            variants={feedbackButtonVariants}
-                            initial="initial"
-                            whileHover="hover"
-                            whileTap="tap"
-                            animate={feedbacks['initial'] === 'dislike' ? 'bounce' : 'initial'}
-                          >
-                            <svg width="12" height="12" viewBox="0 0 57 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M31.5335 57.716C32.3412 55.6216 32.7536 53.2247 33.4217 50.7219C34.5696 46.422 36.1808 42.1125 40.5921 39.2507C41.0718 40.2428 41.7225 41.108 42.5042 41.7676C44.1331 43.142 46.1611 43.7521 48.1688 43.7521C50.1765 43.7521 52.2284 43.142 53.8573 41.7676C55.4862 40.3932 56.582 38.1762 56.582 35.6205L56.582 11.6132C56.582 9.05756 55.4862 6.8647 53.8573 5.49035C52.2284 4.11592 50.1765 3.48165 48.1688 3.48165C46.1611 3.48165 44.1331 4.11584 42.5042 5.49035C42.1054 5.8268 41.7335 6.22409 41.4047 6.65204C40.2267 5.76099 39.0057 5.09715 37.8435 4.76473C31.8258 2.93107 28.1593 0.83196 16.2128 0.0455745C13.3447 0.00609211 10.2804 0.646858 8.03869 1.6915C5.52762 2.89554 3.23507 5.08399 2.78042 8.22573C2.01189 13.5371 0.416488 21.3628 0.0556785 27.8769C-0.0920192 30.5456 0.176238 33.2206 1.70486 35.4761C3.21879 37.7097 5.8892 39.1359 9.40106 39.5902C12.8347 40.0552 16.5938 40.0287 19.6308 39.8322C17.6497 44.4794 16.116 48.9744 16.189 52.9008C16.2348 55.3647 16.9376 57.7738 18.7225 59.4834C20.4928 61.1788 23.0604 61.9634 26.1558 61.9761C29.4063 61.9606 30.7414 59.6597 31.5335 57.716ZM26.2275 57.3286C23.8281 57.3286 22.5679 56.78 21.8774 56.1186C21.1869 55.4572 20.809 54.4712 20.778 52.8031C20.9931 49.57 23.2876 41.8257 26.8967 34.7733C20.2282 34.8559 15.0367 35.6604 10.0463 34.9911C7.31486 34.6541 6.15869 33.8611 5.48118 32.8614C4.80368 31.8619 4.5257 30.2669 4.64464 28.118C4.97371 22.177 6.51669 14.4651 7.32158 8.9025C7.50886 7.60842 8.3428 6.69554 9.99852 5.90157C11.6357 5.1165 13.9397 4.67686 15.9977 4.66727C27.5018 5.43275 30.1411 7.27283 36.6484 9.24135C38.8867 10.015 39.7127 11.632 39.7317 13.2345C39.7571 20.3012 39.7555 27.3679 39.7555 34.4346C32.953 38.0561 30.3531 44.4431 28.9999 49.5118C27.9592 52.8879 27.5563 57.3163 26.2275 57.3286Z" fill="currentColor"/>
-</svg>
-
-                           
-                          </motion.button>
                         </motion.div>
                       )}
                     </motion.div>
@@ -1016,7 +968,7 @@ function Content() {
                       initial={{ opacity: 0, y: 50 }}
                       animate={{ opacity: 1,  y: 0 }}
                       transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5 }}
-                        style={styles.followUpQA}
+                        style={themedStyles.followUpQA}
                       >
                         
                         {/* Question bubble */}
@@ -1027,7 +979,7 @@ function Content() {
                             width: '100%'
                           }}
                         >
-                          <div style={styles.followUpQuestion}>
+                          <div style={themedStyles.followUpQuestion}>
                             {question}
                           </div>
                         </motion.div>
@@ -1040,7 +992,7 @@ function Content() {
                             width: '100%'
                           }}
                         >
-                          <div style={styles.followUpAnswer}>
+                          <div style={themedStyles.followUpAnswer}>
                             <MarkdownText
                               text={answer}
                               isStreaming={activeAnswerId === id && !isComplete}
@@ -1054,7 +1006,7 @@ function Content() {
                             {!isComplete && (
                               <motion.div
                                 style={{
-                                  ...styles.feedbackContainer,
+                                  ...themedStyles.feedbackContainer,
                                   opacity: 0.8
                                 }}
                                 initial={{ opacity: 0 }}
@@ -1065,7 +1017,11 @@ function Content() {
                                 <motion.button
                                   onClick={() => handleCopy(stripHtml(answer), `followup-${id}`)}
                                   style={{
-                                    ...styles.feedbackButton,
+                                    background: 'none',
+                                    border: 'none',
+                                    cursor: 'pointer',
+                                    padding: '4px',
+                                    borderRadius: '4px',
                                     color: copiedId === `followup-${id}` ? '#666' : '#666'
                                   }}
                                   whileHover={{ scale: 1.1 }}
@@ -1081,40 +1037,6 @@ function Content() {
                                     </svg>
                                   )}
                                 </motion.button>
-                                {/* Like button */}
-                                <motion.button
-                                  onClick={() => handleFeedback(`followup-${id}`, answer, 'like')}
-                                  style={{
-                                    ...styles.feedbackButton,
-                                    color: feedbacks[`followup-${id}`] === 'like' ? '#0F8A5F' : '#666'
-                                  }}
-                                  variants={feedbackButtonVariants}
-                                  initial="initial"
-                                  whileHover="hover"
-                                  whileTap="tap"
-                                >
-                                 <svg width="12" height="12" viewBox="0 0 60 66" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M26.6108 5.3736C25.764 7.54084 25.3317 10.0211 24.6313 12.611C23.4279 17.0604 21.7389 21.5198 17.1143 24.4812C16.6115 23.4546 15.9293 22.5592 15.1098 21.8767C13.4022 20.4546 11.2762 19.8232 9.17144 19.8232C7.0667 19.8232 4.91561 20.4546 3.208 21.8767C1.5004 23.299 0.351562 25.5931 0.351562 28.2376V53.08C0.351562 55.7245 1.5004 57.9937 3.208 59.4158C4.91561 60.8381 7.0667 61.4944 9.17144 61.4944C11.2762 61.4944 13.4022 60.8381 15.1098 59.4158C15.5279 59.0677 15.9177 58.6566 16.2624 58.2137C17.4974 59.1358 18.7774 59.8227 19.9958 60.1667C26.3043 62.0641 30.1481 64.2363 42.672 65.05C45.6787 65.0908 48.8912 64.4278 51.2412 63.3468C53.8736 62.1009 56.277 59.8363 56.7536 56.5853C57.5593 51.0892 59.2318 42.9913 59.6101 36.2506C59.7649 33.4891 59.4837 30.721 57.8812 28.3871C56.2941 26.0758 53.4946 24.5999 49.813 24.1298C46.2134 23.6486 42.2725 23.6761 39.0888 23.8794C41.1656 19.0706 42.7735 14.4192 42.6969 10.3563C42.6489 7.80672 41.9122 5.31376 40.0409 3.54473C38.1852 1.79028 35.4935 0.97847 32.2484 0.965332C28.8408 0.981354 27.4411 3.36224 26.6108 5.3736ZM32.1733 5.77446C34.6886 5.77446 36.0097 6.34218 36.7336 7.02654C37.4574 7.71099 37.8536 8.73124 37.8862 10.4574C37.6607 13.8029 35.2552 21.8166 31.4717 29.1143C38.4625 29.0289 43.905 28.1964 49.1365 28.8889C52 29.2376 53.2121 30.0582 53.9223 31.0927C54.6326 32.127 54.924 33.7774 54.7993 36.0011C54.4543 42.1487 52.8368 50.1289 51.993 55.885C51.7966 57.2241 50.9224 58.1687 49.1866 58.9903C47.4703 59.8027 45.0549 60.2576 42.8975 60.2675C30.8373 59.4754 28.0705 57.5713 21.2487 55.5344C18.9022 54.7338 18.0362 53.0605 18.0164 51.4023C17.9897 44.0898 17.9914 36.7773 17.9914 29.4648C25.1227 25.7173 27.8483 19.1081 29.2668 13.8632C30.3578 10.3696 30.7803 5.78719 32.1733 5.77446Z" fill="currentColor"/>
-</svg>
-
-                                </motion.button>
-                                {/* Dislike button */}
-                                <motion.button
-                                  onClick={() => handleFeedback(`followup-${id}`, answer, 'dislike')}
-                                  style={{
-                                    ...styles.feedbackButton,
-                                    color: feedbacks[`followup-${id}`] === 'dislike' ? '#ff4444' : '#666'
-                                  }}
-                                  variants={feedbackButtonVariants}
-                                  initial="initial"
-                                  whileHover="hover"
-                                  whileTap="tap"
-                                >
-                                  <svg width="12" height="12" viewBox="0 0 57 62" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M31.5335 57.716C32.3412 55.6216 32.7536 53.2247 33.4217 50.7219C34.5696 46.422 36.1808 42.1125 40.5921 39.2507C41.0718 40.2428 41.7225 41.108 42.5042 41.7676C44.1331 43.142 46.1611 43.7521 48.1688 43.7521C50.1765 43.7521 52.2284 43.142 53.8573 41.7676C55.4862 40.3932 56.582 38.1762 56.582 35.6205L56.582 11.6132C56.582 9.05756 55.4862 6.8647 53.8573 5.49035C52.2284 4.11592 50.1765 3.48165 48.1688 3.48165C46.1611 3.48165 44.1331 4.11584 42.5042 5.49035C42.1054 5.8268 41.7335 6.22409 41.4047 6.65204C40.2267 5.76099 39.0057 5.09715 37.8435 4.76473C31.8258 2.93107 28.1593 0.83196 16.2128 0.0455745C13.3447 0.00609211 10.2804 0.646858 8.03869 1.6915C5.52762 2.89554 3.23507 5.08399 2.78042 8.22573C2.01189 13.5371 0.416488 21.3628 0.0556785 27.8769C-0.0920192 30.5456 0.176238 33.2206 1.70486 35.4761C3.21879 37.7097 5.8892 39.1359 9.40106 39.5902C12.8347 40.0552 16.5938 40.0287 19.6308 39.8322C17.6497 44.4794 16.116 48.9744 16.189 52.9008C16.2348 55.3647 16.9376 57.7738 18.7225 59.4834C20.4928 61.1788 23.0604 61.9634 26.1558 61.9761C29.4063 61.9606 30.7414 59.6597 31.5335 57.716ZM26.2275 57.3286C23.8281 57.3286 22.5679 56.78 21.8774 56.1186C21.1869 55.4572 20.809 54.4712 20.778 52.8031C20.9931 49.57 23.2876 41.8257 26.8967 34.7733C20.2282 34.8559 15.0367 35.6604 10.0463 34.9911C7.31486 34.6541 6.15869 33.8611 5.48118 32.8614C4.80368 31.8619 4.5257 30.2669 4.64464 28.118C4.97371 22.177 6.51669 14.4651 7.32158 8.9025C7.50886 7.60842 8.3428 6.69554 9.99852 5.90157C11.6357 5.1165 13.9397 4.67686 15.9977 4.66727C27.5018 5.43275 30.1411 7.27283 36.6484 9.24135C38.8867 10.015 39.7127 11.632 39.7317 13.2345C39.7571 20.3012 39.7555 27.3679 39.7555 34.4346C32.953 38.0561 30.3531 44.4431 28.9999 49.5118C27.9592 52.8879 27.5563 57.3163 26.2275 57.3286Z" fill="currentColor"/>
-</svg>
-
-                                </motion.button>
                               </motion.div>
                             )}
                           </div>
@@ -1126,9 +1048,9 @@ function Content() {
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      style={styles.followUpInputContainer}
+                      style={themedStyles.followUpInputContainer}
                     >
-                      <div style={styles.searchContainer}>
+                      <div style={themedStyles.searchContainer}>
                         <input
                           type="text"
                           value={followUpQuestion}
@@ -1143,7 +1065,7 @@ function Content() {
                           onKeyUp={(e) => e.stopPropagation()}
                           onKeyPress={(e) => e.stopPropagation()}
                           placeholder="Ask a follow-up question..."
-                          style={styles.input}
+                          style={themedStyles.input}
                           disabled={isAskingFollowUp}
                           onFocus={() => setIsInputFocused(true)}
                           onBlur={() => setIsInputFocused(false)}
@@ -1153,11 +1075,11 @@ function Content() {
                           disabled={!followUpQuestion.trim() || isAskingFollowUp}
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          style={styles.searchSendButton}
+                          style={themedStyles.searchSendButton}
                         >
                           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22 2L11 13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         </motion.button>
                       </div>

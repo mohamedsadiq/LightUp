@@ -299,7 +299,9 @@ function IndexOptions() {
       {/* Add Customization Section */}
       <div className="mb-5">
         <h2 className="text-lg font-semibold mb-4">Customization</h2>
-        <div className="flex items-center gap-2">
+        
+        {/* Show Selected Text Toggle */}
+        <div className="flex items-center gap-2 mb-4">
           <input
             type="checkbox"
             id="showSelectedText"
@@ -316,6 +318,25 @@ function IndexOptions() {
           <label htmlFor="showSelectedText" className="text-sm">
             Show selected text in popup
           </label>
+        </div>
+
+        {/* Theme Toggle */}
+        <div className="flex items-center gap-2">
+          <label className="text-sm font-medium">Theme:</label>
+          <select
+            value={settings.customization?.theme || "light"}
+            onChange={(e) => setSettings(prev => ({
+              ...prev,
+              customization: {
+                ...prev.customization,
+                theme: e.target.value as "light" | "dark"
+              }
+            }))}
+            className="p-1 rounded border border-gray-200 text-sm"
+          >
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+          </select>
         </div>
       </div>
     </div>

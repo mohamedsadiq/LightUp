@@ -25,6 +25,7 @@ export interface Settings {
   customPrompt?: string
   customization?: {
     showSelectedText: boolean;
+    theme: "light" | "dark";
   };
 }
 

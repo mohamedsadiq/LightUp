@@ -7,10 +7,15 @@ interface PopupModeSelectorProps {
   activeMode: Mode
   onModeChange: (mode: Mode, settings?: TranslationSettings) => void
   isLoading?: boolean
+  theme?: "light" | "dark"
 }
 
-
-export const PopupModeSelector = ({ activeMode, onModeChange, isLoading = false }: PopupModeSelectorProps) => {
+export const PopupModeSelector = ({ 
+  activeMode, 
+  onModeChange, 
+  isLoading = false,
+  theme = "light"
+}: PopupModeSelectorProps) => {
   const [fromLanguage, setFromLanguage] = useState("en")
   const [toLanguage, setToLanguage] = useState("es")
 
@@ -36,7 +41,11 @@ export const PopupModeSelector = ({ activeMode, onModeChange, isLoading = false 
       layout
     >
       <motion.div 
-        style={styles.modeButton}
+        style={{
+          ...styles.modeButton,
+          backgroundColor: theme === "dark" ? "#FFFFFF" : "#2c2c2c",
+          color: theme === "dark" ? "#2c2c2c" : "white",
+        }}
         initial={{ filter: "blur(8px)" }}
         animate={{ filter: "blur(0)" }}
         transition={{ duration: 0.2 }}
@@ -94,8 +103,6 @@ const styles = {
     alignItems: "center",
     gap: "6px",
     padding: "2px 11px",
-    backgroundColor: "#2c2c2c",
-    color: "white",
     borderRadius: "20px",
     fontSize: "10px",
     fontFamily: "'K2D', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",

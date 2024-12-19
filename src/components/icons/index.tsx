@@ -1,4 +1,38 @@
-export const Logo = () => (
+export const Logo = (theme: "light" | "dark" = "light") => (
+  theme === "dark" ? (
+    <svg width="35" height="35" viewBox="0 0 93 94" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g filter="url(#filter0_d_713_73)">
+        <circle cx="46.2447" cy="47.3492" r="14.8228" fill="#292929"/>
+        <circle cx="46.2447" cy="47.3492" r="14.5216" stroke="#292929" strokeWidth="0.602432"/>
+      </g>
+      <g filter="url(#filter1_d_713_73)">
+        <ellipse cx="46.5687" cy="47.4381" rx="13.7093" ry="13.9498" fill="#292929"/>
+      </g>
+      <defs>
+        <filter id="filter0_d_713_73" x="0.0107341" y="0.713605" width="92.4707" height="92.4678" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+          <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+          <feMorphology radius="5.29131" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_713_73"/>
+          <feOffset dy="-0.401621"/>
+          <feGaussianBlur stdDeviation="13.0599"/>
+          <feComposite in2="hardAlpha" operator="out"/>
+          <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1 0"/>
+          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_713_73"/>
+          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_713_73" result="shape"/>
+        </filter>
+        <filter id="filter1_d_713_73" x="24.0237" y="24.6526" width="45.0932" height="45.571" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+          <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+          <feOffset/>
+          <feGaussianBlur stdDeviation="4.41783"/>
+          <feComposite in2="hardAlpha" operator="out"/>
+          <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0"/>
+          <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_713_73"/>
+          <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_713_73" result="shape"/>
+        </filter>
+      </defs>
+    </svg>
+  ) : (
     <svg width="35" height="35" viewBox="0 0 202 201" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_d_171_147)">
     <circle cx="101.067" cy="101.227" r="32.1546" fill="black"/>
@@ -31,7 +65,8 @@ export const Logo = () => (
     </filter>
     </defs>
     </svg>
-)
+  )
+);
 
 export const CloseIcon = () => (
     <svg width="14" height="14" viewBox="0 0 87 86" fill="none" xmlns="http://www.w3.org/2000/svg">

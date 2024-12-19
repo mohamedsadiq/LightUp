@@ -42,3 +42,24 @@ export const LANGUAGES = {
   ja: "Japanese",
   ko: "Korean"
 } as const 
+
+export const THEME_COLORS = {
+  light: {
+    background: "#E9E9E9",
+    text: "#000000",
+    secondaryText: "#666666",
+    border: "#d4d4d4",
+    popupBackground: "#f5f5f5",
+    buttonBackground: "#D6D6D6",
+    buttonHover: "#C4C4C4"
+  },
+  dark: {
+    background: "#2C2C2C",
+    text: "#FFFFFF",
+    secondaryText: "#A0A0A0",
+    border: "#404040",
+    popupBackground: "#383838",
+    buttonBackground: "#404040",
+    buttonHover: "#505050"
+  }
+} as const;
