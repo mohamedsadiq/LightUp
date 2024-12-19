@@ -7,6 +7,7 @@ export interface ProcessTextRequest {
     serverUrl: string;
     apiKey: string;
     geminiApiKey?: string;
+    xaiApiKey?: string;
     geminiModel?: "gemini-pro" | "gemini-1.5-flash-8b" | "gemini-1.5-pro" | string;
     maxTokens?: number;
     stream?: boolean;
@@ -14,7 +15,7 @@ export interface ProcessTextRequest {
       fromLanguage: string;
       toLanguage: string;
     };
-    modelType?: "local" | "openai" | "gemini";
+    modelType?: "local" | "openai" | "gemini" | "xai";
   };
   aborted?: boolean;
   isFollowUp?: boolean;

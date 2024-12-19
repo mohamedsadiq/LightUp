@@ -146,21 +146,32 @@ function Content() {
       console.log('📚 Loaded settings:', { savedSettings, translationSettings });
       setSettings(savedSettings);
       
-      // Check if settings are properly configured
+      // Check if settings are properly configured based on model type
       if (savedSettings) {
-        if (savedSettings.modelType === "local" && savedSettings.serverUrl) {
-          console.log('✅ Local model configured');
-          setIsConfigured(true);
-        } else if (savedSettings.modelType === "openai" && savedSettings.apiKey) {
-          console.log('✅ OpenAI configured');
-          setIsConfigured(true);
-        } else if (savedSettings.modelType === "gemini" && savedSettings.geminiApiKey) {
-          console.log('✅ Gemini configured');
-          setIsConfigured(true);
-        } else {
-          console.log('⚠️ Settings not properly configured');
-          setIsConfigured(false);
-        }
+        const isConfigValid = (() => {
+          switch (savedSettings.modelType) {
+            case "local":
+              return !!savedSettings.serverUrl;
+            case "openai":
+              return !!savedSettings.apiKey;
+            case "gemini":
+              return !!savedSettings.geminiApiKey;
+            case "xai":
+              return !!savedSettings.xaiApiKey;
+            default:
+              return false;
+          }
+        })();
+
+        console.log('🔧 Configuration validation:', {
+          modelType: savedSettings.modelType,
+          isValid: isConfigValid
+        });
+
+        setIsConfigured(isConfigValid);
+      } else {
+        console.log('⚠️ No settings found');
+        setIsConfigured(false);
       }
     };
 
@@ -474,9 +485,13 @@ function Content() {
 
   const renderConfigurationWarning = () => {
     if (!isConfigured) {
+      const message = settings 
+        ? `Please configure your ${settings.modelType.toUpperCase()} API key in the extension options`
+        : "Please configure the extension in the options page first.";
+        
       return (
         <div style={styles.configurationWarning}>
-          ⚠️ Extension not configured. Please visit the options page to set it up.
+          ⚠️ {message}
         </div>
       );
     }

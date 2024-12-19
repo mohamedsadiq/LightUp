@@ -1,5 +1,5 @@
 // Model types available in the extension
-export type ModelType = "local" | "openai" | "gemini"
+export type ModelType = "local" | "openai" | "gemini" | "xai"
 
 // Available modes for text processing
 export type Mode = "explain" | "summarize" | "analyze" | "translate"
@@ -16,7 +16,8 @@ export interface Settings {
   // Optional fields depending on model type
   serverUrl?: string    // Required for local model
   apiKey?: string      // Required for OpenAI
-  geminiApiKey?: string
+  geminiApiKey?: string // Required for Gemini
+  xaiApiKey?: string   // Required for xAI
   geminiModel?: GeminiModel
   
   // User preferences

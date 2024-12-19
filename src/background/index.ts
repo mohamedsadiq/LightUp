@@ -3,15 +3,18 @@ import { verifyServerConnection } from "~utils/storage"
 import type { ProcessTextRequest, StreamChunk } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "~utils/constants"
 import { processGeminiText } from "~services/llm/gemini"
+import { processXAIText } from "~services/llm/xai"
 
 interface Settings {
-  modelType: "local" | "openai" | "gemini"
+  modelType: "local" | "openai" | "gemini" | "xai"
   serverUrl?: string
   translationSettings?: {
     fromLanguage: string
     toLanguage: string
   }
+  apiKey?: string
   geminiApiKey?: string
+  xaiApiKey?: string
   geminiModel?: string
   maxTokens?: number
 }
@@ -32,6 +35,40 @@ setInterval(() => {
   }
 }, 1000 * 60 * 5); // Check every 5 minutes
 
+const isConfigurationValid = (settings: Settings): boolean => {
+  if (!settings) {
+    console.error('No settings provided');
+    return false;
+  }
+
+  try {
+    switch (settings.modelType) {
+      case "local":
+        return !!settings.serverUrl;
+      case "openai":
+        return !!settings.apiKey && settings.apiKey.startsWith('sk-');
+      case "gemini":
+        return !!settings.geminiApiKey;
+      case "xai": {
+        const xaiKey = settings.xaiApiKey || '';
+        console.log('Validating xAI key:', {
+          length: xaiKey.length,
+          hasKey: !!xaiKey,
+          key: xaiKey.substring(0, 10) + '...' // Log first 10 chars for debugging
+        });
+        
+        // Accept any non-empty key for now since xAI token format might vary
+        return xaiKey.length > 0;
+      }
+      default:
+        return false;
+    }
+  } catch (error) {
+    console.error('Configuration validation error:', error);
+    return false;
+  }
+};
+
 export async function handleProcessText(request: ProcessTextRequest, port: chrome.runtime.Port) {
   try {
     const connectionId = port.name.split('text-processing-')[1];
@@ -44,11 +81,29 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
     const { mode, text, context, isFollowUp, settings } = request;
     
+    // Add more detailed validation logging
+    console.log('Validating settings:', {
+      modelType: settings?.modelType,
+      hasXaiKey: !!settings?.xaiApiKey,
+      keyLength: settings?.xaiApiKey?.length
+    });
+
+    if (!isConfigurationValid(settings)) {
+      throw new Error(
+        `${settings?.modelType?.toUpperCase() || 'AI model'} is not properly configured.\n` +
+        'Please ensure you have:\n' +
+        '1. Selected xAI as your model type\n' +
+        '2. Entered your xAI API key\n' +
+        '3. Saved your settings'
+      );
+    }
+
     console.log('Processing request:', { 
       mode, 
       text, 
       context, 
       isFollowUp,
+      modelType: settings?.modelType,
       translationSettings: settings?.translationSettings 
     });
 
@@ -142,6 +197,14 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       }
 
       port.postMessage({ type: 'done' });
+      return;
+    }
+
+    if (settings.modelType === "xai") {
+      console.log('Using xAI model');
+      for await (const chunk of processXAIText(request)) {
+        port.postMessage(chunk);
+      }
       return;
     }
 

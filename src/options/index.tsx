@@ -116,12 +116,21 @@ function IndexOptions() {
         if (!settings.apiKey) {
           throw new Error("API key is required for OpenAI");
         }
+        if (!settings.apiKey.startsWith('sk-')) {
+          throw new Error("Invalid OpenAI API key format");
+        }
       } else if (settings.modelType === "gemini") {
         if (!settings.geminiApiKey) {
           throw new Error("API key is required for Google Gemini");
         }
+      } else if (settings.modelType === "xai") {
+        if (!settings.xaiApiKey?.trim()) {
+          throw new Error("API key is required for xAI");
+        }
+        // Log successful validation
+        console.log('xAI configuration validated successfully');
       }
-
+      
       // Ensure customization settings are included
       const settingsToSave = {
         ...settings,
@@ -134,6 +143,13 @@ function IndexOptions() {
       // Save settings with await and proper error handling
       await storage.set("settings", settingsToSave).catch(err => {
         throw new Error(`Storage error: ${err.message}`);
+      });
+      
+      console.log('Settings saved:', {
+        ...settingsToSave,
+        apiKey: settingsToSave.apiKey ? '***' : undefined,
+        geminiApiKey: settingsToSave.geminiApiKey ? '***' : undefined,
+        xaiApiKey: settingsToSave.xaiApiKey ? '***' : undefined
       });
       
       setError(""); // Clear any previous errors
@@ -175,13 +191,14 @@ function IndexOptions() {
           value={settings.modelType}
           onChange={(e) => setSettings(prev => ({
             ...prev,
-            modelType: e.target.value
+            modelType: e.target.value as ModelType
           }))}
           className="w-full p-2 mb-4 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
         >
           <option value="local">Local LLM</option>
           <option value="openai">OpenAI</option>
           <option value="gemini">Google Gemini</option>
+          <option value="xai">xAI (Grok)</option>
         </select>
 
         {settings.modelType === "local" ? (
@@ -213,7 +230,7 @@ function IndexOptions() {
               placeholder="Enter your OpenAI API key"
             />
           </>
-        ) : (
+        ) : settings.modelType === "gemini" ? (
           <>
             <label className="block mb-2 font-k2d font-medium">
               Google Gemini API Key:
@@ -249,6 +266,25 @@ function IndexOptions() {
             </select>
             <p className="text-sm text-gray-500 mb-4">
               {GEMINI_MODELS.find(m => m.value === (settings.geminiModel || "gemini-pro"))?.description}
+            </p>
+          </>
+        ) : (
+          <>
+            <label className="block mb-2 font-k2d font-medium">
+              xAI API Key:
+            </label>
+            <input
+              type="password"
+              value={settings.xaiApiKey}
+              onChange={(e) => setSettings(prev => ({
+                ...prev,
+                xaiApiKey: e.target.value
+              }))}
+              className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
+              placeholder="Enter your xAI API key"
+            />
+            <p className="text-sm text-gray-500 mb-4">
+              Get your API key from the <a href="https://x.ai" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">xAI platform</a>
             </p>
           </>
         )}
