@@ -8,6 +8,8 @@
 Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
 
 
+## 🌙 Dark Mode
+LightUp also supports a dark mode to reduce eye strain and provide a comfortable browsing experience in low-light environments. You can easily switch between light and dark themes based on your preference.
 
 https://github.com/user-attachments/assets/7a9d5cf0-ba4f-477c-8e73-525042fe68ed
 
