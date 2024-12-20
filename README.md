@@ -26,8 +26,6 @@ Seamless AI assistance that lives in your browser. No new tabs. No context switc
   - Connect to your local LLM (supports llama.cpp, LM Studio, Text Generation WebUI)
   - Grok-beta by xAI
   - Google Gemini Models
-    - Gemini Pro
-    - Gemini Pro Vision
     - Gemini 1.0 Pro
     - Gemini 1.5 Pro
     - Gemini 1.5 Flash
