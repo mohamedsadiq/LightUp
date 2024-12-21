@@ -27,6 +27,7 @@ export interface Settings {
   customization?: {
     showSelectedText: boolean;
     theme: "light" | "dark";
+    radicallyFocus: boolean;
   };
 }
 

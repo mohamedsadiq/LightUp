@@ -355,7 +355,26 @@ function IndexOptions() {
             Show selected text in popup
           </label>
         </div>
-
+        <div className="mb-4">
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={settings.customization?.radicallyFocus ?? false}
+              onChange={(e) => setSettings(prev => ({
+                ...prev,
+                customization: {
+                  ...prev.customization,
+                  radicallyFocus: e.target.checked
+                }
+              }))}
+              className="w-4 h-4 rounded border-gray-300"
+            />
+            <span className="text-sm font-medium">Radically Focus Mode</span>
+          </label>
+          <p className="text-xs text-gray-400 mt-1">
+            Blur the background when viewing results to help you focus on the content
+          </p>
+        </div>
         {/* Theme Toggle */}
         <div className="flex items-center gap-2">
           <label className="text-sm font-medium">Theme:</label>
@@ -374,6 +393,8 @@ function IndexOptions() {
             <option value="dark">Dark</option>
           </select>
         </div>
+
+       
       </div>
     </div>
   )

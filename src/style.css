@@ -43,3 +43,13 @@
   50% { opacity: 1; }
 }
 
+#plasmo-blur-overlay {
+  pointer-events: none;
+}
+
+/* Add this to ensure the popup is above the blur overlay */
+[data-plasmo-popup] {
+  position: relative;
+  z-index: 2147483647;
+}
+

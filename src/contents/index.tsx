@@ -48,6 +48,7 @@ interface Settings {
   customization?: {
     showSelectedText: boolean;
     theme: "light" | "dark";
+    radicallyFocus: boolean;
   };
 }
 
@@ -101,6 +102,9 @@ function Content() {
 
   const currentTheme = settings?.customization?.theme || "light";
   const themedStyles = getStyles(currentTheme);
+
+  // Add this near the top with other state declarations
+  const [isBlurActive, setIsBlurActive] = useState(false);
 
   // Load the mode when component mounts
   useEffect(() => {
@@ -558,6 +562,7 @@ function Content() {
     }
     
     setIsVisible(false);
+    setIsBlurActive(false);
     setIsLoading(false);
     setError(null);
     setStreamingText('');
@@ -771,6 +776,66 @@ function Content() {
       setStreamingText('');
     }
   }, [isLoading]);
+
+  // Add this after other useEffect hooks
+  useEffect(() => {
+    if (!isVisible || !settings?.customization?.radicallyFocus) {
+      setIsBlurActive(false);
+      return;
+    }
+
+    setIsBlurActive(true);
+  }, [isVisible, settings?.customization?.radicallyFocus]);
+
+  // Add this right before the return statement
+  useEffect(() => {
+    // Create or update blur overlay
+    let blurOverlay = document.getElementById('plasmo-blur-overlay');
+    
+    if (isBlurActive) {
+      if (!blurOverlay) {
+        blurOverlay = document.createElement('div');
+        blurOverlay.id = 'plasmo-blur-overlay';
+        document.body.appendChild(blurOverlay);
+      }
+      
+      // Set styles for blur overlay
+      Object.assign(blurOverlay.style, {
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        right: '0',
+        bottom: '0',
+        backgroundColor: settings?.customization?.theme === 'dark' 
+          ? 'rgba(0, 0, 0, 0.7)' 
+          : 'rgba(255, 255, 255, 0.7)',
+        backdropFilter: 'blur(5px)',
+        zIndex: '2147483646', // Just below the popup
+        transition: 'all 0.3s ease',
+        opacity: '0'
+      });
+
+      // Animate in
+      requestAnimationFrame(() => {
+        if (blurOverlay) {
+          blurOverlay.style.opacity = '1';
+        }
+      });
+    } else {
+      // Remove blur overlay if it exists
+      if (blurOverlay) {
+        blurOverlay.style.opacity = '0';
+        setTimeout(() => {
+          blurOverlay?.remove();
+        }, 300);
+      }
+    }
+
+    return () => {
+      // Cleanup
+      document.getElementById('plasmo-blur-overlay')?.remove();
+    };
+  }, [isBlurActive, settings?.customization?.theme]);
 
   return (
     <AnimatePresence mode="sync" >
