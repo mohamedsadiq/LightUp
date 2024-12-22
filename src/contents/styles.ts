@@ -1,6 +1,6 @@
 import { THEME_COLORS } from "~utils/constants";
 
-export const getStyles = (theme: "light" | "dark") => ({
+export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" = "ltr") => ({
   popup: {
     width: "300px",
     height: "auto",
@@ -50,7 +50,9 @@ export const getStyles = (theme: "light" | "dark") => ({
     borderRadius: 8,
     marginTop: 16,
     fontFamily: "'K2D', sans-serif",
-    marginBottom: 16
+    marginBottom: 16,
+    direction: textDirection,
+    textAlign: textDirection === "rtl" ? "right" : "left"
   },
   followUpQA: {
     display: 'flex',
@@ -132,6 +134,8 @@ export const getStyles = (theme: "light" | "dark") => ({
     fontSize: '12px',
     fontFamily: "'K2D', sans-serif",
     boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+    direction: textDirection,
+    textAlign: textDirection === "rtl" ? "right" : "left"
   },
   followUpAnswer: {
     backgroundColor: THEME_COLORS[theme].popupBackground,
@@ -145,6 +149,8 @@ export const getStyles = (theme: "light" | "dark") => ({
     lineHeight: 1.6,
     fontFamily: "'K2D', sans-serif",
     boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+    direction: textDirection,
+    textAlign: textDirection === "rtl" ? "right" : "left"
   },
   // ... rest of the existing styles with theme colors
   popupContainer: {

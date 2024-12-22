@@ -15,11 +15,20 @@ import { PopupModeSelector } from "../components/content/PopupModeSelector"
 import type { Mode } from "~types/settings"
 import { v4 as uuidv4 } from 'uuid';
 import { getStyles } from "./styles"
+import { getTextDirection } from "~utils/rtl";
 
 // Add this style block right after your imports
 const fontImportStyle = document.createElement('style');
 fontImportStyle.textContent = `
-  @import url('https://fonts.googleapis.com/css2?family=K2D:wght@400;500;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=K2D:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
+  
+  [dir="rtl"] {
+    font-family: 'Noto Naskh Arabic', 'K2D', sans-serif;
+  }
+  
+  [dir="ltr"] {
+    font-family: 'K2D', sans-serif;
+  }
   
   ::selection {
     background-color: #FFBF5A !important;
@@ -101,7 +110,9 @@ function Content() {
   });
 
   const currentTheme = settings?.customization?.theme || "light";
-  const themedStyles = getStyles(currentTheme);
+  const targetLanguage = settings?.translationSettings?.toLanguage || 'en';
+  const textDirection = getTextDirection(targetLanguage);
+  const themedStyles = getStyles(currentTheme, textDirection);
 
   // Add this near the top with other state declarations
   const [isBlurActive, setIsBlurActive] = useState(false);
@@ -123,8 +134,8 @@ function Content() {
     const handleStorageChange = async (changes) => {
       const newMode = await storage.get("mode")
       if (newMode) {
-        if (newMode === "explain" || newMode === "summarize" || 
-            newMode === "analyze" || newMode === "translate") {
+        if (newMode === "explain" || savedMode === "summarize" || 
+            savedMode === "analyze" || savedMode === "translate") {
           setMode(newMode)
         }
       }
@@ -654,7 +665,7 @@ function Content() {
         setIsLoading(false)
       }
     } else {
-      console.log('⚠️ No text selected for processing');
+      console.log('���️ No text selected for processing');
     }
   }
 
@@ -1017,6 +1028,7 @@ function Content() {
                         <MarkdownText 
                           text={streamingText} 
                           isStreaming={isLoading}
+                          language={targetLanguage}
                           style={{
                             opacity: isLoading ? 0.7 : 1,
                             transition: 'opacity 0.2s'
@@ -1025,11 +1037,7 @@ function Content() {
                       </div>
 
                       {isExplanationComplete && (
-                        <motion.div
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.2 }}
-                        >
+                        <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                           <motion.button
                             onClick={() => handleCopy(stripHtml(streamingText), 'initial')}
                             style={{
@@ -1091,6 +1099,7 @@ function Content() {
                             <MarkdownText
                               text={answer}
                               isStreaming={activeAnswerId === id && !isComplete}
+                              language={targetLanguage}
                               style={{
                                 margin: 10,
                                 opacity: activeAnswerId === id && !isComplete ? 0.7 : 1
@@ -1099,16 +1108,7 @@ function Content() {
                             />
                             
                             {!isComplete && (
-                              <motion.div
-                                style={{
-                                  ...themedStyles.feedbackContainer,
-                                  opacity: 0.8
-                                }}
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 0.8 }}
-                                transition={{ delay: 0.2 }}
-                              >
-                                {/* Copy button */}
+                              <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                                 <motion.button
                                   onClick={() => handleCopy(stripHtml(answer), `followup-${id}`)}
                                   style={{

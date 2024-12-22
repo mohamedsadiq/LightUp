@@ -25,10 +25,10 @@ export interface Settings {
   temperature?: number
   customPrompt?: string
   customization?: {
-    showSelectedText: boolean;
-    theme: "light" | "dark";
-    radicallyFocus: boolean;
-  };
+    showSelectedText: boolean
+    theme: "light" | "dark"
+    radicallyFocus: boolean
+  }
 }
 
 // Extended settings state with additional properties

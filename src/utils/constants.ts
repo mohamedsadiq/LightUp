@@ -31,8 +31,9 @@ export const USER_PROMPTS: Record<string, string | ((text: string, context?: str
 } as const;
 
 export const LANGUAGES = {
+  ar: "Arabic (العربية)",
   en: "English",
-  es: "Spanish",
+  es: "Spanish (Español)",
   fr: "French",
   de: "German",
   it: "Italian",

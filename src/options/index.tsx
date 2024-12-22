@@ -393,8 +393,6 @@ function IndexOptions() {
             <option value="dark">Dark</option>
           </select>
         </div>
-
-       
       </div>
     </div>
   )

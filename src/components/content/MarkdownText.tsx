@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { marked } from 'marked';
 import DOMPurify from "dompurify";
+import { getTextDirection } from "~utils/rtl";
 
 interface MarkdownTextProps {
   text: string;
   isStreaming?: boolean;
+  language?: string;
 }
 
 const MarkdownText: React.FC<MarkdownTextProps> = ({ 
   text, 
-  isStreaming = false 
+  isStreaming = false,
+  language = 'en'
 }) => {
   const [formattedText, setFormattedText] = useState('');
+  const textDirection = getTextDirection(language);
 
   useEffect(() => {
     marked.setOptions({
@@ -52,6 +56,10 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
   return (
     <div 
       className="prose dark:prose-invert max-w-none"
+      style={{ 
+        direction: textDirection,
+        textAlign: textDirection === 'rtl' ? 'right' : 'left'
+      }}
       dangerouslySetInnerHTML={{ __html: formattedText }}
     />
   );
