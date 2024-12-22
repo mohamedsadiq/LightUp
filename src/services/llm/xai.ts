@@ -2,9 +2,24 @@ import type { ProcessTextRequest } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
 
 export const processXAIText = async function*(request: ProcessTextRequest) {
-  const { text, mode, settings } = request
+  const { text, mode, context, isFollowUp, settings } = request
   
   try {
+    const messages = [
+      {
+        role: "system",
+        content: SYSTEM_PROMPTS[mode]
+      },
+      {
+        role: "user",
+        content: isFollowUp
+          ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
+          : mode === "translate"
+            ? `Translate the following text from ${settings.translationSettings?.fromLanguage || "en"} to ${settings.translationSettings?.toLanguage || "es"}:\n\n${text}`
+            : `${typeof USER_PROMPTS[mode] === 'function' ? USER_PROMPTS[mode](text) : USER_PROMPTS[mode]}\n${text}`
+      }
+    ];
+
     // Using the correct xAI endpoint and format from the curl example
     const response = await fetch('https://api.x.ai/v1/chat/completions', {
       method: 'POST',
@@ -13,18 +28,7 @@ export const processXAIText = async function*(request: ProcessTextRequest) {
         'Authorization': `Bearer ${settings.xaiApiKey}`
       },
       body: JSON.stringify({
-        messages: [
-          {
-            role: "system",
-            content: SYSTEM_PROMPTS[mode]
-          },
-          {
-            role: "user",
-            content: mode === "translate" 
-              ? `Translate the following text from ${settings.translationSettings?.fromLanguage || "en"} to ${settings.translationSettings?.toLanguage || "es"}:\n\n${text}`
-              : `${typeof USER_PROMPTS[mode] === 'function' ? USER_PROMPTS[mode](text) : USER_PROMPTS[mode]}\n${text}`
-          }
-        ],
+        messages: messages,
         model: "grok-beta",  // Using the correct model name from the example
         stream: true,        // We want streaming for real-time responses
         temperature: 0.7     // Slightly higher than 0 for more creative responses

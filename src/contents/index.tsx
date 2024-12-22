@@ -394,10 +394,9 @@ function Content() {
     if (!followUpQuestion.trim() || isAskingFollowUp) return;
 
     console.log('Starting follow-up question:', followUpQuestion);
-    setIsAskingFollowUp(false);
+    setIsAskingFollowUp(true);
     const newId = Date.now();
     
-    // Set the active answer ID first
     setActiveAnswerId(newId);
     
     setFollowUpQAs(prev => {
@@ -414,19 +413,27 @@ function Content() {
 
     try {
       if (!port) {
-        throw new Error('Connection not established');
+        throw new Error('Port not connected');
       }
 
-      console.log('Sending follow-up request with ID:', newId);
+      console.log('Sending follow-up request:', {
+        text: followUpQuestion,
+        context: selectedText,
+        mode,
+        settings,
+        isFollowUp: true,
+        id: newId
+      });
+
       port.postMessage({
         type: "PROCESS_TEXT",
         payload: {
           text: followUpQuestion,
           context: selectedText,
           mode: mode,
-          settings,
+          settings: settings,
           isFollowUp: true,
-          id: newId // Add the ID to the payload
+          id: newId
         }
       });
     } catch (error) {
@@ -434,6 +441,7 @@ function Content() {
       setError('Failed to process follow-up question');
       setFollowUpQAs(prev => prev.filter(qa => qa.id !== newId));
       setActiveAnswerId(null);
+      setIsAskingFollowUp(false);
     }
   };
 
@@ -666,7 +674,12 @@ function Content() {
       switch (message.type) {
         case 'chunk':
           if (message.content) {
-            console.log('📝 Received chunk:', message.content);
+            console.log('📝 Received chunk:', {
+              content: message.content,
+              isFollowUp: message.isFollowUp
+            });
+            
+            // Separate handling for main text and follow-up responses
             if (message.isFollowUp) {
               setFollowUpQAs(prev => {
                 const lastQA = prev[prev.length - 1];

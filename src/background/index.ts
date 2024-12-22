@@ -201,9 +201,16 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     }
 
     if (settings.modelType === "xai") {
-      console.log('Using xAI model');
+      console.log('Using xAI model with follow-up:', isFollowUp);
       for await (const chunk of processXAIText(request)) {
-        port.postMessage(chunk);
+        if (chunk.type === 'chunk') {
+          port.postMessage({
+            ...chunk,
+            isFollowUp: isFollowUp
+          });
+        } else {
+          port.postMessage(chunk);
+        }
       }
       return;
     }
