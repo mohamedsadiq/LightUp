@@ -369,7 +369,7 @@ function IndexOptions() {
               }))}
               className="w-4 h-4 rounded border-gray-300"
             />
-            <span className="text-sm font-medium">Radically Focus Mode</span>
+            <span className="text-sm font-medium">Radical Focus Mode</span>
           </label>
           <p className="text-xs text-gray-400 mt-1">
             Blur the background when viewing results to help you focus on the content
