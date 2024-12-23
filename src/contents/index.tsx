@@ -927,8 +927,12 @@ function Content() {
         
         switch (e.key.toLowerCase()) {
           case 'x': // Toggle LightUp
-            setIsEnabled(prev => !prev);
-            shortcutMessage = `LightUp ${!isEnabled ? 'enabled' : 'disabled'} (Ctrl+Shift+X)`;
+            const newState = !isEnabled;
+            setIsEnabled(newState);
+            // Save the new state to storage
+            const storage = new Storage();
+            await storage.set("isEnabled", newState);
+            shortcutMessage = `LightUp ${newState ? 'enabled' : 'disabled'} (Ctrl+Shift+X)`;
             e.preventDefault();
             setToast({
               message: shortcutMessage,
@@ -1104,6 +1108,19 @@ function Content() {
       clearInterval(keepAlive);
       window.speechSynthesis.cancel();
     };
+  }, []);
+
+  // Add this effect to load and save the enabled state
+  useEffect(() => {
+    const loadEnabledState = async () => {
+      const storage = new Storage();
+      const savedState = await storage.get("isEnabled");
+      if (savedState !== undefined) {
+        setIsEnabled(savedState);
+      }
+    };
+
+    loadEnabledState();
   }, []);
 
   return (
