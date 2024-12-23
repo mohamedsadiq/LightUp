@@ -8,9 +8,6 @@
 Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
 
 
-
-
-
 ## ✨ Features
 
 - **Smart Text Analysis**: Get instant explanations for complex text passages
@@ -29,13 +26,8 @@ Seamless AI assistance that lives in your browser. No new tabs. No context switc
     - Gemini 1.0 Pro
     - Gemini 1.5 Pro
     - Gemini 1.5 Flash
+  - **Dark Mode**:
   
-  
-## 🌙 Dark Mode
-LightUp also supports a dark mode to reduce eye strain and provide a comfortable browsing experience in low-light environments. You can easily switch between light and dark themes based on your preference.
-
-
-
 
 ## 📥 Download
 
@@ -70,7 +62,7 @@ OR click "Load unpacked" and select the unzipped folder.
    - Local LLM (requires running local serverlocal-llm-download)
    - OpenAI API (requires API key)
    - Google Gemini (requires Gemini API key and model selection)
-
+   - Grok-beta by xAI
 3. Save your settings
 
 ## 🔧 Usage
@@ -100,32 +92,6 @@ You can switch modes in two ways:
 This allows you to easily toggle between explaining, summarizing, analyzing, and translating text as per your needs.
 
 
-### Installation for Developers
-
-1. Clone this repository:
-```bash
-git clone https://github.com/mohamedsadiq/LightUp
-cd lightup-extension
-```
-
-2. Install dependencies:
-```bash
-pnpm install
-```
-
-3. Run the development server:
-```bash
-pnpm dev
-```
-
-### Building for Production
-
-```bash
-pnpm build
-# or
-npm run build
-```
-
 ## 🛠️ Development
 
 This extension is built with:
@@ -134,29 +100,14 @@ This extension is built with:
 - Framer Motion for animations
 
 
+## 🌟 Support LightUp
 
-## 📝 License
+If you've found LightUp helpful and want to see it grow, consider supporting the project! Whether it's through a small donation, a coffee, or sharing with others, every bit helps us continue improving and bringing new features to life.
+
+You can send your support through the following cryptocurrency addresses:
+
+- Bitcoin (BTC): `bc1qfz2ccaqu579xjtfqdhr37k07u6z2g22gzkkfz2`
+- Ethereum (ETH): `0xc486F15697FFe7BE07709f2009e032e1d3aC78fA`
+- USDT (ERC-20): `0xc486F15697FFe7BE07709f2009e032e1d3aC78fA`
 
 
-This project is licensed under the Apache 2.0 License - see the [LICENSE]([https://github.com/apache/.github/blob/main/LICENSE](https://github.com/mohamedsadiq/LightUp?tab=Apache-2.0-1-ov-file)) file for details.
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 🙏 Acknowledgments
-
-- Built with [Plasmo](https://docs.plasmo.com/)
-- Powered by OpenAI/Local LLM 
-
----
-
-<p align="center">
-  Made by [Moe Sadiq](https://twitter.com/sadiq_moo)  
-</p>
