@@ -80,9 +80,24 @@ OR click "Load unpacked" and select the unzipped folder.
 3. Get instant AI-powered insights
 4. Ask follow-up questions for deeper understanding
 
+## Keyboard Shortcuts
+
+LightUp supports keyboard shortcuts for quick mode switching:
+
+- `Ctrl+Shift+Z`: Switch to Explain mode
+- `Ctrl+Shift+S`: Switch to Summarize mode
+- `Ctrl+Shift+A`: Switch to Analyze mode
+- `Ctrl+Shift+T`: Switch to Translate mode
+
+After setting the mode via shortcut, simply select any text and LightUp will appear with your chosen mode.
+
 ## Switching Modes
 
-If you want to change the mode, click on the LightUp icon in the toolbar to switch between different modes. This allows you to easily toggle between explaining, summarizing, analyzing, and translating text as per your needs.
+You can switch modes in two ways:
+1. Using keyboard shortcuts (see above)
+2. Clicking the LightUp icon in the toolbar to manually select a mode
+
+This allows you to easily toggle between explaining, summarizing, analyzing, and translating text as per your needs.
 
 
 ### Installation for Developers

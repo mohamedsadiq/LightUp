@@ -117,6 +117,26 @@ function Content() {
   // Add this near the top with other state declarations
   const [isBlurActive, setIsBlurActive] = useState(false);
 
+  // Add new state for toast
+  const [toast, setToast] = useState<{
+    message: string;
+    visible: boolean;
+  }>({
+    message: '',
+    visible: false
+  });
+
+  // Add useEffect for toast auto-hide
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    if (toast.visible) {
+      timeoutId = setTimeout(() => {
+        setToast(prev => ({ ...prev, visible: false }));
+      }, 2000); // Hide after 2 seconds
+    }
+    return () => clearTimeout(timeoutId);
+  }, [toast.visible]);
+
   // Load the mode when component mounts
   useEffect(() => {
     const loadMode = async () => {
@@ -601,9 +621,9 @@ function Content() {
       currentMode: mode 
     });
 
-    // Add validation for translation mode
-    if (newMode === 'translate' && (!translationSettings?.targetLanguage)) {
-      console.error('❌ Translation settings missing target language');
+    // Fix validation for translation mode
+    if (newMode === 'translate' && (!translationSettings?.toLanguage || !translationSettings?.fromLanguage)) {
+      console.error('❌ Translation settings missing languages');
       setError('Translation settings are incomplete');
       return;
     }
@@ -665,7 +685,7 @@ function Content() {
         setIsLoading(false)
       }
     } else {
-      console.log('���️ No text selected for processing');
+      console.log('������️ No text selected for processing');
     }
   }
 
@@ -861,345 +881,429 @@ function Content() {
     };
   }, [isBlurActive, settings?.customization?.theme]);
 
+  // Modify keyboard shortcut handler
+  useEffect(() => {
+    const handleKeyDown = async (e: KeyboardEvent) => {
+      // Check if Ctrl+Shift is pressed
+      if (e.ctrlKey && e.shiftKey) {
+        let newMode: Mode | null = null;
+        let translationSettings = undefined;
+        let shortcutMessage = '';
+        
+        switch (e.key.toLowerCase()) {
+          case 'z':
+            newMode = 'explain';
+            shortcutMessage = 'Switched to Explain mode (Ctrl+Shift+Z)';
+            break;
+          case 's':
+            newMode = 'summarize';
+            shortcutMessage = 'Switched to Summarize mode (Ctrl+Shift+S)';
+            break;
+          case 'a':
+            newMode = 'analyze';
+            shortcutMessage = 'Switched to Analyze mode (Ctrl+Shift+A)';
+            break;
+          case 't':
+            newMode = 'translate';
+            shortcutMessage = 'Switched to Translate mode (Ctrl+Shift+T)';
+            translationSettings = {
+              fromLanguage: 'en',
+              toLanguage: 'es'
+            };
+            break;
+        }
+
+        if (newMode) {
+          e.preventDefault();
+          console.log('🎮 Keyboard shortcut triggered:', newMode, translationSettings);
+          await handleModeChange(newMode, translationSettings);
+          // Show toast notification
+          setToast({
+            message: shortcutMessage,
+            visible: true
+          });
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [handleModeChange]);
+
   return (
-    <AnimatePresence mode="sync" >
-      
-      {isVisible && (
-        <motion.div 
-          style={{
-            // ...themedStyles.popup,
-            left: `${position.x}px`,
-            top: `${position.y}px`,
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.2 }}
-       
-        >
-          <div style={{
-            ...themedStyles.popupPositioner,
-            left: `${position.x}px`,
-            top: `${position.y}px`,
-          }}>
-            <motion.div 
-              style={{
-                ...themedStyles.popup,
-                width: `${width}px`,
-                height: `${height}px`,
-                overflow: 'auto',
-                position: 'relative'
-              }}
-              data-plasmo-popup
-              className="no-select"
-              onClick={(e) => e.stopPropagation()}
-              onMouseEnter={() => setIsInteractingWithPopup(true)}
-              onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-              initial="initial"
-              animate="animate"
-              exit="exit"
-              layout
-              variants={{
-                initial: {
-                  opacity: 0,
-                  filter: "blur(30px)",
-                  scale: 0.1,
-                  transition: { duration: 0.4,  type: "spring", },
-                },
-                animate: {
-                  filter: "blur(0px)",
-                  opacity: 1,
-                  scale: 1,
-                  transition: {
-                    duration: 0.4,
-                    type: "spring",
-                    ease: "easeInOut",
+    <>
+      {/* Toast notification with its own AnimatePresence */}
+      <AnimatePresence>
+        {toast.visible && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.2 }}
+            style={{
+              position: 'fixed',
+              bottom: '20px',
+              left: '20px',
+              backgroundColor: settings?.customization?.theme === "dark" ? '#2C2C2C' : 'white',
+              color: settings?.customization?.theme === "dark" ? 'white' : 'black',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+              zIndex: 2147483647,
+              fontSize: '14px',
+              fontFamily: "'K2D', sans-serif",
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+            </svg>
+            {toast.message}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Main popup with its own AnimatePresence */}
+      <AnimatePresence mode="sync">
+        {isVisible && (
+          <motion.div 
+            style={{
+              // ...themedStyles.popup,
+              left: `${position.x}px`,
+              top: `${position.y}px`,
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+         
+          >
+            <div style={{
+              ...themedStyles.popupPositioner,
+              left: `${position.x}px`,
+              top: `${position.y}px`,
+            }}>
+              <motion.div 
+                style={{
+                  ...themedStyles.popup,
+                  width: `${width}px`,
+                  height: `${height}px`,
+                  overflow: 'auto',
+                  position: 'relative'
+                }}
+                data-plasmo-popup
+                className="no-select"
+                onClick={(e) => e.stopPropagation()}
+                onMouseEnter={() => setIsInteractingWithPopup(true)}
+                onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
+                initial="initial"
+                animate="animate"
+                exit="exit"
+                layout
+                variants={{
+                  initial: {
+                    opacity: 0,
+                    filter: "blur(30px)",
+                    scale: 0.1,
+                    transition: { duration: 0.4,  type: "spring", },
                   },
-                },
-                exit: {
-                  scale: 0.5,
-                  opacity: 0,
-                  filter: "blur(30px)",
-                  transition: {
-                    type: "spring",
-                    duration: 0.4,
-                    ease: "easeInOut",
+                  animate: {
+                    filter: "blur(0px)",
+                    opacity: 1,
+                    scale: 1,
+                    transition: {
+                      duration: 0.4,
+                      type: "spring",
+                      ease: "easeInOut",
+                    },
                   },
-                },
-              }}
-            >
-              <div style={themedStyles.buttonContainerParent}>
-                <motion.div style={{ marginLeft: '-6px' }} layout>
-                  {Logo(settings?.customization?.theme)}
-                </motion.div>
-                <PopupModeSelector 
-                  activeMode={mode}
-                  onModeChange={handleModeChange}
-                  isLoading={isLoading}
-                  theme={settings?.customization?.theme || "light"}
-                />
-                <div style={themedStyles.buttonContainer}>
-                  <div style={{ position: 'relative' }}>
-                    <motion.button 
-                      onClick={handleClose}
-                      style={{
-                        ...themedStyles.button, 
-                        color: settings?.customization?.theme === "dark" ? "#FFFFFF" : "#000000",
-                        marginTop: '2px'
-                      }}
-                      variants={iconButtonVariants}
-                       whileHover="hover"
+                  exit: {
+                    scale: 0.5,
+                    opacity: 0,
+                    filter: "blur(30px)",
+                    transition: {
+                      type: "spring",
+                      duration: 0.4,
+                      ease: "easeInOut",
+                    },
+                  },
+                }}
+              >
+                <div style={themedStyles.buttonContainerParent}>
+                  <motion.div style={{ marginLeft: '-6px' }} layout>
+                    {Logo(settings?.customization?.theme)}
+                  </motion.div>
+                  <PopupModeSelector 
+                    activeMode={mode}
+                    onModeChange={handleModeChange}
+                    isLoading={isLoading}
+                    theme={settings?.customization?.theme || "light"}
+                  />
+                  <div style={themedStyles.buttonContainer}>
+                    <div style={{ position: 'relative' }}>
+                      <motion.button 
+                        onClick={handleClose}
+                        style={{
+                          ...themedStyles.button, 
+                          color: settings?.customization?.theme === "dark" ? "#FFFFFF" : "#000000",
+                          marginTop: '2px'
+                        }}
+                        variants={iconButtonVariants}
+                         whileHover="hover"
                        
-                    >
-                      {CloseIcon()}
-                    </motion.button>
+                      >
+                        {CloseIcon()}
+                      </motion.button>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              {settings?.customization?.showSelectedText !== false && (
-                <p style={{...themedStyles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline'}}>
-                  {truncateText(selectedText)}
-                </p>
-              )}
-
-              <AnimatePresence mode="wait">
-                {isLoading && !streamingText ? (
-                  <motion.div
-                    style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '12px',
-                      width: '100%',
-                    }}
-                    layout
-                  >
-                    {/* Skeleton lines */}
-                    {[...Array(10)].map((_, i) => (
-                      <motion.div
-                        key={i}
-                        style={{
-                          height: '16px',
-                          background: settings?.customization?.theme === "dark" 
-                            ? 'linear-gradient(90deg, #2C2C2C 25%, #3D3D3D 50%, #2C2C2C 75%)'
-                            : 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
-                          borderRadius: '4px',
-                          width: i === 2 ? '70%' : '100%',
-                        }}
-                        animate={{
-                          backgroundPosition: ['0px', '500px'],
-                        }}
-                        transition={{
-                          duration: 1.5,
-                          repeat: Infinity,
-                          ease: 'linear',
-                        }}
-                      />
-                    ))}
-                  </motion.div>
-                ) : error ? (
-                  <motion.p
-                    key="error"
-                    style={themedStyles.error}
-                    variants={textVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                  >
-                    {error}
-                  </motion.p>
-                ) : (
-                  <motion.div
-                    key="content"
-                    variants={textVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                  >
-                    <motion.div
-                      style={themedStyles.explanation}
-                      
-                      initial={{  y: 50 }}
-                      animate={{   y: 0 }}
-                      // transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5 }}
-                      // exit={{ opacity: 0, y: 50 }}
-                    >
-                      <div style={{ marginBottom: '8px' }}>
-                        <MarkdownText 
-                          text={streamingText} 
-                          isStreaming={isLoading}
-                          language={targetLanguage}
-                          style={{
-                            opacity: isLoading ? 0.7 : 1,
-                            transition: 'opacity 0.2s'
-                          }}
-                        />
-                      </div>
-
-                      {isExplanationComplete && (
-                        <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                          <motion.button
-                            onClick={() => handleCopy(stripHtml(streamingText), 'initial')}
-                            style={{
-                              background: 'none',
-                              border: 'none',
-                              cursor: 'pointer',
-                              padding: '4px',
-                              borderRadius: '4px',
-                              color: copiedId === 'initial' ? '#666' : '#666'
-                            }}
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
-                          >
-                            {copiedId === 'initial' ? (
-                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                              </svg>
-                            ) : (
-                              <svg width="12" height="12" viewBox="0 0 62 61" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
-                              </svg>
-                            )}
-                          </motion.button>
-                        </motion.div>
-                      )}
-                    </motion.div>
-                    {followUpQAs.map(({ question, answer, id, isComplete }) => (
-                      <motion.div
-                        key={id}
-                        
-                      initial={{ opacity: 0, y: 50 }}
-                      animate={{ opacity: 1,  y: 0 }}
-                      transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5 }}
-                        style={themedStyles.followUpQA}
-                      >
-                        
-                        {/* Question bubble */}
-                        <motion.div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'flex-end',
-                            width: '100%'
-                          }}
-                        >
-                          <div style={themedStyles.followUpQuestion}>
-                            {question}
-                          </div>
-                        </motion.div>
-
-                        {/* Answer bubble */}
-                        <motion.div
-                          style={{
-                            display: 'flex',
-                            justifyContent: 'flex-start',
-                            width: '100%'
-                          }}
-                        >
-                          <div style={themedStyles.followUpAnswer}>
-                            <MarkdownText
-                              text={answer}
-                              isStreaming={activeAnswerId === id && !isComplete}
-                              language={targetLanguage}
-                              style={{
-                                margin: 10,
-                                opacity: activeAnswerId === id && !isComplete ? 0.7 : 1
-                              }}
-                              onMount={() => console.log('Follow-up Answer:', answer)}
-                            />
-                            
-                            {!isComplete && (
-                              <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                <motion.button
-                                  onClick={() => handleCopy(stripHtml(answer), `followup-${id}`)}
-                                  style={{
-                                    background: 'none',
-                                    border: 'none',
-                                    cursor: 'pointer',
-                                    padding: '4px',
-                                    borderRadius: '4px',
-                                    color: copiedId === `followup-${id}` ? '#666' : '#666'
-                                  }}
-                                  whileHover={{ scale: 1.1 }}
-                                  whileTap={{ scale: 0.9 }}
-                                >
-                                  {copiedId === `followup-${id}` ? (
-                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                                    </svg>
-                                  ) : (
-                                    <svg width="12" height="12" viewBox="0 0 62 61" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                      <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
-                                    </svg>
-                                  )}
-                                </motion.button>
-                              </motion.div>
-                            )}
-                          </div>
-                        </motion.div>
-                      </motion.div>
-                    ))}
-                    
-                    {/* Input section */}
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      style={themedStyles.followUpInputContainer}
-                    >
-                      <div style={themedStyles.searchContainer}>
-                        <input
-                          type="text"
-                          value={followUpQuestion}
-                          onChange={(e) => setFollowUpQuestion(e.target.value)}
-                          onKeyDown={(e) => {
-                            e.stopPropagation();
-                            
-                            if (e.key === 'Enter') {
-                              handleAskFollowUp();
-                            }
-                          }}
-                          onKeyUp={(e) => e.stopPropagation()}
-                          onKeyPress={(e) => e.stopPropagation()}
-                          placeholder="Ask a follow-up question..."
-                          style={themedStyles.input}
-                          disabled={isAskingFollowUp}
-                          onFocus={() => setIsInputFocused(true)}
-                          onBlur={() => setIsInputFocused(false)}
-                        />
-                        <motion.button
-                          onClick={handleAskFollowUp}
-                          disabled={!followUpQuestion.trim() || isAskingFollowUp}
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          style={themedStyles.searchSendButton}
-                        >
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </motion.button>
-                      </div>
-                    </motion.div>
-                  </motion.div>
+                {settings?.customization?.showSelectedText !== false && (
+                  <p style={{...themedStyles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline'}}>
+                    {truncateText(selectedText)}
+                  </p>
                 )}
-              </AnimatePresence>
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  right: 0,
-                  width: '15px',
-                  height: '15px',
-                  cursor: 'se-resize',
-                  background: 'transparent'
-                }}
-                onMouseDown={handleResizeStart}
-                className="resize-handle"
-              />
-            </motion.div>
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+
+                <AnimatePresence mode="wait">
+                  {isLoading && !streamingText ? (
+                    <motion.div
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '12px',
+                        width: '100%',
+                      }}
+                      layout
+                    >
+                      {/* Skeleton lines */}
+                      {[...Array(10)].map((_, i) => (
+                        <motion.div
+                          key={i}
+                          style={{
+                            height: '16px',
+                            background: settings?.customization?.theme === "dark" 
+                              ? 'linear-gradient(90deg, #2C2C2C 25%, #3D3D3D 50%, #2C2C2C 75%)'
+                              : 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
+                            borderRadius: '4px',
+                            width: i === 2 ? '70%' : '100%',
+                          }}
+                          animate={{
+                            backgroundPosition: ['0px', '500px'],
+                          }}
+                          transition={{
+                            duration: 1.5,
+                            repeat: Infinity,
+                            ease: 'linear',
+                          }}
+                        />
+                      ))}
+                    </motion.div>
+                  ) : error ? (
+                    <motion.p
+                      key="error"
+                      style={themedStyles.error}
+                      variants={textVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                    >
+                      {error}
+                    </motion.p>
+                  ) : (
+                    <motion.div
+                      key="content"
+                      variants={textVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                    >
+                      <motion.div
+                        style={themedStyles.explanation}
+                        
+                        initial={{  y: 50 }}
+                        animate={{   y: 0 }}
+                        // transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5 }}
+                        // exit={{ opacity: 0, y: 50 }}
+                      >
+                        <div style={{ marginBottom: '8px' }}>
+                          <MarkdownText 
+                            text={streamingText} 
+                            isStreaming={isLoading}
+                            language={targetLanguage}
+                            style={{
+                              opacity: isLoading ? 0.7 : 1,
+                              transition: 'opacity 0.2s'
+                            }}
+                          />
+                        </div>
+
+                        {isExplanationComplete && (
+                          <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <motion.button
+                              onClick={() => handleCopy(stripHtml(streamingText), 'initial')}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                padding: '4px',
+                                borderRadius: '4px',
+                                color: copiedId === 'initial' ? '#666' : '#666'
+                              }}
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                            >
+                              {copiedId === 'initial' ? (
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                                </svg>
+                              ) : (
+                                <svg width="12" height="12" viewBox="0 0 62 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
+                                </svg>
+                              )}
+                            </motion.button>
+                          </motion.div>
+                        )}
+                      </motion.div>
+                      {followUpQAs.map(({ question, answer, id, isComplete }) => (
+                        <motion.div
+                          key={id}
+                          
+                        initial={{ opacity: 0, y: 50 }}
+                        animate={{ opacity: 1,  y: 0 }}
+                        transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5 }}
+                          style={themedStyles.followUpQA}
+                        >
+                          
+                          {/* Question bubble */}
+                          <motion.div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'flex-end',
+                              width: '100%'
+                            }}
+                          >
+                            <div style={themedStyles.followUpQuestion}>
+                              {question}
+                            </div>
+                          </motion.div>
+
+                          {/* Answer bubble */}
+                          <motion.div
+                            style={{
+                              display: 'flex',
+                              justifyContent: 'flex-start',
+                              width: '100%'
+                            }}
+                          >
+                            <div style={themedStyles.followUpAnswer}>
+                              <MarkdownText
+                                text={answer}
+                                isStreaming={activeAnswerId === id && !isComplete}
+                                language={targetLanguage}
+                                style={{
+                                  margin: 10,
+                                  opacity: activeAnswerId === id && !isComplete ? 0.7 : 1
+                                }}
+                                onMount={() => console.log('Follow-up Answer:', answer)}
+                              />
+                              
+                              {!isComplete && (
+                                <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                  <motion.button
+                                    onClick={() => handleCopy(stripHtml(answer), `followup-${id}`)}
+                                    style={{
+                                      background: 'none',
+                                      border: 'none',
+                                      cursor: 'pointer',
+                                      padding: '4px',
+                                      borderRadius: '4px',
+                                      color: copiedId === `followup-${id}` ? '#666' : '#666'
+                                    }}
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                  >
+                                    {copiedId === `followup-${id}` ? (
+                                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                                      </svg>
+                                    ) : (
+                                      <svg width="12" height="12" viewBox="0 0 62 61" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
+                                      </svg>
+                                    )}
+                                  </motion.button>
+                                </motion.div>
+                              )}
+                            </div>
+                          </motion.div>
+                        </motion.div>
+                      ))}
+                      
+                      {/* Input section */}
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        style={themedStyles.followUpInputContainer}
+                      >
+                        <div style={themedStyles.searchContainer}>
+                          <input
+                            type="text"
+                            value={followUpQuestion}
+                            onChange={(e) => setFollowUpQuestion(e.target.value)}
+                            onKeyDown={(e) => {
+                              e.stopPropagation();
+                              
+                              if (e.key === 'Enter') {
+                                handleAskFollowUp();
+                              }
+                            }}
+                            onKeyUp={(e) => e.stopPropagation()}
+                            onKeyPress={(e) => e.stopPropagation()}
+                            placeholder="Ask a follow-up question..."
+                            style={themedStyles.input}
+                            disabled={isAskingFollowUp}
+                            onFocus={() => setIsInputFocused(true)}
+                            onBlur={() => setIsInputFocused(false)}
+                          />
+                          <motion.button
+                            onClick={handleAskFollowUp}
+                            disabled={!followUpQuestion.trim() || isAskingFollowUp}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            style={themedStyles.searchSendButton}
+                          >
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </motion.button>
+                        </div>
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <div
+                  style={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    width: '15px',
+                    height: '15px',
+                    cursor: 'se-resize',
+                    background: 'transparent'
+                  }}
+                  onMouseDown={handleResizeStart}
+                  className="resize-handle"
+                />
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   )
 }
 
