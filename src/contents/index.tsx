@@ -126,6 +126,9 @@ function Content() {
     visible: false
   });
 
+  // Add new state for enabled/disabled status
+  const [isEnabled, setIsEnabled] = useState(true);
+
   // Add useEffect for toast auto-hide
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -253,6 +256,11 @@ function Content() {
     }
 
     const handleMouseUp = async (event: MouseEvent) => {
+      // If LightUp is disabled, don't do anything
+      if (!isEnabled) {
+        return;
+      }
+
       const popup = document.querySelector('[data-plasmo-popup]')
       
       // If we're interacting with the popup, don't do anything
@@ -417,7 +425,7 @@ function Content() {
       document.removeEventListener("mouseup", handleMouseUp)
       document.removeEventListener("click", handleClickOutside)
     }
-  }, [mode, isConfigured, isInteractingWithPopup])
+  }, [mode, isConfigured, isInteractingWithPopup, isEnabled])
 
  
 
@@ -891,6 +899,15 @@ function Content() {
         let shortcutMessage = '';
         
         switch (e.key.toLowerCase()) {
+          case 'x': // Add new shortcut for toggle
+            setIsEnabled(prev => !prev);
+            shortcutMessage = `LightUp ${!isEnabled ? 'enabled' : 'disabled'} (Ctrl+Shift+X)`;
+            e.preventDefault();
+            setToast({
+              message: shortcutMessage,
+              visible: true
+            });
+            return;
           case 'z':
             newMode = 'explain';
             shortcutMessage = 'Switched to Explain mode (Ctrl+Shift+Z)';
@@ -928,10 +945,42 @@ function Content() {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [handleModeChange]);
+  }, [handleModeChange, isEnabled]); // Add isEnabled to dependencies
 
   return (
     <>
+      {/* Add visual indicator when LightUp is disabled */}
+      <AnimatePresence>
+        {!isEnabled && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            style={{
+              position: 'fixed',
+              top: '20px',
+              right: '20px',
+              backgroundColor: settings?.customization?.theme === "dark" ? '#2C2C2C' : 'white',
+              color: settings?.customization?.theme === "dark" ? 'white' : 'black',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
+              zIndex: 2147483647,
+              fontSize: '14px',
+              fontFamily: "'K2D', sans-serif",
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px'
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" fill="currentColor"/>
+            </svg>
+            LightUp disabled
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Toast notification with its own AnimatePresence */}
       <AnimatePresence>
         {toast.visible && (
