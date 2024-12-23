@@ -26,7 +26,7 @@ Seamless AI assistance that lives in your browser. No new tabs. No context switc
     - Gemini 1.0 Pro
     - Gemini 1.5 Pro
     - Gemini 1.5 Flash
-  - **Dark Mode**:
+- **Dark Mode**.
   
 
 ## 📥 Download
