@@ -20,6 +20,7 @@ export interface ProcessTextRequest {
   aborted?: boolean;
   isFollowUp?: boolean;
   context?: string;
+  id?: number;
 }
 
 export interface ProcessTextResponse {
@@ -29,7 +30,9 @@ export interface ProcessTextResponse {
 }
 
 export interface StreamChunk {
-  type: 'chunk' | 'error' | 'done';
+  type: 'chunk' | 'error' | 'done' | 'aborted';
   content?: string;
   error?: string;
+  isFollowUp?: boolean;
+  id?: number;
 } 

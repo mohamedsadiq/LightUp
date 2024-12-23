@@ -62,9 +62,18 @@ export const processXAIText = async function*(request: ProcessTextRequest) {
         
         if (done) {
           if (buffer) {
-            yield { type: 'chunk', content: buffer };
+            yield { 
+              type: 'chunk', 
+              content: buffer,
+              isFollowUp: request.isFollowUp,
+              id: request.id
+            };
           }
-          yield { type: 'done' };
+          yield { 
+            type: 'done',
+            isFollowUp: request.isFollowUp,
+            id: request.id
+          };
           break;
         }
 
@@ -76,7 +85,11 @@ export const processXAIText = async function*(request: ProcessTextRequest) {
         for (const line of lines) {
           if (line.trim() === '') continue;
           if (line.includes('[DONE]')) {
-            yield { type: 'done' };
+            yield { 
+              type: 'done',
+              isFollowUp: request.isFollowUp,
+              id: request.id
+            };
             continue;
           }
           
@@ -85,7 +98,9 @@ export const processXAIText = async function*(request: ProcessTextRequest) {
             if (data.choices?.[0]?.delta?.content) {
               yield { 
                 type: 'chunk', 
-                content: data.choices[0].delta.content
+                content: data.choices[0].delta.content,
+                isFollowUp: request.isFollowUp,
+                id: request.id
               };
             }
           } catch (e) {

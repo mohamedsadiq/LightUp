@@ -48,9 +48,18 @@ export const processGeminiText = async function*(request: ProcessTextRequest) {
       
       if (done) {
         if (buffer) {
-          yield { type: 'chunk', content: buffer }
+          yield { 
+            type: 'chunk', 
+            content: buffer,
+            isFollowUp: request.isFollowUp,
+            id: request.id
+          }
         }
-        yield { type: 'done' }
+        yield { 
+          type: 'done',
+          isFollowUp: request.isFollowUp,
+          id: request.id
+        }
         break
       }
 
@@ -65,7 +74,12 @@ export const processGeminiText = async function*(request: ProcessTextRequest) {
         try {
           const data = JSON.parse(line)
           if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-            yield { type: 'chunk', content: data.candidates[0].content.parts[0].text }
+            yield { 
+              type: 'chunk', 
+              content: data.candidates[0].content.parts[0].text,
+              isFollowUp: request.isFollowUp,
+              id: request.id
+            }
           }
         } catch (e) {
           console.warn('Failed to parse line:', line)

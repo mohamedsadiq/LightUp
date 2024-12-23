@@ -59,9 +59,18 @@ export const processLocalText = async function*(request: ProcessTextRequest) {
       
       if (done) {
         if (buffer) {
-          yield { type: 'chunk', content: buffer }
+          yield { 
+            type: 'chunk', 
+            content: buffer,
+            isFollowUp: request.isFollowUp,
+            id: request.id
+          }
         }
-        yield { type: 'done' }
+        yield { 
+          type: 'done',
+          isFollowUp: request.isFollowUp,
+          id: request.id
+        }
         break
       }
 
@@ -77,7 +86,12 @@ export const processLocalText = async function*(request: ProcessTextRequest) {
         try {
           const data = JSON.parse(line.replace(/^data: /, ''))
           if (data.choices?.[0]?.delta?.content) {
-            yield { type: 'chunk', content: data.choices[0].delta.content }
+            yield { 
+              type: 'chunk', 
+              content: data.choices[0].delta.content,
+              isFollowUp: request.isFollowUp,
+              id: request.id
+            }
           }
         } catch (e) {
           console.warn('Failed to parse line:', line)

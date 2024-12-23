@@ -184,7 +184,8 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
             port.postMessage({
               type: 'chunk',
               content: chunk + ' ',
-              isFollowUp: isFollowUp
+              isFollowUp: isFollowUp,
+              id: request.id
             });
             // Add a small delay to simulate streaming
             await new Promise(resolve => setTimeout(resolve, 50));
@@ -196,7 +197,11 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         console.warn('No candidates in Gemini response:', data);
       }
 
-      port.postMessage({ type: 'done' });
+      port.postMessage({ 
+        type: 'done',
+        isFollowUp: isFollowUp,
+        id: request.id
+      });
       return;
     }
 
@@ -206,10 +211,15 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         if (chunk.type === 'chunk') {
           port.postMessage({
             ...chunk,
-            isFollowUp: isFollowUp
+            isFollowUp: isFollowUp,
+            id: request.id
           });
         } else {
-          port.postMessage(chunk);
+          port.postMessage({
+            ...chunk,
+            isFollowUp: isFollowUp,
+            id: request.id
+          });
         }
       }
       return;
@@ -257,9 +267,18 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         
         if (done) {
           if (buffer) {
-            port.postMessage({ type: 'chunk', content: buffer });
+            port.postMessage({ 
+              type: 'chunk', 
+              content: buffer,
+              isFollowUp: isFollowUp,
+              id: request.id
+            });
           }
-          port.postMessage({ type: 'done' });
+          port.postMessage({ 
+            type: 'done',
+            isFollowUp: isFollowUp,
+            id: request.id
+          });
           break;
         }
 
@@ -279,7 +298,8 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
                 port.postMessage({ 
                   type: 'chunk', 
                   content: content,
-                  isFollowUp: isFollowUp
+                  isFollowUp: isFollowUp,
+                  id: request.id
                 });
               }
             } else {
@@ -296,7 +316,8 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
                 port.postMessage({ 
                   type: 'chunk', 
                   content: content,
-                  isFollowUp: isFollowUp
+                  isFollowUp: isFollowUp,
+                  id: request.id
                 });
               }
             }

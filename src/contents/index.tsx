@@ -129,6 +129,12 @@ function Content() {
   // Add new state for enabled/disabled status
   const [isEnabled, setIsEnabled] = useState(true);
 
+  // Add new state for speech
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  // Update state to track speaking state for each answer
+  const [speakingId, setSpeakingId] = useState<string | null>(null);
+
   // Add useEffect for toast auto-hide
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -394,7 +400,8 @@ function Content() {
             ...settings,
             translationSettings
           },
-          connectionId
+          connectionId,
+          id: Date.now()
         });
 
         port.postMessage({
@@ -406,7 +413,8 @@ function Content() {
               ...settings,
               translationSettings
             },
-            connectionId
+            connectionId,
+            id: Date.now()
           }
         });
 
@@ -461,7 +469,8 @@ function Content() {
         mode,
         settings,
         isFollowUp: true,
-        id: newId
+        id: newId,
+        connectionId
       });
 
       port.postMessage({
@@ -472,7 +481,8 @@ function Content() {
           mode: mode,
           settings: settings,
           isFollowUp: true,
-          id: newId
+          id: newId,
+          connectionId
         }
       });
     } catch (error) {
@@ -707,6 +717,7 @@ function Content() {
       content?: string;
       error?: string;
       isFollowUp?: boolean;
+      id?: number;
     }) => {
       console.log('📨 Port message received:', message);
       
@@ -715,51 +726,66 @@ function Content() {
           if (message.content) {
             console.log('📝 Received chunk:', {
               content: message.content,
-              isFollowUp: message.isFollowUp
+              isFollowUp: message.isFollowUp,
+              id: message.id
             });
             
-            // Separate handling for main text and follow-up responses
-            if (message.isFollowUp) {
+            if (message.isFollowUp && message.id) {
               setFollowUpQAs(prev => {
-                const lastQA = prev[prev.length - 1];
-                if (!lastQA) return prev;
-                
-                return prev.map(qa => 
-                  qa.id === lastQA.id
+                const updatedQAs = prev.map(qa => 
+                  qa.id === message.id
                     ? { ...qa, answer: qa.answer + message.content }
                     : qa
                 );
+                console.log('Updated QAs:', updatedQAs);
+                return updatedQAs;
               });
             } else {
               setStreamingText(prev => prev + message.content);
             }
           }
           break;
+
         case 'done':
-          console.log('✅ Processing completed');
-          if (message.isFollowUp) {
+          console.log('✅ Processing completed:', {
+            isFollowUp: message.isFollowUp,
+            id: message.id
+          });
+          
+          if (message.isFollowUp && message.id) {
             setFollowUpQAs(prev => {
-              return prev.map(qa => {
-                if (qa.id === activeAnswerId) {
+              const updatedQAs = prev.map(qa => {
+                if (qa.id === message.id) {
                   return { ...qa, isComplete: true };
                 }
                 return qa;
               });
+              console.log('Marking QA as complete:', updatedQAs);
+              return updatedQAs;
             });
+            
+            // Reset follow-up states
             setActiveAnswerId(null);
             setIsAskingFollowUp(false);
+            console.log('Reset follow-up states');
           } else {
             setIsExplanationComplete(true);
           }
           setIsLoading(false);
           break;
+
         case 'error':
           console.error('❌ Stream error:', message.error);
           setError(message.error || 'An unknown error occurred');
           setIsLoading(false);
+          // Also reset follow-up states on error
           setActiveAnswerId(null);
           setIsAskingFollowUp(false);
+          console.log('Reset states due to error');
           break;
+
+        default:
+          console.log('Unhandled message type:', message.type);
       }
     });
 
@@ -769,7 +795,8 @@ function Content() {
     return () => {
       console.log('🔌 Disconnecting port:', connectionId);
       newPort.postMessage({
-        type: "STOP_GENERATION"
+        type: "STOP_GENERATION",
+        connectionId
       });
       newPort.disconnect();
     };
@@ -946,6 +973,36 @@ function Content() {
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [handleModeChange, isEnabled]); // Add isEnabled to dependencies
+
+  // Update speech handler function
+  const handleSpeak = (text: string, id: string) => {
+    if ('speechSynthesis' in window) {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+
+      if (speakingId === id) {
+        setSpeakingId(null);
+        return;
+      }
+
+      const utterance = new SpeechSynthesisUtterance(stripHtml(text));
+      utterance.onend = () => setSpeakingId(null);
+      utterance.onerror = () => setSpeakingId(null);
+      
+      setSpeakingId(id);
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Clean up speech when component unmounts
+  useEffect(() => {
+    return () => {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        setSpeakingId(null);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -1213,6 +1270,31 @@ function Content() {
                                 </svg>
                               )}
                             </motion.button>
+
+                            <motion.button
+                              onClick={() => handleSpeak(streamingText, 'main')}
+                              style={{
+                                background: 'none',
+                                border: 'none',
+                                cursor: 'pointer',
+                                padding: '4px',
+                                borderRadius: '4px',
+                                color: speakingId === 'main' ? '#14742F' : '#666'
+                              }}
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              title={speakingId === 'main' ? "Stop speaking" : "Read text aloud"}
+                            >
+                              {speakingId === 'main' ? (
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M6 6h4v12H6V6zm8 0h4v12h-4V6z" fill="currentColor"/>
+                                </svg>
+                              ) : (
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
+                                </svg>
+                              )}
+                            </motion.button>
                           </motion.div>
                         )}
                       </motion.div>
@@ -1259,7 +1341,7 @@ function Content() {
                                 onMount={() => console.log('Follow-up Answer:', answer)}
                               />
                               
-                              {!isComplete && (
+                              {isComplete && (
                                 <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                                   <motion.button
                                     onClick={() => handleCopy(stripHtml(answer), `followup-${id}`)}
@@ -1281,6 +1363,31 @@ function Content() {
                                     ) : (
                                       <svg width="12" height="12" viewBox="0 0 62 61" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
+                                      </svg>
+                                    )}
+                                  </motion.button>
+
+                                  <motion.button
+                                    onClick={() => handleSpeak(answer, `followup-${id}`)}
+                                    style={{
+                                      background: 'none',
+                                      border: 'none',
+                                      cursor: 'pointer',
+                                      padding: '4px',
+                                      borderRadius: '4px',
+                                      color: speakingId === `followup-${id}` ? '#14742F' : '#666'
+                                    }}
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    title={speakingId === `followup-${id}` ? "Stop speaking" : "Read text aloud"}
+                                  >
+                                    {speakingId === `followup-${id}` ? (
+                                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M6 6h4v12H6V6zm8 0h4v12h-4V6z" fill="currentColor"/>
+                                      </svg>
+                                    ) : (
+                                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
                                       </svg>
                                     )}
                                   </motion.button>
