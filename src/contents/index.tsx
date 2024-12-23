@@ -359,7 +359,7 @@ function Content() {
       }
 
       const text = selection?.toString().trim();
-      console.log('����������� Processed text:', text);
+      console.log('������������� Processed text:', text);
 
       // If there's no valid text selected but popup is visible,
       // keep showing the last result
@@ -916,7 +916,7 @@ function Content() {
     };
   }, [isBlurActive, settings?.customization?.theme]);
 
-  // Modify keyboard shortcut handler
+  // Update the keyboard shortcut handler
   useEffect(() => {
     const handleKeyDown = async (e: KeyboardEvent) => {
       // Check if Ctrl+Shift is pressed
@@ -926,7 +926,7 @@ function Content() {
         let shortcutMessage = '';
         
         switch (e.key.toLowerCase()) {
-          case 'x': // Add new shortcut for toggle
+          case 'x': // Toggle LightUp
             setIsEnabled(prev => !prev);
             shortcutMessage = `LightUp ${!isEnabled ? 'enabled' : 'disabled'} (Ctrl+Shift+X)`;
             e.preventDefault();
@@ -974,71 +974,141 @@ function Content() {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [handleModeChange, isEnabled]); // Add isEnabled to dependencies
 
-  // Update speech handler function
-  const handleSpeak = (text: string, id: string) => {
-    if ('speechSynthesis' in window) {
-      // Cancel any ongoing speech
-      window.speechSynthesis.cancel();
+  // Add this state for voice availability
+  const [voicesLoaded, setVoicesLoaded] = useState(false);
 
+  // Update the handleSpeak function
+  const handleSpeak = async (text: string, id: string) => {
+    try {
+      // Toggle speaking state immediately for better UI feedback
       if (speakingId === id) {
+        console.log('Stopping speech');
+        window.speechSynthesis.cancel();
         setSpeakingId(null);
         return;
       }
 
-      const utterance = new SpeechSynthesisUtterance(stripHtml(text));
-      utterance.onend = () => setSpeakingId(null);
-      utterance.onerror = () => setSpeakingId(null);
-      
       setSpeakingId(id);
+      console.log('Starting speech for:', id);
+
+      // Stop any current speech
+      window.speechSynthesis.cancel();
+
+      // Get voices synchronously first
+      let voices = window.speechSynthesis.getVoices();
+      
+      // If no voices available, try to load them
+      if (voices.length === 0) {
+        console.log('No voices available, waiting for voices to load...');
+        voices = await new Promise((resolve) => {
+          const checkVoices = () => {
+            const availableVoices = window.speechSynthesis.getVoices();
+            if (availableVoices.length > 0) {
+              resolve(availableVoices);
+            } else {
+              setTimeout(checkVoices, 100);
+            }
+          };
+          checkVoices();
+        });
+      }
+
+      console.log('Available voices:', voices.length);
+
+      // Select the best voice
+      const preferredVoice = voices.find(voice => 
+        voice.lang === 'en-US' && 
+        (voice.name.includes('Samantha') || 
+         voice.name.includes('Daniel') ||
+         voice.name.includes('Karen') ||
+         voice.name.includes('Alex'))
+      ) || voices.find(voice => voice.lang === 'en-US') || voices[0];
+
+      if (!preferredVoice) {
+        throw new Error('No voice available');
+      }
+
+      console.log('Selected voice:', preferredVoice.name);
+
+      // Clean the text
+      const cleanText = stripHtml(text)
+        .replace(/[*_~`]/g, '')
+        .replace(/\s+/g, ' ')
+        .replace(/\n+/g, ' ')
+        .trim();
+
+      // Create utterance
+      const utterance = new SpeechSynthesisUtterance(cleanText);
+      utterance.voice = preferredVoice;
+      utterance.rate = 0.95;
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+
+      // Handle events
+      utterance.onstart = () => {
+        console.log('Speech started');
+        setSpeakingId(id);
+      };
+
+      utterance.onend = () => {
+        console.log('Speech ended');
+        setSpeakingId(null);
+      };
+
+      utterance.onerror = (event) => {
+        console.error('Speech error:', event);
+        setSpeakingId(null);
+      };
+
+      // Start speaking
+      console.log('Speaking text:', cleanText);
       window.speechSynthesis.speak(utterance);
+
+      // Chrome bug workaround
+      setTimeout(() => {
+        if (window.speechSynthesis.speaking) {
+          window.speechSynthesis.pause();
+          window.speechSynthesis.resume();
+        }
+      }, 0);
+
+    } catch (error) {
+      console.error('Speech error:', error);
+      setSpeakingId(null);
+      window.speechSynthesis.cancel();
     }
   };
 
-  // Clean up speech when component unmounts
+  // Update the voice loading effect
   useEffect(() => {
-    return () => {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        setSpeakingId(null);
+    const loadVoices = () => {
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length > 0) {
+        console.log('Voices loaded:', voices.length);
+        setVoicesLoaded(true);
       }
+    };
+
+    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+
+    // Chrome bug workaround
+    const keepAlive = setInterval(() => {
+      if (window.speechSynthesis.speaking) {
+        window.speechSynthesis.pause();
+        window.speechSynthesis.resume();
+      }
+    }, 5000);
+
+    return () => {
+      clearInterval(keepAlive);
+      window.speechSynthesis.cancel();
     };
   }, []);
 
   return (
     <>
-      {/* Add visual indicator when LightUp is disabled */}
-      <AnimatePresence>
-        {!isEnabled && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            style={{
-              position: 'fixed',
-              top: '20px',
-              right: '20px',
-              backgroundColor: settings?.customization?.theme === "dark" ? '#2C2C2C' : 'white',
-              color: settings?.customization?.theme === "dark" ? 'white' : 'black',
-              padding: '8px 16px',
-              borderRadius: '8px',
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
-              zIndex: 2147483647,
-              fontSize: '14px',
-              fontFamily: "'K2D', sans-serif",
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z" fill="currentColor"/>
-            </svg>
-            LightUp disabled
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Toast notification with its own AnimatePresence */}
+      {/* Toast notification */}
       <AnimatePresence>
         {toast.visible && (
           <motion.div
@@ -1071,7 +1141,7 @@ function Content() {
         )}
       </AnimatePresence>
 
-      {/* Main popup with its own AnimatePresence */}
+      {/* Main popup */}
       <AnimatePresence mode="sync">
         {isVisible && (
           <motion.div 
@@ -1286,11 +1356,11 @@ function Content() {
                               title={speakingId === 'main' ? "Stop speaking" : "Read text aloud"}
                             >
                               {speakingId === 'main' ? (
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                   <path d="M6 6h4v12H6V6zm8 0h4v12h-4V6z" fill="currentColor"/>
                                 </svg>
                               ) : (
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                   <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
                                 </svg>
                               )}
@@ -1382,11 +1452,11 @@ function Content() {
                                     title={speakingId === `followup-${id}` ? "Stop speaking" : "Read text aloud"}
                                   >
                                     {speakingId === `followup-${id}` ? (
-                                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M6 6h4v12H6V6zm8 0h4v12h-4V6z" fill="currentColor"/>
                                       </svg>
                                     ) : (
-                                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
                                       </svg>
                                     )}
