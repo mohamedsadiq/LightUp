@@ -290,6 +290,9 @@ function IndexOptions() {
               className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
               placeholder="http://127.0.0.1:1234"
             />
+            <p className="text-sm text-gray-500 mb-4">
+              Llama is a local server setup. No API key is required.
+            </p>
           </>
         ) : settings.modelType === "openai" ? (
           <>
@@ -306,6 +309,9 @@ function IndexOptions() {
               className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
               placeholder="Enter your OpenAI API key"
             />
+            <p className="text-sm text-gray-500 mb-4">
+              Get your API key from the <a href="https://platform.openai.com/docs/overview" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">OpenAI platform</a>. Free tier available.
+            </p>
           </>
         ) : settings.modelType === "gemini" ? (
           <>
@@ -322,27 +328,8 @@ function IndexOptions() {
               className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
               placeholder="Enter your Gemini API key"
             />
-
-            {/* Add Gemini Model Selector */}
-            <label className="block mb-2 font-k2d font-medium">
-              Gemini Model:
-            </label>
-            <select
-              value={settings.geminiModel || "gemini-pro"}
-              onChange={(e) => setSettings(prev => ({
-                ...prev,
-                geminiModel: e.target.value as GeminiModel
-              }))}
-              className="w-full p-2 mb-4 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
-            >
-              {GEMINI_MODELS.map((model) => (
-                <option key={model.value} value={model.value}>
-                  {model.label}
-                </option>
-              ))}
-            </select>
             <p className="text-sm text-gray-500 mb-4">
-              {GEMINI_MODELS.find(m => m.value === (settings.geminiModel || "gemini-pro"))?.description}
+              Get your API key from the <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Google AI Studio</a>. Free tier available.
             </p>
           </>
         ) : (
@@ -361,7 +348,7 @@ function IndexOptions() {
               placeholder="Enter your xAI API key"
             />
             <p className="text-sm text-gray-500 mb-4">
-              Get your API key from the <a href="https://x.ai" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">xAI platform</a>
+              Get your API key from the <a href="https://x.ai/api" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">xAI platform</a>. Free tier available with $25 monthly credits for beta users.
             </p>
           </>
         )}
