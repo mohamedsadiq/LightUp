@@ -21,17 +21,6 @@ import { getTextDirection } from "~utils/rtl";
 const fontImportStyle = document.createElement('style');
 fontImportStyle.textContent = `
   @import url('https://fonts.googleapis.com/css2?family=K2D:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
-  
-
-  ::selection {
-    background-color: #FFBF5A !important;
-    color: #000000 !important;
-  }
-  
-  ::-moz-selection {
-    background-color: #FFBF5A !important;
-    color: #000000 !important;
-  }
 `;
 document.head.appendChild(fontImportStyle);
 
@@ -1138,6 +1127,44 @@ function Content() {
   const handleToastVisibility = (visible: boolean) => {
     setToast(prev => ({ ...prev, visible }));
   };
+
+  // Add effect to update selection color based on enabled state
+  useEffect(() => {
+    const selectionStyle = document.createElement('style');
+    selectionStyle.id = 'lightup-selection-style';
+    
+    if (isEnabled) {
+      selectionStyle.textContent = `
+        ::selection {
+          background-color: #FFBF5A !important;
+          color: #000000 !important;
+        }
+        
+        ::-moz-selection {
+          background-color: #FFBF5A !important;
+          color: #000000 !important;
+        }
+      `;
+    } else {
+      selectionStyle.textContent = `
+        ::selection {
+          /* Use default system selection color */
+        }
+        
+        ::-moz-selection {
+          /* Use default system selection color */
+        }
+      `;
+    }
+
+    // Remove any existing selection style
+    document.getElementById('lightup-selection-style')?.remove();
+    document.head.appendChild(selectionStyle);
+
+    return () => {
+      document.getElementById('lightup-selection-style')?.remove();
+    };
+  }, [isEnabled]);
 
   return (
     <>
