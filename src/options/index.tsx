@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import { Storage } from "@plasmohq/storage"
 import "../styles/options.css"
 import "../style.css"
-import type { Settings, GeminiModel } from "~types/settings"
+import type { Settings, ModelType, GeminiModel } from "~types/settings"
 
 const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
   {
@@ -74,7 +74,10 @@ function IndexOptions() {
     modelType: "openai",
     maxTokens: 2048,
     customization: {
-      showSelectedText: true
+      showSelectedText: true,
+      theme: "light",
+      radicallyFocus: false,
+      fontSize: "1rem"
     }
   });
 
@@ -84,14 +87,15 @@ function IndexOptions() {
   // Load settings
   useEffect(() => {
     const loadSettings = async () => {
-      const savedSettings = await storage.get("settings");
+      const savedSettings = await storage.get("settings") as Settings | undefined;
       if (savedSettings) {
-        // Ensure customization settings are preserved
         setSettings({
           ...savedSettings,
           customization: {
-            ...savedSettings.customization,
-            showSelectedText: savedSettings.customization?.showSelectedText ?? true
+            showSelectedText: savedSettings.customization?.showSelectedText ?? true,
+            theme: savedSettings.customization?.theme ?? "light",
+            radicallyFocus: savedSettings.customization?.radicallyFocus ?? false,
+            fontSize: savedSettings.customization?.fontSize ?? "1rem"
           }
         });
       }
@@ -304,15 +308,116 @@ function IndexOptions() {
           min="1"
           max="4096"
         />
-
-        <button
-          onClick={handleSave}
-          className="px-4 py-2 bg-[#10a37f] text-white border-none rounded cursor-pointer font-medium transition-colors duration-200 font-k2d hover:bg-[#0d8c6d]"
-        >
-          Save Settings
-        </button>
       </div>
 
+      {/* Customization Section */}
+      <div className="mt-6">
+        <h2 className="text-xl font-semibold mb-4">Customization</h2>
+        
+        <div className="space-y-4">
+          {/* Show Selected Text Toggle */}
+          <div className="flex items-center justify-between">
+            <label className="font-k2d">Show Selected Text</label>
+            <input
+              type="checkbox"
+              checked={settings.customization?.showSelectedText ?? true}
+              onChange={(e) => {
+                setSettings(prev => ({
+                  ...prev,
+                  customization: {
+                    showSelectedText: e.target.checked,
+                    theme: prev.customization?.theme ?? "light",
+                    radicallyFocus: prev.customization?.radicallyFocus ?? false,
+                    fontSize: prev.customization?.fontSize ?? "1rem"
+                  }
+                }));
+              }}
+              className="w-4 h-4 text-[#10a37f] rounded focus:ring-[#10a37f] focus:ring-offset-0"
+            />
+          </div>
+
+          {/* Theme Toggle */}
+          <div className="flex items-center justify-between">
+            <label className="font-k2d">Theme</label>
+            <select
+              value={settings.customization?.theme ?? "light"}
+              onChange={(e) => {
+                setSettings(prev => ({
+                  ...prev,
+                  customization: {
+                    showSelectedText: prev.customization?.showSelectedText ?? true,
+                    theme: e.target.value as "light" | "dark",
+                    radicallyFocus: prev.customization?.radicallyFocus ?? false,
+                    fontSize: prev.customization?.fontSize ?? "1rem"
+                  }
+                }));
+              }}
+              className="p-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
+            >
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+
+          {/* Radical Focus Toggle */}
+          <div className="flex items-center justify-between">
+            <div>
+              <label className="font-k2d">Radical Focus Mode</label>
+              <p className="text-sm text-gray-500">Blur background when viewing results</p>
+            </div>
+            <input
+              type="checkbox"
+              checked={settings.customization?.radicallyFocus ?? false}
+              onChange={(e) => {
+                setSettings(prev => ({
+                  ...prev,
+                  customization: {
+                    showSelectedText: prev.customization?.showSelectedText ?? true,
+                    theme: prev.customization?.theme ?? "light",
+                    radicallyFocus: e.target.checked,
+                    fontSize: prev.customization?.fontSize ?? "1rem"
+                  }
+                }));
+              }}
+              className="w-4 h-4 text-[#10a37f] rounded focus:ring-[#10a37f] focus:ring-offset-0"
+            />
+          </div>
+
+          {/* Font Size Selector */}
+          <div className="flex items-center justify-between">
+            <label className="font-k2d">Font Size</label>
+            <select
+              value={settings.customization?.fontSize ?? "1rem"}
+              onChange={(e) => {
+                setSettings(prev => ({
+                  ...prev,
+                  customization: {
+                    showSelectedText: prev.customization?.showSelectedText ?? true,
+                    theme: prev.customization?.theme ?? "light",
+                    radicallyFocus: prev.customization?.radicallyFocus ?? false,
+                    fontSize: e.target.value as "0.8rem" | "0.9rem" | "1rem"
+                  }
+                }));
+              }}
+              className="p-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
+            >
+              <option value="0.8rem">Small (0.8rem)</option>
+              <option value="0.9rem">Medium (0.9rem)</option>
+              <option value="1rem">Large (1rem)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Save Button */}
+      <button
+        onClick={handleSave}
+        className="mt-6 px-4 py-2 bg-[#10a37f] text-white border-none rounded-[7px] cursor-pointer font-medium transition-colors duration-200 font-k2d hover:bg-[#0d8c6d] w-full"
+      >
+        Save Settings
+      </button>
+
+      {/* Local LLM Instructions */}
       {settings.modelType === "local" && (
         <div className="mt-5 bg-gray-50 p-4 rounded-lg border border-gray-200 font-k2d">
           <h2 className="text-lg mb-3 font-k2d font-semibold">
@@ -331,71 +436,8 @@ function IndexOptions() {
           </ol>
         </div>
       )}
-
-      {/* Add Customization Section */}
-      <div className="mb-5">
-        <h2 className="text-lg font-semibold mb-4">Customization</h2>
-        
-        {/* Show Selected Text Toggle */}
-        <div className="flex items-center gap-2 mb-4">
-          <input
-            type="checkbox"
-            id="showSelectedText"
-            checked={settings.customization?.showSelectedText ?? true}
-            onChange={(e) => setSettings(prev => ({
-              ...prev,
-              customization: {
-                ...prev.customization,
-                showSelectedText: e.target.checked
-              }
-            }))}
-            className="w-4 h-4 rounded border-gray-300"
-          />
-          <label htmlFor="showSelectedText" className="text-sm">
-            Show selected text in popup
-          </label>
-        </div>
-        <div className="mb-4">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={settings.customization?.radicallyFocus ?? false}
-              onChange={(e) => setSettings(prev => ({
-                ...prev,
-                customization: {
-                  ...prev.customization,
-                  radicallyFocus: e.target.checked
-                }
-              }))}
-              className="w-4 h-4 rounded border-gray-300"
-            />
-            <span className="text-sm font-medium">Radical Focus Mode</span>
-          </label>
-          <p className="text-xs text-gray-400 mt-1">
-            Blur the background when viewing results to help you focus on the content
-          </p>
-        </div>
-        {/* Theme Toggle */}
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium">Theme:</label>
-          <select
-            value={settings.customization?.theme || "light"}
-            onChange={(e) => setSettings(prev => ({
-              ...prev,
-              customization: {
-                ...prev.customization,
-                theme: e.target.value as "light" | "dark"
-              }
-            }))}
-            className="p-1 rounded border border-gray-200 text-sm"
-          >
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </div>
-      </div>
     </div>
-  )
+  );
 }
 
-export default IndexOptions
+export default IndexOptions;

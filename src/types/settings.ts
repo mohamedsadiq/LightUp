@@ -24,10 +24,15 @@ export interface Settings {
   mode?: Mode
   temperature?: number
   customPrompt?: string
-  customization?: {
+  customization: {
     showSelectedText: boolean
     theme: "light" | "dark"
     radicallyFocus: boolean
+    fontSize: "0.8rem" | "0.9rem" | "1rem"
+  }
+  translationSettings?: {
+    fromLanguage: string
+    toLanguage: string
   }
 }
 

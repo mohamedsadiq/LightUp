@@ -1,6 +1,6 @@
 import { THEME_COLORS } from "~utils/constants";
 
-export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" = "ltr") => ({
+export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" = "ltr", fontSize: "0.8rem" | "0.9rem" | "1rem" = "1rem") => ({
   popup: {
     width: "300px",
     height: "auto",
@@ -13,6 +13,7 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     maxHeight: "400px",
     overflow: "auto",
+    fontSize: fontSize
   },
   buttonContainer: {
     height: "fit-content",
@@ -35,14 +36,14 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     fontFamily: "'K2D', sans-serif",
   },
   text: {
-    fontSize: 14,
+    fontSize: fontSize,
     lineHeight: 1.5,
     margin: "0 0 16px 0",
     color: THEME_COLORS[theme].text,
     fontFamily: "'K2D', sans-serif"
   },
   explanation: {
-    fontSize: 12,
+    fontSize: fontSize,
     lineHeight: 1.6,
     color: THEME_COLORS[theme].text,
     backgroundColor: THEME_COLORS[theme].popupBackground,
@@ -52,7 +53,7 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     fontFamily: "'K2D', sans-serif",
     marginBottom: 16,
     direction: textDirection,
-    textAlign: textDirection === "rtl" ? "right" : "left"
+    textAlign: textDirection === "rtl" ? "right" : "left" as const
   },
   followUpQA: {
     display: 'flex',
@@ -131,11 +132,11 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     marginTop: "17px",
     marginLeft: 'auto',
     marginBottom: '8px',
-    fontSize: '12px',
+    fontSize: fontSize,
     fontFamily: "'K2D', sans-serif",
     boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
     direction: textDirection,
-    textAlign: textDirection === "rtl" ? "right" : "left"
+    textAlign: textDirection === "rtl" ? "right" : "left" as const
   },
   followUpAnswer: {
     backgroundColor: THEME_COLORS[theme].popupBackground,
@@ -145,12 +146,12 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     borderBottomLeftRadius: '4px',
     maxWidth: '85%',
     marginRight: 'auto',
-    fontSize: '12px',
+    fontSize: fontSize,
     lineHeight: 1.6,
     fontFamily: "'K2D', sans-serif",
     boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
     direction: textDirection,
-    textAlign: textDirection === "rtl" ? "right" : "left"
+    textAlign: textDirection === "rtl" ? "right" : "left" as const
   },
   // ... rest of the existing styles with theme colors
   popupContainer: {

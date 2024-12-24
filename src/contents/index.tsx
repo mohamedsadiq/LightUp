@@ -3,12 +3,12 @@ import { sendToBackground } from "@plasmohq/messaging"
 import type { PlasmoCSConfig } from "plasmo"
 import { Storage } from "@plasmohq/storage"
 import { motion, AnimatePresence, usePresence } from "framer-motion"
+import type { MotionStyle } from "framer-motion"
 import MarkdownText from "../components/content/MarkdownText"
 import { Logo, CloseIcon, PinIcon } from "../components/icons"
 import "../style.css"
 import { styles } from "./styles"
 import { textVariants, loadingVariants, iconButtonVariants, popupVariants, tooltipVariants, feedbackButtonVariants } from "./variants"
-
 import { useResizable } from '../hooks/useResizable';
 import LoadingGif from "../assets/loading.gif"
 import { PopupModeSelector } from "../components/content/PopupModeSelector"
@@ -40,21 +40,30 @@ export const config: PlasmoCSConfig = {
   matches: ["<all_urls>"]
 }
 
-// Add this interface near the top of the file
+// Define the Settings interface locally to avoid conflicts
 interface Settings {
-  modelType: "local" | "openai" | "gemini";
-  serverUrl?: string;
-  apiKey?: string;
-  geminiApiKey?: string;
-  maxTokens: number;
-  customization?: {
-    showSelectedText: boolean;
-    theme: "light" | "dark";
-    radicallyFocus: boolean;
-  };
+  modelType: "local" | "openai" | "gemini" | "xai"
+  maxTokens: number
+  serverUrl?: string
+  apiKey?: string
+  geminiApiKey?: string
+  xaiApiKey?: string
+  geminiModel?: string
+  mode?: Mode
+  temperature?: number
+  customPrompt?: string
+  customization: {
+    showSelectedText: boolean
+    theme: "light" | "dark"
+    radicallyFocus: boolean
+    fontSize: "0.8rem" | "0.9rem" | "1rem"
+  }
+  translationSettings?: {
+    fromLanguage: string
+    toLanguage: string
+  }
 }
 
-// Add this type definition at the top with other interfaces
 interface Port extends chrome.runtime.Port {
   postMessage: (message: any) => void;
 }
@@ -105,7 +114,16 @@ function Content() {
   const currentTheme = settings?.customization?.theme || "light";
   const targetLanguage = settings?.translationSettings?.toLanguage || 'en';
   const textDirection = getTextDirection(targetLanguage);
-  const themedStyles = getStyles(currentTheme, textDirection);
+  const fontSize = settings?.customization?.fontSize || "1rem" as "0.8rem" | "0.9rem" | "1rem";
+  const themedStyles = getStyles(currentTheme, textDirection, fontSize);
+
+  // Define motion styles inside the component with specific types
+  const flexMotionStyle = {
+    display: "flex" as const,
+    flexDirection: "column" as const,
+    gap: '12px',
+    width: '100%'
+  } as unknown as MotionStyle;
 
   // Add this near the top with other state declarations
   const [isBlurActive, setIsBlurActive] = useState(false);
@@ -142,37 +160,37 @@ function Content() {
   // Load the mode when component mounts
   useEffect(() => {
     const loadMode = async () => {
-      const savedMode = await storage.get("mode")
+      const savedMode = await storage.get("mode") as Mode | undefined;
       if (savedMode) {
         if (savedMode === "explain" || savedMode === "summarize" || 
             savedMode === "analyze" || savedMode === "translate") {
-          setMode(savedMode)
+          setMode(savedMode);
         }
       }
-    }
-    loadMode()
+    };
+    loadMode();
 
     // Add storage listener to update mode when changed from options
-    const handleStorageChange = async (changes) => {
-      const newMode = await storage.get("mode")
+    const handleStorageChange = async () => {
+      const newMode = await storage.get("mode") as Mode | undefined;
       if (newMode) {
-        if (newMode === "explain" || savedMode === "summarize" || 
-            savedMode === "analyze" || savedMode === "translate") {
-          setMode(newMode)
+        if (newMode === "explain" || newMode === "summarize" || 
+            newMode === "analyze" || newMode === "translate") {
+          setMode(newMode);
         }
       }
-    }
+    };
 
     storage.watch({
       mode: handleStorageChange
-    })
+    });
 
     return () => {
       storage.unwatch({
         mode: handleStorageChange
-      })
-    }
-  }, [])
+      });
+    };
+  }, []);
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -358,7 +376,7 @@ function Content() {
       // keep showing the last result
       if (!text || !/[a-zA-Z0-9]/.test(text)) {
         if (isVisible && lastResult.text) {
-          console.log('📍 Keeping last result visible');
+          console.log('��� Keeping last result visible');
           return;
         }
         setIsVisible(false);
@@ -544,7 +562,7 @@ function Content() {
         : "Please configure the extension in the options page first.";
         
       return (
-        <div style={styles.configurationWarning}>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
           ⚠️ {message}
         </div>
       );
@@ -666,7 +684,7 @@ function Content() {
           throw new Error('Port not connected');
         }
 
-        // console.log('📤 Sending to port:', {
+        // console.log('�� Sending to port:', {
         //   type: "PROCESS_TEXT",
         //   payload: {
         //     text: selectedText,
@@ -912,25 +930,15 @@ function Content() {
   // Update the keyboard shortcut handler
   useEffect(() => {
     const handleKeyDown = async (e: KeyboardEvent) => {
-      // Check if Ctrl+Shift is pressed
       if (e.ctrlKey && e.shiftKey) {
         let newMode: Mode | null = null;
         let translationSettings = undefined;
         let shortcutMessage = '';
         
         switch (e.key.toLowerCase()) {
-          case 'x': // Toggle LightUp
-            const newState = !isEnabled;
-            setIsEnabled(newState);
-            // Save the new state to storage
-            const storage = new Storage();
-            await storage.set("isEnabled", newState);
-            shortcutMessage = `LightUp ${newState ? 'enabled' : 'disabled'} (Ctrl+Shift+X)`;
+          case 'x':
             e.preventDefault();
-            setToast({
-              message: shortcutMessage,
-              visible: true
-            });
+            await handleEnabledChange(!isEnabled);
             return;
           case 'z':
             newMode = 'explain';
@@ -969,7 +977,7 @@ function Content() {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [handleModeChange, isEnabled]); // Add isEnabled to dependencies
+  }, [isEnabled]);
 
   // Add this state for voice availability
   const [voicesLoaded, setVoicesLoaded] = useState(false);
@@ -1116,6 +1124,21 @@ function Content() {
     loadEnabledState();
   }, []);
 
+  const handleEnabledChange = async (newState: boolean) => {
+    setIsEnabled(newState);
+    const storage = new Storage();
+    await storage.set("isEnabled", newState);
+    setToast({
+      message: `LightUp ${newState ? 'enabled' : 'disabled'} (Ctrl+Shift+X)`,
+      visible: true
+    });
+  };
+
+  // Handle toast visibility
+  const handleToastVisibility = (visible: boolean) => {
+    setToast(prev => ({ ...prev, visible }));
+  };
+
   return (
     <>
       {/* Toast notification */}
@@ -1255,12 +1278,7 @@ function Content() {
                 <AnimatePresence mode="wait">
                   {isLoading && !streamingText ? (
                     <motion.div
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '12px',
-                        width: '100%',
-                      }}
+                      style={flexMotionStyle}
                       layout
                     >
                       {/* Skeleton lines */}
@@ -1306,22 +1324,18 @@ function Content() {
                       exit="exit"
                     >
                       <motion.div
-                        style={themedStyles.explanation}
-                        
-                        initial={{  y: 50 }}
-                        animate={{   y: 0 }}
-                        // transition={{ type: 'spring', stiffness: 100, damping: 10, duration: 0.5 }}
-                        // exit={{ opacity: 0, y: 50 }}
+                        style={{
+                          ...themedStyles.explanation,
+                          textAlign: textDirection === "rtl" ? "right" as const : "left" as const
+                        }}
+                        initial={{ y: 50 }}
+                        animate={{ y: 0 }}
                       >
                         <div style={{ marginBottom: '8px' }}>
                           <MarkdownText 
                             text={streamingText} 
                             isStreaming={isLoading}
                             language={targetLanguage}
-                            style={{
-                              opacity: isLoading ? 0.7 : 1,
-                              transition: 'opacity 0.2s'
-                            }}
                           />
                         </div>
 
@@ -1396,7 +1410,10 @@ function Content() {
                               width: '100%'
                             }}
                           >
-                            <div style={themedStyles.followUpQuestion}>
+                            <div style={{
+                              ...themedStyles.followUpQuestion,
+                              textAlign: textDirection === "rtl" ? "right" as const : "left" as const
+                            }}>
                               {question}
                             </div>
                           </motion.div>
@@ -1409,15 +1426,14 @@ function Content() {
                               width: '100%'
                             }}
                           >
-                            <div style={themedStyles.followUpAnswer}>
+                            <div style={{
+                              ...themedStyles.followUpAnswer,
+                              textAlign: textDirection === "rtl" ? "right" as const : "left" as const
+                            }}>
                               <MarkdownText
                                 text={answer}
                                 isStreaming={activeAnswerId === id && !isComplete}
                                 language={targetLanguage}
-                                style={{
-                                  margin: 10,
-                                  opacity: activeAnswerId === id && !isComplete ? 0.7 : 1
-                                }}
                               />
                               
                               {isComplete && (
