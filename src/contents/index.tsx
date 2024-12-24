@@ -22,14 +22,7 @@ const fontImportStyle = document.createElement('style');
 fontImportStyle.textContent = `
   @import url('https://fonts.googleapis.com/css2?family=K2D:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
   
-  [dir="rtl"] {
-    font-family: 'Noto Naskh Arabic', 'K2D', sans-serif;
-  }
-  
-  [dir="ltr"] {
-    font-family: 'K2D', sans-serif;
-  }
-  
+
   ::selection {
     background-color: #FFBF5A !important;
     color: #000000 !important;
@@ -187,7 +180,7 @@ function Content() {
       const savedSettings = await storage.get("settings") as Settings | null;
       const translationSettings = await storage.get("translationSettings");
       
-      console.log('📚 Loaded settings:', { savedSettings, translationSettings });
+      // console.log('📚 Loaded settings:', { savedSettings, translationSettings });
       setSettings(savedSettings);
       
       // Check if settings are properly configured based on model type
@@ -207,14 +200,14 @@ function Content() {
           }
         })();
 
-        console.log('🔧 Configuration validation:', {
-          modelType: savedSettings.modelType,
-          isValid: isConfigValid
-        });
+        // console.log('🔧 Configuration validation:', {
+        //   modelType: savedSettings.modelType,
+        //   isValid: isConfigValid
+        // });
 
         setIsConfigured(isConfigValid);
       } else {
-        console.log('⚠️ No settings found');
+        // console.log('⚠️ No settings found');
         setIsConfigured(false);
       }
     };
@@ -271,22 +264,22 @@ function Content() {
       
       // If we're interacting with the popup, don't do anything
       if (isInteractingWithPopup) {
-        console.log('🚫 Ignoring mouseup - interacting with popup');
+        // console.log('🚫 Ignoring mouseup - interacting with popup');
         return
       }
 
       // If clicking inside popup, just return
       if (popup?.contains(event.target as Node)) {
-        console.log('🚫 Ignoring mouseup - clicked inside popup');
+        // console.log('🚫 Ignoring mouseup - clicked inside popup');
         return
       }
 
       const selection = window.getSelection()
-      console.log('📝 Selected text:', selection?.toString());
+      // console.log('📝 Selected text:', selection?.toString());
       
       // Check if there's an ongoing request
       if (port) {
-        console.log('🛑 Canceling previous request');
+        // console.log('🛑 Canceling previous request');
         port.postMessage({
           type: "STOP_GENERATION",
           connectionId
@@ -307,12 +300,12 @@ function Content() {
         container.appendChild(range.cloneContents())
         
         // Add logging for selection details
-        console.log('🔍 Selection details:', {
-          text: selection.toString(),
-          rangeCount: selection.rangeCount,
-          anchorNode: selection.anchorNode?.textContent,
-          focusNode: selection.focusNode?.textContent
-        });
+        // console.log('🔍 Selection details:', {
+        //   text: selection.toString(),
+        //   rangeCount: selection.rangeCount,
+        //   anchorNode: selection.anchorNode?.textContent,
+        //   focusNode: selection.focusNode?.textContent
+        // });
 
         // Check if the selection or any of its parents has the no-select class
         const hasNoSelectClass = (element: Element | null): boolean => {
@@ -348,18 +341,18 @@ function Content() {
       }
 
       if (checkSelectionForClass()) {
-        console.log('🚫 Selection contains no-select class');
+        // console.log('🚫 Selection contains no-select class');
         return;
       }
 
       if (!isConfigured) {
-        console.log('⚠️ Extension not configured');
+        // console.log('⚠️ Extension not configured');
         setError("Please configure the extension in the options page first.");
         return;
       }
 
       const text = selection?.toString().trim();
-      console.log('������������� Processed text:', text);
+      // console.log(' Processed text:', text);
 
       // If there's no valid text selected but popup is visible,
       // keep showing the last result
@@ -393,16 +386,16 @@ function Content() {
         const storage = new Storage();
         const translationSettings = await storage.get("translationSettings");
 
-        console.log('📤 Sending text to process:', {
-          text,
-          mode,
-          settings: {
-            ...settings,
-            translationSettings
-          },
-          connectionId,
-          id: Date.now()
-        });
+        // console.log('📤 Sending text to process:', {
+        //   text,
+        //   mode,
+        //   settings: {
+        //     ...settings,
+        //     translationSettings
+        //   },
+        //   connectionId,
+        //   id: Date.now()
+        // });
 
         port.postMessage({
           type: "PROCESS_TEXT",
@@ -419,7 +412,7 @@ function Content() {
         });
 
       } catch (err) {
-        console.error('❌ Error processing text:', err);
+        // console.error('❌ Error processing text:', err);
         setError('Failed to process text');
         setIsLoading(false);
       }
@@ -440,14 +433,14 @@ function Content() {
   const handleAskFollowUp = async () => {
     if (!followUpQuestion.trim() || isAskingFollowUp) return;
 
-    console.log('Starting follow-up question:', followUpQuestion);
+    // console.log('Starting follow-up question:', followUpQuestion);
     setIsAskingFollowUp(true);
     const newId = Date.now();
     
     setActiveAnswerId(newId);
     
     setFollowUpQAs(prev => {
-      console.log('Adding new QA with id:', newId);
+      // console.log('Adding new QA with id:', newId);
       return [...prev, { 
         question: followUpQuestion, 
         answer: '', 
@@ -463,15 +456,15 @@ function Content() {
         throw new Error('Port not connected');
       }
 
-      console.log('Sending follow-up request:', {
-        text: followUpQuestion,
-        context: selectedText,
-        mode,
-        settings,
-        isFollowUp: true,
-        id: newId,
-        connectionId
-      });
+      // console.log('Sending follow-up request:', {
+      //   text: followUpQuestion,
+      //   context: selectedText,
+      //   mode,
+      //   settings,
+      //   isFollowUp: true,
+      //   id: newId,
+      //   connectionId
+      // });
 
       port.postMessage({
         type: "PROCESS_TEXT",
@@ -486,7 +479,7 @@ function Content() {
         }
       });
     } catch (error) {
-      console.error('Follow-up error:', error);
+      // console.error('Follow-up error:', error);
       setError('Failed to process follow-up question');
       setFollowUpQAs(prev => prev.filter(qa => qa.id !== newId));
       setActiveAnswerId(null);
@@ -506,7 +499,7 @@ function Content() {
           payload: selectedText
         })
       } catch (error) {
-        console.error("Error sending selected text:", error)
+        // console.error("Error sending selected text:", error)
       }
     }
   })
@@ -632,12 +625,12 @@ function Content() {
   const explanationKey = useMemo(() => `explanation-${explanation}`, [explanation]);
 
   const handleModeChange = async (newMode: Mode, translationSettings?: any) => {
-    console.log('🔄 Mode Change Triggered:', { 
-      newMode, 
-      translationSettings,
-      currentText: selectedText,
-      currentMode: mode 
-    });
+    // console.log('🔄 Mode Change Triggered:', { 
+    //   newMode, 
+    //   translationSettings,
+    //   currentText: selectedText,
+    //   currentMode: mode 
+    // });
 
     // Fix validation for translation mode
     if (newMode === 'translate' && (!translationSettings?.toLanguage || !translationSettings?.fromLanguage)) {
@@ -650,20 +643,20 @@ function Content() {
     await storage.set("mode", newMode)
     
     if (translationSettings) {
-      console.log('📝 Translation Settings:', {
-        ...translationSettings,
-        currentText: selectedText
-      });
+      // console.log('📝 Translation Settings:', {
+      //   ...translationSettings,
+      //   currentText: selectedText
+      // });
       await storage.set("translationSettings", translationSettings)
     }
     
     // Re-process text with new mode
     if (selectedText) {
-      console.log('🎯 Starting text processing with new mode:', {
-        text: selectedText,
-        mode: newMode,
-        settings: translationSettings
-      });
+      // console.log('🎯 Starting text processing with new mode:', {
+      //   text: selectedText,
+      //   mode: newMode,
+      //   settings: translationSettings
+      // });
       
       setIsLoading(true)
       setError(null)
@@ -673,17 +666,17 @@ function Content() {
           throw new Error('Port not connected');
         }
 
-        console.log('📤 Sending to port:', {
-          type: "PROCESS_TEXT",
-          payload: {
-            text: selectedText,
-            mode: newMode,
-            settings: {
-              ...settings,
-              translationSettings
-            }
-          }
-        });
+        // console.log('📤 Sending to port:', {
+        //   type: "PROCESS_TEXT",
+        //   payload: {
+        //     text: selectedText,
+        //     mode: newMode,
+        //     settings: {
+        //       ...settings,
+        //       translationSettings
+        //     }
+        //   }
+        // });
 
         port.postMessage({
           type: "PROCESS_TEXT",
@@ -703,7 +696,7 @@ function Content() {
         setIsLoading(false)
       }
     } else {
-      console.log('������️ No text selected for processing');
+      // console.log(' No text selected for processing');
     }
   }
 
@@ -719,16 +712,16 @@ function Content() {
       isFollowUp?: boolean;
       id?: number;
     }) => {
-      console.log('📨 Port message received:', message);
+      // console.log('📨 Port message received:', message);
       
       switch (message.type) {
         case 'chunk':
           if (message.content) {
-            console.log('📝 Received chunk:', {
-              content: message.content,
-              isFollowUp: message.isFollowUp,
-              id: message.id
-            });
+            // console.log('📝 Received chunk:', {
+            //   content: message.content,
+            //   isFollowUp: message.isFollowUp,
+            //   id: message.id
+            // });
             
             if (message.isFollowUp && message.id) {
               setFollowUpQAs(prev => {
@@ -737,7 +730,7 @@ function Content() {
                     ? { ...qa, answer: qa.answer + message.content }
                     : qa
                 );
-                console.log('Updated QAs:', updatedQAs);
+                // console.log('Updated QAs:', updatedQAs);
                 return updatedQAs;
               });
             } else {
@@ -747,10 +740,10 @@ function Content() {
           break;
 
         case 'done':
-          console.log('✅ Processing completed:', {
-            isFollowUp: message.isFollowUp,
-            id: message.id
-          });
+          // console.log('✅ Processing completed:', {
+          //   isFollowUp: message.isFollowUp,
+          //   id: message.id
+          // });
           
           if (message.isFollowUp && message.id) {
             setFollowUpQAs(prev => {
@@ -760,14 +753,14 @@ function Content() {
                 }
                 return qa;
               });
-              console.log('Marking QA as complete:', updatedQAs);
+              // console.log('Marking QA as complete:', updatedQAs);
               return updatedQAs;
             });
             
             // Reset follow-up states
             setActiveAnswerId(null);
             setIsAskingFollowUp(false);
-            console.log('Reset follow-up states');
+            // console.log('Reset follow-up states');
           } else {
             setIsExplanationComplete(true);
           }
@@ -775,25 +768,25 @@ function Content() {
           break;
 
         case 'error':
-          console.error('❌ Stream error:', message.error);
+          // console.error('❌ Stream error:', message.error);
           setError(message.error || 'An unknown error occurred');
           setIsLoading(false);
           // Also reset follow-up states on error
           setActiveAnswerId(null);
           setIsAskingFollowUp(false);
-          console.log('Reset states due to error');
+          // console.log('Reset states due to error');
           break;
 
         default:
-          console.log('Unhandled message type:', message.type);
+          // console.log('Unhandled message type:', message.type);
       }
     });
 
-    console.log('🔌 Port connected:', connectionId);
+    // console.log('🔌 Port connected:', connectionId);
     setPort(newPort);
 
     return () => {
-      console.log('🔌 Disconnecting port:', connectionId);
+      // console.log('🔌 Disconnecting port:', connectionId);
       newPort.postMessage({
         type: "STOP_GENERATION",
         connectionId
@@ -805,7 +798,7 @@ function Content() {
   // Add this inside the Content component, near other useEffect hooks
   useEffect(() => {
     followUpQAs.forEach(qa => {
-      console.log(`Answer for question "${qa.question}":`, qa.answer);
+      // console.log(`Answer for question "${qa.question}":`, qa.answer);
     });
   }, [followUpQAs]);
 
@@ -821,10 +814,10 @@ function Content() {
   }, [streamingText, isLoading, selectedText]);
 
   const handleStreamResponse = (msg: any) => {
-    console.log('Received message in UI:', msg);
+    // console.log('Received message in UI:', msg);
 
     if (msg.type === 'error') {
-      console.error('Stream error:', msg.error);
+      // console.error('Stream error:', msg.error);
       setError(msg.error);
       setIsLoading(false);
       return;
@@ -832,19 +825,19 @@ function Content() {
 
     if (msg.type === 'chunk') {
       if (msg.content) {
-        console.log('Adding chunk to UI:', msg.content);
+        // console.log('Adding chunk to UI:', msg.content);
         setStreamingText(prev => {
           const newText = prev + msg.content;
-          console.log('New streaming text:', newText);
+          // console.log('New streaming text:', newText);
           return newText;
         });
       } else {
-        console.warn('Received chunk with no content:', msg);
+        // console.warn('Received chunk with no content:', msg);
       }
     }
 
     if (msg.type === 'done') {
-      console.log('Stream completed');
+      // console.log('Stream completed');
       setIsLoading(false);
     }
   };
@@ -963,7 +956,7 @@ function Content() {
 
         if (newMode) {
           e.preventDefault();
-          console.log('🎮 Keyboard shortcut triggered:', newMode, translationSettings);
+          // console.log('🎮 Keyboard shortcut triggered:', newMode, translationSettings);
           await handleModeChange(newMode, translationSettings);
           // Show toast notification
           setToast({
@@ -986,14 +979,14 @@ function Content() {
     try {
       // Toggle speaking state immediately for better UI feedback
       if (speakingId === id) {
-        console.log('Stopping speech');
+        // console.log('Stopping speech');
         window.speechSynthesis.cancel();
         setSpeakingId(null);
         return;
       }
 
       setSpeakingId(id);
-      console.log('Starting speech for:', id);
+      // console.log('Starting speech for:', id);
 
       // Stop any current speech
       window.speechSynthesis.cancel();
@@ -1003,7 +996,7 @@ function Content() {
       
       // If no voices available, try to load them
       if (voices.length === 0) {
-        console.log('No voices available, waiting for voices to load...');
+        // console.log('No voices available, waiting for voices to load...');
         voices = await new Promise((resolve) => {
           const checkVoices = () => {
             const availableVoices = window.speechSynthesis.getVoices();
@@ -1017,7 +1010,7 @@ function Content() {
         });
       }
 
-      console.log('Available voices:', voices.length);
+      // console.log('Available voices:', voices.length);
 
       // Select the best voice
       const preferredVoice = voices.find(voice => 
@@ -1032,7 +1025,7 @@ function Content() {
         throw new Error('No voice available');
       }
 
-      console.log('Selected voice:', preferredVoice.name);
+      // console.log('Selected voice:', preferredVoice.name);
 
       // Clean the text
       const cleanText = stripHtml(text)
@@ -1050,22 +1043,22 @@ function Content() {
 
       // Handle events
       utterance.onstart = () => {
-        console.log('Speech started');
+        // console.log('Speech started');
         setSpeakingId(id);
       };
 
       utterance.onend = () => {
-        console.log('Speech ended');
+        // console.log('Speech ended');
         setSpeakingId(null);
       };
 
       utterance.onerror = (event) => {
-        console.error('Speech error:', event);
+        // console.error('Speech error:', event);
         setSpeakingId(null);
       };
 
       // Start speaking
-      console.log('Speaking text:', cleanText);
+      // console.log('Speaking text:', cleanText);
       window.speechSynthesis.speak(utterance);
 
       // Chrome bug workaround
@@ -1077,7 +1070,7 @@ function Content() {
       }, 0);
 
     } catch (error) {
-      console.error('Speech error:', error);
+      // console.error('Speech error:', error);
       setSpeakingId(null);
       window.speechSynthesis.cancel();
     }
@@ -1088,7 +1081,7 @@ function Content() {
     const loadVoices = () => {
       const voices = window.speechSynthesis.getVoices();
       if (voices.length > 0) {
-        console.log('Voices loaded:', voices.length);
+        // console.log('Voices loaded:', voices.length);
         setVoicesLoaded(true);
       }
     };
@@ -1425,7 +1418,6 @@ function Content() {
                                   margin: 10,
                                   opacity: activeAnswerId === id && !isComplete ? 0.7 : 1
                                 }}
-                                onMount={() => console.log('Follow-up Answer:', answer)}
                               />
                               
                               {isComplete && (
