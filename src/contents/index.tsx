@@ -1266,12 +1266,10 @@ function Content() {
                 variants={{
                   initial: {
                     opacity: 0,
-                    filter: "blur(30px)",
                     scale: 0.1,
-                    transition: { duration: 0.4,  type: "spring", },
+                    transition: { duration: 0.4, type: "spring" },
                   },
                   animate: {
-                    filter: "blur(0px)",
                     opacity: 1,
                     scale: 1,
                     transition: {
@@ -1283,7 +1281,6 @@ function Content() {
                   exit: {
                     scale: 0.5,
                     opacity: 0,
-                    filter: "blur(30px)",
                     transition: {
                       type: "spring",
                       duration: 0.4,
