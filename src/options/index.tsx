@@ -142,22 +142,28 @@ function IndexOptions() {
 
   // Add error state
   const [error, setError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
   // Load settings
   useEffect(() => {
     const loadSettings = async () => {
-      const savedSettings = await storage.get("settings") as Settings | undefined;
-      if (savedSettings) {
-        setSettings({
-          ...savedSettings,
-          customization: {
-            showSelectedText: savedSettings.customization?.showSelectedText ?? true,
-            theme: savedSettings.customization?.theme ?? "light",
-            radicallyFocus: savedSettings.customization?.radicallyFocus ?? false,
-            fontSize: savedSettings.customization?.fontSize ?? "1rem",
-            highlightColor: savedSettings.customization?.highlightColor ?? "default"
-          }
-        });
+      try {
+        const savedSettings = await storage.get("settings") as Settings | undefined;
+        if (savedSettings) {
+          setSettings({
+            ...savedSettings,
+            customization: {
+              showSelectedText: savedSettings.customization?.showSelectedText ?? true,
+              theme: savedSettings.customization?.theme ?? "light",
+              radicallyFocus: savedSettings.customization?.radicallyFocus ?? false,
+              fontSize: savedSettings.customization?.fontSize ?? "1rem",
+              highlightColor: savedSettings.customization?.highlightColor ?? "default"
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Error loading settings:", err);
+        setError("Failed to load settings");
       }
     };
     loadSettings();
@@ -166,6 +172,7 @@ function IndexOptions() {
   // Add validation before saving
   const handleSave = async () => {
     try {
+      setIsSaving(true);
       // Validate settings
       if (settings.modelType === "local") {
         if (!settings.serverUrl) {
@@ -191,8 +198,6 @@ function IndexOptions() {
         if (!settings.xaiApiKey?.trim()) {
           throw new Error("API key is required for xAI");
         }
-        // Log successful validation
-        console.log('xAI configuration validated successfully');
       }
       
       // Ensure customization settings are included
@@ -200,14 +205,16 @@ function IndexOptions() {
         ...settings,
         customization: {
           ...settings.customization,
-          showSelectedText: settings.customization?.showSelectedText ?? true
+          showSelectedText: settings.customization?.showSelectedText ?? true,
+          theme: settings.customization?.theme ?? "light",
+          radicallyFocus: settings.customization?.radicallyFocus ?? false,
+          fontSize: settings.customization?.fontSize ?? "1rem",
+          highlightColor: settings.customization?.highlightColor ?? "default"
         }
       };
 
-      // Save settings with await and proper error handling
-      await storage.set("settings", settingsToSave).catch(err => {
-        throw new Error(`Storage error: ${err.message}`);
-      });
+      // Save settings
+      await storage.set("settings", settingsToSave);
       
       console.log('Settings saved:', {
         ...settingsToSave,
@@ -222,6 +229,8 @@ function IndexOptions() {
       console.error("Save error:", error);
       setError(error.message || "Failed to save settings");
       alert(error.message || "Failed to save settings");
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -256,6 +265,53 @@ function IndexOptions() {
     { value: 'purple', label: 'Purple', color: 'bg-[#C4B5FD]' },
     { value: 'pink', label: 'Pink', color: 'bg-[#FDA4AF]' }
   ];
+
+  // Add a new function to handle immediate settings updates
+  const handleImmediateSettingUpdate = async (
+    key: keyof Settings['customization'],
+    value: any
+  ) => {
+    try {
+      const newSettings = {
+        ...settings,
+        customization: {
+          ...settings.customization,
+          [key]: value
+        }
+      };
+      
+      setSettings(newSettings);
+      await storage.set("settings", newSettings);
+      
+      // Show a subtle success message
+      const event = new CustomEvent('settingUpdated', { 
+        detail: { message: `${key} updated successfully` } 
+      });
+      window.dispatchEvent(event);
+    } catch (err) {
+      console.error(`Error updating ${key}:`, err);
+      setError(`Failed to update ${key}`);
+    }
+  };
+
+  // Add event listener for success messages
+  useEffect(() => {
+    const handleSettingUpdated = (event: CustomEvent) => {
+      const toast = document.getElementById('toast');
+      if (toast) {
+        toast.textContent = event.detail.message;
+        toast.style.opacity = '1';
+        setTimeout(() => {
+          toast.style.opacity = '0';
+        }, 2000);
+      }
+    };
+
+    window.addEventListener('settingUpdated', handleSettingUpdated as EventListener);
+    return () => {
+      window.removeEventListener('settingUpdated', handleSettingUpdated as EventListener);
+    };
+  }, []);
 
   return (
     <div className="p-5 max-w-[600px] mx-auto font-k2d bg-white text-gray-800 min-h-screen rounded-lg shadow-sm">
@@ -409,144 +465,145 @@ function IndexOptions() {
 
       {/* Customization Section - Moved to bottom */}
       <div className="mt-8 mb-5">
-        <h2 className="text-xl font-semibold mb-4">Customization</h2>
-        
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <label className="font-k2d">Highlight Color</label>
-              <p className="text-xs text-gray-500">Color of selected text</p>
-            </div>
-            <div className="flex items-center gap-3">
-              <select
-                value={settings.customization?.highlightColor ?? "default"}
-                onChange={(e) => {
-                  setSettings(prev => ({
-                    ...prev,
-                    customization: {
-                      ...prev.customization,
-                      highlightColor: e.target.value as Settings['customization']['highlightColor']
-                    }
-                  }));
-                }}
-                className="p-2 pr-12 rounded border border-gray-200 bg-white text-gray-800 font-k2d appearance-none"
-                style={{ 
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23666'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'right 8px center',
-                  backgroundSize: '16px'
-                }}
-              >
-                {colorOptions.map(option => (
-                  <option 
-                    key={option.value} 
-                    value={option.value}
-                    className="flex items-center gap-2 py-2"
-                  >
-                    {option.label}
-                  </option>
-                ))}
-              </select>
-              <div className="flex items-center gap-2 min-w-[24px]">
-                <div 
-                  className={`w-6 h-6 rounded-full border border-gray-300 transition-all duration-200 ${
-                    colorOptions.find(opt => opt.value === settings.customization?.highlightColor)?.color
-                  }`}
-                ></div>
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="p-6 border-b border-gray-100">
+            <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+              </svg>
+              Customization
+            </h2>
+          </div>
+
+          <div className="p-6 space-y-6">
+            {/* Show Selected Text */}
+            <div className="flex items-center justify-between py-2">
+              <div className="flex-1">
+                <label className="font-medium text-gray-900 flex items-center gap-2">
+                  Show Selected Text
+                </label>
+              </div>
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  id="show-selected-text"
+                  checked={settings.customization?.showSelectedText ?? true}
+                  onChange={(e) => handleImmediateSettingUpdate('showSelectedText', e.target.checked)}
+                  className="toggle-checkbox"
+                />
+                <label htmlFor="show-selected-text" className="toggle-label"></label>
               </div>
             </div>
-          </div>
 
-          <div className="flex items-center justify-between">
-            <label className="font-k2d">Show Selected Text</label>
-            <input
-              type="checkbox"
-              checked={settings.customization?.showSelectedText ?? true}
-              onChange={(e) => {
-                setSettings(prev => ({
-                  ...prev,
-                  customization: {
-                    ...prev.customization,
-                    showSelectedText: e.target.checked
-                  }
-                }));
-              }}
-              className="w-4 h-4 text-[#10a37f] rounded focus:ring-[#10a37f] focus:ring-offset-0"
-            />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <label className="font-k2d">Theme</label>
-            <select
-              value={settings.customization?.theme ?? "light"}
-              onChange={(e) => {
-                setSettings(prev => ({
-                  ...prev,
-                  customization: {
-                    ...prev.customization,
-                    theme: e.target.value as "light" | "dark"
-                  }
-                }));
-              }}
-              className="p-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
-            >
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div>
-              <label className="font-k2d">Radical Focus Mode</label>
-              <p className="text-xs text-gray-500">Blur background when viewing results</p>
+            {/* Radical Focus Mode */}
+            <div className="flex items-center justify-between py-2">
+              <div className="flex-1">
+                <label className="font-medium text-gray-900">Radical Focus Mode</label>
+                <p className="text-sm text-gray-500">Blur background when viewing results</p>
+              </div>
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  id="radical-focus"
+                  checked={settings.customization?.radicallyFocus ?? false}
+                  onChange={(e) => handleImmediateSettingUpdate('radicallyFocus', e.target.checked)}
+                  className="toggle-checkbox"
+                />
+                <label htmlFor="radical-focus" className="toggle-label"></label>
+              </div>
             </div>
-            <input
-              type="checkbox"
-              checked={settings.customization?.radicallyFocus ?? false}
-              onChange={(e) => {
-                setSettings(prev => ({
-                  ...prev,
-                  customization: {
-                    ...prev.customization,
-                    radicallyFocus: e.target.checked
-                  }
-                }));
-              }}
-              className="w-4 h-4 text-[#10a37f] rounded focus:ring-[#10a37f] focus:ring-offset-0"
-            />
-          </div>
 
-          <div className="flex items-center justify-between">
-            <label className="font-k2d">Font Size</label>
-            <select
-              value={settings.customization?.fontSize ?? "1rem"}
-              onChange={(e) => {
-                setSettings(prev => ({
-                  ...prev,
-                  customization: {
-                    ...prev.customization,
-                    fontSize: e.target.value as "0.8rem" | "0.9rem" | "1rem"
-                  }
-                }));
-              }}
-              className="p-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
-            >
-              <option value="0.8rem">Small (0.8rem)</option>
-              <option value="0.9rem">Medium (0.9rem)</option>
-              <option value="1rem">Large (1rem)</option>
-            </select>
+            {/* Theme Selector */}
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <label className="font-medium text-gray-900 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                  </svg>
+                  Theme
+                </label>
+              </div>
+              <select
+                value={settings.customization?.theme ?? "light"}
+                onChange={(e) => handleImmediateSettingUpdate('theme', e.target.value)}
+                className="form-select rounded-lg border-gray-200 bg-white text-gray-800 font-medium px-4 py-2 pr-10 hover:border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-colors duration-200"
+              >
+                <option value="light">Light</option>
+                <option value="dark">Dark</option>
+              </select>
+            </div>
+
+            {/* Font Size Selector */}
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <label className="font-medium text-gray-900 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                  </svg>
+                  Font Size
+                </label>
+              </div>
+              <select
+                value={settings.customization?.fontSize ?? "1rem"}
+                onChange={(e) => handleImmediateSettingUpdate('fontSize', e.target.value)}
+                className="form-select rounded-lg border-gray-200 bg-white text-gray-800 font-medium px-4 py-2 pr-10 hover:border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-colors duration-200"
+              >
+                <option value="0.8rem">Small (0.8rem)</option>
+                <option value="0.9rem">Medium (0.9rem)</option>
+                <option value="1rem">Large (1rem)</option>
+              </select>
+            </div>
+
+            {/* Highlight Color Selector */}
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <label className="font-medium text-gray-900 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clipRule="evenodd" />
+                  </svg>
+                  Highlight Color
+                </label>
+                <p className="text-sm text-gray-500">Color of selected text</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <select
+                  value={settings.customization?.highlightColor ?? "default"}
+                  onChange={(e) => handleImmediateSettingUpdate('highlightColor', e.target.value)}
+                  className="form-select rounded-lg border-gray-200 bg-white text-gray-800 font-medium px-4 py-2 pr-10 hover:border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-colors duration-200"
+                >
+                  {colorOptions.map(option => (
+                    <option key={option.value} value={option.value} className="flex items-center gap-2 py-2">
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+                <div className={`w-6 h-6 rounded-full border border-gray-200 transition-all duration-200 ${
+                  colorOptions.find(opt => opt.value === settings.customization?.highlightColor)?.color
+                }`}></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       <button
         onClick={handleSave}
-        className="mt-6 px-4 py-2 bg-[#10a37f] text-white border-none rounded-[7px] cursor-pointer font-medium transition-colors duration-200 font-k2d hover:bg-[#0d8c6d] w-full"
+        disabled={isSaving}
+        className={`mt-6 px-4 py-2 bg-[#10a37f] text-white border-none rounded-[7px] cursor-pointer font-medium transition-colors duration-200 font-k2d hover:bg-[#0d8c6d] w-full disabled:opacity-50 disabled:cursor-not-allowed`}
       >
-        Save Settings
+        {isSaving ? 'Saving...' : 'Save Settings'}
       </button>
 
+      {error && (
+        <div className="mt-4 text-red-500 text-sm animate-shake">
+          {error}
+        </div>
+      )}
+
       <CryptoSupportPopup isOpen={isPopupOpen} onClose={handleClosePopup} />
+
+      <div id="toast" className="fixed bottom-4 right-4 bg-[#10a37f] text-white px-4 py-2 rounded-lg opacity-0 transition-opacity duration-300 shadow-lg"></div>
     </div>
   );
 }

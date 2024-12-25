@@ -13,9 +13,106 @@ body {
   font-family: 'K2D', sans-serif;
 }
 
-
-
 /* Add smooth scrolling to the page */
 html {
   scroll-behavior: smooth;
+}
+
+/* Toggle Switch Styles */
+.toggle-checkbox {
+  position: absolute;
+  left: 0;
+  top: 0;
+  outline: none;
+  appearance: none;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  z-index: 1;
+  border: none;
+}
+
+.toggle-label {
+  position: relative;
+  display: block;
+  width: 48px;
+  height: 24px;
+  background-color: #e5e7eb;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-label:after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: white;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #10a37f;
+}
+
+.toggle-checkbox:checked + .toggle-label:after {
+  transform: translateX(24px);
+}
+
+.toggle-checkbox:focus + .toggle-label {
+  box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.2);
+}
+
+.toggle-checkbox:disabled + .toggle-label {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Form Select Styles */
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+/* Button Hover Effects */
+button:not(:disabled):hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+button:not(:disabled):active {
+  transform: translateY(0);
+}
+
+/* Transition Effects */
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+/* Focus Styles */
+input:focus, select:focus {
+  outline: none;
+  border-color: #10a37f;
+  box-shadow: 0 0 0 3px rgba(16, 163, 127, 0.1);
+}
+
+/* Error Message Styles */
+.text-red-500 {
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
 } 
