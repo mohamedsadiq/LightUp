@@ -950,13 +950,59 @@ function Content() {
               toLanguage: 'es'
             };
             break;
+          case 'r':
+            e.preventDefault();
+            // Toggle radically focus mode
+            const newRadicallyFocus = !settings?.customization?.radicallyFocus;
+            const storage = new Storage();
+            await storage.set("settings", {
+              ...settings,
+              customization: {
+                ...settings?.customization,
+                radicallyFocus: newRadicallyFocus
+              }
+            });
+            setSettings(prev => ({
+              ...prev!,
+              customization: {
+                ...prev!.customization,
+                radicallyFocus: newRadicallyFocus
+              }
+            }));
+            setToast({
+              message: `Radically Focus Mode ${newRadicallyFocus ? 'enabled' : 'disabled'} (Ctrl+Shift+R)`,
+              visible: true
+            });
+            return;
+          case 'd':
+            e.preventDefault();
+            // Toggle dark/light theme
+            const newTheme = settings?.customization?.theme === 'dark' ? 'light' : 'dark';
+            const themeStorage = new Storage();
+            await themeStorage.set("settings", {
+              ...settings,
+              customization: {
+                ...settings?.customization,
+                theme: newTheme
+              }
+            });
+            setSettings(prev => ({
+              ...prev!,
+              customization: {
+                ...prev!.customization,
+                theme: newTheme
+              }
+            }));
+            setToast({
+              message: `${newTheme.charAt(0).toUpperCase() + newTheme.slice(1)} theme activated (Ctrl+Shift+D)`,
+              visible: true
+            });
+            return;
         }
 
         if (newMode) {
           e.preventDefault();
-          // console.log('🎮 Keyboard shortcut triggered:', newMode, translationSettings);
           await handleModeChange(newMode, translationSettings);
-          // Show toast notification
           setToast({
             message: shortcutMessage,
             visible: true
@@ -967,7 +1013,7 @@ function Content() {
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isEnabled]);
+  }, [isEnabled, settings]);
 
   // Add this state for voice availability
   const [voicesLoaded, setVoicesLoaded] = useState(false);
@@ -1218,10 +1264,18 @@ function Content() {
               gap: '8px'
             }}
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-            </svg>
-            {toast.message}
+            <div
+              style={{
+                width: '8px',
+                height: '8px',
+                borderRadius: '50%',
+                backgroundColor: isEnabled ? '#10B981' : '#EF4444',
+                marginRight: '4px'
+              }}
+            />
+            <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              {toast.message}
+            </span>
           </motion.div>
         )}
       </AnimatePresence>
