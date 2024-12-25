@@ -88,7 +88,7 @@ function Content() {
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [isFollowUpResultVisible, setIsFollowUpResultVisible] = useState(false);
   const { width, height, handleResizeStart } = useResizable({
-    initialWidth: 300,
+    initialWidth: 340,
     initialHeight: 400
   });
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -228,7 +228,7 @@ function Content() {
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
     const popupHeight = 400; // Maximum height of our popup
-    const popupWidth = 300;  // Width of our popup
+    const popupWidth = 340;  // Width of our popup
 
     // Calculate available space below and to the right
     const spaceBelow = viewportHeight - clientY;

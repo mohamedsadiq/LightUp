@@ -2,7 +2,7 @@ import { THEME_COLORS } from "~utils/constants";
 
 export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" = "ltr", fontSize: "0.8rem" | "0.9rem" | "1rem" = "1rem") => ({
   popup: {
-    width: "300px",
+    width: "340px",
     height: "auto",
     padding: 20,
     background: THEME_COLORS[theme].background,
