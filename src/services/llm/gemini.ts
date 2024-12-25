@@ -4,6 +4,19 @@ import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
 export const processGeminiText = async function*(request: ProcessTextRequest) {
   const { text, mode, settings } = request
   
+  const getUserPrompt = () => {
+    if (mode === "translate") {
+      const translateFn = USER_PROMPTS.translate as (fromLang: string, toLang: string) => string
+      return translateFn(
+        settings.translationSettings?.fromLanguage || "en",
+        settings.translationSettings?.toLanguage || "es"
+      ) + "\n" + text
+    }
+    
+    const prompt = USER_PROMPTS[mode]
+    return typeof prompt === "function" ? prompt(text) : prompt + "\n" + text
+  }
+  
   try {
     const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:streamGenerateContent', {
       method: 'POST',
@@ -12,17 +25,20 @@ export const processGeminiText = async function*(request: ProcessTextRequest) {
         'x-goog-api-key': settings.geminiApiKey || ''
       },
       body: JSON.stringify({
-        contents: [{
-          role: "user",
-          parts: [{
-            text: mode === "translate"
-              ? USER_PROMPTS.translate(
-                  settings.translationSettings?.fromLanguage || "en",
-                  settings.translationSettings?.toLanguage || "es"
-                ) + "\n" + text
-              : USER_PROMPTS[mode] + "\n" + text
-          }]
-        }],
+        contents: [
+          {
+            role: "user",
+            parts: [{
+              text: SYSTEM_PROMPTS[mode]
+            }]
+          },
+          {
+            role: "user",
+            parts: [{
+              text: getUserPrompt()
+            }]
+          }
+        ],
         generationConfig: {
           temperature: 0.5,
           maxOutputTokens: settings.maxTokens || 2048,

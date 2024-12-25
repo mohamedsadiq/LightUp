@@ -13,9 +13,7 @@ export const SYSTEM_PROMPTS = {
   summarize: "You are a helpful assistant that summarizes text in a clear and concise way.",
   analyze: "You are a helpful assistant that analyzes text in detail.",
   translate: "You are a professional translator. Translate the text accurately while maintaining its original meaning and tone.",
-  critique: `You are a thoughtful critic and analyst. Your role is to provide a balanced, 
-  well-reasoned critique of the given text, examining different perspectives and potential 
-  counterarguments. Consider both strengths and weaknesses, and explore alternative viewpoints.`
+  
 } as const;
 
 export const USER_PROMPTS: Record<string, string | ((text: string, context?: string) => string)> = {
