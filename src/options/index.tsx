@@ -132,7 +132,8 @@ function IndexOptions() {
       showSelectedText: true,
       theme: "light",
       radicallyFocus: false,
-      fontSize: "1rem"
+      fontSize: "1rem",
+      highlightColor: "default"
     }
   });
 
@@ -150,7 +151,8 @@ function IndexOptions() {
             showSelectedText: savedSettings.customization?.showSelectedText ?? true,
             theme: savedSettings.customization?.theme ?? "light",
             radicallyFocus: savedSettings.customization?.radicallyFocus ?? false,
-            fontSize: savedSettings.customization?.fontSize ?? "1rem"
+            fontSize: savedSettings.customization?.fontSize ?? "1rem",
+            highlightColor: savedSettings.customization?.highlightColor ?? "default"
           }
         });
       }
@@ -243,6 +245,15 @@ function IndexOptions() {
     setIsPopupOpen(false);
   };
 
+  const colorOptions = [
+    { value: 'default', label: 'Default (System)', color: 'bg-gray-200' },
+    { value: 'orange', label: 'Orange', color: 'bg-[#FFBF5A]' },
+    { value: 'blue', label: 'Blue', color: 'bg-[#93C5FD]' },
+    { value: 'green', label: 'Green', color: 'bg-[#86EFAC]' },
+    { value: 'purple', label: 'Purple', color: 'bg-[#C4B5FD]' },
+    { value: 'pink', label: 'Pink', color: 'bg-[#FDA4AF]' }
+  ];
+
   return (
     <div className="p-5 max-w-[600px] mx-auto font-k2d bg-white text-gray-800 min-h-screen rounded-lg shadow-sm">
       <div className="flex items-center justify-between mb-6">
@@ -259,8 +270,11 @@ function IndexOptions() {
           Support LightUp
         </button>
       </div>
-      
+
+      {/* Configuration Section */}
       <div className="mb-5">
+        <h2 className="text-xl font-semibold mb-4">Configuration</h2>
+        
         <label className="block mb-2 text-gray-800 font-k2d font-medium">
           Model Type:
         </label>
@@ -370,116 +384,9 @@ function IndexOptions() {
         />
       </div>
 
-      {/* Customization Section */}
-      <div className="mt-6">
-        <h2 className="text-xl font-semibold mb-4">Customization</h2>
-        
-        <div className="space-y-4">
-          {/* Show Selected Text Toggle */}
-          <div className="flex items-center justify-between">
-            <label className="font-k2d">Show Selected Text</label>
-            <input
-              type="checkbox"
-              checked={settings.customization?.showSelectedText ?? true}
-              onChange={(e) => {
-                setSettings(prev => ({
-                  ...prev,
-                  customization: {
-                    showSelectedText: e.target.checked,
-                    theme: prev.customization?.theme ?? "light",
-                    radicallyFocus: prev.customization?.radicallyFocus ?? false,
-                    fontSize: prev.customization?.fontSize ?? "1rem"
-                  }
-                }));
-              }}
-              className="w-4 h-4 text-[#10a37f] rounded focus:ring-[#10a37f] focus:ring-offset-0"
-            />
-          </div>
-
-          {/* Theme Toggle */}
-          <div className="flex items-center justify-between">
-            <label className="font-k2d">Theme</label>
-            <select
-              value={settings.customization?.theme ?? "light"}
-              onChange={(e) => {
-                setSettings(prev => ({
-                  ...prev,
-                  customization: {
-                    showSelectedText: prev.customization?.showSelectedText ?? true,
-                    theme: e.target.value as "light" | "dark",
-                    radicallyFocus: prev.customization?.radicallyFocus ?? false,
-                    fontSize: prev.customization?.fontSize ?? "1rem"
-                  }
-                }));
-              }}
-              className="p-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
-            >
-              <option value="light">Light</option>
-              <option value="dark">Dark</option>
-            </select>
-          </div>
-
-          {/* Radical Focus Toggle */}
-          <div className="flex items-center justify-between">
-            <div>
-              <label className="font-k2d">Radical Focus Mode</label>
-              <p className="text-xs text-gray-500">Blur background when viewing results</p>
-            </div>
-            <input
-              type="checkbox"
-              checked={settings.customization?.radicallyFocus ?? false}
-              onChange={(e) => {
-                setSettings(prev => ({
-                  ...prev,
-                  customization: {
-                    showSelectedText: prev.customization?.showSelectedText ?? true,
-                    theme: prev.customization?.theme ?? "light",
-                    radicallyFocus: e.target.checked,
-                    fontSize: prev.customization?.fontSize ?? "1rem"
-                  }
-                }));
-              }}
-              className="w-4 h-4 text-[#10a37f] rounded focus:ring-[#10a37f] focus:ring-offset-0"
-            />
-          </div>
-
-          {/* Font Size Selector */}
-          <div className="flex items-center justify-between">
-            <label className="font-k2d">Font Size</label>
-            <select
-              value={settings.customization?.fontSize ?? "1rem"}
-              onChange={(e) => {
-                setSettings(prev => ({
-                  ...prev,
-                  customization: {
-                    showSelectedText: prev.customization?.showSelectedText ?? true,
-                    theme: prev.customization?.theme ?? "light",
-                    radicallyFocus: prev.customization?.radicallyFocus ?? false,
-                    fontSize: e.target.value as "0.8rem" | "0.9rem" | "1rem"
-                  }
-                }));
-              }}
-              className="p-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
-            >
-              <option value="0.8rem">Small (0.8rem)</option>
-              <option value="0.9rem">Medium (0.9rem)</option>
-              <option value="1rem">Large (1rem)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Save Button */}
-      <button
-        onClick={handleSave}
-        className="mt-6 px-4 py-2 bg-[#10a37f] text-white border-none rounded-[7px] cursor-pointer font-medium transition-colors duration-200 font-k2d hover:bg-[#0d8c6d] w-full"
-      >
-        Save Settings
-      </button>
-
       {/* Local LLM Instructions */}
       {settings.modelType === "local" && (
-        <div className="mt-5 bg-gray-50 p-4 rounded-lg border border-gray-200 font-k2d">
+        <div className="mt-5 mb-5 bg-gray-50 p-4 rounded-lg border border-gray-200 font-k2d">
           <h2 className="text-lg mb-3 font-k2d font-semibold">
             How to find your Llama server URL:
           </h2>
@@ -496,6 +403,145 @@ function IndexOptions() {
           </ol>
         </div>
       )}
+
+      {/* Customization Section - Moved to bottom */}
+      <div className="mt-8 mb-5">
+        <h2 className="text-xl font-semibold mb-4">Customization</h2>
+        
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <label className="font-k2d">Highlight Color</label>
+              <p className="text-xs text-gray-500">Color of selected text</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <select
+                value={settings.customization?.highlightColor ?? "default"}
+                onChange={(e) => {
+                  setSettings(prev => ({
+                    ...prev,
+                    customization: {
+                      ...prev.customization,
+                      highlightColor: e.target.value as Settings['customization']['highlightColor']
+                    }
+                  }));
+                }}
+                className="p-2 pr-12 rounded border border-gray-200 bg-white text-gray-800 font-k2d appearance-none"
+                style={{ 
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23666'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E")`,
+                  backgroundRepeat: 'no-repeat',
+                  backgroundPosition: 'right 8px center',
+                  backgroundSize: '16px'
+                }}
+              >
+                {colorOptions.map(option => (
+                  <option 
+                    key={option.value} 
+                    value={option.value}
+                    className="flex items-center gap-2 py-2"
+                  >
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+              <div className="flex items-center gap-2 min-w-[24px]">
+                <div 
+                  className={`w-6 h-6 rounded-full border border-gray-300 transition-all duration-200 ${
+                    colorOptions.find(opt => opt.value === settings.customization?.highlightColor)?.color
+                  }`}
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <label className="font-k2d">Show Selected Text</label>
+            <input
+              type="checkbox"
+              checked={settings.customization?.showSelectedText ?? true}
+              onChange={(e) => {
+                setSettings(prev => ({
+                  ...prev,
+                  customization: {
+                    ...prev.customization,
+                    showSelectedText: e.target.checked
+                  }
+                }));
+              }}
+              className="w-4 h-4 text-[#10a37f] rounded focus:ring-[#10a37f] focus:ring-offset-0"
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <label className="font-k2d">Theme</label>
+            <select
+              value={settings.customization?.theme ?? "light"}
+              onChange={(e) => {
+                setSettings(prev => ({
+                  ...prev,
+                  customization: {
+                    ...prev.customization,
+                    theme: e.target.value as "light" | "dark"
+                  }
+                }));
+              }}
+              className="p-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
+            >
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div>
+              <label className="font-k2d">Radical Focus Mode</label>
+              <p className="text-xs text-gray-500">Blur background when viewing results</p>
+            </div>
+            <input
+              type="checkbox"
+              checked={settings.customization?.radicallyFocus ?? false}
+              onChange={(e) => {
+                setSettings(prev => ({
+                  ...prev,
+                  customization: {
+                    ...prev.customization,
+                    radicallyFocus: e.target.checked
+                  }
+                }));
+              }}
+              className="w-4 h-4 text-[#10a37f] rounded focus:ring-[#10a37f] focus:ring-offset-0"
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <label className="font-k2d">Font Size</label>
+            <select
+              value={settings.customization?.fontSize ?? "1rem"}
+              onChange={(e) => {
+                setSettings(prev => ({
+                  ...prev,
+                  customization: {
+                    ...prev.customization,
+                    fontSize: e.target.value as "0.8rem" | "0.9rem" | "1rem"
+                  }
+                }));
+              }}
+              className="p-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
+            >
+              <option value="0.8rem">Small (0.8rem)</option>
+              <option value="0.9rem">Medium (0.9rem)</option>
+              <option value="1rem">Large (1rem)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <button
+        onClick={handleSave}
+        className="mt-6 px-4 py-2 bg-[#10a37f] text-white border-none rounded-[7px] cursor-pointer font-medium transition-colors duration-200 font-k2d hover:bg-[#0d8c6d] w-full"
+      >
+        Save Settings
+      </button>
 
       <CryptoSupportPopup isOpen={isPopupOpen} onClose={handleClosePopup} />
     </div>

@@ -29,6 +29,7 @@ export interface Settings {
     theme: "light" | "dark"
     radicallyFocus: boolean
     fontSize: "0.8rem" | "0.9rem" | "1rem"
+    highlightColor: "default" | "orange" | "blue" | "green" | "purple" | "pink"
   }
   translationSettings?: {
     fromLanguage: string

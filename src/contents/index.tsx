@@ -46,6 +46,7 @@ interface Settings {
     theme: "light" | "dark"
     radicallyFocus: boolean
     fontSize: "0.8rem" | "0.9rem" | "1rem"
+    highlightColor?: string
   }
   translationSettings?: {
     fromLanguage: string
@@ -1128,23 +1129,47 @@ function Content() {
     setToast(prev => ({ ...prev, visible }));
   };
 
-  // Add effect to update selection color based on enabled state
+  // Add color mapping
+  const highlightColors = {
+    default: '',
+    orange: '#FFBF5A',
+    blue: '#93C5FD',
+    green: '#86EFAC',
+    purple: '#C4B5FD',
+    pink: '#FDA4AF'
+  };
+
+  // Update effect to handle highlight color based on settings
   useEffect(() => {
     const selectionStyle = document.createElement('style');
     selectionStyle.id = 'lightup-selection-style';
     
     if (isEnabled) {
-      selectionStyle.textContent = `
-        ::selection {
-          background-color: #FFBF5A !important;
-          color: #000000 !important;
-        }
-        
-        ::-moz-selection {
-          background-color: #FFBF5A !important;
-          color: #000000 !important;
-        }
-      `;
+      const highlightColor = highlightColors[settings?.customization?.highlightColor || 'default'];
+      
+      if (highlightColor) {
+        selectionStyle.textContent = `
+          ::selection {
+            background-color: ${highlightColor} !important;
+            color: #000000 !important;
+          }
+          
+          ::-moz-selection {
+            background-color: ${highlightColor} !important;
+            color: #000000 !important;
+          }
+        `;
+      } else {
+        selectionStyle.textContent = `
+          ::selection {
+            /* Use default system selection color */
+          }
+          
+          ::-moz-selection {
+            /* Use default system selection color */
+          }
+        `;
+      }
     } else {
       selectionStyle.textContent = `
         ::selection {
@@ -1164,7 +1189,7 @@ function Content() {
     return () => {
       document.getElementById('lightup-selection-style')?.remove();
     };
-  }, [isEnabled]);
+  }, [isEnabled, settings?.customization?.highlightColor]);
 
   return (
     <>
