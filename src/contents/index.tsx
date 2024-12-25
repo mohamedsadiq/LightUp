@@ -699,7 +699,7 @@ function Content() {
         });
 
       } catch (err) {
-        console.error('❌ Processing error:', err)
+        // console.error('❌ Processing error:', err)
         setError('Failed to process text')
         setIsLoading(false)
       }

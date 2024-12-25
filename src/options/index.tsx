@@ -128,6 +128,9 @@ function IndexOptions() {
   const [settings, setSettings] = useState<Settings>({
     modelType: "openai",
     maxTokens: 2048,
+    apiKey: "",
+    geminiApiKey: "",
+    xaiApiKey: "",
     customization: {
       showSelectedText: true,
       theme: "light",
