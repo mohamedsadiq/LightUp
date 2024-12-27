@@ -62,3 +62,12 @@ export const THEME_COLORS = {
     buttonHover: "#505050"
   }
 } as const;
+
+export const Z_INDEX = {
+  TOAST: 2147483647,      // Highest
+  POPUP: 2147483647,      // Same as toast
+  BLUR_OVERLAY: 2147483645, // Below popup
+  PAGE_CONTENT: 1         // Normal page content
+} as const;
+
+// Add other constants here if needed
