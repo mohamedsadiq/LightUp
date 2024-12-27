@@ -84,8 +84,8 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     backgroundColor: theme === "light" ? "#FFFFFF" : THEME_COLORS[theme].buttonBackground,
     padding: "8px 12px",
     borderRadius: "31px",
-    marginTop: "12px",
     border: theme === "light" ? "1px solid #E5E5E5" : "none",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
   },
   searchSendButton: {
     backgroundColor: "transparent",
@@ -173,9 +173,15 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     display: 'flex',
     gap: '8px',
     marginTop: '12px',
-    backgroundColor: 'transparent',
-    borderRadius: '12px',
+ 
     width: "100%",
+    position: 'sticky' as const,
+    bottom: 0,
+   
+  
+    // backgroundColor: THEME_COLORS[theme].popupBackground,
+    // borderTop: theme === "light" ? "1px solid #E5E5E5" : `1px solid ${THEME_COLORS[theme].border}`,
+    zIndex: 10,
   },
 });
 
