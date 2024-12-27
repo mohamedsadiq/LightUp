@@ -5,14 +5,14 @@ export const Logo = (theme: Theme = "light") => (
     <svg width="40" height="40" viewBox="0 0 193 194" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g filter="url(#filter0_d_339_94)">
         <circle cx="96.8148" cy="97.8148" r="30.8148" fill="black"/>
-        <circle cx="96.8148" cy="97.8148" r="30.1886" stroke="#A72D20" stroke-width="1.25238"/>
+        <circle cx="96.8148" cy="97.8148" r="30.1886" stroke="#A72D20" strokeWidth="1.25238"/>
       </g>
       <g filter="url(#filter1_d_339_94)">
         <ellipse cx="97.5" cy="98" rx="28.5" ry="29" fill="black"/>
       </g>
       <defs>
-        <filter id="filter0_d_339_94" x="0.700001" y="0.865079" width="192.229" height="192.23" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-          <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <filter id="filter0_d_339_94" x="0.700001" y="0.865079" width="192.229" height="192.23" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
           <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
           <feMorphology radius="11" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_339_94"/>
           <feOffset dy="-0.834922"/>
@@ -22,8 +22,8 @@ export const Logo = (theme: Theme = "light") => (
           <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_339_94"/>
           <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_339_94" result="shape"/>
         </filter>
-        <filter id="filter1_d_339_94" x="50.6317" y="50.6317" width="93.7366" height="94.7366" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-          <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <filter id="filter1_d_339_94" x="50.6317" y="50.6317" width="93.7366" height="94.7366" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
           <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
           <feOffset/>
           <feGaussianBlur stdDeviation="9.18414"/>
@@ -38,14 +38,14 @@ export const Logo = (theme: Theme = "light") => (
     <svg width="40" height="40" viewBox="0 0 93 94" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g filter="url(#filter0_d_729_79)">
         <circle cx="46.2447" cy="47.3492" r="14.8228" fill="#292929"/>
-        <circle cx="46.2447" cy="47.3492" r="14.5216" stroke="#292929" stroke-width="0.602432"/>
+        <circle cx="46.2447" cy="47.3492" r="14.5216" stroke="#292929" strokeWidth="0.602432"/>
       </g>
       <g filter="url(#filter1_d_729_79)">
         <ellipse cx="46.5687" cy="47.4381" rx="13.7093" ry="13.9498" fill="#292929"/>
       </g>
       <defs>
-        <filter id="filter0_d_729_79" x="0.0107341" y="0.713605" width="92.4707" height="92.4678" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-          <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <filter id="filter0_d_729_79" x="0.0107341" y="0.713605" width="92.4707" height="92.4678" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
           <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
           <feMorphology radius="5.29131" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_729_79"/>
           <feOffset dy="-0.401621"/>
@@ -55,8 +55,8 @@ export const Logo = (theme: Theme = "light") => (
           <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_729_79"/>
           <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_729_79" result="shape"/>
         </filter>
-        <filter id="filter1_d_729_79" x="24.0237" y="24.6526" width="45.0932" height="45.571" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-          <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+        <filter id="filter1_d_729_79" x="24.0237" y="24.6526" width="45.0932" height="45.571" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
           <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
           <feOffset/>
           <feGaussianBlur stdDeviation="4.41783"/>
