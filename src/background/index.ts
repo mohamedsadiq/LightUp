@@ -209,14 +209,117 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
     if (settings.modelType === "xai") {
       console.log('Using xAI model with follow-up:', isFollowUp);
-      for await (const chunk of processXAIText(request)) {
-        if (chunk.type === 'chunk') {
+      let buffer = '';
+      let markdownBuffer = '';
+      let isInMarkdown = false;
+      let lastSentWasHeading = false;
+
+      const cleanAndSendText = (text: string, isMarkdown = false) => {
+        if (!text.trim()) return;
+
+        // Clean the text
+        let cleanedText = text
+          // Remove common introductory phrases
+          .replace(/^(?:Explanation of the Text:?\s*|The text (?:describes|explains|discusses):?\s*)+/i, '')
+          // Remove repeated colons and dots
+          .replace(/[:.]\s*[:.]\s*/g, ': ')
+          // Remove duplicate content
+          .replace(/(.{20,}?)\s*\1/g, '$1')
+          // Fix markdown formatting
+          .replace(/\*\s*\*/g, '**')
+          // Fix bullet points and dashes
+          .replace(/(?:^|\n)\s*[-•]\s*/g, '\n• ')
+          // Fix spacing around punctuation
+          .replace(/\s*([.,!?:;])\s*/g, '$1 ')
+          // Remove extra spaces
+          .replace(/\s+/g, ' ')
+          // Fix spacing after bullet points
+          .replace(/•\s+/g, '• ')
+          .trim();
+
+        // Special handling for markdown headings
+        if (isMarkdown && cleanedText.startsWith('**') && cleanedText.endsWith('**')) {
+          // Remove redundant punctuation in headings
+          cleanedText = cleanedText.replace(/\*\*(.*?)[:.]+\s*\*\*$/, '**$1**');
+          
+          if (lastSentWasHeading) {
+            // Skip if we just sent a heading
+            return;
+          }
+          lastSentWasHeading = true;
+        } else {
+          lastSentWasHeading = false;
+        }
+
+        // Only send if we have meaningful content
+        if (cleanedText.length > 2) {
+          // Don't add extra punctuation to headings or bullet points
+          const needsPunctuation = !cleanedText.endsWith('.') && 
+                                 !cleanedText.endsWith('!') && 
+                                 !cleanedText.endsWith('?') &&
+                                 !cleanedText.endsWith('**') &&
+                                 !cleanedText.startsWith('• ');
+          
           port.postMessage({
-            ...chunk,
+            type: 'chunk',
+            content: cleanedText + (needsPunctuation ? '. ' : ' '),
             isFollowUp: isFollowUp,
             id: request.id
           });
+        }
+      };
+
+      for await (const chunk of processXAIText(request)) {
+        if (chunk.type === 'chunk') {
+          const text = chunk.content;
+          let currentIndex = 0;
+
+          while (currentIndex < text.length) {
+            // Handle markdown sections
+            if (text.substr(currentIndex, 2) === '**') {
+              if (!isInMarkdown) {
+                // Start of markdown
+                if (buffer) {
+                  cleanAndSendText(buffer);
+                  buffer = '';
+                }
+                isInMarkdown = true;
+                markdownBuffer = '**';
+                currentIndex += 2;
+                continue;
+              } else {
+                // End of markdown
+                markdownBuffer += '**';
+                cleanAndSendText(markdownBuffer, true);
+                markdownBuffer = '';
+                isInMarkdown = false;
+                currentIndex += 2;
+                continue;
+              }
+            }
+
+            if (isInMarkdown) {
+              markdownBuffer += text[currentIndex];
+            } else {
+              buffer += text[currentIndex];
+              
+              // Check for sentence end
+              if (['.', '!', '?'].includes(text[currentIndex]) && 
+                  (currentIndex === text.length - 1 || /\s/.test(text[currentIndex + 1]))) {
+                cleanAndSendText(buffer);
+                buffer = '';
+              }
+            }
+            currentIndex++;
+          }
         } else {
+          // Send any remaining text
+          if (buffer) {
+            cleanAndSendText(buffer);
+          }
+          if (markdownBuffer) {
+            cleanAndSendText(markdownBuffer, true);
+          }
           port.postMessage({
             ...chunk,
             isFollowUp: isFollowUp,

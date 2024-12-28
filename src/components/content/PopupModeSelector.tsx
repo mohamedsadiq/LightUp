@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import { useState } from "react"
 import { LanguageSelector } from "./LanguageSelector"
 import type { Mode, TranslationSettings } from "~types/settings"
+import { useSettings } from "~hooks/useSettings"
 
 interface PopupModeSelectorProps {
   activeMode: Mode
@@ -18,6 +19,8 @@ export const PopupModeSelector = ({
 }: PopupModeSelectorProps) => {
   const [fromLanguage, setFromLanguage] = useState("en")
   const [toLanguage, setToLanguage] = useState("es")
+  const { settings } = useSettings()
+  const isContextAwareEnabled = settings?.customization?.contextAwareness ?? false
 
   const handleModeClick = (mode: Mode) => {
     if (mode === "translate") {
@@ -86,6 +89,35 @@ export const PopupModeSelector = ({
             </motion.div>
           )}
         </AnimatePresence>
+
+        {isContextAwareEnabled && (
+          <motion.div
+            style={styles.contextIndicator}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.2 }}
+            title="Context awareness is enabled"
+          >
+            <svg 
+              width="12" 
+              height="12" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2"
+              style={{ opacity: 0.7 }}
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </motion.div>
+        )}
       </motion.div>
     </motion.div>
   )
@@ -126,6 +158,12 @@ const styles = {
     color: "#8e8e8e",
     lineHeight: 1,
     marginLeft: "0",
+  },
+  contextIndicator: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: "2px",
   },
   languageSelectors: {
     display: "flex",
