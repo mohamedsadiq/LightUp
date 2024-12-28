@@ -19,10 +19,22 @@ export const useContextAwareness = () => {
 
   // Function to clean and normalize text content
   const cleanText = useCallback((text: string): string => {
-    // Remove excessive whitespace and normalize line endings
     return text
+      // Remove duplicate whitespace
       .replace(/\s+/g, ' ')
-      .replace(/\n+/g, '\n')
+      // Remove duplicate newlines while preserving paragraph structure
+      .replace(/\n{3,}/g, '\n\n')
+      // Remove duplicate punctuation
+      .replace(/([.!?])\1+/g, '$1')
+      // Fix spacing around punctuation
+      .replace(/\s+([.,!?])/g, '$1')
+      // Remove duplicate words next to each other
+      .replace(/\b(\w+)\s+\1\b/g, '$1')
+      // Normalize spaces around special characters
+      .replace(/\s*([*_~`])\s*/g, '$1')
+      // Clean up markdown-style headers
+      .replace(/#{1,6}\s+/g, '')
+      // Trim whitespace
       .trim();
   }, []);
 
@@ -36,17 +48,24 @@ export const useContextAwareness = () => {
       NodeFilter.SHOW_TEXT,
       {
         acceptNode: (node) => {
-          // Skip hidden elements
           const element = node.parentElement;
           if (!element) return NodeFilter.FILTER_REJECT;
           
+          // Skip hidden elements and irrelevant tags
           const style = window.getComputedStyle(element);
-          if (style.display === 'none' || style.visibility === 'hidden') {
+          if (
+            style.display === 'none' || 
+            style.visibility === 'hidden' ||
+            style.opacity === '0' ||
+            element.getAttribute('aria-hidden') === 'true' ||
+            ['SCRIPT', 'STYLE', 'META', 'LINK', 'NOSCRIPT'].includes(element.tagName)
+          ) {
             return NodeFilter.FILTER_REJECT;
           }
           
-          // Skip script and style tags
-          if (['SCRIPT', 'STYLE', 'META', 'LINK'].includes(element.tagName)) {
+          // Only accept nodes with meaningful content
+          const text = node.textContent?.trim();
+          if (!text || text.length < 2) {
             return NodeFilter.FILTER_REJECT;
           }
           
@@ -55,22 +74,48 @@ export const useContextAwareness = () => {
       }
     );
 
-    let textContent = '';
+    // Store nodes in their document order with position information
+    const textNodes: { text: string; position: number }[] = [];
     let node;
+    let position = 0;
+    
     while (node = walker.nextNode()) {
+      const element = node.parentElement;
+      if (!element) continue;
+      
       const text = node.textContent?.trim();
-      if (text) {
-        textContent += text + ' ';
+      if (!text) continue;
+
+      // Preserve document structure with appropriate spacing
+      let formattedText = text;
+      
+      // Add proper spacing for headings and block elements
+      if (['H1', 'H2', 'H3', 'H4', 'H5', 'H6'].includes(element.tagName)) {
+        formattedText = `\n\n${text}\n`;
+      } else if (['P', 'DIV', 'LI'].includes(element.tagName)) {
+        formattedText = `${text}\n`;
+      } else if (element.tagName === 'BR') {
+        formattedText = '\n';
       }
+      
+      textNodes.push({ 
+        text: formattedText,
+        position: position++
+      });
     }
 
+    // Maintain document order
+    const orderedText = textNodes
+      .sort((a, b) => a.position - b.position)
+      .map(node => node.text)
+      .join('');
+
     // Clean and limit the text
-    const cleanedText = cleanText(textContent);
+    const cleanedText = cleanText(orderedText);
     const trimmedText = cleanedText.slice(0, contextLimit);
     
     debugRef.current.extractedContent = trimmedText;
     console.log(`Context Awareness: Extracted ${trimmedText.length} characters of content`);
-    console.log("Context Awareness: Content preview:", trimmedText.substring(0, 100) + "...");
     
     return trimmedText;
   }, [contextLimit, cleanText]);
