@@ -593,37 +593,117 @@ function IndexOptions() {
         </div>
       </div>
 
-      <div className="mb-8 bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-xl font-semibold mb-4">Context Settings</h2>
-        
-        <div className="flex items-center justify-between mb-4">
-          <label className="flex items-center space-x-2">
-            <span className="text-gray-700">Enable Context Awareness</span>
-            <input
-              type="checkbox"
-              checked={settings.customization?.contextAwareness ?? false}
-              onChange={(e) => handleImmediateSettingUpdate('contextAwareness', e.target.checked)}
-              className="form-checkbox h-5 w-5 text-blue-600"
-            />
-          </label>
+      <div className="mb-8 bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200">
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900">Context Settings</h2>
+            <p className="text-xs text-gray-500 mt-1">Configure how LightUp understands page context</p>
+          </div>
+          <div className="relative inline-block">
+            <button
+              type="button"
+              className="text-gray-500 hover:text-gray-700"
+              aria-label="Context settings information"
+              onClick={() => {
+                const tooltip = document.getElementById('context-tooltip');
+                if (tooltip) {
+                  tooltip.classList.toggle('opacity-0');
+                  tooltip.classList.toggle('pointer-events-none');
+                }
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+            </button>
+            <div
+              id="context-tooltip"
+              className="absolute right-0 w-72 mt-2 bg-white rounded-lg shadow-lg border border-gray-100 p-4 text-sm text-gray-600 opacity-0 pointer-events-none transition-opacity duration-200 z-10"
+            >
+              <p className="mb-2 text-xs"><strong >Context Awareness:</strong> Allows LightUp to understand the surrounding content when processing your requests.</p>
+              <p className="text-xs"><strong >Context Limit:</strong> Controls how much surrounding text is considered for context. Higher limits provide more context but may slow down processing.</p>
+            </div>
+          </div>
         </div>
+        
+        <div className="space-y-6">
+          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+            <div className="flex-1">
+              <div className="flex flex-col">
+                <span className="text-gray-700 font-medium text-sm">Enable Context Awareness</span>
+                <p className="text-xs text-gray-500 mt-1">
+                  Enables LightUp to understand the context of the page when processing your requests
+                </p>
+              </div>
+            </div>
+            <div className="ml-4">
+              <label className="cursor-pointer">
+                <div className="relative inline-block">
+                  <input
+                    type="checkbox"
+                    checked={settings.customization?.contextAwareness ?? false}
+                    onChange={(e) => handleImmediateSettingUpdate('contextAwareness', e.target.checked)}
+                    className="sr-only"
+                  />
+                  <div className={`relative w-14 h-7 rounded-full transition-colors duration-200 ease-in-out ${
+                    settings.customization?.contextAwareness ? 'bg-[#10a37f]' : 'bg-gray-200'
+                  }`}>
+                    <div className={`absolute left-0.5 top-0.5 w-6 h-6 bg-white rounded-full shadow-lg transform transition-transform duration-200 ease-in-out ${
+                      settings.customization?.contextAwareness ? 'translate-x-7' : 'translate-x-0'
+                    }`}>
+                      {settings.customization?.contextAwareness && (
+                        <svg
+                          className="absolute inset-0 m-auto h-4 w-4 text-[#10a37f] transition-opacity"
+                          fill="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path d="M5 13l4 4L19 7"></path>
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">
-            Context Limit (characters)
-          </label>
-          <input
-            type="number"
-            value={settings.customization?.contextLimit ?? 1000}
-            onChange={(e) => handleImmediateSettingUpdate('contextLimit', parseInt(e.target.value, 10))}
-            min="100"
-            max="10000"
-            step="100"
-            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-          <p className="text-sm text-gray-500 mt-1">
-            Maximum number of characters to store for page context (100-10000)
-          </p>
+          <div className={`space-y-4 transition-opacity duration-200 ${
+            settings.customization?.contextAwareness ? 'opacity-100' : 'opacity-50 pointer-events-none'
+          }`}>
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-gray-700 font-medium">
+                  Context Limit
+                </label>
+                <span className="text-sm text-gray-500">
+                  {settings.customization?.contextLimit ?? 1000} characters
+                </span>
+              </div>
+              <div className="relative">
+                <input
+                  type="range"
+                  value={settings.customization?.contextLimit ?? 1000}
+                  onChange={(e) => handleImmediateSettingUpdate('contextLimit', parseInt(e.target.value, 10))}
+                  min="100"
+                  max="10000"
+                  step="100"
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#10a37f]"
+                />
+                <div className="flex justify-between text-xs text-gray-500 mt-1">
+                  <span>100</span>
+                  <span>5000</span>
+                  <span>10000</span>
+                </div>
+              </div>
+              <p className="text-xs text-gray-500 mt-6">
+                Adjust how much surrounding text LightUp considers for context
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
