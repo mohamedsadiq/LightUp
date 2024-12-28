@@ -30,6 +30,7 @@ import { usePort } from "~hooks/usePort"
 import { usePopup } from "~hooks/usePopup"
 import { useCopy } from "~hooks/useCopy"
 import { useLastResult } from "~hooks/useLastResult"
+import { useContextAwareness } from "~hooks/useContextAwareness"
 
 // Add font import
 const fontImportStyle = document.createElement('style');
@@ -59,6 +60,15 @@ function Content() {
   const { voicesLoaded, speakingId, handleSpeak } = useSpeech();
   const { copiedId, handleCopy } = useCopy();
   const { lastResult, updateLastResult } = useLastResult();
+  const { getRelevantContext, refreshContext, isInitialized } = useContextAwareness();
+
+  // Refresh context when component mounts
+  useEffect(() => {
+    if (isEnabled && isInitialized) {
+      console.log("Content script: Refreshing context on mount");
+      refreshContext();
+    }
+  }, [isEnabled, isInitialized]);
 
   // Initialize followUpQAs state first
   const {
@@ -154,11 +164,14 @@ function Content() {
     ]);
 
     try {
+      const relevantContext = getRelevantContext(selectedText);
+      
       port.postMessage({
         type: "PROCESS_TEXT",
         payload: {
           text: followUpQuestion,
           context: selectedText,
+          pageContext: relevantContext,
           mode: mode,
           settings: settings,
           isFollowUp: true,
@@ -227,6 +240,99 @@ function Content() {
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
   }, [isInteractingWithPopup, setIsVisible]);
+
+  const handleSelection = async (event: MouseEvent) => {
+    console.log("Selection event triggered", { isEnabled, isInitialized });
+    
+    if (!isEnabled) {
+      console.log("Extension is disabled");
+      return;
+    }
+
+    if (!isInitialized) {
+      console.log("Context awareness not initialized yet");
+      return;
+    }
+    
+    // Don't process if we're interacting with the popup
+    if (isInteractingWithPopup) {
+      console.log("Interacting with popup, ignoring selection");
+      return;
+    }
+
+    const popup = document.querySelector('[data-plasmo-popup]');
+    if (popup?.contains(event.target as Node)) {
+      console.log("Click was inside popup, ignoring");
+      return;
+    }
+
+    const selection = window.getSelection();
+    const text = selection?.toString().trim();
+    console.log("Selected text:", text);
+
+    if (!text || !/\S/.test(text)) {
+      console.log("No valid text selected");
+      // Only hide if we're not interacting with the popup
+      if (!isInteractingWithPopup) {
+        setIsVisible(false);
+      }
+      return;
+    }
+
+    // Get relevant context for the selected text
+    const relevantContext = getRelevantContext(text);
+    console.log("Context for selected text:", { 
+      hasContext: !!relevantContext,
+      contextLength: relevantContext?.length,
+      isInitialized
+    });
+
+    // Clear previous results
+    setStreamingText?.("");
+    setFollowUpQAs?.([]);
+    setError?.(null);
+
+    // Calculate position and show popup
+    const { top, left } = calculatePosition(event.clientX, event.clientY);
+    console.log("Showing popup at position:", { top, left });
+    setPosition({ x: left, y: top });
+    setSelectedText(text);
+    setIsVisible(true);
+    setIsLoading?.(true);
+
+    try {
+      if (!port) {
+        throw new Error('Connection not established');
+      }
+
+      const storage = new Storage();
+      const translationSettings = await storage.get("translationSettings");
+
+      port.postMessage({
+        type: "PROCESS_TEXT",
+        payload: {
+          text,
+          mode,
+          pageContext: relevantContext,
+          settings: {
+            ...settings,
+            translationSettings
+          },
+          connectionId,
+          id: Date.now()
+        }
+      });
+    } catch (err) {
+      console.error("Error processing text:", err);
+      setError?.('Failed to process text');
+      setIsLoading?.(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mouseup', handleSelection);
+    return () => document.removeEventListener('mouseup', handleSelection);
+  }, [isEnabled, isInitialized, isInteractingWithPopup, mode, settings, port, connectionId]);
 
   return (
     <>

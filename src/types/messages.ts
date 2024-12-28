@@ -2,6 +2,8 @@ import type { Settings } from "./settings"
 
 export interface ProcessTextRequest {
   text: string;
+  context?: string;
+  pageContext?: string;
   mode: "explain" | "summarize" | "analyze" | "translate";
   settings: {
     serverUrl: string;
@@ -19,8 +21,8 @@ export interface ProcessTextRequest {
   };
   aborted?: boolean;
   isFollowUp?: boolean;
-  context?: string;
   id?: number;
+  connectionId?: string;
 }
 
 export interface ProcessTextResponse {

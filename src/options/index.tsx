@@ -136,7 +136,9 @@ function IndexOptions() {
       theme: "light",
       radicallyFocus: false,
       fontSize: "1rem",
-      highlightColor: "default"
+      highlightColor: "default",
+      contextAwareness: false,
+      contextLimit: 1000
     }
   });
 
@@ -157,7 +159,9 @@ function IndexOptions() {
               theme: savedSettings.customization?.theme ?? "light",
               radicallyFocus: savedSettings.customization?.radicallyFocus ?? false,
               fontSize: savedSettings.customization?.fontSize ?? "1rem",
-              highlightColor: savedSettings.customization?.highlightColor ?? "default"
+              highlightColor: savedSettings.customization?.highlightColor ?? "default",
+              contextAwareness: savedSettings.customization?.contextAwareness ?? false,
+              contextLimit: savedSettings.customization?.contextLimit ?? 1000
             }
           });
         }
@@ -209,7 +213,9 @@ function IndexOptions() {
           theme: settings.customization?.theme ?? "light",
           radicallyFocus: settings.customization?.radicallyFocus ?? false,
           fontSize: settings.customization?.fontSize ?? "1rem",
-          highlightColor: settings.customization?.highlightColor ?? "default"
+          highlightColor: settings.customization?.highlightColor ?? "default",
+          contextAwareness: settings.customization?.contextAwareness ?? false,
+          contextLimit: settings.customization?.contextLimit ?? 1000
         }
       };
 
@@ -584,6 +590,40 @@ function IndexOptions() {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <div className="mb-8 bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-xl font-semibold mb-4">Context Settings</h2>
+        
+        <div className="flex items-center justify-between mb-4">
+          <label className="flex items-center space-x-2">
+            <span className="text-gray-700">Enable Context Awareness</span>
+            <input
+              type="checkbox"
+              checked={settings.customization?.contextAwareness ?? false}
+              onChange={(e) => handleImmediateSettingUpdate('contextAwareness', e.target.checked)}
+              className="form-checkbox h-5 w-5 text-blue-600"
+            />
+          </label>
+        </div>
+
+        <div className="mb-4">
+          <label className="block text-gray-700 mb-2">
+            Context Limit (characters)
+          </label>
+          <input
+            type="number"
+            value={settings.customization?.contextLimit ?? 1000}
+            onChange={(e) => handleImmediateSettingUpdate('contextLimit', parseInt(e.target.value, 10))}
+            min="100"
+            max="10000"
+            step="100"
+            className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+          <p className="text-sm text-gray-500 mt-1">
+            Maximum number of characters to store for page context (100-10000)
+          </p>
         </div>
       </div>
 

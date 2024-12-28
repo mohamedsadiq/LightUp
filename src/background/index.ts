@@ -98,13 +98,23 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       );
     }
 
-    console.log('Processing request:', { 
+    const userMessage = isFollowUp
+      ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
+      : mode === "translate" && settings?.translationSettings 
+        ? `Translate the following text from ${settings.translationSettings.fromLanguage} to ${settings.translationSettings.toLanguage}:\n\n${text}`
+        : request.pageContext 
+          ? `Page context: "${request.pageContext}"\n\nUser selection: "${text}"\n\nPlease provide an answer that takes into account both the selected text and its surrounding context. ${typeof USER_PROMPTS[mode] === 'function' ? USER_PROMPTS[mode](text, context) : text}`
+          : typeof USER_PROMPTS[mode] === 'function' 
+            ? USER_PROMPTS[mode](text, context)
+            : text;
+
+    console.log('Processing request with context:', { 
       mode, 
       text, 
-      context, 
+      hasContext: !!request.pageContext,
+      contextLength: request.pageContext?.length,
       isFollowUp,
-      modelType: settings?.modelType,
-      translationSettings: settings?.translationSettings 
+      modelType: settings?.modelType
     });
 
     const storage = new Storage();
@@ -115,14 +125,6 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       : globalSettings?.modelType === "gemini"
         ? "/v1beta/models/gemini-pro:streamGenerateContent"
         : "/api/generate";
-
-    const userMessage = isFollowUp
-      ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
-      : mode === "translate" && settings?.translationSettings 
-        ? `Translate the following text from ${settings.translationSettings.fromLanguage} to ${settings.translationSettings.toLanguage}:\n\n${text}`
-        : typeof USER_PROMPTS[mode] === 'function' 
-          ? USER_PROMPTS[mode](text, context)
-          : text;
 
     console.log('Sending message to LLM:', userMessage);
 
