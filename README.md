@@ -1,8 +1,9 @@
 ## LightUp : AI-Powered Annotations for every page on the web.
 
-<p align="center">
-  <img src="assets/intro.png" width="100%" height="100%" alt="LightUp Logo">
-</p>
+![1441](https://github.com/user-attachments/assets/c596a963-fab3-4908-a0f9-5ffe993a07a8)
+
+
+
 
 ## ✨  Meet LightUp
 Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
@@ -99,6 +100,10 @@ This extension is built with:
 - React + TypeScript
 - Framer Motion for animations
 
+
+<p align="center">
+  <img src="assets/intro.png" width="100%" height="100%" alt="LightUp Logo">
+</p>
 
 ## 🌟 Support LightUp
 
