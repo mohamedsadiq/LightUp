@@ -53,3 +53,18 @@
   z-index: 2147483647;
 }
 
+/* Highlight styles */
+.lightup-highlight {
+  display: inline;
+  padding: 2px 0;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  color: #000000 !important;
+}
+
+.lightup-highlight:hover {
+  filter: brightness(0.95);
+}
+

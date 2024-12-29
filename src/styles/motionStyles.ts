@@ -14,7 +14,7 @@ export const followUpMotionStyle: MotionStyle = {
   width: '100%'
 };
 
-export const popupMotionVariants = {
+export const scaleMotionVariants = {
   initial: { 
     opacity: 0, 
     scale: 0.1 
@@ -26,6 +26,30 @@ export const popupMotionVariants = {
   exit: { 
     scale: 0.5, 
     opacity: 0 
+  }
+};
+
+export const fadeMotionVariants = {
+  initial: { 
+    opacity: 0
+  },
+  animate: { 
+    opacity: 1
+  },
+  exit: { 
+    opacity: 0
+  }
+};
+
+export const noMotionVariants = {
+  initial: { 
+    opacity: 1
+  },
+  animate: { 
+    opacity: 1
+  },
+  exit: { 
+    opacity: 0
   }
 };
 

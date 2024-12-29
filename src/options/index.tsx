@@ -138,7 +138,9 @@ function IndexOptions() {
       fontSize: "1rem",
       highlightColor: "default",
       contextAwareness: false,
-      contextLimit: 1000
+      contextLimit: 1000,
+      popupAnimation: "scale",
+      persistHighlight: false
     }
   });
 
@@ -161,7 +163,9 @@ function IndexOptions() {
               fontSize: savedSettings.customization?.fontSize ?? "1rem",
               highlightColor: savedSettings.customization?.highlightColor ?? "default",
               contextAwareness: savedSettings.customization?.contextAwareness ?? false,
-              contextLimit: savedSettings.customization?.contextLimit ?? 1000
+              contextLimit: savedSettings.customization?.contextLimit ?? 1000,
+              popupAnimation: savedSettings.customization?.popupAnimation ?? "scale",
+              persistHighlight: savedSettings.customization?.persistHighlight ?? false
             }
           });
         }
@@ -215,7 +219,9 @@ function IndexOptions() {
           fontSize: settings.customization?.fontSize ?? "1rem",
           highlightColor: settings.customization?.highlightColor ?? "default",
           contextAwareness: settings.customization?.contextAwareness ?? false,
-          contextLimit: settings.customization?.contextLimit ?? 1000
+          contextLimit: settings.customization?.contextLimit ?? 1000,
+          popupAnimation: settings.customization?.popupAnimation ?? "scale",
+          persistHighlight: settings.customization?.persistHighlight ?? false
         }
       };
 
@@ -495,9 +501,9 @@ function IndexOptions() {
                   id="show-selected-text"
                   checked={settings.customization?.showSelectedText ?? true}
                   onChange={(e) => handleImmediateSettingUpdate('showSelectedText', e.target.checked)}
-                  className="toggle-checkbox"
+                  className="sr-only peer"
                 />
-                <label htmlFor="show-selected-text" className="toggle-label"></label>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#10a37f]/30 dark:peer-focus:ring-[#10a37f]/80 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#10a37f]"></div>
               </div>
             </div>
 
@@ -513,10 +519,27 @@ function IndexOptions() {
                   id="radical-focus"
                   checked={settings.customization?.radicallyFocus ?? false}
                   onChange={(e) => handleImmediateSettingUpdate('radicallyFocus', e.target.checked)}
-                  className="toggle-checkbox"
+                  className="sr-only peer"
                 />
-                <label htmlFor="radical-focus" className="toggle-label"></label>
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#10a37f]/30 dark:peer-focus:ring-[#10a37f]/80 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#10a37f]"></div>
               </div>
+            </div>
+
+            {/* Popup Animation */}
+            <div className="flex items-center justify-between py-2">
+              <div className="flex-1">
+                <label className="font-medium text-gray-900">Popup Animation</label>
+                <p className="text-sm text-gray-500">Choose how the popup appears</p>
+              </div>
+              <select
+                value={settings.customization?.popupAnimation ?? "scale"}
+                onChange={(e) => handleImmediateSettingUpdate('popupAnimation', e.target.value)}
+                className="form-select rounded-lg border-gray-200 bg-white text-gray-800 font-medium px-4 py-2 pr-10 hover:border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-colors duration-200"
+              >
+                <option value="scale">Scale Animation</option>
+                <option value="fade">Fade Animation</option>
+                <option value="none">No Animation</option>
+              </select>
             </div>
 
             {/* Theme Selector */}
@@ -589,6 +612,25 @@ function IndexOptions() {
                 }`}></div>
               </div>
             </div>
+
+            {/* Add Persistent Highlight Toggle after the Highlight Color selector */}
+            <div className="flex items-center justify-between py-2">
+              <div className="flex-1">
+                <label className="font-medium text-gray-900">Persistent Highlighting</label>
+                <p className="text-sm text-gray-500">Keep text highlighted after selection</p>
+              </div>
+              <div className="flex items-center">
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={settings.customization?.persistHighlight ?? false}
+                    onChange={(e) => handleImmediateSettingUpdate('persistHighlight', e.target.checked)}
+                    className="sr-only peer"
+                  />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#10a37f]/30 dark:peer-focus:ring-[#10a37f]/80 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#10a37f]"></div>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -643,7 +685,7 @@ function IndexOptions() {
                     type="checkbox"
                     checked={settings.customization?.contextAwareness ?? false}
                     onChange={(e) => handleImmediateSettingUpdate('contextAwareness', e.target.checked)}
-                    className="sr-only"
+                    className="sr-only peer"
                   />
                   <div className={`relative w-14 h-7 rounded-full transition-colors duration-200 ease-in-out ${
                     settings.customization?.contextAwareness ? 'bg-[#10a37f]' : 'bg-gray-200'

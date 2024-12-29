@@ -20,13 +20,55 @@ export const textVariants = {
   }
 }
 
+export const loadingSkeletonVariants = {
+  initial: {
+    opacity: 0,
+    y: 10,
+    scale: 0.98
+  },
+  animate: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.3,
+      ease: "easeOut"
+    }
+  },
+  exit: {
+    opacity: 0,
+    y: -10,
+    scale: 0.98,
+    transition: {
+      duration: 0.2,
+      ease: "easeIn"
+    }
+  }
+}
+
+export const shimmerVariants = {
+  initial: {
+    backgroundPosition: "-200%"
+  },
+  animate: {
+    backgroundPosition: "200%",
+    transition: {
+      repeat: Infinity,
+      duration: 2,
+      ease: "linear"
+    }
+  }
+}
+
 export const loadingVariants = {
   animate: {
     opacity: [0.3, 1, 0.3],
+    scale: [0.98, 1, 0.98],
     transition: {
-      duration: 1.5,
+      duration: 1.8,
       repeat: Infinity,
-      ease: "easeInOut"
+      ease: "easeInOut",
+      times: [0, 0.5, 1]
     }
   }
 }

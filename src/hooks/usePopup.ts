@@ -147,6 +147,10 @@ export const usePopup = (
     setSelectedText("");
     setStreamingText?.("");
     setFollowUpQAs?.([]);
+    setIsInteractingWithPopup(false);
+    setIsInputFocused(false);
+    setError?.(null);
+    setIsLoading?.(false);
   };
 
   const handleModeChange = async (newMode: Mode, translationSettings?: any) => {

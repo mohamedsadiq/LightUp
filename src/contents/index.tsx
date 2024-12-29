@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react"
 import type { PlasmoCSConfig } from "plasmo"
 import { motion, AnimatePresence } from "framer-motion"
+import type { MotionStyle } from "framer-motion"
 import MarkdownText from "../components/content/MarkdownText"
 import { Logo, CloseIcon } from "../components/icons"
 import "../style.css"
@@ -12,12 +13,14 @@ import { v4 as uuidv4 } from 'uuid'
 import { getStyles } from "./styles"
 import { getTextDirection } from "~utils/rtl"
 import { truncateText } from "~utils/textProcessing"
-import { flexMotionStyle, popupMotionVariants, toastMotionVariants } from "~styles/motionStyles"
+import { flexMotionStyle, scaleMotionVariants, fadeMotionVariants, noMotionVariants, toastMotionVariants } from "~styles/motionStyles"
 import type { Theme } from "~types/theme"
 import { applyHighlightColor } from "~utils/highlight"
 import { calculatePosition } from "~utils/position"
 import { Storage } from "@plasmohq/storage"
 import { Z_INDEX } from "~utils/constants"
+import { loadingSkeletonVariants, shimmerVariants, loadingVariants } from "~contents/variants"
+import { getHighlightColor } from "~utils/highlight"
 
 // Import our hooks
 import { useSpeech } from "~hooks/useSpeech"
@@ -44,9 +47,19 @@ export const config: PlasmoCSConfig = {
   matches: ["<all_urls>"]
 }
 
+const loadingIndicatorContainerStyle: MotionStyle = {
+  display: 'flex' as const,
+  flexDirection: 'row' as const,
+  justifyContent: 'center' as const,
+  alignItems: 'center' as const,
+  marginTop: '8px',
+  gap: '8px'
+};
+
 function Content() {
   // Generate a stable connection ID
   const [connectionId] = useState(() => uuidv4());
+  const [highlightedRanges, setHighlightedRanges] = useState<Range[]>([]);
 
   // Initialize all our hooks
   const { width, height, handleResizeStart } = useResizable({
@@ -234,13 +247,43 @@ function Content() {
       const popup = document.querySelector('[data-plasmo-popup]');
       if (popup && !popup.contains(event.target as Node) && !isInteractingWithPopup) {
         setIsVisible(false);
+        setIsInteractingWithPopup(false);
+        setIsInputFocused(false);
+        setSelectedText("");
+        setStreamingText?.("");
+        setFollowUpQAs?.([]);
+        setError?.(null);
+        setIsLoading?.(false);
       }
     };
 
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
-  }, [isInteractingWithPopup, setIsVisible]);
+  }, [isInteractingWithPopup, setIsVisible, setIsInteractingWithPopup, setIsInputFocused, setSelectedText, setStreamingText, setFollowUpQAs, setError, setIsLoading]);
 
+  // Add function to apply highlight to a range
+  const applyHighlightToRange = (range: Range, color: string) => {
+    const span = document.createElement('span');
+    span.className = 'lightup-highlight';
+    span.style.backgroundColor = color;
+    range.surroundContents(span);
+    return span;
+  };
+
+  // Add function to remove highlights
+  const removeHighlights = () => {
+    const highlights = document.querySelectorAll('.lightup-highlight');
+    highlights.forEach(highlight => {
+      const parent = highlight.parentNode;
+      if (parent) {
+        parent.replaceChild(document.createTextNode(highlight.textContent || ''), highlight);
+        parent.normalize();
+      }
+    });
+    setHighlightedRanges([]);
+  };
+
+  // Modify handleSelection to handle persistent highlighting
   const handleSelection = async (event: MouseEvent) => {
     console.log("Selection event triggered", { isEnabled, isInitialized });
     
@@ -277,6 +320,19 @@ function Content() {
         setIsVisible(false);
       }
       return;
+    }
+
+    // Handle persistent highlighting
+    if (settings?.customization?.persistHighlight && selection) {
+      const range = selection.getRangeAt(0);
+      const highlightColor = getHighlightColor(settings.customization.highlightColor);
+      
+      try {
+        const highlightedSpan = applyHighlightToRange(range.cloneRange(), highlightColor);
+        setHighlightedRanges(prev => [...prev, range]);
+      } catch (err) {
+        console.error("Error applying highlight:", err);
+      }
     }
 
     // Get relevant context for the selected text
@@ -328,6 +384,20 @@ function Content() {
       setIsLoading?.(false);
     }
   };
+
+  // Add cleanup effect for highlights when settings change
+  useEffect(() => {
+    if (!settings?.customization?.persistHighlight) {
+      removeHighlights();
+    }
+  }, [settings?.customization?.persistHighlight]);
+
+  // Add cleanup effect when component unmounts
+  useEffect(() => {
+    return () => {
+      removeHighlights();
+    };
+  }, []);
 
   useEffect(() => {
     document.addEventListener('mouseup', handleSelection);
@@ -386,10 +456,10 @@ function Content() {
               top: `${position.y}px`,
               zIndex: Z_INDEX.POPUP
             }}
-            initial={{ opacity: 0 }}
+            initial={settings?.customization?.popupAnimation === "none" ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2 }}
           >
             <div style={{
               ...themedStyles.popupPositioner,
@@ -409,11 +479,17 @@ function Content() {
                 onClick={(e) => e.stopPropagation()}
                 onMouseEnter={() => setIsInteractingWithPopup(true)}
                 onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-                initial="initial"
-                animate="animate"
-                exit="exit"
+                initial={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "initial"}
+                animate={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "animate"}
+                exit={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 0 } : "exit"}
                 layout
-                variants={popupMotionVariants}
+                variants={
+                  settings?.customization?.popupAnimation === "scale" 
+                    ? scaleMotionVariants 
+                    : settings?.customization?.popupAnimation === "fade"
+                      ? fadeMotionVariants
+                      : noMotionVariants
+                }
               >
                 {/* Header */}
                 <div style={themedStyles.buttonContainerParent}>
@@ -451,28 +527,110 @@ function Content() {
                 {/* Main Content */}
                 <AnimatePresence mode="wait">
                   {isLoading && !streamingText ? (
-                    <motion.div style={flexMotionStyle} layout>
-                      {[...Array(10)].map((_, i) => (
+                    <motion.div 
+                      style={flexMotionStyle} 
+                      variants={loadingSkeletonVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      layout
+                    >
+                      {[...Array(9)].map((_, i) => (
                         <motion.div
                           key={i}
                           style={{
-                            height: '16px',
+                            height: '24px',
                             background: currentTheme === "dark" 
-                              ? 'linear-gradient(90deg, #2C2C2C 25%, #3D3D3D 50%, #2C2C2C 75%)'
-                              : 'linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%)',
-                            borderRadius: '4px',
-                            width: i === 2 ? '70%' : '100%',
+                              ? 'linear-gradient(90deg, #2C2C2C 0%, #3D3D3D 50%, #2C2C2C 100%)'
+                              : 'linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%)',
+                            borderRadius: '6px',
+                            width: i === 1 ? '85%' : i === 2 ? '70%' : '100%',
+                            backgroundSize: '200% 100%',
+                            overflow: 'hidden',
+                            position: 'relative'
+                          }}
+                          variants={shimmerVariants}
+                          initial="initial"
+                          animate="animate"
+                        >
+                          <motion.div
+                            style={{
+                              position: 'absolute',
+                              top: 0,
+                              left: 0,
+                              right: 0,
+                              bottom: 0,
+                              background: currentTheme === "dark"
+                                ? 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)'
+                                : 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%)',
+                              backgroundSize: '200% 100%'
+                            }}
+                            variants={shimmerVariants}
+                            initial="initial"
+                            animate="animate"
+                          />
+                        </motion.div>
+                      ))}
+                      <motion.div
+                        style={{
+                          ...loadingIndicatorContainerStyle,
+                          color: currentTheme === "dark" ? '#666' : '#999'
+                        }}
+                        variants={loadingVariants}
+                        animate="animate"
+                      >
+                        <motion.div
+                          style={{
+                            width: '6px',
+                            height: '6px',
+                            borderRadius: '50%',
+                            background: 'currentColor'
                           }}
                           animate={{
-                            backgroundPosition: ['0px', '500px'],
+                            scale: [1, 1.2, 1],
+                            opacity: [0.5, 1, 0.5]
                           }}
                           transition={{
-                            duration: 1.5,
+                            duration: 1,
                             repeat: Infinity,
-                            ease: 'linear',
+                            delay: 0
                           }}
                         />
-                      ))}
+                        <motion.div
+                          style={{
+                            width: '6px',
+                            height: '6px',
+                            borderRadius: '50%',
+                            background: 'currentColor'
+                          }}
+                          animate={{
+                            scale: [1, 1.2, 1],
+                            opacity: [0.5, 1, 0.5]
+                          }}
+                          transition={{
+                            duration: 1,
+                            repeat: Infinity,
+                            delay: 0.2
+                          }}
+                        />
+                        <motion.div
+                          style={{
+                            width: '6px',
+                            height: '6px',
+                            borderRadius: '50%',
+                            background: 'currentColor'
+                          }}
+                          animate={{
+                            scale: [1, 1.2, 1],
+                            opacity: [0.5, 1, 0.5]
+                          }}
+                          transition={{
+                            duration: 1,
+                            repeat: Infinity,
+                            delay: 0.4
+                          }}
+                        />
+                      </motion.div>
                     </motion.div>
                   ) : error ? (
                     <motion.p
@@ -576,8 +734,9 @@ function Content() {
                           {/* Question bubble */}
                           <motion.div
                             style={{
-                              display: 'flex' as const,
-                              justifyContent: 'flex-end' as const,
+                              display: 'flex',
+                              flexDirection: 'row' as const,
+                              justifyContent: 'flex-end',
                               width: '100%'
                             }}
                           >
@@ -592,8 +751,9 @@ function Content() {
                           {/* Answer bubble */}
                           <motion.div
                             style={{
-                              display: 'flex' as const,
-                              justifyContent: 'flex-start' as const,
+                              display: 'flex',
+                              flexDirection: 'row' as const,
+                              justifyContent: 'flex-start',
                               width: '100%'
                             }}
                           >
