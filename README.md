@@ -107,7 +107,7 @@ This extension is built with:
 
 ## 🌟 Support LightUp
 
-If you've found LightUp helpful and want to see it grow, consider supporting the project! Whether it's through a small donation, a coffee, or sharing with others, every bit helps us continue improving and bringing new features to life.
+If you've found LightUp helpful and want to see it grow, consider supporting the project! Whether it's through a small donation, or sharing with others, every bit helps us continue improving and bringing new features to life.
 
 You can send your support through the following cryptocurrency addresses:
 
