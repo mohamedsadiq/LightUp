@@ -30,8 +30,6 @@ export interface Settings {
     radicallyFocus: boolean
     fontSize: "0.8rem" | "0.9rem" | "1rem"
     highlightColor: "default" | "orange" | "blue" | "green" | "purple" | "pink"
-    contextAwareness: boolean
-    contextLimit: number
     popupAnimation: "none" | "scale" | "fade"
     persistHighlight: boolean
   }

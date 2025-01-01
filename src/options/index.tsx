@@ -123,6 +123,32 @@ const CryptoSupportPopup = ({ isOpen, onClose }) => {
   );
 };
 
+// Add this before the IndexOptions function
+const Switch = ({ id, checked, onChange, label, description = undefined }) => (
+  <div className="flex items-center justify-between py-2">
+    <div className="flex-1">
+      <div className="text-base font-semibold text-gray-900">{label}</div>
+      {description && <p className="text-xs font-normal text-gray-500 mt-0.5">{description}</p>}
+    </div>
+    <div 
+      className="relative cursor-pointer" 
+      onClick={(e) => {
+        e.preventDefault();
+        onChange({ target: { checked: !checked } });
+      }}
+    >
+      <input
+        type="checkbox"
+        id={id}
+        checked={checked}
+        onChange={() => {}}
+        className="sr-only peer"
+      />
+      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#10a37f]/30 dark:peer-focus:ring-[#10a37f]/80 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#10a37f]"></div>
+    </div>
+  </div>
+);
+
 function IndexOptions() {
   const storage = useRef(new Storage()).current;
   const [settings, setSettings] = useState<Settings>({
@@ -137,8 +163,6 @@ function IndexOptions() {
       radicallyFocus: false,
       fontSize: "1rem",
       highlightColor: "default",
-      contextAwareness: false,
-      contextLimit: 1000,
       popupAnimation: "scale",
       persistHighlight: false
     }
@@ -162,15 +186,12 @@ function IndexOptions() {
               radicallyFocus: savedSettings.customization?.radicallyFocus ?? false,
               fontSize: savedSettings.customization?.fontSize ?? "1rem",
               highlightColor: savedSettings.customization?.highlightColor ?? "default",
-              contextAwareness: savedSettings.customization?.contextAwareness ?? false,
-              contextLimit: savedSettings.customization?.contextLimit ?? 1000,
               popupAnimation: savedSettings.customization?.popupAnimation ?? "scale",
               persistHighlight: savedSettings.customization?.persistHighlight ?? false
             }
           });
         }
       } catch (err) {
-        console.error("Error loading settings:", err);
         setError("Failed to load settings");
       }
     };
@@ -218,8 +239,6 @@ function IndexOptions() {
           radicallyFocus: settings.customization?.radicallyFocus ?? false,
           fontSize: settings.customization?.fontSize ?? "1rem",
           highlightColor: settings.customization?.highlightColor ?? "default",
-          contextAwareness: settings.customization?.contextAwareness ?? false,
-          contextLimit: settings.customization?.contextLimit ?? 1000,
           popupAnimation: settings.customization?.popupAnimation ?? "scale",
           persistHighlight: settings.customization?.persistHighlight ?? false
         }
@@ -228,17 +247,9 @@ function IndexOptions() {
       // Save settings
       await storage.set("settings", settingsToSave);
       
-      console.log('Settings saved:', {
-        ...settingsToSave,
-        apiKey: settingsToSave.apiKey ? '***' : undefined,
-        geminiApiKey: settingsToSave.geminiApiKey ? '***' : undefined,
-        xaiApiKey: settingsToSave.xaiApiKey ? '***' : undefined
-      });
-      
       setError(""); // Clear any previous errors
       alert("Settings saved successfully!");
     } catch (error) {
-      console.error("Save error:", error);
       setError(error.message || "Failed to save settings");
       alert(error.message || "Failed to save settings");
     } finally {
@@ -279,10 +290,7 @@ function IndexOptions() {
   ];
 
   // Add a new function to handle immediate settings updates
-  const handleImmediateSettingUpdate = async (
-    key: keyof Settings['customization'],
-    value: any
-  ) => {
+  const handleImmediateSettingUpdate = async (key: string, value: any) => {
     try {
       const newSettings = {
         ...settings,
@@ -294,14 +302,9 @@ function IndexOptions() {
       
       setSettings(newSettings);
       await storage.set("settings", newSettings);
-      
-      // Show a subtle success message
-      const event = new CustomEvent('settingUpdated', { 
-        detail: { message: `${key} updated successfully` } 
-      });
-      window.dispatchEvent(event);
-    } catch (err) {
-      console.error(`Error updating ${key}:`, err);
+      console.log(`Updated ${key}:`, value);
+    } catch (error) {
+      console.error(`Error updating ${key}:`, error);
       setError(`Failed to update ${key}`);
     }
   };
@@ -326,7 +329,7 @@ function IndexOptions() {
   }, []);
 
   return (
-    <div className="p-5 max-w-[600px] mx-auto font-k2d bg-white text-gray-800 min-h-screen rounded-lg shadow-sm">
+    <div className="p-5 pb-24 max-w-[600px] mx-auto font-k2d bg-white text-gray-800 min-h-screen rounded-lg shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Logo />
@@ -346,7 +349,7 @@ function IndexOptions() {
       <div className="mb-5">
         <h2 className="text-xl font-semibold mb-4">Configuration</h2>
         
-        <label className="block mb-2 text-gray-800 font-k2d font-medium">
+        <label className="block mb-2 text-gray-800 font-k2d font-medium text-base">
           Model Type:
         </label>
         <select 
@@ -365,7 +368,7 @@ function IndexOptions() {
 
         {settings.modelType === "local" ? (
           <>
-            <label className="block mb-2 text-gray-800 font-k2d font-medium">
+            <label className="block mb-2 text-gray-800 font-k2d font-medium  text-base">
               Llama Server URL:
             </label>
             <input
@@ -381,7 +384,7 @@ function IndexOptions() {
           </>
         ) : settings.modelType === "openai" ? (
           <>
-            <label className="block mb-2 font-k2d font-medium">
+            <label className="block mb-2 font-k2d font-medium text-base">
               OpenAI API Key:
             </label>
             <input
@@ -400,7 +403,7 @@ function IndexOptions() {
           </>
         ) : settings.modelType === "gemini" ? (
           <>
-            <label className="block mb-2 font-k2d font-medium">
+            <label className="block mb-2 font-k2d font-medium text-base">
               Google Gemini API Key:
             </label>
             <input
@@ -419,7 +422,7 @@ function IndexOptions() {
           </>
         ) : (
           <>
-            <label className="block mb-2 font-k2d font-medium">
+            <label className="block mb-2 font-k2d font-medium  text-base">
               xAI API Key:
             </label>
             <input
@@ -438,7 +441,7 @@ function IndexOptions() {
           </>
         )}
 
-        <label className="block mb-2 text-gray-800 font-k2d font-medium">
+        <label className="block mb-2 text-gray-800 font-k2d font-medium text-base">
           Max Tokens:
         </label>
         <input
@@ -489,47 +492,35 @@ function IndexOptions() {
 
           <div className="p-6 space-y-6">
             {/* Show Selected Text */}
-            <div className="flex items-center justify-between py-2">
-              <div className="flex-1">
-                <label className="font-medium text-gray-900 flex items-center gap-2">
-                  Show Selected Text
-                </label>
-              </div>
-              <div className="relative">
-                <input
-                  type="checkbox"
-                  id="show-selected-text"
-                  checked={settings.customization?.showSelectedText ?? true}
-                  onChange={(e) => handleImmediateSettingUpdate('showSelectedText', e.target.checked)}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#10a37f]/30 dark:peer-focus:ring-[#10a37f]/80 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#10a37f]"></div>
-              </div>
+            <div className="mb-4">
+              <Switch
+                id="show-selected-text"
+                checked={settings.customization?.showSelectedText ?? true}
+                onChange={(e) => handleImmediateSettingUpdate('showSelectedText', e.target.checked)}
+                label="Show Selected Text"
+              />
             </div>
 
             {/* Radical Focus Mode */}
-            <div className="flex items-center justify-between py-2">
-              <div className="flex-1">
-                <label className="font-medium text-gray-900">Radical Focus Mode</label>
-                <p className="text-sm text-gray-500">Blur background when viewing results</p>
-              </div>
-              <div className="relative">
-                <input
-                  type="checkbox"
-                  id="radical-focus"
-                  checked={settings.customization?.radicallyFocus ?? false}
-                  onChange={(e) => handleImmediateSettingUpdate('radicallyFocus', e.target.checked)}
-                  className="sr-only peer"
-                />
-                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#10a37f]/30 dark:peer-focus:ring-[#10a37f]/80 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#10a37f]"></div>
-              </div>
+            <div className="mb-4">
+              <Switch
+                id="radical-focus"
+                checked={settings.customization?.radicallyFocus ?? false}
+                onChange={(e) => handleImmediateSettingUpdate('radicallyFocus', e.target.checked)}
+                label={
+                  <div>
+                    <span className="font-medium text-gray-900">Radical Focus Mode</span>
+                    <p className="text-xs font-normal text-gray-500 mt-0.5">Blur background when viewing results</p>
+                  </div>
+                }
+              />
             </div>
 
             {/* Popup Animation */}
             <div className="flex items-center justify-between py-2">
               <div className="flex-1">
-                <label className="font-medium text-gray-900">Popup Animation</label>
-                <p className="text-sm text-gray-500">Choose how the popup appears</p>
+                <div className="text-base font-semibold text-gray-900">Popup Animation</div>
+                <p className="text-xs font-normal text-gray-500 mt-0.5">Choose how the popup appears</p>
               </div>
               <select
                 value={settings.customization?.popupAnimation ?? "scale"}
@@ -543,14 +534,14 @@ function IndexOptions() {
             </div>
 
             {/* Theme Selector */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between py-2">
               <div className="flex-1">
-                <label className="font-medium text-gray-900 flex items-center gap-2">
+                <div className="text-base font-semibold text-gray-900 flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
                   </svg>
                   Theme
-                </label>
+                </div>
               </div>
               <select
                 value={settings.customization?.theme ?? "light"}
@@ -563,15 +554,15 @@ function IndexOptions() {
             </div>
 
             {/* Font Size Selector */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between py-2">
               <div className="flex-1">
-                <label className="font-medium text-gray-900 flex items-center gap-2">
+                <div className="text-base font-semibold text-gray-900 flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
                     <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                     <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
                   </svg>
                   Font Size
-                </label>
+                </div>
               </div>
               <select
                 value={settings.customization?.fontSize ?? "1rem"}
@@ -585,15 +576,15 @@ function IndexOptions() {
             </div>
 
             {/* Highlight Color Selector */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between py-2">
               <div className="flex-1">
-                <label className="font-medium text-gray-900 flex items-center gap-2">
+                <div className="text-base font-semibold text-gray-900 flex items-center gap-2">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clipRule="evenodd" />
                   </svg>
                   Highlight Color
-                </label>
-                <p className="text-sm text-gray-500">Color of selected text</p>
+                </div>
+                <p className="text-sm font-normal text-gray-500 mt-0.5">Color of selected text</p>
               </div>
               <div className="flex items-center gap-3">
                 <select
@@ -616,8 +607,13 @@ function IndexOptions() {
             {/* Add Persistent Highlight Toggle after the Highlight Color selector */}
             <div className="flex items-center justify-between py-2">
               <div className="flex-1">
-                <label className="font-medium text-gray-900">Persistent Highlighting</label>
-                <p className="text-sm text-gray-500">Keep text highlighted after selection</p>
+                <label className="font-medium text-gray-900 text-base flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 10a2 2 0 114 0 2 2 0 01-4 0z" clipRule="evenodd" />
+                  </svg>
+                  Persistent Highlighting
+                </label>
+                <p className="text-sm font-normal text-gray-500 mt-0.5">Keep text highlighted after selection</p>
               </div>
               <div className="flex items-center">
                 <label className="relative inline-flex items-center cursor-pointer">
@@ -638,130 +634,75 @@ function IndexOptions() {
       <div className="mb-8 bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Context Settings</h2>
-            <p className="text-xs text-gray-500 mt-1">Configure how LightUp understands page context</p>
-          </div>
-          <div className="relative inline-block">
-            <button
-              type="button"
-              className="text-gray-500 hover:text-gray-700"
-              aria-label="Context settings information"
-              onClick={() => {
-                const tooltip = document.getElementById('context-tooltip');
-                if (tooltip) {
-                  tooltip.classList.toggle('opacity-0');
-                  tooltip.classList.toggle('pointer-events-none');
-                }
-              }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-              </svg>
-            </button>
-            <div
-              id="context-tooltip"
-              className="absolute right-0 w-72 mt-2 bg-white rounded-lg shadow-lg border border-gray-100 p-4 text-sm text-gray-600 opacity-0 pointer-events-none transition-opacity duration-200 z-10"
-            >
-              <p className="mb-2 text-xs"><strong >Context Awareness:</strong> Allows LightUp to understand the surrounding content when processing your requests.</p>
-              <p className="text-xs"><strong >Context Limit:</strong> Controls how much surrounding text is considered for context. Higher limits provide more context but may slow down processing.</p>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-semibold text-gray-900">Context Settings</h2>
+              <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Beta</span>
             </div>
+            <p className="text-sm font-normal text-gray-500 mt-0.5">Coming Soon</p>
           </div>
         </div>
         
-        <div className="space-y-6">
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-            <div className="flex-1">
-              <div className="flex flex-col">
-                <span className="text-gray-700 font-medium text-sm">Enable Context Awareness</span>
-                <p className="text-xs text-gray-500 mt-1">
-                  Enables LightUp to understand the context of the page when processing your requests
-                </p>
-              </div>
-            </div>
-            <div className="ml-4">
-              <label className="cursor-pointer">
-                <div className="relative inline-block">
-                  <input
-                    type="checkbox"
-                    checked={settings.customization?.contextAwareness ?? false}
-                    onChange={(e) => handleImmediateSettingUpdate('contextAwareness', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className={`relative w-14 h-7 rounded-full transition-colors duration-200 ease-in-out ${
-                    settings.customization?.contextAwareness ? 'bg-[#10a37f]' : 'bg-gray-200'
-                  }`}>
-                    <div className={`absolute left-0.5 top-0.5 w-6 h-6 bg-white rounded-full shadow-lg transform transition-transform duration-200 ease-in-out ${
-                      settings.customization?.contextAwareness ? 'translate-x-7' : 'translate-x-0'
-                    }`}>
-                      {settings.customization?.contextAwareness && (
-                        <svg
-                          className="absolute inset-0 m-auto h-4 w-4 text-[#10a37f] transition-opacity"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path d="M5 13l4 4L19 7"></path>
-                        </svg>
-                      )}
-                    </div>
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="w-16 h-16 mb-4">
+            <svg className="w-full h-full text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+            </svg>
+          </div>
+          <h3 className="text-lg font-semibold text-gray-700 mb-2">Context Settings are Coming Soon!</h3>
+          <p className="text-gray-500 max-w-sm">
+            We're working on bringing you smart context awareness features to enhance your LightUp experience. Stay tuned for updates!
+          </p>
+        </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 z-50">
+        {/* Backdrop blur and gradient */}
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white to-transparent h-32 -translate-y-full pointer-events-none" />
+        
+        {/* Main container */}
+        <div className="bg-white/80 backdrop-blur-md border-t border-gray-100 shadow-lg py-4">
+          <div className="max-w-[600px] mx-auto px-5">
+            <div className="flex flex-col gap-3">
+              {error && (
+                <div className="text-red-500 text-sm bg-red-50 px-4 py-2 rounded-lg border border-red-100 animate-shake">
+                  <div className="flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                    </svg>
+                    {error}
                   </div>
                 </div>
-              </label>
-            </div>
-          </div>
-
-          <div className={`space-y-4 transition-opacity duration-200 ${
-            settings.customization?.contextAwareness ? 'opacity-100' : 'opacity-50 pointer-events-none'
-          }`}>
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <label className="block text-gray-700 font-medium">
-                  Context Limit
-                </label>
-                <span className="text-sm text-gray-500">
-                  {settings.customization?.contextLimit ?? 1000} characters
-                </span>
+              )}
+              
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className={`flex-1 px-4 h-11 bg-[#10a37f] text-white border-none rounded-xl cursor-pointer font-medium transition-all duration-200 font-k2d hover:bg-[#0d8c6d] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none flex items-center justify-center gap-2`}
+                >
+                  {isSaving ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      <span>Saving...</span>
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                        <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h-2v5.586l-1.293-1.293z" />
+                        <path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm10 0H6v12h8V4z" />
+                      </svg>
+                      <span>Save Settings</span>
+                    </>
+                  )}
+                </button>
               </div>
-              <div className="relative">
-                <input
-                  type="range"
-                  value={settings.customization?.contextLimit ?? 1000}
-                  onChange={(e) => handleImmediateSettingUpdate('contextLimit', parseInt(e.target.value, 10))}
-                  min="100"
-                  max="10000"
-                  step="100"
-                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#10a37f]"
-                />
-                <div className="flex justify-between text-xs text-gray-500 mt-1">
-                  <span>100</span>
-                  <span>5000</span>
-                  <span>10000</span>
-                </div>
-              </div>
-              <p className="text-xs text-gray-500 mt-6">
-                Adjust how much surrounding text LightUp considers for context
-              </p>
             </div>
           </div>
         </div>
       </div>
-
-      <button
-        onClick={handleSave}
-        disabled={isSaving}
-        className={`mt-6 px-4 py-2 bg-[#10a37f] text-white border-none rounded-[7px] cursor-pointer font-medium transition-colors duration-200 font-k2d hover:bg-[#0d8c6d] w-full disabled:opacity-50 disabled:cursor-not-allowed`}
-      >
-        {isSaving ? 'Saving...' : 'Save Settings'}
-      </button>
-
-      {error && (
-        <div className="mt-4 text-red-500 text-sm animate-shake">
-          {error}
-        </div>
-      )}
 
       <CryptoSupportPopup isOpen={isPopupOpen} onClose={handleClosePopup} />
 

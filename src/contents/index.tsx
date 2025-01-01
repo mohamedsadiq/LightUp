@@ -33,7 +33,6 @@ import { usePort } from "~hooks/usePort"
 import { usePopup } from "~hooks/usePopup"
 import { useCopy } from "~hooks/useCopy"
 import { useLastResult } from "~hooks/useLastResult"
-import { useContextAwareness } from "~hooks/useContextAwareness"
 
 // Add font import
 const fontImportStyle = document.createElement('style');
@@ -48,10 +47,10 @@ export const config: PlasmoCSConfig = {
 }
 
 const loadingIndicatorContainerStyle: MotionStyle = {
-  display: 'flex' as const,
+  display: 'flex',
   flexDirection: 'row' as const,
-  justifyContent: 'center' as const,
-  alignItems: 'center' as const,
+  justifyContent: 'center',
+  alignItems: 'center',
   marginTop: '8px',
   gap: '8px'
 };
@@ -73,15 +72,11 @@ function Content() {
   const { voicesLoaded, speakingId, handleSpeak } = useSpeech();
   const { copiedId, handleCopy } = useCopy();
   const { lastResult, updateLastResult } = useLastResult();
-  const { getRelevantContext, refreshContext, isInitialized } = useContextAwareness();
 
-  // Refresh context when component mounts
+  // Remove context refresh effect and add simple mount effect
   useEffect(() => {
-    if (isEnabled && isInitialized) {
-      console.log("Content script: Refreshing context on mount");
-      refreshContext();
-    }
-  }, [isEnabled, isInitialized]);
+    console.log("Content script mounted");
+  }, [isEnabled]);
 
   // Initialize followUpQAs state first
   const {
@@ -177,14 +172,12 @@ function Content() {
     ]);
 
     try {
-      const relevantContext = getRelevantContext(selectedText);
-      
       port.postMessage({
         type: "PROCESS_TEXT",
         payload: {
           text: followUpQuestion,
           context: selectedText,
-          pageContext: relevantContext,
+          pageContext: "", // Remove context awareness
           mode: mode,
           settings: settings,
           isFollowUp: true,
@@ -245,7 +238,8 @@ function Content() {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const popup = document.querySelector('[data-plasmo-popup]');
-      if (popup && !popup.contains(event.target as Node) && !isInteractingWithPopup) {
+      // Only close if clicking outside the popup
+      if (popup && !popup.contains(event.target as Node)) {
         setIsVisible(false);
         setIsInteractingWithPopup(false);
         setIsInputFocused(false);
@@ -259,7 +253,7 @@ function Content() {
 
     document.addEventListener('click', handleClickOutside);
     return () => document.removeEventListener('click', handleClickOutside);
-  }, [isInteractingWithPopup, setIsVisible, setIsInteractingWithPopup, setIsInputFocused, setSelectedText, setStreamingText, setFollowUpQAs, setError, setIsLoading]);
+  }, [setIsVisible, setIsInteractingWithPopup, setIsInputFocused, setSelectedText, setStreamingText, setFollowUpQAs, setError, setIsLoading]);
 
   // Add function to apply highlight to a range
   const applyHighlightToRange = (range: Range, color: string) => {
@@ -285,104 +279,29 @@ function Content() {
 
   // Modify handleSelection to handle persistent highlighting
   const handleSelection = async (event: MouseEvent) => {
-    console.log("Selection event triggered", { isEnabled, isInitialized });
+    if (!isEnabled) return;
     
-    if (!isEnabled) {
-      console.log("Extension is disabled");
-      return;
-    }
-
-    if (!isInitialized) {
-      console.log("Context awareness not initialized yet");
-      return;
-    }
-    
-    // Don't process if we're interacting with the popup
-    if (isInteractingWithPopup) {
-      console.log("Interacting with popup, ignoring selection");
-      return;
-    }
-
+    // Check if the click is inside the popup
     const popup = document.querySelector('[data-plasmo-popup]');
     if (popup?.contains(event.target as Node)) {
-      console.log("Click was inside popup, ignoring");
       return;
     }
-
+    
     const selection = window.getSelection();
-    const text = selection?.toString().trim();
-    console.log("Selected text:", text);
-
-    if (!text || !/\S/.test(text)) {
-      console.log("No valid text selected");
-      // Only hide if we're not interacting with the popup
-      if (!isInteractingWithPopup) {
-        setIsVisible(false);
-      }
+    if (!selection || selection.isCollapsed) {
       return;
     }
 
-    // Handle persistent highlighting
-    if (settings?.customization?.persistHighlight && selection) {
-      const range = selection.getRangeAt(0);
-      const highlightColor = getHighlightColor(settings.customization.highlightColor);
-      
-      try {
-        const highlightedSpan = applyHighlightToRange(range.cloneRange(), highlightColor);
-        setHighlightedRanges(prev => [...prev, range]);
-      } catch (err) {
-        console.error("Error applying highlight:", err);
-      }
+    const text = selection.toString().trim();
+    if (!text) {
+      return;
     }
 
-    // Get relevant context for the selected text
-    const relevantContext = getRelevantContext(text);
-    console.log("Context for selected text:", { 
-      hasContext: !!relevantContext,
-      contextLength: relevantContext?.length,
-      isInitialized
-    });
-
-    // Clear previous results
-    setStreamingText?.("");
-    setFollowUpQAs?.([]);
-    setError?.(null);
-
-    // Calculate position and show popup
+    // Calculate position
     const { top, left } = calculatePosition(event.clientX, event.clientY);
-    console.log("Showing popup at position:", { top, left });
     setPosition({ x: left, y: top });
     setSelectedText(text);
     setIsVisible(true);
-    setIsLoading?.(true);
-
-    try {
-      if (!port) {
-        throw new Error('Connection not established');
-      }
-
-      const storage = new Storage();
-      const translationSettings = await storage.get("translationSettings");
-
-      port.postMessage({
-        type: "PROCESS_TEXT",
-        payload: {
-          text,
-          mode,
-          pageContext: relevantContext,
-          settings: {
-            ...settings,
-            translationSettings
-          },
-          connectionId,
-          id: Date.now()
-        }
-      });
-    } catch (err) {
-      console.error("Error processing text:", err);
-      setError?.('Failed to process text');
-      setIsLoading?.(false);
-    }
   };
 
   // Add cleanup effect for highlights when settings change
@@ -402,7 +321,7 @@ function Content() {
   useEffect(() => {
     document.addEventListener('mouseup', handleSelection);
     return () => document.removeEventListener('mouseup', handleSelection);
-  }, [isEnabled, isInitialized, isInteractingWithPopup, mode, settings, port, connectionId]);
+  }, [isEnabled, isInteractingWithPopup, mode, settings, port, connectionId]);
 
   return (
     <>
@@ -448,13 +367,14 @@ function Content() {
 
       {/* Main popup */}
       <AnimatePresence mode="sync">
-        {isVisible && (
+        {isVisible && isEnabled && isConfigured && (
           <motion.div 
             style={{
               position: 'fixed',
               left: `${position.x}px`,
               top: `${position.y}px`,
-              zIndex: Z_INDEX.POPUP
+              zIndex: Z_INDEX.POPUP,
+              pointerEvents: 'none'
             }}
             initial={settings?.customization?.popupAnimation === "none" ? { opacity: 1 } : { opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -463,8 +383,7 @@ function Content() {
           >
             <div style={{
               ...themedStyles.popupPositioner,
-              left: `${position.x}px`,
-              top: `${position.y}px`,
+              pointerEvents: 'auto'
             }}>
               <motion.div 
                 style={{
@@ -476,7 +395,15 @@ function Content() {
                 }}
                 data-plasmo-popup
                 className="no-select"
-                onClick={(e) => e.stopPropagation()}
+                onClick={(e) => {
+                  e.stopPropagation();
+                }}
+                onMouseUp={(e) => {
+                  e.stopPropagation();
+                }}
+                onMouseDown={(e) => {
+                  e.stopPropagation();
+                }}
                 onMouseEnter={() => setIsInteractingWithPopup(true)}
                 onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
                 initial={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "initial"}

@@ -3,7 +3,6 @@ import type { Settings } from "./settings"
 export interface ProcessTextRequest {
   text: string;
   context?: string;
-  pageContext?: string;
   mode: "explain" | "summarize" | "analyze" | "translate";
   settings: {
     serverUrl: string;
@@ -17,7 +16,7 @@ export interface ProcessTextRequest {
       fromLanguage: string;
       toLanguage: string;
     };
-    modelType?: "local" | "openai" | "gemini" | "xai";
+    modelType: "local" | "openai" | "gemini" | "xai";
   };
   aborted?: boolean;
   isFollowUp?: boolean;

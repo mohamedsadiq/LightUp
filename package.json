@@ -2,8 +2,8 @@
   "name": "lightup",
   "displayName": "LightUp",
   "version": "0.1.0",
-  "description": "Your AI-powered reading companion that instantly clarifies and explains any text with precision and insight",
-  "author": "mosadiq",
+  "description": "Genius annotations for every page on the web.",
+  "author": "Moe Sadiq",
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
@@ -41,7 +41,7 @@
   },
   "manifest": {
     "background": {
-      "service_worker": "src/background.ts"
+      "service_worker": "background.js"
     },
     "host_permissions": [
       "http://127.0.0.1:1234/*"
@@ -50,7 +50,17 @@
       "tabs",
       "activeTab",
       "scripting",
-      "storage"
-    ]
+      "storage",
+      "commands"
+    ],
+    "commands": {
+      "open-welcome": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+W",
+          "mac": "Command+Shift+W"
+        },
+        "description": "Open welcome page"
+      }
+    }
   }
 }
