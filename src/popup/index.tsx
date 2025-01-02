@@ -126,7 +126,7 @@ function IndexPopup() {
         fromLanguage,
         toLanguage
       };
-      console.log('Saving translation settings:', translationSettings);
+     
       await storage.set("translationSettings", translationSettings);
     }
   }

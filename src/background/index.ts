@@ -35,6 +35,53 @@ setInterval(() => {
   }
 }, 1000 * 60 * 5); // Check every 5 minutes
 
+// Add rate limiting constants
+const RATE_LIMITS = {
+  REQUESTS_PER_MINUTE: 60,
+  REQUESTS_PER_HOUR: 1000
+};
+
+// Rate limiting tracking
+const rateLimiter = {
+  requests: new Map<string, number[]>(),
+  clean: () => {
+    const now = Date.now();
+    for (const [key, timestamps] of rateLimiter.requests.entries()) {
+      const filtered = timestamps.filter(t => now - t < 60 * 60 * 1000); // Keep last hour
+      if (filtered.length === 0) {
+        rateLimiter.requests.delete(key);
+      } else {
+        rateLimiter.requests.set(key, filtered);
+      }
+    }
+  }
+};
+
+// Clean up rate limiting data periodically
+setInterval(rateLimiter.clean, 5 * 60 * 1000); // Every 5 minutes
+
+const checkRateLimit = (apiKey: string): boolean => {
+  const now = Date.now();
+  const timestamps = rateLimiter.requests.get(apiKey) || [];
+  
+  // Clean old timestamps
+  const recentTimestamps = timestamps.filter(t => now - t < 60 * 60 * 1000);
+  const lastMinuteTimestamps = recentTimestamps.filter(t => now - t < 60 * 1000);
+
+  // Check limits
+  if (lastMinuteTimestamps.length >= RATE_LIMITS.REQUESTS_PER_MINUTE) {
+    throw new Error("Rate limit exceeded. Please wait a minute before trying again.");
+  }
+  if (recentTimestamps.length >= RATE_LIMITS.REQUESTS_PER_HOUR) {
+    throw new Error("Hourly rate limit exceeded. Please try again later.");
+  }
+
+  // Update timestamps
+  recentTimestamps.push(now);
+  rateLimiter.requests.set(apiKey, recentTimestamps);
+  return true;
+};
+
 const isConfigurationValid = (settings: Settings): boolean => {
   if (!settings) {
     console.error('No settings provided');
@@ -51,11 +98,7 @@ const isConfigurationValid = (settings: Settings): boolean => {
         return !!settings.geminiApiKey;
       case "xai": {
         const xaiKey = settings.xaiApiKey || '';
-        console.log('Validating xAI key:', {
-          length: xaiKey.length,
-          hasKey: !!xaiKey,
-          key: xaiKey.substring(0, 10) + '...' // Log first 10 chars for debugging
-        });
+     
         
         // Accept any non-empty key for now since xAI token format might vary
         return xaiKey.length > 0;
@@ -70,10 +113,18 @@ const isConfigurationValid = (settings: Settings): boolean => {
 };
 
 export async function handleProcessText(request: ProcessTextRequest, port: chrome.runtime.Port) {
+  const connectionId = port.name.split('text-processing-')[1];
+  const abortController = new AbortController();
+  let timeoutId: NodeJS.Timeout;
+  
   try {
-    const connectionId = port.name.split('text-processing-')[1];
-    const abortController = new AbortController();
-    
+    // Set up request timeout
+    const timeout = new Promise((_, reject) => {
+      timeoutId = setTimeout(() => {
+        reject(new Error("Request timed out. Please try again."));
+      }, 30000); // 30 second timeout
+    });
+
     activeConnections.set(connectionId, {
       controller: abortController,
       timestamp: Date.now()
@@ -81,21 +132,17 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
     const { mode, text, context, isFollowUp, settings } = request;
     
-    // Add more detailed validation logging
-    console.log('Validating settings:', {
-      modelType: settings?.modelType,
-      hasXaiKey: !!settings?.xaiApiKey,
-      keyLength: settings?.xaiApiKey?.length
-    });
-
     if (!isConfigurationValid(settings)) {
       throw new Error(
-        `${settings?.modelType?.toUpperCase() || 'AI model'} is not properly configured.\n` +
-        'Please ensure you have:\n' +
-        '1. Selected xAI as your model type\n' +
-        '2. Entered your xAI API key\n' +
-        '3. Saved your settings'
+        `Invalid configuration for ${settings?.modelType?.toUpperCase() || 'AI model'}.\n` +
+        'Please check your settings and try again.'
       );
+    }
+
+    // Check rate limits based on API key
+    const apiKey = settings.geminiApiKey || settings.xaiApiKey || settings.apiKey;
+    if (apiKey) {
+      checkRateLimit(apiKey);
     }
 
     const userMessage = isFollowUp
@@ -108,15 +155,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
             ? USER_PROMPTS[mode](text, context)
             : text;
 
-    console.log('Processing request with context:', { 
-      mode, 
-      text, 
-      hasContext: !!request.pageContext,
-      contextLength: request.pageContext?.length,
-      isFollowUp,
-      modelType: settings?.modelType
-    });
-
+   
     const storage = new Storage();
     const globalSettings = await storage.get("settings") as Settings;
     
@@ -126,7 +165,6 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         ? "/v1beta/models/gemini-pro:streamGenerateContent"
         : "/api/generate";
 
-    console.log('Sending message to LLM:', userMessage);
 
     let headers = { 'Content-Type': 'application/json' };
     let requestBody;
@@ -149,10 +187,6 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         }
       };
 
-      console.log('Using Gemini model:', globalSettings.geminiModel || "gemini-pro");
-
-      console.log('Sending Gemini request:', { url, requestBody });
-
       const response = await fetch(url, {
         method: "POST",
         headers,
@@ -168,13 +202,11 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
       // Handle non-streaming response for now
       const data = await response.json();
-      console.log('Raw Gemini response:', data);
 
       if (data.candidates && data.candidates.length > 0) {
         const candidate = data.candidates[0];
         if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
           const text = candidate.content.parts[0].text;
-          console.log('Extracted text:', text);
           
           // Split the text into smaller chunks for streaming-like behavior
           const words = text.split(' ');
@@ -182,7 +214,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
           
           for (let i = 0; i < words.length; i += chunkSize) {
             const chunk = words.slice(i, i + chunkSize).join(' ');
-            console.log('Sending chunk:', chunk);
+          
             port.postMessage({
               type: 'chunk',
               content: chunk + ' ',
@@ -208,7 +240,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     }
 
     if (settings.modelType === "xai") {
-      console.log('Using xAI model with follow-up:', isFollowUp);
+     
       let buffer = '';
       let markdownBuffer = '';
       let isInMarkdown = false;
@@ -414,7 +446,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
                 const content = chunk.choices[0].delta.content;
                 
                 if (isFirstChunk) {
-                  console.log('First chunk content:', content);
+               
                   isFirstChunk = false;
                 }
 
@@ -435,11 +467,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         if (streamError.message?.includes('aborted') || 
             streamError.name === 'AbortError' || 
             streamError.message?.includes('BodyStreamBuffer was aborted')) {
-          console.log('Stream was intentionally aborted');
-          port.postMessage({ 
-            type: 'aborted',
-            error: 'Request was cancelled'
-          });
+     
           return;
         }
         throw streamError; // Re-throw other errors
@@ -447,20 +475,31 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     }
 
   } catch (error) {
-    console.error('Processing error:', error);
-    port.postMessage({ 
-      type: 'error', 
-      error: error instanceof Error ? error.message : 'Unknown error occurred'
+    console.error("Error processing text:", error);
+    
+    // Send user-friendly error message
+    const userMessage = error.message.includes("rate limit")
+      ? error.message
+      : error.message.includes("timeout")
+      ? "Request timed out. Please try again."
+      : "An error occurred while processing your request. Please try again.";
+
+    port.postMessage({
+      type: 'error',
+      error: userMessage,
+      isFollowUp: request.isFollowUp,
+      id: request.id
     });
   } finally {
-    const connectionId = port.name.split('text-processing-')[1];
+    // Clean up
+    clearTimeout(timeoutId);
     activeConnections.delete(connectionId);
   }
 }
 
 // Update message listener to use port-based communication
 chrome.runtime.onConnect.addListener((port) => {
-  console.log("Connection established", port.name);
+
   
   port.onMessage.addListener(async (msg) => {
     if (msg.type === "STOP_GENERATION") {

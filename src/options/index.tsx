@@ -302,9 +302,9 @@ function IndexOptions() {
       
       setSettings(newSettings);
       await storage.set("settings", newSettings);
-      console.log(`Updated ${key}:`, value);
+   
     } catch (error) {
-      console.error(`Error updating ${key}:`, error);
+    
       setError(`Failed to update ${key}`);
     }
   };

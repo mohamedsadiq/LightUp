@@ -9,7 +9,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
   
   try {
     const { text, mode } = req.body
-    console.log('Processing text in mode:', mode)
+  
 
     if (!['explain', 'summarize', 'analyze', 'translate'].includes(mode)) {
       res.send({ error: `Invalid mode: ${mode}` })

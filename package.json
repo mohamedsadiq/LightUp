@@ -40,11 +40,22 @@
     "uuid": "^11.0.3"
   },
   "manifest": {
+    "manifest_version": 3,
+    "name": "LightUp - AI Powered Web Annotations",
+    "version": "0.1.0",
+    "description": "Genius annotations for every page on the web. Powered by AI to explain, summarize, and analyze any text you select.",
     "background": {
-      "service_worker": "background.js"
+      "service_worker": "background.js",
+      "type": "module"
     },
+    "action": {
+      "default_popup": "popup.html"
+    },
+    "icons": {},
     "host_permissions": [
-      "http://127.0.0.1:1234/*"
+      "http://127.0.0.1:1234/*",
+      "https://*/*",
+      "http://*/*"
     ],
     "permissions": [
       "tabs",
@@ -61,6 +72,21 @@
         },
         "description": "Open welcome page"
       }
-    }
+    },
+    "content_security_policy": {
+      "extension_pages": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/css2; img-src 'self' data: https:; connect-src 'self' http://127.0.0.1:* ws://localhost:* https://api.openai.com https://generativelanguage.googleapis.com https://api.x.ai; frame-src 'none'; font-src 'self' data: https://fonts.gstatic.com; media-src 'none'; worker-src 'self'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;",
+      "sandbox": "sandbox allow-scripts allow-forms allow-popups allow-modals"
+    },
+    "web_accessible_resources": [
+      {
+        "resources": [
+          "assets/*"
+        ],
+        "matches": [
+          "<all_urls>"
+        ]
+      }
+    ],
+    "options_page": "options.html"
   }
 }

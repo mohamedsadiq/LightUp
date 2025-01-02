@@ -75,7 +75,7 @@ function Content() {
 
   // Remove context refresh effect and add simple mount effect
   useEffect(() => {
-    console.log("Content script mounted");
+    
   }, [isEnabled]);
 
   // Initialize followUpQAs state first
