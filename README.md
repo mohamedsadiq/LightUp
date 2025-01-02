@@ -3,7 +3,7 @@
 ![1441](https://github.com/user-attachments/assets/c596a963-fab3-4908-a0f9-5ffe993a07a8)
 
 <div align="center">
-  <a href="https://boimaginations.com/lightup">🌐 Website</a> | <a href="https://x.com/Lightupaii">𝕏 Follow us on X</a>
+  <a href="https://boimaginations.com/lightup">🌐 Website</a> | <a href="https://x.com/Lightupaii">𝕏 Follow us on X</a> | <a href="https://www.boimaginations.com/lightup/getting-started">🚀 Getting Started</a> | <a href="https://github.com/lightup/releases">📥 Release Page</a>
 </div>
 
 ## ✨  Meet LightUp
