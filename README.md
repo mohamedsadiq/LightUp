@@ -2,7 +2,9 @@
 
 ![1441](https://github.com/user-attachments/assets/c596a963-fab3-4908-a0f9-5ffe993a07a8)
 
-[🌐 Website](https://lightup.ai) | [𝕏 Follow us on X](https://x.com/LightUpAI)
+<div align="center">
+  <a href="https://boimaginations.com/lightup">🌐 Website</a> | <a href="https://x.com/Lightupaii">𝕏 Follow us on X</a>
+</div>
 
 ## ✨  Meet LightUp
 Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
