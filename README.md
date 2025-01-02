@@ -2,11 +2,24 @@
 
 ![1441](https://github.com/user-attachments/assets/c596a963-fab3-4908-a0f9-5ffe993a07a8)
 
-
-
+[🌐 Website](https://lightup.ai) | [𝕏 Follow us on X](https://x.com/LightUpAI)
 
 ## ✨  Meet LightUp
 Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
+
+## 🚀 Quick Start
+
+1. **Download LightUp**
+   - Visit our [Releases page](https://github.com/lightup/releases) or
+   - Get it from [Chrome Web Store](https://chrome.google.com/webstore/detail/lightup)
+
+2. **Setup**
+   - Pin LightUp to your browser toolbar
+   - Right-click on the LightUp icon in your browser toolbar and then click on "Options"
+   - Choose your preferred AI model
+   - Start highlighting text to see the magic!
+
+[📖 Detailed Installation Guide](#installation-for-users) or visit our [Getting Started page](https://www.boimaginations.com/lightup/getting-started)
 
 
 ## ✨ Features
@@ -92,6 +105,28 @@ You can switch modes in two ways:
 
 This allows you to easily toggle between explaining, summarizing, analyzing, and translating text as per your needs.
 
+### Browser Installation
+
+1. **Chrome/Brave Users**
+   - Open chrome://extensions/
+   - Enable "Developer mode" in the top right
+   - Drag and drop the downloaded ZIP file OR
+   - Click "Load unpacked" and select the unzipped folder
+
+### Configuration
+
+1. **Setup Extension**
+   - Click the puzzle piece icon in your browser toolbar
+   - Find LightUp and click the pin icon
+   - Right-click the LightUp icon and choose "Options" for settings
+  
+2. **Choose AI Backend**
+   - Local LLM (requires running local server)
+   - OpenAI API (requires API key)
+   - Google Gemini (requires API key)
+   - Grok-beta by xAI
+
+
 
 ## 🛠️ Development
 
@@ -114,5 +149,7 @@ You can send your support through the following cryptocurrency addresses:
 - Bitcoin (BTC): `bc1qfz2ccaqu579xjtfqdhr37k07u6z2g22gzkkfz2`
 - Ethereum (ETH): `0xc486F15697FFe7BE07709f2009e032e1d3aC78fA`
 - USDT (ERC-20): `0xc486F15697FFe7BE07709f2009e032e1d3aC78fA`
+
+
 
 
