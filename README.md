@@ -13,7 +13,7 @@ Seamless AI assistance that lives in your browser. No new tabs. No context switc
 
 1. **Download LightUp**
    - Visit our [Releases page](https://github.com/lightup/releases) or
-   - Get it from [Chrome Web Store](https://chrome.google.com/webstore/detail/lightup)
+   - Get it from [Chrome Web Store(soon)]()
 
 2. **Setup**
    - Pin LightUp to your browser toolbar
