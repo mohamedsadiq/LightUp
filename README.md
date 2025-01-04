@@ -10,8 +10,6 @@ Created by [@sadiq_moo](https://x.com/sadiq_moo)
   <a href="https://boimaginations.com/lightup">🌐 Website</a> | <a href="https://x.com/sadiq_moo">𝕏 Follow us on X</a> | <a href="https://www.boimaginations.com/lightup/getting-started">🚀 Getting Started</a> | <a href="https://github.com/mohamedsadiq/LightUp/releases">📥 Release Page</a>
 </div>
 
-## ✨  Meet LightUp
-AI-powered annotations for every page on the web. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
 
 ## 🚀 Quick Start
 
