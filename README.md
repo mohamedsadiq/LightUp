@@ -1,4 +1,6 @@
 ## LightUp : AI-Powered Annotations for every page on the web.
+AI-powered annotations for every page on the web. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
+created by (@sadiq_moo)[https://x.com/sadiq_moo]
 
 ![1441](https://github.com/user-attachments/assets/c596a963-fab3-4908-a0f9-5ffe993a07a8)
 
@@ -7,7 +9,7 @@
 </div>
 
 ## ✨  Meet LightUp
-Seamless AI assistance that lives in your browser. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
+AI-powered annotations for every page on the web. No new tabs. No context switching. No interruptions. Just highlight any text and instantly get AI-powered insights.
 
 ## 🚀 Quick Start
 
