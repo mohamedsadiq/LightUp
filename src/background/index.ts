@@ -149,11 +149,9 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
       : mode === "translate" && settings?.translationSettings 
         ? `Translate the following text from ${settings.translationSettings.fromLanguage} to ${settings.translationSettings.toLanguage}:\n\n${text}`
-        : request.pageContext 
-          ? `Page context: "${request.pageContext}"\n\nUser selection: "${text}"\n\nPlease provide an answer that takes into account both the selected text and its surrounding context. ${typeof USER_PROMPTS[mode] === 'function' ? USER_PROMPTS[mode](text, context) : text}`
-          : typeof USER_PROMPTS[mode] === 'function' 
-            ? USER_PROMPTS[mode](text, context)
-            : text;
+        : typeof USER_PROMPTS[mode] === 'function' 
+          ? USER_PROMPTS[mode](text, context)
+          : text;
 
    
     const storage = new Storage();
@@ -496,6 +494,16 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     activeConnections.delete(connectionId);
   }
 }
+
+const ONBOARDING_URL = "https://www.boimaginations.com/lightup/welcome" // Replace with your actual onboarding URL
+
+// Listen for extension installation
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === "install") {
+    // Open onboarding page in a new tab
+    chrome.tabs.create({ url: ONBOARDING_URL });
+  }
+});
 
 // Update message listener to use port-based communication
 chrome.runtime.onConnect.addListener((port) => {

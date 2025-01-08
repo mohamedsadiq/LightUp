@@ -16,9 +16,9 @@
 ### Chrome Permissions
 ```json
 "permissions": [
-  "tabs",
+ 
   "activeTab",
-  "scripting",
+  
   "storage",
   "commands"
 ]

@@ -58,7 +58,6 @@
       "http://*/*"
     ],
     "permissions": [
-      
       "activeTab",
       "storage",
       "commands"
