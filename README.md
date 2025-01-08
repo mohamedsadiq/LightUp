@@ -4,7 +4,7 @@
 
 
 <div align="center">
-  <a href="https://boimaginations.com/lightup">🌐 Website</a> | <a href="https://x.com/sadiq_moo">𝕏 Follow us on X</a> | <a href="https://www.boimaginations.com/lightup/getting-started">🚀 Getting Started</a> | <a href="https://github.com/mohamedsadiq/LightUp/releases">📥 Release Page</a>
+  <a href="https://boimaginations.com/lightup">🌐 Website</a> | <a href="https://x.com/sadiq_moo">𝕏 Follow us on X</a> | <a href="https://www.boimaginations.com/lightup/getting-started">🚀 Getting Started</a> | <a href="https://github.com/mohamedsadiq/LightUp/releases">📥 Release Page</a> |  <a href="https://chromewebstore.google.com/detail/lightup-ai-powered-web-an/pncapgeoeedlfppkohlbelelkkihikel?authuser=5&hl=en-GB">📥 Download on Chrome</a>
 </div>
 
 ## ✨  Meet LightUp
