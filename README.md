@@ -1,6 +1,7 @@
 ## LightUp : AI-Powered Annotations for every page on the web.
 
-![1441](https://github.com/user-attachments/assets/c596a963-fab3-4908-a0f9-5ffe993a07a8)
+![1441](https://pbs.twimg.com/media/GgxiXUPXoAAVQWP?format=jpg&name=medium)
+
 
 <div align="center">
   <a href="https://boimaginations.com/lightup">🌐 Website</a> | <a href="https://x.com/sadiq_moo">𝕏 Follow us on X</a> | <a href="https://www.boimaginations.com/lightup/getting-started">🚀 Getting Started</a> | <a href="https://github.com/mohamedsadiq/LightUp/releases">📥 Release Page</a>
@@ -43,7 +44,8 @@ Seamless AI assistance that lives in your browser. No new tabs. No context switc
     - Gemini 1.5 Pro
     - Gemini 1.5 Flash
 - **Dark Mode**.
-  
+![1441](https://github.com/user-attachments/assets/c596a963-fab3-4908-a0f9-5ffe993a07a8)
+
 
 ## 📥 Download
 
