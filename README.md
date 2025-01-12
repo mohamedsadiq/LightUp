@@ -77,7 +77,7 @@ OR click "Load unpacked" and select the unzipped folder.
    - Right-click the LightUp icon and choose "Options" to go directly to Settings
   
 2. Choose your preferred AI backend:
-   - Local LLM (requires running local serverlocal-llm-download)
+   - Local LLM (requires running local server)
    - OpenAI API (requires API key)
    - Google Gemini (requires Gemini API key and model selection)
    - Grok-beta by xAI
