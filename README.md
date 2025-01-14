@@ -161,16 +161,4 @@ This allows you to easily toggle between explaining, summarizing, analyzing, and
   <img src="assets/intro.png" width="100%" height="100%" alt="LightUp Logo">
 </p>
 
-## 🌟 Support LightUp
-
-If you've found LightUp helpful and want to see it grow, consider supporting the project! Whether it's through a small donation, or sharing with others, every bit helps us continue improving and bringing new features to life.
-
-You can send your support through the following cryptocurrency addresses:
-
-- Bitcoin (BTC): `bc1qfz2ccaqu579xjtfqdhr37k07u6z2g22gzkkfz2`
-- Ethereum (ETH): `0xc486F15697FFe7BE07709f2009e032e1d3aC78fA`
-- USDT (ERC-20): `0xc486F15697FFe7BE07709f2009e032e1d3aC78fA`
-
-
-
 
