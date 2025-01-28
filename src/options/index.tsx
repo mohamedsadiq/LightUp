@@ -83,45 +83,6 @@ const popupVariants = {
   exit: { opacity: 0, scale: 0.8, filter: 'blur(10px)' }
 };
 
-const CryptoSupportPopup = ({ isOpen, onClose }) => {
-  return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <motion.div
-            className="bg-white p-8 rounded-lg shadow-lg w-5/6 max-w-lg"
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            variants={popupVariants}
-            transition={{ duration: 0.3 }}
-          >
-            <h2 className="text-2xl font-bold mb-6 text-center">Support the Project</h2>
-            {/* <p className="text-center text-gray-600 mb-4">Your support helps us continue to improve and maintain this project. Thank you for your generosity!</p> */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="font-medium">BTC Address:</span>
-                <span className="text-gray-600">1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</span>
-                <button onClick={() => copyToClipboard('1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa')} className="ml-2 bg-gray-200 text-gray-800 px-2 py-1 rounded">Copy</button>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="font-medium">ETH Address:</span>
-                <span className="text-gray-600">0x742d35Cc6634C0532925a3b844Bc454e4438f44e</span>
-                <button onClick={() => copyToClipboard('0x742d35Cc6634C0532925a3b844Bc454e4438f44e')} className="ml-2 bg-gray-200 text-gray-800 px-2 py-1 rounded">Copy</button>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="font-medium">USDT Address:</span>
-                <span className="text-gray-600">T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb</span>
-                <button onClick={() => copyToClipboard('T9yD14Nj9j7xAB4dbGeiX9h8unkKHxuWwb')} className="ml-2 bg-gray-200 text-gray-800 px-2 py-1 rounded">Copy</button>
-              </div>
-            </div>
-            <button onClick={onClose} className="mt-6 bg-[#000] text-white px-4 py-2 rounded-[7px] w-full">Close</button>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
-  );
-};
 
 // Add this before the IndexOptions function
 const Switch = ({ id, checked, onChange, label, description = undefined }) => (
@@ -270,15 +231,6 @@ function IndexOptions() {
     }));
   };
 
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const handleSupportClick = () => {
-    setIsPopupOpen(true);
-  };
-
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
-  };
 
   const colorOptions = [
     { value: 'default', label: 'Default (System)', color: 'bg-gray-200' },
@@ -337,12 +289,7 @@ function IndexOptions() {
             LightUp Settings
           </h1>
         </div>
-        <button onClick={handleSupportClick} className="bg-[#f5a435] text-white px-3 py-1 rounded-[5px] flex items-center gap-1">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-4 h-4">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-          </svg>
-          Support LightUp
-        </button>
+       
       </div>
 
       {/* Configuration Section */}
@@ -704,7 +651,7 @@ function IndexOptions() {
         </div>
       </div>
 
-      <CryptoSupportPopup isOpen={isPopupOpen} onClose={handleClosePopup} />
+     
 
       <div id="toast" className="fixed bottom-4 right-4 bg-[#10a37f] text-white px-4 py-2 rounded-lg opacity-0 transition-opacity duration-300 shadow-lg"></div>
     </div>
