@@ -1,9 +1,10 @@
 ## LightUp : AI-Powered Annotations for every page on the web.
 
-![1441](https://github.com/user-attachments/assets/c596a963-fab3-4908-a0f9-5ffe993a07a8)
+![1441](https://pbs.twimg.com/media/GgxiXUPXoAAVQWP?format=jpg&name=medium)
+
 
 <div align="center">
-  <a href="https://boimaginations.com/lightup">🌐 Website</a> | <a href="https://x.com/sadiq_moo">𝕏 Follow us on X</a> | <a href="https://www.boimaginations.com/lightup/getting-started">🚀 Getting Started</a> | <a href="https://github.com/mohamedsadiq/LightUp/releases">📥 Release Page</a>
+  <a href="https://boimaginations.com/lightup">🌐 Website</a> | <a href="https://x.com/sadiq_moo">𝕏 Follow us on X</a> | <a href="https://www.boimaginations.com/lightup/getting-started">🚀 Getting Started</a> | <a href="https://github.com/mohamedsadiq/LightUp/releases">📥 Release Page</a> |  <a href="https://chromewebstore.google.com/detail/lightup-ai-powered-web-an/pncapgeoeedlfppkohlbelelkkihikel?authuser=5&hl=en-GB">📥 Download on Chrome</a>
 </div>
 
 ## ✨  Meet LightUp
@@ -13,7 +14,7 @@ Seamless AI assistance that lives in your browser. No new tabs. No context switc
 
 1. **Download LightUp**
    - Visit our [Releases page](https://github.com/lightup/releases) or
-   - Get it from [Chrome Web Store(soon)]()
+   - Get it from [Chrome Web Store](https://chromewebstore.google.com/detail/lightup-ai-powered-web-an/pncapgeoeedlfppkohlbelelkkihikel?authuser=5&hl=en-GB)
 
 2. **Setup**
    - Pin LightUp to your browser toolbar
@@ -43,7 +44,8 @@ Seamless AI assistance that lives in your browser. No new tabs. No context switc
     - Gemini 1.5 Pro
     - Gemini 1.5 Flash
 - **Dark Mode**.
-  
+![1441](https://github.com/user-attachments/assets/c596a963-fab3-4908-a0f9-5ffe993a07a8)
+
 
 ## 📥 Download
 
@@ -75,7 +77,7 @@ OR click "Load unpacked" and select the unzipped folder.
    - Right-click the LightUp icon and choose "Options" to go directly to Settings
   
 2. Choose your preferred AI backend:
-   - Local LLM (requires running local serverlocal-llm-download)
+   - Local LLM (requires running local server)
    - OpenAI API (requires API key)
    - Google Gemini (requires Gemini API key and model selection)
    - Grok-beta by xAI
@@ -158,17 +160,5 @@ This allows you to easily toggle between explaining, summarizing, analyzing, and
 <p align="center">
   <img src="assets/intro.png" width="100%" height="100%" alt="LightUp Logo">
 </p>
-
-## 🌟 Support LightUp
-
-If you've found LightUp helpful and want to see it grow, consider supporting the project! Whether it's through a small donation, or sharing with others, every bit helps us continue improving and bringing new features to life.
-
-You can send your support through the following cryptocurrency addresses:
-
-- Bitcoin (BTC): `bc1qfz2ccaqu579xjtfqdhr37k07u6z2g22gzkkfz2`
-- Ethereum (ETH): `0xc486F15697FFe7BE07709f2009e032e1d3aC78fA`
-- USDT (ERC-20): `0xc486F15697FFe7BE07709f2009e032e1d3aC78fA`
-
-
 
 
