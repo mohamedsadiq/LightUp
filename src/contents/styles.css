@@ -1,0 +1,52 @@
+/* Base styles for content */
+.lightup-content {
+  font-family: 'K2D', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: #1a1a1a;
+}
+
+/* Dialog styles */
+.lightup-dialog {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  max-width: 32rem;
+  width: 100%;
+  margin: 1rem;
+  padding: 1.5rem;
+}
+
+/* Dark mode styles */
+.dark .lightup-dialog {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+
+/* Animation classes */
+.lightup-fade-in {
+  animation: fadeIn 0.2s ease-in-out;
+}
+
+.lightup-scale-in {
+  animation: scaleIn 0.2s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+} 

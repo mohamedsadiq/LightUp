@@ -58,12 +58,12 @@ Download the latest version of LightUp from our [Releases page](https://github.c
 
 1. Download the Extension
   - Go to the LightUp Releases
-  - Download the latest release ZIP file (lightup-vX.X.X.zip)
+  - Download the latest release ZIP file (lightup-vX.X.X.zip) and unzip it.
 
 2. Install in Chrome/Brave
    - Open Chrome/Brave and go to chrome://extensions/
    - Enable "Developer mode" in the top right corner
-   - Drag and drop the downloaded ZIP file into the extensions page
+   - Drag and drop the downloaded unzipped file into the extensions page
 OR click "Load unpacked" and select the unzipped folder.
 
 
