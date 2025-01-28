@@ -15,6 +15,7 @@ interface Settings {
   apiKey?: string
   geminiApiKey?: string
   xaiApiKey?: string
+  openaiApiKey?: string
   geminiModel?: string
   maxTokens?: number
 }
@@ -92,15 +93,19 @@ const isConfigurationValid = (settings: Settings): boolean => {
     switch (settings.modelType) {
       case "local":
         return !!settings.serverUrl;
-      case "openai":
-        return !!settings.apiKey && settings.apiKey.startsWith('sk-');
+      case "openai": {
+        // Check both new and legacy API key fields
+        const openaiKey = settings.openaiApiKey || settings.apiKey;
+        return !!openaiKey && (
+          openaiKey.startsWith('sk-') || // Standard OpenAI key format
+          openaiKey.startsWith('org-') || // Organization key format
+          openaiKey.length >= 32 // Fallback for other valid key formats
+        );
+      }
       case "gemini":
         return !!settings.geminiApiKey;
       case "xai": {
         const xaiKey = settings.xaiApiKey || '';
-     
-        
-        // Accept any non-empty key for now since xAI token format might vary
         return xaiKey.length > 0;
       }
       default:
@@ -140,7 +145,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     }
 
     // Check rate limits based on API key
-    const apiKey = settings.geminiApiKey || settings.xaiApiKey || settings.apiKey;
+    const apiKey = settings.geminiApiKey || settings.xaiApiKey || settings.apiKey || settings.openaiApiKey;
     if (apiKey) {
       checkRateLimit(apiKey);
     }
@@ -424,51 +429,72 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         for (const line of lines) {
           if (line.trim() === '') continue;
           
-          try {
-            if (globalSettings?.modelType === "gemini") {
-              // Handle Gemini response format
-              const data = JSON.parse(line);
-              if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-                const content = data.candidates[0].content.parts[0].text;
-                port.postMessage({ 
-                  type: 'chunk', 
-                  content: content,
-                  isFollowUp: isFollowUp,
-                  id: request.id
-                });
-              }
-            } else {
-              // Handle other models' response format
-              const chunk = JSON.parse(line.replace(/^data: /, ''));
-              if (chunk.choices?.[0]?.delta?.content) {
-                const content = chunk.choices[0].delta.content;
-                
-                if (isFirstChunk) {
-               
-                  isFirstChunk = false;
-                }
+          const parsedLine = JSON.parse(line.replace(/^data: /, ''));
+          const settings = await storage.get("settings") as Settings;
+          
+          if (settings?.modelType === "gemini" && parsedLine.candidates?.[0]?.content?.parts?.[0]?.text) {
+            // Handle Gemini response format
+            const content = parsedLine.candidates[0].content.parts[0].text;
+            port.postMessage({ 
+              type: 'chunk', 
+              content: content,
+              isFollowUp: isFollowUp,
+              id: request.id
+            });
+          } else if (parsedLine.choices?.[0]?.delta?.content) {
+            // Handle other models' response format
+            const content = parsedLine.choices[0].delta.content;
+            
+            if (isFirstChunk) {
+              isFirstChunk = false;
+            }
 
-                port.postMessage({ 
-                  type: 'chunk', 
-                  content: content,
-                  isFollowUp: isFollowUp,
-                  id: request.id
-                });
+            port.postMessage({ 
+              type: 'chunk', 
+              content: content,
+              isFollowUp: isFollowUp,
+              id: request.id
+            });
+          }
+        }
+      } catch (e) {
+        console.warn('Failed to parse streaming response:', e);
+      }
+    }
+
+    if (settings.modelType === "openai") {
+      try {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          
+          const chunk = decoder.decode(value);
+          const lines = chunk.split('\n').filter(line => line.trim());
+          
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              try {
+                const data = JSON.parse(line.slice(6));
+                if (data.choices[0].delta.content) {
+                  port.postMessage({
+                    type: 'chunk',
+                    content: data.choices[0].delta.content,
+                    isFollowUp: request.isFollowUp,
+                    id: request.id
+                  });
+                }
+              } catch (e) {
+                console.error('Error parsing OpenAI stream chunk:', e);
               }
             }
-          } catch (e) {
-            console.warn('Failed to parse streaming response:', e);
           }
         }
       } catch (streamError) {
-        // Check if the error is due to an aborted stream
-        if (streamError.message?.includes('aborted') || 
-            streamError.name === 'AbortError' || 
-            streamError.message?.includes('BodyStreamBuffer was aborted')) {
-     
-          return;
-        }
-        throw streamError; // Re-throw other errors
+        if (streamError.message?.includes('aborted')) return;
+        throw streamError;
       }
     }
 
