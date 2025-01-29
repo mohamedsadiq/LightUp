@@ -75,11 +75,7 @@ const ActionButton = ({ mode, activeMode, onClick, children }: ActionButtonProps
         <path d="M3 5h12M9 3v2m1.048 8.5A18.022 18.022 0 008 5.3m3.048 8.2l1.452 3.2m-1.452-3.2a18.019 18.019 0 002.048-3.2M9 19l3-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
-    annotations: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    )
+   
   }
 
   return (
@@ -202,12 +198,7 @@ function IndexPopup() {
               onClick={() => handleModeChange("translate")}>
               Translate
             </ActionButton>
-            <ActionButton
-              mode="annotations"
-              activeMode={activeMode}
-              onClick={() => handleModeChange("annotations")}>
-              Annotations
-            </ActionButton>
+         
           </div>
         </div>
 

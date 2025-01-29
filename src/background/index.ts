@@ -117,12 +117,31 @@ const isConfigurationValid = (settings: Settings): boolean => {
   }
 };
 
+const waitForSettings = async (maxAttempts = 3, delayMs = 1000): Promise<Settings | null> => {
+  const storage = new Storage();
+  
+  for (let i = 0; i < maxAttempts; i++) {
+    const settings = await storage.get("settings") as Settings;
+    if (settings && isConfigurationValid(settings)) {
+      return settings;
+    }
+    await new Promise(resolve => setTimeout(resolve, delayMs));
+  }
+  return null;
+};
+
 export async function handleProcessText(request: ProcessTextRequest, port: chrome.runtime.Port) {
   const connectionId = port.name.split('text-processing-')[1];
   const abortController = new AbortController();
   let timeoutId: NodeJS.Timeout;
   
   try {
+    // Wait for settings to be properly initialized
+    const settings = await waitForSettings();
+    if (!settings) {
+      throw new Error("Failed to initialize settings. Please try again.");
+    }
+
     // Set up request timeout
     const timeout = new Promise((_, reject) => {
       timeoutId = setTimeout(() => {
@@ -135,25 +154,25 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       timestamp: Date.now()
     });
 
-    const { mode, text, context, isFollowUp, settings } = request;
+    const { mode, text, context, isFollowUp, settings: requestSettings } = request;
     
-    if (!isConfigurationValid(settings)) {
+    if (!isConfigurationValid(requestSettings)) {
       throw new Error(
-        `Invalid configuration for ${settings?.modelType?.toUpperCase() || 'AI model'}.\n` +
+        `Invalid configuration for ${requestSettings?.modelType?.toUpperCase() || 'AI model'}.\n` +
         'Please check your settings and try again.'
       );
     }
 
     // Check rate limits based on API key
-    const apiKey = settings.geminiApiKey || settings.xaiApiKey || settings.apiKey || settings.openaiApiKey;
+    const apiKey = requestSettings.geminiApiKey || requestSettings.xaiApiKey || requestSettings.apiKey || requestSettings.openaiApiKey;
     if (apiKey) {
       checkRateLimit(apiKey);
     }
 
     const userMessage = isFollowUp
       ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
-      : mode === "translate" && settings?.translationSettings 
-        ? `Translate the following text from ${settings.translationSettings.fromLanguage} to ${settings.translationSettings.toLanguage}:\n\n${text}`
+      : mode === "translate" && requestSettings?.translationSettings 
+        ? `Translate the following text from ${requestSettings.translationSettings.fromLanguage} to ${requestSettings.translationSettings.toLanguage}:\n\n${text}`
         : typeof USER_PROMPTS[mode] === 'function' 
           ? USER_PROMPTS[mode](text, context)
           : text;
@@ -171,10 +190,10 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
     let headers = { 'Content-Type': 'application/json' };
     let requestBody;
-    let url = settings.serverUrl;
+    let url = requestSettings.serverUrl;
 
     if (globalSettings?.modelType === "gemini") {
-      headers['x-goog-api-key'] = settings.geminiApiKey || '';
+      headers['x-goog-api-key'] = requestSettings.geminiApiKey || '';
       url = `https://generativelanguage.googleapis.com/v1beta/models/${globalSettings.geminiModel || "gemini-pro"}:generateContent`;
       requestBody = {
         contents: [{
@@ -186,7 +205,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
           temperature: 0.7,
           topK: 40,
           topP: 0.95,
-          maxOutputTokens: settings.maxTokens || 2048
+          maxOutputTokens: requestSettings.maxTokens || 2048
         }
       };
 
@@ -242,7 +261,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       return;
     }
 
-    if (settings.modelType === "xai") {
+    if (requestSettings.modelType === "xai") {
      
       let buffer = '';
       let markdownBuffer = '';
@@ -365,7 +384,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       return;
     }
 
-    url = settings.serverUrl + endpoint;
+    url = requestSettings.serverUrl + endpoint;
     requestBody = {
       model: "llama-3.2-3b-instruct",
       messages: [
@@ -462,7 +481,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       }
     }
 
-    if (settings.modelType === "openai") {
+    if (requestSettings.modelType === "openai") {
       try {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
