@@ -321,14 +321,13 @@ function IndexOptions() {
           className="w-full p-2 mb-4 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
         >
           <option value="local">Local LLM</option>
-          <option value="openai">OpenAI</option>
           <option value="gemini">Google Gemini</option>
           <option value="xai">xAI (Grok)</option>
         </select>
 
         {settings.modelType === "local" ? (
           <>
-            <label className="block mb-2 text-gray-800 font-k2d font-medium  text-base">
+            <label className="block mb-2 text-gray-800 font-k2d font-medium text-base">
               Llama Server URL:
             </label>
             <input
@@ -340,25 +339,6 @@ function IndexOptions() {
             />
             <p className="text-sm text-gray-500 mb-4">
               Llama is a local server setup. No API key is required.
-            </p>
-          </>
-        ) : settings.modelType === "openai" ? (
-          <>
-            <label className="block mb-2 font-k2d font-medium text-base">
-              OpenAI API Key:
-            </label>
-            <input
-              type="password"
-              value={settings.apiKey}
-              onChange={(e) => setSettings(prev => ({
-                ...prev,
-                apiKey: e.target.value
-              }))}
-              className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
-              placeholder="Enter your OpenAI API key"
-            />
-            <p className="text-sm text-gray-500 mb-4">
-              Get your API key from the <a href="https://platform.openai.com/docs/overview" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">OpenAI platform</a>. Free tier available.
             </p>
           </>
         ) : settings.modelType === "gemini" ? (

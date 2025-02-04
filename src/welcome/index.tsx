@@ -104,22 +104,6 @@ function Welcome() {
               <div className="space-y-4">
                 <button
                   onClick={() => {
-                    setSettings(prev => ({ ...prev, modelType: "openai" }))
-                    handleNext()
-                  }}
-                  className="w-full p-4 border rounded-lg hover:bg-gray-50 transition-colors flex items-center justify-between group"
-                >
-                  <div>
-                    <h3 className="font-medium text-lg">OpenAI</h3>
-                    <p className="text-gray-500">Powered by GPT models</p>
-                  </div>
-                  <svg className="w-6 h-6 text-gray-400 group-hover:text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-
-                <button
-                  onClick={() => {
                     setSettings(prev => ({ ...prev, modelType: "gemini" }))
                     handleNext()
                   }}
