@@ -664,11 +664,10 @@ function Content() {
                                 gap: '4px',
                                 marginTop: '-3px',
                                 // padding: '4px 8px',
-                             
                                 // background: currentTheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
                                 // border: '1px solid ' + (currentTheme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'),
                                 minWidth: '80px',
-                                justifyContent: 'center'
+                                // justifyContent: 'center'
                               }}
                             >
                              

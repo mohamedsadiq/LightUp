@@ -23,7 +23,7 @@ export const useCurrentModel = () => {
             setCurrentModel(settings.geminiModel)
           }
           // For Grok, show the specific model version
-          else if (settings.modelType === "grok" && settings.grokModel) {
+          else if (settings.modelType === "xai" && settings.grokModel) {
             console.log("[useCurrentModel] Found Grok model:", settings.grokModel)
             setCurrentModel(settings.grokModel)
           }
@@ -56,7 +56,7 @@ export const useCurrentModel = () => {
             setCurrentModel(settings.geminiModel)
           }
           // For Grok, show the specific model version
-          else if (settings.modelType === "grok" && settings.grokModel) {
+          else if (settings.modelType === "xai" && settings.grokModel) {
             console.log("[useCurrentModel] Model updated to Grok:", settings.grokModel)
             setCurrentModel(settings.grokModel)
           }
@@ -95,7 +95,7 @@ export const useCurrentModel = () => {
         setCurrentModel(settings.geminiModel)
       }
       // For Grok, show the specific model version
-      else if (settings.modelType === "grok" && settings.grokModel) {
+      else if (settings.modelType === "xai" && settings.grokModel) {
         console.log("[useCurrentModel] Updating to Grok model:", settings.grokModel)
         setCurrentModel(settings.grokModel)
       }

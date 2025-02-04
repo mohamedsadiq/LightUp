@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import { Storage } from "@plasmohq/storage"
 import "../styles/options.css"
 import "../style.css"
-import type { Settings, ModelType, GeminiModel } from "~types/settings"
+import type { Settings, ModelType, GeminiModel, GrokModel } from "~types/settings"
 import { motion, AnimatePresence } from "framer-motion"
 
 const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
@@ -20,6 +20,27 @@ const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[
     value: "gemini-1.5-flash-8b",
     label: "Gemini 1.5 Flash-8B",
     description: "8-bit quantized version for efficient processing"
+  }
+];
+
+const GROK_MODELS: { value: GrokModel; label: string; description: string; price: string }[] = [
+  {
+    value: "grok-2",
+    label: "Grok 2",
+    description: "Standard text model with balanced performance",
+    price: "$2.00 per 1M tokens"
+  },
+  {
+    value: "grok-2-latest",
+    label: "Grok 2 Latest",
+    description: "Latest version with improved capabilities",
+    price: "$2.00 per 1M tokens"
+  },
+  {
+    value: "grok-beta",
+    label: "Grok Beta",
+    description: "Beta version with experimental features",
+    price: "$5.00 per 1M tokens"
   }
 ];
 
@@ -109,6 +130,7 @@ function IndexOptions() {
     geminiApiKey: "",
     geminiModel: "gemini-1.5-pro",
     xaiApiKey: "",
+    grokModel: "grok-2",
     customization: {
       showSelectedText: true,
       theme: "light",
@@ -394,7 +416,7 @@ function IndexOptions() {
           </>
         ) : (
           <>
-            <label className="block mb-2 font-k2d font-medium  text-base">
+            <label className="block mb-2 font-k2d font-medium text-base">
               xAI API Key:
             </label>
             <input
@@ -410,6 +432,45 @@ function IndexOptions() {
             <p className="text-sm text-gray-500 mb-4">
               Get your API key from the <a href="https://x.ai/api" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">xAI platform</a>. Free tier available with $25 monthly credits for beta users.
             </p>
+
+            <label className="block mb-2 font-k2d font-medium text-base">
+              Grok Model:
+            </label>
+            <div className="grid gap-4">
+              {GROK_MODELS.map((model) => (
+                <div
+                  key={model.value}
+                  className={`relative flex items-center p-4 rounded-lg border ${
+                    settings.grokModel === model.value
+                      ? 'border-[#10a37f] bg-[#10a37f]/5'
+                      : 'border-gray-200 hover:border-gray-300'
+                  } cursor-pointer transition-all duration-200`}
+                  onClick={() => setSettings(prev => ({ ...prev, grokModel: model.value }))}
+                >
+                  <div className="flex items-center h-5">
+                    <input
+                      type="radio"
+                      checked={settings.grokModel === model.value}
+                      onChange={() => {}}
+                      className="w-4 h-4 text-[#10a37f] border-gray-300 focus:ring-[#10a37f]"
+                    />
+                  </div>
+                  <div className="ml-4 flex-1">
+                    <div className="flex justify-between items-start">
+                      <label className="font-medium text-gray-900">
+                        {model.label}
+                      </label>
+                      <span className="text-sm text-gray-500">
+                        {model.price}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-500">
+                      {model.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </>
         )}
 

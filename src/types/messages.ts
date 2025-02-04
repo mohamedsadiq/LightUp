@@ -11,6 +11,7 @@ export interface ProcessTextRequest {
     xaiApiKey?: string;
     openaiApiKey?: string;
     geminiModel?: "gemini-1.5-pro" | "gemini-1.5-flash" | "gemini-1.5-flash-8b";
+    grokModel?: "grok-2" | "grok-2-latest" | "grok-beta";
     maxTokens?: number;
     stream?: boolean;
     translationSettings?: {

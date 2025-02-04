@@ -7,6 +7,9 @@ export type Mode = "explain" | "summarize" | "analyze" | "translate"
 // Feedback types
 export type FeedbackType = "like" | "dislike"
 
+// Grok model types
+export type GrokModel = "grok-2" | "grok-2-latest" | "grok-beta";
+
 // Main settings interface
 export interface Settings {
   // Required fields
@@ -19,6 +22,7 @@ export interface Settings {
   geminiApiKey?: string // Required for Gemini
   xaiApiKey?: string   // Required for xAI
   geminiModel?: GeminiModel
+  grokModel?: GrokModel  // Add Grok model selection
   
   // User preferences
   mode?: Mode

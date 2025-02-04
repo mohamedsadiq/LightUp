@@ -20,7 +20,6 @@ export const processXAIText = async function*(request: ProcessTextRequest) {
       }
     ];
 
-    // Using the correct xAI endpoint and format from the curl example
     const response = await fetch('https://api.x.ai/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -29,9 +28,9 @@ export const processXAIText = async function*(request: ProcessTextRequest) {
       },
       body: JSON.stringify({
         messages: messages,
-        model: "grok-beta",  // Using the correct model name from the example
-        stream: true,        // We want streaming for real-time responses
-        temperature: 0.7     // Slightly higher than 0 for more creative responses
+        model: settings.grokModel || "grok-2", // Use selected model or default to grok-2
+        stream: true,
+        temperature: 0.7
       })
     });
 
