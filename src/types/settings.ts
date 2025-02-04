@@ -98,4 +98,4 @@ export interface TranslationSettings {
   toLanguage: string
 }
 
-export type GeminiModel = "gemini-pro" | "gemini-pro-vision" | "gemini-1.0-pro" | "gemini-1.5-pro" | "gemini-1.5-flash-8b"; 
+export type GeminiModel = "gemini-1.5-pro" | "gemini-1.5-flash" | "gemini-1.5-flash-8b"; 

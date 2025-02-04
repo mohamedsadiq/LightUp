@@ -10,7 +10,7 @@ export interface ProcessTextRequest {
     geminiApiKey?: string;
     xaiApiKey?: string;
     openaiApiKey?: string;
-    geminiModel?: "gemini-pro" | "gemini-1.5-flash-8b" | "gemini-1.5-pro" | string;
+    geminiModel?: "gemini-1.5-pro" | "gemini-1.5-flash" | "gemini-1.5-flash-8b";
     maxTokens?: number;
     stream?: boolean;
     translationSettings?: {

@@ -29,8 +29,8 @@ export const useSettings = (): UseSettingsReturn => {
           switch (savedSettings.modelType) {
             case "local":
               return !!savedSettings.serverUrl
-            case "openai":
-              return !!savedSettings.apiKey
+              case "openai":
+                return !!savedSettings.apiKey
             case "gemini":
               return !!savedSettings.geminiApiKey
             case "xai":

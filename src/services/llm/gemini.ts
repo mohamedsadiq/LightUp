@@ -18,7 +18,8 @@ export const processGeminiText = async function*(request: ProcessTextRequest) {
   }
   
   try {
-    const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:streamGenerateContent', {
+    const modelName = settings.geminiModel || "gemini-1.5-pro"; // Default to 1.5 Pro if not specified
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

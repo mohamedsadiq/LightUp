@@ -7,29 +7,19 @@ import { motion, AnimatePresence } from "framer-motion"
 
 const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
   {
-    value: "gemini-pro",
-    label: "Gemini Pro",
-    description: "Standard text model with balanced performance"
-  },
-  {
-    value: "gemini-pro-vision",
-    label: "Gemini Pro Vision",
-    description: "Handles both text and image inputs"
-  },
-  {
-    value: "gemini-1.0-pro",
-    label: "Gemini 1.0 Pro",
-    description: "First version of the model"
-  },
-  {
     value: "gemini-1.5-pro",
     label: "Gemini 1.5 Pro",
     description: "Latest version with improved capabilities"
   },
   {
-    value: "gemini-1.5-flash-8b",
+    value: "gemini-1.5-flash",
     label: "Gemini 1.5 Flash",
     description: "Faster, smaller model for quick responses"
+  },
+  {
+    value: "gemini-1.5-flash-8b",
+    label: "Gemini 1.5 Flash-8B",
+    description: "8-bit quantized version for efficient processing"
   }
 ];
 
@@ -117,6 +107,7 @@ function IndexOptions() {
     maxTokens: 2048,
     apiKey: "",
     geminiApiKey: "",
+    geminiModel: "gemini-1.5-pro",
     xaiApiKey: "",
     customization: {
       showSelectedText: true,
@@ -366,6 +357,40 @@ function IndexOptions() {
             <p className="text-sm text-gray-500 mb-4">
               Get your API key from the <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Google AI Studio</a>. Free tier available.
             </p>
+
+            <label className="block mb-2 font-k2d font-medium text-base">
+              Gemini Model:
+            </label>
+            <div className="grid gap-4">
+              {GEMINI_MODELS.map((model) => (
+                <div
+                  key={model.value}
+                  className={`relative flex items-center p-4 rounded-lg border ${
+                    settings.geminiModel === model.value
+                      ? 'border-[#10a37f] bg-[#10a37f]/5'
+                      : 'border-gray-200 hover:border-gray-300'
+                  } cursor-pointer transition-all duration-200`}
+                  onClick={() => setSettings(prev => ({ ...prev, geminiModel: model.value }))}
+                >
+                  <div className="flex items-center h-5">
+                    <input
+                      type="radio"
+                      checked={settings.geminiModel === model.value}
+                      onChange={() => {}}
+                      className="w-4 h-4 text-[#10a37f] border-gray-300 focus:ring-[#10a37f]"
+                    />
+                  </div>
+                  <div className="ml-4">
+                    <label className="font-medium text-gray-900">
+                      {model.label}
+                    </label>
+                    <p className="text-sm text-gray-500">
+                      {model.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </>
         ) : (
           <>

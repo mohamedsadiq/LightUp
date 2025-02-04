@@ -33,6 +33,7 @@ import { usePort } from "~hooks/usePort"
 import { usePopup } from "~hooks/usePopup"
 import { useCopy } from "~hooks/useCopy"
 import { useLastResult } from "~hooks/useLastResult"
+import { useCurrentModel } from "~hooks/useCurrentModel"
 
 // Add font import
 const fontImportStyle = document.createElement('style');
@@ -72,6 +73,12 @@ function Content() {
   const { voicesLoaded, speakingId, handleSpeak } = useSpeech();
   const { copiedId, handleCopy } = useCopy();
   const { lastResult, updateLastResult } = useLastResult();
+  const currentModel = useCurrentModel();
+
+  // Add debug logging for model
+  useEffect(() => {
+    console.log("[Content] Current model:", currentModel);
+  }, [currentModel]);
 
   // Remove context refresh effect and add simple mount effect
   useEffect(() => {
@@ -595,7 +602,7 @@ function Content() {
 
                         {/* Action buttons */}
                         {!isLoading && streamingText && (
-                          <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                          <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' } as const}>
                             {/* Copy button */}
                             <motion.button
                               onClick={() => handleCopy(streamingText, 'initial')}
@@ -646,6 +653,34 @@ function Content() {
                                 </svg>
                               )}
                             </motion.button>
+
+                            {/* Model display */}
+                            <motion.div
+                              style={{
+                                fontSize: '0.8rem',
+                                color: '#666',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                marginTop: '-3px',
+                                // padding: '4px 8px',
+                             
+                                // background: currentTheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+                                // border: '1px solid ' + (currentTheme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'),
+                                minWidth: '80px',
+                                justifyContent: 'center'
+                              }}
+                            >
+                             
+                              <span style={{ 
+                                textTransform: 'capitalize',
+                                fontWeight: 500,
+                                color: currentTheme === 'dark' ? '#fff' : '#666',
+                                userSelect: 'none'
+                              }}>
+                                {currentModel || 'Loading...'}
+                              </span>
+                            </motion.div>
                           </motion.div>
                         )}
                       </motion.div>
@@ -744,6 +779,33 @@ function Content() {
                                       </svg>
                                     )}
                                   </motion.button>
+                                   {/* Model display */}
+                            <motion.div
+                              style={{
+                                fontSize: '0.8rem',
+                                color: '#666',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                marginTop: '-3px',
+                                // padding: '4px 8px',
+                             
+                                // background: currentTheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
+                                // border: '1px solid ' + (currentTheme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'),
+                                minWidth: '80px',
+                                justifyContent: 'center'
+                              }}
+                            >
+                             
+                              <span style={{ 
+                                textTransform: 'capitalize',
+                                fontWeight: 500,
+                                color: currentTheme === 'dark' ? '#fff' : '#666',
+                                userSelect: 'none'
+                              }}>
+                                {currentModel || 'Loading...'}
+                              </span>
+                            </motion.div>
                                 </motion.div>
                               )}
                             </div>
