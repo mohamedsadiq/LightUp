@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react"
 import { Storage } from "@plasmohq/storage"
 import "../styles/options.css"
 import "../style.css"
-import type { Settings, ModelType, GeminiModel, GrokModel } from "~types/settings"
+import type { Settings, ModelType, GeminiModel, GrokModel, LocalModel } from "~types/settings"
 import { motion, AnimatePresence } from "framer-motion"
 
 const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
@@ -41,6 +41,69 @@ const GROK_MODELS: { value: GrokModel; label: string; description: string; price
     label: "Grok Beta",
     description: "Beta version with experimental features",
     price: "$5.00 per 1M tokens"
+  }
+];
+
+const LOCAL_MODELS: { value: LocalModel; label: string; description: string; size: string }[] = [
+  {
+    value: "llama-2-70b-chat",
+    label: "Llama 2 70B Chat",
+    description: "Most powerful Llama 2 model, best for complex tasks",
+    size: "70B parameters"
+  },
+  {
+    value: "deepseek-v3",
+    label: "DeepSeek V3",
+    description: "Latest DeepSeek model with enhanced reasoning capabilities",
+    size: "67B parameters"
+  },
+  {
+    value: "mixtral-8x7b-instruct",
+    label: "Mixtral 8x7B Instruct",
+    description: "High-performance mixture of experts model",
+    size: "47B parameters"
+  },
+  {
+    value: "llama-2-13b-chat",
+    label: "Llama 2 13B Chat",
+    description: "Balanced performance and resource usage",
+    size: "13B parameters"
+  },
+  {
+    value: "mistral-7b-instruct",
+    label: "Mistral 7B Instruct",
+    description: "Efficient instruction-following model",
+    size: "7B parameters"
+  },
+  {
+    value: "neural-chat-7b-v3-1",
+    label: "Neural Chat V3.1",
+    description: "Optimized for natural conversations",
+    size: "7B parameters"
+  },
+  {
+    value: "deepseek-v3-base",
+    label: "DeepSeek V3 Base",
+    description: "Lighter version of DeepSeek with good reasoning",
+    size: "7B parameters"
+  },
+  {
+    value: "llama-3.2-3b-instruct",
+    label: "Llama 3.2 3B Instruct",
+    description: "Lightweight model for basic tasks",
+    size: "3B parameters"
+  },
+  {
+    value: "phi-2",
+    label: "Phi-2",
+    description: "Compact but powerful for its size",
+    size: "2.7B parameters"
+  },
+  {
+    value: "openchat-3.5",
+    label: "OpenChat 3.5",
+    description: "Optimized for chat interactions",
+    size: "7B parameters"
   }
 ];
 
@@ -124,13 +187,14 @@ const Switch = ({ id, checked, onChange, label, description = undefined }) => (
 function IndexOptions() {
   const storage = useRef(new Storage()).current;
   const [settings, setSettings] = useState<Settings>({
-    modelType: "openai",
+    modelType: "local",
     maxTokens: 2048,
     apiKey: "",
     geminiApiKey: "",
     geminiModel: "gemini-1.5-pro",
     xaiApiKey: "",
     grokModel: "grok-2",
+    localModel: "llama-2-70b-chat",
     customization: {
       showSelectedText: true,
       theme: "light",
@@ -338,8 +402,47 @@ function IndexOptions() {
               placeholder="http://127.0.0.1:1234"
             />
             <p className="text-sm text-gray-500 mb-4">
-              Llama is a local server setup. No API key is required.
+              Local LLM server setup. No API key required.
             </p>
+
+            <label className="block mb-2 font-k2d font-medium text-base">
+              Local Model:
+            </label>
+            <div className="grid gap-4">
+              {LOCAL_MODELS.map((model) => (
+                <div
+                  key={model.value}
+                  className={`relative flex items-center p-4 rounded-lg border ${
+                    settings.localModel === model.value
+                      ? 'border-[#10a37f] bg-[#10a37f]/5'
+                      : 'border-gray-200 hover:border-gray-300'
+                  } cursor-pointer transition-all duration-200`}
+                  onClick={() => setSettings(prev => ({ ...prev, localModel: model.value }))}
+                >
+                  <div className="flex items-center h-5">
+                    <input
+                      type="radio"
+                      checked={settings.localModel === model.value}
+                      onChange={() => {}}
+                      className="w-4 h-4 text-[#10a37f] border-gray-300 focus:ring-[#10a37f]"
+                    />
+                  </div>
+                  <div className="ml-4 flex-1">
+                    <div className="flex justify-between items-start">
+                      <label className="font-medium text-gray-900">
+                        {model.label}
+                      </label>
+                      <span className="text-sm text-gray-500">
+                        {model.size}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-500">
+                      {model.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </>
         ) : settings.modelType === "gemini" ? (
           <>

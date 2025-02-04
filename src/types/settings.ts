@@ -10,6 +10,19 @@ export type FeedbackType = "like" | "dislike"
 // Grok model types
 export type GrokModel = "grok-2" | "grok-2-latest" | "grok-beta";
 
+// Local model types
+export type LocalModel = 
+  | "llama-3.2-3b-instruct"
+  | "deepseek-v3"
+  | "deepseek-v3-base"
+  | "llama-2-70b-chat"
+  | "llama-2-13b-chat"
+  | "mistral-7b-instruct"
+  | "mixtral-8x7b-instruct"
+  | "phi-2"
+  | "neural-chat-7b-v3-1"
+  | "openchat-3.5";
+
 // Main settings interface
 export interface Settings {
   // Required fields
@@ -23,6 +36,7 @@ export interface Settings {
   xaiApiKey?: string   // Required for xAI
   geminiModel?: GeminiModel
   grokModel?: GrokModel  // Add Grok model selection
+  localModel?: LocalModel
   
   // User preferences
   mode?: Mode

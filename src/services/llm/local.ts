@@ -23,7 +23,7 @@ export const processLocalText = async function*(request: ProcessTextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: "llama-3.2-3b-instruct",
+        model: settings.localModel || "llama-2-70b-chat",
         messages: [
           {
             role: "system",

@@ -1,9 +1,9 @@
-import type { Settings } from "./settings"
+import type { Mode, ModelType, LocalModel } from "./settings"
 
 export interface ProcessTextRequest {
   text: string;
   context?: string;
-  mode: "explain" | "summarize" | "analyze" | "translate";
+  mode: Mode;
   settings: {
     serverUrl: string;
     apiKey: string;
@@ -12,17 +12,18 @@ export interface ProcessTextRequest {
     openaiApiKey?: string;
     geminiModel?: "gemini-1.5-pro" | "gemini-1.5-flash" | "gemini-1.5-flash-8b";
     grokModel?: "grok-2" | "grok-2-latest" | "grok-beta";
+    localModel?: LocalModel;
     maxTokens?: number;
     stream?: boolean;
     translationSettings?: {
       fromLanguage: string;
       toLanguage: string;
     };
-    modelType: "local" | "openai" | "gemini" | "xai";
+    modelType: ModelType;
   };
   aborted?: boolean;
   isFollowUp?: boolean;
-  id?: number;
+  id?: string;
   connectionId?: string;
 }
 

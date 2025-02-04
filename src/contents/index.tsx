@@ -674,7 +674,7 @@ function Content() {
                               <span style={{ 
                                 textTransform: 'capitalize',
                                 fontWeight: 500,
-                                color: currentTheme === 'dark' ? '#fff' : '#666',
+                                color: currentTheme === 'dark' ? '#7e7e7e' : '#666',
                                 userSelect: 'none'
                               }}>
                                 {currentModel || 'Loading...'}
@@ -799,7 +799,7 @@ function Content() {
                               <span style={{ 
                                 textTransform: 'capitalize',
                                 fontWeight: 500,
-                                color: currentTheme === 'dark' ? '#fff' : '#666',
+                                color: currentTheme === 'dark' ? '#7e7e7e' : '#666',
                                 userSelect: 'none'
                               }}>
                                 {currentModel || 'Loading...'}
