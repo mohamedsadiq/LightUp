@@ -29,12 +29,14 @@ export const useSettings = (): UseSettingsReturn => {
           switch (savedSettings.modelType) {
             case "local":
               return !!savedSettings.serverUrl
-              case "openai":
-                return !!savedSettings.apiKey
+            case "openai":
+              return !!savedSettings.apiKey
             case "gemini":
               return !!savedSettings.geminiApiKey
             case "xai":
               return !!savedSettings.xaiApiKey
+            case "basic":
+              return true // Basic model is always configured
             default:
               return false
           }

@@ -7,9 +7,24 @@ import { motion, AnimatePresence } from "framer-motion"
 
 const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
   {
+    value: "gemini-2.0-flash",
+    label: "Gemini 2.0 Flash",
+    description: "Latest version with improved capabilities and faster response times"
+  },
+  {
+    value: "gemini-2.0-flash-lite-preview-02-05",
+    label: "Gemini 2.0 Flash-Lite",
+    description: "Lightweight version optimized for efficiency and speed"
+  },
+  {
+    value: "gemini-2.0-flash-thinking-exp-01-21",
+    label: "Gemini 2.0 Flash Thinking",
+    description: "Experimental model focused on reasoning and analytical tasks"
+  },
+  {
     value: "gemini-1.5-pro",
     label: "Gemini 1.5 Pro",
-    description: "Latest version with improved capabilities"
+    description: "Stable version with balanced performance"
   },
   {
     value: "gemini-1.5-flash",
@@ -187,7 +202,7 @@ const Switch = ({ id, checked, onChange, label, description = undefined }) => (
 function IndexOptions() {
   const storage = useRef(new Storage()).current;
   const [settings, setSettings] = useState<Settings>({
-    modelType: "local",
+    modelType: "basic",
     maxTokens: 2048,
     apiKey: "",
     geminiApiKey: "",
@@ -195,6 +210,7 @@ function IndexOptions() {
     xaiApiKey: "",
     grokModel: "grok-2",
     localModel: "llama-2-70b-chat",
+    basicModel: "gemini-2.0-flash-lite-preview-02-05",
     customization: {
       showSelectedText: true,
       theme: "light",
@@ -384,12 +400,30 @@ function IndexOptions() {
           }))}
           className="w-full p-2 mb-4 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
         >
+          <option value="basic">LightUp Basic (Free)</option>
           <option value="local">Local LLM</option>
           <option value="gemini">Google Gemini</option>
           <option value="xai">xAI (Grok)</option>
         </select>
 
-        {settings.modelType === "local" ? (
+        {settings.modelType === "basic" ? (
+          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
+            <div className="flex items-center gap-2 mb-2">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <h3 className="text-lg font-semibold text-gray-900">LightUp Basic</h3>
+            </div>
+            <p className="text-sm text-gray-600 mb-3">
+              Try LightUp for free with our basic version. Please note that it may get slow due to the limitations of the free version.
+            </p>
+            <ul className="space-y-2">
+             
+            
+              
+            </ul>
+          </div>
+        ) : settings.modelType === "local" ? (
           <>
             <label className="block mb-2 text-gray-800 font-k2d font-medium text-base">
               Llama Server URL:

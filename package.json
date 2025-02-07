@@ -72,7 +72,7 @@
       }
     },
     "content_security_policy": {
-      "extension_pages": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/css2; img-src 'self' data: https:; connect-src 'self' http://127.0.0.1:* ws://localhost:* https://api.openai.com https://generativelanguage.googleapis.com https://api.x.ai; frame-src 'none'; font-src 'self' data: https://fonts.gstatic.com; media-src 'none'; worker-src 'self'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;",
+      "extension_pages": "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; object-src 'none'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com/css2; img-src 'self' data: https:; connect-src 'self' http://127.0.0.1:* ws://localhost:* https://api.openai.com https://generativelanguage.googleapis.com https://api.x.ai https://www.boimaginations.com; frame-src 'none'; font-src 'self' data: https://fonts.gstatic.com; media-src 'none'; worker-src 'self'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;",
       "sandbox": "sandbox allow-scripts allow-forms allow-popups allow-modals"
     },
     "web_accessible_resources": [

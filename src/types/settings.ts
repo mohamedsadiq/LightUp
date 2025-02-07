@@ -1,5 +1,5 @@
 // Model types available in the extension
-export type ModelType = "local" | "openai" | "gemini" | "xai"
+export type ModelType = "local" | "openai" | "gemini" | "xai" | "basic"
 
 // Available modes for text processing
 export type Mode = "explain" | "summarize" | "analyze" | "translate"
@@ -27,16 +27,17 @@ export type LocalModel =
 export interface Settings {
   // Required fields
   modelType: ModelType
-  maxTokens: number
+  maxTokens?: number
   
   // Optional fields depending on model type
   serverUrl?: string    // Required for local model
   apiKey?: string      // Required for OpenAI
   geminiApiKey?: string // Required for Gemini
   xaiApiKey?: string   // Required for xAI
-  geminiModel?: GeminiModel
-  grokModel?: GrokModel  // Add Grok model selection
-  localModel?: LocalModel
+  geminiModel?: string
+  grokModel?: string  // Add Grok model selection
+  localModel?: string
+  basicModel?: "gemini-2.0-flash-lite-preview-02-05" // Only one model for basic version
   
   // User preferences
   mode?: Mode
@@ -116,4 +117,10 @@ export interface TranslationSettings {
   toLanguage: string
 }
 
-export type GeminiModel = "gemini-1.5-pro" | "gemini-1.5-flash" | "gemini-1.5-flash-8b"; 
+export type GeminiModel = 
+  | "gemini-1.5-pro" 
+  | "gemini-1.5-flash" 
+  | "gemini-1.5-flash-8b"
+  | "gemini-2.0-flash"
+  | "gemini-2.0-flash-lite-preview-02-05"
+  | "gemini-2.0-flash-thinking-exp-01-21"; 

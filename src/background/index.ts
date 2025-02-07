@@ -4,9 +4,10 @@ import type { ProcessTextRequest, StreamChunk } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "~utils/constants"
 import { processGeminiText } from "~services/llm/gemini"
 import { processXAIText } from "~services/llm/xai"
+import { processBasicText } from "~services/llm/basic"
 
 interface Settings {
-  modelType: "local" | "openai" | "gemini" | "xai"
+  modelType: "local" | "openai" | "gemini" | "xai" | "basic"
   serverUrl?: string
   translationSettings?: {
     fromLanguage: string
@@ -94,12 +95,11 @@ const isConfigurationValid = (settings: Settings): boolean => {
       case "local":
         return !!settings.serverUrl;
       case "openai": {
-        // Check both new and legacy API key fields
         const openaiKey = settings.openaiApiKey || settings.apiKey;
         return !!openaiKey && (
-          openaiKey.startsWith('sk-') || // Standard OpenAI key format
-          openaiKey.startsWith('org-') || // Organization key format
-          openaiKey.length >= 32 // Fallback for other valid key formats
+          openaiKey.startsWith('sk-') || 
+          openaiKey.startsWith('org-') || 
+          openaiKey.length >= 32 
         );
       }
       case "gemini":
@@ -108,6 +108,8 @@ const isConfigurationValid = (settings: Settings): boolean => {
         const xaiKey = settings.xaiApiKey || '';
         return xaiKey.length > 0;
       }
+      case "basic":
+        return true; // Basic version doesn't require configuration
       default:
         return false;
     }
@@ -136,7 +138,6 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
   let timeoutId: NodeJS.Timeout;
   
   try {
-    // Wait for settings to be properly initialized
     const settings = await waitForSettings();
     if (!settings) {
       throw new Error("Failed to initialize settings. Please try again.");
@@ -146,7 +147,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     const timeout = new Promise((_, reject) => {
       timeoutId = setTimeout(() => {
         reject(new Error("Request timed out. Please try again."));
-      }, 30000); // 30 second timeout
+      }, 30000);
     });
 
     activeConnections.set(connectionId, {
@@ -161,6 +162,14 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         `Invalid configuration for ${requestSettings?.modelType?.toUpperCase() || 'AI model'}.\n` +
         'Please check your settings and try again.'
       );
+    }
+
+    // Process text based on model type
+    if (requestSettings.modelType === "basic") {
+      for await (const chunk of processBasicText(request)) {
+        port.postMessage(chunk);
+      }
+      return;
     }
 
     // Check rate limits based on API key
@@ -552,11 +561,14 @@ chrome.runtime.onInstalled.addListener((details) => {
 
 // Update message listener to use port-based communication
 chrome.runtime.onConnect.addListener((port) => {
-
+  console.log("[Background] New connection established:", port.name);
   
   port.onMessage.addListener(async (msg) => {
+    console.log("[Background] Received message:", msg);
+    
     if (msg.type === "STOP_GENERATION") {
       const connectionId = port.name.split('text-processing-')[1];
+      console.log("[Background] Stopping generation for:", connectionId);
       const connection = activeConnections.get(connectionId);
       
       if (connection) {
@@ -565,11 +577,23 @@ chrome.runtime.onConnect.addListener((port) => {
       }
     }
     if (msg.type === "PROCESS_TEXT") {
-      handleProcessText(msg.payload, port);
+      console.log("[Background] Processing text request:", {
+        mode: msg.payload.mode,
+        modelType: msg.payload.settings?.modelType,
+        text: msg.payload.text?.substring(0, 100) + "..."
+      });
+      handleProcessText(msg.payload, port).catch(error => {
+        console.error("[Background] Error processing text:", error);
+        port.postMessage({
+          type: 'error',
+          error: error.message || 'Unknown error occurred'
+        });
+      });
     }
   });
 
   port.onDisconnect.addListener(() => {
+    console.log("[Background] Port disconnected:", port.name);
     const connectionId = port.name.split('text-processing-')[1];
     const connection = activeConnections.get(connectionId);
     

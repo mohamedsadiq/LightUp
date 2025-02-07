@@ -10,7 +10,13 @@ export interface ProcessTextRequest {
     geminiApiKey?: string;
     xaiApiKey?: string;
     openaiApiKey?: string;
-    geminiModel?: "gemini-1.5-pro" | "gemini-1.5-flash" | "gemini-1.5-flash-8b";
+    geminiModel?: 
+      | "gemini-1.5-pro" 
+      | "gemini-1.5-flash" 
+      | "gemini-1.5-flash-8b"
+      | "gemini-2.0-flash"
+      | "gemini-2.0-flash-lite-preview-02-05"
+      | "gemini-2.0-flash-thinking-exp-01-21";
     grokModel?: "grok-2" | "grok-2-latest" | "grok-beta";
     localModel?: LocalModel;
     maxTokens?: number;

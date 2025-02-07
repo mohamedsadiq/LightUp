@@ -10,6 +10,12 @@ export const useCurrentModel = () => {
   const getModelDisplay = (settings: Settings) => {
     if (!settings?.modelType) return "Not configured"
     
+    // For Basic version, show the specific model version
+    if (settings.modelType === "basic") {
+      // Format the model name to be more user-friendly
+      return "Gemini 2.0 Flash"
+    }
+    
     // For Gemini, show the specific model version
     if (settings.modelType === "gemini" && settings.geminiModel) {
       return settings.geminiModel
