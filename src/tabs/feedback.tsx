@@ -1,5 +1,6 @@
 import { useState } from "react"
 import "../style.css"
+import ErrorMessage from "~components/common/ErrorMessage"
 
 function FeedbackPage() {
   const [formData, setFormData] = useState({
@@ -103,6 +104,13 @@ function FeedbackPage() {
           </div>
         </div>
 
+        {submitStatus === "error" && (
+          <ErrorMessage 
+            message="Failed to submit feedback. Please try again." 
+            className="mb-4"
+          />
+        )}
+
         <div className="bg-white p-8 rounded-lg shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -184,12 +192,6 @@ function FeedbackPage() {
             {submitStatus === "success" && (
               <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-green-800">
                 Thank you for your feedback! Please submit the form in the new tab.
-              </div>
-            )}
-
-            {submitStatus === "error" && (
-              <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-800">
-                Something went wrong. Please try again later.
               </div>
             )}
           </form>

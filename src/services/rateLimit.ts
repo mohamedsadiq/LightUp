@@ -1,84 +1,109 @@
 import { Storage } from "@plasmohq/storage"
+import type { Settings, RateLimit } from "~types/settings"
 
-interface RateLimitData {
-  count: number
-  lastReset: number
-  dailyLimit: number
-}
+const DEFAULT_DAILY_LIMIT = 20
 
 export class RateLimitService {
   private storage: Storage
-  private readonly RATE_LIMIT_KEY = "lightup_basic_rate_limit"
-  private readonly DAILY_LIMIT = 15 // 15 requests per day for basic version
-  private readonly MS_PER_DAY = 24 * 60 * 60 * 1000
 
   constructor() {
     this.storage = new Storage()
   }
 
-  private async getRateLimitData(): Promise<RateLimitData> {
-    const data = await this.storage.get(this.RATE_LIMIT_KEY) as RateLimitData
-    if (!data) {
-      return {
-        count: 0,
-        lastReset: Date.now(),
-        dailyLimit: this.DAILY_LIMIT
+  private async getRateLimit(): Promise<RateLimit> {
+    const settings = await this.storage.get("settings") as Settings
+    if (!settings?.rateLimit) {
+      // Initialize rate limit if it doesn't exist
+      const rateLimit: RateLimit = {
+        actionsRemaining: DEFAULT_DAILY_LIMIT,
+        lastResetDate: new Date().toISOString(),
+        dailyLimit: DEFAULT_DAILY_LIMIT
       }
+      await this.storage.set("settings", {
+        ...settings,
+        rateLimit
+      })
+      return rateLimit
     }
-    return data
+    return settings.rateLimit
   }
 
-  private async updateRateLimitData(data: RateLimitData): Promise<void> {
-    await this.storage.set(this.RATE_LIMIT_KEY, data)
+  private shouldResetLimit(lastResetDate: string): boolean {
+    const lastReset = new Date(lastResetDate)
+    const now = new Date()
+    
+    // Reset if it's a different day
+    return lastReset.toDateString() !== now.toDateString()
   }
 
-  async checkRateLimit(): Promise<{ allowed: boolean; remaining: number; error?: string }> {
-    const data = await this.getRateLimitData()
-    const now = Date.now()
-
-    // Reset count if it's a new day
-    if (now - data.lastReset >= this.MS_PER_DAY) {
-      data.count = 0
-      data.lastReset = now
+  public async checkActionAvailable(): Promise<boolean> {
+    const rateLimit = await this.getRateLimit()
+    
+    if (this.shouldResetLimit(rateLimit.lastResetDate)) {
+      // Reset the counter for a new day
+      await this.resetLimit()
+      return true
     }
-
-    // Check if limit exceeded
-    if (data.count >= this.DAILY_LIMIT) {
-      const hoursUntilReset = Math.ceil((this.MS_PER_DAY - (now - data.lastReset)) / (1000 * 60 * 60))
-      return {
-        allowed: false,
-        remaining: 0,
-        error: `Daily limit exceeded. Please try again in ${hoursUntilReset} hours or upgrade to use your own API key.`
-      }
-    }
-
-    // Increment count and update storage
-    data.count++
-    await this.updateRateLimitData(data)
-
-    return {
-      allowed: true,
-      remaining: this.DAILY_LIMIT - data.count
-    }
+    
+    return rateLimit.actionsRemaining > 0
   }
 
-  async getRemainingRequests(): Promise<number> {
-    const data = await this.getRateLimitData()
-    const now = Date.now()
-
-    // Reset count if it's a new day
-    if (now - data.lastReset >= this.MS_PER_DAY) {
-      return this.DAILY_LIMIT
+  public async useAction(): Promise<number> {
+    const settings = await this.storage.get("settings") as Settings
+    const rateLimit = settings?.rateLimit || await this.getRateLimit()
+    
+    if (this.shouldResetLimit(rateLimit.lastResetDate)) {
+      await this.resetLimit()
+      const newRateLimit = await this.getRateLimit()
+      return newRateLimit.actionsRemaining - 1
     }
-
-    return Math.max(0, this.DAILY_LIMIT - data.count)
-  }
-
-  async resetLimit(): Promise<void> {
-    await this.updateRateLimitData({
-      count: 0,
-      lastReset: Date.now(),
-      dailyLimit: this.DAILY_LIMIT
+    
+    if (rateLimit.actionsRemaining <= 0) {
+      throw new Error("Daily action limit reached")
+    }
+    
+    const updatedRateLimit: RateLimit = {
+      ...rateLimit,
+      actionsRemaining: rateLimit.actionsRemaining - 1
+    }
+    
+    await this.storage.set("settings", {
+      ...settings,
+      rateLimit: updatedRateLimit
     })
+    
+    return updatedRateLimit.actionsRemaining
+  }
+
+  private async resetLimit(): Promise<void> {
+    const settings = await this.storage.get("settings") as Settings
+    const rateLimit = settings?.rateLimit || {
+      dailyLimit: DEFAULT_DAILY_LIMIT,
+      actionsRemaining: DEFAULT_DAILY_LIMIT,
+      lastResetDate: new Date().toISOString()
+    }
+    
+    const updatedRateLimit: RateLimit = {
+      ...rateLimit,
+      actionsRemaining: rateLimit.dailyLimit,
+      lastResetDate: new Date().toISOString()
+    }
+    
+    await this.storage.set("settings", {
+      ...settings,
+      rateLimit: updatedRateLimit
+    })
+  }
+
+  public async getRemainingActions(): Promise<number> {
+    const rateLimit = await this.getRateLimit()
+    
+    if (this.shouldResetLimit(rateLimit.lastResetDate)) {
+      await this.resetLimit()
+      const newRateLimit = await this.getRateLimit()
+      return newRateLimit.actionsRemaining
+    }
+    
+    return rateLimit.actionsRemaining
   }
 } 

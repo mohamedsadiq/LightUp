@@ -4,6 +4,8 @@ import "../styles/options.css"
 import "../style.css"
 import type { Settings, ModelType, GeminiModel, GrokModel, LocalModel } from "~types/settings"
 import { motion, AnimatePresence } from "framer-motion"
+import { useRateLimit } from "~hooks/useRateLimit"
+import ErrorMessage from "~components/common/ErrorMessage"
 
 const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
   {
@@ -199,6 +201,45 @@ const Switch = ({ id, checked, onChange, label, description = undefined }) => (
   </div>
 );
 
+// Add RateLimitDisplay component
+const RateLimitDisplay = () => {
+  const { remainingActions, isLoading, error } = useRateLimit()
+  
+  if (isLoading) {
+    return (
+      <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+        <p className="text-gray-500">Loading usage info...</p>
+      </div>
+    )
+  }
+  
+  if (error) {
+    return (
+      <div className="mt-4 p-4 bg-red-50 rounded-lg">
+        <p className="text-red-600">{error}</p>
+      </div>
+    )
+  }
+  
+  return (
+    <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+      <h3 className="text-lg font-semibold mb-2">Daily Usage</h3>
+      <div className="flex items-center justify-between">
+        <span className="text-gray-600">Actions Remaining Today</span>
+        <span className="text-lg font-medium">
+          {remainingActions} / 20
+        </span>
+      </div>
+      <div className="mt-2 w-full bg-gray-200 rounded-full h-2.5">
+        <div 
+          className="bg-[#10a37f] h-2.5 rounded-full transition-all duration-500"
+          style={{ width: `${(remainingActions / 20) * 100}%` }}
+        ></div>
+      </div>
+    </div>
+  )
+}
+
 function IndexOptions() {
   const storage = useRef(new Storage()).current;
   const [settings, setSettings] = useState<Settings>({
@@ -385,6 +426,8 @@ function IndexOptions() {
        
       </div>
 
+     
+
       {/* Configuration Section */}
       <div className="mb-5">
         <h2 className="text-xl font-semibold mb-4">Configuration</h2>
@@ -414,40 +457,43 @@ function IndexOptions() {
               </svg>
               <h3 className="text-lg font-semibold text-gray-900">LightUp Basic</h3>
             </div>
+          
             <p className="text-sm text-gray-600 mb-3">
               Try LightUp for free with our basic version. Please note that it may get slow due to the limitations of the free version.
             </p>
             <ul className="space-y-2">
-              <li className="flex items-center text-sm text-gray-600">
+              {/* <li className="flex items-center text-sm text-gray-600">
                 <svg className="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
                 </svg>
                 Rate limited to prevent abuse
-              </li>
+              </li> */}
               <li className="flex items-center text-sm text-gray-600">
                 <svg className="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
                 </svg>
-                Limited to 15 requests per day
+                Limited to 20 requests per day
               </li>
-              <li className="flex items-center text-sm text-gray-600">
+              {/* <li className="flex items-center text-sm text-gray-600">
                 <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
                 </svg>
                 Uses Gemini 2.0 Flash-Lite for optimal performance
-              </li>
+              </li> */}
               <li className="flex items-center text-sm text-gray-600">
                 <svg className="w-4 h-4 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
                 </svg>
                 Do not use for sensitive or personal information
               </li>
+                 {/* Add RateLimitDisplay here, right after the header */}
+      <RateLimitDisplay />
             </ul>
-            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+            {/* <div className="mt-4 p-3 bg-blue-50 rounded-lg">
               <p className="text-sm text-blue-700">
                 <span className="font-semibold">💡 Pro Tip:</span> For better performance and no rate limits, upgrade to use your own Gemini API key.
               </p>
-            </div>
+            </div> */}
           </div>
         ) : settings.modelType === "local" ? (
           <>
@@ -839,16 +885,7 @@ function IndexOptions() {
         <div className="bg-white/80 backdrop-blur-md border-t border-gray-100 shadow-lg py-4">
           <div className="max-w-[600px] mx-auto px-5">
             <div className="flex flex-col gap-3">
-              {error && (
-                <div className="text-red-500 text-sm bg-red-50 px-4 py-2 rounded-lg border border-red-100 animate-shake">
-                  <div className="flex items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                    </svg>
-                    {error}
-                  </div>
-                </div>
-              )}
+              {error && <ErrorMessage message={error} />}
               
               <div className="flex items-center gap-4">
                 <button

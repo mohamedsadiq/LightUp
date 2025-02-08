@@ -23,11 +23,19 @@ export type LocalModel =
   | "neural-chat-7b-v3-1"
   | "openchat-3.5";
 
+// Rate limit interface
+export interface RateLimit {
+  actionsRemaining: number;  // Number of actions remaining for the day
+  lastResetDate: string;     // ISO string of when the count was last reset
+  dailyLimit: number;        // Maximum number of actions per day (default 20)
+}
+
 // Main settings interface
 export interface Settings {
   // Required fields
   modelType: ModelType
   maxTokens?: number
+  rateLimit?: RateLimit
   
   // Optional fields depending on model type
   serverUrl?: string    // Required for local model

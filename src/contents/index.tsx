@@ -21,6 +21,7 @@ import { Storage } from "@plasmohq/storage"
 import { Z_INDEX } from "~utils/constants"
 import { loadingSkeletonVariants, shimmerVariants, loadingVariants } from "~contents/variants"
 import { getHighlightColor } from "~utils/highlight"
+import ErrorMessage from "~components/common/ErrorMessage"
 
 // Import our hooks
 import { useSpeech } from "~hooks/useSpeech"
@@ -567,15 +568,7 @@ function Content() {
                       </motion.div>
                     </motion.div>
                   ) : error ? (
-                    <motion.p
-                      style={themedStyles.error}
-                      variants={textVariants}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                    >
-                      {error}
-                    </motion.p>
+                    <ErrorMessage message={error} />
                   ) : (
                     <motion.div
                       variants={textVariants}
@@ -593,11 +586,14 @@ function Content() {
                         animate={{ y: 0 }}
                       >
                         <div style={{ marginBottom: '8px' }}>
-                          <MarkdownText 
-                            text={streamingText} 
-                            isStreaming={isLoading}
-                            language={targetLanguage}
-                          />
+                          {streamingText && (
+                            <div style={{
+                              ...themedStyles.explanation,
+                              textAlign: themedStyles.explanation.textAlign as "left" | "right"
+                            }} className="streaming-text">
+                              <MarkdownText text={streamingText} />
+                            </div>
+                          )}
                         </div>
 
                         {/* Action buttons */}
