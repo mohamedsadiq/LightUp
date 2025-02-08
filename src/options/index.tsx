@@ -240,6 +240,69 @@ const RateLimitDisplay = () => {
   )
 }
 
+// Add new components for better organization
+const SettingsCard = ({ title, icon, children, className = "" }) => (
+  <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-md ${className}`}>
+    <div className="p-6 border-b border-gray-100">
+      <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+        {icon}
+        {title}
+      </h2>
+    </div>
+    <div className="p-6 space-y-6">
+      {children}
+    </div>
+  </div>
+);
+
+const Badge = ({ children, variant = "default", className = "" }) => {
+  const variants = {
+    default: "bg-gray-100 text-gray-800",
+    success: "bg-green-100 text-green-800",
+    warning: "bg-yellow-100 text-yellow-800",
+    danger: "bg-red-100 text-red-800",
+    info: "bg-blue-100 text-blue-800"
+  };
+
+  return (
+    <span className={`${variants[variant]} text-xs font-medium px-2.5 py-0.5 rounded-full ${className}`}>
+      {children}
+    </span>
+  );
+};
+
+const ModelOption = ({ model, selected, onChange, showPrice = false, showSize = false }) => (
+  <div
+    className={`relative flex items-center p-4 rounded-lg border ${
+      selected
+        ? 'border-[#10a37f] bg-[#10a37f]/5'
+        : 'border-gray-200 hover:border-gray-300'
+    } cursor-pointer transition-all duration-200`}
+    onClick={onChange}
+  >
+    <div className="flex items-center h-5">
+      <input
+        type="radio"
+        checked={selected}
+        onChange={() => {}}
+        className="w-4 h-4 text-[#10a37f] border-gray-300 focus:ring-[#10a37f]"
+      />
+    </div>
+    <div className="ml-4 flex-1">
+      <div className="flex justify-between items-start">
+        <label className="font-medium text-gray-900">
+          {model.label}
+        </label>
+        {showPrice && <span className="text-sm text-gray-500">{model.price}</span>}
+        {showSize && <span className="text-sm text-gray-500">{model.size}</span>}
+      </div>
+      <p className="text-sm text-gray-500">
+        {model.description}
+      </p>
+    </div>
+  </div>
+);
+
 function IndexOptions() {
   const storage = useRef(new Storage()).current;
   const [settings, setSettings] = useState<Settings>({
@@ -415,511 +478,480 @@ function IndexOptions() {
   }, []);
 
   return (
-    <div className="p-5 pb-24 max-w-[600px] mx-auto font-k2d bg-white text-gray-800 min-h-screen rounded-lg shadow-sm">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <Logo />
-          <h1 className="text-gray-800 text-2xl m-0 font-k2d font-semibold">
-            LightUp Settings
-          </h1>
-        </div>
-       
-      </div>
-
-     
-
-      {/* Configuration Section */}
-      <div className="mb-5">
-        <h2 className="text-xl font-semibold mb-4">Configuration</h2>
-        
-        <label className="block mb-2 text-gray-800 font-k2d font-medium text-base">
-          Model Type:
-        </label>
-        <select 
-          value={settings.modelType}
-          onChange={(e) => setSettings(prev => ({
-            ...prev,
-            modelType: e.target.value as ModelType
-          }))}
-          className="w-full p-2 mb-4 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-[800px] mx-auto p-5 pb-24">
+        {/* Header */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between mb-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100"
         >
-          <option value="basic">LightUp Basic (Free)</option>
-          <option value="local">Local LLM</option>
-          <option value="gemini">Google Gemini</option>
-          <option value="xai">xAI (Grok)</option>
-        </select>
-
-        {settings.modelType === "basic" ? (
-          <div className="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-4">
-            <div className="flex items-center gap-2 mb-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-green-600" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <h3 className="text-lg font-semibold text-gray-900">LightUp Basic</h3>
-            </div>
-          
-            <p className="text-sm text-gray-600 mb-3">
-              Try LightUp for free with our basic version. Please note that it may get slow due to the limitations of the free version.
-            </p>
-            <ul className="space-y-2">
-              {/* <li className="flex items-center text-sm text-gray-600">
-                <svg className="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
-                </svg>
-                Rate limited to prevent abuse
-              </li> */}
-              <li className="flex items-center text-sm text-gray-600">
-                <svg className="w-4 h-4 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
-                </svg>
-                Limited to 20 requests per day
-              </li>
-              {/* <li className="flex items-center text-sm text-gray-600">
-                <svg className="w-4 h-4 mr-2 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd"/>
-                </svg>
-                Uses Gemini 2.0 Flash-Lite for optimal performance
-              </li> */}
-              <li className="flex items-center text-sm text-gray-600">
-                <svg className="w-4 h-4 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd"/>
-                </svg>
-                Do not use for sensitive or personal information
-              </li>
-                 {/* Add RateLimitDisplay here, right after the header */}
-      <RateLimitDisplay />
-            </ul>
-            {/* <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-              <p className="text-sm text-blue-700">
-                <span className="font-semibold">💡 Pro Tip:</span> For better performance and no rate limits, upgrade to use your own Gemini API key.
+          <div className="flex items-center gap-3">
+            <Logo />
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-800 m-0">
+                LightUp Settings
+              </h1>
+              <p className="text-sm text-gray-500 mt-1">
+                Configure your AI assistant preferences
               </p>
-            </div> */}
+            </div>
           </div>
-        ) : settings.modelType === "local" ? (
-          <>
-            <label className="block mb-2 text-gray-800 font-k2d font-medium text-base">
-              Llama Server URL:
-            </label>
-            <input
-              type="text"
-              value={settings.serverUrl}
-              onChange={handleServerUrlChange}
-              className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
-              placeholder="http://127.0.0.1:1234"
-            />
-            <p className="text-sm text-gray-500 mb-4">
-              Local LLM server setup. No API key required.
-            </p>
+          <Badge variant="success">v1.0.0</Badge>
+        </motion.div>
 
-            <label className="block mb-2 font-k2d font-medium text-base">
-              Local Model:
-            </label>
-            <div className="grid gap-4">
-              {LOCAL_MODELS.map((model) => (
-                <div
-                  key={model.value}
-                  className={`relative flex items-center p-4 rounded-lg border ${
-                    settings.localModel === model.value
-                      ? 'border-[#10a37f] bg-[#10a37f]/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  } cursor-pointer transition-all duration-200`}
-                  onClick={() => setSettings(prev => ({ ...prev, localModel: model.value }))}
-                >
-                  <div className="flex items-center h-5">
-                    <input
-                      type="radio"
-                      checked={settings.localModel === model.value}
-                      onChange={() => {}}
-                      className="w-4 h-4 text-[#10a37f] border-gray-300 focus:ring-[#10a37f]"
-                    />
-                  </div>
-                  <div className="ml-4 flex-1">
-                    <div className="flex justify-between items-start">
-                      <label className="font-medium text-gray-900">
-                        {model.label}
-                      </label>
-                      <span className="text-sm text-gray-500">
-                        {model.size}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-500">
-                      {model.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        ) : settings.modelType === "gemini" ? (
-          <>
-            <label className="block mb-2 font-k2d font-medium text-base">
-              Google Gemini API Key:
-            </label>
-            <input
-              type="password"
-              value={settings.geminiApiKey}
-              onChange={(e) => setSettings(prev => ({
-                ...prev,
-                geminiApiKey: e.target.value
-              }))}
-              className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
-              placeholder="Enter your Gemini API key"
-            />
-            <p className="text-sm text-gray-500 mb-4">
-              Get your API key from the <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Google AI Studio</a>. Free tier available.
-            </p>
-
-            <label className="block mb-2 font-k2d font-medium text-base">
-              Gemini Model:
-            </label>
-            <div className="grid gap-4">
-              {GEMINI_MODELS.map((model) => (
-                <div
-                  key={model.value}
-                  className={`relative flex items-center p-4 rounded-lg border ${
-                    settings.geminiModel === model.value
-                      ? 'border-[#10a37f] bg-[#10a37f]/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  } cursor-pointer transition-all duration-200`}
-                  onClick={() => setSettings(prev => ({ ...prev, geminiModel: model.value }))}
-                >
-                  <div className="flex items-center h-5">
-                    <input
-                      type="radio"
-                      checked={settings.geminiModel === model.value}
-                      onChange={() => {}}
-                      className="w-4 h-4 text-[#10a37f] border-gray-300 focus:ring-[#10a37f]"
-                    />
-                  </div>
-                  <div className="ml-4">
-                    <label className="font-medium text-gray-900">
-                      {model.label}
-                    </label>
-                    <p className="text-sm text-gray-500">
-                      {model.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        ) : (
-          <>
-            <label className="block mb-2 font-k2d font-medium text-base">
-              xAI API Key:
-            </label>
-            <input
-              type="password"
-              value={settings.xaiApiKey}
-              onChange={(e) => setSettings(prev => ({
-                ...prev,
-                xaiApiKey: e.target.value
-              }))}
-              className="w-full p-2 mb-2 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
-              placeholder="Enter your xAI API key"
-            />
-            <p className="text-sm text-gray-500 mb-4">
-              Get your API key from the <a href="https://x.ai/api" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">xAI platform</a>. Free tier available with $25 monthly credits for beta users.
-            </p>
-
-            <label className="block mb-2 font-k2d font-medium text-base">
-              Grok Model:
-            </label>
-            <div className="grid gap-4">
-              {GROK_MODELS.map((model) => (
-                <div
-                  key={model.value}
-                  className={`relative flex items-center p-4 rounded-lg border ${
-                    settings.grokModel === model.value
-                      ? 'border-[#10a37f] bg-[#10a37f]/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  } cursor-pointer transition-all duration-200`}
-                  onClick={() => setSettings(prev => ({ ...prev, grokModel: model.value }))}
-                >
-                  <div className="flex items-center h-5">
-                    <input
-                      type="radio"
-                      checked={settings.grokModel === model.value}
-                      onChange={() => {}}
-                      className="w-4 h-4 text-[#10a37f] border-gray-300 focus:ring-[#10a37f]"
-                    />
-                  </div>
-                  <div className="ml-4 flex-1">
-                    <div className="flex justify-between items-start">
-                      <label className="font-medium text-gray-900">
-                        {model.label}
-                      </label>
-                      <span className="text-sm text-gray-500">
-                        {model.price}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-500">
-                      {model.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        <label className="block mb-2 text-gray-800 font-k2d font-medium text-base">
-          Max Tokens:
-        </label>
-        <input
-          type="number"
-          value={settings.maxTokens}
-          onChange={(e) => setSettings(prev => ({
-            ...prev,
-            maxTokens: parseInt(e.target.value) || 1000
-          }))}
-          className="w-full p-2 mb-4 rounded border border-gray-200 bg-white text-gray-800 font-k2d"
-          placeholder="1000"
-          min="1"
-          max="4096"
-        />
-      </div>
-
-      {/* Local LLM Instructions */}
-      {settings.modelType === "local" && (
-        <div className="mt-5 mb-5 bg-gray-50 p-4 rounded-lg border border-gray-200 font-k2d">
-          <h2 className="text-lg mb-3 font-k2d font-semibold">
-            How to find your Llama server URL:
-          </h2>
-          <ol className="leading-relaxed pl-5 font-k2d">
-            <li>If you're running Llama locally, the URL is typically <code>http://localhost:PORT</code></li>
-            <li>The default port depends on your setup:
-              <ul>
-                <li>llama.cpp server: Usually port 8080</li>
-                <li>LM Studio: Default port 1234</li>
-                <li>Text Generation WebUI: Default port 7860</li>
-              </ul>
-            </li>
-            <li>Make sure your Llama server is running before using the extension</li>
-          </ol>
-        </div>
-      )}
-
-      {/* Customization Section - Moved to bottom */}
-      <div className="mt-8 mb-5">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-          <div className="p-6 border-b border-gray-100">
-            <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-600" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+        <div className="grid gap-8">
+          {/* Model Configuration */}
+          <SettingsCard 
+            title="Model Configuration" 
+            icon={
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#10a37f]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              Customization
-            </h2>
-          </div>
+            }
+          >
+            <div className="space-y-6">
+              <div>
+                <label className="block mb-2 text-gray-800 font-medium text-base">
+                  Model Type
+                </label>
+                <select 
+                  value={settings.modelType}
+                  onChange={(e) => setSettings(prev => ({
+                    ...prev,
+                    modelType: e.target.value as ModelType
+                  }))}
+                  className="w-full p-3 rounded-lg border border-gray-200 bg-white text-gray-800 font-medium transition-colors duration-200 hover:border-[#10a37f] focus:border-[#10a37f] focus:ring focus:ring-[#10a37f]/20"
+                >
+                  <option value="basic">LightUp Basic (Free)</option>
+                  <option value="local">Local LLM</option>
+                  <option value="gemini">Google Gemini</option>
+                  <option value="xai">xAI (Grok)</option>
+                </select>
+              </div>
 
-          <div className="p-6 space-y-6">
-            {/* Show Selected Text */}
-            <div className="mb-4">
+              {settings.modelType === "basic" && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="bg-gradient-to-br from-[#10a37f]/5 to-[#10a37f]/10 p-6 rounded-xl border border-[#10a37f]/20"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-[#10a37f] rounded-lg">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900">LightUp Basic</h3>
+                      <p className="text-sm text-gray-600">Free tier with basic features</p>
+                    </div>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <svg className="w-5 h-5 text-[#10a37f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <span>20 requests per day</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <svg className="w-5 h-5 text-[#10a37f]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                      <span>Powered by Gemini 2.0</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-gray-600">
+                      <svg className="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                      </svg>
+                      <span>Not for sensitive data</span>
+                    </div>
+                  </div>
+
+                  <RateLimitDisplay />
+                </motion.div>
+              )}
+
+              {settings.modelType === "local" && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="space-y-6"
+                >
+                  <div>
+                    <label className="block mb-2 text-gray-800 font-medium text-base">
+                      Llama Server URL
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.serverUrl}
+                      onChange={handleServerUrlChange}
+                      className="w-full p-3 rounded-lg border border-gray-200 bg-white text-gray-800 font-medium transition-colors duration-200 hover:border-[#10a37f] focus:border-[#10a37f] focus:ring focus:ring-[#10a37f]/20"
+                      placeholder="http://127.0.0.1:1234"
+                    />
+                    <p className="mt-2 text-sm text-gray-500">
+                      Local LLM server setup. No API key required.
+                    </p>
+                  </div>
+
+                  <div>
+                    <label className="block mb-4 text-gray-800 font-medium text-base">
+                      Local Model
+                    </label>
+                    <div className="grid gap-3">
+                      {LOCAL_MODELS.map((model) => (
+                        <ModelOption
+                          key={model.value}
+                          model={model}
+                          selected={settings.localModel === model.value}
+                          onChange={() => setSettings(prev => ({ ...prev, localModel: model.value }))}
+                          showSize
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {settings.modelType === "gemini" && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="space-y-6"
+                >
+                  <div>
+                    <label className="block mb-2 text-gray-800 font-medium text-base">
+                      Google Gemini API Key
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="password"
+                        value={settings.geminiApiKey}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          geminiApiKey: e.target.value
+                        }))}
+                        className="w-full p-3 rounded-lg border border-gray-200 bg-white text-gray-800 font-medium transition-colors duration-200 hover:border-[#10a37f] focus:border-[#10a37f] focus:ring focus:ring-[#10a37f]/20"
+                        placeholder="Enter your Gemini API key"
+                      />
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-gray-500">
+                        Get your API key from the <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Google AI Studio</a>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block mb-4 text-gray-800 font-medium text-base">
+                      Gemini Model
+                    </label>
+                    <div className="grid gap-3">
+                      {GEMINI_MODELS.map((model) => (
+                        <ModelOption
+                          key={model.value}
+                          model={model}
+                          selected={settings.geminiModel === model.value}
+                          onChange={() => setSettings(prev => ({ ...prev, geminiModel: model.value }))}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-blue-50 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                      </svg>
+                      <div>
+                        <h4 className="text-sm font-medium text-blue-900">Free Tier Available</h4>
+                        <p className="text-sm text-blue-700 mt-0.5">
+                          Google Gemini offers a generous free tier with up to 60 requests per minute.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {settings.modelType === "xai" && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="space-y-6"
+                >
+                  <div>
+                    <label className="block mb-2 text-gray-800 font-medium text-base">
+                      xAI API Key
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="password"
+                        value={settings.xaiApiKey}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          xaiApiKey: e.target.value
+                        }))}
+                        className="w-full p-3 rounded-lg border border-gray-200 bg-white text-gray-800 font-medium transition-colors duration-200 hover:border-[#10a37f] focus:border-[#10a37f] focus:ring focus:ring-[#10a37f]/20"
+                        placeholder="Enter your xAI API key"
+                      />
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                      </svg>
+                      <p className="text-sm text-gray-500">
+                        Get your API key from the <a href="https://x.ai/api" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">xAI platform</a>
+                      </p>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block mb-4 text-gray-800 font-medium text-base">
+                      Grok Model
+                    </label>
+                    <div className="grid gap-3">
+                      {GROK_MODELS.map((model) => (
+                        <ModelOption
+                          key={model.value}
+                          model={model}
+                          selected={settings.grokModel === model.value}
+                          onChange={() => setSettings(prev => ({ ...prev, grokModel: model.value }))}
+                          showPrice
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-blue-50 rounded-lg">
+                    <div className="flex items-start gap-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500 mt-0.5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                      </svg>
+                      <div>
+                        <h4 className="text-sm font-medium text-blue-900">Beta Access</h4>
+                        <p className="text-sm text-blue-700 mt-0.5">
+                          xAI offers $25 in free credits for beta users. Sign up on their platform to get started.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Max Tokens Input */}
+              <div>
+                <label className="block mb-2 text-gray-800 font-medium text-base">
+                  Max Tokens
+                </label>
+                <input
+                  type="number"
+                  value={settings.maxTokens}
+                  onChange={(e) => setSettings(prev => ({
+                    ...prev,
+                    maxTokens: parseInt(e.target.value) || 1000
+                  }))}
+                  className="w-full p-3 rounded-lg border border-gray-200 bg-white text-gray-800 font-medium transition-colors duration-200 hover:border-[#10a37f] focus:border-[#10a37f] focus:ring focus:ring-[#10a37f]/20"
+                  placeholder="1000"
+                  min="1"
+                  max="4096"
+                />
+                <p className="mt-2 text-sm text-gray-500">
+                  Maximum number of tokens to generate in each response
+                </p>
+              </div>
+
+            </div>
+          </SettingsCard>
+
+          {/* Customization */}
+          <SettingsCard 
+            title="Customization" 
+            icon={
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#10a37f]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+              </svg>
+            }
+          >
+            <div className="grid gap-6">
               <Switch
                 id="show-selected-text"
                 checked={settings.customization?.showSelectedText ?? true}
                 onChange={(e) => handleImmediateSettingUpdate('showSelectedText', e.target.checked)}
                 label="Show Selected Text"
+                description="Display the text you've selected in the results"
               />
-            </div>
 
-            {/* Radical Focus Mode */}
-            <div className="mb-4">
               <Switch
                 id="radical-focus"
                 checked={settings.customization?.radicallyFocus ?? false}
                 onChange={(e) => handleImmediateSettingUpdate('radicallyFocus', e.target.checked)}
-                label={
-                  <div>
-                    <span className="font-medium text-gray-900">Radical Focus Mode</span>
-                    <p className="text-xs font-normal text-gray-500 mt-0.5">Blur background when viewing results</p>
-                  </div>
-                }
+                label="Radical Focus Mode"
+                description="Blur background when viewing results"
               />
-            </div>
 
-            {/* Popup Animation */}
-            <div className="flex items-center justify-between py-2">
-              <div className="flex-1">
-                <div className="text-base font-semibold text-gray-900">Popup Animation</div>
-                <p className="text-xs font-normal text-gray-500 mt-0.5">Choose how the popup appears</p>
-              </div>
-              <select
-                value={settings.customization?.popupAnimation ?? "scale"}
-                onChange={(e) => handleImmediateSettingUpdate('popupAnimation', e.target.value)}
-                className="form-select rounded-lg border-gray-200 bg-white text-gray-800 font-medium px-4 py-2 pr-10 hover:border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-colors duration-200"
-              >
-                <option value="scale">Scale Animation</option>
-                <option value="fade">Fade Animation</option>
-                <option value="none">No Animation</option>
-              </select>
-            </div>
+              <Switch
+                id="persistent-highlight"
+                checked={settings.customization?.persistHighlight ?? false}
+                onChange={(e) => handleImmediateSettingUpdate('persistHighlight', e.target.checked)}
+                label="Persistent Highlighting"
+                description="Keep text highlighted after selection"
+              />
 
-            {/* Theme Selector */}
-            <div className="flex items-center justify-between py-2">
-              <div className="flex-1">
-                <div className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                  </svg>
-                  Theme
-                </div>
-              </div>
-              <select
-                value={settings.customization?.theme ?? "light"}
-                onChange={(e) => handleImmediateSettingUpdate('theme', e.target.value)}
-                className="form-select rounded-lg border-gray-200 bg-white text-gray-800 font-medium px-4 py-2 pr-10 hover:border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-colors duration-200"
-              >
-                <option value="light">Light</option>
-                <option value="dark">Dark</option>
-              </select>
-            </div>
-
-            {/* Font Size Selector */}
-            <div className="flex items-center justify-between py-2">
-              <div className="flex-1">
-                <div className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                  </svg>
-                  Font Size
-                </div>
-              </div>
-              <select
-                value={settings.customization?.fontSize ?? "1rem"}
-                onChange={(e) => handleImmediateSettingUpdate('fontSize', e.target.value)}
-                className="form-select rounded-lg border-gray-200 bg-white text-gray-800 font-medium px-4 py-2 pr-10 hover:border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-colors duration-200"
-              >
-                <option value="0.8rem">Small (0.8rem)</option>
-                <option value="0.9rem">Medium (0.9rem)</option>
-                <option value="1rem">Large (1rem)</option>
-              </select>
-            </div>
-
-            {/* Highlight Color Selector */}
-            <div className="flex items-center justify-between py-2">
-              <div className="flex-1">
-                <div className="text-base font-semibold text-gray-900 flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M4 2a2 2 0 00-2 2v11a3 3 0 106 0V4a2 2 0 00-2-2H4zm1 14a1 1 0 100-2 1 1 0 000 2zm5-1.757l4.9-4.9a2 2 0 000-2.828L13.485 5.1a2 2 0 00-2.828 0L10 5.757v8.486zM16 18H9.071l6-6H16a2 2 0 012 2v2a2 2 0 01-2 2z" clipRule="evenodd" />
-                  </svg>
-                  Highlight Color
-                </div>
-                <p className="text-sm font-normal text-gray-500 mt-0.5">Color of selected text</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <select
-                  value={settings.customization?.highlightColor ?? "default"}
-                  onChange={(e) => handleImmediateSettingUpdate('highlightColor', e.target.value)}
-                  className="form-select rounded-lg border-gray-200 bg-white text-gray-800 font-medium px-4 py-2 pr-10 hover:border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition-colors duration-200"
-                >
-                  {colorOptions.map(option => (
-                    <option key={option.value} value={option.value} className="flex items-center gap-2 py-2">
-                      {option.label}
-                    </option>
+              {/* Font Size Selection */}
+              <div className="space-y-2">
+                <label className="block text-gray-800 font-medium text-base">Font Size</label>
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { value: '0.8rem', label: 'Small' },
+                    { value: '0.9rem', label: 'Medium' },
+                    { value: '1rem', label: 'Large' }
+                  ].map((size) => (
+                    <button
+                      key={size.value}
+                      onClick={() => handleImmediateSettingUpdate('fontSize', size.value)}
+                      className={`p-4 rounded-lg border ${
+                        settings.customization?.fontSize === size.value
+                          ? 'border-[#10a37f] bg-[#10a37f]/5'
+                          : 'border-gray-200 hover:border-gray-300'
+                      } transition-all duration-200`}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <span className={`text-gray-600`} style={{ fontSize: size.value }}>Aa</span>
+                        <span className="text-sm">{size.label}</span>
+                      </div>
+                    </button>
                   ))}
-                </select>
-                <div className={`w-6 h-6 rounded-full border border-gray-200 transition-all duration-200 ${
-                  colorOptions.find(opt => opt.value === settings.customization?.highlightColor)?.color
-                }`}></div>
+                </div>
               </div>
-            </div>
 
-            {/* Add Persistent Highlight Toggle after the Highlight Color selector */}
-            <div className="flex items-center justify-between py-2">
-              <div className="flex-1">
-                <label className="font-medium text-gray-900 text-base flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 2a8 8 0 100 16 8 8 0 000-16zM8 10a2 2 0 114 0 2 2 0 01-4 0z" clipRule="evenodd" />
-                  </svg>
-                  Persistent Highlighting
-                </label>
-                <p className="text-sm font-normal text-gray-500 mt-0.5">Keep text highlighted after selection</p>
+              {/* Theme Selection */}
+              <div className="space-y-2">
+                <label className="block text-gray-800 font-medium text-base">Theme</label>
+                <div className="grid grid-cols-2 gap-3">
+                  {['light', 'dark'].map((theme) => (
+                    <button
+                      key={theme}
+                      onClick={() => handleImmediateSettingUpdate('theme', theme)}
+                      className={`p-4 rounded-lg border ${
+                        settings.customization?.theme === theme
+                          ? 'border-[#10a37f] bg-[#10a37f]/5'
+                          : 'border-gray-200 hover:border-gray-300'
+                      } transition-all duration-200`}
+                    >
+                      <div className="flex items-center justify-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                          {theme === 'light' ? (
+                            <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                          ) : (
+                            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                          )}
+                        </svg>
+                        <span className="capitalize">{theme}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
-              <div className="flex items-center">
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={settings.customization?.persistHighlight ?? false}
-                    onChange={(e) => handleImmediateSettingUpdate('persistHighlight', e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#10a37f]/30 dark:peer-focus:ring-[#10a37f]/80 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#10a37f]"></div>
-                </label>
+
+              {/* Color Selection */}
+              <div className="space-y-2">
+                <label className="block text-gray-800 font-medium text-base">Highlight Color</label>
+                <div className="grid grid-cols-3 gap-3">
+                  {colorOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => handleImmediateSettingUpdate('highlightColor', option.value)}
+                      className={`p-4 rounded-lg border ${
+                        settings.customization?.highlightColor === option.value
+                          ? 'border-[#10a37f] bg-[#10a37f]/5'
+                          : 'border-gray-200 hover:border-gray-300'
+                      } transition-all duration-200`}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        <div className={`w-6 h-6 rounded-full ${option.color}`} />
+                        <span className="text-sm">{option.label}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          </SettingsCard>
+
+          {/* Context Settings Card */}
+          <SettingsCard 
+            title="Context Settings" 
+            icon={
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#10a37f]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              </svg>
+            }
+          >
+            <div className="flex flex-col items-center justify-center py-8 text-center">
+              <div className="w-16 h-16 mb-4 text-gray-400">
+                <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">Coming Soon!</h3>
+              <p className="text-gray-500 max-w-sm">
+                We're working on bringing you smart context awareness features to enhance your LightUp experience.
+              </p>
+              <Badge variant="info" className="mt-4">Beta</Badge>
+            </div>
+          </SettingsCard>
         </div>
       </div>
 
-      <div className="mb-8 bg-white p-6 rounded-lg shadow-md border border-gray-100 hover:shadow-lg transition-shadow duration-200">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-semibold text-gray-900">Context Settings</h2>
-              <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full">Beta</span>
-            </div>
-            <p className="text-sm font-normal text-gray-500 mt-0.5">Coming Soon</p>
-          </div>
-        </div>
-        
-        <div className="flex flex-col items-center justify-center py-8 text-center">
-          <div className="w-16 h-16 mb-4">
-            <svg className="w-full h-full text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-            </svg>
-          </div>
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">Context Settings are Coming Soon!</h3>
-          <p className="text-gray-500 max-w-sm">
-            We're working on bringing you smart context awareness features to enhance your LightUp experience. Stay tuned for updates!
-          </p>
-        </div>
-      </div>
-
-      <div className="fixed bottom-0 left-0 right-0 z-50">
-        {/* Backdrop blur and gradient */}
-        {/* <div className="absolute inset-0 bg-gradient-to-t from-white via-white to-transparent h-32 -translate-y-full pointer-events-none" /> */}
-        
-        {/* Main container */}
+      {/* Fixed Save Button */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="fixed bottom-0 left-0 right-0 z-50"
+      >
         <div className="bg-white/80 backdrop-blur-md border-t border-gray-100 shadow-lg py-4">
-          <div className="max-w-[600px] mx-auto px-5">
-            <div className="flex flex-col gap-3">
+          <div className="max-w-[800px] mx-auto px-5">
+            <div className="flex items-center gap-4">
               {error && <ErrorMessage message={error} />}
               
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={handleSave}
-                  disabled={isSaving}
-                  className={`flex-1 px-4 h-11 bg-[#10a37f] text-white border-none rounded-xl cursor-pointer font-medium transition-all duration-200 font-k2d hover:bg-[#0d8c6d] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none flex items-center justify-center gap-2`}
-                >
-                  {isSaving ? (
-                    <>
-                      <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      <span>Saving...</span>
-                    </>
-                  ) : (
-                    <>
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                        <path d="M7.707 10.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V6h-2v5.586l-1.293-1.293z" />
-                        <path d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm10 0H6v12h8V4z" />
-                      </svg>
-                      <span>Save Settings</span>
-                    </>
-                  )}
-                </button>
-              </div>
+              <button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="flex-1 h-12 bg-[#10a37f] text-white rounded-xl font-medium transition-all duration-200 hover:bg-[#0d8c6d] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none flex items-center justify-center gap-2"
+              >
+                {isSaving ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    </svg>
+                    <span>Saving Changes...</span>
+                  </>
+                ) : (
+                  <>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>Save Settings</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-     
-
-      <div id="toast" className="fixed bottom-4 right-4 bg-[#10a37f] text-white px-4 py-2 rounded-lg opacity-0 transition-opacity duration-300 shadow-lg"></div>
+      {/* Toast */}
+      <div id="toast" className="fixed bottom-4 right-4 bg-[#10a37f] text-white px-4 py-2 rounded-lg opacity-0 transition-opacity duration-300 shadow-lg" />
     </div>
   );
 }
