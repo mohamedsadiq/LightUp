@@ -879,7 +879,7 @@ function IndexOptions() {
 
       <div className="fixed bottom-0 left-0 right-0 z-50">
         {/* Backdrop blur and gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white to-transparent h-32 -translate-y-full pointer-events-none" />
+        {/* <div className="absolute inset-0 bg-gradient-to-t from-white via-white to-transparent h-32 -translate-y-full pointer-events-none" /> */}
         
         {/* Main container */}
         <div className="bg-white/80 backdrop-blur-md border-t border-gray-100 shadow-lg py-4">

@@ -6,6 +6,34 @@ import { processGeminiText } from "~services/llm/gemini"
 import { processXAIText } from "~services/llm/xai"
 import { processBasicText } from "~services/llm/basic"
 
+// Default settings for new installations
+const DEFAULT_SETTINGS: Settings = {
+  modelType: "basic",
+  basicModel: "gemini-2.0-flash-lite-preview-02-05",
+  customization: {
+    showSelectedText: true,
+    theme: "light",
+    radicallyFocus: false,
+    fontSize: "1rem",
+    highlightColor: "default",
+    popupAnimation: "scale",
+    persistHighlight: false
+  }
+}
+
+// Initialize settings when extension is installed
+chrome.runtime.onInstalled.addListener(async (details) => {
+  if (details.reason === "install") {
+    const storage = new Storage()
+    const existingSettings = await storage.get("settings")
+    
+    if (!existingSettings) {
+      await storage.set("settings", DEFAULT_SETTINGS)
+      console.log("Initialized default settings for new installation")
+    }
+  }
+})
+
 interface Settings {
   modelType: "local" | "openai" | "gemini" | "xai" | "basic"
   serverUrl?: string
@@ -19,6 +47,16 @@ interface Settings {
   openaiApiKey?: string
   geminiModel?: string
   maxTokens?: number
+  basicModel?: string
+  customization?: {
+    showSelectedText: boolean
+    theme: "light" | "dark"
+    radicallyFocus: boolean
+    fontSize: "0.8rem" | "0.9rem" | "1rem"
+    highlightColor: "default" | "orange" | "blue" | "green" | "purple" | "pink"
+    popupAnimation: "none" | "scale" | "fade"
+    persistHighlight: boolean
+  }
 }
 
 let activeConnections = new Map<string, {
