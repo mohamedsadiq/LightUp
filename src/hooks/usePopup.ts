@@ -45,19 +45,29 @@ export const usePopup = (
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [mode, setMode] = useState<Mode>("explain");
 
-  // Load initial mode
+  // Load initial mode and translation settings
   useEffect(() => {
-    const loadMode = async () => {
+    const loadSettings = async () => {
       const storage = new Storage();
       const savedMode = await storage.get("mode") as Mode | undefined;
+      const savedTranslationSettings = await storage.get("translationSettings");
+      
       if (savedMode) {
         if (savedMode === "explain" || savedMode === "summarize" || 
             savedMode === "analyze" || savedMode === "translate") {
           setMode(savedMode);
+          
+          // If we're in translate mode, ensure we have translation settings
+          if (savedMode === "translate" && !savedTranslationSettings) {
+            await storage.set("translationSettings", {
+              fromLanguage: "en",
+              toLanguage: "es"
+            });
+          }
         }
       }
     };
-    loadMode();
+    loadSettings();
   }, []);
 
   // Handle text selection

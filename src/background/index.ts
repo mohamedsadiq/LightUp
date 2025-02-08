@@ -219,7 +219,9 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     const userMessage = isFollowUp
       ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
       : mode === "translate" && requestSettings?.translationSettings 
-        ? `Translate the following text from ${requestSettings.translationSettings.fromLanguage} to ${requestSettings.translationSettings.toLanguage}:\n\n${text}`
+        ? typeof USER_PROMPTS[mode] === 'function'
+          ? USER_PROMPTS[mode](text, `${requestSettings.translationSettings.fromLanguage}:${requestSettings.translationSettings.toLanguage}`)
+          : text
         : typeof USER_PROMPTS[mode] === 'function' 
           ? USER_PROMPTS[mode](text, context)
           : text;
