@@ -497,7 +497,7 @@ function IndexOptions() {
               </p>
             </div>
           </div>
-          <Badge variant="success">v0.1.3</Badge>
+          <Badge variant="success">v0.1.4</Badge>
         </motion.div>
 
         <div className="grid gap-8">
