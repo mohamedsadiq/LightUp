@@ -64,8 +64,8 @@ function Content() {
 
   // Initialize all our hooks
   const { width, height, handleResizeStart } = useResizable({
-    initialWidth: 340,
-    initialHeight: 400
+    initialWidth: 350,
+    initialHeight: 460
   });
 
   const { settings, setSettings, isConfigured, currentTheme, targetLanguage, fontSize } = useSettings();

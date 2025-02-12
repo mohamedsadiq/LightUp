@@ -11,6 +11,8 @@ interface PopupModeSelectorProps {
   theme?: "light" | "dark"
 }
 
+const modes: Mode[] = ["summarize", "analyze", "explain", "translate"]
+
 export const PopupModeSelector = ({ 
   activeMode, 
   onModeChange, 
@@ -19,8 +21,7 @@ export const PopupModeSelector = ({
 }: PopupModeSelectorProps) => {
   const [fromLanguage, setFromLanguage] = useState("en")
   const [toLanguage, setToLanguage] = useState("es")
-  const { settings } = useSettings()
-  const isContextAwareEnabled = settings?.customization?.contextAwareness ?? false
+  const [isHovered, setIsHovered] = useState(false)
 
   const handleModeClick = (mode: Mode) => {
     if (mode === "translate") {
@@ -33,91 +34,106 @@ export const PopupModeSelector = ({
   return (
     <motion.div 
       style={styles.container}
-      initial={{  scale: 0.5 }}
-      animate={{  scale: 1 }}
-      transition={{ 
+      initial={{ scale: 0.5 }}
+      animate={{ scale: 1 }}
+      exit={{ scale: 2, opacity: 0 }}
+      transition={{
         type: "spring",
-        bounce: 0.1,
-        stiffness: 120,
-        damping: 10
+        bounce: 0.2,
+        duration: 0.3
       }}
-      layout
+      layout="preserve-aspect"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <motion.div 
         style={{
-          ...styles.modeButton,
-          backgroundColor: theme === "dark" ? "#FFFFFF" : "#2c2c2c",
-          color: theme === "dark" ? "#2c2c2c" : "white",
+          ...styles.modeContainer,
+          backgroundColor: theme === "dark" ? "#FFFFFF10" : "#2c2c2c10",
         }}
         initial={{ filter: "blur(8px)" }}
         animate={{ filter: "blur(0)" }}
-        transition={{ duration: 0.2 }}
-        layout
+        exit={{ scale: 2, opacity: 0 }}
+        transition={{
+          type: "spring",
+          stiffness: 300,
+          damping: 20,
+          mass: 0.8
+        }}
+        layout="preserve-aspect"
+        layoutId="mode-container"
       >
-        <motion.span 
-          key={activeMode}
-          initial={{ filter: "blur(8px)" }}
-          animate={{ filter: "blur(0)" }}
-          transition={{ duration: 0.2 }}
-          layout
-        >
-          {activeMode.charAt(0).toUpperCase() + activeMode.slice(1)} mode
-        </motion.span>
-        
-        <AnimatePresence mode="wait">
-          {isLoading && (
-            <motion.div
-              style={styles.loadingIndicator}
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ 
-                opacity: 1, 
-                scale: 1,
-                rotate: 360 
-              }}
-              exit={{ 
-                opacity: 0,
-                scale: 0.5,
-                transition: { duration: 0.2, }
-              }}
-              transition={{ 
-                rotate: { duration: 1, repeat: Infinity, ease: "linear" },
-                opacity: { duration: 0.2 },
-                scale: { duration: 0.2 }
-              }}
-            >
-              •
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <AnimatePresence mode="popLayout" initial={false}>
+          {modes.map((mode) => (
+            (mode === activeMode || isHovered) && (
+              <motion.button
+                key={mode}
+                onClick={() => handleModeClick(mode)}
+                style={{
+                  ...styles.modeButton,
+                  backgroundColor: mode === activeMode 
+                    ? (theme === "dark" ? "#FFFFFF" : "#2c2c2c")
+                    : "transparent",
+                  color: mode === activeMode
+                    ? (theme === "dark" ? "#2c2c2c" : "white")
+                    : (theme === "dark" ? "#FFFFFF80" : "#2c2c2c80"),
+                }}
+                initial={mode === activeMode ? { scale: 1, y: 0 } : { scale: 0.9, y: 0, opacity: 0}}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.9, y: 0, opacity: 0 }}
+                transition={{
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 30,
+                  mass: 0.8,
+                  exit: {
+                    duration: 0.4,
+                    mass: 0.2,
+                  }
+                }}
+                layout="position"
+                layoutId={`mode-button-${mode}`}
+                whileHover={mode !== activeMode ? {
+                  backgroundColor: theme === "dark" ? "#FFFFFF20" : "#2c2c2c20",
+                  color: theme === "dark" ? "#FFFFFF" : "#2c2c2c",
+                  scale: 1.02,
+                  transition: {
+                    duration: 0.2
+                  }
+                } : {}}
+              
+              >
+                <motion.span >
+                  {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                </motion.span>
 
-        {isContextAwareEnabled && (
-          <motion.div
-            style={styles.contextIndicator}
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.2 }}
-            title="Context awareness is enabled"
-          >
-            <svg 
-              width="12" 
-              height="12" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2"
-              style={{ opacity: 0.7 }}
-            >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-          </motion.div>
-        )}
+                {mode === activeMode && isLoading && (
+                  <motion.div
+                    style={styles.loadingIndicator}
+                    initial={{ opacity: 0, scale: 0.5 }}
+                    animate={{ 
+                      opacity: 1, 
+                      scale: 1,
+                      rotate: 360 
+                    }}
+                    exit={{ 
+                      opacity: 0,
+                      scale: 0.5,
+                      transition: { duration: 0.2 }
+                    }}
+                    transition={{ 
+                      rotate: { duration: 1, repeat: Infinity, ease: "linear" },
+                      opacity: { duration: 0.2 },
+                      scale: { duration: 0.2 }
+                    }}
+                  >
+                    •
+                  </motion.div>
+                )}
+              </motion.button>
+            )
+          ))}
+        </AnimatePresence>
       </motion.div>
     </motion.div>
   )
@@ -128,7 +144,13 @@ const styles = {
     display: "flex",
     justifyContent: "center",
     padding: "4px 0",
-    marginBottom: "8px"
+    marginBottom: "8px",
+  },
+  modeContainer: {
+    display: "flex",
+    gap: "4px",
+    padding: "4px",
+    borderRadius: "24px",
   },
   modeButton: {
     display: "flex",
@@ -138,10 +160,13 @@ const styles = {
     borderRadius: "20px",
     fontSize: "10px",
     fontFamily: "'K2D', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    cursor: "default",
+    cursor: "pointer",
     height: "28px",
     lineHeight: "16px",
-    fontWeight: "500"
+    fontWeight: "500",
+    border: "none",
+    outline: "none",
+    transition: "background-color 0.2s, color 0.2s",
   },
   iconWrapper: {
     display: "flex",
