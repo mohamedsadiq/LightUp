@@ -1,7 +1,7 @@
 {
   "name": "lightup",
   "displayName": "LightUp",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Genius annotations for every page on the web.",
   "author": "Moe Sadiq",
   "scripts": {
@@ -42,7 +42,7 @@
   "manifest": {
     "manifest_version": 3,
     "name": "LightUp - AI Powered Web Annotations",
-    "version": "0.1.3", 
+    "version": "0.1.4", 
     "description": "Genius annotations for every page on the web. Powered by AI to explain, summarize, and analyze any text you select.",
     "background": {
       "service_worker": "background.js",
