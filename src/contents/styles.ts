@@ -168,17 +168,53 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     maxHeight: '80vh',
     pointerEvents: 'auto' as const,
   },
-  // ... all other existing styles
+  sidebarPopup: {
+    position: 'fixed' as const,
+    right: 10,
+    top: 10,
+    bottom: 10,
+    width: '500px',
+    background: THEME_COLORS[theme].background,
+    border: `1px solid ${THEME_COLORS[theme].border}`,
+    borderLeft: `1px solid ${THEME_COLORS[theme].border}`,
+    boxShadow: "-2px 0 20px rgba(0,0,0,0.15)",
+    padding: 20,
+    fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    overflow: 'auto',
+    fontSize: fontSize,
+    zIndex: 3147483645,
+    borderRadius: 12,
+    minWidth: "400px",
+    maxWidth: "800px",
+    resize: "horizontal" as const,
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      bottom: 0,
+      right: 0,
+      width: '15px',
+      height: '15px',
+      cursor: 'se-resize',
+      background: 'transparent'
+    },
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      width: '15px',
+      height: '15px',
+      cursor: 'sw-resize',
+      background: 'transparent'
+    }
+  },
   followUpInputContainer: {
     display: 'flex',
     gap: '8px',
     marginTop: '12px',
- 
     width: "100%",
     position: 'sticky' as const,
     bottom: 0,
-   
-  
     // backgroundColor: THEME_COLORS[theme].popupBackground,
     // borderTop: theme === "light" ? "1px solid #E5E5E5" : `1px solid ${THEME_COLORS[theme].border}`,
     zIndex: 10,

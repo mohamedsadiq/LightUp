@@ -59,6 +59,7 @@ export interface Settings {
     highlightColor: "default" | "orange" | "blue" | "green" | "purple" | "pink"
     popupAnimation: "none" | "scale" | "fade"
     persistHighlight: boolean
+    layoutMode: "floating" | "sidebar"
   }
   translationSettings?: {
     fromLanguage: string

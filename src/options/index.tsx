@@ -322,7 +322,8 @@ function IndexOptions() {
       fontSize: "1rem",
       highlightColor: "default",
       popupAnimation: "scale",
-      persistHighlight: false
+      persistHighlight: false,
+      layoutMode: "floating"
     }
   });
 
@@ -345,7 +346,8 @@ function IndexOptions() {
               fontSize: savedSettings.customization?.fontSize ?? "1rem",
               highlightColor: savedSettings.customization?.highlightColor ?? "default",
               popupAnimation: savedSettings.customization?.popupAnimation ?? "scale",
-              persistHighlight: savedSettings.customization?.persistHighlight ?? false
+              persistHighlight: savedSettings.customization?.persistHighlight ?? false,
+              layoutMode: savedSettings.customization?.layoutMode ?? "floating"
             }
           });
         }
@@ -782,6 +784,47 @@ function IndexOptions() {
             }
           >
             <div className="grid gap-6">
+              {/* Layout Mode Selection */}
+              <div className="space-y-2">
+                <label className="block text-gray-800 font-medium text-base">Layout Mode</label>
+                <div className="grid grid-cols-2 gap-3">
+                  {[
+                    { value: 'floating', label: 'Floating', icon: (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+                        <circle cx="12" cy="12" r="1"/>
+                        <circle cx="12" cy="8" r="1"/>
+                        <circle cx="12" cy="16" r="1"/>
+                      </svg>
+                    )},
+                    { value: 'sidebar', label: 'Sidebar', icon: (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="15" y1="3" x2="15" y2="21"/>
+                      </svg>
+                    )}
+                  ].map((mode) => (
+                    <button
+                      key={mode.value}
+                      onClick={() => handleImmediateSettingUpdate('layoutMode', mode.value)}
+                      className={`p-4 rounded-lg border ${
+                        settings.customization?.layoutMode === mode.value
+                          ? 'border-[#10a37f] bg-[#10a37f]/5'
+                          : 'border-gray-200 hover:border-gray-300'
+                      } transition-all duration-200`}
+                    >
+                      <div className="flex flex-col items-center gap-2">
+                        {mode.icon}
+                        <span className="text-sm">{mode.label}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-500 mt-2">
+                  Choose between a floating popup or a fixed sidebar layout
+                </p>
+              </div>
+
               <Switch
                 id="show-selected-text"
                 checked={settings.customization?.showSelectedText ?? true}

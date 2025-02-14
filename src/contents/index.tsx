@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from "react"
 import type { PlasmoCSConfig } from "plasmo"
 import { motion, AnimatePresence } from "framer-motion"
 import type { MotionStyle } from "framer-motion"
+import type { CSSProperties } from "react"
 import MarkdownText from "../components/content/MarkdownText"
 import { Logo, CloseIcon } from "../components/icons"
 import "../style.css"
@@ -56,6 +57,14 @@ const loadingIndicatorContainerStyle: MotionStyle = {
   marginTop: '8px',
   gap: '8px'
 };
+
+// Define a type for our flex container style
+type FlexContainerStyle = {
+  display: 'flex'
+  flexDirection: 'row'
+  justifyContent: 'flex-start' | 'flex-end'
+  width: string
+}
 
 function Content() {
   // Generate a stable connection ID
@@ -331,6 +340,425 @@ function Content() {
     return () => document.removeEventListener('mouseup', handleSelection);
   }, [isEnabled, isInteractingWithPopup, mode, settings, port, connectionId]);
 
+  // Helper function to render popup content
+  const renderPopupContent = () => (
+    <>
+      {/* Header */}
+      <div style={themedStyles.buttonContainerParent}>
+        <motion.div style={{ marginLeft: '-6px' }} layout>
+          {Logo(currentTheme)}
+        </motion.div>
+        <PopupModeSelector 
+          activeMode={mode}
+          onModeChange={handleModeChange}
+          isLoading={isLoading}
+          theme={currentTheme}
+        />
+        <div style={themedStyles.buttonContainer}>
+          <motion.button 
+            onClick={handleClose}
+            style={{
+              ...themedStyles.button,
+              marginTop: '2px'
+            }}
+            variants={iconButtonVariants}
+            whileHover="hover"
+          >
+            <CloseIcon theme={currentTheme} />
+          </motion.button>
+        </div>
+      </div>
+
+      {/* Selected Text */}
+      {settings?.customization?.showSelectedText !== false && (
+        <p style={{...themedStyles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline'}}>
+          {truncateText(selectedText)}
+        </p>
+      )}
+
+      {/* Main Content */}
+      <AnimatePresence mode="wait">
+        {isLoading && !streamingText ? (
+          <motion.div 
+            style={flexMotionStyle} 
+            variants={loadingSkeletonVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            layout
+          >
+            {[...Array(9)].map((_, i) => (
+              <motion.div
+                key={i}
+                style={{
+                  height: '24px',
+                  background: currentTheme === "dark" 
+                    ? 'linear-gradient(90deg, #2C2C2C 0%, #3D3D3D 50%, #2C2C2C 100%)'
+                    : 'linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%)',
+                  borderRadius: '6px',
+                  width: i === 1 ? '85%' : i === 2 ? '70%' : '100%',
+                  backgroundSize: '200% 100%',
+                  overflow: 'hidden',
+                  position: 'relative'
+                }}
+                variants={shimmerVariants}
+                initial="initial"
+                animate="animate"
+              >
+                <motion.div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: currentTheme === "dark"
+                      ? 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)'
+                      : 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%)',
+                    backgroundSize: '200% 100%'
+                  }}
+                  variants={shimmerVariants}
+                  initial="initial"
+                  animate="animate"
+                />
+              </motion.div>
+            ))}
+            <motion.div
+              style={{
+                ...loadingIndicatorContainerStyle,
+                color: currentTheme === "dark" ? '#666' : '#999'
+              }}
+              variants={loadingVariants}
+              animate="animate"
+            >
+              <motion.div
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  background: 'currentColor'
+                }}
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.5, 1, 0.5]
+                }}
+                transition={{
+                  duration: 1,
+                  repeat: Infinity,
+                  delay: 0
+                }}
+              />
+              <motion.div
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  background: 'currentColor'
+                }}
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.5, 1, 0.5]
+                }}
+                transition={{
+                  duration: 1,
+                  repeat: Infinity,
+                  delay: 0.2
+                }}
+              />
+              <motion.div
+                style={{
+                  width: '6px',
+                  height: '6px',
+                  borderRadius: '50%',
+                  background: 'currentColor'
+                }}
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.5, 1, 0.5]
+                }}
+                transition={{
+                  duration: 1,
+                  repeat: Infinity,
+                  delay: 0.4
+                }}
+              />
+            </motion.div>
+          </motion.div>
+        ) : error ? (
+          <ErrorMessage message={error} />
+        ) : (
+          <motion.div
+            variants={textVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+          >
+            {/* Explanation */}
+            <motion.div
+              style={{
+                ...themedStyles.explanation,
+                textAlign: textDirection === "rtl" ? "right" : "left"
+              }}
+              initial={{ y: 50 }}
+              animate={{ y: 0 }}
+            >
+              <div style={{ marginBottom: '8px' }}>
+                {streamingText && (
+                  <div style={{
+                    ...themedStyles.explanation,
+                    textAlign: themedStyles.explanation.textAlign as "left" | "right"
+                  }} className="streaming-text">
+                    <MarkdownText text={streamingText} />
+                  </div>
+                )}
+              </div>
+
+              {/* Action buttons */}
+              {!isLoading && streamingText && (
+                <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' } as const}>
+                  {/* Copy button */}
+                  <motion.button
+                    onClick={() => handleCopy(streamingText, 'initial')}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: '4px',
+                      borderRadius: '4px',
+                      color: '#666'
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                  >
+                    {copiedId === 'initial' ? (
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                      </svg>
+                    ) : (
+                      <svg width="12" height="12" viewBox="0 0 62 61" fill="none">
+                        <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
+                      </svg>
+                    )}
+                  </motion.button>
+
+                  {/* Speak button */}
+                  <motion.button
+                    onClick={() => handleSpeak(streamingText, 'main')}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      padding: '4px',
+                      borderRadius: '4px',
+                      color: speakingId === 'main' ? '#14742F' : '#666'
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    title={speakingId === 'main' ? "Stop speaking" : "Read text aloud"}
+                  >
+                    {speakingId === 'main' ? (
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+                        <path d="M6 6h4v12H6V6zm8 0h4v12h-4V6z" fill="currentColor"/>
+                      </svg>
+                    ) : (
+                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
+                      </svg>
+                    )}
+                  </motion.button>
+
+                  {/* Model display */}
+                  <motion.div
+                    style={{
+                      fontSize: '0.8rem',
+                      color: '#666',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      marginTop: '-3px',
+                      minWidth: '80px',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    <span style={{ 
+                      textTransform: 'capitalize',
+                      fontWeight: 500,
+                      color: currentTheme === 'dark' ? '#7e7e7e' : '#666',
+                      userSelect: 'none'
+                    }}>
+                      {currentModel || 'Loading...'}
+                    </span>
+                  </motion.div>
+                </motion.div>
+              )}
+            </motion.div>
+
+            {/* Follow-up QAs */}
+            {followUpQAs.map(({ question, answer, id, isComplete }) => (
+              <motion.div
+                key={id}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                style={themedStyles.followUpQA}
+              >
+                {/* Question bubble */}
+                <motion.div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row' as CSSProperties['flexDirection'],
+                    justifyContent: 'flex-end',
+                    width: '100%'
+                  } as FlexContainerStyle}
+                >
+                  <div style={{
+                    ...themedStyles.followUpQuestion,
+                    textAlign: textDirection === "rtl" ? "right" : "left"
+                  }}>
+                    {question}
+                  </div>
+                </motion.div>
+
+                {/* Answer bubble */}
+                <motion.div
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row' as CSSProperties['flexDirection'],
+                    justifyContent: 'flex-start',
+                    width: '100%'
+                  } as FlexContainerStyle}
+                >
+                  <div style={{
+                    ...themedStyles.followUpAnswer,
+                    textAlign: textDirection === "rtl" ? "right" : "left"
+                  }}>
+                    <MarkdownText
+                      text={answer}
+                      isStreaming={activeAnswerId === id && !isComplete}
+                      language={targetLanguage}
+                    />
+                    
+                    {isComplete && (
+                      <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <motion.button
+                          onClick={() => handleCopy(answer, `followup-${id}`)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: '4px',
+                            borderRadius: '4px',
+                            color: copiedId === `followup-${id}` ? '#666' : '#666'
+                          }}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                        >
+                          {copiedId === `followup-${id}` ? (
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                            </svg>
+                          ) : (
+                            <svg width="12" height="12" viewBox="0 0 62 61" fill="none">
+                              <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
+                            </svg>
+                          )}
+                        </motion.button>
+
+                        <motion.button
+                          onClick={() => handleSpeak(answer, `followup-${id}`)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            cursor: 'pointer',
+                            padding: '4px',
+                            borderRadius: '4px',
+                            color: speakingId === `followup-${id}` ? '#14742F' : '#666'
+                          }}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          title={speakingId === `followup-${id}` ? "Stop speaking" : "Read text aloud"}
+                        >
+                          {speakingId === `followup-${id}` ? (
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+                              <path d="M6 6h4v12H6V6zm8 0h4v12h-4V6z" fill="currentColor"/>
+                            </svg>
+                          ) : (
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+                              <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
+                            </svg>
+                          )}
+                        </motion.button>
+                        {/* Model display */}
+                        <motion.div
+                          style={{
+                            fontSize: '0.8rem',
+                            color: '#666',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            marginTop: '-3px',
+                            minWidth: '80px',
+                            justifyContent: 'center'
+                          }}
+                        >
+                          <span style={{ 
+                            textTransform: 'capitalize',
+                            fontWeight: 500,
+                            color: currentTheme === 'dark' ? '#7e7e7e' : '#666',
+                            userSelect: 'none'
+                          }}>
+                            {currentModel || 'Loading...'}
+                          </span>
+                        </motion.div>
+                      </motion.div>
+                    )}
+                  </div>
+                </motion.div>
+              </motion.div>
+            ))}
+
+            {/* Input section */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={themedStyles.followUpInputContainer}
+            >
+              <div style={themedStyles.searchContainer}>
+                <input
+                  type="text"
+                  value={followUpQuestion}
+                  onChange={handleFollowUpQuestion}
+                  onKeyDown={(e) => {
+                    e.stopPropagation();
+                    if (e.key === 'Enter') {
+                      handleAskFollowUpWrapper();
+                    }
+                  }}
+                  placeholder="Ask a follow-up question..."
+                  style={themedStyles.input}
+                  disabled={isAskingFollowUp}
+                  onFocus={() => setIsInputFocused(true)}
+                  onBlur={() => setIsInputFocused(false)}
+                />
+                <motion.button
+                  onClick={handleAskFollowUpWrapper}
+                  disabled={!followUpQuestion.trim() || isAskingFollowUp}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  style={themedStyles.searchSendButton}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
+
   return (
     <>
       {/* Toast notification */}
@@ -376,496 +804,131 @@ function Content() {
       {/* Main popup */}
       <AnimatePresence mode="sync">
         {isVisible && isEnabled && isConfigured && (
-          <motion.div 
-            style={{
-              position: 'fixed',
-              left: `${position.x}px`,
-              top: `${position.y}px`,
-              zIndex: Z_INDEX.POPUP,
-              pointerEvents: 'none'
-            }}
-            initial={settings?.customization?.popupAnimation === "none" ? { opacity: 1 } : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2 }}
-          >
-            <div style={{
-              ...themedStyles.popupPositioner,
-              pointerEvents: 'auto'
-            }}>
-              <motion.div 
-                style={{
-                  ...themedStyles.popup,
-                  width: `${width}px`,
-                  height: `${height}px`,
-                  overflow: 'auto',
-                  position: 'relative'
-                }}
-                data-plasmo-popup
-                className="no-select"
-                onClick={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseUp={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseDown={(e) => {
-                  e.stopPropagation();
-                }}
-                onMouseEnter={() => setIsInteractingWithPopup(true)}
-                onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-                initial={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "initial"}
-                animate={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "animate"}
-                exit={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 0 } : "exit"}
-                layout
-                variants={
-                  settings?.customization?.popupAnimation === "scale" 
-                    ? scaleMotionVariants 
-                    : settings?.customization?.popupAnimation === "fade"
-                      ? fadeMotionVariants
-                      : noMotionVariants
-                }
-              >
-                {/* Header */}
-                <div style={themedStyles.buttonContainerParent}>
-                  <motion.div style={{ marginLeft: '-6px' }} layout>
-                    {Logo(currentTheme)}
-                  </motion.div>
-                  <PopupModeSelector 
-                    activeMode={mode}
-                    onModeChange={handleModeChange}
-                    isLoading={isLoading}
-                    theme={currentTheme}
-                  />
-                  <div style={themedStyles.buttonContainer}>
-                    <motion.button 
-                      onClick={handleClose}
-                      style={{
-                        ...themedStyles.button,
-                        marginTop: '2px'
-                      }}
-                      variants={iconButtonVariants}
-                      whileHover="hover"
-                    >
-                      <CloseIcon theme={currentTheme} />
-                    </motion.button>
-                  </div>
-                </div>
-
-                {/* Selected Text */}
-                {settings?.customization?.showSelectedText !== false && (
-                  <p style={{...themedStyles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline'}}>
-                    {truncateText(selectedText)}
-                  </p>
-                )}
-
-                {/* Main Content */}
-                <AnimatePresence mode="wait">
-                  {isLoading && !streamingText ? (
-                    <motion.div 
-                      style={flexMotionStyle} 
-                      variants={loadingSkeletonVariants}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                      layout
-                    >
-                      {[...Array(9)].map((_, i) => (
-                        <motion.div
-                          key={i}
-                          style={{
-                            height: '24px',
-                            background: currentTheme === "dark" 
-                              ? 'linear-gradient(90deg, #2C2C2C 0%, #3D3D3D 50%, #2C2C2C 100%)'
-                              : 'linear-gradient(90deg, #f0f0f0 0%, #e0e0e0 50%, #f0f0f0 100%)',
-                            borderRadius: '6px',
-                            width: i === 1 ? '85%' : i === 2 ? '70%' : '100%',
-                            backgroundSize: '200% 100%',
-                            overflow: 'hidden',
-                            position: 'relative'
-                          }}
-                          variants={shimmerVariants}
-                          initial="initial"
-                          animate="animate"
-                        >
-                          <motion.div
-                            style={{
-                              position: 'absolute',
-                              top: 0,
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              background: currentTheme === "dark"
-                                ? 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.05) 50%, transparent 100%)'
-                                : 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%)',
-                              backgroundSize: '200% 100%'
-                            }}
-                            variants={shimmerVariants}
-                            initial="initial"
-                            animate="animate"
-                          />
-                        </motion.div>
-                      ))}
-                      <motion.div
-                        style={{
-                          ...loadingIndicatorContainerStyle,
-                          color: currentTheme === "dark" ? '#666' : '#999'
-                        }}
-                        variants={loadingVariants}
-                        animate="animate"
-                      >
-                        <motion.div
-                          style={{
-                            width: '6px',
-                            height: '6px',
-                            borderRadius: '50%',
-                            background: 'currentColor'
-                          }}
-                          animate={{
-                            scale: [1, 1.2, 1],
-                            opacity: [0.5, 1, 0.5]
-                          }}
-                          transition={{
-                            duration: 1,
-                            repeat: Infinity,
-                            delay: 0
-                          }}
-                        />
-                        <motion.div
-                          style={{
-                            width: '6px',
-                            height: '6px',
-                            borderRadius: '50%',
-                            background: 'currentColor'
-                          }}
-                          animate={{
-                            scale: [1, 1.2, 1],
-                            opacity: [0.5, 1, 0.5]
-                          }}
-                          transition={{
-                            duration: 1,
-                            repeat: Infinity,
-                            delay: 0.2
-                          }}
-                        />
-                        <motion.div
-                          style={{
-                            width: '6px',
-                            height: '6px',
-                            borderRadius: '50%',
-                            background: 'currentColor'
-                          }}
-                          animate={{
-                            scale: [1, 1.2, 1],
-                            opacity: [0.5, 1, 0.5]
-                          }}
-                          transition={{
-                            duration: 1,
-                            repeat: Infinity,
-                            delay: 0.4
-                          }}
-                        />
-                      </motion.div>
-                    </motion.div>
-                  ) : error ? (
-                    <ErrorMessage message={error} />
-                  ) : (
-                    <motion.div
-                      variants={textVariants}
-                      initial="initial"
-                      animate="animate"
-                      exit="exit"
-                    >
-                      {/* Explanation */}
-                      <motion.div
-                        style={{
-                          ...themedStyles.explanation,
-                          textAlign: textDirection === "rtl" ? "right" : "left"
-                        }}
-                        initial={{ y: 50 }}
-                        animate={{ y: 0 }}
-                      >
-                        <div style={{ marginBottom: '8px' }}>
-                          {streamingText && (
-                            <div style={{
-                              ...themedStyles.explanation,
-                              textAlign: themedStyles.explanation.textAlign as "left" | "right"
-                            }} className="streaming-text">
-                              <MarkdownText text={streamingText} />
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Action buttons */}
-                        {!isLoading && streamingText && (
-                          <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' } as const}>
-                            {/* Copy button */}
-                            <motion.button
-                              onClick={() => handleCopy(streamingText, 'initial')}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                cursor: 'pointer',
-                                padding: '4px',
-                                borderRadius: '4px',
-                                color: '#666'
-                              }}
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                            >
-                              {copiedId === 'initial' ? (
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                                </svg>
-                              ) : (
-                                <svg width="12" height="12" viewBox="0 0 62 61" fill="none">
-                                  <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
-                                </svg>
-                              )}
-                            </motion.button>
-
-                            {/* Speak button */}
-                            <motion.button
-                              onClick={() => handleSpeak(streamingText, 'main')}
-                              style={{
-                                background: 'none',
-                                border: 'none',
-                                cursor: 'pointer',
-                                padding: '4px',
-                                borderRadius: '4px',
-                                color: speakingId === 'main' ? '#14742F' : '#666'
-                              }}
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
-                              title={speakingId === 'main' ? "Stop speaking" : "Read text aloud"}
-                            >
-                              {speakingId === 'main' ? (
-                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-                                  <path d="M6 6h4v12H6V6zm8 0h4v12h-4V6z" fill="currentColor"/>
-                                </svg>
-                              ) : (
-                                <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-                                  <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
-                                </svg>
-                              )}
-                            </motion.button>
-
-                            {/* Model display */}
-                            <motion.div
-                              style={{
-                                fontSize: '0.8rem',
-                                color: '#666',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                                marginTop: '-3px',
-                                // padding: '4px 8px',
-                                // background: currentTheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
-                                // border: '1px solid ' + (currentTheme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'),
-                                minWidth: '80px',
-                                // justifyContent: 'center'
-                              }}
-                            >
-                             
-                              <span style={{ 
-                                textTransform: 'capitalize',
-                                fontWeight: 500,
-                                color: currentTheme === 'dark' ? '#7e7e7e' : '#666',
-                                userSelect: 'none'
-                              }}>
-                                {currentModel || 'Loading...'}
-                              </span>
-                            </motion.div>
-                          </motion.div>
-                        )}
-                      </motion.div>
-
-                      {/* Follow-up QAs */}
-                      {followUpQAs.map(({ question, answer, id, isComplete }) => (
-                        <motion.div
-                          key={id}
-                          initial={{ opacity: 0, y: 50 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          style={themedStyles.followUpQA}
-                        >
-                          {/* Question bubble */}
-                          <motion.div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'row' as const,
-                              justifyContent: 'flex-end',
-                              width: '100%'
-                            }}
-                          >
-                            <div style={{
-                              ...themedStyles.followUpQuestion,
-                              textAlign: textDirection === "rtl" ? "right" : "left"
-                            }}>
-                              {question}
-                            </div>
-                          </motion.div>
-
-                          {/* Answer bubble */}
-                          <motion.div
-                            style={{
-                              display: 'flex',
-                              flexDirection: 'row' as const,
-                              justifyContent: 'flex-start',
-                              width: '100%'
-                            }}
-                          >
-                            <div style={{
-                              ...themedStyles.followUpAnswer,
-                              textAlign: textDirection === "rtl" ? "right" : "left"
-                            }}>
-                              <MarkdownText
-                                text={answer}
-                                isStreaming={activeAnswerId === id && !isComplete}
-                                language={targetLanguage}
-                              />
-                              
-                              {isComplete && (
-                                <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                  <motion.button
-                                    onClick={() => handleCopy(answer, `followup-${id}`)}
-                                    style={{
-                                      background: 'none',
-                                      border: 'none',
-                                      cursor: 'pointer',
-                                      padding: '4px',
-                                      borderRadius: '4px',
-                                      color: copiedId === `followup-${id}` ? '#666' : '#666'
-                                    }}
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.9 }}
-                                  >
-                                    {copiedId === `followup-${id}` ? (
-                                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                                      </svg>
-                                    ) : (
-                                      <svg width="12" height="12" viewBox="0 0 62 61" fill="none">
-                                        <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
-                                      </svg>
-                                    )}
-                                  </motion.button>
-
-                                  <motion.button
-                                    onClick={() => handleSpeak(answer, `followup-${id}`)}
-                                    style={{
-                                      background: 'none',
-                                      border: 'none',
-                                      cursor: 'pointer',
-                                      padding: '4px',
-                                      borderRadius: '4px',
-                                      color: speakingId === `followup-${id}` ? '#14742F' : '#666'
-                                    }}
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.9 }}
-                                    title={speakingId === `followup-${id}` ? "Stop speaking" : "Read text aloud"}
-                                  >
-                                    {speakingId === `followup-${id}` ? (
-                                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-                                        <path d="M6 6h4v12H6V6zm8 0h4v12h-4V6z" fill="currentColor"/>
-                                      </svg>
-                                    ) : (
-                                      <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
-                                        <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
-                                      </svg>
-                                    )}
-                                  </motion.button>
-                                   {/* Model display */}
-                            <motion.div
-                              style={{
-                                fontSize: '0.8rem',
-                                color: '#666',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                                marginTop: '-3px',
-                                // padding: '4px 8px',
-                             
-                                // background: currentTheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)',
-                                // border: '1px solid ' + (currentTheme === 'dark' ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'),
-                                minWidth: '80px',
-                                justifyContent: 'center'
-                              }}
-                            >
-                             
-                              <span style={{ 
-                                textTransform: 'capitalize',
-                                fontWeight: 500,
-                                color: currentTheme === 'dark' ? '#7e7e7e' : '#666',
-                                userSelect: 'none'
-                              }}>
-                                {currentModel || 'Loading...'}
-                              </span>
-                            </motion.div>
-                                </motion.div>
-                              )}
-                            </div>
-                          </motion.div>
-                        </motion.div>
-                      ))}
-
-                      {/* Input section */}
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        style={themedStyles.followUpInputContainer}
-                      >
-                        <div style={themedStyles.searchContainer}>
-                          <input
-                            type="text"
-                            value={followUpQuestion}
-                            onChange={handleFollowUpQuestion}
-                            onKeyDown={(e) => {
-                              e.stopPropagation();
-                              if (e.key === 'Enter') {
-                                handleAskFollowUpWrapper();
-                              }
-                            }}
-                            placeholder="Ask a follow-up question..."
-                            style={themedStyles.input}
-                            disabled={isAskingFollowUp}
-                            onFocus={() => setIsInputFocused(true)}
-                            onBlur={() => setIsInputFocused(false)}
-                          />
-                          <motion.button
-                            onClick={handleAskFollowUpWrapper}
-                            disabled={!followUpQuestion.trim() || isAskingFollowUp}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            style={themedStyles.searchSendButton}
-                          >
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                              <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                          </motion.button>
-                        </div>
-                      </motion.div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Resize handle */}
-                <div
+          settings?.customization?.layoutMode === "floating" ? (
+            <motion.div 
+              style={{
+                position: 'fixed',
+                left: `${position.x}px`,
+                top: `${position.y}px`,
+                zIndex: Z_INDEX.POPUP,
+                pointerEvents: 'none'
+              }}
+              initial={settings?.customization?.popupAnimation === "none" ? { opacity: 1 } : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2 }}
+            >
+              <div style={{
+                ...themedStyles.popupPositioner,
+                pointerEvents: 'auto'
+              }}>
+                <motion.div 
                   style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    right: 0,
-                    width: '15px',
-                    height: '15px',
-                    cursor: 'se-resize',
-                    background: 'transparent'
+                    ...themedStyles.popup,
+                    width: `${width}px`,
+                    height: `${height}px`,
+                    overflow: 'auto',
+                    position: 'relative'
                   }}
-                  onMouseDown={handleResizeStart}
-                  className="resize-handle"
-                />
-              </motion.div>
-            </div>
-          </motion.div>
+                  data-plasmo-popup
+                  className="no-select"
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseUp={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onMouseEnter={() => setIsInteractingWithPopup(true)}
+                  onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
+                  initial={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "initial"}
+                  animate={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "animate"}
+                  exit={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 0 } : "exit"}
+                  layout
+                  variants={
+                    settings?.customization?.popupAnimation === "scale" 
+                      ? scaleMotionVariants 
+                      : settings?.customization?.popupAnimation === "fade"
+                        ? fadeMotionVariants
+                        : noMotionVariants
+                  }
+                >
+                  {/* Popup Content */}
+                  {renderPopupContent()}
+
+                  {/* Resize handle */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      right: 0,
+                      width: '15px',
+                      height: '15px',
+                      cursor: 'se-resize',
+                      background: 'transparent'
+                    }}
+                    onMouseDown={handleResizeStart}
+                    className="resize-handle"
+                  />
+                </motion.div>
+              </div>
+            </motion.div>
+          ) : (
+            // Sidebar Mode
+            <motion.div
+              style={{
+                ...themedStyles.sidebarPopup,
+                width: `${width}px`,
+                minWidth: "350px",
+                maxWidth: "800px",
+                resize: "horizontal",
+                overflow: "auto"
+              }}
+              data-plasmo-popup
+              className="no-select"
+              onClick={(e) => e.stopPropagation()}
+              onMouseUp={(e) => e.stopPropagation()}
+              onMouseDown={(e) => e.stopPropagation()}
+              onMouseEnter={() => setIsInteractingWithPopup(true)}
+              onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
+              initial={{ x: 400, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              exit={{ x: 400, opacity: 0 }}
+              transition={{ 
+                type: "spring",
+                stiffness: 300,
+                damping: 25,
+                mass: 1
+              }}
+            >
+              {/* Popup Content */}
+              {renderPopupContent()}
+
+              {/* Resize handles */}
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  left: 0,
+                  width: '15px',
+                  height: '15px',
+                  cursor: 'sw-resize',
+                  background: 'transparent'
+                }}
+                onMouseDown={handleResizeStart}
+                className="resize-handle"
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: 0,
+                  right: 0,
+                  width: '15px',
+                  height: '15px',
+                  cursor: 'se-resize',
+                  background: 'transparent'
+                }}
+                onMouseDown={handleResizeStart}
+                className="resize-handle"
+              />
+            </motion.div>
+          )
         )}
       </AnimatePresence>
 
