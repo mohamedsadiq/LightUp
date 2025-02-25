@@ -49,4 +49,84 @@
     transform: scale(1);
     opacity: 1;
   }
+}
+
+/* Highlight styles */
+.lightup-highlight {
+  display: inline;
+  padding: 2px 0;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  color: #000000 !important;
+}
+
+.lightup-highlight:hover {
+  filter: brightness(0.95);
+}
+
+/* Ensure all LightUp components have their own styles and don't inherit from the page */
+[data-plasmo-popup] button,
+[data-plasmo-popup] input,
+[data-plasmo-popup] select,
+[data-plasmo-popup] textarea {
+  font-family: 'K2D', system-ui, -apple-system, sans-serif;
+  font-size: 100%;
+  line-height: 1.15;
+  margin: 0;
+}
+
+[data-plasmo-popup] button,
+[data-plasmo-popup] [role="button"] {
+  cursor: pointer;
+}
+
+/* Streaming text cursor animation */
+.streaming-text {
+  position: relative;
+}
+
+.streaming-text::after {
+  content: '▋';
+  display: inline-block;
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+  font-weight: 100;
+  opacity: 0.7;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+
+/* Ensure popup is above blur overlay */
+[data-plasmo-popup] {
+  position: relative;
+  z-index: 2147483647;
+}
+
+#plasmo-blur-overlay {
+  pointer-events: none;
+}
+
+/* Resize handle styles */
+.resize-handle:hover {
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+
+.resize-handle:active {
+  background: rgba(0, 0, 0, 0.2) !important;
+}
+
+.resize-handle::after {
+  content: '';
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid rgba(0, 0, 0, 0.2);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.2);
 } 

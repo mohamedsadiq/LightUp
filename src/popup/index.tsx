@@ -7,7 +7,8 @@ import type { Mode, TranslationSettings } from "~types/settings"
 import { LANGUAGES } from "~utils/constants"
 import { useSettings } from "~hooks/useSettings"
 
-import "../style.css"
+// Import the popup-specific CSS file
+import "./popup-style.css"
 
 const Logo = () => (
   <svg width="30" height="30" viewBox="0 0 202 201" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -103,7 +104,9 @@ function IndexPopup() {
   const [showSaveAnimation, setShowSaveAnimation] = useState(false)
   const storage = new Storage()
   const { settings } = useSettings()
-  const isContextAwareEnabled = settings?.customization?.contextAwareness ?? false
+  const isContextAwareEnabled = settings?.customization && 'contextAwareness' in settings.customization 
+    ? settings.customization.contextAwareness 
+    : false
 
   useEffect(() => {
     console.log("Loading saved settings...")

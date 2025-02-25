@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=K2D:wght@300;400;500;600;700&display=swap');
+
+/* Include all Tailwind directives for popup */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Add any popup-specific styles here */
+body {
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Ensure buttons have pointer cursor */
+button, [role="button"] {
+  cursor: pointer;
+} 

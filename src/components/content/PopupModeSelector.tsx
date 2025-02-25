@@ -32,110 +32,113 @@ export const PopupModeSelector = ({
   }
 
   return (
-    <motion.div 
-      style={styles.container}
-      initial={{ scale: 0.5 }}
-      animate={{ scale: 1 }}
-      exit={{ scale: 2, opacity: 0 }}
-      transition={{
-        type: "spring",
-        bounce: 0.2,
-        duration: 0.3
-      }}
-      layout="preserve-aspect"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-    >
+    <>
+      <style>{GlobalStyles}</style>
       <motion.div 
-        style={{
-          ...styles.modeContainer,
-          backgroundColor: theme === "dark" ? "#FFFFFF10" : "#2c2c2c10",
-        }}
-        initial={{ filter: "blur(8px)" }}
-        animate={{ filter: "blur(0)" }}
+        style={styles.container}
+        initial={{ scale: 0.5 }}
+        animate={{ scale: 1 }}
         exit={{ scale: 2, opacity: 0 }}
         transition={{
           type: "spring",
-          stiffness: 300,
-          damping: 20,
-          mass: 0.8
+          bounce: 0.2,
+          duration: 0.3
         }}
         layout="preserve-aspect"
-        layoutId="mode-container"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        <AnimatePresence mode="popLayout" initial={false}>
-          {modes.map((mode) => (
-            (mode === activeMode || isHovered) && (
-              <motion.button
-                key={mode}
-                onClick={() => handleModeClick(mode)}
-                style={{
-                  ...styles.modeButton,
-                  backgroundColor: mode === activeMode 
-                    ? (theme === "dark" ? "#FFFFFF" : "#2c2c2c")
-                    : "transparent",
-                  color: mode === activeMode
-                    ? (theme === "dark" ? "#2c2c2c" : "white")
-                    : (theme === "dark" ? "#FFFFFF80" : "#2c2c2c80"),
-                }}
-                initial={mode === activeMode ? { scale: 1, y: 0 } : { scale: 0.9, y: 0, opacity: 0}}
-                animate={{ scale: 1, y: 0, opacity: 1 }}
-                exit={{ scale: 0.9, y: 0, opacity: 0 }}
-                transition={{
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 30,
-                  mass: 0.8,
-                  exit: {
-                    duration: 0.4,
-                    mass: 0.2,
-                  }
-                }}
-                layout="position"
-                layoutId={`mode-button-${mode}`}
-                whileHover={mode !== activeMode ? {
-                  backgroundColor: theme === "dark" ? "#FFFFFF20" : "#2c2c2c20",
-                  color: theme === "dark" ? "#FFFFFF" : "#2c2c2c",
-                  scale: 1.02,
-                  transition: {
-                    duration: 0.2
-                  }
-                } : {}}
-              
-              >
-                <motion.span >
-                  {mode.charAt(0).toUpperCase() + mode.slice(1)}
-                </motion.span>
+        <motion.div 
+          style={{
+            ...styles.modeContainer,
+            backgroundColor: theme === "dark" ? "#FFFFFF10" : "#2c2c2c10",
+          }}
+          initial={{ filter: "blur(8px)" }}
+          animate={{ filter: "blur(0)" }}
+          exit={{ scale: 2, opacity: 0 }}
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 20,
+            mass: 0.8
+          }}
+          layout="preserve-aspect"
+          layoutId="mode-container"
+        >
+          <AnimatePresence mode="popLayout" initial={false}>
+            {modes.map((mode) => (
+              (mode === activeMode || isHovered) && (
+                <motion.button
+                  key={mode}
+                  onClick={() => handleModeClick(mode)}
+                  style={{
+                    ...styles.modeButton,
+                    backgroundColor: mode === activeMode 
+                      ? (theme === "dark" ? "#FFFFFF" : "#2c2c2c")
+                      : "transparent",
+                    color: mode === activeMode
+                      ? (theme === "dark" ? "#2c2c2c" : "white")
+                      : (theme === "dark" ? "#FFFFFF80" : "#2c2c2c80"),
+                  }}
+                  initial={mode === activeMode ? { scale: 1, y: 0 } : { scale: 0.9, y: 0, opacity: 0}}
+                  animate={{ scale: 1, y: 0, opacity: 1 }}
+                  exit={{ scale: 0.9, y: 0, opacity: 0 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 30,
+                    mass: 0.8,
+                    exit: {
+                      duration: 0.4,
+                      mass: 0.2,
+                    }
+                  }}
+                  layout="position"
+                  layoutId={`mode-button-${mode}`}
+                  whileHover={mode !== activeMode ? {
+                    backgroundColor: theme === "dark" ? "#FFFFFF20" : "#2c2c2c20",
+                    color: theme === "dark" ? "#FFFFFF" : "#2c2c2c",
+                    scale: 1.02,
+                    transition: {
+                      duration: 0.2
+                    }
+                  } : {}}
+                
+                >
+                  <motion.span >
+                    {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                  </motion.span>
 
-                {mode === activeMode && isLoading && (
-                  <motion.div
-                    style={styles.loadingIndicator}
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ 
-                      opacity: 1, 
-                      scale: 1,
-                      rotate: 360 
-                    }}
-                    exit={{ 
-                      opacity: 0,
-                      scale: 0.5,
-                      transition: { duration: 0.2 }
-                    }}
-                    transition={{ 
-                      rotate: { duration: 1, repeat: Infinity, ease: "linear" },
-                      opacity: { duration: 0.2 },
-                      scale: { duration: 0.2 }
-                    }}
-                  >
-                    •
-                  </motion.div>
-                )}
-              </motion.button>
-            )
-          ))}
-        </AnimatePresence>
+                  {mode === activeMode && isLoading && (
+                    <motion.div
+                      key={`loading-${mode}-${isLoading}`}
+                      style={styles.loadingIndicator}
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ 
+                        opacity: 1, 
+                        scale: 1
+                      }}
+                      exit={{ 
+                        opacity: 0,
+                        scale: 0.5,
+                        transition: { duration: 0.2 }
+                      }}
+                      transition={{ 
+                        opacity: { duration: 0.2 },
+                        scale: { duration: 0.2 }
+                      }}
+                      className="loading-dot"
+                    >
+                      •
+                    </motion.div>
+                  )}
+                </motion.button>
+              )
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </motion.div>
-    </motion.div>
+    </>
   )
 }
 
@@ -196,3 +199,19 @@ const styles = {
     marginTop: "8px"
   }
 } as const 
+
+const GlobalStyles = `
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loading-dot {
+    animation: spin 1s linear infinite;
+    display: inline-block;
+  }
+`; 

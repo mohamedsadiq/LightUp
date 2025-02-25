@@ -5,7 +5,9 @@ import type { MotionStyle } from "framer-motion"
 import type { CSSProperties } from "react"
 import MarkdownText from "../components/content/MarkdownText"
 import { Logo, CloseIcon } from "../components/icons"
-import "../style.css"
+import "./styles.css"
+import "./content-style.css"
+import "./tailwind-scoped.css"
 import { styles } from "./styles"
 import { textVariants, iconButtonVariants } from "./variants"
 import { useResizable } from '../hooks/useResizable'
@@ -37,6 +39,33 @@ import { useCopy } from "~hooks/useCopy"
 import { useLastResult } from "~hooks/useLastResult"
 import { useCurrentModel } from "~hooks/useCurrentModel"
 
+// Add CSS reset to prevent Tailwind base styles from affecting the webpage
+const cssResetStyle = document.createElement('style');
+cssResetStyle.textContent = `
+  /* Reset styles for LightUp components */
+  [data-plasmo-popup] button,
+  [data-plasmo-popup] input,
+  [data-plasmo-popup] select,
+  [data-plasmo-popup] textarea {
+    all: revert;
+    font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+  }
+
+  /* Ensure our buttons have pointer cursor */
+  [data-plasmo-popup] button,
+  [data-plasmo-popup] [role="button"] {
+    cursor: pointer;
+  }
+`;
+document.head.appendChild(cssResetStyle);
+
 // Add font import
 const fontImportStyle = document.createElement('style');
 fontImportStyle.textContent = `
@@ -47,6 +76,40 @@ document.head.appendChild(fontImportStyle);
 // Plasmo config
 export const config: PlasmoCSConfig = {
   matches: ["<all_urls>"]
+}
+
+// Add a specific fix for Reddit's CSS that hides custom elements
+const isReddit = window.location.hostname.includes('reddit.com');
+if (isReddit) {
+  // Create a style element to override Reddit's CSS
+  const redditFixStyle = document.createElement('style');
+  redditFixStyle.textContent = `
+    /* Override Reddit's CSS that hides undefined custom elements */
+    plasmo-csui, 
+    [data-plasmo-popup],
+    .grecaptcha-badge, 
+    :not(:defined):not(faceplate-auto-height-animator,faceplate-dropdown-menu,faceplate-expandable-section-helper,faceplate-hovercard,faceplate-tracker) {
+      visibility: visible !important;
+    }
+  `;
+  document.head.appendChild(redditFixStyle);
+  
+  // Add a MutationObserver to ensure our elements remain visible
+  // even if Reddit's DOM changes
+  const observer = new MutationObserver((mutations) => {
+    const plasmoElements = document.querySelectorAll('plasmo-csui, [data-plasmo-popup]');
+    plasmoElements.forEach(element => {
+      if (element instanceof HTMLElement) {
+        element.style.visibility = 'visible';
+      }
+    });
+  });
+  
+  // Start observing the document with the configured parameters
+  observer.observe(document.body, { 
+    childList: true, 
+    subtree: true 
+  });
 }
 
 const loadingIndicatorContainerStyle: MotionStyle = {
@@ -66,10 +129,43 @@ type FlexContainerStyle = {
   width: string
 }
 
+// Create properly typed style objects
+const questionBubbleStyle: MotionStyle = {
+  display: 'flex',
+  flexDirection: 'row' as const,
+  justifyContent: 'flex-end' as const,
+  width: '100%'
+};
+
+const answerBubbleStyle: MotionStyle = {
+  display: 'flex',
+  flexDirection: 'row' as const,
+  justifyContent: 'flex-start' as const,
+  width: '100%'
+};
+
 function Content() {
   // Generate a stable connection ID
   const [connectionId] = useState(() => uuidv4());
   const [highlightedRanges, setHighlightedRanges] = useState<Range[]>([]);
+
+  // Add effect to ensure visibility on Reddit
+  useEffect(() => {
+    if (isReddit) {
+      const ensureVisibility = () => {
+        const popupElement = document.querySelector('[data-plasmo-popup]');
+        if (popupElement instanceof HTMLElement) {
+          popupElement.style.visibility = 'visible';
+        }
+      };
+      
+      // Apply immediately and after a short delay to ensure it works
+      ensureVisibility();
+      const timeoutId = setTimeout(ensureVisibility, 100);
+      
+      return () => clearTimeout(timeoutId);
+    }
+  }, []);
 
   // Initialize all our hooks
   const { width, height, handleResizeStart } = useResizable({
@@ -319,6 +415,16 @@ function Content() {
     setPosition({ x: left, y: top });
     setSelectedText(text);
     setIsVisible(true);
+    
+    // For Reddit: ensure the popup is visible after it's created
+    if (isReddit) {
+      setTimeout(() => {
+        const popupElement = document.querySelector('[data-plasmo-popup]');
+        if (popupElement instanceof HTMLElement) {
+          popupElement.style.visibility = 'visible';
+        }
+      }, 0);
+    }
   };
 
   // Add cleanup effect for highlights when settings change
@@ -603,12 +709,7 @@ function Content() {
               >
                 {/* Question bubble */}
                 <motion.div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row' as CSSProperties['flexDirection'],
-                    justifyContent: 'flex-end',
-                    width: '100%'
-                  } as FlexContainerStyle}
+                  style={questionBubbleStyle}
                 >
                   <div style={{
                     ...themedStyles.followUpQuestion,
@@ -620,12 +721,7 @@ function Content() {
 
                 {/* Answer bubble */}
                 <motion.div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row' as CSSProperties['flexDirection'],
-                    justifyContent: 'flex-start',
-                    width: '100%'
-                  } as FlexContainerStyle}
+                  style={answerBubbleStyle}
                 >
                   <div style={{
                     ...themedStyles.followUpAnswer,
@@ -805,7 +901,7 @@ function Content() {
       <AnimatePresence mode="sync">
         {isVisible && isEnabled && isConfigured && (
           settings?.customization?.layoutMode === "floating" ? (
-            <motion.div 
+            <motion.div
               style={{
                 position: 'fixed',
                 left: `${position.x}px`,
@@ -851,7 +947,7 @@ function Content() {
                 >
                   {/* Popup Content */}
                   {renderPopupContent()}
-
+                  
                   {/* Resize handle */}
                   <div
                     style={{

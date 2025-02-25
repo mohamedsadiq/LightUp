@@ -1,7 +1,7 @@
 {
   "name": "lightup",
   "displayName": "LightUp",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Genius annotations for every page on the web.",
   "author": "Moe Sadiq",
   "scripts": {
@@ -35,14 +35,14 @@
     "postcss": "^8.4.49",
     "postcss-import": "^16.1.0",
     "prettier": "3.2.4",
-    "tailwindcss": "^3.4.14",
+    "tailwindcss": "^3.4.1",
     "typescript": "5.3.3",
     "uuid": "^11.0.3"
   },
   "manifest": {
     "manifest_version": 3,
     "name": "LightUp - AI Powered Web Annotations",
-    "version": "0.1.4", 
+    "version": "0.1.5",
     "description": "Genius annotations for every page on the web. Powered by AI to explain, summarize, and analyze any text you select.",
     "background": {
       "service_worker": "background.js",

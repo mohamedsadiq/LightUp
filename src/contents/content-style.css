@@ -1,15 +1,25 @@
 @import url('https://fonts.googleapis.com/css2?family=K2D:wght@300;400;500;600;700&display=swap');
 
-/* 
- * Main style file for the extension
- * This file is used by the content script with specific scoping
- * For popup and options pages, use their specific CSS files instead
- */
-
-/* Tailwind directives */
-@tailwind base;
+/* Only include components and utilities, not base */
 @tailwind components;
 @tailwind utilities;
+
+/* Override Reddit's CSS that hides undefined custom elements */
+plasmo-csui {
+  visibility: visible !important;
+}
+
+/* Specific override for Reddit's CSS rule */
+.grecaptcha-badge, :not(:defined):not(faceplate-auto-height-animator,faceplate-dropdown-menu,faceplate-expandable-section-helper,faceplate-hovercard,faceplate-tracker) {
+  visibility: visible !important;
+}
+
+/* Ensure our popup is always visible, even on Reddit */
+[data-plasmo-popup] {
+  visibility: visible !important;
+  z-index: 2147483647 !important;
+  position: relative;
+}
 
 /* Add these styles */
 .resize-handle:hover {
@@ -54,13 +64,7 @@
   pointer-events: none;
 }
 
-/* Add this to ensure the popup is above the blur overlay */
-[data-plasmo-popup] {
-  position: relative;
-  z-index: 2147483647;
-}
-
-Highlight styles
+/* Highlight styles */
 .lightup-highlight {
   display: inline;
   padding: 2px 0;
@@ -73,5 +77,4 @@ Highlight styles
 
 .lightup-highlight:hover {
   filter: brightness(0.95);
-}
-
+} 

@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from "react"
 import { Storage } from "@plasmohq/storage"
-import "../styles/options.css"
-import "../style.css"
+import "./options-style.css"
 import type { Settings, ModelType, GeminiModel, GrokModel, LocalModel } from "~types/settings"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRateLimit } from "~hooks/useRateLimit"

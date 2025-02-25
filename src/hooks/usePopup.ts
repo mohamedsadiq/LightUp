@@ -4,6 +4,9 @@ import { Storage } from "@plasmohq/storage";
 import type { Mode } from '~types/settings';
 import type { Settings } from '~types/settings';
 
+// Check if we're on Reddit
+const isReddit = typeof window !== 'undefined' && window.location.hostname.includes('reddit.com');
+
 interface Position {
   x: number;
   y: number;
@@ -103,6 +106,16 @@ export const usePopup = (
       setSelectedText(text);
       setIsVisible(true);
       setIsLoading?.(true);
+
+      // For Reddit: ensure the popup is visible after it's created
+      if (isReddit) {
+        setTimeout(() => {
+          const popupElement = document.querySelector('[data-plasmo-popup]');
+          if (popupElement instanceof HTMLElement) {
+            popupElement.style.visibility = 'visible';
+          }
+        }, 0);
+      }
 
       try {
         if (!port) {
