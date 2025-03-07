@@ -156,9 +156,3 @@ This allows you to easily toggle between explaining, summarizing, analyzing, and
 - **Framer Motion**: Used for animations within the extension.
 
 
-
-<p align="center">
-  <img src="assets/intro.png" width="100%" height="100%" alt="LightUp Logo">
-</p>
-
-
