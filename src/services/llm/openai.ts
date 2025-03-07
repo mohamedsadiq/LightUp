@@ -2,7 +2,7 @@ import type { ProcessTextRequest } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
 
 export const processOpenAIText = async function*(request: ProcessTextRequest) {
-  const { text, mode, settings } = request
+  const { text, mode, settings, isFollowUp } = request
   
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -20,12 +20,18 @@ export const processOpenAIText = async function*(request: ProcessTextRequest) {
           },
           {
             role: "user",
-            content: mode === "translate"
-              ? USER_PROMPTS.translate(
-                  settings.translationSettings?.fromLanguage || "en",
-                  settings.translationSettings?.toLanguage || "es"
-                ) + "\n" + text
-              : USER_PROMPTS[mode] + "\n" + text
+            content: isFollowUp
+              ? `Context from previous conversation:\n${request.context || ''}\n\nFollow-up question:\n${text}`
+              : mode === "translate"
+                ? typeof USER_PROMPTS.translate === 'function'
+                  ? USER_PROMPTS.translate(
+                      settings.translationSettings?.fromLanguage || "en",
+                      settings.translationSettings?.toLanguage || "es"
+                    ) + "\n" + text
+                  : text
+                : typeof USER_PROMPTS[mode] === 'function'
+                  ? USER_PROMPTS[mode](text)
+                  : USER_PROMPTS[mode] + "\n" + text
           }
         ],
         max_tokens: settings.maxTokens || 2048,

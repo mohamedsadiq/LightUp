@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { calculatePosition } from '../utils/position';
 import { Storage } from "@plasmohq/storage";
-import type { Mode } from '~types/settings';
-import type { Settings } from '~types/settings';
+import type { Mode, Settings } from '~types/settings';
 
 // Check if we're on Reddit
 const isReddit = typeof window !== 'undefined' && window.location.hostname.includes('reddit.com');
@@ -11,6 +10,10 @@ interface Position {
   x: number;
   y: number;
 }
+
+// Constants for sidebar activation
+const SIDEBAR_ACTIVATION_THRESHOLD = 20; // pixels from right edge
+const HOVER_DELAY = 300; // milliseconds to wait before showing sidebar
 
 interface UsePopupReturn {
   isVisible: boolean;
@@ -47,6 +50,7 @@ export const usePopup = (
   const [isInteractingWithPopup, setIsInteractingWithPopup] = useState(false);
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [mode, setMode] = useState<Mode>("explain");
+  const [hoverTimer, setHoverTimer] = useState<NodeJS.Timeout | null>(null);
 
   // Load initial mode and translation settings
   useEffect(() => {
@@ -57,7 +61,7 @@ export const usePopup = (
       
       if (savedMode) {
         if (savedMode === "explain" || savedMode === "summarize" || 
-            savedMode === "analyze" || savedMode === "translate") {
+            savedMode === "analyze" || savedMode === "translate" || savedMode === "free") {
           setMode(savedMode);
           
           // If we're in translate mode, ensure we have translation settings
@@ -73,6 +77,52 @@ export const usePopup = (
     loadSettings();
   }, []);
 
+  // Handle mouse movement for sidebar activation
+  useEffect(() => {
+    if (!isEnabled || !settings?.customization?.layoutMode || settings.customization.layoutMode !== "sidebar") {
+      return;
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isInteractingWithPopup) return;
+
+      const distanceFromRight = window.innerWidth - e.clientX;
+      
+      if (distanceFromRight <= SIDEBAR_ACTIVATION_THRESHOLD) {
+        // Clear any existing timer
+        if (hoverTimer) clearTimeout(hoverTimer);
+        
+        // Set new timer
+        const timer = setTimeout(() => {
+          if (!isVisible) {
+            setMode("free");
+            setPosition({ x: window.innerWidth - 400, y: 0 }); // Adjust width as needed
+            setIsVisible(true);
+          }
+        }, HOVER_DELAY);
+        
+        setHoverTimer(timer);
+      } else {
+        // Clear timer if mouse moves away
+        if (hoverTimer) {
+          clearTimeout(hoverTimer);
+          setHoverTimer(null);
+        }
+        
+        // Hide sidebar if not interacting
+        if (isVisible && !isInteractingWithPopup && mode === "free") {
+          setIsVisible(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      if (hoverTimer) clearTimeout(hoverTimer);
+    };
+  }, [isEnabled, settings?.customization?.layoutMode, isInteractingWithPopup, isVisible, hoverTimer]);
+
   // Handle text selection
   useEffect(() => {
     const handleSelection = async (event: MouseEvent) => {
@@ -87,6 +137,17 @@ export const usePopup = (
       const selection = window.getSelection();
       const text = selection?.toString().trim();
 
+      // For free mode, we don't require selected text
+      if (mode === "free") {
+        if (!isVisible) {
+          const { top, left } = calculatePosition(event.clientX, event.clientY);
+          setPosition({ x: left, y: top });
+          setIsVisible(true);
+        }
+        return;
+      }
+
+      // For other modes, require text selection
       if (!text || !/\S/.test(text)) {
         // Only hide if we're not interacting with the popup
         if (!isInteractingWithPopup) {
@@ -185,7 +246,20 @@ export const usePopup = (
       await storage.set("translationSettings", translationSettings);
     }
 
-    // If there's selected text, reprocess it with the new mode
+    // Reset everything when switching to free mode
+    if (newMode === "free") {
+      setStreamingText?.("");
+      setFollowUpQAs?.([]);
+      setError?.(null);
+      setIsLoading?.(false);
+      setSelectedText("");
+      setIsVisible(true);
+      const { top, left } = calculatePosition(window.innerWidth / 2, window.innerHeight / 2);
+      setPosition({ x: left, y: top });
+      return;
+    }
+
+    // For other modes, only reprocess if there's selected text
     if (selectedText && isVisible) {
       setStreamingText?.("");
       setFollowUpQAs?.([]);

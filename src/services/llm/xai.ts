@@ -13,7 +13,7 @@ export const processXAIText = async function*(request: ProcessTextRequest) {
       {
         role: "user",
         content: isFollowUp
-          ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
+          ? `Context from previous conversation:\n${context || ''}\n\nFollow-up question:\n${text}`
           : mode === "translate"
             ? `Translate the following text from ${settings.translationSettings?.fromLanguage || "en"} to ${settings.translationSettings?.toLanguage || "es"}:\n\n${text}`
             : `${typeof USER_PROMPTS[mode] === 'function' ? USER_PROMPTS[mode](text) : USER_PROMPTS[mode]}\n${text}`

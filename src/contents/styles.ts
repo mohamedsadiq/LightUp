@@ -57,9 +57,11 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
   },
   followUpQA: {
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as const,
     gap: '12px',
     width: '100%',
+    position: 'relative' as const,
+    perspective: '1000px',
   },
   error: {
     color: 'red',
@@ -82,10 +84,17 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     gap: 8,
     fontFamily: "'K2D', sans-serif",
     backgroundColor: theme === "light" ? "#FFFFFF" : THEME_COLORS[theme].buttonBackground,
-    padding: "8px 12px",
+    padding: "10px 16px",
     borderRadius: "31px",
     border: theme === "light" ? "1px solid #E5E5E5" : "none",
-    boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
+    boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+    transition: "all 0.2s ease",
+    transform: 'translateZ(0)',
+    willChange: 'transform',
+    "&:focus-within": {
+      boxShadow: "0 3px 8px rgba(0,0,0,0.08)",
+      transform: "translateY(-1px)",
+    }
   },
   searchSendButton: {
     backgroundColor: "transparent",
@@ -94,18 +103,30 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: "8px",
-    minWidth: "36px",
-    height: "36px",
+    padding: "10px",
+    minWidth: "40px",
+    height: "40px",
     borderRadius: "50%",
     transition: "all 0.2s ease",
     color: theme === "light" ? "#2C2C2C" : "#fff",
+    transform: 'translateZ(0)',
+    willChange: 'transform, opacity',
     "&:disabled": {
       opacity: 0.5,
       cursor: "not-allowed",
+      color: theme === "light" ? "rgba(44, 44, 44, 0.5)" : "rgba(255, 255, 255, 0.5)",
     },
-    "&:hover": {
+    "&:hover:not(:disabled)": {
       backgroundColor: "rgba(0, 0, 0, 0.05)",
+      color: theme === "light" ? "#000" : "#fff",
+    },
+    "&:active:not(:disabled)": {
+      backgroundColor: "rgba(0, 0, 0, 0.1)",
+      transform: "scale(0.95)",
+    },
+    "& svg": {
+      transition: "transform 0.2s ease",
+      transformOrigin: "center",
     }
   },
   input: {
@@ -118,14 +139,23 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     color: THEME_COLORS[theme].text,
     outline: "none",
     width: "100%",
+    transition: "opacity 0.2s ease",
     "&::placeholder": {
-      color: THEME_COLORS[theme].secondaryText
+      color: THEME_COLORS[theme].secondaryText,
+      transition: "color 0.2s ease"
+    },
+    "&:focus::placeholder": {
+      color: "transparent"
+    },
+    "&:disabled": {
+      cursor: "not-allowed",
+      opacity: 0.7
     }
   },
   followUpQuestion: {
     backgroundColor: THEME_COLORS[theme].buttonBackground,
     color: THEME_COLORS[theme].text,
-    padding: '8px 12px',
+    padding: '12px 16px',
     borderRadius: '18px',
     borderBottomRightRadius: '4px',
     maxWidth: '85%',
@@ -134,14 +164,16 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     marginBottom: '8px',
     fontSize: fontSize,
     fontFamily: "'K2D', sans-serif",
-    boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
     direction: textDirection,
-    textAlign: textDirection === "rtl" ? "right" : "left" as const
+    textAlign: textDirection === "rtl" ? "right" : "left" as const,
+    transform: 'translateZ(0)',
+    willChange: 'transform',
   },
   followUpAnswer: {
     backgroundColor: THEME_COLORS[theme].popupBackground,
     color: THEME_COLORS[theme].text,
-    padding: '8px 12px',
+    padding: '12px 16px',
     borderRadius: '18px',
     borderBottomLeftRadius: '4px',
     maxWidth: '85%',
@@ -149,9 +181,11 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     fontSize: fontSize,
     lineHeight: 1.6,
     fontFamily: "'K2D', sans-serif",
-    boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
     direction: textDirection,
-    textAlign: textDirection === "rtl" ? "right" : "left" as const
+    textAlign: textDirection === "rtl" ? "right" : "left" as const,
+    transform: 'translateZ(0)',
+    willChange: 'transform',
   },
   // ... rest of the existing styles with theme colors
   popupContainer: {
@@ -211,13 +245,13 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
   followUpInputContainer: {
     display: 'flex',
     gap: '8px',
-    marginTop: '12px',
+    marginTop: '16px',
     width: "100%",
     position: 'sticky' as const,
     bottom: 0,
-    // backgroundColor: THEME_COLORS[theme].popupBackground,
-    // borderTop: theme === "light" ? "1px solid #E5E5E5" : `1px solid ${THEME_COLORS[theme].border}`,
     zIndex: 10,
+    padding: '8px 0',
+    background: `linear-gradient(180deg, transparent 0%, ${THEME_COLORS[theme].background} 20%)`,
   },
 });
 

@@ -9,24 +9,22 @@ export const DEFAULT_MAX_TOKENS = 2048
 export const DEFAULT_TEMPERATURE = 0.5
 
 export const SYSTEM_PROMPTS = {
-  explain: "You are a helpful assistant that explains text in a clear and concise way.",
-  summarize: "You are a helpful assistant that summarizes text in a clear and concise way.",
-  analyze: "You are a helpful assistant that analyzes text in detail.",
-  translate: "You are a professional translator. Your task is to translate the given text accurately while preserving its original meaning, tone, and context. Do not add any explanations or notes - provide only the direct translation.",
+  explain: "You are a friendly expert who gets straight to the point. Give clear, direct explanations while maintaining a conversational tone. Use analogies or examples only when they truly clarify the concept. Keep introductory phrases brief.",
+  summarize: "You are a clear and efficient communicator. Present key points directly while keeping a natural tone. Focus on essential information first, then add context if needed. Avoid unnecessary introductions.",
+  analyze: "You are an insightful analyst who values directness. Share observations clearly and concisely while maintaining engagement. Focus on key insights first, then expand thoughtfully when relevant.",
+  translate: "You are a skilled translator focused on accuracy and natural flow. Translate text directly while preserving tone and context. Provide only the translation without preamble.",
 } as const;
 
 export const USER_PROMPTS: Record<string, string | ((text: string, context?: string) => string)> = {
-  explain: (text: string) => `Please explain this text: ${text}`,
-  summarize: (text: string) => `Please summarize this text: ${text}`,
-  analyze: (text: string) => `Please analyze this text: ${text}`,
+  explain: (text: string) => `What does this mean: ${text}`,
+  summarize: (text: string) => `Key points from: ${text}`,
+  analyze: (text: string) => `Analyze this: ${text}`,
   translate: (text: string, context?: string) => {
     const [fromLang, toLang] = (context || "en:es").split(":");
     return `Translate from ${LANGUAGES[fromLang] || "English"} to ${LANGUAGES[toLang] || "Spanish"}:\n${text}`;
   },
   critique: (text: string) => 
-    `Please provide a thorough critique of the following text, analyzing its arguments, 
-    assumptions, and potential counterpoints:\n\n${text}\n\nConsider different perspectives 
-    and provide a balanced analysis.`
+    `Analyze the key arguments and different viewpoints:\n\n${text}`
 } as const;
 
 export const LANGUAGES = {

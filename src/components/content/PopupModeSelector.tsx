@@ -11,7 +11,7 @@ interface PopupModeSelectorProps {
   theme?: "light" | "dark"
 }
 
-const modes: Mode[] = ["summarize", "analyze", "explain", "translate"]
+const modes: Mode[] = ["summarize", "analyze", "explain", "translate", "free"]
 
 export const PopupModeSelector = ({ 
   activeMode, 

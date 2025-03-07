@@ -2,9 +2,14 @@ import type { ProcessTextRequest } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
 
 export const processGeminiText = async function*(request: ProcessTextRequest) {
-  const { text, mode, settings } = request
+  const { text, mode, settings, isFollowUp } = request
   
   const getUserPrompt = () => {
+    if (isFollowUp) {
+      // Include original context and previous conversation for follow-ups
+      return `Context from previous conversation:\n${request.context || ''}\n\nFollow-up question:\n${text}`;
+    }
+    
     if (mode === "translate") {
       const translateFn = USER_PROMPTS.translate as (fromLang: string, toLang: string) => string
       return translateFn(

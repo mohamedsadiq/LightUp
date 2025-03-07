@@ -31,6 +31,12 @@ export const ModeSelector: React.FC<ModeSelectorProps> = ({
         onClick={() => onModeChange("analyze")}>
         Analyze
       </ActionButton>
+      <ActionButton
+        mode="free"
+        activeMode={activeMode}
+        onClick={() => onModeChange("free")}>
+        Ask Anything
+      </ActionButton>
     </div>
   )
 }

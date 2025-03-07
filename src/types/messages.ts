@@ -1,8 +1,31 @@
 import type { Mode, ModelType, LocalModel } from "./settings"
 
+export interface Entity {
+  name: string;
+  type: string;
+  mentions: number;
+  lastMentionedIndex: number;
+  description?: string;
+  relationships?: { [key: string]: string };
+}
+
+export interface ConversationContext {
+  topic?: string;
+  lastQuestion?: string;
+  lastAnswer?: string;
+  entities: Entity[];
+  activeEntity: Entity | null;
+  history: {
+    role: "user" | "assistant";
+    content: string;
+    timestamp: number;
+  }[];
+}
+
 export interface ProcessTextRequest {
   text: string;
   context?: string;
+  conversationContext?: ConversationContext;
   mode: Mode;
   settings: {
     serverUrl: string;

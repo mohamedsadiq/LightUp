@@ -193,7 +193,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       timestamp: Date.now()
     });
 
-    const { mode, text, context, isFollowUp, settings: requestSettings } = request;
+    const { mode, text, context, isFollowUp, settings: requestSettings, conversationContext } = request;
     
     if (!isConfigurationValid(requestSettings)) {
       throw new Error(
@@ -216,8 +216,26 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       checkRateLimit(apiKey);
     }
 
-    const userMessage = isFollowUp
-      ? `Previous context: "${context}"\n\nFollow-up question: ${text}\n\nPlease provide a direct answer to the follow-up question.`
+    const userMessage = isFollowUp && conversationContext
+      ? `You are a direct and knowledgeable assistant. Respond naturally but efficiently.
+
+${conversationContext.activeEntity?.name ? `Current topic: ${conversationContext.activeEntity.name}` : ''}
+
+Last exchange:
+${conversationContext.history.slice(-2).map(msg => 
+  msg.role === "user" 
+    ? `Q: ${msg.content}` 
+    : `A: ${msg.content}`
+).join('\n')}
+
+New question: "${text}"
+
+Guidelines:
+1. Answer directly without preambles or unnecessary acknowledgments
+2. If the question changes topic, simply answer the new question
+3. Don't mention topic changes or previous context unless directly relevant
+4. Don't apologize for not knowing something - just state what you know or don't know
+5. Keep responses focused and concise`
       : mode === "translate" && requestSettings?.translationSettings 
         ? typeof USER_PROMPTS[mode] === 'function'
           ? USER_PROMPTS[mode](text, `${requestSettings.translationSettings.fromLanguage}:${requestSettings.translationSettings.toLanguage}`)

@@ -2,8 +2,8 @@
 @import url('https://fonts.googleapis.com/css2?family=K2D:wght@300;400;500;600;700&display=swap');
 
 /* Only include components and utilities, not base */
-@tailwind components;
-@tailwind utilities;
+/* @tailwind components;
+@tailwind utilities; */
 
 /* Scope all Tailwind utilities to our extension's components */
 [data-plasmo-popup] {

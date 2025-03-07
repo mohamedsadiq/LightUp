@@ -2,7 +2,7 @@
 export type ModelType = "local" | "openai" | "gemini" | "xai" | "basic"
 
 // Available modes for text processing
-export type Mode = "explain" | "summarize" | "analyze" | "translate"
+export type Mode = "explain" | "summarize" | "analyze" | "translate" | "free"
 
 // Feedback types
 export type FeedbackType = "like" | "dislike"
