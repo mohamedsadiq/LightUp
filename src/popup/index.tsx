@@ -3,9 +3,10 @@ import { Storage } from "@plasmohq/storage"
 import { sendToBackground } from "@plasmohq/messaging"
 import { motion, AnimatePresence } from "framer-motion"
 
-import type { Mode, TranslationSettings } from "~types/settings"
+import type { Mode, TranslationSettings, Settings } from "~types/settings"
 import { LANGUAGES } from "~utils/constants"
 import { useSettings } from "~hooks/useSettings"
+import { useRateLimit } from "~hooks/useRateLimit"
 
 // Import the popup-specific CSS file
 import "./popup-style.css"
@@ -76,7 +77,11 @@ const ActionButton = ({ mode, activeMode, onClick, children }: ActionButtonProps
         <path d="M3 5h12M9 3v2m1.048 8.5A18.022 18.022 0 008 5.3m3.048 8.2l1.452 3.2m-1.452-3.2a18.019 18.019 0 002.048-3.2M9 19l3-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
       </svg>
     ),
-   
+    free: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M8 12h8M12 8v8M12 21a9 9 0 100-18 9 9 0 000 18z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    )
   }
 
   return (
@@ -93,6 +98,278 @@ const ActionButton = ({ mode, activeMode, onClick, children }: ActionButtonProps
   )
 }
 
+// Add RateLimitDisplay component
+const RateLimitDisplay = () => {
+  const { remainingActions, isLoading, error } = useRateLimit()
+  
+  if (isLoading) {
+    return (
+      <div className="p-3 bg-gray-50 rounded-lg">
+        <p className="text-gray-500 text-sm">Loading usage info...</p>
+      </div>
+    )
+  }
+  
+  if (error) {
+    return (
+      <div className="p-3 bg-red-50 rounded-lg">
+        <p className="text-red-600 text-sm">{error}</p>
+      </div>
+    )
+  }
+  
+  return (
+    <div className="p-3 bg-gray-50 rounded-lg">
+      <h3 className="text-sm font-semibold mb-1">Daily Usage</h3>
+      <div className="flex items-center justify-between">
+        <span className="text-gray-600 text-xs">Actions Remaining Today</span>
+        <span className="text-sm font-medium">
+          {remainingActions} / 20
+        </span>
+      </div>
+      <div className="mt-1.5 w-full bg-gray-200 rounded-full h-2">
+        <div 
+          className="bg-[#10a37f] h-2 rounded-full transition-all duration-500"
+          style={{ width: `${(remainingActions / 20) * 100}%` }}
+        ></div>
+      </div>
+    </div>
+  )
+}
+
+// Add a new Switch component for settings
+const Switch = ({ id, checked, onChange, label, description = undefined }) => (
+  <div className="flex items-start gap-3">
+    <div className="flex-shrink-0 pt-0.5">
+      <label htmlFor={id} className="relative inline-flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          id={id}
+          checked={checked}
+          onChange={onChange}
+          className="sr-only peer"
+        />
+        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#10a37f]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#10a37f]"></div>
+      </label>
+    </div>
+    <div>
+      <label htmlFor={id} className="text-sm font-medium text-gray-800 cursor-pointer">
+        {label}
+      </label>
+      {description && (
+        <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+      )}
+    </div>
+  </div>
+);
+
+// Add a new SettingsSection component
+const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
+  if (!isOpen) return null;
+
+  const colorOptions = [
+    { value: 'default', label: 'Default', color: 'bg-gray-200' },
+    { value: 'orange', label: 'Orange', color: 'bg-[#FFBF5A]' },
+    { value: 'blue', label: 'Blue', color: 'bg-[#93C5FD]' },
+    { value: 'green', label: 'Green', color: 'bg-[#86EFAC]' },
+    { value: 'purple', label: 'Purple', color: 'bg-[#C4B5FD]' },
+    { value: 'pink', label: 'Pink', color: 'bg-[#FDA4AF]' }
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 20 }}
+      className="absolute inset-0 bg-white z-10 flex flex-col h-full"
+    >
+      <div className="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0">
+        <h2 className="text-lg font-semibold">Quick Settings</h2>
+        <button 
+          onClick={onClose}
+          className="p-1 rounded-full hover:bg-gray-100"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div className="p-4 overflow-y-auto flex-grow">
+        <div className="space-y-6">
+          {/* Layout Mode Selection */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-800">Layout Mode</label>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { value: 'floating', label: 'Floating', icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
+                    <circle cx="12" cy="12" r="1"/>
+                    <circle cx="12" cy="8" r="1"/>
+                    <circle cx="12" cy="16" r="1"/>
+                  </svg>
+                )},
+                { value: 'sidebar', label: 'Sidebar', icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="15" y1="3" x2="15" y2="21"/>
+                  </svg>
+                )}
+              ].map((mode) => (
+                <button
+                  key={mode.value}
+                  onClick={() => updateSettings('layoutMode', mode.value)}
+                  className={`p-3 rounded-lg border ${
+                    settings.customization?.layoutMode === mode.value
+                      ? 'border-[#10a37f] bg-[#10a37f]/5'
+                      : 'border-gray-200 hover:border-gray-300'
+                  } transition-all duration-200`}
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    {mode.icon}
+                    <span className="text-sm">{mode.label}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Toggle Switches */}
+          <div className="space-y-4">
+            <Switch
+              id="show-selected-text"
+              checked={settings.customization?.showSelectedText ?? true}
+              onChange={(e) => updateSettings('showSelectedText', e.target.checked)}
+              label="Show Selected Text"
+              description="Display the text you've selected in the results"
+            />
+
+            <Switch
+              id="radical-focus"
+              checked={settings.customization?.radicallyFocus ?? false}
+              onChange={(e) => updateSettings('radicallyFocus', e.target.checked)}
+              label="Radical Focus Mode"
+              description="Blur background when viewing results"
+            />
+
+            <Switch
+              id="persistent-highlight"
+              checked={settings.customization?.persistHighlight ?? false}
+              onChange={(e) => updateSettings('persistHighlight', e.target.checked)}
+              label="Persistent Highlighting"
+              description="Keep text highlighted after selection"
+            />
+          </div>
+
+          {/* Font Size Selection */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-800">Font Size</label>
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { value: '0.8rem', label: 'Small' },
+                { value: '0.9rem', label: 'Medium' },
+                { value: '1rem', label: 'Large' }
+              ].map((size) => (
+                <button
+                  key={size.value}
+                  onClick={() => updateSettings('fontSize', size.value)}
+                  className={`p-3 rounded-lg border ${
+                    settings.customization?.fontSize === size.value
+                      ? 'border-[#10a37f] bg-[#10a37f]/5'
+                      : 'border-gray-200 hover:border-gray-300'
+                  } transition-all duration-200`}
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <span className={`text-gray-600`} style={{ fontSize: size.value }}>Aa</span>
+                    <span className="text-sm">{size.label}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Theme Selection */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-800">Theme</label>
+            <div className="grid grid-cols-2 gap-3">
+              {['light', 'dark'].map((theme) => (
+                <button
+                  key={theme}
+                  onClick={() => updateSettings('theme', theme)}
+                  className={`p-3 rounded-lg border ${
+                    settings.customization?.theme === theme
+                      ? 'border-[#10a37f] bg-[#10a37f]/5'
+                      : 'border-gray-200 hover:border-gray-300'
+                  } transition-all duration-200`}
+                >
+                  <div className="flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                      {theme === 'light' ? (
+                        <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                      ) : (
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                      )}
+                    </svg>
+                    <span className="capitalize">{theme}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Highlight Color Selection */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-800">Highlight Color</label>
+            <div className="grid grid-cols-3 gap-3">
+              {colorOptions.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => updateSettings('highlightColor', option.value)}
+                  className={`p-3 rounded-lg border ${
+                    settings.customization?.highlightColor === option.value
+                      ? 'border-[#10a37f] bg-[#10a37f]/5'
+                      : 'border-gray-200 hover:border-gray-300'
+                  } transition-all duration-200`}
+                >
+                  <div className="flex flex-col items-center gap-2">
+                    <div className={`w-6 h-6 rounded-full ${option.color}`}></div>
+                    <span className="text-sm">{option.label}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Animation Selection */}
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-800">Popup Animation</label>
+            <div className="grid grid-cols-3 gap-3">
+              {[
+                { value: 'none', label: 'None' },
+                { value: 'scale', label: 'Scale' },
+                { value: 'fade', label: 'Fade' }
+              ].map((animation) => (
+                <button
+                  key={animation.value}
+                  onClick={() => updateSettings('popupAnimation', animation.value)}
+                  className={`p-3 rounded-lg border ${
+                    settings.customization?.popupAnimation === animation.value
+                      ? 'border-[#10a37f] bg-[#10a37f]/5'
+                      : 'border-gray-200 hover:border-gray-300'
+                  } transition-all duration-200`}
+                >
+                  <span className="text-sm">{animation.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 function IndexPopup() {
   console.log("Popup component mounting...")
   
@@ -102,11 +379,17 @@ function IndexPopup() {
   const [customInstruction, setCustomInstruction] = useState("")
   const [isEditing, setIsEditing] = useState(false)
   const [showSaveAnimation, setShowSaveAnimation] = useState(false)
+  const [showModeConfig, setShowModeConfig] = useState(false)
+  const [preferredModes, setPreferredModes] = useState<Mode[]>(["summarize", "explain", "analyze", "free"])
+  const [showSettings, setShowSettings] = useState(false)
   const storage = new Storage()
-  const { settings } = useSettings()
+  const { settings, setSettings } = useSettings()
   const isContextAwareEnabled = settings?.customization && 'contextAwareness' in settings.customization 
     ? settings.customization.contextAwareness 
     : false
+
+  // All available modes
+  const allModes: Mode[] = ["summarize", "analyze", "explain", "translate", "free"]
 
   useEffect(() => {
     console.log("Loading saved settings...")
@@ -114,9 +397,11 @@ function IndexPopup() {
       try {
         const savedMode = await storage.get("mode") as Mode
         const savedTranslationSettings = await storage.get("translationSettings") as TranslationSettings
+        const savedPreferredModes = await storage.get("preferredModes") as Mode[] | undefined
         
         console.log("Saved mode:", savedMode)
         console.log("Saved translation settings:", savedTranslationSettings)
+        console.log("Saved preferred modes:", savedPreferredModes)
         
         if (savedMode) {
           setActiveMode(savedMode)
@@ -124,6 +409,9 @@ function IndexPopup() {
         if (savedTranslationSettings) {
           setFromLanguage(savedTranslationSettings.fromLanguage)
           setToLanguage(savedTranslationSettings.toLanguage)
+        }
+        if (savedPreferredModes && savedPreferredModes.length > 0) {
+          setPreferredModes(savedPreferredModes)
         }
       } catch (error) {
         console.error("Error loading settings:", error)
@@ -136,6 +424,50 @@ function IndexPopup() {
     setActiveMode(mode)
     await storage.set("mode", mode)
     
+    // Check if the selected mode is in the preferred modes
+    if (!preferredModes.includes(mode)) {
+      // Add the mode to preferred modes
+      let newPreferredModes: Mode[];
+      
+      if (preferredModes.length >= 4) {
+        // If we already have 4 modes, replace the last one
+        newPreferredModes = [...preferredModes.slice(0, 3), mode];
+      } else {
+        // Otherwise, just add it
+        newPreferredModes = [...preferredModes, mode];
+      }
+      
+      setPreferredModes(newPreferredModes);
+      await storage.set("preferredModes", newPreferredModes);
+      
+      // Also update settings if they exist
+      const currentSettings = await storage.get("settings") as Settings | undefined;
+      if (currentSettings) {
+        const updatedSettings = {
+          ...currentSettings,
+          preferredModes: newPreferredModes
+        };
+        
+        await storage.set("settings", updatedSettings);
+        
+        // Notify all tabs about the mode configuration changes
+        chrome.tabs.query({}, (tabs) => {
+          tabs.forEach(tab => {
+            if (tab.id) {
+              chrome.tabs.sendMessage(tab.id, { 
+                type: "MODES_UPDATED", 
+                settings: updatedSettings,
+                preferredModes: newPreferredModes
+              }).catch(err => {
+                // Ignore errors for tabs that don't have the content script running
+                console.log(`Could not send message to tab ${tab.id}:`, err);
+              });
+            }
+          });
+        });
+      }
+    }
+    
     if (mode === "translate") {
       const translationSettings = {
         fromLanguage,
@@ -143,6 +475,80 @@ function IndexPopup() {
       };
      
       await storage.set("translationSettings", translationSettings);
+    }
+    
+    // Notify all tabs about the mode change
+    chrome.tabs.query({}, (tabs) => {
+      tabs.forEach(tab => {
+        if (tab.id) {
+          chrome.tabs.sendMessage(tab.id, { 
+            type: "MODE_CHANGED", 
+            mode,
+            translationSettings: mode === "translate" ? { fromLanguage, toLanguage } : undefined,
+            reprocessExisting: true // Add this flag to indicate we want to reprocess existing text
+          }).catch(err => {
+            // Ignore errors for tabs that don't have the content script running
+            console.log(`Could not send message to tab ${tab.id}:`, err);
+          });
+        }
+      });
+    });
+  }
+
+  // Function to toggle a mode in the preferred modes list
+  const togglePreferredMode = async (mode: Mode) => {
+    let newPreferredModes: Mode[]
+    
+    if (preferredModes.includes(mode)) {
+      // Don't allow removing if it would result in less than 1 mode
+      if (preferredModes.length <= 1) {
+        return
+      }
+      // Remove the mode
+      newPreferredModes = preferredModes.filter(m => m !== mode)
+    } else {
+      // Don't allow adding if already at 4 modes
+      if (preferredModes.length >= 4) {
+        return
+      }
+      // Add the mode
+      newPreferredModes = [...preferredModes, mode]
+    }
+    
+    setPreferredModes(newPreferredModes)
+    await storage.set("preferredModes", newPreferredModes)
+    
+    // Also update settings if they exist
+    const currentSettings = await storage.get("settings") as Settings | undefined
+    if (currentSettings) {
+      const updatedSettings = {
+        ...currentSettings,
+        preferredModes: newPreferredModes
+      };
+      
+      await storage.set("settings", updatedSettings);
+      
+      // Notify all tabs about the mode configuration changes
+      chrome.tabs.query({}, (tabs) => {
+        tabs.forEach(tab => {
+          if (tab.id) {
+            chrome.tabs.sendMessage(tab.id, { 
+              type: "MODES_UPDATED", 
+              settings: updatedSettings,
+              preferredModes: newPreferredModes
+            }).catch(err => {
+              // Ignore errors for tabs that don't have the content script running
+              console.log(`Could not send message to tab ${tab.id}:`, err);
+            });
+          }
+        });
+      });
+      
+      // Show a brief success animation
+      setShowSaveAnimation(true);
+      setTimeout(() => {
+        setShowSaveAnimation(false);
+      }, 1500);
     }
   }
 
@@ -155,213 +561,390 @@ function IndexPopup() {
     }
   }, [fromLanguage, toLanguage, activeMode]);
 
+  // Add a new function to handle immediate settings updates
+  const handleImmediateSettingUpdate = async (key: string, value: any) => {
+    try {
+      if (!settings) return;
+      
+      const newSettings = {
+        ...settings,
+        customization: {
+          ...settings.customization,
+          [key]: value
+        }
+      };
+      
+      setSettings(newSettings);
+      await storage.set("settings", newSettings);
+      
+      // Notify all tabs about the settings change
+      chrome.tabs.query({}, (tabs) => {
+        tabs.forEach(tab => {
+          if (tab.id) {
+            chrome.tabs.sendMessage(tab.id, { 
+              type: "SETTINGS_UPDATED", 
+              settings: newSettings,
+              key,
+              value
+            }).catch(err => {
+              // Ignore errors for tabs that don't have the content script running
+              console.log(`Could not send message to tab ${tab.id}:`, err);
+            });
+          }
+        });
+      });
+      
+      // Dispatch a custom event to notify content scripts of the setting change
+      const event = new CustomEvent('settingUpdated', { 
+        detail: { 
+          key,
+          value,
+          message: `${key} setting updated successfully` 
+        } 
+      });
+      window.dispatchEvent(event);
+      
+      // Show a brief success animation
+      setShowSaveAnimation(true);
+      setTimeout(() => {
+        setShowSaveAnimation(false);
+      }, 1500);
+    } catch (error) {
+      console.error(`Failed to update ${key}:`, error);
+    }
+  };
+
   const handleOpenOptions = () => {
     chrome.tabs.create({ url: chrome.runtime.getURL("options.html") })
   }
 
   return (
-    <div className="w-[600px] min-h-[250px] font-['K2D'] bg-[#E9E9E9]">
-      <div className="bg-[#E9E9E9] p-6">
-        <div className="flex items-center gap-2 mb-6">
-          <h2 className="text-xl font-medium text-black flex items-center gap-2">
-            Define LightUp's purpose
-            <span className="text-gray-400">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <circle cx="12" cy="12" r="10" strokeWidth="2"/>
-                <path d="M12 16v-4M12 8h.01" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-            </span>
-          </h2>
-        </div>
-        
-        <div>
-          <h3 className="text-base mb-4 text-black font-['K2D']">Available actions</h3>
-          <div className="flex flex-wrap gap-2">
-            <ActionButton
-              mode="summarize"
-              activeMode={activeMode}
-              onClick={() => handleModeChange("summarize")}>
-              Summarize
-            </ActionButton>
-            <ActionButton
-              mode="analyze"
-              activeMode={activeMode}
-              onClick={() => handleModeChange("analyze")}>
-              Analyze
-            </ActionButton>
-            <ActionButton
-              mode="explain"
-              activeMode={activeMode}
-              onClick={() => handleModeChange("explain")}>
-              Explain
-            </ActionButton>
-            <ActionButton
-              mode="translate"
-              activeMode={activeMode}
-              onClick={() => handleModeChange("translate")}>
-              Translate
-            </ActionButton>
-         
-          </div>
-        </div>
-
-        {activeMode === "translate" && (
-          <div className="flex gap-4 mt-6">
-            <div className="flex-1">
-              <label className="block text-sm font-medium mb-2 text-gray-700">
-                From
-              </label>
-              <select
-                value={fromLanguage}
-                onChange={(e) => setFromLanguage(e.target.value)}
-                className="w-full p-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-200"
-              >
-                {Object.entries(LANGUAGES).map(([code, name]) => (
-                  <option key={code} value={code}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="flex-1">
-              <label className="block text-sm font-medium mb-2 text-gray-700">
-                To
-              </label>
-              <select
-                value={toLanguage}
-                onChange={(e) => setToLanguage(e.target.value)}
-                className="w-full p-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-200"
-              >
-                {Object.entries(LANGUAGES).map(([code, name]) => (
-                  <option key={code} value={code}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+    <div className="w-[600px] h-[500px] font-['K2D'] bg-[#E9E9E9] relative overflow-hidden">
+      {/* Toast notification for settings saved */}
+      <AnimatePresence>
+        {showSaveAnimation && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="absolute top-4 right-4 bg-[#10a37f] text-white px-4 py-2 rounded-md shadow-md z-50"
+          >
+            Setting updated successfully
+          </motion.div>
         )}
+      </AnimatePresence>
 
-     
-        <div className="mt-auto pt-12 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {isContextAwareEnabled && (
-              <div 
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#14742F]/10 text-[#14742F] rounded-lg text-sm"
-                title="Context awareness is enabled">
-                <svg 
-                  className="w-4 h-4" 
-                  fill="none" 
-                  strokeWidth="2" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24">
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+      {/* Settings Panel */}
+      <AnimatePresence>
+        {showSettings && (
+          <SettingsSection 
+            isOpen={showSettings} 
+            onClose={() => setShowSettings(false)} 
+            settings={settings} 
+            updateSettings={handleImmediateSettingUpdate}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Main Content */}
+      {!showSettings && (
+        <div className="h-full flex flex-col overflow-auto">
+          {/* Header */}
+          <div className="flex justify-between items-center p-4 border-b border-[#D6D6D6]">
+            <div className="flex items-center gap-2">
+              <Logo />
+              <h1 className="text-xl font-semibold">LightUp</h1>
+            </div>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setShowSettings(true)}
+                className="p-2 rounded-full hover:bg-[#D6D6D6] transition-colors"
+                aria-label="Settings"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
                 </svg>
-                Context Aware
+              </button>
+              <button 
+                onClick={handleOpenOptions}
+                className="p-2 rounded-full hover:bg-[#D6D6D6] transition-colors"
+                aria-label="Advanced Settings"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div className="bg-[#E9E9E9] p-6 flex-1 overflow-y-auto">
+            <div className="flex items-center justify-between gap-2 mb-6">
+              <h2 className="text-xl font-medium text-black flex items-center gap-2">
+                Define LightUp's purpose
+                <span className="text-gray-400">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10" strokeWidth="2"/>
+                    <path d="M12 16v-4M12 8h.01" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </span>
+              </h2>
+              <button 
+                onClick={() => setShowModeConfig(!showModeConfig)}
+                className="text-sm flex items-center gap-1 px-3 py-1 rounded-full bg-[#D6D6D6] hover:bg-[#C4C4C4] transition-all"
+              >
+                {showModeConfig ? "Hide Mode Config" : "Configure Modes"}
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 6v12m-6-6h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" transform={showModeConfig ? "rotate(45, 12, 12)" : ""}/>
+                </svg>
+              </button>
+            </div>
+            
+            {showModeConfig && (
+              <div className="mb-6 p-4 bg-white rounded-lg shadow-sm">
+                <h3 className="text-base mb-3 text-black font-medium">Configure Mode Selector (Choose up to 4)</h3>
+                <div className="flex flex-wrap gap-2">
+                  {allModes.map((mode) => (
+                    <button
+                      key={mode}
+                      onClick={() => togglePreferredMode(mode)}
+                      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all ${
+                        preferredModes.includes(mode)
+                          ? "bg-[#14742F] text-white"
+                          : "bg-[#D6D6D6] text-black hover:bg-[#C4C4C4]"
+                      }`}
+                    >
+                      {preferredModes.includes(mode) && (
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M5 12l5 5 9-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      )}
+                      {mode === "summarize" && "Summarize"}
+                      {mode === "analyze" && "Analyze"}
+                      {mode === "explain" && "Explain"}
+                      {mode === "translate" && "Translate"}
+                      {mode === "free" && "Ask Anything"}
+                    </button>
+                  ))}
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  These modes will appear in the mode selector when using LightUp.
+                </p>
               </div>
             )}
+            
+            <div>
+              <h3 className="text-base mb-4 text-black font-['K2D']">Available actions</h3>
+              <div className="flex flex-wrap gap-2">
+                <ActionButton
+                  mode="summarize"
+                  activeMode={activeMode}
+                  onClick={() => handleModeChange("summarize")}>
+                  Summarize
+                </ActionButton>
+                <ActionButton
+                  mode="analyze"
+                  activeMode={activeMode}
+                  onClick={() => handleModeChange("analyze")}>
+                  Analyze
+                </ActionButton>
+                <ActionButton
+                  mode="explain"
+                  activeMode={activeMode}
+                  onClick={() => handleModeChange("explain")}>
+                  Explain
+                </ActionButton>
+                <ActionButton
+                  mode="translate"
+                  activeMode={activeMode}
+                  onClick={() => handleModeChange("translate")}>
+                  Translate
+                </ActionButton>
+                <ActionButton
+                  mode="free"
+                  activeMode={activeMode}
+                  onClick={() => handleModeChange("free")}>
+                  Ask Anything
+                </ActionButton>
+              </div>
+            </div>
+
+            {activeMode === "translate" && (
+              <div className="flex gap-4 mt-6">
+                <div className="flex-1">
+                  <label className="block text-sm font-medium mb-2 text-gray-700">
+                    From
+                  </label>
+                  <select
+                    value={fromLanguage}
+                    onChange={(e) => setFromLanguage(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-200"
+                  >
+                    {Object.entries(LANGUAGES).map(([code, name]) => (
+                      <option key={code} value={code}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex-1">
+                  <label className="block text-sm font-medium mb-2 text-gray-700">
+                    To
+                  </label>
+                  <select
+                    value={toLanguage}
+                    onChange={(e) => setToLanguage(e.target.value)}
+                    className="w-full p-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-200"
+                  >
+                    {Object.entries(LANGUAGES).map(([code, name]) => (
+                      <option key={code} value={code}>
+                        {name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
+
+            {activeMode === "free" && (
+              <div className="mt-6">
+                <div className="p-4 bg-[#F5F5F5] rounded-lg border border-gray-200">
+                  <p className="text-sm text-gray-700">
+                    In "Ask Anything" mode, you can have free-form conversations with the AI about any topic.
+                    {settings?.customization?.layoutMode === "sidebar" ? (
+                      <span> With sidebar layout enabled, simply move your cursor to the far right edge of the screen to activate the AI assistant - no text selection needed.</span>
+                    ) : (
+                      <span> With floating layout, you can either highlight text to ask about specific content or use the popup for general questions.</span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <div className="mt-auto pt-12 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {isContextAwareEnabled && (
+                  <div 
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#14742F]/10 text-[#14742F] rounded-lg text-sm"
+                    title="Context awareness is enabled">
+                    <svg 
+                      className="w-4 h-4" 
+                      fill="none" 
+                      strokeWidth="2" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24">
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Context Aware
+                  </div>
+                )}
+              </div>
+              
+              {/* Add Daily Usage component */}
+              <div className="w-48">
+                <RateLimitDisplay />
+              </div>
+            </div>
+
+            {/* Social Media Links */}
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <div className="flex items-center justify-between">
+
+               <div className="flex items-center gap-2">
+                  <button
+                    onClick={handleOpenOptions}
+                    className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 pr-3 pl-0 py-1.5 rounded-lg hover:bg-gray-200/50 transition-colors"
+                    aria-label="Open settings"
+                    tabIndex={0}>
+                    <svg 
+                      className="w-4 h-4" 
+                      fill="none" 
+                      strokeWidth="2" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24">
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.686.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.644-.644-.869l.214-1.281z" />
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Settings
+                  </button>
+                  <a
+                    onClick={() => {
+                      chrome.tabs.create({
+                        url: chrome.runtime.getURL("tabs/feedback.html")
+                      })
+                    }}
+                    className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-200/50 transition-colors cursor-pointer"
+                    aria-label="Tell Us Your Opinion"
+                    tabIndex={0}>
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                    </svg>
+                    Tell Us Your Opinion
+                  </a>
+                </div>
+                <div className="flex items-center gap-4">
+                  <a
+                    href="https://github.com/mohamedsadiq/LightUp"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                    aria-label="GitHub"
+                    tabIndex={0}>
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-1.41-.49-1.695-1.41-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.845 1.23.66 1.65 1.905 1.905 1.905 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                  </a>
+                  <a
+                    href="https://x.com/Lightupaii"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                    aria-label="X (Twitter)"
+                    tabIndex={0}>
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                    </svg>
+                  </a>
+                  <a
+                    href="https://www.instagram.com/lightupaiapp/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                    aria-label="Instagram"
+                    tabIndex={0}>
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                  </a>
+                  <a
+                    href="https://www.reddit.com/r/LightUpai/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                    aria-label="Reddit"
+                    tabIndex={0}>
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 0A12 12 0 0 0 0 12c0 5.37 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-1.41-.49-1.695-1.41-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.845 1.23.66 1.65 1.905 1.905 1.905 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                  </a>
+                </div>
+               
+              </div>
+            </div>
           </div>
         </div>
-
-        {/* Social Media Links */}
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <div className="flex items-center justify-between">
-
-           <div className="flex items-center gap-2">
-              <button
-                onClick={handleOpenOptions}
-                className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 pr-3 pl-0 py-1.5 rounded-lg hover:bg-gray-200/50 transition-colors"
-                aria-label="Open settings"
-                tabIndex={0}>
-                <svg 
-                  className="w-4 h-4" 
-                  fill="none" 
-                  strokeWidth="2" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24">
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
-                  <path 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round" 
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                Settings
-              </button>
-              <a
-                onClick={() => {
-                  chrome.tabs.create({
-                    url: chrome.runtime.getURL("tabs/feedback.html")
-                  })
-                }}
-                className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-200/50 transition-colors cursor-pointer"
-                aria-label="Tell Us Your Opinion"
-                tabIndex={0}>
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                </svg>
-                Tell Us Your Opinion
-              </a>
-            </div>
-            <div className="flex items-center gap-4">
-              <a
-                href="https://github.com/mohamedsadiq/LightUp"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-                aria-label="GitHub"
-                tabIndex={0}>
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                </svg>
-              </a>
-              <a
-                href="https://x.com/Lightupaii"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-                aria-label="X (Twitter)"
-                tabIndex={0}>
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                </svg>
-              </a>
-              <a
-                href="https://www.instagram.com/lightupaiapp/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-                aria-label="Instagram"
-                tabIndex={0}>
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                </svg>
-              </a>
-              <a
-                href="https://www.reddit.com/r/LightUpai/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-gray-600 hover:text-gray-900 transition-colors"
-                aria-label="Reddit"
-                tabIndex={0}>
-                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/>
-                </svg>
-              </a>
-            </div>
-           
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   )
 }
@@ -373,5 +956,5 @@ function PopupWithErrorBoundary() {
   
   )
 }
-
 export default PopupWithErrorBoundary
+

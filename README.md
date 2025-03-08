@@ -34,6 +34,9 @@ Seamless AI assistance that lives in your browser. No new tabs. No context switc
   - 📝 Summarize - Quick summaries of longer content
   - 📊 Analyze - Deep analysis of selected content
   - 🌐 Translate - Translate text into different languages
+  - 💬 Ask Anything - Free-form questions and conversations with the AI
+    - In sidebar layout: Access by moving cursor to the right edge of screen
+    - In floating layout: Use with or without text selection
 - **Follow-up Questions**: Ask additional questions about the analyzed content to dive deeper
 - **Flexible AI Backend**:
   - Use OpenAI's GPT models

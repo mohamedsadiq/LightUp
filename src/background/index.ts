@@ -5,11 +5,13 @@ import { SYSTEM_PROMPTS, USER_PROMPTS } from "~utils/constants"
 import { processGeminiText } from "~services/llm/gemini"
 import { processXAIText } from "~services/llm/xai"
 import { processBasicText } from "~services/llm/basic"
+import type { Mode } from "~types/settings"
 
 // Default settings for new installations
 const DEFAULT_SETTINGS: Settings = {
   modelType: "basic",
   basicModel: "gemini-2.0-flash-lite-preview-02-05",
+  preferredModes: ["summarize", "explain", "analyze", "free"],
   customization: {
     showSelectedText: true,
     theme: "light",
@@ -48,6 +50,7 @@ interface Settings {
   geminiModel?: string
   maxTokens?: number
   basicModel?: string
+  preferredModes?: Mode[]
   customization?: {
     showSelectedText: boolean
     theme: "light" | "dark"

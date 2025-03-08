@@ -49,6 +49,40 @@ export const useSettings = (): UseSettingsReturn => {
     }
 
     loadSettings()
+    
+    // Listen for settings updates from the popup
+    const handleSettingsUpdated = (event: CustomEvent) => {
+      const { settings: newSettings } = event.detail;
+      if (newSettings) {
+        setSettings(newSettings);
+        
+        // Update configuration status
+        const isConfigValid = (() => {
+          switch (newSettings.modelType) {
+            case "local":
+              return !!newSettings.serverUrl
+            case "openai":
+              return !!newSettings.apiKey
+            case "gemini":
+              return !!newSettings.geminiApiKey
+            case "xai":
+              return !!newSettings.xaiApiKey
+            case "basic":
+              return true // Basic model is always configured
+            default:
+              return false
+          }
+        })()
+        
+        setIsConfigured(isConfigValid);
+      }
+    };
+    
+    window.addEventListener('settingsUpdated', handleSettingsUpdated as EventListener);
+    
+    return () => {
+      window.removeEventListener('settingsUpdated', handleSettingsUpdated as EventListener);
+    };
   }, [])
 
   const currentTheme = (settings?.customization?.theme || "light") as Theme

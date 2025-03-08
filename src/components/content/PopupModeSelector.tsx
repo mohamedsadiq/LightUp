@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion"
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { Storage } from "@plasmohq/storage"
 import { LanguageSelector } from "./LanguageSelector"
 import type { Mode, TranslationSettings } from "~types/settings"
 import { useSettings } from "~hooks/useSettings"
@@ -11,7 +12,11 @@ interface PopupModeSelectorProps {
   theme?: "light" | "dark"
 }
 
-const modes: Mode[] = ["summarize", "analyze", "explain", "translate", "free"]
+// Default modes if user hasn't configured any
+const DEFAULT_MODES: Mode[] = ["summarize", "analyze", "explain", "free"]
+
+// All available modes
+const ALL_MODES: Mode[] = ["summarize", "analyze", "explain", "translate", "free"]
 
 export const PopupModeSelector = ({ 
   activeMode, 
@@ -22,6 +27,42 @@ export const PopupModeSelector = ({
   const [fromLanguage, setFromLanguage] = useState("en")
   const [toLanguage, setToLanguage] = useState("es")
   const [isHovered, setIsHovered] = useState(false)
+  const [preferredModes, setPreferredModes] = useState<Mode[]>(DEFAULT_MODES)
+
+  // Load preferred modes from storage
+  useEffect(() => {
+    const loadPreferredModes = async () => {
+      try {
+        const storage = new Storage()
+        const savedPreferredModes = await storage.get("preferredModes") as Mode[] | undefined
+        
+        if (savedPreferredModes && savedPreferredModes.length > 0) {
+          // Limit to 4 modes
+          setPreferredModes(savedPreferredModes.slice(0, 4))
+        }
+      } catch (error) {
+        console.error("Error loading preferred modes:", error)
+      }
+    }
+    
+    loadPreferredModes()
+    
+    // Listen for updates to preferred modes
+    const handleModesUpdated = (event: CustomEvent) => {
+      const { preferredModes: newPreferredModes } = event.detail;
+      
+      if (newPreferredModes && newPreferredModes.length > 0) {
+        // Limit to 4 modes
+        setPreferredModes(newPreferredModes.slice(0, 4));
+      }
+    };
+    
+    window.addEventListener('modesUpdated', handleModesUpdated as EventListener);
+    
+    return () => {
+      window.removeEventListener('modesUpdated', handleModesUpdated as EventListener);
+    };
+  }, [])
 
   const handleModeClick = (mode: Mode) => {
     if (mode === "translate") {
@@ -30,6 +71,9 @@ export const PopupModeSelector = ({
       onModeChange(mode)
     }
   }
+
+  // Use the preferred modes or default to the first 4 modes
+  const displayModes = preferredModes.length > 0 ? preferredModes : DEFAULT_MODES
 
   return (
     <>
@@ -66,7 +110,7 @@ export const PopupModeSelector = ({
           layoutId="mode-container"
         >
           <AnimatePresence mode="popLayout" initial={false}>
-            {modes.map((mode) => (
+            {displayModes.map((mode) => (
               (mode === activeMode || isHovered) && (
                 <motion.button
                   key={mode}

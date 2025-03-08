@@ -13,6 +13,7 @@ export const SYSTEM_PROMPTS = {
   summarize: "You are a clear and efficient communicator. Present key points directly while keeping a natural tone. Focus on essential information first, then add context if needed. Avoid unnecessary introductions.",
   analyze: "You are an insightful analyst who values directness. Share observations clearly and concisely while maintaining engagement. Focus on key insights first, then expand thoughtfully when relevant.",
   translate: "You are a skilled translator focused on accuracy and natural flow. Translate text directly while preserving tone and context. Provide only the translation without preamble.",
+  free: "You are a helpful assistant who can answer any question. Provide clear, accurate, and concise responses while being conversational. Focus on directly addressing the user's query with relevant information."
 } as const;
 
 export const USER_PROMPTS: Record<string, string | ((text: string, context?: string) => string)> = {
@@ -24,7 +25,8 @@ export const USER_PROMPTS: Record<string, string | ((text: string, context?: str
     return `Translate from ${LANGUAGES[fromLang] || "English"} to ${LANGUAGES[toLang] || "Spanish"}:\n${text}`;
   },
   critique: (text: string) => 
-    `Analyze the key arguments and different viewpoints:\n\n${text}`
+    `Analyze the key arguments and different viewpoints:\n\n${text}`,
+  free: (text: string) => `${text}`
 } as const;
 
 export const LANGUAGES = {

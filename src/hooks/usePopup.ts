@@ -137,21 +137,14 @@ export const usePopup = (
       const selection = window.getSelection();
       const text = selection?.toString().trim();
 
-      // For free mode, we don't require selected text
-      if (mode === "free") {
-        if (!isVisible) {
-          const { top, left } = calculatePosition(event.clientX, event.clientY);
-          setPosition({ x: left, y: top });
-          setIsVisible(true);
-        }
-        return;
-      }
-
-      // For other modes, require text selection
+      // For all modes, require text selection to show popup on click
       if (!text || !/\S/.test(text)) {
         // Only hide if we're not interacting with the popup
         if (!isInteractingWithPopup) {
-          setIsVisible(false);
+          // Don't hide if we're in sidebar mode - that's handled by mouse movement
+          if (!(mode === "free" && settings?.customization?.layoutMode === "sidebar")) {
+            setIsVisible(false);
+          }
         }
         return;
       }
@@ -217,6 +210,50 @@ export const usePopup = (
     }
     setIsBlurActive(true);
   }, [isVisible, radicallyFocus]);
+
+  // Listen for reprocessText events
+  useEffect(() => {
+    const handleReprocessText = (event: CustomEvent) => {
+      const { mode: newMode, translationSettings: newTranslationSettings } = event.detail;
+      
+      // Only reprocess if we have selected text and the popup is visible
+      if (selectedText && isVisible && port) {
+        // Update the local mode state
+        setMode(newMode);
+        
+        // Clear previous results
+        setStreamingText?.("");
+        setFollowUpQAs?.([]);
+        setIsLoading?.(true);
+        setError?.(null);
+        
+        try {
+          port.postMessage({
+            type: "PROCESS_TEXT",
+            payload: {
+              text: selectedText,
+              mode: newMode,
+              settings: {
+                ...settings,
+                translationSettings: newTranslationSettings
+              },
+              connectionId,
+              id: Date.now()
+            }
+          });
+        } catch (err) {
+          setError?.('Failed to process text');
+          setIsLoading?.(false);
+        }
+      }
+    };
+    
+    window.addEventListener('reprocessText', handleReprocessText as EventListener);
+    
+    return () => {
+      window.removeEventListener('reprocessText', handleReprocessText as EventListener);
+    };
+  }, [selectedText, isVisible, port, connectionId, settings, setStreamingText, setFollowUpQAs, setIsLoading, setError]);
 
   const handleClose = () => {
     if (port) {

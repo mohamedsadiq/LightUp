@@ -51,6 +51,7 @@ export interface Settings {
   mode?: Mode
   temperature?: number
   customPrompt?: string
+  preferredModes?: Mode[]  // Array of modes to display in the mode selector (max 4)
   customization: {
     showSelectedText: boolean
     theme: "light" | "dark"

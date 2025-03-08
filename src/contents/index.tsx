@@ -22,6 +22,7 @@ import { applyHighlightColor } from "~utils/highlight"
 import { calculatePosition } from "~utils/position"
 import { Storage } from "@plasmohq/storage"
 import { Z_INDEX } from "~utils/constants"
+import { THEME_COLORS } from "~utils/constants"
 import { loadingSkeletonVariants, shimmerVariants, loadingVariants } from "~contents/variants"
 import { getHighlightColor } from "~utils/highlight"
 import ErrorMessage from "~components/common/ErrorMessage"
@@ -39,6 +40,88 @@ import { useCopy } from "~hooks/useCopy"
 import { useLastResult } from "~hooks/useLastResult"
 import { useCurrentModel } from "~hooks/useCurrentModel"
 import { useConversation } from "~hooks/useConversation"
+import { useMode } from "~hooks/useMode"
+
+// Add message listener for settings updates
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "SETTINGS_UPDATED") {
+    // Force a refresh of the settings in the content script
+    const storage = new Storage();
+    storage.set("settings", message.settings).then(() => {
+      // Dispatch a custom event that our hooks can listen for
+      const event = new CustomEvent('settingsUpdated', { 
+        detail: { 
+          key: message.key,
+          value: message.value,
+          settings: message.settings
+        } 
+      });
+      window.dispatchEvent(event);
+      
+      // Send response to confirm receipt
+      sendResponse({ success: true });
+    });
+    
+    // Return true to indicate we'll send a response asynchronously
+    return true;
+  }
+  
+  if (message.type === "MODES_UPDATED") {
+    // Force a refresh of the settings and preferred modes in the content script
+    const storage = new Storage();
+    
+    // Update settings with new preferred modes
+    storage.set("settings", message.settings).then(() => {
+      // Also update the preferredModes in storage
+      return storage.set("preferredModes", message.preferredModes);
+    }).then(() => {
+      // Dispatch a custom event that our hooks can listen for
+      const event = new CustomEvent('modesUpdated', { 
+        detail: { 
+          preferredModes: message.preferredModes,
+          settings: message.settings
+        } 
+      });
+      window.dispatchEvent(event);
+      
+      // Send response to confirm receipt
+      sendResponse({ success: true });
+    });
+    
+    // Return true to indicate we'll send a response asynchronously
+    return true;
+  }
+  
+  if (message.type === "MODE_CHANGED") {
+    // Update the active mode in storage
+    const storage = new Storage();
+    
+    // Update the mode
+    storage.set("mode", message.mode).then(() => {
+      // If it's translate mode, also update translation settings
+      if (message.mode === "translate" && message.translationSettings) {
+        return storage.set("translationSettings", message.translationSettings);
+      }
+      return Promise.resolve();
+    }).then(() => {
+      // Dispatch a custom event that our hooks can listen for
+      const event = new CustomEvent('modeChanged', { 
+        detail: { 
+          mode: message.mode,
+          translationSettings: message.translationSettings,
+          reprocessExisting: message.reprocessExisting
+        } 
+      });
+      window.dispatchEvent(event);
+      
+      // Send response to confirm receipt
+      sendResponse({ success: true });
+    });
+    
+    // Return true to indicate we'll send a response asynchronously
+    return true;
+  }
+});
 
 // Add CSS reset to prevent Tailwind base styles from affecting the webpage
 const cssResetStyle = document.createElement('style');
@@ -142,13 +225,21 @@ const answerBubbleStyle: MotionStyle = {
   display: 'flex',
   flexDirection: 'row' as const,
   justifyContent: 'flex-start' as const,
-  width: '100%'
+  width: '100%',
+  lineHeight: '13px'
 };
 
 function Content() {
   // Generate a stable connection ID
   const [connectionId] = useState(() => uuidv4());
   const [highlightedRanges, setHighlightedRanges] = useState<Range[]>([]);
+  
+  // Add ref for the input element
+  const inputRef = useRef<HTMLInputElement>(null);
+  
+  // Use our custom hooks
+  const { settings, setSettings, isConfigured, currentTheme, targetLanguage, fontSize } = useSettings();
+  const { activeMode, preferredModes, translationSettings } = useMode();
 
   // Add effect to ensure visibility on Reddit
   useEffect(() => {
@@ -174,7 +265,6 @@ function Content() {
     initialHeight: 460
   });
 
-  const { settings, setSettings, isConfigured, currentTheme, targetLanguage, fontSize } = useSettings();
   const { toast, showToast } = useToast();
   const { isEnabled, handleEnabledChange } = useEnabled(showToast);
   const { voicesLoaded, speakingId, handleSpeak } = useSpeech();
@@ -294,6 +384,20 @@ function Content() {
       ));
       setActiveAnswerId(null);
       setIsAskingFollowUp(false);
+      
+      // Add auto-focus to the input field after response is complete
+      setTimeout(() => {
+        // Try to focus using the ref first
+        if (inputRef.current) {
+          inputRef.current.focus();
+        } else {
+          // Fallback to querySelector if ref is not available
+          const inputElement = document.querySelector('[data-plasmo-popup] input[type="text"]');
+          if (inputElement instanceof HTMLInputElement) {
+            inputElement.focus();
+          }
+        }
+      }, 100);
     }
   );
 
@@ -397,6 +501,13 @@ function Content() {
       });
 
       setFollowUpQuestion("");
+      
+      // Keep focus on the input field after submitting
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+        }
+      }, 100);
     } catch (error) {
       setFollowUpQAs(prev => prev.filter(qa => qa.id !== newId));
       setActiveAnswerId(null);
@@ -1157,10 +1268,19 @@ function Content() {
               </motion.div>
             ))}
 
-            {/* Input section */}
-            <div style={themedStyles.followUpInputContainer}>
+            {/* Spacer to push the search input to the bottom */}
+            <div style={{ flexGrow: 1 }}></div>
+
+            {/* Input section - now at the bottom */}
+            <div style={{
+              ...themedStyles.followUpInputContainer,
+              marginTop: '8px',
+              paddingTop: '8px',
+              // background: `linear-gradient(180deg, transparent 0%, ${THEME_COLORS[currentTheme].background}80 30%, ${THEME_COLORS[currentTheme].background} 100%)`,
+            }}>
               <div style={themedStyles.searchContainer}>
                 <input
+                  ref={inputRef}
                   type="text"
                   value={followUpQuestion}
                   onChange={handleFollowUpQuestion}

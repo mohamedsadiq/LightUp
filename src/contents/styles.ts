@@ -84,16 +84,16 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     gap: 8,
     fontFamily: "'K2D', sans-serif",
     backgroundColor: theme === "light" ? "#FFFFFF" : THEME_COLORS[theme].buttonBackground,
-    padding: "10px 16px",
+    padding: "12px 16px",
     borderRadius: "31px",
-    border: theme === "light" ? "1px solid #E5E5E5" : "none",
-    boxShadow: "0 2px 6px rgba(0,0,0,0.06)",
+    // border: theme === "light" ? "1px solid #E5E5E5" : "1px solid transparent",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
     transition: "all 0.2s ease",
     transform: 'translateZ(0)',
     willChange: 'transform',
     "&:focus-within": {
-      boxShadow: "0 3px 8px rgba(0,0,0,0.08)",
-      transform: "translateY(-1px)",
+      boxShadow: "0 4px 12px rgba(0,0,0,0.12)",
+      transform: "translateY(-2px)",
     }
   },
   searchSendButton: {
@@ -251,7 +251,6 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     bottom: 0,
     zIndex: 10,
     padding: '8px 0',
-    background: `linear-gradient(180deg, transparent 0%, ${THEME_COLORS[theme].background} 20%)`,
   },
 });
 
