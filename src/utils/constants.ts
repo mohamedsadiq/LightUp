@@ -51,7 +51,7 @@ export const THEME_COLORS = {
     secondaryText: "#666666",
     border: "#d4d4d4",
     popupBackground: "#f5f5f5",
-    buttonBackground: "#D6D6D6",
+    buttonBackground: "#fff",
     buttonHover: "#C4C4C4"
   },
   dark: {

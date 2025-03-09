@@ -1017,7 +1017,6 @@ function Content() {
                     <motion.div
                       style={{
                         fontSize: '0.8rem',
-                        color: '#666',
                         display: 'flex',
                         alignItems: 'center',
                         gap: '4px',
@@ -1029,8 +1028,11 @@ function Content() {
                       <span style={{ 
                         textTransform: 'capitalize',
                         fontWeight: 500,
-                        color: currentTheme === 'dark' ? '#7e7e7e' : '#666',
-                        userSelect: 'none'
+                        color: currentTheme === 'dark' ? 'rgb(132, 132, 132)' : 'rgb(102, 102, 102)',
+                        userSelect: 'none',
+                        backgroundColor: currentTheme === 'dark' ? '#494949' : '#f0f0f0',
+                        padding: '2px 10px',
+                        borderRadius: '11px',
                       }}>
                         {currentModel || 'Loading...'}
                       </span>
@@ -1240,7 +1242,6 @@ function Content() {
                         <motion.div
                           style={{
                             fontSize: '0.8rem',
-                            color: '#666',
                             display: 'flex',
                             alignItems: 'center',
                             gap: '4px',
@@ -1255,8 +1256,11 @@ function Content() {
                           <span style={{ 
                             textTransform: 'capitalize',
                             fontWeight: 500,
-                            color: currentTheme === 'dark' ? '#7e7e7e' : '#666',
-                            userSelect: 'none'
+                            color: currentTheme === 'dark' ? 'rgb(132, 132, 132)' : 'rgb(102, 102, 102)',
+                            userSelect: 'none',
+                            backgroundColor: currentTheme === 'dark' ? '#494949' : '#f0f0f0',
+                            padding: '2px 10px',
+                            borderRadius: '11px',
                           }}>
                             {currentModel || 'Loading...'}
                           </span>

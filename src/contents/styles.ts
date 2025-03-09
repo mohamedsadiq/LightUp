@@ -51,7 +51,7 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     borderRadius: 8,
     // marginTop: 16,
     fontFamily: "'K2D', sans-serif",
-    marginBottom: 16,
+   
     direction: textDirection,
     textAlign: textDirection === "rtl" ? "right" : "left" as const
   },
