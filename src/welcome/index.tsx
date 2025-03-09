@@ -48,13 +48,14 @@ function Welcome() {
     geminiApiKey: "",
     xaiApiKey: "",
     customization: {
-      showSelectedText: true,
+      showSelectedText: false,
       theme: "light",
       radicallyFocus: false,
       fontSize: "1rem",
       highlightColor: "default",
       popupAnimation: "scale",
-      persistHighlight: false
+      persistHighlight: false,
+      layoutMode: "floating"
     }
   })
 

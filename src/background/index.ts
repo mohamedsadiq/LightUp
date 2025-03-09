@@ -13,7 +13,7 @@ const DEFAULT_SETTINGS: Settings = {
   basicModel: "gemini-2.0-flash-lite-preview-02-05",
   preferredModes: ["summarize", "explain", "analyze", "free"],
   customization: {
-    showSelectedText: true,
+    showSelectedText: false,
     theme: "light",
     radicallyFocus: false,
     fontSize: "1rem",

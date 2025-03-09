@@ -84,17 +84,34 @@ const ActionButton = ({ mode, activeMode, onClick, children }: ActionButtonProps
     )
   }
 
+  // Tooltip descriptions for each mode
+  const tooltips = {
+    summarize: "Condense text into key points",
+    analyze: "Examine text for insights and patterns",
+    explain: "Clarify complex concepts in simple terms",
+    translate: "Convert text to another language",
+    free: "Ask any question about selected text"
+  }
+
   return (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all ${
-        activeMode === mode 
-          ? "bg-[#14742F] text-white" 
-          : "bg-[#D6D6D6] text-black hover:bg-[#C4C4C4]"
-      }`}>
-      {icons[mode]}
-      {children}
-    </button>
+    <div className="relative group">
+      <button
+        onClick={onClick}
+        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all ${
+          activeMode === mode 
+            ? "bg-[#14742F] text-white" 
+            : "bg-[#D6D6D6] text-black hover:bg-[#C4C4C4]"
+        }`}
+        aria-label={`${children} - ${tooltips[mode]}`}
+        title={tooltips[mode]}>
+        {icons[mode]}
+        {children}
+      </button>
+      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+        {tooltips[mode]}
+        <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+      </div>
+    </div>
   )
 }
 
@@ -104,7 +121,7 @@ const RateLimitDisplay = () => {
   
   if (isLoading) {
     return (
-      <div className="p-3 bg-gray-50 rounded-lg">
+      <div className="p-4 bg-gray-50 rounded-lg shadow-sm">
         <p className="text-gray-500 text-sm">Loading usage info...</p>
       </div>
     )
@@ -112,24 +129,24 @@ const RateLimitDisplay = () => {
   
   if (error) {
     return (
-      <div className="p-3 bg-red-50 rounded-lg">
+      <div className="p-4 bg-red-50 rounded-lg shadow-sm">
         <p className="text-red-600 text-sm">{error}</p>
       </div>
     )
   }
   
   return (
-    <div className="p-3 bg-gray-50 rounded-lg">
-      <h3 className="text-sm font-semibold mb-1">Daily Usage</h3>
-      <div className="flex items-center justify-between">
-        <span className="text-gray-600 text-xs">Actions Remaining Today</span>
+    <div className="p-4 bg-gray-50 rounded-lg shadow-sm">
+      <h3 className="text-sm font-semibold mb-2">Daily Usage</h3>
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-gray-600 text-sm">Actions Remaining Today</span>
         <span className="text-sm font-medium">
           {remainingActions} / 20
         </span>
       </div>
-      <div className="mt-1.5 w-full bg-gray-200 rounded-full h-2">
+      <div className="w-full bg-gray-200 rounded-full h-2.5">
         <div 
-          className="bg-[#10a37f] h-2 rounded-full transition-all duration-500"
+          className="bg-[#10a37f] h-2.5 rounded-full transition-all duration-500"
           style={{ width: `${(remainingActions / 20) * 100}%` }}
         ></div>
       </div>
@@ -656,24 +673,38 @@ function IndexPopup() {
               <h1 className="text-xl font-semibold">LightUp</h1>
             </div>
             <div className="flex items-center gap-2">
-              <button 
-                onClick={() => setShowSettings(true)}
-                className="p-2 rounded-full hover:bg-[#D6D6D6] transition-colors"
-                aria-label="Settings"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
-                </svg>
-              </button>
-              <button 
-                onClick={handleOpenOptions}
-                className="p-2 rounded-full hover:bg-[#D6D6D6] transition-colors"
-                aria-label="Advanced Settings"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
-                </svg>
-              </button>
+              <div className="relative group">
+                <button 
+                  onClick={() => setShowSettings(true)}
+                  className="p-2 rounded-full hover:bg-[#D6D6D6] transition-colors flex items-center gap-1"
+                  aria-label="Settings"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
+                  </svg>
+                  <span className="text-sm">Settings</span>
+                </button>
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                  Customize LightUp appearance and behavior
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-b-gray-800"></div>
+                </div>
+              </div>
+              <div className="relative group">
+                <button 
+                  onClick={handleOpenOptions}
+                  className="p-2 rounded-full hover:bg-[#D6D6D6] transition-colors flex items-center gap-1"
+                  aria-label="Advanced Settings"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
+                  </svg>
+                  <span className="text-sm">Advanced</span>
+                </button>
+                <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                  Configure advanced settings and API options
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-b-gray-800"></div>
+                </div>
+              </div>
             </div>
           </div>
           <div className="bg-[#E9E9E9] p-6 flex-1 overflow-y-auto">
@@ -703,26 +734,40 @@ function IndexPopup() {
                 <h3 className="text-base mb-3 text-black font-medium">Configure Mode Selector (Choose up to 4)</h3>
                 <div className="flex flex-wrap gap-2">
                   {allModes.map((mode) => (
-                    <button
-                      key={mode}
-                      onClick={() => togglePreferredMode(mode)}
-                      className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all ${
-                        preferredModes.includes(mode)
-                          ? "bg-[#14742F] text-white"
-                          : "bg-[#D6D6D6] text-black hover:bg-[#C4C4C4]"
-                      }`}
-                    >
-                      {preferredModes.includes(mode) && (
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M5 12l5 5 9-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      )}
-                      {mode === "summarize" && "Summarize"}
-                      {mode === "analyze" && "Analyze"}
-                      {mode === "explain" && "Explain"}
-                      {mode === "translate" && "Translate"}
-                      {mode === "free" && "Ask Anything"}
-                    </button>
+                    <div key={mode} className="relative group">
+                      <button
+                        onClick={() => togglePreferredMode(mode)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all ${
+                          preferredModes.includes(mode)
+                            ? "bg-[#14742F] text-white"
+                            : "bg-[#D6D6D6] text-black hover:bg-[#C4C4C4]"
+                        }`}
+                        title={mode === "summarize" ? "Condense text into key points" :
+                               mode === "analyze" ? "Examine text for insights and patterns" :
+                               mode === "explain" ? "Clarify complex concepts in simple terms" :
+                               mode === "translate" ? "Convert text to another language" :
+                               "Ask any question about selected text"}
+                      >
+                        {preferredModes.includes(mode) && (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 12l5 5 9-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        )}
+                        {mode === "summarize" && "Summarize"}
+                        {mode === "analyze" && "Analyze"}
+                        {mode === "explain" && "Explain"}
+                        {mode === "translate" && "Translate"}
+                        {mode === "free" && "Ask Anything"}
+                      </button>
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                        {mode === "summarize" ? "Condense text into key points" :
+                         mode === "analyze" ? "Examine text for insights and patterns" :
+                         mode === "explain" ? "Clarify complex concepts in simple terms" :
+                         mode === "translate" ? "Convert text to another language" :
+                         "Ask any question about selected text"}
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+                      </div>
+                    </div>
                   ))}
                 </div>
                 <p className="text-xs text-gray-500 mt-2">
@@ -846,7 +891,7 @@ function IndexPopup() {
               </div>
               
               {/* Add Daily Usage component */}
-              <div className="w-48">
+              <div className="w-full">
                 <RateLimitDisplay />
               </div>
             </div>
@@ -870,7 +915,7 @@ function IndexPopup() {
                       <path 
                         strokeLinecap="round" 
                         strokeLinejoin="round" 
-                        d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.686.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.644-.644-.869l.214-1.281z" />
+                        d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                       <path 
                         strokeLinecap="round" 
                         strokeLinejoin="round" 
@@ -902,7 +947,7 @@ function IndexPopup() {
                     aria-label="GitHub"
                     tabIndex={0}>
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-1.41-.49-1.695-1.41-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.845 1.23.66 1.65 1.905 1.905 1.905 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                      <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.237 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
                     </svg>
                   </a>
                   <a
@@ -912,19 +957,21 @@ function IndexPopup() {
                     className="text-gray-600 hover:text-gray-900 transition-colors"
                     aria-label="X (Twitter)"
                     tabIndex={0}>
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
                   </a>
                   <a
-                    href="https://www.instagram.com/lightupaiapp/"
+                    href="https://www.instagram.com/lightup.ai/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                    className="text-gray-600 hover:text-gray-800 transition-colors"
                     aria-label="Instagram"
                     tabIndex={0}>
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                     </svg>
                   </a>
                   <a
@@ -935,7 +982,7 @@ function IndexPopup() {
                     aria-label="Reddit"
                     tabIndex={0}>
                     <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 0A12 12 0 0 0 0 12c0 5.37 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-1.41-.49-1.695-1.41-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.845 1.23.66 1.65 1.905 1.905 1.905 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                      <path d="M12 0A12 12 0 0 0 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.237 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
                     </svg>
                   </a>
                 </div>

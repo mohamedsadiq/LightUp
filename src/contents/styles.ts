@@ -181,7 +181,7 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     fontSize: fontSize,
     lineHeight: 1.6,
     fontFamily: "'K2D', sans-serif",
-    boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+    // boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
     direction: textDirection,
     textAlign: textDirection === "rtl" ? "right" : "left" as const,
     transform: 'translateZ(0)',

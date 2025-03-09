@@ -315,7 +315,7 @@ function IndexOptions() {
     localModel: "llama-2-70b-chat",
     basicModel: "gemini-2.0-flash-lite-preview-02-05",
     customization: {
-      showSelectedText: true,
+      showSelectedText: false,
       theme: "light",
       radicallyFocus: false,
       fontSize: "1rem",

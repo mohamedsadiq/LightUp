@@ -163,11 +163,11 @@ export const validateAndSaveSettings = async (settings: Settings): Promise<boole
       throw new Error("xAI API key is required")
     }
 
-    // Add rate limiting metadata
-    secureSettings.apiUsage = {
-      lastRequest: Date.now(),
-      requestCount: 0
-    }
+    // Add rate limiting metadata - removed as it's not in the Settings type
+    // secureSettings.apiUsage = {
+    //   lastRequest: Date.now(),
+    //   requestCount: 0
+    // }
 
     await storage.set("settings", secureSettings)
     return true
@@ -182,12 +182,13 @@ const getDefaultSettings = (): Settings => ({
   modelType: "local",
   maxTokens: 1000,
   customization: {
-    showSelectedText: true,
+    showSelectedText: false,
     theme: "light",
     radicallyFocus: false,
     fontSize: "1rem",
     highlightColor: "default",
     popupAnimation: "scale",
-    persistHighlight: false
+    persistHighlight: false,
+    layoutMode: "floating"
   }
 }) 
