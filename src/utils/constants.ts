@@ -68,6 +68,8 @@ export const THEME_COLORS = {
 export const Z_INDEX = {
   TOAST: 2147483647,      // Highest
   POPUP: 2147483647,      // Same as toast
+  CENTERED_POPUP: 2147483647, // For centered modal popup
+  POPUP_OVERLAY: 2147483646, // For the overlay behind centered popup
   BLUR_OVERLAY: 2147483645, // Below popup
   PAGE_CONTENT: 1         // Normal page content
 } as const;

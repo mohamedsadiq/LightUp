@@ -786,7 +786,7 @@ function IndexOptions() {
               {/* Layout Mode Selection */}
               <div className="space-y-2">
                 <label className="block text-gray-800 font-medium text-base">Layout Mode</label>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-3 gap-3">
                   {[
                     { value: 'floating', label: 'Floating', icon: (
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -800,6 +800,12 @@ function IndexOptions() {
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                         <line x1="15" y1="3" x2="15" y2="21"/>
+                      </svg>
+                    )},
+                    { value: 'centered', label: 'Centered', icon: (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2" ry="2"/>
+                        <rect x="6" y="8" width="12" height="8" rx="1" ry="1"/>
                       </svg>
                     )}
                   ].map((mode) => (

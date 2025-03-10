@@ -1464,7 +1464,7 @@ function Content() {
                 </motion.div>
               </div>
             </motion.div>
-          ) : (
+          ) : settings?.customization?.layoutMode === "sidebar" ? (
             // Sidebar Mode
             <motion.div
               ref={popupRef}
@@ -1484,47 +1484,82 @@ function Content() {
               onMouseDown={(e) => e.stopPropagation()}
               onMouseEnter={() => setIsInteractingWithPopup(true)}
               onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-              initial={{ x: 400, opacity: 0 }}
+              initial={{ x: 150, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 400, opacity: 0 }}
-              transition={{ 
-                type: "spring",
-                stiffness: 300,
-                damping: 25,
-                mass: 1
-              }}
+              exit={{ x: 150, opacity: 0 }}
+              transition={{ duration: 0.3 }}
             >
-              {/* Popup Content */}
+              {/* Sidebar Popup Content */}
               {renderPopupContent()}
-
-              {/* Resize handles */}
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  left: 0,
-                  width: '15px',
-                  height: '15px',
-                  cursor: 'sw-resize',
-                  background: 'transparent'
-                }}
-                onMouseDown={handleResizeStart}
-                className="resize-handle"
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: 0,
-                  right: 0,
-                  width: '15px',
-                  height: '15px',
-                  cursor: 'se-resize',
-                  background: 'transparent'
-                }}
-                onMouseDown={handleResizeStart}
-                className="resize-handle"
-              />
             </motion.div>
+          ) : (
+            // Centered Mode
+            <>
+              {/* Background overlay with blur */}
+              <motion.div
+                style={themedStyles.centeredPopupOverlay}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setIsVisible(false)}
+              />
+              
+              {/* Centered popup */}
+              <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                zIndex: Z_INDEX.CENTERED_POPUP,
+                pointerEvents: 'none'
+              }}>
+                <motion.div
+                  ref={popupRef}
+                  style={{
+                    ...themedStyles.centeredPopup,
+                    width: `${Math.max(width, 650)}px`,
+                    height: `${Math.max(height, 450)}px`,
+                    overflow: "auto",
+                    scrollBehavior: 'smooth',
+                    pointerEvents: 'auto'
+                  }}
+                  data-plasmo-popup
+                  className="no-select"
+                  onClick={(e) => e.stopPropagation()}
+                  onMouseUp={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onMouseEnter={() => setIsInteractingWithPopup(true)}
+                  onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
+                  initial={{ scale: 0.95, opacity: 0, y: 10 }}
+                  animate={{ scale: 1, opacity: 1, y: 0 }}
+                  exit={{ scale: 0.95, opacity: 0, y: 10 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                >
+                  {/* Centered Popup Content */}
+                  {renderPopupContent()}
+                  
+                  {/* Resize handle - smaller and less visible */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      right: 0,
+                      width: '12px',
+                      height: '12px',
+                      cursor: 'se-resize',
+                      background: 'transparent'
+                    }}
+                    onMouseDown={handleResizeStart}
+                    className="resize-handle"
+                  />
+                </motion.div>
+              </div>
+            </>
           )
         )}
       </AnimatePresence>

@@ -1,4 +1,4 @@
-import { THEME_COLORS } from "~utils/constants";
+import { THEME_COLORS, Z_INDEX } from "~utils/constants";
 
 export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" = "ltr", fontSize: "0.8rem" | "0.9rem" | "1rem" = "1rem") => ({
   popup: {
@@ -241,6 +241,42 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
       cursor: 'sw-resize',
       background: 'transparent'
     }
+  },
+  centeredPopup: {
+    position: 'relative',
+    width: '700px',
+    background: THEME_COLORS[theme].background,
+    border: `1px solid ${THEME_COLORS[theme].border}`,
+    boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
+    padding: 25,
+    fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    overflow: 'auto',
+    fontSize: fontSize,
+    zIndex: Z_INDEX.CENTERED_POPUP,
+    borderRadius: 12,
+    minWidth: "600px",
+    maxWidth: "80%",
+    minHeight: "400px", 
+    maxHeight: "80vh",
+    margin: 0,
+    resize: "both" as const,
+  },
+  centeredPopupOverlay: {
+    position: 'fixed' as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backdropFilter: 'blur(4px)',
+    zIndex: Z_INDEX.POPUP_OVERLAY,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 0,
+    padding: 0,
   },
   followUpInputContainer: {
     display: 'flex',

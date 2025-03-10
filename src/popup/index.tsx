@@ -115,6 +115,72 @@ const ActionButton = ({ mode, activeMode, onClick, children }: ActionButtonProps
   )
 }
 
+// Add ShortcutsSection component
+const ShortcutsSection = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  
+  const shortcuts = [
+    { key: "Ctrl+Shift+Z", description: "Switch to Explain mode" },
+    { key: "Ctrl+Shift+S", description: "Switch to Summarize mode" },
+    { key: "Ctrl+Shift+A", description: "Switch to Analyze mode" },
+    { key: "Ctrl+Shift+T", description: "Switch to Translate mode" },
+    { key: "Ctrl+Shift+X", description: "Toggle LightUp on/off" },
+    { key: "Ctrl+Shift+R", description: "Toggle Radically Focus mode" },
+    { key: "Ctrl+Shift+D", description: "Toggle Light/Dark theme" }
+  ];
+  
+  return (
+    <div className="mt-4 p-4 bg-white rounded-lg shadow-sm">
+      <div 
+        className="flex items-center justify-between cursor-pointer"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        <h3 className="text-sm font-medium text-black flex items-center gap-2">
+          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
+            <path d="M6 10h2v2H6v-2zM10 10h2v2h-2v-2zM14 10h2v2h-2v-2zM6 14h12v2H6v-2z" fill="currentColor" />
+          </svg>
+          Keyboard Shortcuts
+        </h3>
+        <button 
+          className="text-gray-500 hover:text-gray-700"
+          aria-label={isExpanded ? "Collapse shortcuts" : "Expand shortcuts"}
+        >
+          <svg 
+            className={`w-4 h-4 transition-transform ${isExpanded ? "transform rotate-180" : ""}`} 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M19 9l-7 7-7-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      
+      {isExpanded && (
+        <div className="mt-3 space-y-2">
+          <div className="grid grid-cols-1 gap-2 border-b border-gray-100 pb-2">
+            <p className="text-xs text-gray-600 italic">
+              Use these shortcuts to quickly switch between modes or toggle features
+            </p>
+          </div>
+          {shortcuts.map((shortcut, index) => (
+            <div key={index} className="flex items-center justify-between py-1 border-b border-gray-100 last:border-0">
+              <span className="text-xs text-gray-700">{shortcut.description}</span>
+              <kbd className="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded-md shadow-sm">
+                {shortcut.key}
+              </kbd>
+            </div>
+          ))}
+          <p className="text-xs text-gray-500 mt-1 pt-1">
+            After setting the mode via shortcut, select any text and LightUp will appear with your chosen mode.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
+
 // Add RateLimitDisplay component
 const RateLimitDisplay = () => {
   const { remainingActions, isLoading, error } = useRateLimit()
@@ -146,7 +212,7 @@ const RateLimitDisplay = () => {
       </div>
       <div className="w-full bg-gray-200 rounded-full h-2.5">
         <div 
-          className="bg-[#10a37f] h-2.5 rounded-full transition-all duration-500"
+          className="bg-[#14742F] h-2.5 rounded-full transition-all duration-500"
           style={{ width: `${(remainingActions / 20) * 100}%` }}
         ></div>
       </div>
@@ -217,7 +283,7 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
           {/* Layout Mode Selection */}
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-800">Layout Mode</label>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-3 gap-3">
               {[
                 { value: 'floating', label: 'Floating', icon: (
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -232,20 +298,26 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                     <line x1="15" y1="3" x2="15" y2="21"/>
                   </svg>
+                )},
+                { value: 'centered', label: 'Centered', icon: (
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2" ry="2"/>
+                    <rect x="6" y="8" width="12" height="8" rx="1" ry="1"/>
+                  </svg>
                 )}
-              ].map((mode) => (
+              ].map((option) => (
                 <button
-                  key={mode.value}
-                  onClick={() => updateSettings('layoutMode', mode.value)}
+                  key={option.value}
+                  onClick={() => updateSettings('layoutMode', option.value)}
                   className={`p-3 rounded-lg border ${
-                    settings.customization?.layoutMode === mode.value
+                    settings.customization?.layoutMode === option.value
                       ? 'border-[#10a37f] bg-[#10a37f]/5'
                       : 'border-gray-200 hover:border-gray-300'
                   } transition-all duration-200`}
                 >
                   <div className="flex flex-col items-center gap-2">
-                    {mode.icon}
-                    <span className="text-sm">{mode.label}</span>
+                    {option.icon}
+                    <span className="text-sm">{option.label}</span>
                   </div>
                 </button>
               ))}
@@ -856,6 +928,8 @@ function IndexPopup() {
                     In "Ask Anything" mode, you can have free-form conversations with the AI about any topic.
                     {settings?.customization?.layoutMode === "sidebar" ? (
                       <span> With sidebar layout enabled, simply move your cursor to the far right edge of the screen to activate the AI assistant - no text selection needed.</span>
+                    ) : settings?.customization?.layoutMode === "centered" ? (
+                      <span> With centered layout, the AI assistant appears as a larger modal in the middle of your screen with a blurred background for a more immersive experience.</span>
                     ) : (
                       <span> With floating layout, you can either highlight text to ask about specific content or use the popup for general questions.</span>
                     )}
@@ -894,6 +968,11 @@ function IndexPopup() {
               <div className="w-full">
                 <RateLimitDisplay />
               </div>
+            </div>
+
+            {/* Add Shortcuts Section */}
+            <div className="mt-3">
+              <ShortcutsSection />
             </div>
 
             {/* Social Media Links */}

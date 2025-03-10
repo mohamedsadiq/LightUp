@@ -37,6 +37,7 @@ Seamless AI assistance that lives in your browser. No new tabs. No context switc
   - 💬 Ask Anything - Free-form questions and conversations with the AI
     - In sidebar layout: Access by moving cursor to the right edge of screen
     - In floating layout: Use with or without text selection
+    - In centered layout: Experience an immersive conversation with AI in a modal overlay with blurred background
 - **Follow-up Questions**: Ask additional questions about the analyzed content to dive deeper
 - **Flexible AI Backend**:
   - Use OpenAI's GPT models
