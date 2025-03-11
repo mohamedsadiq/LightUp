@@ -30,6 +30,16 @@ export interface RateLimit {
   dailyLimit: number;        // Maximum number of actions per day (default 20)
 }
 
+// Add a new interface for custom prompts
+export interface CustomPrompts {
+  systemPrompts: {
+    [key in Mode]?: string;
+  };
+  userPrompts: {
+    [key in Mode]?: string;
+  };
+}
+
 // Main settings interface
 export interface Settings {
   // Required fields
@@ -52,15 +62,17 @@ export interface Settings {
   temperature?: number
   customPrompt?: string
   preferredModes?: Mode[]  // Array of modes to display in the mode selector (max 4)
+  customPrompts?: CustomPrompts // Custom prompt templates for each mode
   customization: {
     showSelectedText: boolean
     theme: "light" | "dark"
     radicallyFocus: boolean
-    fontSize: "0.8rem" | "0.9rem" | "1rem"
+    fontSize: "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem"
     highlightColor: "default" | "orange" | "blue" | "green" | "purple" | "pink"
     popupAnimation: "none" | "scale" | "fade"
     persistHighlight: boolean
     layoutMode: "floating" | "sidebar" | "centered"
+    contextAwareness?: boolean // New setting for context awareness
   }
   translationSettings?: {
     fromLanguage: string

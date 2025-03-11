@@ -1,6 +1,6 @@
 import { THEME_COLORS, Z_INDEX } from "~utils/constants";
 
-export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" = "ltr", fontSize: "0.8rem" | "0.9rem" | "1rem" = "1rem") => ({
+export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" = "ltr", fontSize: "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem" = "1rem") => ({
   popup: {
     width: "340px",
     height: "auto",

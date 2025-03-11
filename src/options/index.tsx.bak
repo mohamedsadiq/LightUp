@@ -1,0 +1,1067 @@
+import { useEffect, useState, useRef } from "react"
+import { Storage } from "@plasmohq/storage"
+import "./options-style.css"
+import type { Settings, ModelType, GeminiModel, GrokModel, LocalModel, Mode } from "~types/settings"
+import { motion, AnimatePresence } from "framer-motion"
+import { useRateLimit } from "~hooks/useRateLimit"
+import ErrorMessage from "~components/common/ErrorMessage"
+import { SYSTEM_PROMPTS, USER_PROMPTS } from "../utils/constants"
+
+const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
+  {
+    value: "gemini-2.0-flash",
+    label: "Gemini 2.0 Flash",
+    description: "Latest version with improved capabilities and faster response times"
+  },
+  {
+    value: "gemini-2.0-flash-lite-preview-02-05",
+    label: "Gemini 2.0 Flash-Lite",
+    description: "Lightweight version optimized for efficiency and speed"
+  },
+  {
+    value: "gemini-2.0-flash-thinking-exp-01-21",
+    label: "Gemini 2.0 Flash Thinking",
+    description: "Experimental model focused on reasoning and analytical tasks"
+  },
+  {
+    value: "gemini-1.5-pro",
+    label: "Gemini 1.5 Pro",
+    description: "Stable version with balanced performance"
+  },
+  {
+    value: "gemini-1.5-flash",
+    label: "Gemini 1.5 Flash",
+    description: "Faster, smaller model for quick responses"
+  },
+  {
+    value: "gemini-1.5-flash-8b",
+    label: "Gemini 1.5 Flash-8B",
+    description: "8-bit quantized version for efficient processing"
+  }
+];
+
+const GROK_MODELS: { value: GrokModel; label: string; description: string; price: string }[] = [
+  {
+    value: "grok-2",
+    label: "Grok 2",
+    description: "Standard text model with balanced performance",
+    price: "$2.00 per 1M tokens"
+  },
+  {
+    value: "grok-2-latest",
+    label: "Grok 2 Latest",
+    description: "Latest version with improved capabilities",
+    price: "$2.00 per 1M tokens"
+  },
+  {
+    value: "grok-beta",
+    label: "Grok Beta",
+    description: "Beta version with experimental features",
+    price: "$5.00 per 1M tokens"
+  }
+];
+
+const LOCAL_MODELS: { value: LocalModel; label: string; description: string; size: string }[] = [
+  {
+    value: "llama-2-70b-chat",
+    label: "Llama 2 70B Chat",
+    description: "Most powerful Llama 2 model, best for complex tasks",
+    size: "70B parameters"
+  },
+  {
+    value: "deepseek-v3",
+    label: "DeepSeek V3",
+    description: "Latest DeepSeek model with enhanced reasoning capabilities",
+    size: "67B parameters"
+  },
+  {
+    value: "mixtral-8x7b-instruct",
+    label: "Mixtral 8x7B Instruct",
+    description: "High-performance mixture of experts model",
+    size: "47B parameters"
+  },
+  {
+    value: "llama-2-13b-chat",
+    label: "Llama 2 13B Chat",
+    description: "Balanced performance and resource usage",
+    size: "13B parameters"
+  },
+  {
+    value: "mistral-7b-instruct",
+    label: "Mistral 7B Instruct",
+    description: "Efficient instruction-following model",
+    size: "7B parameters"
+  },
+  {
+    value: "neural-chat-7b-v3-1",
+    label: "Neural Chat V3.1",
+    description: "Optimized for natural conversations",
+    size: "7B parameters"
+  },
+  {
+    value: "deepseek-v3-base",
+    label: "DeepSeek V3 Base",
+    description: "Lighter version of DeepSeek with good reasoning",
+    size: "7B parameters"
+  },
+  {
+    value: "llama-3.2-3b-instruct",
+    label: "Llama 3.2 3B Instruct",
+    description: "Lightweight model for basic tasks",
+    size: "3B parameters"
+  },
+  {
+    value: "phi-2",
+    label: "Phi-2",
+    description: "Compact but powerful for its size",
+    size: "2.7B parameters"
+  },
+  {
+    value: "openchat-3.5",
+    label: "OpenChat 3.5",
+    description: "Optimized for chat interactions",
+    size: "7B parameters"
+  }
+];
+
+// Add the Logo component
+const Logo = () => (
+  <div className="flex items-center">
+    <div className="logo-glow">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="20" fill="black" />
+        <path d="M20 10C14.477 10 10 14.477 10 20C10 25.523 14.477 30 20 30C25.523 30 30 25.523 30 20C30 14.477 25.523 10 20 10ZM20 28C15.582 28 12 24.418 12 20C12 15.582 15.582 12 20 12C24.418 12 28 15.582 28 20C28 24.418 24.418 28 20 28Z" fill="#FFA500" />
+        <path d="M20 14C16.686 14 14 16.686 14 20C14 23.314 16.686 26 20 26C23.314 26 26 23.314 26 20C26 16.686 23.314 14 20 14ZM20 24C17.791 24 16 22.209 16 20C16 17.791 17.791 16 20 16C22.209 16 24 17.791 24 20C24 22.209 22.209 24 20 24Z" fill="#FFA500" />
+        <circle cx="20" cy="20" r="2" fill="#FFA500" />
+      </svg>
+    </div>
+    <span className="ml-2 text-xl font-semibold text-gray-900">LightUp Setting</span>
+  </div>
+);
+
+const copyToClipboard = (text) => {
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Address copied to clipboard!');
+  }, (err) => {
+    console.error('Could not copy text: ', err);
+  });
+
+const popupVariants = {
+  hidden: { opacity: 0, scale: 0.8, filter: 'blur(10px)' },
+  visible: { opacity: 1, scale: 1, filter: 'blur(0px)' },
+  exit: { opacity: 0, scale: 0.8, filter: 'blur(10px)' }
+};
+
+
+// Add this before the IndexOptions function
+const Switch = ({ id, checked, onChange, label, description = undefined }) => (
+  <div className="flex items-start gap-3">
+    <div className="flex-shrink-0 pt-0.5">
+      <label htmlFor={id} className="relative inline-flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          id={id}
+          checked={checked}
+          onChange={onChange}
+          className="sr-only peer"
+        />
+        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#10a37f]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#10a37f]"></div>
+      </label>
+    </div>
+    <div>
+      <label htmlFor={id} className="text-sm font-medium text-gray-800 cursor-pointer">
+        {label}
+      </label>
+      {description && (
+        <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+      )}
+    </div>
+  </div>
+);
+
+// Add RateLimitDisplay component
+const RateLimitDisplay = () => {
+  const { remainingActions, isLoading, error } = useRateLimit()
+  
+  if (isLoading) {
+    return (
+      <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+        <p className="text-gray-500">Loading usage info...</p>
+      </div>
+    )
+  }
+  
+  if (error) {
+    return (
+      <div className="mt-4 p-4 bg-red-50 rounded-lg">
+        <p className="text-red-600">{error}</p>
+      </div>
+    )
+  }
+  
+  return (
+    <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+      <h3 className="text-lg font-semibold mb-2">Daily Usage</h3>
+      <div className="flex items-center justify-between">
+        <span className="text-gray-600">Actions Remaining Today</span>
+        <span className="text-lg font-medium">
+          {remainingActions} / 20
+        </span>
+      </div>
+      <div className="mt-2 w-full bg-gray-200 rounded-full h-2.5">
+        <div 
+          className="bg-[#10a37f] h-2.5 rounded-full transition-all duration-500"
+          style={{ width: `${(remainingActions / 20) * 100}%` }}
+        ></div>
+      </div>
+    </div>
+  )
+}
+
+// Add new components for better organization
+const SettingsCard = ({ id = undefined, title, icon, children, className = "" }) => (
+  <div id={id} className={`bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-md ${className}`}>
+    <div className="px-4 py-3 border-b border-gray-100">
+      <h2 className="text-base font-medium text-gray-800 flex items-center gap-2">
+        {icon}
+        {title}
+      </h2>
+    </div>
+    <div className="p-4 space-y-4">
+      {children}
+    </div>
+  </div>
+);
+
+const Badge = ({ children, variant = "default", className = "" }) => {
+  const variants = {
+    default: "bg-gray-100 text-gray-800",
+    success: "bg-green-50 text-green-700",
+    warning: "bg-yellow-50 text-yellow-700",
+    error: "bg-red-50 text-red-700",
+    info: "bg-blue-50 text-blue-700"
+  };
+
+  return (
+    <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${variants[variant]} ${className}`}>
+      {children}
+    </span>
+  );
+};
+
+const ModelOption = ({ model, selected, onChange, showPrice = false, showSize = false }) => (
+  <div
+    className={`relative flex items-center p-3 rounded-lg border ${
+      selected
+        ? 'border-[#10a37f] bg-[#f0faf7]'
+        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+    } cursor-pointer transition-all duration-150`}
+    onClick={onChange}
+  >
+    <div className="flex items-center h-5">
+      <input
+        type="radio"
+        checked={selected}
+        onChange={() => {}}
+        className="w-4 h-4 text-[#10a37f] border-gray-300 focus:ring-[#10a37f] focus:ring-2"
+      />
+    </div>
+    <div className="ml-3 flex-1">
+      <div className="flex justify-between items-start">
+        <label className="text-sm font-medium text-gray-800">
+          {model.label}
+        </label>
+        {showPrice && <span className="text-xs text-gray-500">{model.price}</span>}
+        {showSize && <span className="text-xs text-gray-500">{model.size}</span>}
+      </div>
+      <p className="text-xs text-gray-500 mt-0.5">
+        {model.description}
+      </p>
+    </div>
+  </div>
+);
+
+function IndexOptions() {
+  const storage = useRef(new Storage()).current;
+  const [settings, setSettings] = useState<Settings>({
+    modelType: "basic",
+    maxTokens: 2048,
+    apiKey: "",
+    geminiApiKey: "",
+    geminiModel: "gemini-1.5-pro",
+    xaiApiKey: "",
+    grokModel: "grok-2",
+    localModel: "llama-2-70b-chat",
+    basicModel: "gemini-2.0-flash-lite-preview-02-05",
+    customization: {
+      showSelectedText: false,
+      theme: "light",
+      radicallyFocus: false,
+      fontSize: "1rem",
+      highlightColor: "default",
+      popupAnimation: "scale",
+      persistHighlight: false,
+      layoutMode: "floating"
+    }
+  });
+
+  // Add error state
+  const [error, setError] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Add new state for managing prompt editing
+  const [activePromptMode, setActivePromptMode] = useState<Mode>("explain");
+  const [isEditingSystemPrompt, setIsEditingSystemPrompt] = useState(false);
+  const [isEditingUserPrompt, setIsEditingUserPrompt] = useState(false);
+  const [editedSystemPrompt, setEditedSystemPrompt] = useState("");
+  const [editedUserPrompt, setEditedUserPrompt] = useState("");
+
+  // Add state for active sidebar item
+  const [activeSidebarItem, setActiveSidebarItem] = useState("modelConfig");
+
+  // Load settings
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const savedSettings = await storage.get("settings") as Settings | undefined;
+        if (savedSettings) {
+          setSettings({
+            ...savedSettings,
+            customization: {
+              showSelectedText: savedSettings.customization?.showSelectedText ?? true,
+              theme: savedSettings.customization?.theme ?? "light",
+              radicallyFocus: savedSettings.customization?.radicallyFocus ?? false,
+              fontSize: savedSettings.customization?.fontSize ?? "1rem",
+              highlightColor: savedSettings.customization?.highlightColor ?? "default",
+              popupAnimation: savedSettings.customization?.popupAnimation ?? "scale",
+              persistHighlight: savedSettings.customization?.persistHighlight ?? false,
+              layoutMode: savedSettings.customization?.layoutMode ?? "floating",
+              contextAwareness: savedSettings.customization?.contextAwareness ?? false
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Error loading settings:", err);
+        setError("Failed to load settings");
+      }
+    };
+    
+    loadSettings();
+  }, []);
+
+  // Update the handleSave function to include the customPrompts
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      const updatedSettings = {
+        ...settings,
+        // Include any fields you need to save
+        modelType: settings.modelType,
+        apiKey: settings.apiKey,
+        geminiApiKey: settings.geminiApiKey,
+        xaiApiKey: settings.xaiApiKey,
+        serverUrl: settings.serverUrl,
+        geminiModel: settings.geminiModel,
+        grokModel: settings.grokModel,
+        localModel: settings.localModel,
+        maxTokens: settings.maxTokens,
+        preferredModes: settings.preferredModes,
+        customPrompts: settings.customPrompts, // Save custom prompts
+        customization: settings.customization
+      };
+      
+      // Save updated settings to storage
+      await storage.set("settings", updatedSettings);
+      
+      // Notify tabs about settings update
+      chrome.tabs.query({}, (tabs) => {
+        tabs.forEach(tab => {
+          if (tab.id) {
+            chrome.tabs.sendMessage(tab.id, { 
+              type: "SETTINGS_UPDATED", 
+              settings: updatedSettings 
+            }).catch(err => {
+              // Ignore errors for tabs that don't have the content script running
+              console.log(`Could not send message to tab ${tab.id}:`, err);
+            });
+          }
+        });
+      });
+      
+      setIsSaving(false);
+      setSaveSuccess(true);
+      
+      // Show success message briefly
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, 3000);
+    } catch (err) {
+      console.error("Failed to save settings:", err);
+      setError("Failed to save settings");
+      setIsSaving(false);
+    }
+  };
+
+  // Add a helper function to set server URL
+  const handleServerUrlChange = (e) => {
+    let url = e.target.value;
+    // Ensure the URL starts with http://127.0.0.1:
+    if (url && !url.startsWith("http://")) {
+      url = `http://${url}`;
+    }
+    setSettings(prev => ({
+      ...prev,
+      serverUrl: url
+    }));
+  };
+
+
+  const colorOptions = [
+    { value: 'default', label: 'Default (System)', color: 'bg-gray-200' },
+    { value: 'orange', label: 'Orange', color: 'bg-[#FFBF5A]' },
+    { value: 'blue', label: 'Blue', color: 'bg-[#93C5FD]' },
+    { value: 'green', label: 'Green', color: 'bg-[#86EFAC]' },
+    { value: 'purple', label: 'Purple', color: 'bg-[#C4B5FD]' },
+    { value: 'pink', label: 'Pink', color: 'bg-[#FDA4AF]' }
+  ];
+
+  // Add a new function to handle immediate settings updates
+  const handleImmediateSettingUpdate = async (key: string, value: any) => {
+    try {
+      const newSettings = {
+        ...settings,
+        customization: {
+          ...settings.customization,
+          [key]: value
+        }
+      };
+      
+      setSettings(newSettings);
+      await storage.set("settings", newSettings);
+   
+    } catch (error) {
+    
+      setError(`Failed to update ${key}`);
+    }
+  };
+
+  // Add event listener for success messages
+  useEffect(() => {
+    const handleSettingUpdated = (event: CustomEvent) => {
+      const toast = document.getElementById('toast');
+      if (toast) {
+        toast.textContent = event.detail.message;
+        toast.style.opacity = '1';
+        setTimeout(() => {
+          toast.style.opacity = '0';
+        }, 2000);
+      }
+    };
+
+    window.addEventListener('settingUpdated', handleSettingUpdated as EventListener);
+    return () => {
+      window.removeEventListener('settingUpdated', handleSettingUpdated as EventListener);
+    };
+  }, []);
+
+  // Add a function to get the current prompt for a mode
+  const getCurrentPrompts = (mode: Mode) => {
+    const systemPrompt = settings.customPrompts?.systemPrompts[mode] || SYSTEM_PROMPTS[mode];
+    
+    // Handle user prompts which can be functions or strings
+    let userPrompt = settings.customPrompts?.userPrompts[mode];
+    if (!userPrompt) {
+      const defaultUserPrompt = USER_PROMPTS[mode];
+      userPrompt = typeof defaultUserPrompt === 'function' 
+        ? mode === 'explain' ? 'What does this mean: ${text}'
+          : mode === 'summarize' ? 'Key points from: ${text}'
+          : mode === 'analyze' ? 'Analyze this: ${text}'
+          : mode === 'translate' ? 'Translate from ${fromLanguage} to ${toLanguage}:\n${text}'
+          : '${text}'
+        : defaultUserPrompt;
+    }
+    
+    return {
+      systemPrompt,
+      userPrompt,
+      system: systemPrompt,
+      user: userPrompt,
+      defaultSystemPrompt: SYSTEM_PROMPTS[mode],
+      defaultUserPrompt: typeof USER_PROMPTS[mode] === 'function' 
+        ? mode === 'explain' ? 'What does this mean: ${text}'
+          : mode === 'summarize' ? 'Key points from: ${text}'
+          : mode === 'analyze' ? 'Analyze this: ${text}'
+          : mode === 'translate' ? 'Translate from ${fromLanguage} to ${toLanguage}:\n${text}'
+          : '${text}'
+        : USER_PROMPTS[mode]
+    };
+  };
+
+  // Function to handle editing a prompt
+  const handleEditPrompt = (mode: Mode, type: 'system' | 'user') => {
+    setActivePromptMode(mode);
+    const { systemPrompt, userPrompt } = getCurrentPrompts(mode);
+    
+    if (type === 'system') {
+      setEditedSystemPrompt(systemPrompt);
+      setIsEditingSystemPrompt(true);
+      setIsEditingUserPrompt(false);
+    } else {
+      setEditedUserPrompt(userPrompt);
+      setIsEditingUserPrompt(true);
+      setIsEditingSystemPrompt(false);
+    }
+  };
+
+  // Function to save edited prompt
+  const saveEditedPrompt = (type: 'system' | 'user') => {
+    const currentCustomPrompts = settings.customPrompts || {
+      systemPrompts: {},
+      userPrompts: {}
+    };
+    
+    let updatedCustomPrompts;
+    
+    if (type === 'system') {
+      updatedCustomPrompts = {
+        ...currentCustomPrompts,
+        systemPrompts: {
+          ...currentCustomPrompts.systemPrompts,
+          [activePromptMode]: editedSystemPrompt
+        }
+      };
+      setIsEditingSystemPrompt(false);
+    } else {
+      updatedCustomPrompts = {
+        ...currentCustomPrompts,
+        userPrompts: {
+          ...currentCustomPrompts.userPrompts,
+          [activePromptMode]: editedUserPrompt
+        }
+      };
+      setIsEditingUserPrompt(false);
+    }
+    
+    setSettings(prev => ({
+      ...prev,
+      customPrompts: updatedCustomPrompts
+    }));
+  };
+
+  // Function to reset prompt to default
+  const resetPromptToDefault = (mode: Mode, type: 'system' | 'user') => {
+    const { defaultSystemPrompt, defaultUserPrompt } = getCurrentPrompts(mode);
+    const currentCustomPrompts = settings.customPrompts || {
+      systemPrompts: {},
+      userPrompts: {}
+    };
+    
+    let updatedCustomPrompts;
+    
+    if (type === 'system') {
+      // Create a new object without the specified mode
+      const { [mode]: _, ...restSystemPrompts } = currentCustomPrompts.systemPrompts;
+      updatedCustomPrompts = {
+        ...currentCustomPrompts,
+        systemPrompts: restSystemPrompts
+      };
+      
+      // Update the edited text if we're currently editing
+      if (isEditingSystemPrompt && activePromptMode === mode) {
+        setEditedSystemPrompt(defaultSystemPrompt);
+      }
+    } else {
+      // Create a new object without the specified mode
+      const { [mode]: _, ...restUserPrompts } = currentCustomPrompts.userPrompts;
+      updatedCustomPrompts = {
+        ...currentCustomPrompts,
+        userPrompts: restUserPrompts
+      };
+      
+      // Update the edited text if we're currently editing
+      if (isEditingUserPrompt && activePromptMode === mode) {
+        setEditedUserPrompt(defaultUserPrompt);
+      }
+    }
+    
+    setSettings(prev => ({
+      ...prev,
+      customPrompts: updatedCustomPrompts
+    }));
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f5f5f5] text-gray-800">
+      <div className="container mx-auto p-4 md:p-6 max-w-7xl">
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Sidebar */}
+          <div className="w-full md:w-64 sidebar rounded-lg">
+            <div className="p-4">
+              <Logo />
+              <div className="text-xs text-gray-500 mt-1 ml-2">v0.1.6</div>
+            </div>
+            
+            <div className="mt-6 space-y-1 px-2">
+              <button 
+                onClick={() => setActiveSidebarItem("modelConfig")}
+                className={`sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center ${activeSidebarItem === "modelConfig" ? "active" : ""}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Model Configuration
+              </button>
+              
+              <button 
+                onClick={() => setActiveSidebarItem("customization")}
+                className={`sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center ${activeSidebarItem === "customization" ? "active" : ""}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                Customization
+              </button>
+              
+              <button 
+                onClick={() => setActiveSidebarItem("promptTemplates")}
+                className={`sidebar-item w-full text-left px-4 py-3 rounded-lg flex items-center ${activeSidebarItem === "promptTemplates" ? "active" : ""}`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h7" />
+                </svg>
+                Prompt Templates
+              </button>
+            </div>
+          </div>
+          
+          {/* Main Content Area */}
+          <div className="flex-1">
+            <div className="content-area p-6">
+              {/* Model Configuration */}
+              {activeSidebarItem === "modelConfig" && (
+                <div>
+                  <h2 className="text-xl font-medium mb-6">Model Configuration</h2>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <label className="block mb-2 text-gray-800 font-medium text-base section-header">
+                        Model Type
+                      </label>
+                      <select 
+                        value={settings.modelType}
+                        onChange={(e) => setSettings(prev => ({
+                          ...prev,
+                          modelType: e.target.value as ModelType
+                        }))}
+                        className="w-full p-3 rounded-lg input-field text-gray-800 font-medium transition-colors duration-200"
+                      >
+                        <option value="basic">LightUp Basic (Free)</option>
+                        <option value="local">Local LLM</option>
+                        <option value="gemini">Google Gemini</option>
+                        <option value="xai">xAI (Grok)</option>
+                      </select>
+                    </div>
+
+                    {settings.modelType === "basic" && (
+                      <div>
+                        <label className="block mb-2 text-gray-800 font-medium text-base section-header">
+                          API Key
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.apiKey}
+                          onChange={(e) => setSettings(prev => ({
+                            ...prev,
+                            apiKey: e.target.value
+                          }))}
+                          placeholder="Enter your API key (optional)"
+                          className="w-full p-3 rounded-lg input-field text-gray-800 transition-colors duration-200"
+                        />
+                      </div>
+                    )}
+
+                    {settings.modelType === "gemini" && (
+                      <div>
+                        <label className="block mb-2 text-gray-800 font-medium text-base section-header">
+                          Gemini API Key
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.geminiApiKey}
+                          onChange={(e) => setSettings(prev => ({
+                            ...prev,
+                            geminiApiKey: e.target.value
+                          }))}
+                          placeholder="Enter your Gemini API key"
+                          className="w-full p-3 rounded-lg input-field text-gray-800 transition-colors duration-200"
+                        />
+                        
+                        <div className="mt-4">
+                          <label className="block mb-2 text-gray-800 font-medium text-base section-header">
+                            Gemini Model
+                          </label>
+                          <div className="grid gap-3">
+                            {GEMINI_MODELS.map((model) => (
+                              <ModelOption
+                                key={model.value}
+                                model={model}
+                                selected={settings.geminiModel === model.value}
+                                onChange={() => setSettings(prev => ({
+                                  ...prev,
+                                  geminiModel: model.value
+                                }))}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {settings.modelType === "xai" && (
+                      <div>
+                        <label className="block mb-2 text-gray-800 font-medium text-base section-header">
+                          xAI API Key
+                        </label>
+                        <input
+                          type="text"
+                          value={settings.xaiApiKey}
+                          onChange={(e) => setSettings(prev => ({
+                            ...prev,
+                            xaiApiKey: e.target.value
+                          }))}
+                          placeholder="Enter your xAI API key"
+                          className="w-full p-3 rounded-lg input-field text-gray-800 transition-colors duration-200"
+                        />
+                        
+                        <div className="mt-4">
+                          <label className="block mb-2 text-gray-800 font-medium text-base section-header">
+                            Grok Model
+                          </label>
+                          <div className="grid gap-3">
+                            {GROK_MODELS.map((model) => (
+                              <ModelOption
+                                key={model.value}
+                                model={model}
+                                selected={settings.grokModel === model.value}
+                                onChange={() => setSettings(prev => ({
+                                  ...prev,
+                                  grokModel: model.value
+                                }))}
+                                showPrice
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {settings.modelType === "local" && (
+                      <div>
+                        <label className="block mb-2 text-gray-800 font-medium text-base section-header">
+                          Local Model
+                        </label>
+                        <select
+                          value={settings.localModel}
+                          onChange={(e) => setSettings(prev => ({
+                            ...prev,
+                            localModel: e.target.value as LocalModel
+                          }))}
+                          className="w-full p-3 rounded-lg input-field text-gray-800 font-medium transition-colors duration-200"
+                        >
+                          <option value="llama-2-70b-chat">Llama 2 (70B)</option>
+                          <option value="llama-2-13b-chat">Llama 2 (13B)</option>
+                          <option value="llama-2-7b-chat">Llama 2 (7B)</option>
+                          <option value="mistral-7b">Mistral (7B)</option>
+                          <option value="mixtral-8x7b">Mixtral (8x7B)</option>
+                          <option value="phi-2">Phi-2</option>
+                        </select>
+                        
+                        <div className="mt-4">
+                          <label className="block mb-2 text-gray-800 font-medium text-base section-header">
+                            Server URL
+                          </label>
+                          <input
+                            type="text"
+                            value={settings.serverUrl || ""}
+                            onChange={handleServerUrlChange}
+                            placeholder="http://localhost:8080"
+                            className="w-full p-3 rounded-lg input-field text-gray-800 transition-colors duration-200"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+              
+              {/* Customization */}
+              {activeSidebarItem === "customization" && (
+                <div>
+                  <h2 className="text-xl font-medium mb-6">Customization</h2>
+                  
+                  {/* Theme Selection */}
+                  <div className="space-y-6">
+                    <div className="space-y-2">
+                      <label className="block text-gray-800 font-medium text-base section-header">Theme</label>
+                      <div className="grid grid-cols-2 gap-3">
+                        {['light', 'dark'].map((theme) => (
+                          <button
+                            key={theme}
+                            onClick={() => handleImmediateSettingUpdate('theme', theme)}
+                            className={`p-4 rounded-lg input-field ${
+                              settings.customization?.theme === theme
+                                ? 'border-[#10a37f] bg-[#10a37f]/5'
+                                : 'border-gray-200 hover:border-gray-300'
+                            } transition-all duration-200`}
+                          >
+                            <div className="flex items-center justify-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                {theme === 'light' ? (
+                                  <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 100-2v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                                ) : (
+                                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                                )}
+                              </svg>
+                              <span className="capitalize">{theme}</span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Other customization options */}
+                    <div className="space-y-4">
+                      <Switch
+                        id="showSelectedText"
+                        checked={settings.customization?.showSelectedText || false}
+                        onChange={(e) => handleImmediateSettingUpdate('showSelectedText', e.target.checked)}
+                        label="Show Selected Text"
+                        description="Display the selected text in the popup"
+                      />
+                      
+                      <Switch
+                        id="radicallyFocus"
+                        checked={settings.customization?.radicallyFocus || false}
+                        onChange={(e) => handleImmediateSettingUpdate('radicallyFocus', e.target.checked)}
+                        label="Radically Focus"
+                        description="Dim the page to focus on the popup"
+                      />
+                      
+                      <Switch
+                        id="persistHighlight"
+                        checked={settings.customization?.persistHighlight || false}
+                        onChange={(e) => handleImmediateSettingUpdate('persistHighlight', e.target.checked)}
+                        label="Persist Highlight"
+                        description="Keep text highlighted after selection"
+                      />
+                    </div>
+                    
+                    {/* Font Size */}
+                    <div className="space-y-2">
+                      <label className="block text-gray-800 font-medium text-base section-header">Font Size</label>
+                      <select
+                        value={settings.customization?.fontSize || "1rem"}
+                        onChange={(e) => handleImmediateSettingUpdate('fontSize', e.target.value)}
+                        className="w-full p-3 rounded-lg input-field text-gray-800 font-medium transition-colors duration-200"
+                      >
+                        <option value="0.875rem">Small</option>
+                        <option value="1rem">Medium</option>
+                        <option value="1.125rem">Large</option>
+                      </select>
+                    </div>
+                    
+                    {/* Layout Mode */}
+                    <div className="space-y-2">
+                      <label className="block text-gray-800 font-medium text-base section-header">Layout Mode</label>
+                      <select
+                        value={settings.customization?.layoutMode || "floating"}
+                        onChange={(e) => handleImmediateSettingUpdate('layoutMode', e.target.value)}
+                        className="w-full p-3 rounded-lg input-field text-gray-800 font-medium transition-colors duration-200"
+                      >
+                        <option value="floating">Floating</option>
+                        <option value="sidebar">Sidebar</option>
+                        <option value="bottom">Bottom</option>
+                      </select>
+                    </div>
+                    
+                    {/* Highlight Color */}
+                    <div className="space-y-2">
+                      <label className="block text-gray-800 font-medium text-base section-header">Highlight Color</label>
+                      <div className="grid grid-cols-3 gap-3">
+                        {colorOptions.map((option) => (
+                          <button
+                            key={option.value}
+                            onClick={() => handleImmediateSettingUpdate('highlightColor', option.value)}
+                            className={`p-4 rounded-lg input-field ${
+                              settings.customization?.highlightColor === option.value
+                                ? 'border-[#10a37f] bg-[#10a37f]/5'
+                                : 'border-gray-200 hover:border-gray-300'
+                            } transition-all duration-200`}
+                          >
+                            <div className="flex flex-col items-center gap-2">
+                              <div className={`w-6 h-6 rounded-full ${option.color}`} />
+                              <span className="text-sm">{option.label}</span>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Prompt Templates */}
+              {activeSidebarItem === "promptTemplates" && (
+                <div>
+                  <h2 className="text-xl font-medium mb-6">Prompt Templates</h2>
+                  
+                  <div className="space-y-6">
+                    <div className="space-y-2">
+                      <label className="block text-gray-800 font-medium text-base section-header">Mode</label>
+                      <select
+                        value={activePromptMode}
+                        onChange={(e) => setActivePromptMode(e.target.value as Mode)}
+                        className="w-full p-3 rounded-lg input-field text-gray-800 font-medium transition-colors duration-200"
+                      >
+                        <option value="explain">Explain</option>
+                        <option value="summarize">Summarize</option>
+                        <option value="analyze">Analyze</option>
+                        <option value="translate">Translate</option>
+                        <option value="free">Free</option>
+                      </select>
+                    </div>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="text-gray-800 font-medium text-base section-header">System Prompt</label>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEditPrompt(activePromptMode, 'system')}
+                              className="text-xs text-[#10a37f] hover:text-[#0d8c6d] font-medium"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => resetPromptToDefault(activePromptMode, 'system')}
+                              className="text-xs text-gray-500 hover:text-gray-700 font-medium"
+                            >
+                              Reset
+                            </button>
+                          </div>
+                        </div>
+                        <div className="p-3 rounded-lg input-field bg-gray-50 text-sm text-gray-700 whitespace-pre-wrap">
+                          {getCurrentPrompts(activePromptMode).system}
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <div className="flex items-center justify-between mb-2">
+                          <label className="text-gray-800 font-medium text-base section-header">User Prompt</label>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => handleEditPrompt(activePromptMode, 'user')}
+                              className="text-xs text-[#10a37f] hover:text-[#0d8c6d] font-medium"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              onClick={() => resetPromptToDefault(activePromptMode, 'user')}
+                              className="text-xs text-gray-500 hover:text-gray-700 font-medium"
+                            >
+                              Reset
+                            </button>
+                          </div>
+                        </div>
+                        <div className="p-3 rounded-lg input-field bg-gray-50 text-sm text-gray-700 whitespace-pre-wrap">
+                          {getCurrentPrompts(activePromptMode).user}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              {/* Save Button */}
+              <div className="mt-8 flex justify-end">
+                <button
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="px-6 py-2.5 bg-[#10a37f] text-white rounded-lg font-medium hover:bg-[#0d8c6d] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSaving ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Prompt Editing Modal */}
+      <AnimatePresence>
+        {(isEditingSystemPrompt || isEditingUserPrompt) && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-lg p-6 w-full max-w-2xl"
+            >
+              <h3 className="text-lg font-medium mb-4">
+                Edit {isEditingSystemPrompt ? "System" : "User"} Prompt for {activePromptMode.charAt(0).toUpperCase() + activePromptMode.slice(1)}
+              </h3>
+              <textarea
+                value={isEditingSystemPrompt ? editedSystemPrompt : editedUserPrompt}
+                onChange={(e) => isEditingSystemPrompt ? setEditedSystemPrompt(e.target.value) : setEditedUserPrompt(e.target.value)}
+                className="w-full h-64 p-3 rounded-lg input-field text-gray-800 font-mono text-sm"
+              />
+              <div className="flex justify-end gap-3 mt-4">
+                <button
+                  onClick={() => {
+                    setIsEditingSystemPrompt(false);
+                    setIsEditingUserPrompt(false);
+                  }}
+                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors duration-200"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={() => saveEditedPrompt(isEditingSystemPrompt ? 'system' : 'user')}
+                  className="px-4 py-2 bg-[#10a37f] text-white rounded-lg hover:bg-[#0d8c6d] transition-colors duration-200"
+                >
+                  Save
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Success Message */}
+      <AnimatePresence>
+        {saveSuccess && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-4 right-4 bg-[#10a37f] text-white px-4 py-2 rounded-lg shadow-lg"
+          >
+            Settings saved successfully!
+          </motion.div>
+        )}
+      </AnimatePresence>
+      
+      {/* Error Message */}
+      {error && <ErrorMessage message={error} />}
+    </div>
+  );
+}
+
+export default IndexOptions;

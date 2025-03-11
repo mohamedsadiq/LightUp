@@ -16,7 +16,15 @@ import { v4 as uuidv4 } from 'uuid'
 import { getStyles } from "./styles"
 import { getTextDirection } from "~utils/rtl"
 import { truncateText } from "~utils/textProcessing"
-import { flexMotionStyle, scaleMotionVariants, fadeMotionVariants, noMotionVariants, toastMotionVariants } from "~styles/motionStyles"
+import { 
+  flexMotionStyle, 
+  scaleMotionVariants, 
+  fadeMotionVariants, 
+  noMotionVariants, 
+  toastMotionVariants,
+  sidebarScaleMotionVariants,
+  sidebarSlideMotionVariants
+} from "~styles/motionStyles"
 import type { Theme } from "~types/theme"
 import { applyHighlightColor } from "~utils/highlight"
 import { calculatePosition } from "~utils/position"
@@ -119,6 +127,16 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     });
     
     // Return true to indicate we'll send a response asynchronously
+    return true;
+  }
+  
+  if (message.type === "OPEN_FREE_POPUP") {
+    // Dispatch a custom event to open the popup in free mode
+    const event = new CustomEvent('openFreePopup');
+    window.dispatchEvent(event);
+    
+    // Send response to confirm receipt
+    sendResponse({ success: true });
     return true;
   }
 });
@@ -672,7 +690,7 @@ function Content() {
     <>
       {/* Header */}
       <div style={themedStyles.buttonContainerParent}>
-        <motion.div style={{ marginLeft: '-6px' }} layout>
+        <motion.div style={{ marginLeft: '-6px', boxShadow: 'none !important' }} >
           {Logo(currentTheme)}
         </motion.div>
         <PopupModeSelector 
@@ -1484,10 +1502,16 @@ function Content() {
               onMouseDown={(e) => e.stopPropagation()}
               onMouseEnter={() => setIsInteractingWithPopup(true)}
               onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-              initial={{ x: 150, opacity: 0 }}
+              initial={{ x: 200, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 150, opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              exit={{ x: 200, opacity: 0 }}
+              transition={{ 
+                type: settings?.customization?.popupAnimation === "none" ? "tween" : "spring",
+                stiffness: 300,
+                damping: 25,
+                mass: 0.8,
+                duration: settings?.customization?.popupAnimation === "none" ? 0 : undefined
+              }}
             >
               {/* Sidebar Popup Content */}
               {renderPopupContent()}

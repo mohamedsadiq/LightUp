@@ -102,6 +102,10 @@ LightUp supports keyboard shortcuts for quick mode switching:
 - `Ctrl+Shift+S`: Switch to Summarize mode
 - `Ctrl+Shift+A`: Switch to Analyze mode
 - `Ctrl+Shift+T`: Switch to Translate mode
+- `Ctrl+Shift+F` / `Command+Shift+F`: Open popup in Free mode (floating, sidebar, or centered based on your settings)
+- `Ctrl+Shift+X`: Toggle LightUp on/off
+- `Ctrl+Shift+R`: Toggle Radically Focus mode
+- `Ctrl+Shift+D`: Toggle Light/Dark theme
 
 After setting the mode via shortcut, simply select any text and LightUp will appear with your chosen mode.
 

@@ -29,6 +29,39 @@ export const scaleMotionVariants = {
   }
 };
 
+export const sidebarScaleMotionVariants = {
+  initial: { 
+    opacity: 0, 
+    scale: 0.1,
+    x: 150
+  },
+  animate: { 
+    opacity: 1, 
+    scale: 1,
+    x: 0
+  },
+  exit: { 
+    scale: 0.5, 
+    opacity: 0,
+    x: 150
+  }
+};
+
+export const sidebarSlideMotionVariants = {
+  initial: { 
+    opacity: 0,
+    x: 150
+  },
+  animate: { 
+    opacity: 1,
+    x: 0
+  },
+  exit: { 
+    opacity: 0,
+    x: 150
+  }
+};
+
 export const fadeMotionVariants = {
   initial: { 
     opacity: 0

@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef } from "react"
 import { Storage } from "@plasmohq/storage"
 import "./options-style.css"
-import type { Settings, ModelType, GeminiModel, GrokModel, LocalModel } from "~types/settings"
+import type { Settings, ModelType, GeminiModel, GrokModel, LocalModel, Mode } from "~types/settings"
 import { motion, AnimatePresence } from "framer-motion"
 import { useRateLimit } from "~hooks/useRateLimit"
 import ErrorMessage from "~components/common/ErrorMessage"
+import { SYSTEM_PROMPTS, USER_PROMPTS } from "../utils/constants"
 
 const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
   {
@@ -176,26 +177,26 @@ const popupVariants = {
 
 // Add this before the IndexOptions function
 const Switch = ({ id, checked, onChange, label, description = undefined }) => (
-  <div className="flex items-center justify-between py-2">
-    <div className="flex-1">
-      <div className="text-base font-semibold text-gray-900">{label}</div>
-      {description && <p className="text-xs font-normal text-gray-500 mt-0.5">{description}</p>}
+  <div className="flex items-start gap-3">
+    <div className="flex-shrink-0 pt-0.5">
+      <label htmlFor={id} className="relative inline-flex items-center cursor-pointer">
+        <input
+          type="checkbox"
+          id={id}
+          checked={checked}
+          onChange={onChange}
+          className="sr-only peer"
+        />
+        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#10a37f]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#10a37f]"></div>
+      </label>
     </div>
-    <div 
-      className="relative cursor-pointer" 
-      onClick={(e) => {
-        e.preventDefault();
-        onChange({ target: { checked: !checked } });
-      }}
-    >
-      <input
-        type="checkbox"
-        id={id}
-        checked={checked}
-        onChange={() => {}}
-        className="sr-only peer"
-      />
-      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#10a37f]/30 dark:peer-focus:ring-[#10a37f]/80 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-[#10a37f]"></div>
+    <div>
+      <label htmlFor={id} className="text-sm font-medium text-gray-800 cursor-pointer">
+        {label}
+      </label>
+      {description && (
+        <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+      )}
     </div>
   </div>
 );
@@ -240,15 +241,15 @@ const RateLimitDisplay = () => {
 }
 
 // Add new components for better organization
-const SettingsCard = ({ title, icon, children, className = "" }) => (
-  <div className={`bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-md ${className}`}>
-    <div className="p-6 border-b border-gray-100">
-      <h2 className="text-xl font-semibold text-gray-800 flex items-center gap-2">
+const SettingsCard = ({ id = undefined, title, icon, children, className = "" }) => (
+  <div id={id} className={`bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden transition-all duration-200 hover:shadow-md ${className}`}>
+    <div className="px-4 py-3 border-b border-gray-100">
+      <h2 className="text-base font-medium text-gray-800 flex items-center gap-2">
         {icon}
         {title}
       </h2>
     </div>
-    <div className="p-6 space-y-6">
+    <div className="p-4 space-y-4">
       {children}
     </div>
   </div>
@@ -257,14 +258,14 @@ const SettingsCard = ({ title, icon, children, className = "" }) => (
 const Badge = ({ children, variant = "default", className = "" }) => {
   const variants = {
     default: "bg-gray-100 text-gray-800",
-    success: "bg-green-100 text-green-800",
-    warning: "bg-yellow-100 text-yellow-800",
-    danger: "bg-red-100 text-red-800",
-    info: "bg-blue-100 text-blue-800"
+    success: "bg-green-50 text-green-700",
+    warning: "bg-yellow-50 text-yellow-700",
+    error: "bg-red-50 text-red-700",
+    info: "bg-blue-50 text-blue-700"
   };
 
   return (
-    <span className={`${variants[variant]} text-xs font-medium px-2.5 py-0.5 rounded-full ${className}`}>
+    <span className={`inline-flex items-center px-2 py-1 rounded-md text-xs font-medium ${variants[variant]} ${className}`}>
       {children}
     </span>
   );
@@ -272,11 +273,11 @@ const Badge = ({ children, variant = "default", className = "" }) => {
 
 const ModelOption = ({ model, selected, onChange, showPrice = false, showSize = false }) => (
   <div
-    className={`relative flex items-center p-4 rounded-lg border ${
+    className={`relative flex items-center p-3 rounded-lg border ${
       selected
-        ? 'border-[#10a37f] bg-[#10a37f]/5'
-        : 'border-gray-200 hover:border-gray-300'
-    } cursor-pointer transition-all duration-200`}
+        ? 'border-[#10a37f] bg-[#f0faf7]'
+        : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+    } cursor-pointer transition-all duration-150`}
     onClick={onChange}
   >
     <div className="flex items-center h-5">
@@ -284,18 +285,18 @@ const ModelOption = ({ model, selected, onChange, showPrice = false, showSize = 
         type="radio"
         checked={selected}
         onChange={() => {}}
-        className="w-4 h-4 text-[#10a37f] border-gray-300 focus:ring-[#10a37f]"
+        className="w-4 h-4 text-[#10a37f] border-gray-300 focus:ring-[#10a37f] focus:ring-2"
       />
     </div>
-    <div className="ml-4 flex-1">
+    <div className="ml-3 flex-1">
       <div className="flex justify-between items-start">
-        <label className="font-medium text-gray-900">
+        <label className="text-sm font-medium text-gray-800">
           {model.label}
         </label>
-        {showPrice && <span className="text-sm text-gray-500">{model.price}</span>}
-        {showSize && <span className="text-sm text-gray-500">{model.size}</span>}
+        {showPrice && <span className="text-xs text-gray-500">{model.price}</span>}
+        {showSize && <span className="text-xs text-gray-500">{model.size}</span>}
       </div>
-      <p className="text-sm text-gray-500">
+      <p className="text-xs text-gray-500 mt-0.5">
         {model.description}
       </p>
     </div>
@@ -329,6 +330,14 @@ function IndexOptions() {
   // Add error state
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
+
+  // Add new state for managing prompt editing
+  const [activePromptMode, setActivePromptMode] = useState<Mode>("explain");
+  const [isEditingSystemPrompt, setIsEditingSystemPrompt] = useState(false);
+  const [isEditingUserPrompt, setIsEditingUserPrompt] = useState(false);
+  const [editedSystemPrompt, setEditedSystemPrompt] = useState("");
+  const [editedUserPrompt, setEditedUserPrompt] = useState("");
 
   // Load settings
   useEffect(() => {
@@ -346,72 +355,106 @@ function IndexOptions() {
               highlightColor: savedSettings.customization?.highlightColor ?? "default",
               popupAnimation: savedSettings.customization?.popupAnimation ?? "scale",
               persistHighlight: savedSettings.customization?.persistHighlight ?? false,
-              layoutMode: savedSettings.customization?.layoutMode ?? "floating"
+              layoutMode: savedSettings.customization?.layoutMode ?? "floating",
+              contextAwareness: savedSettings.customization?.contextAwareness ?? false
             }
           });
         }
       } catch (err) {
+        console.error("Error loading settings:", err);
         setError("Failed to load settings");
       }
     };
+    
     loadSettings();
   }, []);
 
-  // Add validation before saving
+  // Add effect to scroll to the prompt-templates section if the URL has that hash
+  useEffect(() => {
+    // Function to scroll to the element with the given ID
+    const scrollToElement = (id: string) => {
+      // Add a small delay to ensure the DOM is fully loaded
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          // Scroll to the element with smooth behavior
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 300);
+    };
+
+    // Check if the URL has a hash
+    if (window.location.hash) {
+      // Remove the # character
+      const id = window.location.hash.substring(1);
+      scrollToElement(id);
+    }
+
+    // Add event listener for hash changes
+    const handleHashChange = () => {
+      if (window.location.hash) {
+        const id = window.location.hash.substring(1);
+        scrollToElement(id);
+      }
+    };
+
+    window.addEventListener('hashchange', handleHashChange);
+
+    // Clean up the event listener
+    return () => {
+      window.removeEventListener('hashchange', handleHashChange);
+    };
+  }, []);
+
+  // Update the handleSave function to include the customPrompts
   const handleSave = async () => {
     try {
       setIsSaving(true);
-      // Validate settings
-      if (settings.modelType === "local") {
-        if (!settings.serverUrl) {
-          throw new Error("Server URL is required for local LLM");
-        }
-        // Validate server URL format
-        if (!settings.serverUrl.startsWith("http://127.0.0.1:") && 
-            !settings.serverUrl.startsWith("http://localhost:")) {
-          throw new Error("Invalid server URL format");
-        }
-      } else if (settings.modelType === "openai") {
-        if (!settings.apiKey) {
-          throw new Error("API key is required for OpenAI");
-        }
-        if (!settings.apiKey.startsWith('sk-')) {
-          throw new Error("Invalid OpenAI API key format");
-        }
-      } else if (settings.modelType === "gemini") {
-        if (!settings.geminiApiKey) {
-          throw new Error("API key is required for Google Gemini");
-        }
-      } else if (settings.modelType === "xai") {
-        if (!settings.xaiApiKey?.trim()) {
-          throw new Error("API key is required for xAI");
-        }
-      }
-      
-      // Ensure customization settings are included
-      const settingsToSave = {
+      const updatedSettings = {
         ...settings,
-        customization: {
-          ...settings.customization,
-          showSelectedText: settings.customization?.showSelectedText ?? true,
-          theme: settings.customization?.theme ?? "light",
-          radicallyFocus: settings.customization?.radicallyFocus ?? false,
-          fontSize: settings.customization?.fontSize ?? "1rem",
-          highlightColor: settings.customization?.highlightColor ?? "default",
-          popupAnimation: settings.customization?.popupAnimation ?? "scale",
-          persistHighlight: settings.customization?.persistHighlight ?? false
-        }
+        // Include any fields you need to save
+        modelType: settings.modelType,
+        apiKey: settings.apiKey,
+        geminiApiKey: settings.geminiApiKey,
+        xaiApiKey: settings.xaiApiKey,
+        serverUrl: settings.serverUrl,
+        geminiModel: settings.geminiModel,
+        grokModel: settings.grokModel,
+        localModel: settings.localModel,
+        maxTokens: settings.maxTokens,
+        preferredModes: settings.preferredModes,
+        customPrompts: settings.customPrompts, // Save custom prompts
+        customization: settings.customization
       };
-
-      // Save settings
-      await storage.set("settings", settingsToSave);
       
-      setError(""); // Clear any previous errors
-      alert("Settings saved successfully!");
-    } catch (error) {
-      setError(error.message || "Failed to save settings");
-      alert(error.message || "Failed to save settings");
-    } finally {
+      // Save updated settings to storage
+      await storage.set("settings", updatedSettings);
+      
+      // Notify tabs about settings update
+      chrome.tabs.query({}, (tabs) => {
+        tabs.forEach(tab => {
+          if (tab.id) {
+            chrome.tabs.sendMessage(tab.id, { 
+              type: "SETTINGS_UPDATED", 
+              settings: updatedSettings 
+            }).catch(err => {
+              // Ignore errors for tabs that don't have the content script running
+              console.log(`Could not send message to tab ${tab.id}:`, err);
+            });
+          }
+        });
+      });
+      
+      setIsSaving(false);
+      setSaveSuccess(true);
+      
+      // Show success message briefly
+      setTimeout(() => {
+        setSaveSuccess(false);
+      }, 3000);
+    } catch (err) {
+      console.error("Failed to save settings:", err);
+      setError("Failed to save settings");
       setIsSaving(false);
     }
   };
@@ -478,22 +521,132 @@ function IndexOptions() {
     };
   }, []);
 
+  // Add a function to get the current prompt for a mode
+  const getCurrentPrompts = (mode: Mode) => {
+    const defaultSystemPrompt = SYSTEM_PROMPTS[mode] || "";
+    const defaultUserPrompt = typeof USER_PROMPTS[mode] === 'function' 
+      ? mode === 'explain' ? 'What does this mean: ${text}'
+        : mode === 'summarize' ? 'Key points from: ${text}'
+        : mode === 'analyze' ? 'Analyze this: ${text}'
+        : mode === 'translate' ? 'Translate from ${fromLanguage} to ${toLanguage}:\n${text}'
+        : '${text}'
+      : USER_PROMPTS[mode] || "";
+
+    const systemPrompt = settings.customPrompts?.systemPrompts[mode] || defaultSystemPrompt;
+    const userPrompt = settings.customPrompts?.userPrompts[mode] || defaultUserPrompt;
+    
+    return { systemPrompt, userPrompt, defaultSystemPrompt, defaultUserPrompt };
+  };
+
+  // Function to handle editing a prompt
+  const handleEditPrompt = (mode: Mode, type: 'system' | 'user') => {
+    setActivePromptMode(mode);
+    const { systemPrompt, userPrompt } = getCurrentPrompts(mode);
+    
+    if (type === 'system') {
+      setEditedSystemPrompt(systemPrompt);
+      setIsEditingSystemPrompt(true);
+      setIsEditingUserPrompt(false);
+    } else {
+      setEditedUserPrompt(userPrompt);
+      setIsEditingUserPrompt(true);
+      setIsEditingSystemPrompt(false);
+    }
+  };
+
+  // Function to save edited prompt
+  const saveEditedPrompt = (type: 'system' | 'user') => {
+    const currentCustomPrompts = settings.customPrompts || {
+      systemPrompts: {},
+      userPrompts: {}
+    };
+    
+    let updatedCustomPrompts;
+    
+    if (type === 'system') {
+      updatedCustomPrompts = {
+        ...currentCustomPrompts,
+        systemPrompts: {
+          ...currentCustomPrompts.systemPrompts,
+          [activePromptMode]: editedSystemPrompt
+        }
+      };
+      setIsEditingSystemPrompt(false);
+    } else {
+      updatedCustomPrompts = {
+        ...currentCustomPrompts,
+        userPrompts: {
+          ...currentCustomPrompts.userPrompts,
+          [activePromptMode]: editedUserPrompt
+        }
+      };
+      setIsEditingUserPrompt(false);
+    }
+    
+    setSettings(prev => ({
+      ...prev,
+      customPrompts: updatedCustomPrompts
+    }));
+  };
+
+  // Function to reset prompt to default
+  const resetPromptToDefault = (mode: Mode, type: 'system' | 'user') => {
+    const { defaultSystemPrompt, defaultUserPrompt } = getCurrentPrompts(mode);
+    const currentCustomPrompts = settings.customPrompts || {
+      systemPrompts: {},
+      userPrompts: {}
+    };
+    
+    let updatedCustomPrompts;
+    
+    if (type === 'system') {
+      // Create a new object without the specified mode
+      const { [mode]: _, ...restSystemPrompts } = currentCustomPrompts.systemPrompts;
+      updatedCustomPrompts = {
+        ...currentCustomPrompts,
+        systemPrompts: restSystemPrompts
+      };
+      
+      // Update the edited text if we're currently editing
+      if (isEditingSystemPrompt && activePromptMode === mode) {
+        setEditedSystemPrompt(defaultSystemPrompt);
+      }
+    } else {
+      // Create a new object without the specified mode
+      const { [mode]: _, ...restUserPrompts } = currentCustomPrompts.userPrompts;
+      updatedCustomPrompts = {
+        ...currentCustomPrompts,
+        userPrompts: restUserPrompts
+      };
+      
+      // Update the edited text if we're currently editing
+      if (isEditingUserPrompt && activePromptMode === mode) {
+        setEditedUserPrompt(defaultUserPrompt);
+      }
+    }
+    
+    setSettings(prev => ({
+      ...prev,
+      customPrompts: updatedCustomPrompts
+    }));
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-[800px] mx-auto p-5 pb-24">
+    <div className="min-h-screen bg-white">
+      <div className="max-w-[800px] mx-auto p-4">
         {/* Header */}
         <motion.div 
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center justify-between mb-8 bg-white p-6 rounded-xl shadow-sm border border-gray-100"
+          className="flex items-center justify-between mb-6 py-4"
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <Logo />
             <div>
-              <h1 className="text-2xl font-semibold text-gray-800 m-0">
+              <h1 className="text-lg font-medium text-gray-800 m-0">
                 LightUp Settings
               </h1>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-xs text-gray-500 mt-1">
                 Configure your AI assistant preferences
               </p>
             </div>
@@ -501,7 +654,7 @@ function IndexOptions() {
           <Badge variant="success">v0.1.5</Badge>
         </motion.div>
 
-        <div className="grid gap-8">
+        <div className="grid gap-6">
           {/* Model Configuration */}
           <SettingsCard 
             title="Model Configuration" 
@@ -583,17 +736,17 @@ function IndexOptions() {
                   className="space-y-6"
                 >
                   <div>
-                    <label className="block mb-2 text-gray-800 font-medium text-base">
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
                       Llama Server URL
                     </label>
                     <input
                       type="text"
                       value={settings.serverUrl}
                       onChange={handleServerUrlChange}
-                      className="w-full p-3 rounded-lg border border-gray-200 bg-white text-gray-800 font-medium transition-colors duration-200 hover:border-[#10a37f] focus:border-[#10a37f] focus:ring focus:ring-[#10a37f]/20"
+                      className="w-full p-2.5 rounded-md border border-gray-300 text-gray-700 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#10a37f]/20 focus:border-[#10a37f]"
                       placeholder="http://127.0.0.1:1234"
                     />
-                    <p className="mt-2 text-sm text-gray-500">
+                    <p className="mt-1.5 text-xs text-gray-500">
                       Local LLM server setup. No API key required.
                     </p>
                   </div>
@@ -625,7 +778,7 @@ function IndexOptions() {
                   className="space-y-6"
                 >
                   <div>
-                    <label className="block mb-2 text-gray-800 font-medium text-base">
+                    <label className="block mb-2 text-sm font-medium text-gray-700">
                       Google Gemini API Key
                     </label>
                     <div className="relative">
@@ -636,7 +789,7 @@ function IndexOptions() {
                           ...prev,
                           geminiApiKey: e.target.value
                         }))}
-                        className="w-full p-3 rounded-lg border border-gray-200 bg-white text-gray-800 font-medium transition-colors duration-200 hover:border-[#10a37f] focus:border-[#10a37f] focus:ring focus:ring-[#10a37f]/20"
+                        className="w-full p-2.5 rounded-md border border-gray-300 text-gray-700 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[#10a37f]/20 focus:border-[#10a37f]"
                         placeholder="Enter your Gemini API key"
                       />
                     </div>
@@ -857,16 +1010,19 @@ function IndexOptions() {
               {/* Font Size Selection */}
               <div className="space-y-2">
                 <label className="block text-gray-800 font-medium text-base">Font Size</label>
-                <div className="grid grid-cols-3 gap-3">
+                <div className="grid grid-cols-6 gap-2">
                   {[
                     { value: '0.8rem', label: 'Small' },
                     { value: '0.9rem', label: 'Medium' },
-                    { value: '1rem', label: 'Large' }
+                    { value: '1rem', label: 'Large' },
+                    { value: '1.1rem', label: 'X-Large' },
+                    { value: '1.2rem', label: 'XX-Large' },
+                    { value: '1.3rem', label: 'XXX-Large' }
                   ].map((size) => (
                     <button
                       key={size.value}
                       onClick={() => handleImmediateSettingUpdate('fontSize', size.value)}
-                      className={`p-4 rounded-lg border ${
+                      className={`p-3 rounded-lg border ${
                         settings.customization?.fontSize === size.value
                           ? 'border-[#10a37f] bg-[#10a37f]/5'
                           : 'border-gray-200 hover:border-gray-300'
@@ -898,7 +1054,7 @@ function IndexOptions() {
                       <div className="flex items-center justify-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                           {theme === 'light' ? (
-                            <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                            <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 100-2v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
                           ) : (
                             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
                           )}
@@ -935,26 +1091,188 @@ function IndexOptions() {
             </div>
           </SettingsCard>
 
-          {/* Context Settings Card */}
-          <SettingsCard 
-            title="Context Settings" 
+          {/* Prompt Templates */}
+          <SettingsCard
+            id="prompt-templates"
+            title="Prompt Templates"
             icon={
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-[#10a37f]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                <path fillRule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clipRule="evenodd" />
               </svg>
             }
           >
-            <div className="flex flex-col items-center justify-center py-8 text-center">
-              <div className="w-16 h-16 mb-4 text-gray-400">
-                <svg className="w-full h-full" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">Coming Soon!</h3>
-              <p className="text-gray-500 max-w-sm">
-                We're working on bringing you smart context awareness features to enhance your LightUp experience.
+            <div className="mb-4">
+              <p className="text-sm text-gray-500 mb-4">
+                Customize how LightUp processes your text for each mode. You can edit both the system prompt (instructions to the AI) and the user prompt (how your text is formatted).
               </p>
-              <Badge variant="info" className="mt-4">Beta</Badge>
+              
+              <div className="mb-6">
+                <label className="block mb-2 text-gray-800 font-medium">Select Mode</label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {["explain", "summarize", "analyze", "translate", "free"].map((mode) => (
+                    <button
+                      key={mode}
+                      onClick={() => setActivePromptMode(mode as Mode)}
+                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                        activePromptMode === mode
+                          ? "bg-[#10a37f] text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
+                    >
+                      {mode === "explain" && "Explain"}
+                      {mode === "summarize" && "Summarize"}
+                      {mode === "analyze" && "Analyze"}
+                      {mode === "translate" && "Translate"}
+                      {mode === "free" && "Ask Anything"}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              {/* System Prompt Section */}
+              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-base font-semibold">System Prompt</h3>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEditPrompt(activePromptMode, 'system')}
+                      className="text-xs px-2.5 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors flex items-center gap-1"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => resetPromptToDefault(activePromptMode, 'system')}
+                      className="text-xs px-2.5 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors flex items-center gap-1"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Reset
+                    </button>
+                  </div>
+                </div>
+                
+                {isEditingSystemPrompt && activePromptMode ? (
+                  <div>
+                    <textarea
+                      value={editedSystemPrompt}
+                      onChange={(e) => setEditedSystemPrompt(e.target.value)}
+                      className="w-full h-40 p-2.5 rounded-md border border-gray-300 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-[#10a37f]/20 focus:border-[#10a37f]"
+                    />
+                    <div className="flex justify-end gap-2 mt-2">
+                      <button
+                        onClick={() => setIsEditingSystemPrompt(false)}
+                        className="text-xs px-2.5 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => saveEditedPrompt('system')}
+                        className="text-xs px-2.5 py-1 rounded-md bg-[#10a37f] text-white hover:bg-[#0D8C6D] transition-colors"
+                      >
+                        Save
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">
+                      The system prompt provides instructions to the AI about how to respond.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="bg-white p-3 rounded border border-gray-200 text-sm font-mono whitespace-pre-wrap max-h-40 overflow-y-auto">
+                    {getCurrentPrompts(activePromptMode).systemPrompt}
+                    
+                    {settings.customPrompts?.systemPrompts[activePromptMode] && (
+                      <span className="inline-block ml-2 px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-700">
+                        Custom
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+              
+              {/* User Prompt Section */}
+              <div className="mb-4 p-4 bg-gray-50 rounded-lg">
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-base font-semibold">User Prompt</h3>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => handleEditPrompt(activePromptMode, 'user')}
+                      className="text-xs px-2.5 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors flex items-center gap-1"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => resetPromptToDefault(activePromptMode, 'user')}
+                      className="text-xs px-2.5 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors flex items-center gap-1"
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      Reset
+                    </button>
+                  </div>
+                </div>
+                
+                {isEditingUserPrompt && activePromptMode ? (
+                  <div>
+                    <textarea
+                      value={editedUserPrompt}
+                      onChange={(e) => setEditedUserPrompt(e.target.value)}
+                      className="w-full h-40 p-2.5 rounded-md border border-gray-300 text-sm font-mono resize-y focus:outline-none focus:ring-2 focus:ring-[#10a37f]/20 focus:border-[#10a37f]"
+                    />
+                    <div className="flex justify-end gap-2 mt-2">
+                      <button
+                        onClick={() => setIsEditingUserPrompt(false)}
+                        className="text-xs px-2.5 py-1 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => saveEditedPrompt('user')}
+                        className="text-xs px-2.5 py-1 rounded-md bg-[#10a37f] text-white hover:bg-[#0D8C6D] transition-colors"
+                      >
+                        Save
+                      </button>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">
+                      Use <code className="px-1 py-0.5 bg-gray-100 rounded">${"{text}"}</code> to represent the selected text.
+                      {activePromptMode === "translate" && (
+                        <span> For translate mode, you can also use <code className="px-1 py-0.5 bg-gray-100 rounded">${"{fromLanguage}"}</code> and <code className="px-1 py-0.5 bg-gray-100 rounded">${"{toLanguage}"}</code>.</span>
+                      )}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="bg-white p-3 rounded border border-gray-200 text-sm font-mono whitespace-pre-wrap max-h-40 overflow-y-auto">
+                    {getCurrentPrompts(activePromptMode).userPrompt}
+                    
+                    {settings.customPrompts?.userPrompts[activePromptMode] && (
+                      <span className="inline-block ml-2 px-2 py-0.5 text-xs rounded-full bg-blue-100 text-blue-700">
+                        Custom
+                      </span>
+                    )}
+                  </div>
+                )}
+              </div>
+              
+              <div className="text-xs text-gray-500 p-2 bg-yellow-50 rounded-lg">
+                <p className="font-semibold mb-1">Template Variables:</p>
+                <ul className="list-disc pl-4 space-y-1">
+                  <li><code className="px-1 py-0.5 bg-gray-100 rounded">${"{text}"}</code> - Your selected text</li>
+                  {activePromptMode === "translate" && (
+                    <>
+                      <li><code className="px-1 py-0.5 bg-gray-100 rounded">${"{fromLanguage}"}</code> - Source language</li>
+                      <li><code className="px-1 py-0.5 bg-gray-100 rounded">${"{toLanguage}"}</code> - Target language</li>
+                    </>
+                  )}
+                </ul>
+              </div>
             </div>
           </SettingsCard>
         </div>
@@ -968,30 +1286,30 @@ function IndexOptions() {
       >
         <div className="bg-white/80 backdrop-blur-md border-t border-gray-100 shadow-lg py-4">
           <div className="max-w-[800px] mx-auto px-5">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col gap-3 w-full">
               {error && <ErrorMessage message={error} />}
-              
+              {saveSuccess && (
+                <div className="flex items-center justify-center text-green-600 bg-green-50 py-2 px-4 rounded-lg w-full">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Settings saved successfully!
+                </div>
+              )}
               <button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="flex-1 h-12 bg-[#10a37f] text-white rounded-xl font-medium transition-all duration-200 hover:bg-[#0d8c6d] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none flex items-center justify-center gap-2"
+                className="w-full px-4 py-2.5 bg-[#10a37f] hover:bg-[#0D8C6D] text-white font-medium rounded-lg transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-[#10a37f]/20 disabled:opacity-50 flex items-center justify-center"
               >
                 {isSaving ? (
                   <>
-                    <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    <span>Saving Changes...</span>
+                    Saving...
                   </>
-                ) : (
-                  <>
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span>Save Settings</span>
-                  </>
-                )}
+                ) : "Save Settings"}
               </button>
             </div>
           </div>
@@ -999,7 +1317,7 @@ function IndexOptions() {
       </motion.div>
 
       {/* Toast */}
-      <div id="toast" className="fixed bottom-4 right-4 bg-[#10a37f] text-white px-4 py-2 rounded-lg opacity-0 transition-opacity duration-300 shadow-lg" />
+      <div id="toast" className="fixed bottom-4 right-4 bg-[#10a37f] text-white px-4 py-2 rounded-md text-sm opacity-0 transition-opacity duration-200 shadow-md" />
     </div>
   );
 }

@@ -8,58 +8,9 @@
 /* Add any options-specific styles here */
 body {
   font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background-color: #f5f5f5;
-  margin: 0;
-  padding: 0;
 }
 
-/* Toggle Switch Styles */
-.toggle-checkbox {
-  position: absolute;
-  left: 0;
-  top: 0;
-  outline: none;
-  appearance: none;
-  width: 100%;
-  height: 100%;
-  margin: 0;
+/* Ensure buttons have pointer cursor */
+button, [role="button"] {
   cursor: pointer;
-  z-index: 1;
-  border: none;
-}
-
-.toggle-label {
-  position: relative;
-  display: block;
-  width: 48px;
-  height: 24px;
-  background-color: #e5e7eb;
-  border-radius: 9999px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.toggle-label:after {
-  content: "";
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 20px;
-  height: 20px;
-  background-color: white;
-  border-radius: 50%;
-  transition: all 0.3s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.toggle-checkbox:checked + .toggle-label {
-  background-color: #10a37f;
-}
-
-.toggle-checkbox:checked + .toggle-label:after {
-  transform: translateX(24px);
-}
-
-.toggle-checkbox:focus + .toggle-label {
-  box-shadow: 0 0 0 2px rgba(16, 163, 127, 0.2);
 } 

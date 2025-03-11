@@ -9,7 +9,7 @@ interface UseSettingsReturn {
   isConfigured: boolean;
   currentTheme: Theme;
   targetLanguage: string;
-  fontSize: "0.8rem" | "0.9rem" | "1rem";
+  fontSize: "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem";
 }
 
 export const useSettings = (): UseSettingsReturn => {
@@ -87,7 +87,7 @@ export const useSettings = (): UseSettingsReturn => {
 
   const currentTheme = (settings?.customization?.theme || "light") as Theme
   const targetLanguage = settings?.translationSettings?.toLanguage || 'en'
-  const fontSize = settings?.customization?.fontSize || "1rem" as "0.8rem" | "0.9rem" | "1rem"
+  const fontSize = settings?.customization?.fontSize || "1rem" as "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem"
 
   return {
     settings,

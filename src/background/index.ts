@@ -5,13 +5,32 @@ import { SYSTEM_PROMPTS, USER_PROMPTS } from "~utils/constants"
 import { processGeminiText } from "~services/llm/gemini"
 import { processXAIText } from "~services/llm/xai"
 import { processBasicText } from "~services/llm/basic"
-import type { Mode } from "~types/settings"
+import type { Mode, Settings, CustomPrompts } from "~types/settings"
+
+// Default custom prompts based on constants
+const DEFAULT_CUSTOM_PROMPTS: CustomPrompts = {
+  systemPrompts: {
+    explain: SYSTEM_PROMPTS.explain,
+    summarize: SYSTEM_PROMPTS.summarize,
+    analyze: SYSTEM_PROMPTS.analyze,
+    translate: SYSTEM_PROMPTS.translate,
+    free: SYSTEM_PROMPTS.free
+  },
+  userPrompts: {
+    explain: typeof USER_PROMPTS.explain === 'function' ? 'What does this mean: ${text}' : USER_PROMPTS.explain,
+    summarize: typeof USER_PROMPTS.summarize === 'function' ? 'Key points from: ${text}' : USER_PROMPTS.summarize,
+    analyze: typeof USER_PROMPTS.analyze === 'function' ? 'Analyze this: ${text}' : USER_PROMPTS.analyze,
+    translate: typeof USER_PROMPTS.translate === 'function' ? 'Translate from ${fromLanguage} to ${toLanguage}:\n${text}' : USER_PROMPTS.translate,
+    free: typeof USER_PROMPTS.free === 'function' ? '${text}' : USER_PROMPTS.free
+  }
+};
 
 // Default settings for new installations
 const DEFAULT_SETTINGS: Settings = {
   modelType: "basic",
   basicModel: "gemini-2.0-flash-lite-preview-02-05",
   preferredModes: ["summarize", "explain", "analyze", "free"],
+  customPrompts: DEFAULT_CUSTOM_PROMPTS,
   customization: {
     showSelectedText: false,
     theme: "light",
@@ -19,7 +38,9 @@ const DEFAULT_SETTINGS: Settings = {
     fontSize: "1rem",
     highlightColor: "default",
     popupAnimation: "scale",
-    persistHighlight: false
+    persistHighlight: false,
+    layoutMode: "floating",
+    contextAwareness: false
   }
 }
 
@@ -35,32 +56,6 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     }
   }
 })
-
-interface Settings {
-  modelType: "local" | "openai" | "gemini" | "xai" | "basic"
-  serverUrl?: string
-  translationSettings?: {
-    fromLanguage: string
-    toLanguage: string
-  }
-  apiKey?: string
-  geminiApiKey?: string
-  xaiApiKey?: string
-  openaiApiKey?: string
-  geminiModel?: string
-  maxTokens?: number
-  basicModel?: string
-  preferredModes?: Mode[]
-  customization?: {
-    showSelectedText: boolean
-    theme: "light" | "dark"
-    radicallyFocus: boolean
-    fontSize: "0.8rem" | "0.9rem" | "1rem"
-    highlightColor: "default" | "orange" | "blue" | "green" | "purple" | "pink"
-    popupAnimation: "none" | "scale" | "fade"
-    persistHighlight: boolean
-  }
-}
 
 let activeConnections = new Map<string, {
   controller: AbortController;
@@ -617,6 +612,24 @@ chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install") {
     // Open onboarding page in a new tab
     chrome.tabs.create({ url: ONBOARDING_URL });
+  }
+});
+
+// Listen for commands
+chrome.commands.onCommand.addListener((command) => {
+  if (command === "open-welcome") {
+    chrome.tabs.create({ url: ONBOARDING_URL });
+  } else if (command === "open-free-popup") {
+    // Get the current active tab
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const activeTab = tabs[0];
+      if (activeTab && activeTab.id) {
+        // Send a message to the content script to open the popup in free mode
+        chrome.tabs.sendMessage(activeTab.id, {
+          type: "OPEN_FREE_POPUP"
+        });
+      }
+    });
   }
 });
 

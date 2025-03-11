@@ -5,6 +5,54 @@ export const processOpenAIText = async function*(request: ProcessTextRequest) {
   const { text, mode, settings, isFollowUp } = request
   
   try {
+    // Get the system prompt (custom or default)
+    const getSystemPrompt = () => {
+      // If custom system prompt is available, use it
+      if (settings.customPrompts?.systemPrompts?.[mode]) {
+        return settings.customPrompts.systemPrompts[mode];
+      }
+      // Otherwise use default
+      return SYSTEM_PROMPTS[mode];
+    };
+
+    // Get the user prompt (custom or default)
+    const getUserPrompt = () => {
+      if (isFollowUp) {
+        return `Context from previous conversation:\n${request.context || ''}\n\nFollow-up question:\n${text}`;
+      }
+      
+      // For translate mode
+      if (mode === "translate") {
+        // Use custom user prompt if available
+        if (settings.customPrompts?.userPrompts?.[mode]) {
+          const customPrompt = settings.customPrompts.userPrompts[mode];
+          return customPrompt
+            .replace('${fromLanguage}', settings.translationSettings?.fromLanguage || "en")
+            .replace('${toLanguage}', settings.translationSettings?.toLanguage || "es")
+            .replace('${text}', text);
+        }
+        
+        // Otherwise use default
+        return typeof USER_PROMPTS.translate === 'function'
+          ? USER_PROMPTS.translate(
+              settings.translationSettings?.fromLanguage || "en",
+              settings.translationSettings?.toLanguage || "es"
+            ) + "\n" + text
+          : text;
+      }
+      
+      // For other modes
+      if (settings.customPrompts?.userPrompts?.[mode]) {
+        // Use custom user prompt if available
+        return settings.customPrompts.userPrompts[mode].replace('${text}', text);
+      }
+      
+      // Otherwise use default
+      return typeof USER_PROMPTS[mode] === 'function'
+        ? USER_PROMPTS[mode](text)
+        : USER_PROMPTS[mode] + "\n" + text;
+    };
+    
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -16,22 +64,11 @@ export const processOpenAIText = async function*(request: ProcessTextRequest) {
         messages: [
           {
             role: "system",
-            content: SYSTEM_PROMPTS[mode]
+            content: getSystemPrompt()
           },
           {
             role: "user",
-            content: isFollowUp
-              ? `Context from previous conversation:\n${request.context || ''}\n\nFollow-up question:\n${text}`
-              : mode === "translate"
-                ? typeof USER_PROMPTS.translate === 'function'
-                  ? USER_PROMPTS.translate(
-                      settings.translationSettings?.fromLanguage || "en",
-                      settings.translationSettings?.toLanguage || "es"
-                    ) + "\n" + text
-                  : text
-                : typeof USER_PROMPTS[mode] === 'function'
-                  ? USER_PROMPTS[mode](text)
-                  : USER_PROMPTS[mode] + "\n" + text
+            content: getUserPrompt()
           }
         ],
         max_tokens: settings.maxTokens || 2048,

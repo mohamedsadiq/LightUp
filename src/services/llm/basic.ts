@@ -66,30 +66,58 @@ export const processBasicText = async function*(request: ProcessTextRequest) {
     const remainingActions = await rateLimitService.useAction()
     logDebug(`Actions remaining: ${remainingActions}`)
     
+    // Get the system prompt (custom or default)
+    const getSystemPrompt = () => {
+      // If custom system prompt is available, use it
+      if (settings.customPrompts?.systemPrompts?.[mode]) {
+        return settings.customPrompts.systemPrompts[mode];
+      }
+      // Otherwise use default
+      return SYSTEM_PROMPTS[mode];
+    };
+
     const getUserPrompt = () => {
       if (isFollowUp) {
         // Include original context and previous conversation for follow-ups
         return `Context from previous conversation:\n${request.context || ''}\n\nFollow-up question:\n${text}`;
       }
       
+      // For translate mode
       if (mode === "translate") {
+        // Use custom user prompt if available
+        if (settings.customPrompts?.userPrompts?.[mode]) {
+          const customPrompt = settings.customPrompts.userPrompts[mode];
+          return customPrompt
+            .replace('${fromLanguage}', settings.translationSettings?.fromLanguage || "en")
+            .replace('${toLanguage}', settings.translationSettings?.toLanguage || "es")
+            .replace('${text}', text);
+        }
+        
+        // Otherwise use default
         const translateFn = USER_PROMPTS.translate as (fromLang: string, toLang: string) => string
         return translateFn(
           settings.translationSettings?.fromLanguage || "en",
           settings.translationSettings?.toLanguage || "es"
-        ) + "\n" + text
+        ) + "\n" + text;
       }
       
-      const prompt = USER_PROMPTS[mode]
-      return typeof prompt === "function" ? prompt(text) : prompt + "\n" + text
-    }
+      // For other modes
+      if (settings.customPrompts?.userPrompts?.[mode]) {
+        // Use custom user prompt if available
+        return settings.customPrompts.userPrompts[mode].replace('${text}', text);
+      }
+      
+      // Otherwise use default
+      const prompt = USER_PROMPTS[mode];
+      return typeof prompt === "function" ? prompt(text) : prompt + "\n" + text;
+    };
     
     const requestBody = {
       contents: [
         {
           role: "user",
           parts: [{
-            text: SYSTEM_PROMPTS[mode]
+            text: getSystemPrompt()
           }]
         },
         {

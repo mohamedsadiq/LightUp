@@ -69,6 +69,13 @@
           "mac": "Command+Shift+W"
         },
         "description": "Open welcome page"
+      },
+      "open-free-popup": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+F",
+          "mac": "Command+Shift+F"
+        },
+        "description": "Open popup in free mode"
       }
     },
     "content_security_policy": {

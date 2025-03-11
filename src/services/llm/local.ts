@@ -2,6 +2,7 @@ import type { ProcessTextRequest } from "~types/messages"
 import { FeedbackProcessor } from "../feedback/feedbackProcessor"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
 import { LANGUAGES } from "../../utils/constants"
+
 export const processLocalText = async function*(request: ProcessTextRequest) {
   const { text, mode, settings } = request
   const feedbackProcessor = new FeedbackProcessor()
@@ -9,13 +10,57 @@ export const processLocalText = async function*(request: ProcessTextRequest) {
   try {
     const { positivePatterns, negativePatterns } = await feedbackProcessor.getFeedbackContext(text)
     
-    const enhancedPrompt = `
-      ${SYSTEM_PROMPTS[mode]}
-      Based on user feedback:
-      - Include patterns like: ${positivePatterns.slice(0, 3).join(', ')}
-      - Avoid patterns like: ${negativePatterns.slice(0, 3).join(', ')}
-      Keep responses under 1500 tokens.
-    `
+    // Get the system prompt (custom or default)
+    const getSystemPrompt = () => {
+      // If custom system prompt is available, use it
+      const customSystemPrompt = settings.customPrompts?.systemPrompts?.[mode];
+      if (customSystemPrompt) {
+        // We still enhance with feedback context
+        return `
+          ${customSystemPrompt}
+          Based on user feedback:
+          - Include patterns like: ${positivePatterns.slice(0, 3).join(', ')}
+          - Avoid patterns like: ${negativePatterns.slice(0, 3).join(', ')}
+          Keep responses under 1500 tokens.
+        `;
+      }
+      
+      // Otherwise use default with feedback enhancement
+      return `
+        ${SYSTEM_PROMPTS[mode]}
+        Based on user feedback:
+        - Include patterns like: ${positivePatterns.slice(0, 3).join(', ')}
+        - Avoid patterns like: ${negativePatterns.slice(0, 3).join(', ')}
+        Keep responses under 1500 tokens.
+      `;
+    };
+
+    // Get the user prompt (custom or default)
+    const getUserPrompt = () => {
+      // For translate mode
+      if (mode === "translate") {
+        // Use custom user prompt if available
+        if (settings.customPrompts?.userPrompts?.[mode]) {
+          const customPrompt = settings.customPrompts.userPrompts[mode];
+          return customPrompt
+            .replace('${fromLanguage}', settings.translationSettings?.fromLanguage || "en")
+            .replace('${toLanguage}', settings.translationSettings?.toLanguage || "es")
+            .replace('${text}', text);
+        }
+        
+        // Otherwise use default
+        return `Translate to ${LANGUAGES[settings.translationSettings?.toLanguage || "es"]}:\n\n${text}`;
+      }
+      
+      // For other modes
+      if (settings.customPrompts?.userPrompts?.[mode]) {
+        // Use custom user prompt if available
+        return settings.customPrompts.userPrompts[mode].replace('${text}', text);
+      }
+      
+      // Otherwise use default
+      return `${USER_PROMPTS[mode]}\n${text}`;
+    };
 
     const response = await fetch(`${settings.serverUrl}/v1/chat/completions`, {
       method: 'POST',
@@ -27,13 +72,11 @@ export const processLocalText = async function*(request: ProcessTextRequest) {
         messages: [
           {
             role: "system",
-            content: enhancedPrompt
+            content: getSystemPrompt()
           },
           {
             role: "user",
-            content: mode === "translate" 
-              ? `Translate to ${LANGUAGES[settings.translationSettings?.toLanguage || "es"]}:\n\n${text}`
-              : `${USER_PROMPTS[mode]}\n${text}`
+            content: getUserPrompt()
           }
         ],
         max_tokens: settings.maxTokens || 2048,

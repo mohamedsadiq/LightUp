@@ -49,6 +49,14 @@ export interface ProcessTextRequest {
       toLanguage: string;
     };
     modelType: ModelType;
+    customPrompts?: {
+      systemPrompts: {
+        [key in Mode]?: string;
+      };
+      userPrompts: {
+        [key in Mode]?: string;
+      };
+    };
   };
   aborted?: boolean;
   isFollowUp?: boolean;
