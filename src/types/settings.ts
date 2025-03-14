@@ -63,6 +63,9 @@ export interface Settings {
   customPrompt?: string
   preferredModes?: Mode[]  // Array of modes to display in the mode selector (max 4)
   customPrompts?: CustomPrompts // Custom prompt templates for each mode
+  requestTimeout?: number  // Request timeout in seconds (default: 30)
+  /** @deprecated Extended conversations are now enabled by default */
+  extendedConversations?: boolean
   customization: {
     showSelectedText: boolean
     theme: "light" | "dark"
@@ -73,6 +76,7 @@ export interface Settings {
     persistHighlight: boolean
     layoutMode: "floating" | "sidebar" | "centered"
     contextAwareness?: boolean // New setting for context awareness
+    activationMode?: "automatic" | "manual" // Controls whether popup shows automatically or requires context menu
   }
   translationSettings?: {
     fromLanguage: string

@@ -55,7 +55,7 @@ function Welcome() {
       highlightColor: "default",
       popupAnimation: "scale",
       persistHighlight: false,
-      layoutMode: "floating"
+      layoutMode: "sidebar"
     }
   })
 

@@ -34,6 +34,7 @@ import { THEME_COLORS } from "~utils/constants"
 import { loadingSkeletonVariants, shimmerVariants, loadingVariants } from "~contents/variants"
 import { getHighlightColor } from "~utils/highlight"
 import ErrorMessage from "~components/common/ErrorMessage"
+import React from "react"
 
 // Import our hooks
 import { useSpeech } from "~hooks/useSpeech"
@@ -127,6 +128,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     });
     
     // Return true to indicate we'll send a response asynchronously
+    return true;
+  }
+  
+  if (message.type === "PROCESS_SELECTED_TEXT") {
+    // This is triggered by the context menu
+    // Create and dispatch a custom event for the context menu selection
+    const event = new CustomEvent('contextMenuSelection', {
+      detail: {
+        text: message.selectionText,
+        x: window.innerWidth / 2,
+        y: window.innerHeight / 2,
+        fromContextMenu: true // Add a flag to indicate this is from the context menu
+      }
+    });
+    window.dispatchEvent(event);
+    
+    // Send response to confirm receipt
+    sendResponse({ success: true });
     return true;
   }
   
@@ -247,13 +266,159 @@ const answerBubbleStyle: MotionStyle = {
   lineHeight: '13px'
 };
 
+// Add this near the top of the file, after imports
+interface FollowUpInputProps {
+  inputRef: React.RefObject<HTMLTextAreaElement>;
+  followUpQuestion: string;
+  handleFollowUpQuestion: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  handleAskFollowUpWrapper: () => void;
+  isAskingFollowUp: boolean;
+  setIsInputFocused: (focused: boolean) => void;
+  themedStyles: any; // Use the actual type if available
+  currentTheme: "light" | "dark";
+}
+
+const FollowUpInput = React.memo(({ 
+  inputRef, 
+  followUpQuestion, 
+  handleFollowUpQuestion, 
+  handleAskFollowUpWrapper, 
+  isAskingFollowUp, 
+  setIsInputFocused,
+  themedStyles,
+  currentTheme
+}: FollowUpInputProps) => {
+  // Add useRef for tracking textarea height
+  const textareaHeight = useRef<number>(0);
+  const initialHeight = 24; // Reduced initial height in pixels (was 38)
+  const maxHeight = initialHeight * 2; // Maximum height is double the initial height
+  
+  // Function to auto-resize the textarea
+  const autoResizeTextarea = () => {
+    if (inputRef.current) {
+      // Reset height temporarily to get the correct scrollHeight
+      inputRef.current.style.height = `${initialHeight}px`;
+      
+      // Calculate new height based on content
+      const scrollHeight = inputRef.current.scrollHeight;
+      const newHeight = Math.min(scrollHeight, maxHeight);
+      
+      // Only adjust height if content requires more space
+      if (scrollHeight > initialHeight) {
+        inputRef.current.style.height = `${newHeight}px`;
+        // Add scrollbar if content exceeds max height
+        inputRef.current.style.overflowY = newHeight >= maxHeight ? 'auto' : 'hidden';
+      } else {
+        // Keep at initial height if content is small
+        inputRef.current.style.height = `${initialHeight}px`;
+        inputRef.current.style.overflowY = 'hidden';
+      }
+      
+      // Store the current height
+      textareaHeight.current = newHeight;
+    }
+  };
+  
+  // Resize on content change
+  useEffect(() => {
+    autoResizeTextarea();
+  }, [followUpQuestion]);
+  
+  return (
+    <div style={{
+      ...themedStyles.followUpInputContainer,
+      marginTop: '8px',
+      paddingTop: '8px',
+    }}>
+      <div style={themedStyles.searchContainer}>
+        <textarea
+          ref={inputRef}
+          value={followUpQuestion}
+          onChange={handleFollowUpQuestion}
+          onKeyDown={(e) => {
+            e.stopPropagation();
+            if (e.key === 'Enter' && !e.shiftKey) {
+              e.preventDefault(); // Prevent default to avoid new line
+              handleAskFollowUpWrapper();
+            }
+          }}
+          placeholder="Ask anything..."
+          style={{
+            ...themedStyles.input,
+            opacity: isAskingFollowUp ? 0.7 : 1,
+            resize: 'none', // Disable manual resizing
+            height: `${initialHeight}px`, // Set initial height
+            minHeight: `${initialHeight}px`, // Ensure minimum height
+            maxHeight: `${maxHeight}px`, // Set maximum height
+            overflowY: 'hidden', // Hide scrollbar initially
+            lineHeight: `${initialHeight}px`, // Match line-height to height for vertical centering
+            padding: '0 8px', // Remove vertical padding, keep horizontal
+            display: 'block', // Use block display
+          }}
+          disabled={isAskingFollowUp}
+          onFocus={() => setIsInputFocused(true)}
+          onBlur={() => setIsInputFocused(false)}
+          rows={1} // Start with one row
+        />
+        <motion.button
+          onClick={handleAskFollowUpWrapper}
+          disabled={!followUpQuestion.trim() || isAskingFollowUp}
+          whileHover={{ scale: 1.05, rotate: 5 }}
+          whileTap={{ scale: 0.95 }}
+          animate={isAskingFollowUp ? { scale: 0.9, opacity: 0.7 } : { scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          style={themedStyles.searchSendButton}
+        >
+          {isAskingFollowUp ? (
+            <motion.svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+            >
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </motion.svg>
+          ) : (
+            <motion.svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none"
+              initial={{ scale: 1 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0 }}
+            >
+              <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </motion.svg>
+          )}
+        </motion.button>
+      </div>
+    </div>
+  );
+}, (prevProps: FollowUpInputProps, nextProps: FollowUpInputProps) => {
+  // Custom comparison function to prevent unnecessary re-renders
+  return (
+    prevProps.followUpQuestion === nextProps.followUpQuestion &&
+    prevProps.isAskingFollowUp === nextProps.isAskingFollowUp
+  );
+});
+
 function Content() {
   // Generate a stable connection ID
   const [connectionId] = useState(() => uuidv4());
   const [highlightedRanges, setHighlightedRanges] = useState<Range[]>([]);
   
   // Add ref for the input element
-  const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLTextAreaElement>(null);
   
   // Use our custom hooks
   const { settings, setSettings, isConfigured, currentTheme, targetLanguage, fontSize } = useSettings();
@@ -386,9 +551,11 @@ function Content() {
     streamingText,
     isLoading,
     error,
+    connectionStatus,
     setStreamingText,
     setIsLoading,
-    setError
+    setError,
+    reconnect
   } = usePort(
     connectionId,
     (id, content) => {
@@ -403,16 +570,16 @@ function Content() {
       setActiveAnswerId(null);
       setIsAskingFollowUp(false);
       
-      // Add auto-focus to the input field after response is complete
+      // Add auto-focus to the textarea field after response is complete
       setTimeout(() => {
         // Try to focus using the ref first
         if (inputRef.current) {
           inputRef.current.focus();
         } else {
           // Fallback to querySelector if ref is not available
-          const inputElement = document.querySelector('[data-plasmo-popup] input[type="text"]');
-          if (inputElement instanceof HTMLInputElement) {
-            inputElement.focus();
+          const textareaElement = document.querySelector('[data-plasmo-popup] textarea');
+          if (textareaElement instanceof HTMLTextAreaElement) {
+            textareaElement.focus();
           }
         }
       }, 100);
@@ -615,41 +782,10 @@ function Content() {
     setHighlightedRanges([]);
   };
 
-  // Modify handleSelection to handle persistent highlighting
+  // Modify handleSelection to be a no-op
   const handleSelection = async (event: MouseEvent) => {
-    if (!isEnabled) return;
-    
-    // Check if the click is inside the popup
-    const popup = document.querySelector('[data-plasmo-popup]');
-    if (popup?.contains(event.target as Node)) {
-      return;
-    }
-    
-    const selection = window.getSelection();
-    if (!selection || selection.isCollapsed) {
-      return;
-    }
-
-    const text = selection.toString().trim();
-    if (!text) {
-      return;
-    }
-
-    // Calculate position
-    const { top, left } = calculatePosition(event.clientX, event.clientY);
-    setPosition({ x: left, y: top });
-    setSelectedText(text);
-    setIsVisible(true);
-    
-    // For Reddit: ensure the popup is visible after it's created
-    if (isReddit) {
-      setTimeout(() => {
-        const popupElement = document.querySelector('[data-plasmo-popup]');
-        if (popupElement instanceof HTMLElement) {
-          popupElement.style.visibility = 'visible';
-        }
-      }, 0);
-    }
+    // This function is no longer used - we rely on the usePopup hook's implementation
+    return;
   };
 
   // Add cleanup effect for highlights when settings change
@@ -666,10 +802,33 @@ function Content() {
     };
   }, []);
 
+  // Add event listener for highlight events from usePopup
   useEffect(() => {
-    document.addEventListener('mouseup', handleSelection);
-    return () => document.removeEventListener('mouseup', handleSelection);
-  }, [isEnabled, isInteractingWithPopup, mode, settings, port, connectionId]);
+    const handleHighlightEvent = (event: CustomEvent) => {
+      if (!settings?.customization?.persistHighlight) return;
+      
+      try {
+        const { selection, color } = event.detail;
+        if (!selection) return;
+        
+        // Apply highlight to each range in the selection
+        const ranges = [];
+        for (let i = 0; i < selection.rangeCount; i++) {
+          const range = selection.getRangeAt(i);
+          const span = applyHighlightToRange(range, color);
+          ranges.push({ range, span });
+        }
+        
+        // Store the highlighted ranges
+        setHighlightedRanges([...highlightedRanges, ...ranges]);
+      } catch (e) {
+        console.error("Failed to apply highlight:", e);
+      }
+    };
+    
+    window.addEventListener('applyHighlight', handleHighlightEvent as EventListener);
+    return () => window.removeEventListener('applyHighlight', handleHighlightEvent as EventListener);
+  }, [settings?.customization?.persistHighlight, highlightedRanges]);
 
   // Update conversation when receiving response
   useEffect(() => {
@@ -685,9 +844,81 @@ function Content() {
     }
   }, [isVisible, clearConversation]);
 
-  // Helper function to render popup content
+  // Add a function to handle reconnection
+  const handleReconnect = () => {
+    setError(null);
+    reconnect();
+    
+    // If we were in the middle of processing text, retry
+    if (selectedText && mode) {
+      setIsLoading(true);
+      setTimeout(() => {
+        try {
+          if (port) {
+            port.postMessage({
+              type: "PROCESS_TEXT",
+              payload: {
+                text: selectedText,
+                context: "",
+                pageContext: "",
+                mode: mode,
+                settings: settings,
+                isFollowUp: false,
+                id: Date.now(),
+                connectionId
+              }
+            });
+          }
+        } catch (err) {
+          setError("Failed to reconnect. Please try again.");
+          setIsLoading(false);
+        }
+      }, 500); // Small delay to ensure port is reconnected
+    }
+  };
+
+  // Add a connection status indicator component
+  const ConnectionStatus = () => {
+    if (connectionStatus === 'connected') return null;
+    
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -10 }}
+        className="absolute top-2 right-2 z-50"
+      >
+        <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${
+          connectionStatus === 'connecting' 
+            ? 'bg-yellow-100 text-yellow-800' 
+            : 'bg-red-100 text-red-800'
+        }`}>
+          <span className={`w-2 h-2 rounded-full ${
+            connectionStatus === 'connecting' 
+              ? 'bg-yellow-500 animate-pulse' 
+              : 'bg-red-500'
+          }`}></span>
+          {connectionStatus === 'connecting' ? 'Connecting...' : 'Disconnected'}
+          {connectionStatus === 'disconnected' && (
+            <button 
+              onClick={handleReconnect}
+              className="ml-1 underline text-blue-600 hover:text-blue-800"
+            >
+              Reconnect
+            </button>
+          )}
+        </div>
+      </motion.div>
+    );
+  };
+
+  // Render popup content
   const renderPopupContent = () => (
     <>
+      <div style={{ position: 'relative' }}>
+        <ConnectionStatus />
+      </div>
+      
       {/* Header */}
       <div style={themedStyles.buttonContainerParent}>
         <motion.div style={{ marginLeft: '-6px', boxShadow: 'none !important' }} >
@@ -1294,76 +1525,16 @@ function Content() {
             <div style={{ flexGrow: 1 }}></div>
 
             {/* Input section - now at the bottom */}
-            <div style={{
-              ...themedStyles.followUpInputContainer,
-              marginTop: '8px',
-              paddingTop: '8px',
-              // background: `linear-gradient(180deg, transparent 0%, ${THEME_COLORS[currentTheme].background}80 30%, ${THEME_COLORS[currentTheme].background} 100%)`,
-            }}>
-              <div style={themedStyles.searchContainer}>
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={followUpQuestion}
-                  onChange={handleFollowUpQuestion}
-                  onKeyDown={(e) => {
-                    e.stopPropagation();
-                    if (e.key === 'Enter') {
-                      handleAskFollowUpWrapper();
-                    }
-                  }}
-                  placeholder="Ask anything..."
-                  style={{
-                    ...themedStyles.input,
-                    opacity: isAskingFollowUp ? 0.7 : 1,
-                  }}
-                  disabled={isAskingFollowUp}
-                  onFocus={() => setIsInputFocused(true)}
-                  onBlur={() => setIsInputFocused(false)}
-                />
-                <motion.button
-                  onClick={handleAskFollowUpWrapper}
-                  disabled={!followUpQuestion.trim() || isAskingFollowUp}
-                  whileHover={{ scale: 1.05, rotate: 5 }}
-                  whileTap={{ scale: 0.95 }}
-                  animate={isAskingFollowUp ? { scale: 0.9, opacity: 0.7 } : { scale: 1, opacity: 1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  style={themedStyles.searchSendButton}
-                >
-                  {isAskingFollowUp ? (
-                    <motion.svg 
-                      width="20" 
-                      height="20" 
-                      viewBox="0 0 24 24" 
-                      fill="none"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    >
-                      <path
-                        d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </motion.svg>
-                  ) : (
-                    <motion.svg 
-                      width="20" 
-                      height="20" 
-                      viewBox="0 0 24 24" 
-                      fill="none"
-                      initial={{ scale: 1 }}
-                      animate={{ scale: 1 }}
-                      exit={{ scale: 0 }}
-                    >
-                      <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </motion.svg>
-                  )}
-                </motion.button>
-              </div>
-            </div>
+            <FollowUpInput
+              inputRef={inputRef}
+              followUpQuestion={followUpQuestion}
+              handleFollowUpQuestion={handleFollowUpQuestion}
+              handleAskFollowUpWrapper={handleAskFollowUpWrapper}
+              isAskingFollowUp={isAskingFollowUp}
+              setIsInputFocused={setIsInputFocused}
+              themedStyles={themedStyles}
+              currentTheme={currentTheme}
+            />
           </motion.div>
         )}
       </AnimatePresence>

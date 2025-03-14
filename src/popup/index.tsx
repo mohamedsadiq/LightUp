@@ -348,7 +348,15 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
               checked={settings.customization?.persistHighlight ?? false}
               onChange={(e) => updateSettings('persistHighlight', e.target.checked)}
               label="Persistent Highlighting"
-              description="Keep text highlighted after selection"
+              description="Keep text highlighted after closing popup"
+            />
+
+            <Switch
+              id="activation-mode"
+              checked={(settings.customization?.activationMode ?? "automatic") === "automatic"}
+              onChange={(e) => updateSettings('activationMode', e.target.checked ? "automatic" : "manual")}
+              label="Automatic Activation"
+              description="Show popup automatically when text is selected (or use right-click menu when disabled)"
             />
           </div>
 
@@ -758,6 +766,11 @@ function IndexPopup() {
             </div>
             <div className="flex items-center gap-2">
               <div className="relative group">
+                <div className="absolute -top-2 right-0">
+                  <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-medium rounded-full bg-black text-white">
+                    new
+                  </span>
+                </div>
                 <button 
                   onClick={() => setShowSettings(true)}
                   className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-200/50 transition-colors"
@@ -792,6 +805,11 @@ function IndexPopup() {
                 </div>
               </div>
               <div className="relative group">
+                <div className="absolute -top-2 right-0">
+                  <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-medium rounded-full bg-black text-white">
+                    new
+                  </span>
+                </div>
                 <button 
                   onClick={handleOpenPromptTemplates}
                   className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-200/50 transition-colors"

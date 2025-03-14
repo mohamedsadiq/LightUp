@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { calculatePosition } from '../utils/position';
 import { Storage } from "@plasmohq/storage";
 import type { Mode, Settings } from '~types/settings';
+import { getHighlightColor } from '~utils/highlight';
 
 // Check if we're on Reddit
 const isReddit = typeof window !== 'undefined' && window.location.hostname.includes('reddit.com');
@@ -149,12 +150,41 @@ export const usePopup = (
         return;
       }
 
+      // Apply persistent highlighting if enabled
+      if (settings?.customization?.persistHighlight && selection) {
+        try {
+          // Get the highlight color from settings
+          const highlightColor = settings?.customization?.highlightColor || 'default';
+          const color = getHighlightColor(highlightColor);
+          
+          // Create a custom event to trigger highlighting
+          const highlightEvent = new CustomEvent('applyHighlight', { 
+            detail: { 
+              selection,
+              color
+            } 
+          });
+          window.dispatchEvent(highlightEvent);
+        } catch (e) {
+          console.error("Failed to highlight selection:", e);
+        }
+      }
+
+      // Check if we're in manual activation mode
+      if (settings?.customization?.activationMode === "manual") {
+        // In manual mode, just save the selected text but don't show popup
+        setSelectedText(text);
+        return;
+      }
+
       // Clear previous results
       setStreamingText?.("");
       setFollowUpQAs?.([]);
       setError?.(null);
 
       // Calculate position and show popup
+      // We pass the mouse position, but the calculatePosition function will
+      // prioritize using the selection's bounding rectangle when available
       const { top, left } = calculatePosition(event.clientX, event.clientY);
       setPosition({ x: left, y: top });
       setSelectedText(text);
@@ -201,6 +231,88 @@ export const usePopup = (
     document.addEventListener('mouseup', handleSelection);
     return () => document.removeEventListener('mouseup', handleSelection);
   }, [isEnabled, isInteractingWithPopup, mode, settings, port, connectionId]);
+
+  // Handle context menu text processing
+  useEffect(() => {
+    const handleContextMenuSelection = async (event: CustomEvent) => {
+      if (!isEnabled) return;
+      
+      const text = event.detail?.text || '';
+      if (!text) return;
+
+      // Check if we're in manual mode and this is not from the context menu
+      if (settings?.customization?.activationMode === "manual" && !event.detail?.fromContextMenu) {
+        // In manual mode, we only process text from the context menu
+        return;
+      }
+
+      // Apply persistent highlighting if enabled
+      if (settings?.customization?.persistHighlight && window.getSelection()) {
+        try {
+          // Get the highlight color from settings
+          const highlightColor = settings?.customization?.highlightColor || 'default';
+          const color = getHighlightColor(highlightColor);
+          
+          // Create a custom event to trigger highlighting
+          const highlightEvent = new CustomEvent('applyHighlight', { 
+            detail: { 
+              selection: window.getSelection(),
+              color
+            } 
+          });
+          window.dispatchEvent(highlightEvent);
+        } catch (e) {
+          console.error("Failed to highlight selection:", e);
+        }
+      }
+
+      // Clear previous results
+      setStreamingText?.("");
+      setFollowUpQAs?.([]);
+      setError?.(null);
+
+      // Calculate position based on mouse position or center of screen if not available
+      // The calculatePosition function will prioritize using the selection's bounding rectangle when available
+      const mouseX = event.detail?.x || window.innerWidth / 2;
+      const mouseY = event.detail?.y || window.innerHeight / 2;
+      const { top, left } = calculatePosition(mouseX, mouseY);
+      
+      setPosition({ x: left, y: top });
+      setSelectedText(text);
+      setIsVisible(true);
+      setIsLoading?.(true);
+
+      try {
+        if (!port) {
+          throw new Error('Connection not established');
+        }
+
+        const storage = new Storage();
+        const translationSettings = await storage.get("translationSettings");
+
+        port.postMessage({
+          type: "PROCESS_TEXT",
+          payload: {
+            text,
+            mode,
+            settings: {
+              ...settings,
+              translationSettings
+            },
+            connectionId,
+            id: Date.now()
+          }
+        });
+      } catch (err) {
+        setError?.('Failed to process text');
+        setIsLoading?.(false);
+      }
+    };
+
+    // Listen for context menu events
+    window.addEventListener('contextMenuSelection', handleContextMenuSelection as EventListener);
+    return () => window.removeEventListener('contextMenuSelection', handleContextMenuSelection as EventListener);
+  }, [isEnabled, mode, settings, port, connectionId]);
 
   // Handle blur effect
   useEffect(() => {
@@ -277,6 +389,7 @@ export const usePopup = (
         setPosition({ x: (window.innerWidth / 2) - 250, y: (window.innerHeight / 2) - 200 });
       } else {
         // Default floating mode - position near the center
+        // For free mode, we don't have a selection, so this will use the fallback positioning
         const { top, left } = calculatePosition(window.innerWidth / 2, window.innerHeight / 2);
         setPosition({ x: left, y: top });
       }
@@ -332,6 +445,7 @@ export const usePopup = (
       setIsLoading?.(false);
       setSelectedText("");
       setIsVisible(true);
+      // For free mode, we don't have a selection, so this will use the fallback positioning
       const { top, left } = calculatePosition(window.innerWidth / 2, window.innerHeight / 2);
       setPosition({ x: left, y: top });
       return;

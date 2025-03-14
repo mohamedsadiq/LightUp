@@ -323,7 +323,7 @@ function IndexOptions() {
       highlightColor: "default",
       popupAnimation: "scale",
       persistHighlight: false,
-      layoutMode: "floating"
+      layoutMode: "sidebar"
     }
   });
 
@@ -355,7 +355,7 @@ function IndexOptions() {
               highlightColor: savedSettings.customization?.highlightColor ?? "default",
               popupAnimation: savedSettings.customization?.popupAnimation ?? "scale",
               persistHighlight: savedSettings.customization?.persistHighlight ?? false,
-              layoutMode: savedSettings.customization?.layoutMode ?? "floating",
+              layoutMode: savedSettings.customization?.layoutMode ?? "sidebar",
               contextAwareness: savedSettings.customization?.contextAwareness ?? false
             }
           });
@@ -651,7 +651,7 @@ function IndexOptions() {
               </p>
             </div>
           </div>
-          <Badge variant="success">v0.1.5</Badge>
+          <Badge variant="success">v0.1.7</Badge>
         </motion.div>
 
         <div className="grid gap-6">
@@ -1007,6 +1007,31 @@ function IndexOptions() {
                 description="Keep text highlighted after selection"
               />
 
+              {/* Request Timeout Setting */}
+              <div className="space-y-2">
+                <label className="block text-gray-800 font-medium text-base">Request Timeout</label>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="range"
+                    min="10"
+                    max="180"
+                    step="10"
+                    value={settings.requestTimeout || 30}
+                    onChange={(e) => setSettings(prev => ({
+                      ...prev,
+                      requestTimeout: parseInt(e.target.value)
+                    }))}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#10a37f]"
+                  />
+                  <span className="text-sm font-medium text-gray-700 min-w-[60px]">
+                    {`${settings.requestTimeout || 30} sec`}
+                  </span>
+                </div>
+                <p className="text-sm text-gray-500">
+                  Base timeout for AI responses. LightUp automatically extends this for longer conversations.
+                </p>
+              </div>
+
               {/* Font Size Selection */}
               <div className="space-y-2">
                 <label className="block text-gray-800 font-medium text-base">Font Size</label>
@@ -1291,7 +1316,7 @@ function IndexOptions() {
               {saveSuccess && (
                 <div className="flex items-center justify-center text-green-600 bg-green-50 py-2 px-4 rounded-lg w-full">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 010 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   Settings saved successfully!
                 </div>

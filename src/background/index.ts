@@ -39,8 +39,9 @@ const DEFAULT_SETTINGS: Settings = {
     highlightColor: "default",
     popupAnimation: "scale",
     persistHighlight: false,
-    layoutMode: "floating",
-    contextAwareness: false
+    layoutMode: "sidebar",
+    contextAwareness: false,
+    activationMode: "automatic"
   }
 }
 
@@ -131,7 +132,7 @@ const isConfigurationValid = (settings: Settings): boolean => {
       case "local":
         return !!settings.serverUrl;
       case "openai": {
-        const openaiKey = settings.openaiApiKey || settings.apiKey;
+        const openaiKey = settings.apiKey;
         return !!openaiKey && (
           openaiKey.startsWith('sk-') || 
           openaiKey.startsWith('org-') || 
@@ -172,6 +173,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
   const connectionId = port.name.split('text-processing-')[1];
   const abortController = new AbortController();
   let timeoutId: NodeJS.Timeout;
+  let heartbeatInterval: NodeJS.Timeout;
   
   try {
     const settings = await waitForSettings();
@@ -179,12 +181,36 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       throw new Error("Failed to initialize settings. Please try again.");
     }
 
-    // Set up request timeout
-    const timeout = new Promise((_, reject) => {
+    // Set up connection monitoring based on settings
+    const setupConnectionMonitoring = () => {
+      // Always send heartbeat messages to keep the connection alive
+      heartbeatInterval = setInterval(() => {
+        try {
+          port.postMessage({
+            type: 'heartbeat',
+            timestamp: Date.now()
+          });
+        } catch (e) {
+          // If we can't send a heartbeat, the connection is probably dead
+          clearInterval(heartbeatInterval);
+          abortController.abort();
+        }
+      }, 15000); // Every 15 seconds
+
+      // Always use extended conversations approach with a very long timeout
+      // Set a very long timeout as a fallback (30 minutes)
       timeoutId = setTimeout(() => {
-        reject(new Error("Request timed out. Please try again."));
-      }, 30000);
-    });
+        abortController.abort();
+        port.postMessage({
+          type: 'error',
+          error: "The request has been running for too long (30 minutes). It has been automatically stopped to conserve resources.",
+          isFollowUp: request.isFollowUp,
+          id: request.id
+        });
+      }, 30 * 60 * 1000); // 30 minutes
+    };
+
+    setupConnectionMonitoring();
 
     activeConnections.set(connectionId, {
       controller: abortController,
@@ -193,7 +219,26 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
     const { mode, text, context, isFollowUp, settings: requestSettings, conversationContext } = request;
     
-    if (!isConfigurationValid(requestSettings)) {
+    // Fix the linter error by creating a valid Settings object for validation
+    const validationSettings: Settings = {
+      modelType: requestSettings.modelType,
+      apiKey: requestSettings.apiKey,
+      serverUrl: requestSettings.serverUrl,
+      geminiApiKey: requestSettings.geminiApiKey,
+      xaiApiKey: requestSettings.xaiApiKey,
+      customization: {
+        showSelectedText: true,
+        theme: "light",
+        radicallyFocus: false,
+        fontSize: "1rem",
+        highlightColor: "default",
+        popupAnimation: "scale",
+        persistHighlight: false,
+        layoutMode: "sidebar"
+      }
+    };
+    
+    if (!isConfigurationValid(validationSettings)) {
       throw new Error(
         `Invalid configuration for ${requestSettings?.modelType?.toUpperCase() || 'AI model'}.\n` +
         'Please check your settings and try again.'
@@ -209,7 +254,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     }
 
     // Check rate limits based on API key
-    const apiKey = requestSettings.geminiApiKey || requestSettings.xaiApiKey || requestSettings.apiKey || requestSettings.openaiApiKey;
+    const apiKey = requestSettings.geminiApiKey || requestSettings.xaiApiKey || requestSettings.apiKey;
     if (apiKey) {
       checkRateLimit(apiKey);
     }
@@ -586,11 +631,24 @@ Guidelines:
     console.error("Error processing text:", error);
     
     // Send user-friendly error message
-    const userMessage = error.message.includes("rate limit")
-      ? error.message
-      : error.message.includes("timeout")
-      ? "Request timed out. Please try again."
-      : "An error occurred while processing your request. Please try again.";
+    let userMessage = "An error occurred while processing your request. Please try again.";
+    
+    if (error.message?.includes("rate limit")) {
+      userMessage = error.message;
+    } 
+    else if (error.message?.includes("timeout")) {
+      userMessage = "The request is taking longer than expected. You can try again with a smaller text selection or check your internet connection.";
+    }
+    else if (error.message?.includes("Server responded with")) {
+      // For API server errors, provide more context
+      userMessage = `API server error: ${error.message}. This might be a temporary issue with the AI provider.`;
+    }
+    else if (error.message?.includes("Failed to fetch") || error.message?.includes("NetworkError")) {
+      userMessage = "Network connection error. Please check your internet connection and try again.";
+    }
+    else if (error.message?.includes("aborted")) {
+      userMessage = "The request was cancelled. This might be due to a connection issue or because you navigated away.";
+    }
 
     port.postMessage({
       type: 'error',
@@ -601,17 +659,46 @@ Guidelines:
   } finally {
     // Clean up
     clearTimeout(timeoutId);
+    if (heartbeatInterval) clearInterval(heartbeatInterval);
     activeConnections.delete(connectionId);
   }
 }
 
 const ONBOARDING_URL = "https://www.boimaginations.com/lightup/welcome" // Replace with your actual onboarding URL
 
+// Create context menu item for manual activation
+const createContextMenu = () => {
+  // Remove existing items to avoid duplicates
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({
+      id: "lightup-process-text",
+      title: "Process with LightUp",
+      contexts: ["selection"],
+    });
+  });
+};
+
+// Handle context menu clicks
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  if (info.menuItemId === "lightup-process-text" && tab?.id) {
+    chrome.tabs.sendMessage(tab.id, {
+      type: "PROCESS_SELECTED_TEXT",
+      selectionText: info.selectionText
+    });
+  }
+});
+
 // Listen for extension installation
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install") {
     // Open onboarding page in a new tab
     chrome.tabs.create({ url: ONBOARDING_URL });
+    
+    // Create context menu
+    createContextMenu();
+  } else {
+    // Also create context menu on update or other events
+    createContextMenu();
   }
 });
 
