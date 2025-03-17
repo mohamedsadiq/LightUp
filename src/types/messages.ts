@@ -15,6 +15,7 @@ export interface ConversationContext {
   lastAnswer?: string;
   entities: Entity[];
   activeEntity: Entity | null;
+  currentTopic: Entity | null;
   history: {
     role: "user" | "assistant";
     content: string;

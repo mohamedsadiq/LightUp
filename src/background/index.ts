@@ -63,16 +63,16 @@ let activeConnections = new Map<string, {
   timestamp: number;
 }>();
 
-// Clean up old connections periodically
+// Extend cleanup interval to 4 hours instead of 1 hour
 setInterval(() => {
   const now = Date.now();
   for (const [id, connection] of activeConnections.entries()) {
-    if (now - connection.timestamp > 1000 * 60 * 60) { // 1 hour timeout
+    if (now - connection.timestamp > 1000 * 60 * 240) { // 4 hours timeout
       connection.controller.abort();
       activeConnections.delete(id);
     }
   }
-}, 1000 * 60 * 5); // Check every 5 minutes
+}, 1000 * 60 * 60); // Check every hour
 
 // Add rate limiting constants
 const RATE_LIMITS = {
@@ -172,7 +172,6 @@ const waitForSettings = async (maxAttempts = 3, delayMs = 1000): Promise<Setting
 export async function handleProcessText(request: ProcessTextRequest, port: chrome.runtime.Port) {
   const connectionId = port.name.split('text-processing-')[1];
   const abortController = new AbortController();
-  let timeoutId: NodeJS.Timeout;
   let heartbeatInterval: NodeJS.Timeout;
   
   try {
@@ -181,9 +180,8 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       throw new Error("Failed to initialize settings. Please try again.");
     }
 
-    // Set up connection monitoring based on settings
+    // Set up connection monitoring with longer intervals
     const setupConnectionMonitoring = () => {
-      // Always send heartbeat messages to keep the connection alive
       heartbeatInterval = setInterval(() => {
         try {
           port.postMessage({
@@ -191,23 +189,10 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
             timestamp: Date.now()
           });
         } catch (e) {
-          // If we can't send a heartbeat, the connection is probably dead
           clearInterval(heartbeatInterval);
           abortController.abort();
         }
-      }, 15000); // Every 15 seconds
-
-      // Always use extended conversations approach with a very long timeout
-      // Set a very long timeout as a fallback (30 minutes)
-      timeoutId = setTimeout(() => {
-        abortController.abort();
-        port.postMessage({
-          type: 'error',
-          error: "The request has been running for too long (30 minutes). It has been automatically stopped to conserve resources.",
-          isFollowUp: request.isFollowUp,
-          id: request.id
-        });
-      }, 30 * 60 * 1000); // 30 minutes
+      }, 30000);
     };
 
     setupConnectionMonitoring();
@@ -219,6 +204,26 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
     const { mode, text, context, isFollowUp, settings: requestSettings, conversationContext } = request;
     
+    // Enhanced context handling
+    let enhancedContext = conversationContext;
+    if (isFollowUp && conversationContext) {
+      // Load the stored context from storage
+      const storage = new Storage();
+      const storedContext = await storage.get<ConversationContext>("conversationContext");
+      
+      // Merge stored context with current context if available
+      if (storedContext) {
+        enhancedContext = {
+          ...storedContext,
+          history: [...storedContext.history, ...conversationContext.history],
+          entities: [...storedContext.entities, ...conversationContext.entities.filter(e => 
+            !storedContext.entities.some(se => se.name === e.name)
+          )],
+          activeEntity: conversationContext.activeEntity || storedContext.activeEntity
+        };
+      }
+    }
+
     // Fix the linter error by creating a valid Settings object for validation
     const validationSettings: Settings = {
       modelType: requestSettings.modelType,
@@ -247,7 +252,10 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
     // Process text based on model type
     if (requestSettings.modelType === "basic") {
-      for await (const chunk of processBasicText(request)) {
+      for await (const chunk of processBasicText({
+        ...request,
+        conversationContext: enhancedContext
+      })) {
         port.postMessage(chunk);
       }
       return;
@@ -658,8 +666,7 @@ Guidelines:
     });
   } finally {
     // Clean up
-    clearTimeout(timeoutId);
-    if (heartbeatInterval) clearInterval(heartbeatInterval);
+    clearInterval(heartbeatInterval);
     activeConnections.delete(connectionId);
   }
 }

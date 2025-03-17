@@ -483,6 +483,7 @@ function IndexPopup() {
   const [showModeConfig, setShowModeConfig] = useState(false)
   const [preferredModes, setPreferredModes] = useState<Mode[]>(["summarize", "explain", "analyze", "free"])
   const [showSettings, setShowSettings] = useState(false)
+  const [showFeatureNotification, setShowFeatureNotification] = useState(true)
   const storage = new Storage()
   const { settings, setSettings } = useSettings()
   const isContextAwareEnabled = settings?.customization && 'contextAwareness' in settings.customization 
@@ -499,6 +500,7 @@ function IndexPopup() {
         const savedMode = await storage.get("mode") as Mode
         const savedTranslationSettings = await storage.get("translationSettings") as TranslationSettings
         const savedPreferredModes = await storage.get("preferredModes") as Mode[] | undefined
+        const featureNotificationDismissed = await storage.get("featureNotificationDismissed") as boolean
         
         console.log("Saved mode:", savedMode)
         console.log("Saved translation settings:", savedTranslationSettings)
@@ -513,6 +515,9 @@ function IndexPopup() {
         }
         if (savedPreferredModes && savedPreferredModes.length > 0) {
           setPreferredModes(savedPreferredModes)
+        }
+        if (featureNotificationDismissed) {
+          setShowFeatureNotification(false)
         }
       } catch (error) {
         console.error("Error loading settings:", error)
@@ -727,6 +732,11 @@ function IndexPopup() {
     });
   }
 
+  const dismissFeatureNotification = async () => {
+    setShowFeatureNotification(false)
+    await storage.set("featureNotificationDismissed", true)
+  }
+
   return (
     <div className="w-[600px] h-[500px] font-['K2D'] bg-[#E9E9E9] relative overflow-hidden">
       {/* Toast notification for settings saved */}
@@ -828,6 +838,39 @@ function IndexPopup() {
               </div>
             </div>
           </div>
+
+          {/* New Feature Announcement */}
+          {showFeatureNotification && (
+            <div className="mx-4 mt-2 p-3 bg-[#10a37f]/10 border border-[#10a37f]/20 rounded-lg flex items-start gap-3">
+              <div className="flex-shrink-0 p-1 bg-[#10a37f] rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-[#10a37f]">New Feature: Automatic Activation</h3>
+                <p className="text-xs text-gray-600 mt-1">
+                  You can now enable or disable automatic popup activation when text is selected. When disabled, use right-click and select from the context menu instead.
+                  <button 
+                    onClick={() => setShowSettings(true)} 
+                    className="mt-1 text-[#10a37f] hover:underline font-medium"
+                  >
+                    Configure in settings →
+                  </button>
+                </p>
+              </div>
+              <button 
+                onClick={dismissFeatureNotification} 
+                className="ml-auto text-gray-400 hover:text-gray-600"
+                aria-label="Dismiss notification"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          )}
+
           <div className="bg-[#E9E9E9] p-6 flex-1 overflow-y-auto">
             <div className="flex items-center justify-between gap-2 mb-6">
               <h2 className="text-xl font-medium text-black flex items-center gap-2">

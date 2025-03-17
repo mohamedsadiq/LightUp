@@ -323,7 +323,8 @@ function IndexOptions() {
       highlightColor: "default",
       popupAnimation: "scale",
       persistHighlight: false,
-      layoutMode: "sidebar"
+      layoutMode: "sidebar",
+      activationMode: "manual"
     }
   });
 
@@ -356,7 +357,8 @@ function IndexOptions() {
               popupAnimation: savedSettings.customization?.popupAnimation ?? "scale",
               persistHighlight: savedSettings.customization?.persistHighlight ?? false,
               layoutMode: savedSettings.customization?.layoutMode ?? "sidebar",
-              contextAwareness: savedSettings.customization?.contextAwareness ?? false
+              contextAwareness: savedSettings.customization?.contextAwareness ?? false,
+              activationMode: savedSettings.customization?.activationMode ?? "manual"
             }
           });
         }
@@ -1005,6 +1007,14 @@ function IndexOptions() {
                 onChange={(e) => handleImmediateSettingUpdate('persistHighlight', e.target.checked)}
                 label="Persistent Highlighting"
                 description="Keep text highlighted after selection"
+              />
+
+              <Switch
+                id="automatic-activation"
+                checked={settings.customization?.activationMode === "automatic"}
+                onChange={(e) => handleImmediateSettingUpdate('activationMode', e.target.checked ? "automatic" : "manual")}
+                label="Automatic Activation"
+                description="Show popup automatically when text is selected (without requiring context menu)"
               />
 
               {/* Request Timeout Setting */}

@@ -293,6 +293,24 @@ const FollowUpInput = React.memo(({
   const initialHeight = 24; // Reduced initial height in pixels (was 38)
   const maxHeight = initialHeight * 2; // Maximum height is double the initial height
   
+  // Force re-render when theme changes
+  const [, forceUpdate] = useState({});
+  
+  // Listen for theme changes
+  useEffect(() => {
+    const handleSettingsUpdated = (event: CustomEvent) => {
+      if (event.detail?.key === 'theme') {
+        // Force a re-render when theme changes
+        forceUpdate({});
+      }
+    };
+    
+    window.addEventListener('settingsUpdated', handleSettingsUpdated as EventListener);
+    return () => {
+      window.removeEventListener('settingsUpdated', handleSettingsUpdated as EventListener);
+    };
+  }, []);
+  
   // Function to auto-resize the textarea
   const autoResizeTextarea = () => {
     if (inputRef.current) {
@@ -323,6 +341,11 @@ const FollowUpInput = React.memo(({
   useEffect(() => {
     autoResizeTextarea();
   }, [followUpQuestion]);
+  
+  // Also resize when theme changes
+  useEffect(() => {
+    autoResizeTextarea();
+  }, [currentTheme]);
   
   return (
     <div style={{
@@ -406,9 +429,11 @@ const FollowUpInput = React.memo(({
   );
 }, (prevProps: FollowUpInputProps, nextProps: FollowUpInputProps) => {
   // Custom comparison function to prevent unnecessary re-renders
+  // Add currentTheme to the comparison to ensure re-render on theme change
   return (
     prevProps.followUpQuestion === nextProps.followUpQuestion &&
-    prevProps.isAskingFollowUp === nextProps.isAskingFollowUp
+    prevProps.isAskingFollowUp === nextProps.isAskingFollowUp &&
+    prevProps.currentTheme === nextProps.currentTheme
   );
 });
 

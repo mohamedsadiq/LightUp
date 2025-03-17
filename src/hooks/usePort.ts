@@ -48,7 +48,9 @@ export const usePort = (
 
       newPort.onDisconnect.addListener(() => {
         console.log('Port disconnected');
-        setConnectionStatus('disconnected');
+        if (connectionStatus !== 'connecting') {
+          setConnectionStatus('disconnected');
+        }
       });
 
       setPort(newPort);
@@ -78,16 +80,6 @@ export const usePort = (
   useEffect(() => {
     const newPort = connect();
     
-    // Set up connection health monitoring
-    connectionCheckIntervalRef.current = setInterval(() => {
-      const now = Date.now();
-      // If we haven't received a heartbeat in 30 seconds and we're supposed to be connected
-      if (now - lastHeartbeatRef.current > 30000 && connectionStatus === 'connected' && isLoading) {
-        console.log('Connection seems dead, reconnecting...');
-        reconnect();
-      }
-    }, 10000); // Check every 10 seconds
-
     return () => {
       if (newPort) {
         try {
@@ -99,10 +91,6 @@ export const usePort = (
         } catch (e) {
           console.error('Error cleaning up port:', e);
         }
-      }
-      
-      if (connectionCheckIntervalRef.current) {
-        clearInterval(connectionCheckIntervalRef.current);
       }
     };
   }, [connectionId]);

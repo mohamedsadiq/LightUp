@@ -3,6 +3,7 @@ import { calculatePosition } from '../utils/position';
 import { Storage } from "@plasmohq/storage";
 import type { Mode, Settings } from '~types/settings';
 import { getHighlightColor } from '~utils/highlight';
+import type { FollowUpQA } from "~types/followup";
 
 // Check if we're on Reddit
 const isReddit = typeof window !== 'undefined' && window.location.hostname.includes('reddit.com');
@@ -36,13 +37,14 @@ interface UsePopupReturn {
 export const usePopup = (
   port: chrome.runtime.Port | null,
   connectionId: string,
-  radicallyFocus?: boolean,
-  isEnabled?: boolean,
-  settings?: Settings | null,
-  setIsLoading?: (value: boolean) => void,
-  setError?: (value: string | null) => void,
-  setStreamingText?: (value: string) => void,
-  setFollowUpQAs?: React.Dispatch<React.SetStateAction<any[]>>
+  radicallyFocus: boolean | undefined,
+  isEnabled: boolean,
+  settings: Settings | null,
+  setIsLoading?: (loading: boolean) => void,
+  setError?: (error: string | null) => void,
+  setStreamingText?: (text: string) => void,
+  setFollowUpQAs?: (qas: FollowUpQA[]) => void,
+  setPort?: (port: chrome.runtime.Port | null) => void
 ): UsePopupReturn => {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState<Position>({ x: 0, y: 0 });
@@ -411,10 +413,15 @@ export const usePopup = (
 
   const handleClose = () => {
     if (port) {
-      port.postMessage({
-        type: "STOP_GENERATION",
-        connectionId
-      });
+      try {
+        port.postMessage({
+          type: "STOP_GENERATION",
+          connectionId
+        });
+        port.disconnect();
+      } catch (err) {
+        console.error('Error disconnecting port:', err);
+      }
     }
     
     setIsVisible(false);
@@ -427,6 +434,25 @@ export const usePopup = (
     setError?.(null);
     setIsLoading?.(false);
   };
+
+  // Add effect to maintain connection while popup is visible
+  useEffect(() => {
+    if (isVisible && !port) {
+      // Reconnect if popup is visible but we don't have a port
+      const storage = new Storage();
+      storage.get("settings").then(settings => {
+        try {
+          const newPort = chrome.runtime.connect({ 
+            name: `text-processing-${connectionId}`
+          });
+          setPort(newPort);
+        } catch (err) {
+          console.error('Failed to reconnect port:', err);
+          setError?.('Connection failed. Please try again.');
+        }
+      });
+    }
+  }, [isVisible, port]);
 
   const handleModeChange = async (newMode: Mode, translationSettings?: any) => {
     setMode(newMode);
