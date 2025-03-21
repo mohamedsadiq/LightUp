@@ -675,7 +675,7 @@ function Content() {
 
   // Wrap handleAskFollowUp to include necessary context
   const handleAskFollowUpWrapper = () => {
-    if (!port || !followUpQuestion.trim() || isAskingFollowUp) return;
+    if (!followUpQuestion.trim() || isAskingFollowUp) return;
 
     setIsAskingFollowUp(true);
     const newId = Date.now();
@@ -696,7 +696,12 @@ function Content() {
     updateConversation(followUpQuestion);
 
     try {
-      port.postMessage({
+      // Check if we need to reconnect
+      if (!port || connectionStatus !== 'connected') {
+        reconnect();
+      }
+
+      const message = {
         type: "PROCESS_TEXT",
         payload: {
           text: followUpQuestion,
@@ -708,21 +713,58 @@ function Content() {
           id: newId,
           connectionId
         }
-      });
+      };
 
-      setFollowUpQuestion("");
-      
-      // Keep focus on the input field after submitting
+      // Use a small delay to ensure reconnection completes if needed
       setTimeout(() => {
-        if (inputRef.current) {
-          inputRef.current.focus();
+        try {
+          if (!port) {
+            throw new Error("No connection available");
+          }
+          
+          port.postMessage(message);
+          
+          setFollowUpQuestion("");
+          
+          // Keep focus on the input field after submitting
+          setTimeout(() => {
+            if (inputRef.current) {
+              inputRef.current.focus();
+            }
+          }, 100);
+        } catch (postError) {
+          console.error("Error posting message:", postError);
+          
+          // Try one more time with a fresh connection
+          reconnect();
+          
+          setTimeout(() => {
+            if (port) {
+              try {
+                port.postMessage(message);
+                
+                setFollowUpQuestion("");
+                
+                // Keep focus on the input field after submitting
+                if (inputRef.current) {
+                  inputRef.current.focus();
+                }
+              } catch (retryError) {
+                console.error("Failed after reconnection:", retryError);
+                throw new Error("Failed to send message after reconnection");
+              }
+            } else {
+              throw new Error("Failed to reconnect");
+            }
+          }, 500); // Wait a bit longer for reconnection
         }
       }, 100);
     } catch (error) {
+      console.error("Follow-up error:", error);
       setFollowUpQAs(prev => prev.filter(qa => qa.id !== newId));
       setActiveAnswerId(null);
       setIsAskingFollowUp(false);
-      setError('Failed to process question');
+      setError('Failed to process question. Please try again.');
     }
   };
 

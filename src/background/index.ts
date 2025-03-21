@@ -1,6 +1,6 @@
 import { Storage } from "@plasmohq/storage"
 import { verifyServerConnection } from "~utils/storage"
-import type { ProcessTextRequest, StreamChunk } from "~types/messages"
+import type { ProcessTextRequest, StreamChunk, ConversationContext } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "~utils/constants"
 import { processGeminiText } from "~services/llm/gemini"
 import { processXAIText } from "~services/llm/xai"
@@ -62,17 +62,6 @@ let activeConnections = new Map<string, {
   controller: AbortController;
   timestamp: number;
 }>();
-
-// Extend cleanup interval to 4 hours instead of 1 hour
-setInterval(() => {
-  const now = Date.now();
-  for (const [id, connection] of activeConnections.entries()) {
-    if (now - connection.timestamp > 1000 * 60 * 240) { // 4 hours timeout
-      connection.controller.abort();
-      activeConnections.delete(id);
-    }
-  }
-}, 1000 * 60 * 60); // Check every hour
 
 // Add rate limiting constants
 const RATE_LIMITS = {
@@ -172,7 +161,6 @@ const waitForSettings = async (maxAttempts = 3, delayMs = 1000): Promise<Setting
 export async function handleProcessText(request: ProcessTextRequest, port: chrome.runtime.Port) {
   const connectionId = port.name.split('text-processing-')[1];
   const abortController = new AbortController();
-  let heartbeatInterval: NodeJS.Timeout;
   
   try {
     const settings = await waitForSettings();
@@ -180,27 +168,17 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       throw new Error("Failed to initialize settings. Please try again.");
     }
 
-    // Set up connection monitoring with longer intervals
-    const setupConnectionMonitoring = () => {
-      heartbeatInterval = setInterval(() => {
-        try {
-          port.postMessage({
-            type: 'heartbeat',
-            timestamp: Date.now()
-          });
-        } catch (e) {
-          clearInterval(heartbeatInterval);
-          abortController.abort();
-        }
-      }, 30000);
-    };
-
-    setupConnectionMonitoring();
-
+    // No longer setting up heartbeat interval
+    // Just store the connection
     activeConnections.set(connectionId, {
       controller: abortController,
       timestamp: Date.now()
     });
+
+    // Check if connection is still active before proceeding
+    if (!port) {
+      throw new Error("Connection lost");
+    }
 
     const { mode, text, context, isFollowUp, settings: requestSettings, conversationContext } = request;
     
@@ -644,9 +622,6 @@ Guidelines:
     if (error.message?.includes("rate limit")) {
       userMessage = error.message;
     } 
-    else if (error.message?.includes("timeout")) {
-      userMessage = "The request is taking longer than expected. You can try again with a smaller text selection or check your internet connection.";
-    }
     else if (error.message?.includes("Server responded with")) {
       // For API server errors, provide more context
       userMessage = `API server error: ${error.message}. This might be a temporary issue with the AI provider.`;
@@ -666,7 +641,6 @@ Guidelines:
     });
   } finally {
     // Clean up
-    clearInterval(heartbeatInterval);
     activeConnections.delete(connectionId);
   }
 }
@@ -727,47 +701,42 @@ chrome.commands.onCommand.addListener((command) => {
   }
 });
 
-// Update message listener to use port-based communication
+// Listen for port connections
 chrome.runtime.onConnect.addListener((port) => {
-  console.log("[Background] New connection established:", port.name);
-  
-  port.onMessage.addListener(async (msg) => {
-    console.log("[Background] Received message:", msg);
+  // Text processing ports
+  if (port.name.startsWith('text-processing-')) {
+    // Store the port callback reference to prevent garbage collection
+    const connectionId = port.name.split('text-processing-')[1];
     
-    if (msg.type === "STOP_GENERATION") {
-      const connectionId = port.name.split('text-processing-')[1];
-      console.log("[Background] Stopping generation for:", connectionId);
-      const connection = activeConnections.get(connectionId);
-      
-      if (connection) {
-        connection.controller.abort();
+    // Set up message listener
+    port.onMessage.addListener(async (request) => {
+      if (request.type === "PROCESS_TEXT") {
+        await handleProcessText(request.payload, port);
+      } else if (request.type === "STOP_GENERATION") {
+        // If we have an active generation for this connection, abort it
+        if (activeConnections.has(request.connectionId)) {
+          activeConnections.get(request.connectionId)?.controller.abort();
+          activeConnections.delete(request.connectionId);
+        }
+      } else if (request.type === "PING") {
+        // Simply respond to keep the connection alive
+        try {
+          port.postMessage({ type: "PONG" });
+        } catch (e) {
+          console.error("Error responding to ping:", e);
+        }
+      }
+      // Return true to indicate we'll handle the request asynchronously
+      return true;
+    });
+    
+    // Handle port disconnect
+    port.onDisconnect.addListener(() => {
+      // If we have an active generation for this connection, abort it
+      if (activeConnections.has(connectionId)) {
+        activeConnections.get(connectionId)?.controller.abort();
         activeConnections.delete(connectionId);
       }
-    }
-    if (msg.type === "PROCESS_TEXT") {
-      console.log("[Background] Processing text request:", {
-        mode: msg.payload.mode,
-        modelType: msg.payload.settings?.modelType,
-        text: msg.payload.text?.substring(0, 100) + "..."
-      });
-      handleProcessText(msg.payload, port).catch(error => {
-        console.error("[Background] Error processing text:", error);
-        port.postMessage({
-          type: 'error',
-          error: error.message || 'Unknown error occurred'
-        });
-      });
-    }
-  });
-
-  port.onDisconnect.addListener(() => {
-    console.log("[Background] Port disconnected:", port.name);
-    const connectionId = port.name.split('text-processing-')[1];
-    const connection = activeConnections.get(connectionId);
-    
-    if (connection) {
-      connection.controller.abort();
-      activeConnections.delete(connectionId);
-    }
-  });
+    });
+  }
 }); 

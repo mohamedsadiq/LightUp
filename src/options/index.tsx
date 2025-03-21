@@ -1017,31 +1017,6 @@ function IndexOptions() {
                 description="Show popup automatically when text is selected (without requiring context menu)"
               />
 
-              {/* Request Timeout Setting */}
-              <div className="space-y-2">
-                <label className="block text-gray-800 font-medium text-base">Request Timeout</label>
-                <div className="flex items-center gap-3">
-                  <input
-                    type="range"
-                    min="10"
-                    max="180"
-                    step="10"
-                    value={settings.requestTimeout || 30}
-                    onChange={(e) => setSettings(prev => ({
-                      ...prev,
-                      requestTimeout: parseInt(e.target.value)
-                    }))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#10a37f]"
-                  />
-                  <span className="text-sm font-medium text-gray-700 min-w-[60px]">
-                    {`${settings.requestTimeout || 30} sec`}
-                  </span>
-                </div>
-                <p className="text-sm text-gray-500">
-                  Base timeout for AI responses. LightUp automatically extends this for longer conversations.
-                </p>
-              </div>
-
               {/* Font Size Selection */}
               <div className="space-y-2">
                 <label className="block text-gray-800 font-medium text-base">Font Size</label>
