@@ -94,22 +94,22 @@ const ActionButton = ({ mode, activeMode, onClick, children }: ActionButtonProps
   }
 
   return (
-    <div className="relative group">
+    <div className="lu-relative lu-group">
       <button
         onClick={onClick}
-        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all ${
+        className={`lu-flex lu-items-center lu-gap-2 lu-px-4 lu-py-2 lu-rounded-full lu-text-sm lu-transition-all ${
           activeMode === mode 
-            ? "bg-[#14742F] text-white" 
-            : "bg-[#D6D6D6] text-black hover:bg-[#C4C4C4]"
+            ? "lu-bg-[#14742F] lu-text-white" 
+            : "lu-bg-[#D6D6D6] lu-text-black hover:lu-bg-[#C4C4C4]"
         }`}
         aria-label={`${children} - ${tooltips[mode]}`}
         title={tooltips[mode]}>
         {icons[mode]}
         {children}
       </button>
-      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+      <div className="lu-absolute lu-bottom-full lu-left-1/2 lu-transform lu--translate-x-1/2 lu-mb-2 lu-px-3 lu-py-1.5 lu-bg-gray-800 lu-text-white lu-text-xs lu-rounded lu-opacity-0 lu-group-hover:lu-opacity-100 lu-transition-opacity lu-duration-200 lu-pointer-events-none lu-whitespace-nowrap lu-z-10">
         {tooltips[mode]}
-        <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+        <div className="lu-absolute lu-top-full lu-left-1/2 lu-transform lu--translate-x-1/2 lu-border-4 lu-border-transparent lu-border-t-gray-800"></div>
       </div>
     </div>
   )
@@ -131,24 +131,24 @@ const ShortcutsSection = () => {
   ];
   
   return (
-    <div className="mt-4 p-4 bg-white rounded-lg shadow-sm">
+    <div className="lu-mt-4 lu-p-4 lu-bg-white lu-rounded-lg lu-shadow-sm">
       <div 
-        className="flex items-center justify-between cursor-pointer"
+        className="lu-flex lu-items-center lu-justify-between lu-cursor-pointer"
         onClick={() => setIsExpanded(!isExpanded)}
       >
-        <h3 className="text-sm font-medium text-black flex items-center gap-2">
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <h3 className="lu-text-sm lu-font-medium lu-text-black lu-flex lu-items-center lu-gap-2">
+          <svg className="lu-w-4 lu-h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
             <path d="M6 10h2v2H6v-2zM10 10h2v2h-2v-2zM14 10h2v2h-2v-2zM6 14h12v2H6v-2z" fill="currentColor" />
           </svg>
           Keyboard Shortcuts
         </h3>
         <button 
-          className="text-gray-500 hover:text-gray-700"
+          className="lu-text-gray-500 lu-hover:lu-text-gray-700"
           aria-label={isExpanded ? "Collapse shortcuts" : "Expand shortcuts"}
         >
           <svg 
-            className={`w-4 h-4 transition-transform ${isExpanded ? "transform rotate-180" : ""}`} 
+            className={`lu-w-4 lu-h-4 lu-transition-transform ${isExpanded ? "lu-transform lu-rotate-180" : ""}`} 
             viewBox="0 0 24 24" 
             fill="none" 
             xmlns="http://www.w3.org/2000/svg"
@@ -159,21 +159,21 @@ const ShortcutsSection = () => {
       </div>
       
       {isExpanded && (
-        <div className="mt-3 space-y-2">
-          <div className="grid grid-cols-1 gap-2 border-b border-gray-100 pb-2">
-            <p className="text-xs text-gray-600 italic">
+        <div className="lu-mt-3 lu-space-y-2">
+          <div className="lu-grid lu-grid-cols-1 lu-gap-2 lu-border-b lu-border-gray-100 lu-pb-2">
+            <p className="lu-text-xs lu-text-gray-600 lu-italic">
               Use these shortcuts to quickly switch between modes or toggle features
             </p>
           </div>
           {shortcuts.map((shortcut, index) => (
-            <div key={index} className="flex items-center justify-between py-1 border-b border-gray-100 last:border-0">
-              <span className="text-xs text-gray-700">{shortcut.description}</span>
-              <kbd className="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-100 border border-gray-300 rounded-md shadow-sm">
+            <div key={index} className="lu-flex lu-items-center lu-justify-between lu-py-1 lu-border-b lu-border-gray-100 lu-last:lu-border-0">
+              <span className="lu-text-xs lu-text-gray-700">{shortcut.description}</span>
+              <kbd className="lu-px-2 lu-py-1 lu-text-xs lu-font-semibold lu-text-gray-700 lu-bg-gray-100 lu-border lu-border-gray-300 lu-rounded-md lu-shadow-sm">
                 {shortcut.key}
               </kbd>
             </div>
           ))}
-          <p className="text-xs text-gray-500 mt-1 pt-1">
+          <p className="lu-text-xs lu-text-gray-500 lu-mt-1 lu-pt-1">
             After setting the mode via shortcut, select any text and LightUp will appear with your chosen mode.
           </p>
         </div>
@@ -188,32 +188,32 @@ const RateLimitDisplay = () => {
   
   if (isLoading) {
     return (
-      <div className="p-4 bg-gray-50 rounded-lg shadow-sm">
-        <p className="text-gray-500 text-sm">Loading usage info...</p>
+      <div className="lu-p-4 lu-bg-gray-50 lu-rounded-lg lu-shadow-sm">
+        <p className="lu-text-gray-500 lu-text-sm">Loading usage info...</p>
       </div>
     )
   }
   
   if (error) {
     return (
-      <div className="p-4 bg-red-50 rounded-lg shadow-sm">
-        <p className="text-red-600 text-sm">{error}</p>
+      <div className="lu-p-4 lu-bg-red-50 lu-rounded-lg lu-shadow-sm">
+        <p className="lu-text-red-600 lu-text-sm">{error}</p>
       </div>
     )
   }
   
   return (
-    <div className="p-4 bg-gray-50 rounded-lg shadow-sm">
-      <h3 className="text-sm font-semibold mb-2">Daily Usage</h3>
-      <div className="flex items-center justify-between mb-2">
-        <span className="text-gray-600 text-sm">Actions Remaining Today</span>
-        <span className="text-sm font-medium">
+    <div className="lu-p-4 lu-bg-gray-50 lu-rounded-lg lu-shadow-sm">
+      <h3 className="lu-text-sm lu-font-semibold lu-mb-2">Daily Usage</h3>
+      <div className="lu-flex lu-items-center lu-justify-between lu-mb-2">
+        <span className="lu-text-gray-600 lu-text-sm">Actions Remaining Today</span>
+        <span className="lu-text-sm lu-font-medium">
           {remainingActions} / 20
         </span>
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-2.5">
+      <div className="lu-w-full lu-bg-gray-200 lu-rounded-full lu-h-2.5">
         <div 
-          className="bg-[#14742F] h-2.5 rounded-full transition-all duration-500"
+          className="lu-bg-[#14742F] lu-h-2.5 lu-rounded-full lu-transition-all lu-duration-500"
           style={{ width: `${(remainingActions / 20) * 100}%` }}
         ></div>
       </div>
@@ -223,26 +223,39 @@ const RateLimitDisplay = () => {
 
 // Add a new Switch component for settings
 const Switch = ({ id, checked, onChange, label, description = undefined }) => (
-  <div className="flex items-start gap-3">
-    <div className="flex-shrink-0 pt-0.5">
-      <label htmlFor={id} className="relative inline-flex items-center cursor-pointer">
-        <input
-          type="checkbox"
-          id={id}
-          checked={checked}
-          onChange={onChange}
-          className="sr-only peer"
-        />
-        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[#10a37f]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#10a37f]"></div>
-      </label>
-    </div>
-    <div>
-      <label htmlFor={id} className="text-sm font-medium text-gray-800 cursor-pointer">
-        {label}
-      </label>
-      {description && (
-        <p className="text-xs text-gray-500 mt-0.5">{description}</p>
-      )}
+  <div className="lu-flex lu-flex-col lu-w-full lu-mb-3">
+    <div className="lu-flex lu-items-center lu-justify-between lu-w-full">
+      <div className="lu-flex-grow">
+        <label htmlFor={id} className="lu-text-sm lu-font-medium lu-text-gray-800 lu-cursor-pointer">
+          {label}
+        </label>
+        {description && (
+          <p className="lu-text-xs lu-text-gray-500 lu-mt-0.5">{description}</p>
+        )}
+      </div>
+      <div className="lu-flex lu-items-center lu-gap-2">
+        <span className={`lu-text-xs lu-font-medium ${checked ? 'lu-text-[#10a37f]' : 'lu-text-gray-500'}`}>
+          {checked ? 'ON' : 'OFF'}
+        </span>
+        <label htmlFor={id} className="lu-relative lu-inline-flex lu-items-center lu-cursor-pointer">
+          <input
+            type="checkbox"
+            id={id}
+            checked={checked}
+            onChange={onChange}
+            className="lu-sr-only lu-peer"
+            aria-checked={checked}
+          />
+          <div className={`lu-w-10 lu-h-5 lu-rounded-full lu-transition-colors lu-duration-200 ${
+            checked ? 'lu-bg-[#10a37f]' : 'lu-bg-gray-300'
+          }`}>
+            <div className={`lu-absolute lu-top-0.5 lu-h-4 lu-w-4 lu-bg-white lu-rounded-full lu-shadow-sm
+              lu-transition-transform lu-duration-200 lu-ease-in-out
+              ${checked ? 'lu-translate-x-5' : 'lu-translate-x-0.5'}`}>
+            </div>
+          </div>
+        </label>
+      </div>
     </div>
   </div>
 );
@@ -252,12 +265,12 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
   if (!isOpen) return null;
 
   const colorOptions = [
-    { value: 'default', label: 'Default', color: 'bg-gray-200' },
-    { value: 'orange', label: 'Orange', color: 'bg-[#FFBF5A]' },
-    { value: 'blue', label: 'Blue', color: 'bg-[#93C5FD]' },
-    { value: 'green', label: 'Green', color: 'bg-[#86EFAC]' },
-    { value: 'purple', label: 'Purple', color: 'bg-[#C4B5FD]' },
-    { value: 'pink', label: 'Pink', color: 'bg-[#FDA4AF]' }
+    { value: 'default', label: 'Default', color: 'lu-bg-gray-200' },
+    { value: 'orange', label: 'Orange', color: 'lu-bg-[#FFBF5A]' },
+    { value: 'blue', label: 'Blue', color: 'lu-bg-[#93C5FD]' },
+    { value: 'green', label: 'Green', color: 'lu-bg-[#86EFAC]' },
+    { value: 'purple', label: 'Purple', color: 'lu-bg-[#C4B5FD]' },
+    { value: 'pink', label: 'Pink', color: 'lu-bg-[#FDA4AF]' }
   ];
 
   return (
@@ -265,29 +278,29 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
-      className="absolute inset-0 bg-white z-10 flex flex-col h-full"
+      className="lu-absolute lu-inset-0 lu-bg-white lu-z-10 lu-flex lu-flex-col lu-h-full"
     >
-      <div className="flex justify-between items-center p-4 border-b border-gray-200 flex-shrink-0">
-        <h2 className="text-lg font-semibold">Quick Settings</h2>
+      <div className="lu-flex lu-justify-between lu-items-center lu-p-4 lu-border-b lu-border-gray-200 lu-flex-shrink-0">
+        <h2 className="lu-text-lg lu-font-semibold">Quick Settings</h2>
         <button 
           onClick={onClose}
-          className="p-1 rounded-full hover:bg-gray-100"
+          className="lu-p-1 lu-rounded-full lu-hover:lu-bg-gray-100"
         >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" className="lu-h-6 lu-w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
 
-      <div className="p-4 overflow-y-auto flex-grow">
-        <div className="space-y-6">
+      <div className="lu-p-4 lu-overflow-y-auto lu-flex-grow">
+        <div className="lu-space-y-6">
           {/* Layout Mode Selection */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-800">Layout Mode</label>
-            <div className="grid grid-cols-3 gap-3">
+          <div className="lu-space-y-2">
+            <label className="lu-block lu-text-sm lu-font-medium lu-text-gray-800">Layout Mode</label>
+            <div className="lu-grid lu-grid-cols-3 lu-gap-3">
               {[
                 { value: 'floating', label: 'Floating', icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="lu-h-5 lu-w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="4" y="4" width="16" height="16" rx="2" ry="2"/>
                     <circle cx="12" cy="12" r="1"/>
                     <circle cx="12" cy="8" r="1"/>
@@ -295,13 +308,13 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
                   </svg>
                 )},
                 { value: 'sidebar', label: 'Sidebar', icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="lu-h-5 lu-w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
                     <line x1="15" y1="3" x2="15" y2="21"/>
                   </svg>
                 )},
                 { value: 'centered', label: 'Centered', icon: (
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="lu-h-5 lu-w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="2" y="4" width="20" height="16" rx="2" ry="2"/>
                     <rect x="6" y="8" width="12" height="8" rx="1" ry="1"/>
                   </svg>
@@ -310,15 +323,15 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
                 <button
                   key={option.value}
                   onClick={() => updateSettings('layoutMode', option.value)}
-                  className={`p-3 rounded-lg border ${
+                  className={`lu-p-3 lu-rounded-lg lu-border ${
                     settings.customization?.layoutMode === option.value
-                      ? 'border-[#10a37f] bg-[#10a37f]/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  } transition-all duration-200`}
+                      ? 'lu-border-[#10a37f] lu-bg-[#10a37f]/5'
+                      : 'lu-border-gray-200 lu-hover:lu-border-gray-300'
+                  } lu-transition-all lu-duration-200`}
                 >
-                  <div className="flex flex-col items-center gap-2">
+                  <div className="lu-flex lu-flex-col lu-items-center lu-gap-2">
                     {option.icon}
-                    <span className="text-sm">{option.label}</span>
+                    <span className="lu-text-sm">{option.label}</span>
                   </div>
                 </button>
               ))}
@@ -326,7 +339,7 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
           </div>
 
           {/* Toggle Switches */}
-          <div className="space-y-4">
+          <div className="lu-space-y-4">
             <Switch
               id="show-selected-text"
               checked={settings.customization?.showSelectedText ?? true}
@@ -361,9 +374,9 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
           </div>
 
           {/* Font Size Selection */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-800">Font Size</label>
-            <div className="grid grid-cols-3 gap-2">
+          <div className="lu-space-y-2">
+            <label className="lu-block lu-text-sm lu-font-medium lu-text-gray-800">Font Size</label>
+            <div className="lu-grid lu-grid-cols-3 lu-gap-2">
               {[
                 { value: '0.8rem', label: 'Small' },
                 { value: '0.9rem', label: 'Medium' },
@@ -375,15 +388,15 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
                 <button
                   key={size.value}
                   onClick={() => updateSettings('fontSize', size.value)}
-                  className={`p-2 rounded-lg border ${
+                  className={`lu-p-2 lu-rounded-lg lu-border ${
                     settings.customization?.fontSize === size.value
-                      ? 'border-[#10a37f] bg-[#10a37f]/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  } transition-all duration-200`}
+                      ? 'lu-border-[#10a37f] lu-bg-[#10a37f]/5'
+                      : 'lu-border-gray-200 lu-hover:lu-border-gray-300'
+                  } lu-transition-all lu-duration-200`}
                 >
-                  <div className="flex flex-col items-center gap-1">
-                    <span className={`text-gray-600`} style={{ fontSize: size.value }}>Aa</span>
-                    <span className="text-xs">{size.label}</span>
+                  <div className="lu-flex lu-flex-col lu-items-center lu-gap-1">
+                    <span className={`lu-text-gray-600`} style={{ fontSize: size.value }}>Aa</span>
+                    <span className="lu-text-xs">{size.label}</span>
                   </div>
                 </button>
               ))}
@@ -391,28 +404,28 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
           </div>
 
           {/* Theme Selection */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-800">Theme</label>
-            <div className="grid grid-cols-2 gap-3">
+          <div className="lu-space-y-2">
+            <label className="lu-block lu-text-sm lu-font-medium lu-text-gray-800">Theme</label>
+            <div className="lu-grid lu-grid-cols-2 lu-gap-3">
               {['light', 'dark'].map((theme) => (
                 <button
                   key={theme}
                   onClick={() => updateSettings('theme', theme)}
-                  className={`p-3 rounded-lg border ${
+                  className={`lu-p-3 lu-rounded-lg lu-border ${
                     settings.customization?.theme === theme
-                      ? 'border-[#10a37f] bg-[#10a37f]/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  } transition-all duration-200`}
+                      ? 'lu-border-[#10a37f] lu-bg-[#10a37f]/5'
+                      : 'lu-border-gray-200 lu-hover:lu-border-gray-300'
+                  } lu-transition-all lu-duration-200`}
                 >
-                  <div className="flex items-center justify-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <div className="lu-flex lu-items-center lu-justify-center lu-gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="lu-h-5 lu-w-5" viewBox="0 0 20 20" fill="currentColor">
                       {theme === 'light' ? (
                         <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
                       ) : (
                         <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
                       )}
                     </svg>
-                    <span className="capitalize">{theme}</span>
+                    <span className="lu-capitalize">{theme}</span>
                   </div>
                 </button>
               ))}
@@ -420,22 +433,22 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
           </div>
 
           {/* Highlight Color Selection */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-800">Highlight Color</label>
-            <div className="grid grid-cols-3 gap-3">
+          <div className="lu-space-y-2">
+            <label className="lu-block lu-text-sm lu-font-medium lu-text-gray-800">Highlight Color</label>
+            <div className="lu-grid lu-grid-cols-3 lu-gap-3">
               {colorOptions.map((option) => (
                 <button
                   key={option.value}
                   onClick={() => updateSettings('highlightColor', option.value)}
-                  className={`p-3 rounded-lg border ${
+                  className={`lu-p-3 lu-rounded-lg lu-border ${
                     settings.customization?.highlightColor === option.value
-                      ? 'border-[#10a37f] bg-[#10a37f]/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  } transition-all duration-200`}
+                      ? 'lu-border-[#10a37f] lu-bg-[#10a37f]/5'
+                      : 'lu-border-gray-200 lu-hover:lu-border-gray-300'
+                  } lu-transition-all lu-duration-200`}
                 >
-                  <div className="flex flex-col items-center gap-2">
-                    <div className={`w-6 h-6 rounded-full ${option.color}`}></div>
-                    <span className="text-sm">{option.label}</span>
+                  <div className="lu-flex lu-flex-col lu-items-center lu-gap-2">
+                    <div className={`lu-w-6 lu-h-6 lu-rounded-full ${option.color}`}></div>
+                    <span className="lu-text-sm">{option.label}</span>
                   </div>
                 </button>
               ))}
@@ -443,9 +456,9 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
           </div>
 
           {/* Animation Selection */}
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-800">Popup Animation</label>
-            <div className="grid grid-cols-3 gap-3">
+          <div className="lu-space-y-2">
+            <label className="lu-block lu-text-sm lu-font-medium lu-text-gray-800">Popup Animation</label>
+            <div className="lu-grid lu-grid-cols-3 lu-gap-3">
               {[
                 { value: 'none', label: 'None' },
                 { value: 'scale', label: 'Scale' },
@@ -454,13 +467,13 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
                 <button
                   key={animation.value}
                   onClick={() => updateSettings('popupAnimation', animation.value)}
-                  className={`p-3 rounded-lg border ${
+                  className={`lu-p-3 lu-rounded-lg lu-border ${
                     settings.customization?.popupAnimation === animation.value
-                      ? 'border-[#10a37f] bg-[#10a37f]/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  } transition-all duration-200`}
+                      ? 'lu-border-[#10a37f] lu-bg-[#10a37f]/5'
+                      : 'lu-border-gray-200 lu-hover:lu-border-gray-300'
+                  } lu-transition-all lu-duration-200`}
                 >
-                  <span className="text-sm">{animation.label}</span>
+                  <span className="lu-text-sm">{animation.label}</span>
                 </button>
               ))}
             </div>
@@ -738,7 +751,7 @@ function IndexPopup() {
   }
 
   return (
-    <div className="w-[600px] h-[500px] font-['K2D'] bg-[#E9E9E9] relative overflow-hidden">
+    <div className="lu-w-[600px] lu-h-[500px] lu-font-['K2D'] lu-bg-[#E9E9E9] lu-relative lu-overflow-hidden">
       {/* Toast notification for settings saved */}
       <AnimatePresence>
         {showSaveAnimation && (
@@ -746,7 +759,7 @@ function IndexPopup() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="absolute top-4 right-4 bg-[#10a37f] text-white px-4 py-2 rounded-md shadow-md z-50"
+            className="lu-absolute lu-top-4 lu-right-4 lu-bg-[#10a37f] lu-text-white lu-px-4 lu-py-2 lu-rounded-md lu-shadow-md lu-z-50"
           >
             Setting updated successfully
           </motion.div>
@@ -767,73 +780,73 @@ function IndexPopup() {
 
       {/* Main Content */}
       {!showSettings && (
-        <div className="h-full flex flex-col overflow-auto">
+        <div className="lu-h-full lu-flex lu-flex-col lu-overflow-auto">
           {/* Header */}
-          <div className="flex justify-between items-center p-4 border-b border-[#D6D6D6]">
-            <div className="flex items-center gap-2">
+          <div className="lu-flex lu-justify-between lu-items-center lu-p-4 lu-border-b lu-border-[#D6D6D6]">
+            <div className="lu-flex lu-items-center lu-gap-2">
               <Logo />
-              <h1 className="text-xl font-semibold">LightUp</h1>
+              <h1 className="lu-text-xl lu-font-semibold">LightUp</h1>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="relative group">
-                <div className="absolute -top-2 right-0">
-                  <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-medium rounded-full bg-black text-white">
+            <div className="lu-flex lu-items-center lu-gap-2">
+              <div className="lu-relative lu-group">
+                <div className="lu-absolute lu--top-2 lu-right-0">
+                  <span className="lu-inline-flex lu-items-center lu-justify-center lu-px-1.5 lu-py-0.5 lu-text-[10px] lu-font-medium lu-rounded-full lu-bg-black lu-text-white">
                     new
                   </span>
                 </div>
                 <button 
                   onClick={() => setShowSettings(true)}
-                  className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-200/50 transition-colors"
+                  className="lu-text-sm lu-text-gray-600 hover:lu-text-gray-900 lu-flex lu-items-center lu-gap-1 lu-px-3 lu-py-1.5 lu-rounded-lg hover:lu-bg-gray-200/50 lu-transition-colors"
                   aria-label="Settings"
                   tabIndex={0}
                 >
-                  <svg className="w-4 h-4" fill="none" strokeWidth="2" stroke="currentColor" viewBox="0 0 20 20">
+                  <svg className="lu-w-4 lu-h-4" fill="none" strokeWidth="2" stroke="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clipRule="evenodd" />
                   </svg>
                   Settings
                 </button>
-                <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                <div className="lu-absolute lu-top-full lu-left-1/2 lu-transform lu--translate-x-1/2 lu-mt-2 lu-px-3 lu-py-1.5 lu-bg-gray-800 lu-text-white lu-text-xs lu-rounded lu-opacity-0 lu-group-hover:lu-opacity-100 lu-transition-opacity lu-duration-200 lu-pointer-events-none lu-whitespace-nowrap lu-z-10">
                   Customize LightUp appearance and behavior
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-b-gray-800"></div>
+                  <div className="lu-absolute lu-bottom-full lu-left-1/2 lu-transform lu--translate-x-1/2 lu-border-4 lu-border-transparent lu-border-b-gray-800"></div>
                 </div>
               </div>
-              <div className="relative group">
+              <div className="lu-relative lu-group">
                 <button 
                   onClick={handleOpenOptions}
-                  className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-200/50 transition-colors"
+                  className="lu-text-sm lu-text-gray-600 hover:lu-text-gray-900 lu-flex lu-items-center lu-gap-1 lu-px-3 lu-py-1.5 lu-rounded-lg hover:lu-bg-gray-200/50 lu-transition-colors"
                   aria-label="Advanced Settings"
                   tabIndex={0}
                 >
-                  <svg className="w-4 h-4" fill="none" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="lu-w-4 lu-h-4" fill="none" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
                   </svg>
                   Advanced
                 </button>
-                <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                <div className="lu-absolute lu-top-full lu-left-1/2 lu-transform lu--translate-x-1/2 lu-mt-2 lu-px-3 lu-py-1.5 lu-bg-gray-800 lu-text-white lu-text-xs lu-rounded lu-opacity-0 lu-group-hover:lu-opacity-100 lu-transition-opacity lu-duration-200 lu-pointer-events-none lu-whitespace-nowrap lu-z-10">
                   Configure advanced settings and API options
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-b-gray-800"></div>
+                  <div className="lu-absolute lu-bottom-full lu-left-1/2 lu-transform lu--translate-x-1/2 lu-border-4 lu-border-transparent lu-border-b-gray-800"></div>
                 </div>
               </div>
-              <div className="relative group">
-                <div className="absolute -top-2 right-0">
-                  <span className="inline-flex items-center justify-center px-1.5 py-0.5 text-[10px] font-medium rounded-full bg-black text-white">
+              <div className="lu-relative lu-group">
+                <div className="lu-absolute lu--top-2 lu-right-0">
+                  <span className="lu-inline-flex lu-items-center lu-justify-center lu-px-1.5 lu-py-0.5 lu-text-[10px] lu-font-medium lu-rounded-full lu-bg-black lu-text-white">
                     new
                   </span>
                 </div>
                 <button 
                   onClick={handleOpenPromptTemplates}
-                  className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-200/50 transition-colors"
+                  className="lu-text-sm lu-text-gray-600 hover:lu-text-gray-900 lu-flex lu-items-center lu-gap-1 lu-px-3 lu-py-1.5 lu-rounded-lg hover:lu-bg-gray-200/50 lu-transition-colors"
                   aria-label="Prompt Templates"
                   tabIndex={0}
                 >
-                  <svg className="w-4 h-4" fill="none" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="lu-w-4 lu-h-4" fill="none" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                   </svg>
                   Templates
                 </button>
-                <div className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                <div className="lu-absolute lu-top-full lu-left-1/2 lu-transform lu--translate-x-1/2 lu-mt-2 lu-px-3 lu-py-1.5 lu-bg-gray-800 lu-text-white lu-text-xs lu-rounded lu-opacity-0 lu-group-hover:lu-opacity-100 lu-transition-opacity lu-duration-200 lu-pointer-events-none lu-whitespace-nowrap lu-z-10">
                   Customize prompt templates for each mode
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-b-gray-800"></div>
+                  <div className="lu-absolute lu-bottom-full lu-left-1/2 lu-transform lu--translate-x-1/2 lu-border-4 lu-border-transparent lu-border-b-gray-800"></div>
                 </div>
               </div>
             </div>
@@ -841,19 +854,19 @@ function IndexPopup() {
 
           {/* New Feature Announcement */}
           {showFeatureNotification && (
-            <div className="mx-4 mt-2 p-3 bg-[#10a37f]/10 border border-[#10a37f]/20 rounded-lg flex items-start gap-3">
-              <div className="flex-shrink-0 p-1 bg-[#10a37f] rounded-full">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+            <div className="lu-mx-4 lu-mt-2 lu-p-3 lu-bg-[#10a37f]/10 lu-border lu-border-[#10a37f]/20 lu-rounded-lg lu-flex lu-items-start lu-gap-3">
+              <div className="lu-flex-shrink-0 lu-p-1 lu-bg-[#10a37f] lu-rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" className="lu-h-4 lu-w-4 lu-text-white" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
                 </svg>
               </div>
               <div>
-                <h3 className="text-sm font-medium text-[#10a37f]">New Feature: Automatic Activation</h3>
-                <p className="text-xs text-gray-600 mt-1">
+                <h3 className="lu-text-sm lu-font-medium lu-text-[#10a37f]">New Feature: Automatic Activation</h3>
+                <p className="lu-text-xs lu-text-gray-600 lu-mt-1">
                   You can now enable or disable automatic popup activation when text is selected. When disabled, use right-click and select from the context menu instead.
                   <button 
                     onClick={() => setShowSettings(true)} 
-                    className="mt-1 text-[#10a37f] hover:underline font-medium"
+                    className="lu-mt-1 lu-text-[#10a37f] hover:lu-underline lu-font-medium"
                   >
                     Configure in settings →
                   </button>
@@ -861,21 +874,21 @@ function IndexPopup() {
               </div>
               <button 
                 onClick={dismissFeatureNotification} 
-                className="ml-auto text-gray-400 hover:text-gray-600"
+                className="lu-ml-auto lu-text-gray-400 hover:lu-text-gray-600"
                 aria-label="Dismiss notification"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <svg xmlns="http://www.w3.org/2000/svg" className="lu-h-4 lu-w-4" viewBox="0 0 20 20" fill="currentColor">
                   <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                 </svg>
               </button>
             </div>
           )}
 
-          <div className="bg-[#E9E9E9] p-6 flex-1 overflow-y-auto">
-            <div className="flex items-center justify-between gap-2 mb-6">
-              <h2 className="text-xl font-medium text-black flex items-center gap-2">
+          <div className="lu-bg-[#E9E9E9] lu-p-6 lu-flex-1 lu-overflow-y-auto">
+            <div className="lu-flex lu-items-center lu-justify-between lu-gap-2 lu-mb-6">
+              <h2 className="lu-text-xl lu-font-medium lu-text-black lu-flex lu-items-center lu-gap-2">
                 Define LightUp's purpose
-                <span className="text-gray-400">
+                <span className="lu-text-gray-400">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                     <circle cx="12" cy="12" r="10" strokeWidth="2"/>
                     <path d="M12 16v-4M12 8h.01" strokeWidth="2" strokeLinecap="round"/>
@@ -884,7 +897,7 @@ function IndexPopup() {
               </h2>
               <button 
                 onClick={() => setShowModeConfig(!showModeConfig)}
-                className="text-sm flex items-center gap-1 px-3 py-1 rounded-full bg-[#D6D6D6] hover:bg-[#C4C4C4] transition-all"
+                className="lu-text-sm lu-flex lu-items-center lu-gap-1 lu-px-3 lu-py-1 lu-rounded-full lu-bg-[#D6D6D6] hover:lu-bg-[#C4C4C4] lu-transition-all"
               >
                 {showModeConfig ? "Hide Mode Config" : "Configure Modes"}
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -894,17 +907,17 @@ function IndexPopup() {
             </div>
             
             {showModeConfig && (
-              <div className="mb-6 p-4 bg-white rounded-lg shadow-sm">
-                <h3 className="text-base mb-3 text-black font-medium">Configure Mode Selector (Choose up to 4)</h3>
-                <div className="flex flex-wrap gap-2">
+              <div className="lu-mb-6 lu-p-4 lu-bg-white lu-rounded-lg lu-shadow-sm">
+                <h3 className="lu-text-base lu-mb-3 lu-text-black lu-font-medium">Configure Mode Selector (Choose up to 4)</h3>
+                <div className="lu-flex lu-flex-wrap lu-gap-2">
                   {allModes.map((mode) => (
-                    <div key={mode} className="relative group">
+                    <div key={mode} className="lu-relative lu-group">
                       <button
                         onClick={() => togglePreferredMode(mode)}
-                        className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm transition-all ${
+                        className={`lu-flex lu-items-center lu-gap-2 lu-px-4 lu-py-2 lu-rounded-full lu-text-sm lu-transition-all ${
                           preferredModes.includes(mode)
-                            ? "bg-[#14742F] text-white"
-                            : "bg-[#D6D6D6] text-black hover:bg-[#C4C4C4]"
+                            ? "lu-bg-[#14742F] lu-text-white"
+                            : "lu-bg-[#D6D6D6] lu-text-black hover:lu-bg-[#C4C4C4]"
                         }`}
                         title={mode === "summarize" ? "Condense text into key points" :
                                mode === "analyze" ? "Examine text for insights and patterns" :
@@ -923,26 +936,26 @@ function IndexPopup() {
                         {mode === "translate" && "Translate"}
                         {mode === "free" && "Ask Anything"}
                       </button>
-                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                      <div className="lu-absolute lu-bottom-full lu-left-1/2 lu-transform lu--translate-x-1/2 lu-mb-2 lu-px-3 lu-py-1.5 lu-bg-gray-800 lu-text-white lu-text-xs lu-rounded lu-opacity-0 lu-group-hover:lu-opacity-100 lu-transition-opacity lu-duration-200 lu-pointer-events-none lu-whitespace-nowrap lu-z-10">
                         {mode === "summarize" ? "Condense text into key points" :
                          mode === "analyze" ? "Examine text for insights and patterns" :
                          mode === "explain" ? "Clarify complex concepts in simple terms" :
                          mode === "translate" ? "Convert text to another language" :
                          "Ask any question about selected text"}
-                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 border-4 border-transparent border-t-gray-800"></div>
+                        <div className="lu-absolute lu-top-full lu-left-1/2 lu-transform lu--translate-x-1/2 lu-border-4 lu-border-transparent lu-border-t-gray-800"></div>
                       </div>
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-gray-500 mt-2">
+                <p className="lu-text-xs lu-text-gray-500 lu-mt-2">
                   These modes will appear in the mode selector when using LightUp.
                 </p>
               </div>
             )}
             
             <div>
-              <h3 className="text-base mb-4 text-black font-['K2D']">Available actions</h3>
-              <div className="flex flex-wrap gap-2">
+              <h3 className="lu-text-base lu-mb-4 lu-text-black lu-font-['K2D']">Available actions</h3>
+              <div className="lu-flex lu-flex-wrap lu-gap-2">
                 <ActionButton
                   mode="summarize"
                   activeMode={activeMode}
@@ -977,15 +990,15 @@ function IndexPopup() {
             </div>
 
             {activeMode === "translate" && (
-              <div className="flex gap-4 mt-6">
-                <div className="flex-1">
-                  <label className="block text-sm font-medium mb-2 text-gray-700">
+              <div className="lu-flex lu-gap-4 lu-mt-6">
+                <div className="lu-flex-1">
+                  <label className="lu-block lu-text-sm lu-font-medium lu-mb-2 lu-text-gray-700">
                     From
                   </label>
                   <select
                     value={fromLanguage}
                     onChange={(e) => setFromLanguage(e.target.value)}
-                    className="w-full p-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    className="lu-w-full lu-p-2 lu-rounded-lg lu-border lu-border-gray-200 lu-bg-white lu-text-sm lu-focus:lu-outline-none lu-focus:lu-ring-2 lu-focus:lu-ring-gray-200"
                   >
                     {Object.entries(LANGUAGES).map(([code, name]) => (
                       <option key={code} value={code}>
@@ -994,14 +1007,14 @@ function IndexPopup() {
                     ))}
                   </select>
                 </div>
-                <div className="flex-1">
-                  <label className="block text-sm font-medium mb-2 text-gray-700">
+                <div className="lu-flex-1">
+                  <label className="lu-block lu-text-sm lu-font-medium lu-mb-2 lu-text-gray-700">
                     To
                   </label>
                   <select
                     value={toLanguage}
                     onChange={(e) => setToLanguage(e.target.value)}
-                    className="w-full p-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-gray-200"
+                    className="lu-w-full lu-p-2 lu-rounded-lg lu-border lu-border-gray-200 lu-bg-white lu-text-sm lu-focus:lu-outline-none lu-focus:lu-ring-2 lu-focus:lu-ring-gray-200"
                   >
                     {Object.entries(LANGUAGES).map(([code, name]) => (
                       <option key={code} value={code}>
@@ -1014,9 +1027,9 @@ function IndexPopup() {
             )}
 
             {activeMode === "free" && (
-              <div className="mt-6">
-                <div className="p-4 bg-[#F5F5F5] rounded-lg border border-gray-200">
-                  <p className="text-sm text-gray-700">
+              <div className="lu-mt-6">
+                <div className="lu-p-4 lu-bg-[#F5F5F5] lu-rounded-lg lu-border lu-border-gray-200">
+                  <p className="lu-text-sm lu-text-gray-700">
                     In "Ask Anything" mode, you can have free-form conversations with the AI about any topic.
                     {settings?.customization?.layoutMode === "sidebar" ? (
                       <span> With sidebar layout enabled, simply move your cursor to the far right edge of the screen to activate the AI assistant - no text selection needed.</span>
@@ -1030,14 +1043,14 @@ function IndexPopup() {
               </div>
             )}
 
-            <div className="mt-auto pt-12 flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            <div className="lu-mt-auto lu-pt-12 lu-flex lu-items-center lu-justify-between">
+              <div className="lu-flex lu-items-center lu-gap-2">
                 {isContextAwareEnabled && (
                   <div 
-                    className="flex items-center gap-1.5 px-3 py-1.5 bg-[#14742F]/10 text-[#14742F] rounded-lg text-sm"
+                    className="lu-flex lu-items-center lu-gap-1.5 lu-px-3 lu-py-1.5 lu-bg-[#14742F]/10 lu-text-[#14742F] lu-rounded-lg lu-text-sm"
                     title="Context awareness is enabled">
                     <svg 
-                      className="w-4 h-4" 
+                      className="lu-w-4 lu-h-4" 
                       fill="none" 
                       strokeWidth="2" 
                       stroke="currentColor" 
@@ -1057,28 +1070,28 @@ function IndexPopup() {
               </div>
               
               {/* Add Daily Usage component */}
-              <div className="w-full">
+              <div className="lu-w-full">
                 <RateLimitDisplay />
               </div>
             </div>
 
             {/* Add Shortcuts Section */}
-            <div className="mt-3">
+            <div className="lu-mt-3">
               <ShortcutsSection />
             </div>
 
             {/* Social Media Links */}
-            <div className="mt-4 pt-4 border-t border-gray-200">
-              <div className="flex items-center justify-between">
+            <div className="lu-mt-4 lu-pt-4 lu-border-t lu-border-gray-200">
+              <div className="lu-flex lu-items-center lu-justify-between">
 
-               <div className="flex items-center gap-2">
+               <div className="lu-flex lu-items-center lu-gap-2">
                   <button
                     onClick={handleOpenOptions}
-                    className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 pr-3 pl-0 py-1.5 rounded-lg hover:bg-gray-200/50 transition-colors"
+                    className="lu-text-sm lu-text-gray-600 hover:lu-text-gray-900 lu-flex lu-items-center lu-gap-1 lu-pr-3 lu-pl-0 lu-py-1.5 lu-rounded-lg hover:lu-bg-gray-200/50 lu-transition-colors"
                     aria-label="Open settings"
                     tabIndex={0}>
                     <svg 
-                      className="w-4 h-4" 
+                      className="lu-w-4 lu-h-4" 
                       fill="none" 
                       strokeWidth="2" 
                       stroke="currentColor" 
@@ -1095,29 +1108,40 @@ function IndexPopup() {
                     Settings
                   </button>
                   <a
-                    onClick={() => {
-                      chrome.tabs.create({
-                        url: chrome.runtime.getURL("tabs/feedback.html")
-                      })
-                    }}
-                    className="text-sm text-gray-600 hover:text-gray-900 flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-gray-200/50 transition-colors cursor-pointer"
+                    href="https://boi.featurebase.app/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="lu-text-sm lu-text-gray-600 hover:lu-text-gray-900 lu-flex lu-items-center lu-gap-1 lu-px-3 lu-py-1.5 lu-rounded-lg hover:lu-bg-gray-200/50 lu-transition-colors lu-cursor-pointer"
                     aria-label="Tell Us Your Opinion"
                     tabIndex={0}>
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg className="lu-w-4 lu-h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
                     </svg>
                     Tell Us Your Opinion
                   </a>
                 </div>
-                <div className="flex items-center gap-4">
+                <div className="lu-flex lu-items-center lu-gap-4">
+                  <a
+                    href="https://www.boimaginations.com/lightup"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="lu-text-gray-600 hover:lu-text-gray-900 lu-transition-colors"
+                    aria-label="LightUp Website"
+                    tabIndex={0}>
+                    <svg className="lu-w-4 lu-h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="2" y1="12" x2="22" y2="12"></line>
+                      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                  </a>
                   <a
                     href="https://github.com/mohamedsadiq/LightUp"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                    className="lu-text-gray-600 hover:lu-text-gray-900 lu-transition-colors"
                     aria-label="GitHub"
                     tabIndex={0}>
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <svg className="lu-w-4 lu-h-4" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.756-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.237 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z" />
                     </svg>
                   </a>
@@ -1125,10 +1149,10 @@ function IndexPopup() {
                     href="https://x.com/Lightupaii"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-gray-900 transition-colors"
+                    className="lu-text-gray-600 hover:lu-text-gray-900 lu-transition-colors"
                     aria-label="X (Twitter)"
                     tabIndex={0}>
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+                    <svg className="lu-w-4 lu-h-4" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                     </svg>
                   </a>
@@ -1136,10 +1160,10 @@ function IndexPopup() {
                     href="https://www.instagram.com/lightupaiapp/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-gray-800 transition-colors"
+                    className="lu-text-gray-600 hover:lu-text-gray-800 lu-transition-colors"
                     aria-label="Instagram"
                     tabIndex={0}>
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className="lu-w-4 lu-h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                       <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
                       <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>

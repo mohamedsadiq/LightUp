@@ -5,9 +5,13 @@ import type { MotionStyle } from "framer-motion"
 import type { CSSProperties } from "react"
 import MarkdownText from "../components/content/MarkdownText"
 import { Logo, CloseIcon } from "../components/icons"
-import "./styles.css"
-import "./content-style.css"
-import "./tailwind-scoped.css"
+
+// Import styles as text using Plasmo's data-text scheme
+import cssText from "data-text:./styles.css"
+import contentStyleCssText from "data-text:./content-style.css"
+import tailwindCssText from "data-text:./tailwind-scoped.css"
+import fontCssText from "data-text:./fonts.css" // Import font CSS
+
 import { styles } from "./styles"
 import { textVariants, iconButtonVariants } from "./variants"
 import { useResizable } from '../hooks/useResizable'
@@ -160,39 +164,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   }
 });
 
-// Add CSS reset to prevent Tailwind base styles from affecting the webpage
-const cssResetStyle = document.createElement('style');
-cssResetStyle.textContent = `
-  /* Reset styles for LightUp components */
-  [data-plasmo-popup] button,
-  [data-plasmo-popup] input,
-  [data-plasmo-popup] select,
-  [data-plasmo-popup] textarea {
-    all: revert;
-    font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 100%;
-    line-height: 1.15;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: none;
-    color: inherit;
-  }
-
-  /* Ensure our buttons have pointer cursor */
-  [data-plasmo-popup] button,
-  [data-plasmo-popup] [role="button"] {
-    cursor: pointer;
-  }
-`;
-document.head.appendChild(cssResetStyle);
-
-// Add font import
-const fontImportStyle = document.createElement('style');
-fontImportStyle.textContent = `
-  @import url('https://fonts.googleapis.com/css2?family=K2D:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap');
-`;
-document.head.appendChild(fontImportStyle);
+// Plasmo function to inject CSS into the Shadow DOM
+export const getStyle = () => {
+  const style = document.createElement("style")
+  // Combine all CSS text imports
+  style.textContent = cssText + contentStyleCssText + tailwindCssText + fontCssText
+  return style
+}
 
 // Plasmo config
 export const config: PlasmoCSConfig = {
@@ -953,14 +931,14 @@ function Content() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -10 }}
-        className="absolute top-2 right-2 z-50"
+        className="lu-absolute lu-top-2 lu-right-2 lu-z-50"
       >
-        <div className={`px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${
+        <div className={`lu-px-3 lu-py-1 lu-rounded-full lu-text-xs lu-font-medium lu-flex lu-items-center lu-gap-1 ${
           connectionStatus === 'connecting' 
             ? 'bg-yellow-100 text-yellow-800' 
             : 'bg-red-100 text-red-800'
         }`}>
-          <span className={`w-2 h-2 rounded-full ${
+          <span className={`lu-w-2 lu-h-2 lu-rounded-full ${
             connectionStatus === 'connecting' 
               ? 'bg-yellow-500 animate-pulse' 
               : 'bg-red-500'
@@ -969,7 +947,7 @@ function Content() {
           {connectionStatus === 'disconnected' && (
             <button 
               onClick={handleReconnect}
-              className="ml-1 underline text-blue-600 hover:text-blue-800"
+              className="lu-ml-1 lu-underline lu-text-blue-600 lu-hover:text-blue-800"
             >
               Reconnect
             </button>
@@ -1248,7 +1226,7 @@ function Content() {
                     <div style={{
                       ...themedStyles.explanation,
                       textAlign: themedStyles.explanation.textAlign as "left" | "right"
-                    }} className="streaming-text">
+                    }} className="">
                       <MarkdownText text={streamingText} />
                     </div>
                   )}
@@ -1286,6 +1264,7 @@ function Content() {
                     <motion.button
                       onClick={() => handleSpeak(streamingText, 'main')}
                       style={{
+                        marginTop: '3px',
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
@@ -1440,6 +1419,7 @@ function Content() {
                         <motion.button
                           onClick={() => handleCopy(answer, `followup-${id}`)}
                           style={{
+                            
                             background: 'none',
                             border: 'none',
                             cursor: 'pointer',
@@ -1481,6 +1461,7 @@ function Content() {
                         <motion.button
                           onClick={() => handleSpeak(answer, `followup-${id}`)}
                           style={{
+                            marginTop: '3px',
                             background: 'none',
                             border: 'none',
                             cursor: 'pointer',
@@ -1682,7 +1663,7 @@ function Content() {
                     scrollBehavior: 'smooth'
                   }}
                   data-plasmo-popup
-                  className="no-select"
+                  className="lu-no-select"
                   onClick={(e) => e.stopPropagation()}
                   onMouseUp={(e) => e.stopPropagation()}
                   onMouseDown={(e) => e.stopPropagation()}
@@ -1715,7 +1696,7 @@ function Content() {
                       background: 'transparent'
                     }}
                     onMouseDown={handleResizeStart}
-                    className="resize-handle"
+                    className="lu-resize-handle"
                   />
                 </motion.div>
               </div>
@@ -1734,7 +1715,7 @@ function Content() {
                 scrollBehavior: 'smooth'
               }}
               data-plasmo-popup
-              className="no-select"
+              className="lu-no-select"
               onClick={(e) => e.stopPropagation()}
               onMouseUp={(e) => e.stopPropagation()}
               onMouseDown={(e) => e.stopPropagation()}
@@ -1791,7 +1772,7 @@ function Content() {
                     pointerEvents: 'auto'
                   }}
                   data-plasmo-popup
-                  className="no-select"
+                  className="lu-no-select"
                   onClick={(e) => e.stopPropagation()}
                   onMouseUp={(e) => e.stopPropagation()}
                   onMouseDown={(e) => e.stopPropagation()}
@@ -1817,7 +1798,7 @@ function Content() {
                       background: 'transparent'
                     }}
                     onMouseDown={handleResizeStart}
-                    className="resize-handle"
+                    className="lu-resize-handle"
                   />
                 </motion.div>
               </div>

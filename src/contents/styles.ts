@@ -243,7 +243,7 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     }
   },
   centeredPopup: {
-    position: 'relative',
+    position: 'relative' as const,
     width: '700px',
     background: THEME_COLORS[theme].background,
     border: `1px solid ${THEME_COLORS[theme].border}`,

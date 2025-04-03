@@ -31,6 +31,22 @@
   animation: scaleIn 0.2s ease-in-out;
 }
 
+.lu-animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.lu-animate-scale-in {
+  animation: scaleIn 0.3s ease-out;
+}
+
+.lu-animate-slide-up {
+  animation: slideUp 0.3s ease-out;
+}
+
+.lu-animate-slide-down {
+  animation: slideDown 0.3s ease-out;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -47,6 +63,28 @@
   }
   to {
     transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
     opacity: 1;
   }
 }
@@ -83,18 +121,18 @@
 }
 
 /* Streaming text cursor animation */
-.streaming-text {
+/* .lu-streaming-text {
   position: relative;
-}
+} */
 
-.streaming-text::after {
+/* .lu-streaming-text::after {
   content: '▋';
   display: inline-block;
   animation: blink 1s step-end infinite;
   margin-left: 2px;
   font-weight: 100;
   opacity: 0.7;
-}
+} */
 
 @keyframes blink {
   0%, 100% { opacity: 0; }
@@ -112,15 +150,15 @@
 }
 
 /* Resize handle styles */
-.resize-handle:hover {
+.lu-resize-handle:hover {
   background: rgba(0, 0, 0, 0.1) !important;
 }
 
-.resize-handle:active {
+.lu-resize-handle:active {
   background: rgba(0, 0, 0, 0.2) !important;
 }
 
-.resize-handle::after {
+.lu-resize-handle::after {
   content: '';
   position: absolute;
   right: 3px;

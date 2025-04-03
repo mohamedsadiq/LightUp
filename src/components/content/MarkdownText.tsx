@@ -18,24 +18,22 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
   const textDirection = getTextDirection(language);
 
   useEffect(() => {
-    marked.setOptions({
-      breaks: true,
-      gfm: true,
-      pedantic: false,
-      smartLists: true,
-      smartypants: true,
-      highlight: function(code, lang) {
-        return code;
-      }
-    });
-
     const cleanedText = text
       .replace(/\n\s*\n/g, '\n\n')
       .replace(/<p>\s*<\/p>/g, '')
       .replace(/>\s+</g, '><')
       .trim();
     
-    let parsed = marked.parse(cleanedText);
+    const markedOptions = {
+      breaks: true,
+      gfm: true,
+      pedantic: false,
+      smartypants: true,
+      highlight: function(code: string, lang: string) {
+        return code;
+      }
+    };
+    let parsed = marked.parse(cleanedText, markedOptions) as string;
     parsed = DOMPurify.sanitize(parsed);
     
     parsed = parsed
@@ -55,7 +53,7 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
 
   return (
     <div 
-      className="prose dark:prose-invert max-w-none"
+      className="lu-prose dark:lu-prose-invert lu-max-w-none"
       style={{ 
         direction: textDirection,
         textAlign: textDirection === 'rtl' ? 'right' : 'left'
