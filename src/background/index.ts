@@ -40,6 +40,7 @@ const DEFAULT_SETTINGS: Settings = {
     popupAnimation: "scale",
     persistHighlight: false,
     layoutMode: "sidebar",
+    showGlobalActionButton: true,
     contextAwareness: false,
     activationMode: "automatic"
   }
@@ -53,7 +54,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     
     if (!existingSettings) {
       await storage.set("settings", DEFAULT_SETTINGS)
-      console.log("Initialized default settings for new installation")
+    
     }
   }
 })

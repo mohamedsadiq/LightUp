@@ -189,6 +189,7 @@ const getDefaultSettings = (): Settings => ({
     highlightColor: "default",
     popupAnimation: "scale",
     persistHighlight: false,
-    layoutMode: "sidebar"
+    layoutMode: "sidebar",
+    showGlobalActionButton: true
   }
 }) 

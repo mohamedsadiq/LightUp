@@ -1023,6 +1023,14 @@ function IndexOptions() {
               />
 
               <Switch
+                id="global-action-button"
+                checked={settings.customization?.showGlobalActionButton !== false}
+                onChange={(e) => handleImmediateSettingUpdate('showGlobalActionButton', e.target.checked)}
+                label="Global Action Button"
+                description="Show floating button to process entire page content"
+              />
+
+              <Switch
                 id="automatic-activation"
                 checked={settings.customization?.activationMode === "automatic"}
                 onChange={(e) => handleImmediateSettingUpdate('activationMode', e.target.checked ? "automatic" : "manual")}

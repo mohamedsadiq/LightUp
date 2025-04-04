@@ -74,6 +74,7 @@ export interface Settings {
     popupAnimation: "none" | "scale" | "fade"
     persistHighlight: boolean
     layoutMode: "floating" | "sidebar" | "centered"
+    showGlobalActionButton?: boolean // Controls visibility of the global action button
     contextAwareness?: boolean // New setting for context awareness
     activationMode?: "automatic" | "manual" // Controls whether popup shows automatically or requires context menu
   }

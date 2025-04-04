@@ -5,6 +5,7 @@ import type { MotionStyle } from "framer-motion"
 import type { CSSProperties } from "react"
 import MarkdownText from "../components/content/MarkdownText"
 import { Logo, CloseIcon } from "../components/icons"
+import GlobalActionButton from "../components/content/GlobalActionButton"
 
 // Import styles as text using Plasmo's data-text scheme
 import cssText from "data-text:./styles.css"
@@ -415,6 +416,24 @@ const FollowUpInput = React.memo(({
   );
 });
 
+// Define icons for Show/Hide Search
+const ShowSearchIcon = ({ theme }) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={theme === "dark" ? "#fff" : "#000"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    {/* Magnifying glass */}  
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+  </svg>
+);
+
+const HideSearchIcon = ({ theme }) => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={theme === "dark" ? "#fff" : "#000"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    {/* Slashed Magnifying glass */}  
+    <circle cx="11" cy="11" r="8"></circle>
+    <line x1="16.65" y1="16.65" x2="21" y2="21"></line>
+    <line x1="4" y1="4" x2="18" y2="18"></line> {/* Adjusted slash */}
+  </svg>
+);
+
 function Content() {
   // Generate a stable connection ID
   const [connectionId] = useState(() => uuidv4());
@@ -423,6 +442,9 @@ function Content() {
   // Add ref for the input element
   const inputRef = useRef<HTMLTextAreaElement>(null);
   
+  // State for search visibility - default to hidden
+  const [isSearchVisible, setIsSearchVisible] = useState(false);
+
   // Use our custom hooks
   const { settings, setSettings, isConfigured, currentTheme, targetLanguage, fontSize } = useSettings();
   const { activeMode, preferredModes, translationSettings } = useMode();
@@ -526,11 +548,7 @@ function Content() {
     }
   };
 
-  // Add debug logging for model
-  useEffect(() => {
-    console.log("[Content] Current model:", currentModel);
-  }, [currentModel]);
-
+ 
   // Remove context refresh effect and add simple mount effect
   useEffect(() => {
     
@@ -957,6 +975,54 @@ function Content() {
     );
   };
 
+  // Function to process the entire page content
+  const handleProcessEntirePage = (pageContent: string) => {
+    if (!isEnabled || !port) return;
+    
+    // Set loading state and reset previous results
+    setIsLoading(true);
+    setStreamingText("");
+    setFollowUpQAs([]);
+    setError(null);
+    
+    // Position the popup in a fixed position (center or side)
+    const layoutMode = settings?.customization?.layoutMode || "popup";
+    let popupPosition = { x: 0, y: 0 };
+    
+    if (layoutMode === "sidebar") {
+      popupPosition = { x: window.innerWidth - 400, y: 0 };
+    } else { // Center popup
+      popupPosition = { 
+        x: window.innerWidth / 2 - 300,  
+        y: window.innerHeight / 4
+      };
+    }
+    
+    setSelectedText(pageContent);
+    setPosition(popupPosition);
+    setIsVisible(true);
+    
+    // Process the content with the current mode
+    try {
+      port.postMessage({
+        type: "PROCESS_TEXT",
+        payload: {
+          text: pageContent,
+          context: "",
+          pageContext: "",
+          mode: mode,
+          settings: settings,
+          isFollowUp: false,
+          id: Date.now(),
+          connectionId
+        }
+      });
+    } catch (err) {
+      setError("Failed to process page content. Please try again.");
+      setIsLoading(false);
+    }
+  };
+
   // Render popup content
   const renderPopupContent = () => (
     <>
@@ -1332,6 +1398,53 @@ function Content() {
                         {currentModel || 'Loading...'}
                       </span>
                     </motion.div>
+                    
+                    {/* Search Toggle Button - Far Right */}
+                    <motion.button 
+                      onClick={() => {
+                        // Toggle search visibility
+                        setIsSearchVisible(!isSearchVisible);
+                        
+                        // If showing the search input, scroll to bottom after a short delay
+                        // to allow the animation to start
+                        if (!isSearchVisible) {
+                          setTimeout(() => {
+                            if (popupRef.current) {
+                              popupRef.current.scrollTo({
+                                top: popupRef.current.scrollHeight,
+                                behavior: 'smooth'
+                              });
+                            }
+                          }, 100);
+                        }
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        padding: '4px',
+                        borderRadius: '4px',
+                        color: currentTheme === "dark" ? "#fff" : "#000", // Theme-dependent color
+                        marginTop: '1px',
+                        marginLeft: 'auto' // Push to far right
+                      }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      title={isSearchVisible ? "Hide Search Input" : "Show Search Input"}
+                    >
+                      {isSearchVisible ? (
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="11" cy="11" r="8"></circle>
+                          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                          <line x1="4" y1="4" x2="18" y2="18"></line>
+                        </svg>
+                      ) : (
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="11" cy="11" r="8"></circle>
+                          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                      )}
+                    </motion.button>
                   </motion.div>
                 )}
               </motion.div>
@@ -1458,6 +1571,7 @@ function Content() {
                           )}
                         </motion.button>
 
+                        {/* Speak button */}
                         <motion.button
                           onClick={() => handleSpeak(answer, `followup-${id}`)}
                           style={{
@@ -1573,16 +1687,27 @@ function Content() {
             <div style={{ flexGrow: 1 }}></div>
 
             {/* Input section - now at the bottom */}
-            <FollowUpInput
-              inputRef={inputRef}
-              followUpQuestion={followUpQuestion}
-              handleFollowUpQuestion={handleFollowUpQuestion}
-              handleAskFollowUpWrapper={handleAskFollowUpWrapper}
-              isAskingFollowUp={isAskingFollowUp}
-              setIsInputFocused={setIsInputFocused}
-              themedStyles={themedStyles}
-              currentTheme={currentTheme}
-            />
+            <AnimatePresence>
+              {isSearchVisible && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 20 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <FollowUpInput
+                    inputRef={inputRef}
+                    followUpQuestion={followUpQuestion}
+                    handleFollowUpQuestion={handleFollowUpQuestion}
+                    handleAskFollowUpWrapper={handleAskFollowUpWrapper}
+                    isAskingFollowUp={isAskingFollowUp}
+                    setIsInputFocused={setIsInputFocused}
+                    themedStyles={themedStyles}
+                    currentTheme={currentTheme}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
@@ -1823,6 +1948,15 @@ function Content() {
             zIndex: Z_INDEX.BLUR_OVERLAY,
             transition: 'all 0.3s ease'
           }}
+        />
+      )}
+
+      {/* Add GlobalActionButton if enabled */}
+      {isEnabled && (
+        <GlobalActionButton 
+          onProcess={handleProcessEntirePage}
+          mode={mode}
+          isPopupVisible={isVisible}
         />
       )}
     </>

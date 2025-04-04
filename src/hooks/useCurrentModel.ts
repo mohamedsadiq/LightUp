@@ -39,7 +39,7 @@ export const useCurrentModel = () => {
     const loadCurrentModel = async () => {
       try {
         const settings = await storage.get("settings") as Settings
-        console.log("[useCurrentModel] Initial settings:", settings)
+      
         setCurrentModel(getModelDisplay(settings))
       } catch (error) {
         console.error("[useCurrentModel] Error loading settings:", error)
@@ -74,7 +74,7 @@ export const useCurrentModel = () => {
 
   // Also watch for settings changes from useSettings hook
   useEffect(() => {
-    console.log("[useCurrentModel] Settings from useSettings changed:", settings)
+   
     if (settings) {
       setCurrentModel(getModelDisplay(settings))
     }
