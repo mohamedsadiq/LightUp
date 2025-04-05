@@ -106,4 +106,92 @@ export class RateLimitService {
     
     return rateLimit.actionsRemaining
   }
-} 
+}
+
+// Add a simple cache system for responses
+interface ResponseCacheEntry {
+  mode: string;
+  text: string;
+  response: string;
+  timestamp: number;
+}
+
+class ResponseCacheService {
+  private cache: Map<string, ResponseCacheEntry> = new Map();
+  private MAX_CACHE_SIZE = 20; // Limit cache size to prevent memory issues
+  private CACHE_EXPIRY_MS = 24 * 60 * 60 * 1000; // 24 hours
+
+  // Generate a cache key from the input text and mode
+  private generateCacheKey(text: string, mode: string): string {
+    // Simple hash function for text
+    let hash = 0;
+    for (let i = 0; i < text.length; i++) {
+      const char = text.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    return `${mode}_${hash}`;
+  }
+
+  // Get a cached response if available
+  getResponse(text: string, mode: string): string | null {
+    const key = this.generateCacheKey(text, mode);
+    const entry = this.cache.get(key);
+    
+    if (!entry) return null;
+    
+    // Check if cache entry has expired
+    if (Date.now() - entry.timestamp > this.CACHE_EXPIRY_MS) {
+      this.cache.delete(key);
+      return null;
+    }
+    
+    return entry.response;
+  }
+
+  // Store a response in the cache
+  storeResponse(text: string, mode: string, response: string): void {
+    // Don't cache empty responses or extremely long texts
+    if (!response || text.length > 10000) return;
+    
+    const key = this.generateCacheKey(text, mode);
+    
+    // If cache is full, remove the oldest entry
+    if (this.cache.size >= this.MAX_CACHE_SIZE) {
+      let oldestKey: string | null = null;
+      let oldestTime = Date.now();
+      
+      this.cache.forEach((entry, entryKey) => {
+        if (entry.timestamp < oldestTime) {
+          oldestTime = entry.timestamp;
+          oldestKey = entryKey;
+        }
+      });
+      
+      if (oldestKey) {
+        this.cache.delete(oldestKey);
+      }
+    }
+    
+    // Store the new response
+    this.cache.set(key, {
+      mode,
+      text,
+      response,
+      timestamp: Date.now()
+    });
+  }
+
+  // Clear expired entries from the cache
+  clearExpiredEntries(): void {
+    const now = Date.now();
+    this.cache.forEach((entry, key) => {
+      if (now - entry.timestamp > this.CACHE_EXPIRY_MS) {
+        this.cache.delete(key);
+      }
+    });
+  }
+}
+
+// Export a singleton instance
+export const responseCacheService = new ResponseCacheService(); 

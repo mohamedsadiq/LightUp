@@ -1,6 +1,7 @@
 import type { ProcessTextRequest } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
 import { RateLimitService } from "../rateLimit"
+import { responseCacheService } from "../rateLimit"
 
 // The proxy endpoint URL for the basic version
 const PROXY_URL = "https://www.boimaginations.com/api/v1/basic/generate";
@@ -58,6 +59,51 @@ export const processBasicText = async function*(request: ProcessTextRequest) {
   const rateLimitService = new RateLimitService()
   
   try {
+    // Check for cached response if not a follow-up question
+    if (!isFollowUp) {
+      const cachedResponse = responseCacheService.getResponse(text, mode);
+      if (cachedResponse) {
+        logDebug('Using cached response');
+        
+        // Show immediate feedback
+        yield {
+          type: 'chunk',
+          content: 'Loading cached response...',
+          isFollowUp: request.isFollowUp,
+          id: request.id
+        };
+        
+        // Clear the loading message
+        yield {
+          type: 'chunk',
+          content: '\b'.repeat(25), // Backspace characters to clear the loading message
+          isFollowUp: request.isFollowUp,
+          id: request.id
+        };
+        
+        // Split the cached response into chunks for smoother output
+        const words = cachedResponse.split(' ');
+        const chunkSize = 15; // Larger chunks for cached responses
+        
+        for (let i = 0; i < words.length; i += chunkSize) {
+          const chunk = words.slice(i, i + chunkSize).join(' ');
+          yield {
+            type: 'chunk',
+            content: chunk + ' ',
+            isFollowUp: request.isFollowUp,
+            id: request.id
+          };
+        }
+        
+        yield { 
+          type: 'done',
+          isFollowUp: request.isFollowUp,
+          id: request.id
+        };
+        return;
+      }
+    }
+    
     const actionsAvailable = await rateLimitService.checkActionAvailable()
     if (!actionsAvailable) {
       throw new Error("Daily action limit reached. Please try again tomorrow. Or use your API key.");
@@ -137,6 +183,14 @@ export const processBasicText = async function*(request: ProcessTextRequest) {
 
     logDebug('Request body:', requestBody);
 
+    // Show immediate feedback with a placeholder chunk
+    yield {
+      type: 'chunk',
+      content: 'Thinking...',
+      isFollowUp: request.isFollowUp,
+      id: request.id
+    };
+
     const response = await fetchWithRetry(PROXY_URL, {
       method: 'POST',
       headers: {
@@ -163,6 +217,15 @@ export const processBasicText = async function*(request: ProcessTextRequest) {
 
     const decoder = new TextDecoder();
     let buffer = '';
+    let fullResponseText = ''; // Track the complete response for caching
+
+    // Clear the placeholder text
+    yield {
+      type: 'chunk',
+      content: '\b\b\b\b\b\b\b\b\b\b', // Backspace characters to clear "Thinking..."
+      isFollowUp: request.isFollowUp,
+      id: request.id
+    };
 
     while (true) {
       const { done, value } = await reader.read();
@@ -181,10 +244,13 @@ export const processBasicText = async function*(request: ProcessTextRequest) {
                 }
                 return acc;
               }, '');
+              
+              // Save full response for caching
+              fullResponseText = fullText;
 
-              // Split the text into smaller chunks for streaming
+              // Split the text into larger chunks for faster streaming
               const words = fullText.split(' ');
-              const chunkSize = 3; // Send 3 words at a time
+              const chunkSize = 10; // Increased from 3 to 10 words at a time
               
               for (let i = 0; i < words.length; i += chunkSize) {
                 const chunk = words.slice(i, i + chunkSize).join(' ');
@@ -194,14 +260,19 @@ export const processBasicText = async function*(request: ProcessTextRequest) {
                   isFollowUp: request.isFollowUp,
                   id: request.id
                 };
-                // Add a natural typing delay
-                await new Promise(resolve => setTimeout(resolve, 50));
+                // Remove the 50ms delay to make responses appear faster
               }
             }
           } catch (e) {
             logDebug('Failed to parse final buffer:', e);
           }
         }
+        
+        // Cache the response for future use if not a follow-up question
+        if (!isFollowUp && fullResponseText) {
+          responseCacheService.storeResponse(text, mode, fullResponseText);
+        }
+        
         yield { 
           type: 'done',
           isFollowUp: request.isFollowUp,

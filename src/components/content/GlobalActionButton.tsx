@@ -13,7 +13,6 @@ interface GlobalActionButtonProps {
 }
 
 const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({ onProcess, mode, isPopupVisible = false }) => {
-  const [isHovered, setIsHovered] = useState(false);
   const [theme, setTheme] = useState<Theme>("light");
   const [buttonVisible, setButtonVisible] = useState(true);
   
@@ -57,8 +56,8 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({ onProcess, mode
     onProcess(visibleText);
   };
 
-  // Define the tooltip text based on the current mode
-  const getTooltipText = () => {
+  // Define the aria label text based on the current mode
+  const getAriaLabel = () => {
     switch(mode) {
       case "summarize": return "Summarize entire page";
       case "explain": return "Explain entire page";
@@ -80,16 +79,6 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({ onProcess, mode
     };
   };
 
-  const getTooltipStyles = () => {
-    return {
-      backgroundColor: theme === "dark" ? "#383838" : "#ffffff",
-      color: theme === "dark" ? "#FFFFFF" : "#333333",
-      boxShadow: theme === "dark" 
-        ? "0 2px 10px rgba(0, 0, 0, 0.5)" 
-        : "0 2px 10px rgba(0, 0, 0, 0.1)"
-    };
-  };
-
   // If popup is visible or button is disabled in settings, don't show the button
   if (isPopupVisible || !buttonVisible) {
     return null;
@@ -107,32 +96,8 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({ onProcess, mode
           right: "20px",
           zIndex: Z_INDEX.POPUP,
         }}
-        aria-label={getTooltipText()}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
+        aria-label={getAriaLabel()}
       >
-        {isHovered && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            style={{
-              position: "absolute",
-              bottom: "100%",
-              right: "0",
-              marginBottom: "8px",
-              padding: "6px 12px",
-              borderRadius: "4px",
-              whiteSpace: "nowrap",
-              fontSize: "12px",
-              fontWeight: "500",
-              ...getTooltipStyles()
-            }}
-          >
-            {getTooltipText()}
-          </motion.div>
-        )}
-        
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -149,7 +114,7 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({ onProcess, mode
             padding: 0,
             ...getButtonStyles()
           }}
-          aria-label={getTooltipText()}
+          aria-label={getAriaLabel()}
           tabIndex={0}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {

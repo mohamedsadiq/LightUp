@@ -6,6 +6,7 @@ import type { CSSProperties } from "react"
 import MarkdownText from "../components/content/MarkdownText"
 import { Logo, CloseIcon } from "../components/icons"
 import GlobalActionButton from "../components/content/GlobalActionButton"
+import type { Settings } from "~types/settings"
 
 // Import styles as text using Plasmo's data-text scheme
 import cssText from "data-text:./styles.css"
@@ -55,6 +56,7 @@ import { useLastResult } from "~hooks/useLastResult"
 import { useCurrentModel } from "~hooks/useCurrentModel"
 import { useConversation } from "~hooks/useConversation"
 import { useMode } from "~hooks/useMode"
+import { prefetchService } from "../services/llm/prefetch"
 
 // Add message listener for settings updates
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -209,6 +211,75 @@ if (isReddit) {
   observer.observe(document.body, { 
     childList: true, 
     subtree: true 
+  });
+}
+
+// Add a specific fix for YouTube's CSS that affects font sizing in the extension
+const isYouTube = window.location.hostname.includes('youtube.com');
+if (isYouTube) {
+  // Add a data attribute to the HTML tag for more specific CSS targeting
+  document.documentElement.setAttribute('data-youtube-domain', 'true');
+  
+  // Create a style element to override YouTube's CSS
+  const youtubeFixStyle = document.createElement('style');
+  youtubeFixStyle.textContent = `
+    /* Override YouTube's CSS that affects font sizing */
+    [data-plasmo-popup],
+    [data-plasmo-popup] * {
+      font-size: var(--lightup-font-size, inherit) !important;
+    }
+    
+    [data-plasmo-popup] [style*="font-size"] {
+      font-size: var(--lightup-set-size, inherit) !important;
+    }
+    
+    /* Ensure our elements use our styling not YouTube's */
+    [data-plasmo-popup] button,
+    [data-plasmo-popup] input,
+    [data-plasmo-popup] select,
+    [data-plasmo-popup] textarea,
+    [data-plasmo-popup] div,
+    [data-plasmo-popup] span,
+    [data-plasmo-popup] p {
+      font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+      line-height: 1.5 !important;
+    }
+  `;
+  document.head.appendChild(youtubeFixStyle);
+  
+  // Add a MutationObserver to ensure our font sizing remains correct
+  // even if YouTube's DOM changes
+  const observer = new MutationObserver(() => {
+    const storage = new Storage();
+    storage.get("settings").then((data) => {
+      if (data && typeof data === 'object') {
+        // Type checking to ensure we have valid settings
+        const settings = data as unknown as Settings;
+        const fontSize = settings?.customization?.fontSize || '1rem';
+        
+        // Apply the font size to all popup elements
+        const popupElement = document.querySelector('[data-plasmo-popup]');
+        if (popupElement instanceof HTMLElement) {
+          popupElement.style.setProperty('--lightup-font-size', fontSize);
+          
+          // Find elements with inline font-size and ensure they use our size
+          const elementsWithFontSize = popupElement.querySelectorAll('[style*="font-size"]');
+          elementsWithFontSize.forEach(element => {
+            if (element instanceof HTMLElement) {
+              element.style.setProperty('--lightup-set-size', element.style.fontSize);
+            }
+          });
+        }
+      }
+    });
+  });
+  
+  // Start observing the document with the configured parameters
+  observer.observe(document.body, { 
+    childList: true, 
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['style', 'class']
   });
 }
 
@@ -436,7 +507,8 @@ const HideSearchIcon = ({ theme }) => (
 
 function Content() {
   // Generate a stable connection ID
-  const [connectionId] = useState(() => uuidv4());
+  const connectionIdRef = useRef<string>(uuidv4());
+  const connectionId = connectionIdRef.current;
   const [highlightedRanges, setHighlightedRanges] = useState<Range[]>([]);
   
   // Add ref for the input element
