@@ -10,11 +10,11 @@ interface AnimatedTextProps {
 export const AnimatedText = ({ 
   text, 
   className = "",
-  speed = 60 // default speed
+  speed = 120 // default speed increased from 60 to 120 for faster display
 }: AnimatedTextProps) => {
   // Calculate base timing values adjusted by speed
-  const baseDuration = 6.75 / speed;
-  const baseDelay = 0.1 / speed;
+  const baseDuration = 3.5 / speed; // Reduced from 6.75 to 3.5
+  const baseDelay = 0.05 / speed; // Reduced from 0.1 to 0.05
 
   const tempDiv = document.createElement('div');
   tempDiv.innerHTML = DOMPurify.sanitize(text);

@@ -88,4 +88,22 @@ html[data-youtube-domain] [data-plasmo-popup] [style*="font-size"] {
 
 .lightup-highlight:hover {
   filter: brightness(0.95);
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+@-webkit-keyframes gradientAnimation {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 } 

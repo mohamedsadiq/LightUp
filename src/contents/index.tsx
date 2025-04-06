@@ -56,7 +56,6 @@ import { useLastResult } from "~hooks/useLastResult"
 import { useCurrentModel } from "~hooks/useCurrentModel"
 import { useConversation } from "~hooks/useConversation"
 import { useMode } from "~hooks/useMode"
-import { prefetchService } from "../services/llm/prefetch"
 
 // Add message listener for settings updates
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -507,8 +506,7 @@ const HideSearchIcon = ({ theme }) => (
 
 function Content() {
   // Generate a stable connection ID
-  const connectionIdRef = useRef<string>(uuidv4());
-  const connectionId = connectionIdRef.current;
+  const [connectionId] = useState(() => uuidv4());
   const [highlightedRanges, setHighlightedRanges] = useState<Range[]>([]);
   
   // Add ref for the input element
@@ -551,6 +549,26 @@ function Content() {
   const { copiedId, handleCopy } = useCopy();
   const { lastResult, updateLastResult } = useLastResult();
   const currentModel = useCurrentModel();
+  
+  // Add a ref for the popup element
+  const popupRef = useRef<HTMLDivElement>(null);
+  
+  // Enhanced scroll function
+  const scrollToBottom = useCallback(() => {
+    setTimeout(() => {
+      const popup = popupRef.current;
+      if (popup) {
+        const scrollHeight = popup.scrollHeight;
+        const height = popup.clientHeight;
+        const maxScroll = scrollHeight - height;
+        
+        popup.scrollTo({
+          top: maxScroll,
+          behavior: 'smooth'
+        });
+      }
+    }, 100); // Small delay to ensure content is rendered
+  }, []);
 
   const {
     conversationContext,
@@ -715,26 +733,6 @@ function Content() {
     setSettings,
     showToast
   });
-
-  // Add a ref for the popup element
-  const popupRef = useRef<HTMLDivElement>(null);
-
-  // Enhanced scroll function
-  const scrollToBottom = useCallback(() => {
-    setTimeout(() => {
-      const popup = popupRef.current;
-      if (popup) {
-        const scrollHeight = popup.scrollHeight;
-        const height = popup.clientHeight;
-        const maxScroll = scrollHeight - height;
-        
-        popup.scrollTo({
-          top: maxScroll,
-          behavior: 'smooth'
-        });
-      }
-    }, 100); // Small delay to ensure content is rendered
-  }, []);
 
   // Scroll on new question or answer updates
   useEffect(() => {
@@ -1365,7 +1363,7 @@ function Content() {
                       ...themedStyles.explanation,
                       textAlign: themedStyles.explanation.textAlign as "left" | "right"
                     }} className="">
-                      <MarkdownText text={streamingText} />
+                      <motion.div initial={{ filter: "blur(8px)" }} animate={{ filter: "blur(0px)" }} transition={{ duration: 0.1, delay: 0.1 }}><MarkdownText text={streamingText} /></motion.div>
                     </div>
                   )}
                 </div>
@@ -1477,9 +1475,9 @@ function Content() {
                         // Toggle search visibility
                         setIsSearchVisible(!isSearchVisible);
                         
-                        // If showing the search input, scroll to bottom after a short delay
-                        // to allow the animation to start
+                        // If showing the search input, focus and scroll
                         if (!isSearchVisible) {
+                          // First scroll to make sure the input is visible
                           setTimeout(() => {
                             if (popupRef.current) {
                               popupRef.current.scrollTo({
@@ -1487,6 +1485,13 @@ function Content() {
                                 behavior: 'smooth'
                               });
                             }
+                            
+                            // Then focus the input with slight delay to ensure it's rendered
+                            setTimeout(() => {
+                              if (inputRef.current) {
+                                inputRef.current.focus();
+                              }
+                            }, 150);
                           }, 100);
                         }
                       }}
@@ -1582,11 +1587,52 @@ function Content() {
                     ...themedStyles.followUpAnswer,
                     textAlign: textDirection === "rtl" ? "right" : "left"
                   }}>
-                    <MarkdownText
-                      text={answer}
-                      isStreaming={activeAnswerId === id && !isComplete}
-                      language={targetLanguage}
-                    />
+                    {activeAnswerId === id && !isComplete && answer === '' ? (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.3 }}
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'flex-start',
+                          gap: '8px',
+                          padding: '8px 0'
+                        }}
+                      >
+                        <motion.span 
+                          style={{ 
+                            fontWeight: 500,
+                            fontSize: '0.9em',
+                            backgroundImage: currentTheme === "dark" 
+                              ? 'linear-gradient(90deg, #fff 0%, #505050 50%, #fff 100%)'
+                              : 'linear-gradient(90deg, #c0c0c0 0%, #161616 50%, #c0c0c0 100%)',
+                            backgroundSize: '200% auto',
+                            color: 'transparent',
+                            WebkitBackgroundClip: 'text',
+                            backgroundClip: 'text',
+                            animation: 'gradientAnimation 2s linear infinite'
+                          }}
+                          initial={{}}
+                          animate={{
+                            backgroundPosition: ['0% center', '200% center']
+                          }}
+                          transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "linear"
+                          }}
+                        >
+                          Thinking
+                        </motion.span>
+                      </motion.div>
+                    ) : (
+                      <MarkdownText
+                        text={answer}
+                        isStreaming={activeAnswerId === id && !isComplete}
+                        language={targetLanguage}
+                      />
+                    )}
                     
                     {isComplete && (
                       <motion.div 

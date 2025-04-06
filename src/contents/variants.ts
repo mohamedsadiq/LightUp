@@ -1,7 +1,7 @@
 export const textVariants = {
   initial: { 
     opacity: 0, 
-    y: 20 
+    y: 20,
   },
   animate: { 
     opacity: 1, 

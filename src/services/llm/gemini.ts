@@ -116,24 +116,45 @@ export const processGeminiText = async function*(request: ProcessTextRequest) {
 
       buffer += decoder.decode(value, { stream: true })
       
+      // Optimize buffer handling for faster response
+      if (buffer.length > 500) {
+        // For large chunks, process immediately without waiting for line breaks
+        yield { 
+          type: 'chunk', 
+          content: buffer,
+          isFollowUp: request.isFollowUp,
+          id: request.id
+        }
+        buffer = ''
+        continue
+      }
+      
       const lines = buffer.split('\n')
       buffer = lines.pop() || ''
 
+      // Process multiple lines at once for faster response
+      const chunksToProcess = []
+      
       for (const line of lines) {
         if (line.trim() === '') continue
         
         try {
           const data = JSON.parse(line)
           if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-            yield { 
-              type: 'chunk', 
-              content: data.candidates[0].content.parts[0].text,
-              isFollowUp: request.isFollowUp,
-              id: request.id
-            }
+            chunksToProcess.push(data.candidates[0].content.parts[0].text)
           }
         } catch (e) {
           console.warn('Failed to parse line:', line)
+        }
+      }
+      
+      // Combine chunks and send in bulk for faster display
+      if (chunksToProcess.length > 0) {
+        yield { 
+          type: 'chunk', 
+          content: chunksToProcess.join(''),
+          isFollowUp: request.isFollowUp,
+          id: request.id
         }
       }
     }

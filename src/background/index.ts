@@ -30,6 +30,7 @@ const DEFAULT_SETTINGS: Settings = {
   modelType: "basic",
   basicModel: "gemini-2.0-flash-lite-preview-02-05",
   preferredModes: ["summarize", "explain", "analyze", "free"],
+  maxTokens: 2000,
   customPrompts: DEFAULT_CUSTOM_PROMPTS,
   customization: {
     showSelectedText: false,
@@ -37,7 +38,7 @@ const DEFAULT_SETTINGS: Settings = {
     radicallyFocus: false,
     fontSize: "1rem",
     highlightColor: "default",
-    popupAnimation: "scale",
+    popupAnimation: "none",
     persistHighlight: false,
     layoutMode: "sidebar",
     showGlobalActionButton: true,
@@ -329,7 +330,7 @@ Guidelines:
           
           // Split the text into smaller chunks for streaming-like behavior
           const words = text.split(' ');
-          const chunkSize = 5; // Send 5 words at a time
+          const chunkSize = 20; // Send more words at a time (increased from 15)
           
           for (let i = 0; i < words.length; i += chunkSize) {
             const chunk = words.slice(i, i + chunkSize).join(' ');
@@ -340,8 +341,8 @@ Guidelines:
               isFollowUp: isFollowUp,
               id: request.id
             });
-            // Add a small delay to simulate streaming
-            await new Promise(resolve => setTimeout(resolve, 50));
+            // Reduce delay to simulate faster streaming
+            await new Promise(resolve => setTimeout(resolve, 5)); // Reduced from 10ms to 5ms
           }
         } else {
           console.warn('No content in Gemini response:', data);
@@ -516,12 +517,31 @@ Guidelines:
     const decoder = new TextDecoder();
     let buffer = '';
     let isFirstChunk = true;
+    let pendingChunks = [];
+    let processingTimer = null;
+
+    // Function to efficiently process and send accumulated chunks
+    const processAndSendChunks = () => {
+      if (pendingChunks.length > 0) {
+        port.postMessage({ 
+          type: 'chunk', 
+          content: pendingChunks.join(''),
+          isFollowUp: isFollowUp,
+          id: request.id
+        });
+        pendingChunks = [];
+      }
+      processingTimer = null;
+    };
 
     while (true) {
       try {
         const { done, value } = await reader.read();
         
         if (done) {
+          // Process any pending chunks
+          processAndSendChunks();
+          
           if (buffer) {
             port.postMessage({ 
               type: 'chunk', 
@@ -542,36 +562,31 @@ Guidelines:
         const lines = buffer.split('\n');
         buffer = lines.pop() || '';
 
+        // Fast processing for multiple lines at once
         for (const line of lines) {
           if (line.trim() === '') continue;
           
-          const parsedLine = JSON.parse(line.replace(/^data: /, ''));
-          const settings = await storage.get("settings") as Settings;
-          
-          if (settings?.modelType === "gemini" && parsedLine.candidates?.[0]?.content?.parts?.[0]?.text) {
-            // Handle Gemini response format
-            const content = parsedLine.candidates[0].content.parts[0].text;
-            port.postMessage({ 
-              type: 'chunk', 
-              content: content,
-              isFollowUp: isFollowUp,
-              id: request.id
-            });
-          } else if (parsedLine.choices?.[0]?.delta?.content) {
-            // Handle other models' response format
-            const content = parsedLine.choices[0].delta.content;
+          try {
+            const parsedLine = JSON.parse(line.replace(/^data: /, ''));
+            const settings = await storage.get("settings") as Settings;
             
-            if (isFirstChunk) {
-              isFirstChunk = false;
+            if (settings?.modelType === "gemini" && parsedLine.candidates?.[0]?.content?.parts?.[0]?.text) {
+              // Handle Gemini response format
+              const content = parsedLine.candidates[0].content.parts[0].text;
+              pendingChunks.push(content);
+            } else if (parsedLine.choices?.[0]?.delta?.content) {
+              // Handle other models' response format
+              const content = parsedLine.choices[0].delta.content;
+              pendingChunks.push(content);
             }
-
-            port.postMessage({ 
-              type: 'chunk', 
-              content: content,
-              isFollowUp: isFollowUp,
-              id: request.id
-            });
+          } catch (e) {
+            console.warn('Failed to parse streaming response:', e);
           }
+        }
+        
+        // Send accumulated chunks every 5ms (debounced)
+        if (pendingChunks.length > 0 && !processingTimer) {
+          processingTimer = setTimeout(processAndSendChunks, 5);
         }
       } catch (e) {
         console.warn('Failed to parse streaming response:', e);
@@ -582,10 +597,30 @@ Guidelines:
       try {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
+        let pendingChunks = [];
+        let processingTimer = null;
+        
+        // Function to efficiently process and send accumulated chunks
+        const processAndSendChunks = () => {
+          if (pendingChunks.length > 0) {
+            port.postMessage({
+              type: 'chunk',
+              content: pendingChunks.join(''),
+              isFollowUp: request.isFollowUp,
+              id: request.id
+            });
+            pendingChunks = [];
+          }
+          processingTimer = null;
+        };
         
         while (true) {
           const { done, value } = await reader.read();
-          if (done) break;
+          if (done) {
+            // Send any remaining chunks
+            processAndSendChunks();
+            break;
+          }
           
           const chunk = decoder.decode(value);
           const lines = chunk.split('\n').filter(line => line.trim());
@@ -595,19 +630,26 @@ Guidelines:
               try {
                 const data = JSON.parse(line.slice(6));
                 if (data.choices[0].delta.content) {
-                  port.postMessage({
-                    type: 'chunk',
-                    content: data.choices[0].delta.content,
-                    isFollowUp: request.isFollowUp,
-                    id: request.id
-                  });
+                  pendingChunks.push(data.choices[0].delta.content);
                 }
               } catch (e) {
                 console.error('Error parsing OpenAI stream chunk:', e);
               }
             }
           }
+          
+          // Send accumulated chunks every 5ms (debounced)
+          if (pendingChunks.length > 0 && !processingTimer) {
+            processingTimer = setTimeout(processAndSendChunks, 5);
+          }
         }
+        
+        // Send done signal
+        port.postMessage({
+          type: 'done',
+          isFollowUp: request.isFollowUp,
+          id: request.id
+        });
       } catch (streamError) {
         if (streamError.message?.includes('aborted')) return;
         throw streamError;

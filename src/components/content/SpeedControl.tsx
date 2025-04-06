@@ -7,11 +7,11 @@ interface SpeedControlProps {
 
 export const SpeedControl = ({ speed, onSpeedChange }: SpeedControlProps) => {
   const speeds = [
-    { value: 0.5, label: '0.5x' },
     { value: 1, label: '1x' },
-    { value: 1.5, label: '1.5x' },
     { value: 2, label: '2x' },
-    { value: 3, label: '3x' }
+    { value: 3, label: '3x' },
+    { value: 5, label: '5x' },
+    { value: 10, label: '10x' }
   ];
 
   return (

@@ -19,7 +19,7 @@ interface UsePortReturn {
   setStreamingText: React.Dispatch<React.SetStateAction<string>>;
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
-  reconnect: () => chrome.runtime.Port | null;
+  reconnect: () => void;
 }
 
 export const usePort = (
@@ -33,11 +33,6 @@ export const usePort = (
   const [error, setError] = useState<string | null>(null);
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'connecting' | 'disconnected'>('connecting');
   const portRef = useRef<chrome.runtime.Port | null>(null);
-  
-  // Add a buffer for chunking updates
-  const textBufferRef = useRef<string>("");
-  const followUpBufferRef = useRef<Map<number, string>>(new Map());
-  const updateTimeoutRef = useRef<number | null>(null);
 
   const connect = () => {
     try {
@@ -89,89 +84,85 @@ export const usePort = (
     return connect();
   };
 
-  useEffect(() => {
-    // This effect initializes the port connection when the component mounts
-    let currentPort: chrome.runtime.Port | null = null;
-    
+  // Safely send a message through the port, with automatic reconnection if needed
+  const safelySendMessage = (message: any): boolean => {
     try {
-      currentPort = connect();
-    } catch (e) {
-      console.error('Error connecting port on mount:', e);
-      setConnectionStatus('disconnected');
-      setError('Failed to establish connection.');
-    }
-    
-    // Clean up function to disconnect the port when the component unmounts
-    return () => {
-      if (currentPort) {
-        try {
-          currentPort.disconnect();
-          console.log('Port disconnected on unmount');
-        } catch (e) {
-          console.error('Error disconnecting port on unmount:', e);
-        }
+      if (!portRef.current) {
+        const newPort = reconnect();
+        if (!newPort) return false;
       }
       
-      // Clear any pending timeouts
-      if (updateTimeoutRef.current !== null) {
-        clearTimeout(updateTimeoutRef.current);
+      portRef.current?.postMessage(message);
+      return true;
+    } catch (e) {
+      console.error('Error sending message:', e);
+      
+      // Try to reconnect once
+      try {
+        const newPort = reconnect();
+        if (!newPort) return false;
+        
+        // Try again with the new port
+        newPort.postMessage(message);
+        return true;
+      } catch (e2) {
+        console.error('Failed to reconnect and send message:', e2);
+        setError('Connection lost. Please try again.');
+        return false;
       }
+    }
+  };
+
+  useEffect(() => {
+    const newPort = connect();
+    
+    // Set up periodic connection check
+    const connectionChecker = setInterval(() => {
+      if (portRef.current) {
+        try {
+          // Test if the port is still active by sending a ping
+          portRef.current.postMessage({ type: "PING" });
+        } catch (e) {
+          console.log('Connection test failed, reconnecting...');
+          reconnect();
+        }
+      } else if (connectionStatus !== 'disconnected') {
+        // If we don't have a port but think we're connected, reconnect
+        reconnect();
+      }
+    }, 30000); // Check every 30 seconds, but don't terminate
+    
+    return () => {
+      clearInterval(connectionChecker);
+      
+      if (portRef.current) {
+        try {
+          portRef.current.postMessage({
+            type: "STOP_GENERATION",
+            connectionId
+          });
+          portRef.current.disconnect();
+        } catch (e) {
+          console.error('Error cleaning up port:', e);
+        }
+      }
+      portRef.current = null;
     };
-  }, [connectionId]); // Only re-run if connectionId changes
-
-  // Add a function to flush text buffers to state
-  const flushTextBuffers = () => {
-    // Update main text if there's anything in the buffer
-    if (textBufferRef.current) {
-      setStreamingText(prev => prev + textBufferRef.current);
-      textBufferRef.current = "";
-    }
-    
-    // Update follow-up answers if there's anything in those buffers
-    if (followUpBufferRef.current.size > 0 && onFollowUpUpdate) {
-      followUpBufferRef.current.forEach((content, id) => {
-        onFollowUpUpdate(id, content);
-        followUpBufferRef.current.delete(id);
-      });
-    }
-    
-    // Clear the timeout reference
-    updateTimeoutRef.current = null;
-  };
-
-  // Schedule flushing buffers
-  const scheduleBufferFlush = () => {
-    if (updateTimeoutRef.current === null) {
-      updateTimeoutRef.current = window.setTimeout(flushTextBuffers, 33); // ~30fps, fast enough to feel responsive
-    }
-  };
+  }, [connectionId]);
 
   const handleStreamResponse = (msg: PortMessage) => {
     switch (msg.type) {
       case 'chunk':
         if (msg.content) {
           if (msg.isFollowUp && msg.id && onFollowUpUpdate) {
-            // Add to follow-up buffer
-            const currentBuffer = followUpBufferRef.current.get(msg.id) || "";
-            followUpBufferRef.current.set(msg.id, currentBuffer + msg.content);
-            scheduleBufferFlush();
+            onFollowUpUpdate(msg.id, msg.content);
           } else {
-            // Handle backspace character specially for immediate feedback
-            if (msg.content.includes('\b')) {
-              setStreamingText(""); // Clear the "Thinking..." text immediately
-            } else {
-              // Add to main text buffer
-              textBufferRef.current += msg.content;
-              scheduleBufferFlush();
-            }
+            setStreamingText(prev => prev + msg.content);
           }
         }
         break;
 
       case 'done':
-        // Flush any remaining buffered content immediately
-        flushTextBuffers();
-        
         if (msg.isFollowUp && msg.id && onFollowUpComplete) {
           onFollowUpComplete(msg.id);
         }
@@ -179,9 +170,6 @@ export const usePort = (
         break;
 
       case 'error':
-        // Flush any remaining buffered content immediately
-        flushTextBuffers();
-        
         setError(msg.error || 'An unknown error occurred');
         setIsLoading(false);
         break;

@@ -13,4 +13,23 @@ body {
 /* Ensure buttons have pointer cursor */
 button, [role="button"] {
   cursor: pointer;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+/* Add vendor prefixes for better browser support */
+@-webkit-keyframes gradientAnimation {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 } 
