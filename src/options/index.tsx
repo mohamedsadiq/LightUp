@@ -666,7 +666,7 @@ function IndexOptions() {
               </p>
             </div>
           </div>
-          <Badge variant="success">v0.1.11</Badge>
+          <Badge variant="success">v0.1.12</Badge>
         </motion.div>
 
         <div className="lu-grid lu-gap-6">
