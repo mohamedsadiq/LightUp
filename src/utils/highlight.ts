@@ -1,6 +1,6 @@
 // Define color mapping
 const highlightColors = {
-  default: '#FFEB3B',  // Yellow
+  default: '#fff8bc',  // Light yellow
   orange: '#FFBF5A',
   blue: '#93C5FD',
   green: '#86EFAC',
@@ -12,7 +12,7 @@ type HighlightColor = keyof typeof highlightColors;
 
 // Map of highlight color options to their CSS color values
 export const HIGHLIGHT_COLORS = {
-  default: '#FFEB3B',  // Yellow
+  default: '#fff8bc',  // Light yellow
   orange: '#FFBF5A',
   blue: '#93C5FD',
   green: '#86EFAC',

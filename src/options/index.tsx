@@ -489,7 +489,7 @@ function IndexOptions() {
 
 
   const colorOptions = [
-    { value: 'default', label: 'Default (System)', color: 'lu-bg-gray-200' },
+    { value: 'default', label: 'Default (System)', color: 'lu-bg-[#fff8bc]' },
     { value: 'orange', label: 'Orange', color: 'lu-bg-[#FFBF5A]' },
     { value: 'blue', label: 'Blue', color: 'lu-bg-[#93C5FD]' },
     { value: 'green', label: 'Green', color: 'lu-bg-[#86EFAC]' },

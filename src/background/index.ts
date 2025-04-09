@@ -38,7 +38,7 @@ const DEFAULT_SETTINGS: Settings = {
     radicallyFocus: false,
     fontSize: "1rem",
     highlightColor: "default",
-    popupAnimation: "none",
+    popupAnimation: "scale",
     persistHighlight: false,
     layoutMode: "sidebar",
     showGlobalActionButton: true,
