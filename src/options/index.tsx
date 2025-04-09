@@ -1026,8 +1026,8 @@ function IndexOptions() {
                 id="global-action-button"
                 checked={settings.customization?.showGlobalActionButton !== false}
                 onChange={(e) => handleImmediateSettingUpdate('showGlobalActionButton', e.target.checked)}
-                label="Global Action Button"
-                description="Show floating button to process entire page content"
+                label="Quick View"
+                description="Show floating button to instantly process page content"
               />
 
               <Switch

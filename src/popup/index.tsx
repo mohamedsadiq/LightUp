@@ -368,8 +368,8 @@ const SettingsSection = ({ isOpen, onClose, settings, updateSettings }) => {
               id="global-action-button"
               checked={settings.customization?.showGlobalActionButton !== false}
               onChange={(e) => updateSettings('showGlobalActionButton', e.target.checked)}
-              label="Global Action Button"
-              description="Show floating button to process entire page content"
+              label="Quick View"
+              description="Show floating button to instantly process page content"
             />
 
             <Switch
