@@ -85,9 +85,31 @@ export const useSettings = (): UseSettingsReturn => {
     };
   }, [])
 
-  const currentTheme = (settings?.customization?.theme || "light") as Theme
+  const currentTheme = (() => {
+    const themePreference = settings?.customization?.theme || "system";
+    if (themePreference === "system") {
+      // Check system preference
+      const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      return isDarkMode ? "dark" : "light";
+    }
+    return themePreference as Theme;
+  })();
   const targetLanguage = settings?.translationSettings?.toLanguage || 'en'
   const fontSize = settings?.customization?.fontSize || "1rem" as "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem"
+
+  // Listen for system theme changes
+  useEffect(() => {
+    if (settings?.customization?.theme === "system") {
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      const handleChange = () => {
+        // Force a re-render when system theme changes
+        setSettings(prev => ({ ...prev! }));
+      };
+      
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+  }, [settings?.customization?.theme]);
 
   return {
     settings,

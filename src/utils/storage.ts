@@ -183,7 +183,7 @@ const getDefaultSettings = (): Settings => ({
   maxTokens: 1000,
   customization: {
     showSelectedText: false,
-    theme: "light",
+    theme: "system",
     radicallyFocus: false,
     fontSize: "1rem",
     highlightColor: "default",

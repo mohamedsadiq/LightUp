@@ -67,7 +67,7 @@ export interface Settings {
   extendedConversations?: boolean
   customization: {
     showSelectedText: boolean
-    theme: "light" | "dark"
+    theme: "light" | "dark" | "system"
     radicallyFocus: boolean
     fontSize: "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem"
     highlightColor: "default" | "orange" | "blue" | "green" | "purple" | "pink"

@@ -1,4 +1,4 @@
-export type Theme = "light" | "dark";
+export type Theme = "light" | "dark" | "system";
 
 export interface ThemedStyles {
   popup: React.CSSProperties;

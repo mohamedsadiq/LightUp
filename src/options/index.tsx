@@ -337,7 +337,8 @@ function IndexOptions() {
       popupAnimation: "scale",
       persistHighlight: false,
       layoutMode: "sidebar",
-      activationMode: "manual"
+      activationMode: "manual",
+      enablePDFSupport: false
     }
   });
 
@@ -371,7 +372,8 @@ function IndexOptions() {
               persistHighlight: savedSettings.customization?.persistHighlight ?? false,
               layoutMode: savedSettings.customization?.layoutMode ?? "sidebar",
               contextAwareness: savedSettings.customization?.contextAwareness ?? false,
-              activationMode: savedSettings.customization?.activationMode ?? "manual"
+              activationMode: savedSettings.customization?.activationMode ?? "manual",
+              enablePDFSupport: savedSettings.customization?.enablePDFSupport ?? false
             }
           });
         }
@@ -1036,6 +1038,14 @@ function IndexOptions() {
                 onChange={(e) => handleImmediateSettingUpdate('activationMode', e.target.checked ? "automatic" : "manual")}
                 label="Automatic Activation"
                 description="Show popup automatically when text is selected (without requiring context menu)"
+              />
+
+              <Switch
+                id="pdf-support"
+                checked={settings.customization?.enablePDFSupport ?? false}
+                onChange={(e) => handleImmediateSettingUpdate('enablePDFSupport', e.target.checked)}
+                label="PDF Support"
+                description="Enable text selection and annotations in PDF files"
               />
 
               {/* Font Size Selection */}

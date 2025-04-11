@@ -34,7 +34,7 @@ const DEFAULT_SETTINGS: Settings = {
   customPrompts: DEFAULT_CUSTOM_PROMPTS,
   customization: {
     showSelectedText: false,
-    theme: "light",
+    theme: "system",
     radicallyFocus: false,
     fontSize: "1rem",
     highlightColor: "default",

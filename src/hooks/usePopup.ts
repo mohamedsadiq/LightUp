@@ -86,42 +86,8 @@ export const usePopup = (
       return;
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      if (isInteractingWithPopup) return;
-
-      const distanceFromRight = window.innerWidth - e.clientX;
-      
-      if (distanceFromRight <= SIDEBAR_ACTIVATION_THRESHOLD) {
-        // Clear any existing timer
-        if (hoverTimer) clearTimeout(hoverTimer);
-        
-        // Set new timer
-        const timer = setTimeout(() => {
-          if (!isVisible) {
-            setMode("free");
-            setPosition({ x: window.innerWidth - 400, y: 0 }); // Adjust width as needed
-            setIsVisible(true);
-          }
-        }, HOVER_DELAY);
-        
-        setHoverTimer(timer);
-      } else {
-        // Clear timer if mouse moves away
-        if (hoverTimer) {
-          clearTimeout(hoverTimer);
-          setHoverTimer(null);
-        }
-        
-        // Hide sidebar if not interacting
-        if (isVisible && !isInteractingWithPopup && mode === "free") {
-          setIsVisible(false);
-        }
-      }
-    };
-
-    document.addEventListener('mousemove', handleMouseMove);
+    // Remove the mouse movement event listener and related code
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
       if (hoverTimer) clearTimeout(hoverTimer);
     };
   }, [isEnabled, settings?.customization?.layoutMode, isInteractingWithPopup, isVisible, hoverTimer]);

@@ -2075,6 +2075,7 @@ function Content() {
           onProcess={handleProcessEntirePage}
           mode={mode}
           isPopupVisible={isVisible}
+          currentTheme={currentTheme}
         />
       )}
     </>

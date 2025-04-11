@@ -3,34 +3,28 @@ import { useState, useEffect } from "react";
 import { Z_INDEX } from "~utils/constants";
 import { Logo } from "../icons";
 import { Storage } from "@plasmohq/storage";
-import type { Theme } from "~types/theme";
 import type { Settings } from "~types/settings";
 
 interface GlobalActionButtonProps {
   onProcess: (text: string) => void;
   mode: string;
   isPopupVisible?: boolean;
+  currentTheme: "light" | "dark";
 }
 
-const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({ onProcess, mode, isPopupVisible = false }) => {
-  const [theme, setTheme] = useState<Theme>("light");
+const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({ 
+  onProcess, 
+  mode, 
+  isPopupVisible = false,
+  currentTheme
+}) => {
   const [buttonVisible, setButtonVisible] = useState(true);
   
-  // Load theme and button visibility settings from storage
+  // Load button visibility settings from storage
   useEffect(() => {
     const loadSettings = async () => {
       const storage = new Storage();
       const settings = await storage.get("settings") as Settings | undefined;
-      
-      // Load theme
-      const themePreference = settings?.customization?.theme || "system";
-      if (themePreference === "system") {
-        // Check system preference
-        const isDarkMode = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        setTheme(isDarkMode ? "dark" : "light");
-      } else {
-        setTheme(themePreference as Theme);
-      }
       
       // Load button visibility (default to true if not set)
       const showButton = settings?.customization?.showGlobalActionButton !== false;
@@ -71,9 +65,9 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({ onProcess, mode
   // Theme-aware styles
   const getButtonStyles = () => {
     return {
-      backgroundColor: theme === "dark" ? "#383838" : "#f5f5f5",
-      color: theme === "dark" ? "#FFFFFF" : "#000000",
-      boxShadow: theme === "dark" 
+      backgroundColor: currentTheme === "dark" ? "#383838" : "#f5f5f5",
+      color: currentTheme === "dark" ? "#FFFFFF" : "#000000",
+      boxShadow: currentTheme === "dark" 
         ? "0 4px 14px rgba(0, 0, 0, 0.4)" 
         : "0 4px 14px rgba(0, 0, 0, 0.15)"
     };
@@ -123,7 +117,7 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({ onProcess, mode
           }}
         >
           {/* Use the Logo component with current theme */}
-          {Logo(theme)}
+          {Logo(currentTheme)}
         </motion.button>
       </motion.div>
     </AnimatePresence>
