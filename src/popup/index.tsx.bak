@@ -21,7 +21,7 @@ const theme = {
     background: "#2A2A2A",       // Main popup background
     foreground: "#FFFFFF",      // Text color
     sidebar: "#2A2A2A",         // Sidebar background (darker than before)
-    sidebarActive: "#ffffff0d",   // Active sidebar item
+    sidebarActive: "#2D2D2D",   // Active sidebar item
     content: "#2A2A2A",         // Content area background
     border: "#3A3A3A",          // Border color
     primary: "#0078D4",         // Primary button color
@@ -93,7 +93,7 @@ const HeaderLogoWrapper = styled.div`
 const VersionBadgeContainer = styled.div`
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 10px;
   margin-right: 12px;
 `;
 
@@ -160,9 +160,9 @@ const CloseButton = styled.button`
 const ContentWrapper = styled.div`
   display: flex;
   flex: 1;
-  padding: 20px 0 0px 18px;
+  padding: 14px;
   overflow: hidden; // Prevents the wrapper itself from scrolling
-  
+  padding-top: 22px;
 `
 
 // Sidebar
@@ -185,7 +185,7 @@ const SidebarItem = styled.button<{ active: boolean }>`
   text-align: left;
   cursor: pointer;
   border-radius:7px;
-  margin-bottom: 4px;
+  
   &:hover {
     background: ${props => props.active ? theme.dark.sidebarActive : 'rgba(255, 255, 255, 0.05)'};
     color: ${theme.dark.foreground};
@@ -219,7 +219,7 @@ const SidebarSectionTitle = styled.div`
 // Content area
 const ContentArea = styled.div`
   flex: 1;
-  padding: 9px 35px 0 35px;
+  padding: 10px 20px;
   background: ${theme.dark.background};
   overflow-y: auto; // Enables vertical scrolling
   overflow-x: hidden; // Prevents horizontal scrolling
@@ -446,12 +446,13 @@ const IndexPopup = () => {
   const [activeTab, setActiveTab] = useState('general')
   const [activeModeConfig, setActiveModeConfig] = useState(false)
   const [activeMode, setActiveMode] = useState<string>('explain')
+  const [apiKeySaved, setApiKeySaved] = useState<string>('')
   
   // Get preferred modes from settings or use defaults
   const preferredModes = (settings?.customization as any)?.preferredModes || ['summarize', 'analyze', 'explain', 'translate']
   const allModes = ['summarize', 'analyze', 'explain', 'translate', 'free']
   
-  // Handler for updating a single setting
+  // Handler for updating settings
   const updateSettings = async (key: string, value: any) => {
     if (!settings) return
     
@@ -484,49 +485,6 @@ const IndexPopup = () => {
               type: "SETTINGS_UPDATED", 
               settings: newSettings,
               updatedKey: key
-            }).catch(err => {
-              // Ignore errors for tabs that don't have the content script running
-              console.log(`Could not send message to tab ${tab.id}:`, err);
-            });
-          }
-        });
-      });
-    }
-  }
-  
-  // Function to update multiple settings at once
-  const updateMultipleSettings = async (updates: Record<string, any>) => {
-    if (!settings) return
-    
-    const storage = new Storage()
-    const newSettings = {
-      ...settings,
-      customization: {
-        ...settings.customization,
-        ...updates
-      }
-    }
-    
-    // Update local state
-    setSettings(newSettings)
-    
-    // Save to storage
-    await storage.set("settings", newSettings)
-    
-    // Dispatch event for other components in the same window
-    window.dispatchEvent(
-      new CustomEvent('settingsUpdated', { detail: { settings: newSettings } })
-    )
-    
-    // Notify all tabs about the settings change for real-time updates
-    if (typeof chrome !== 'undefined' && chrome.tabs) {
-      chrome.tabs.query({}, (tabs) => {
-        tabs.forEach(tab => {
-          if (tab.id) {
-            chrome.tabs.sendMessage(tab.id, { 
-              type: "SETTINGS_UPDATED", 
-              settings: newSettings,
-              updatedKeys: Object.keys(updates)
             }).catch(err => {
               // Ignore errors for tabs that don't have the content script running
               console.log(`Could not send message to tab ${tab.id}:`, err);
@@ -655,8 +613,8 @@ const IndexPopup = () => {
           <HeaderTitle>LightUp</HeaderTitle>
         </HeaderLogoWrapper>
         <VersionBadgeContainer>
-          <BetaBadge>Beta </BetaBadge>
-          <VersionNumber>v1.1.12</VersionNumber>
+          <BetaBadge>Beta  v1.1.12</BetaBadge>
+          {/* <VersionNumber>Beta v1.1.12</VersionNumber> */}
         </VersionBadgeContainer>
       </Header>
       <ContentWrapper>
@@ -665,9 +623,9 @@ const IndexPopup = () => {
           <SidebarItem active={activeTab === 'general'} onClick={() => setActiveTab('general')}>
             <SidebarIcon>
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+  <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
 </svg>
-
 
             </SidebarIcon>
             General
@@ -699,7 +657,19 @@ const IndexPopup = () => {
             Keyboard Shortcuts
           </SidebarItem>
           <SidebarItem 
-            active={false} 
+            active={activeTab === 'prompts'} 
+            onClick={() => setActiveTab('prompts')}
+          >
+            <SidebarIcon>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </SidebarIcon>
+            Prompt Templates
+          </SidebarItem>
+          
+          <SidebarItem 
+            active={false}
             onClick={() => {
               if (typeof chrome !== 'undefined' && chrome.runtime) {
                 chrome.runtime.openOptionsPage();
@@ -707,11 +677,9 @@ const IndexPopup = () => {
             }}
           >
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
-  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 0 15 0m-15 0a7.5 7.5 0 1 1 15 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077 1.41-.513m14.095-5.13 1.41-.513M7.501 19.795l.75-1.3m7.5-12.99.75-1.3m-6.063 16.658.26-1.477m2.605-14.772.26-1.477m0 17.726-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205 12 12m6.894 5.785-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495" />
 </svg>
-
             </SidebarIcon>
             Advanced Settings
           </SidebarItem>
@@ -757,10 +725,9 @@ const IndexPopup = () => {
             active={false}
           >
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m20.893 13.393-1.135-1.135a2.252 2.252 0 0 1-.421-.585l-1.08-2.16a.414.414 0 0 0-.663-.107.827.827 0 0 1-.812.21l-1.273-.363a.89.89 0 0 0-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.212.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 0 1-1.81 1.025 1.055 1.055 0 0 1-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.655-.261a2.25 2.25 0 0 1-1.383-2.46l.007-.042a2.25 2.25 0 0 1 .29-.787l.09-.15a2.25 2.25 0 0 1 2.37-1.048l1.178.236a1.125 1.125 0 0 0 1.302-.795l.208-.73a1.125 1.125 0 0 0-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 0 1-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 0 1-1.458-1.137l1.411-2.353a2.25 2.25 0 0 0 .286-.76m11.928 9.869A9 9 0 0 0 8.965 3.525m11.928 9.868A9 9 0 1 1 8.965 3.525" />
-</svg>
-
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+              </svg>
             </SidebarIcon>
             Website
           </SidebarItem>
@@ -770,10 +737,9 @@ const IndexPopup = () => {
             active={false}
           >
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
-</svg>
-
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+              </svg>
             </SidebarIcon>
             Rate Us
           </SidebarItem>
@@ -813,7 +779,27 @@ const IndexPopup = () => {
                         }}
                       ></div>
                     </div>
-                   
+                    <div style={{ marginTop: '8px', textAlign: 'right' }}>
+                      <button 
+                        onClick={() => refreshRateLimit()}
+                        style={{ 
+                          background: 'none', 
+                          border: 'none', 
+                          color: 'rgba(255, 255, 255, 0.6)', 
+                          fontSize: '12px',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          marginLeft: 'auto'
+                        }}
+                      >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Refresh
+                      </button>
+                    </div>
                   </div>
                 )}
               </Section>
@@ -918,15 +904,8 @@ const IndexPopup = () => {
                   <ToggleContainer>
                     <ToggleInput 
                       type="checkbox" 
-                      checked={settings?.customization?.automaticActivation === true}
-                      onChange={(e) => {
-                        // Update both settings to ensure consistency with options page
-                        const newValue = e.target.checked;
-                        updateMultipleSettings({
-                          'automaticActivation': newValue,
-                          'activationMode': newValue ? "automatic" : "manual"
-                        });
-                      }}
+                      checked={(settings?.customization as any)?.activationMode === "automatic"}
+                      onChange={(e) => updateSettings('activationMode', e.target.checked ? "automatic" : "manual")}
                     />
                     <ToggleSlider />
                   </ToggleContainer>
@@ -1317,13 +1296,10 @@ const IndexPopup = () => {
                       onChange={(e) => updateSettings('fontSize', e.target.value)}
                       style={{ width: '120px' }}
                     >
-                      <option value="xx-small">XX-Small</option>
-                      <option value="x-small">X-Small</option>
                       <option value="small">Small</option>
                       <option value="medium">Medium</option>
                       <option value="large">Large</option>
                       <option value="x-large">X-Large</option>
-                      <option value="xx-large">XX-Large</option>
                     </Select>
                   </FormRow>
                   
@@ -1440,6 +1416,111 @@ const IndexPopup = () => {
           )}
           
           {/* Privacy Policy */}
+          {activeTab === 'prompts' && (
+            <Section>
+              <SectionTitle>Prompt Templates</SectionTitle>
+              <Description>Customize AI instructions for different modes</Description>
+              
+              {/* Prompt Templates Content */}
+              <div style={{ background: '#333333', borderRadius: '8px', padding: '20px', marginTop: '16px' }}>
+                <div style={{ marginBottom: '16px' }}>
+                  <Label>Mode Selection</Label>
+                  <Description>Select a mode to view or edit its prompt templates</Description>
+                  
+                  <div style={{ display: 'flex', gap: '8px', marginTop: '12px', flexWrap: 'wrap' }}>
+                    {allModes.map((mode) => (
+                      <Button
+                        key={mode}
+                        variant={activeMode === mode ? 'primary' : 'default'}
+                        onClick={() => setActiveMode(mode)}
+                        style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 12px' }}
+                      >
+                        {modeIcons[mode as keyof typeof modeIcons]}
+                        {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+                
+                <SectionDivider />
+                
+                <div style={{ marginTop: '16px' }}>
+                  <FormRow>
+                    <div>
+                      <Label>System Prompt</Label>
+                      <Description>Instructions given to the AI model (advanced users)</Description>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        if (typeof chrome !== 'undefined' && chrome.runtime) {
+                          chrome.runtime.openOptionsPage();
+                        }
+                      }}
+                      variant="default"
+                      style={{ minWidth: '120px' }}
+                    >
+                      Edit Template
+                    </Button>
+                  </FormRow>
+                  
+                  <div style={{ 
+                    marginTop: '8px', 
+                    padding: '12px', 
+                    backgroundColor: '#222', 
+                    borderRadius: '6px',
+                    maxHeight: '100px',
+                    overflow: 'auto',
+                    fontSize: '12px',
+                    color: 'rgba(255,255,255,0.7)',
+                    fontFamily: 'monospace'
+                  }}>
+                    {/* Display a truncated version of the system prompt */}
+                    {(settings?.customPrompts?.[activeMode]?.systemPrompt || 
+                      'You are a helpful AI assistant...')?.substring(0, 150)}...
+                  </div>
+                </div>
+                
+                <SectionDivider />
+                
+                <div style={{ marginTop: '16px' }}>
+                  <FormRow>
+                    <div>
+                      <Label>User Prompt</Label>
+                      <Description>Template for the user's instruction</Description>
+                    </div>
+                    <Button
+                      onClick={() => {
+                        if (typeof chrome !== 'undefined' && chrome.runtime) {
+                          chrome.runtime.openOptionsPage();
+                        }
+                      }}
+                      variant="default"
+                      style={{ minWidth: '120px' }}
+                    >
+                      Edit Template
+                    </Button>
+                  </FormRow>
+                  
+                  <div style={{ 
+                    marginTop: '8px', 
+                    padding: '12px', 
+                    backgroundColor: '#222', 
+                    borderRadius: '6px',
+                    maxHeight: '100px',
+                    overflow: 'auto',
+                    fontSize: '12px',
+                    color: 'rgba(255,255,255,0.7)',
+                    fontFamily: 'monospace'
+                  }}>
+                    {/* Display the user prompt */}
+                    {settings?.customPrompts?.[activeMode]?.userPrompt || 
+                      `Please ${activeMode} the following text: {{text}}`}
+                  </div>
+                </div>
+              </div>
+            </Section>
+          )}
+
           {activeTab === 'privacy' && (
             <Section>
               <SectionTitle>Privacy Policy</SectionTitle>
@@ -1489,76 +1570,458 @@ const IndexPopup = () => {
           {activeTab === 'advanced' && (
             <Section>
               <SectionTitle>Advanced Settings</SectionTitle>
-              <Description>Configure advanced features and API options</Description>
+              <Description>Configure advanced features in the options page</Description>
+              
+              <div style={{ marginTop: '24px', textAlign: 'center', padding: '32px 0' }}>
+                <div style={{ marginBottom: '24px' }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 16px', opacity: 0.7 }}>
+                    <path d="M4.5 12a7.5 7.5 0 0 0 15 0m-15 0a7.5 7.5 0 1 1 15 0m-15 0H3m16.5 0H21m-1.5 0H12m-8.457 3.077 1.41-.513m14.095-5.13 1.41-.513M7.501 19.795l.75-1.3m7.5-12.99.75-1.3m-6.063 16.658.26-1.477m2.605-14.772.26-1.477m0 17.726-.26-1.477M10.698 4.614l-.26-1.477M16.5 19.794l-.75-1.299M7.5 4.205 12 12m6.894 5.785-1.149-.964M6.256 7.178l-1.15-.964m15.352 8.864-1.41-.513M4.954 9.435l-1.41-.514M12.002 12l-3.75 6.495" />
+                  </svg>
+                  <p style={{ fontSize: '16px', marginBottom: '8px' }}>Advanced Settings</p>
+                  <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px' }}>Configure model providers, API keys, and custom prompts in the full options page</p>
+                </div>
+                
+                <Button
+                  onClick={() => {
+                    if (typeof chrome !== 'undefined' && chrome.runtime) {
+                      chrome.runtime.openOptionsPage();
+                    }
+                  }}
+                  variant="primary"
+                  style={{ padding: '10px 20px' }}
+                >
+                  Open Options Page
+                </Button>
+              </div>
+            </Section>
+          )}
+          {/* Privacy Policy tab */}
+          {activeTab === 'privacy' && (
+            <Section>
+              <SectionTitle>Privacy Policy</SectionTitle>
+              <Description>Information about how we handle your data</Description>
               
               <div style={{ background: '#333333', borderRadius: '8px', padding: '20px', marginTop: '16px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '16px' }}>API Configuration</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '16px' }}>Privacy Commitment</h3>
                 
-                <FormGroup>
-                  <Label htmlFor="api-key" style={{ marginBottom: '8px' }}>API Key</Label>
-                  <Description style={{ marginBottom: '8px' }}>Enter your API key for custom processing</Description>
-                  <Input id="api-key" type="password" placeholder="Enter your API key" />
-                </FormGroup>
-                
-                <FormGroup style={{ marginTop: '16px' }}>
-                  <Label htmlFor="api-endpoint" style={{ marginBottom: '8px' }}>API Endpoint</Label>
-                  <Description style={{ marginBottom: '8px' }}>Custom endpoint URL (advanced users only)</Description>
-                  <Input id="api-endpoint" type="text" placeholder="https://api.example.com/v1" />
-                </FormGroup>
-                
-                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
-                  <Button variant="primary">Save API Settings</Button>
+                <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)', lineHeight: '1.6' }}>
+                  <p style={{ marginBottom: '16px' }}>
+                    We take your privacy seriously. LightUp processes text locally by default and only sends data to our servers when explicitly requested.
+                  </p>
+                  
+                  <p style={{ marginBottom: '16px' }}>
+                    The extension does not collect any personal information without your consent. We do not sell or share your data with third parties.
+                  </p>
+                  
+                  <p style={{ marginBottom: '16px' }}>
+                    By using this extension, you agree to our privacy policy and terms of service.
+                  </p>
                 </div>
-              </div>
-              
-              <SectionDivider />
-              
-              <div style={{ marginTop: '16px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '16px' }}>Advanced Options</h3>
                 
-                <FormRow>
-                  <div>
-                    <Label>Context Awareness</Label>
-                    <Description>Enable deeper page context for better results</Description>
-                  </div>
-                  <ToggleContainer>
-                    <ToggleInput type="checkbox" />
-                    <ToggleSlider />
-                  </ToggleContainer>
-                </FormRow>
-                
-                <SectionDivider />
-                
-                <FormRow>
-                  <div>
-                    <Label>Maximum Content Length</Label>
-                    <Description>Set the maximum number of characters to process</Description>
-                  </div>
-                  <Select defaultValue="4000" style={{ width: '120px' }}>
-                    <option value="2000">2,000</option>
-                    <option value="4000">4,000</option>
-                    <option value="8000">8,000</option>
-                    <option value="16000">16,000</option>
-                  </Select>
-                </FormRow>
-                
-                <SectionDivider />
-                
-                <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
+                <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
                   <Button variant="primary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 2h6v6M11 13L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    Prompt Templates
+                    Full Privacy Policy
+                    </Select>
+                  </div>
+                </FormRow>
+                
+                {settings?.modelType === "basic" && (
+                  <div style={{ background: '#2D2D2D', borderRadius: '8px', padding: '15px', marginTop: '15px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                      <div style={{ padding: '8px', background: '#2DCA6E', borderRadius: '8px' }}>
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill="white" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'white', margin: 0 }}>LightUp Basic</h3>
+                        <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.7)', margin: '4px 0 0 0' }}>Free tier with basic features</p>
+                      </div>
+                    </div>
+
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.8)' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#2DCA6E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <span>20 requests per day</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.8)' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="#2DCA6E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <span>Powered by Gemini 2.0</span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: 'rgba(255,255,255,0.8)' }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="#FFB224" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <span>Not for sensitive data</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+                
+                <SectionDivider />
+                
+                {settings?.modelType === 'gemini' && (
+                  <>
+                    <div>
+                      <FormRow>
+                        <div>
+                          <Label>Google Gemini API Key</Label>
+                          <Description>Enter your API key from Google AI Studio</Description>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <input
+                              type="password"
+                              value={settings?.geminiApiKey || ''}
+                              onChange={(e) => {
+                                // Create a temporary local state
+                                setSettings({
+                                  ...settings,
+                                  geminiApiKey: e.target.value
+                                });
+                              }}
+                              style={{ 
+                                width: '220px', 
+                                padding: '8px 12px',
+                                borderRadius: '6px',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                background: '#333',
+                                color: 'white',
+                                fontSize: '14px'
+                              }}
+                              placeholder="Enter Gemini API key"
+                            />
+                            <Button
+                              onClick={() => {
+                                // Save the API key
+                                updateSettings('geminiApiKey', settings?.geminiApiKey || '');
+                                
+                                // Show success message
+                                setApiKeySaved('gemini');
+                                setTimeout(() => setApiKeySaved(''), 3000);
+                              }}
+                              variant="primary"
+                              style={{ padding: '8px 12px', minWidth: 'auto' }}
+                            >
+                              Save
+                            </Button>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: '4px' }}>
+                            <a 
+                              href="https://aistudio.google.com/app/apikey" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              style={{ 
+                                fontSize: '12px', 
+                                color: '#93C5FD', 
+                                textDecoration: 'none'
+                              }}
+                            >
+                              Get API key
+                            </a>
+                            {apiKeySaved === 'gemini' && (
+                              <span style={{ fontSize: '12px', color: '#2DCA6E' }}>
+                                ✓ API key saved
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </FormRow>
+                    </div>
+                    
+                    <SectionDivider />
+                    
+                    <FormRow>
+                      <div>
+                        <Label>Gemini Model</Label>
+                        <Description>Select which Gemini model to use</Description>
+                      </div>
+                      <div style={{ display: 'flex' }}>
+                        <Select 
+                          value={settings?.basicModel || 'gemini-2.0-flash-lite-preview-02-05'}
+                          onChange={(e) => updateSettings('basicModel', e.target.value)}
+                          style={{ minWidth: '180px' }}
+                        >
+                          <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                          <option value="gemini-2.0-flash-lite-preview-02-05">Gemini 2.0 Flash-Lite</option>
+                          <option value="gemini-2.0-flash-thinking-exp-01-21">Gemini 2.0 Flash Thinking</option>
+                          <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                          <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                          <option value="gemini-1.5-flash-8b">Gemini 1.5 Flash-8B</option>
+                        </Select>
+                      </div>
+                    </FormRow>
+                    
+                    <div style={{ background: '#2D2D2D', borderRadius: '8px', padding: '15px', marginTop: '15px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" fill="#93C5FD"/>
+                        </svg>
+                        <div>
+                          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)', margin: 0 }}>Google Gemini offers a generous free tier with up to 60 requests per minute.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+                
+                {settings?.modelType === 'xai' && (
+                  <>
+                    <div>
+                      <FormRow>
+                        <div>
+                          <Label>xAI (Grok) API Key</Label>
+                          <Description>Enter your API key from xAI platform</Description>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <input
+                              type="password"
+                              value={settings?.xaiApiKey || ''}
+                              onChange={(e) => {
+                                // Create a temporary local state
+                                setSettings({
+                                  ...settings,
+                                  xaiApiKey: e.target.value
+                                });
+                              }}
+                              style={{ 
+                                width: '220px', 
+                                padding: '8px 12px',
+                                borderRadius: '6px',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                background: '#333',
+                                color: 'white',
+                                fontSize: '14px'
+                              }}
+                              placeholder="Enter xAI API key"
+                            />
+                            <Button
+                              onClick={() => {
+                                // Save the API key
+                                updateSettings('xaiApiKey', settings?.xaiApiKey || '');
+                                
+                                // Show success message
+                                setApiKeySaved('xai');
+                                setTimeout(() => setApiKeySaved(''), 3000);
+                              }}
+                              variant="primary"
+                              style={{ padding: '8px 12px', minWidth: 'auto' }}
+                            >
+                              Save
+                            </Button>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: '4px' }}>
+                            <a 
+                              href="https://x.ai/api" 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              style={{ 
+                                fontSize: '12px', 
+                                color: '#93C5FD', 
+                                textDecoration: 'none'
+                              }}
+                            >
+                              Get API key
+                            </a>
+                            {apiKeySaved === 'xai' && (
+                              <span style={{ fontSize: '12px', color: '#2DCA6E' }}>
+                                ✓ API key saved
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </FormRow>
+                    </div>
+                    
+                    <SectionDivider />
+                    
+                    <FormRow>
+                      <div>
+                        <Label>Grok Model</Label>
+                        <Description>Select which Grok model to use</Description>
+                      </div>
+                      <div style={{ display: 'flex' }}>
+                        <Select 
+                          value={settings?.grokModel || 'grok-2'}
+                          onChange={(e) => updateSettings('grokModel', e.target.value)}
+                          style={{ minWidth: '140px' }}
+                        >
+                          <option value="grok-2">Grok 2</option>
+                          <option value="grok-2-latest">Grok 2 Latest</option>
+                          <option value="grok-beta">Grok Beta</option>
+                        </Select>
+                      </div>
+                    </FormRow>
+                    
+                    <div style={{ background: '#2D2D2D', borderRadius: '8px', padding: '15px', marginTop: '15px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" fill="#93C5FD"/>
+                        </svg>
+                        <div>
+                          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)', margin: 0 }}>xAI offers $25 in free credits for beta users. Sign up on their platform to get started.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+                
+                {settings?.modelType === 'local' && (
+                  <>
+                    <div>
+                      <FormRow>
+                        <div>
+                          <Label>Llama Server URL</Label>
+                          <Description>Enter your local server URL</Description>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
+                          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                            <input
+                              type="text"
+                              value={settings?.serverUrl || ''}
+                              onChange={(e) => {
+                                let url = e.target.value;
+                                if (url && !url.startsWith("http://") && !url.startsWith("https://")) {
+                                  url = `http://${url}`;
+                                }
+                                // Update local state
+                                setSettings({
+                                  ...settings,
+                                  serverUrl: url
+                                });
+                              }}
+                              style={{ 
+                                width: '220px', 
+                                padding: '8px 12px',
+                                borderRadius: '6px',
+                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                background: '#333',
+                                color: 'white',
+                                fontSize: '14px'
+                              }}
+                              placeholder="http://127.0.0.1:1234"
+                            />
+                            <Button
+                              onClick={() => {
+                                // Save the server URL
+                                updateSettings('serverUrl', settings?.serverUrl || '');
+                                
+                                // Show success message
+                                setApiKeySaved('local');
+                                setTimeout(() => setApiKeySaved(''), 3000);
+                              }}
+                              variant="primary"
+                              style={{ padding: '8px 12px', minWidth: 'auto' }}
+                            >
+                              Save
+                            </Button>
+                          </div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: '4px' }}>
+                            <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+                              Local LLM server setup
+                            </span>
+                            {apiKeySaved === 'local' && (
+                              <span style={{ fontSize: '12px', color: '#2DCA6E' }}>
+                                ✓ Server URL saved
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </FormRow>
+                    </div>
+                    
+                    <SectionDivider />
+                    
+                    <FormRow>
+                      <div>
+                        <Label>Local Model</Label>
+                        <Description>Select which local model to use</Description>
+                      </div>
+                      <div style={{ display: 'flex' }}>
+                        <Select 
+                          value={settings?.localModel || 'llama-2-70b-chat'}
+                          onChange={(e) => updateSettings('localModel', e.target.value)}
+                          style={{ minWidth: '180px' }}
+                        >
+                          <option value="llama-2-70b-chat">Llama 2 70B Chat</option>
+                          <option value="deepseek-v3">DeepSeek V3</option>
+                          <option value="mixtral-8x7b-instruct">Mixtral 8x7B Instruct</option>
+                          <option value="llama-2-13b-chat">Llama 2 13B Chat</option>
+                          <option value="mistral-7b-instruct">Mistral 7B Instruct</option>
+                          <option value="neural-chat-7b-v3-1">Neural Chat V3.1</option>
+                          <option value="deepseek-v3-base">DeepSeek V3 Base</option>
+                          <option value="llama-3.2-3b-instruct">Llama 3.2 3B Instruct</option>
+                          <option value="phi-2">Phi-2</option>
+                          <option value="openchat-3.5">OpenChat 3.5</option>
+                        </Select>
+                      </div>
+                    </FormRow>
+                    
+                    <div style={{ background: '#2D2D2D', borderRadius: '8px', padding: '15px', marginTop: '15px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <svg width="16" height="16" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" fill="#93C5FD"/>
+                        </svg>
+                        <div>
+                          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.8)', margin: 0 }}>Run your own LLM server locally for complete privacy and no API costs.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+                
+                <SectionDivider />
+                
+                <FormRow>
+                  <div>
+                    <Label>Max Output Tokens</Label>
+                    <Description>Maximum length of generated responses</Description>
+                  </div>
+                  <div style={{ display: 'flex' }}>
+                    <Select 
+                      value={settings?.maxTokens || 2048}
+                      onChange={(e) => updateSettings('maxTokens', parseInt(e.target.value))}
+                      style={{ minWidth: '100px' }}
+                    >
+                      <option value="512">512</option>
+                      <option value="1024">1024</option>
+                      <option value="2048">2048</option>
+                      <option value="4096">4096</option>
+                      <option value="8192">8192</option>
+                    </Select>
+                  </div>
+                </FormRow>
+                
+                <SectionDivider />
+                
+                <FormRow>
+                  <div>
+                    <Label>API Keys Management</Label>
+                    <Description>Enter API keys directly or manage in advanced settings</Description>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      if (typeof chrome !== 'undefined' && chrome.runtime) {
+                        chrome.runtime.openOptionsPage();
+                      }
+                    }}
+                    variant="default"
+                    style={{ minWidth: '160px' }}
+                  >
+                    Advanced Settings
                   </Button>
-                  <Button variant="default" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                    Export Settings
-                  </Button>
-                </div>
+                </FormRow>
               </div>
+              
+              {/* Removed Prompt Templates Section - now in its own dedicated tab */}
             </Section>
           )}
         </ContentArea>

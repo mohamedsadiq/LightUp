@@ -43,7 +43,7 @@ const DEFAULT_SETTINGS: Settings = {
     layoutMode: "sidebar",
     showGlobalActionButton: true,
     contextAwareness: false,
-    activationMode: "automatic"
+    activationMode: "manual"
   }
 }
 

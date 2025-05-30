@@ -176,7 +176,7 @@ export const getStyle = () => {
 
 // Plasmo config
 export const config: PlasmoCSConfig = {
-  matches: ["<all_urls>"]
+  matches: ["<all_urls>", "*://*/*.pdf"]
 }
 
 // Add a specific fix for Reddit's CSS that hides custom elements
@@ -222,26 +222,35 @@ if (isYouTube) {
   // Create a style element to override YouTube's CSS
   const youtubeFixStyle = document.createElement('style');
   youtubeFixStyle.textContent = `
-    /* Override YouTube's CSS that affects font sizing */
-    [data-plasmo-popup],
-    [data-plasmo-popup] * {
-      font-size: var(--lightup-font-size, inherit) !important;
-    }
-    
-    [data-plasmo-popup] [style*="font-size"] {
-      font-size: var(--lightup-set-size, inherit) !important;
-    }
-    
-    /* Ensure our elements use our styling not YouTube's */
-    [data-plasmo-popup] button,
-    [data-plasmo-popup] input,
-    [data-plasmo-popup] select,
-    [data-plasmo-popup] textarea,
-    [data-plasmo-popup] div,
-    [data-plasmo-popup] span,
-    [data-plasmo-popup] p {
+    /* Ensure the popup container uses the intended font size variable */
+    [data-plasmo-popup] {
+      font-size: var(--lightup-font-size, 1rem) !important;
       font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
       line-height: 1.5 !important;
+    }
+    
+    /* Force all elements within the popup to inherit the container's font-size */
+    /* This helps override YouTube's aggressive global styles */
+    [data-plasmo-popup] * {
+      font-size: inherit !important;
+      font-family: inherit !important;
+      line-height: inherit !important;
+    }
+    
+    /* Specifically ensure the markdown container inherits correctly */
+    [data-plasmo-popup] [data-markdown-container] {
+        font-size: inherit !important; 
+    }
+
+    /* Reset font size for code blocks to prevent double scaling */
+    [data-plasmo-popup] code,
+    [data-plasmo-popup] pre {
+      font-size: 0.875em !important; /* Use em for relative sizing */
+    }
+    
+    /* Override any inline font-size styles potentially added by YouTube */
+    [data-plasmo-popup] [style*="font-size"] {
+      font-size: var(--lightup-set-size, inherit) !important;
     }
   `;
   document.head.appendChild(youtubeFixStyle);
@@ -512,8 +521,8 @@ function Content() {
   // Add ref for the input element
   const inputRef = useRef<HTMLTextAreaElement>(null);
   
-  // State for search visibility - default to hidden
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
+  // State for search visibility - default to visible
+  const [isSearchVisible, setIsSearchVisible] = useState(true);
 
   // Use our custom hooks
   const { settings, setSettings, isConfigured, currentTheme, targetLanguage, fontSize } = useSettings();
@@ -615,6 +624,10 @@ function Content() {
     ));
 
     try {
+      // Make sure we have the latest settings with custom prompts
+      const storage = new Storage();
+      const latestSettings = await storage.get("settings");
+      
       port.postMessage({
         type: "PROCESS_TEXT",
         payload: {
@@ -622,7 +635,7 @@ function Content() {
           context: selectedText,
           pageContext: "",
           mode: mode,
-          settings: settings,
+          settings: latestSettings || settings, // Use freshly loaded settings
           isFollowUp: true,
           id: id,
           connectionId
@@ -836,7 +849,8 @@ function Content() {
 
   // Get themed styles
   const textDirection = getTextDirection(targetLanguage);
-  const themedStyles = getStyles(currentTheme, textDirection, fontSize);
+  const normalizedTheme: "light" | "dark" = currentTheme === "system" ? "light" : currentTheme;
+  const themedStyles = getStyles(normalizedTheme, textDirection, fontSize);
 
   // Update last result when streaming completes
   useMemo(() => {
@@ -985,9 +999,13 @@ function Content() {
     // If we were in the middle of processing text, retry
     if (selectedText && mode) {
       setIsLoading(true);
-      setTimeout(() => {
+      setTimeout(async () => {
         try {
           if (port) {
+            // Make sure we have the latest settings with custom prompts
+            const storage = new Storage();
+            const latestSettings = await storage.get("settings");
+            
             port.postMessage({
               type: "PROCESS_TEXT",
               payload: {
@@ -995,7 +1013,7 @@ function Content() {
                 context: "",
                 pageContext: "",
                 mode: mode,
-                settings: settings,
+                settings: latestSettings || settings, // Use freshly loaded settings
                 isFollowUp: false,
                 id: Date.now(),
                 connectionId
@@ -1046,7 +1064,7 @@ function Content() {
   };
 
   // Function to process the entire page content
-  const handleProcessEntirePage = (pageContent: string) => {
+  const handleProcessEntirePage = async (pageContent: string) => {
     if (!isEnabled || !port) return;
     
     // Set loading state and reset previous results
@@ -1072,6 +1090,10 @@ function Content() {
     setPosition(popupPosition);
     setIsVisible(true);
     
+    // Make sure we have the latest settings with custom prompts
+    const storage = new Storage();
+    const latestSettings = await storage.get("settings");
+    
     // Process the content with the current mode
     try {
       port.postMessage({
@@ -1081,7 +1103,7 @@ function Content() {
           context: "",
           pageContext: "",
           mode: mode,
-          settings: settings,
+          settings: latestSettings || settings, // Use freshly loaded settings to ensure custom prompts are included
           isFollowUp: false,
           id: Date.now(),
           connectionId
@@ -1103,13 +1125,13 @@ function Content() {
       {/* Header */}
       <div style={themedStyles.buttonContainerParent}>
         <motion.div style={{ marginLeft: '-6px', boxShadow: 'none !important' }} >
-          {Logo(currentTheme)}
+          {Logo(normalizedTheme)}
         </motion.div>
         <PopupModeSelector 
           activeMode={mode}
           onModeChange={handleModeChange}
           isLoading={isLoading}
-          theme={currentTheme}
+          theme={normalizedTheme}
         />
         <div style={themedStyles.buttonContainer}>
           <motion.button 
@@ -1121,7 +1143,7 @@ function Content() {
             variants={iconButtonVariants}
             whileHover="hover"
           >
-            <CloseIcon theme={currentTheme} />
+            <CloseIcon theme={normalizedTheme} />
           </motion.button>
         </div>
       </div>
@@ -1363,7 +1385,14 @@ function Content() {
                       ...themedStyles.explanation,
                       textAlign: themedStyles.explanation.textAlign as "left" | "right"
                     }} className="">
-                      <motion.div initial={{ filter: "blur(8px)" }} animate={{ filter: "blur(0px)" }} transition={{ duration: 0.1, delay: 0.1 }}><MarkdownText text={streamingText} /></motion.div>
+                      <motion.div initial={{ filter: "blur(8px)" }} animate={{ filter: "blur(0px)" }} transition={{ duration: 0.1, delay: 0.1 }}>
+                        <MarkdownText 
+                          text={streamingText} 
+                          useReferences={(settings as any).enableReferences || false} 
+                          theme={currentTheme === "system" ? "light" : currentTheme}
+                          fontSize={settings?.customization?.fontSize}
+                        />
+                      </motion.div>
                     </div>
                   )}
                 </div>
@@ -1631,6 +1660,8 @@ function Content() {
                         text={answer}
                         isStreaming={activeAnswerId === id && !isComplete}
                         language={targetLanguage}
+                        theme={currentTheme === "system" ? "light" : currentTheme}
+                        fontSize={settings?.customization?.fontSize}
                       />
                     )}
                     
@@ -1821,7 +1852,7 @@ function Content() {
                     isAskingFollowUp={isAskingFollowUp}
                     setIsInputFocused={setIsInputFocused}
                     themedStyles={themedStyles}
-                    currentTheme={currentTheme}
+                    currentTheme={normalizedTheme}
                   />
                 </motion.div>
               )}
@@ -2075,7 +2106,7 @@ function Content() {
           onProcess={handleProcessEntirePage}
           mode={mode}
           isPopupVisible={isVisible}
-          currentTheme={currentTheme}
+          currentTheme={normalizedTheme}
         />
       )}
     </>

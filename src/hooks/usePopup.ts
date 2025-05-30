@@ -138,8 +138,11 @@ export const usePopup = (
         }
       }
 
-      // Check if we're in manual activation mode
-      if (settings?.customization?.activationMode === "manual") {
+      // Check for automatic activation using either the boolean flag or the mode setting
+      const isAutomaticActivation = settings?.customization?.automaticActivation === true || 
+                                    settings?.customization?.activationMode === "automatic";
+      
+      if (!isAutomaticActivation) {
         // In manual mode, just save the selected text but don't show popup
         setSelectedText(text);
         return;

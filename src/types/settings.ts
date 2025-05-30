@@ -1,5 +1,5 @@
 // Model types available in the extension
-export type ModelType = "local" | "openai" | "gemini" | "xai" | "basic"
+export type ModelType = "local" | "openai" | "gemini" | "xai" | "basic" | "grok"
 
 // Available modes for text processing
 export type Mode = "explain" | "summarize" | "analyze" | "translate" | "free"
@@ -69,14 +69,17 @@ export interface Settings {
     showSelectedText: boolean
     theme: "light" | "dark" | "system"
     radicallyFocus: boolean
-    fontSize: "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem"
+    fontSize: "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem" | "0.875rem" | "1.125rem" | "small" | "medium" | "large" | "x-large" | "xx-small" | "x-small" | "xx-large"
     highlightColor: "default" | "orange" | "blue" | "green" | "purple" | "pink"
-    popupAnimation: "none" | "scale" | "fade"
+    popupAnimation: "none" | "scale" | "fade" | "slide"
     persistHighlight: boolean
     layoutMode: "floating" | "sidebar" | "centered"
     showGlobalActionButton?: boolean // Controls visibility of the Quick View button
+    quickView?: boolean // Controls visibility of floating button for instant page content processing
+    automaticActivation?: boolean // Show popup automatically when text is selected
     contextAwareness?: boolean // New setting for context awareness
     activationMode?: "automatic" | "manual" // Controls whether popup shows automatically or requires context menu
+    enablePDFSupport: boolean
   }
   translationSettings?: {
     fromLanguage: string

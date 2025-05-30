@@ -190,6 +190,7 @@ const getDefaultSettings = (): Settings => ({
     popupAnimation: "scale",
     persistHighlight: false,
     layoutMode: "sidebar",
-    showGlobalActionButton: true
+    showGlobalActionButton: true,
+    activationMode: "manual"  // Changed default from automatic to manual
   }
 }) 

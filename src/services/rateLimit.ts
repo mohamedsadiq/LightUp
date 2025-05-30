@@ -1,7 +1,7 @@
 import { Storage } from "@plasmohq/storage"
 import type { Settings, RateLimit } from "~types/settings"
 
-const DEFAULT_DAILY_LIMIT = 20
+const DEFAULT_DAILY_LIMIT = 50
 
 export class RateLimitService {
   private storage: Storage

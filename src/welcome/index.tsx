@@ -70,6 +70,17 @@ function Welcome() {
     window.close()
   }
 
+  const handleThemeSelect = (theme: "light" | "dark") => {
+    setSettings(prev => ({
+      ...prev,
+      customization: {
+        ...prev.customization,
+        theme
+      }
+    }))
+    handleNext()
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8 font-k2d">
       <div className="max-w-2xl mx-auto">
@@ -87,12 +98,13 @@ function Welcome() {
           <div className="h-2 bg-gray-200 rounded-full">
             <div 
               className="h-full bg-[#10a37f] rounded-full transition-all duration-300"
-              style={{ width: `${(currentStep / 3) * 100}%` }}
+              style={{ width: `${(currentStep / 4) * 100}%` }}
             />
           </div>
           <div className="flex justify-between mt-2 text-sm text-gray-500">
             <span>Choose Model</span>
             <span>API Setup</span>
+            <span>Choose Style</span>
             <span>Final Steps</span>
           </div>
         </div>
@@ -183,6 +195,83 @@ function Welcome() {
           )}
 
           {currentStep === 3 && (
+            <div className="space-y-6">
+              <h2 className="text-2xl font-semibold mb-8 text-center">Choose your style</h2>
+              
+              <div className="grid grid-cols-2 gap-6">
+                {/* Light Theme Option */}
+                <button
+                  onClick={() => handleThemeSelect("light")}
+                  className="p-4 rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#10a37f] focus:ring-opacity-50"
+                >
+                  <div className="bg-gray-100 rounded-lg p-6 flex items-center justify-center mb-4">
+                    <div className="w-32 h-20 bg-white rounded-lg border border-gray-200 flex flex-col">
+                      <div className="h-8 bg-gray-50 border-b border-gray-200 flex items-center px-3">
+                        <div className="w-3 h-3 bg-gray-200 rounded-full mr-1"></div>
+                        <div className="flex-1 flex items-center justify-center">
+                          <span className="text-xs font-medium">Aa</span>
+                        </div>
+                        <div className="w-8 h-4 bg-gray-300 rounded-full"></div>
+                      </div>
+                      <div className="flex-1 p-2">
+                        <div className="w-full h-2 bg-gray-200 rounded mb-1"></div>
+                        <div className="flex items-center mb-1">
+                          <div className="w-2 h-2 bg-gray-200 rounded-full mr-1"></div>
+                          <div className="flex-1 h-2 bg-gray-200 rounded"></div>
+                        </div>
+                        <div className="flex items-center">
+                          <div className="w-2 h-2 bg-gray-200 rounded-full mr-1"></div>
+                          <div className="w-3/4 h-2 bg-gray-200 rounded"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="block text-center font-medium">Light</span>
+                </button>
+
+                {/* Dark Theme Option */}
+                <button
+                  onClick={() => handleThemeSelect("dark")}
+                  className="p-4 rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#10a37f] focus:ring-opacity-50"
+                >
+                  <div className="bg-gray-900 rounded-lg p-6 flex items-center justify-center mb-4">
+                    <div className="w-32 h-20 bg-gray-800 rounded-lg border border-gray-700 flex flex-col">
+                      <div className="h-8 bg-gray-900 border-b border-gray-700 flex items-center px-3">
+                        <div className="w-3 h-3 bg-gray-700 rounded-full mr-1"></div>
+                        <div className="flex-1 flex items-center justify-center">
+                          <span className="text-xs font-medium text-white">Aa</span>
+                        </div>
+                        <div className="w-8 h-4 bg-gray-600 rounded-full"></div>
+                      </div>
+                      <div className="flex-1 p-2">
+                        <div className="w-full h-2 bg-gray-700 rounded mb-1"></div>
+                        <div className="flex items-center mb-1">
+                          <div className="w-2 h-2 bg-gray-700 rounded-full mr-1"></div>
+                          <div className="flex-1 h-2 bg-gray-700 rounded"></div>
+                        </div>
+                        <div className="flex items-center">
+                          <div className="w-2 h-2 bg-gray-700 rounded-full mr-1"></div>
+                          <div className="w-3/4 h-2 bg-gray-700 rounded"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <span className="block text-center font-medium">Dark</span>
+                </button>
+              </div>
+
+              <div className="mt-8 flex justify-center">
+                <button
+                  onClick={handleNext}
+                  className="py-2 px-6 bg-[#10a37f] text-white rounded-full hover:bg-[#0d8c6d] transition-colors"
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
+          )}
+
+          {currentStep === 4 && (
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold mb-4">You're all set!</h2>
               <div className="space-y-4">
