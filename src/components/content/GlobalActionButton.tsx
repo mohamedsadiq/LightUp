@@ -19,16 +19,21 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
   currentTheme
 }) => {
   const [buttonVisible, setButtonVisible] = useState(true);
+  const [isEnabled, setIsEnabled] = useState(true);
   
-  // Load button visibility settings from storage
+  // Load button visibility settings and enabled state from storage
   useEffect(() => {
     const loadSettings = async () => {
       const storage = new Storage();
       const settings = await storage.get("settings") as Settings | undefined;
+      const enabledState = await storage.get("isEnabled");
       
       // Load button visibility (default to true if not set)
       const showButton = settings?.customization?.showGlobalActionButton !== false;
       setButtonVisible(showButton);
+      
+      // Load enabled state (default to true if not set)
+      setIsEnabled(enabledState === undefined ? true : enabledState === "true");
     };
     
     loadSettings();
@@ -38,9 +43,30 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
       loadSettings();
     };
     
+    // Listen for enabled state changes
+    const handleEnabledChange = (event: CustomEvent) => {
+      if (event.detail?.isEnabled !== undefined) {
+        console.log('GlobalActionButton received enabled state change:', event.detail.isEnabled);
+        setIsEnabled(event.detail.isEnabled);
+      }
+    };
+    
+    // Listen for extension state changes (alternative event)
+    const handleExtensionStateChange = (event: CustomEvent) => {
+      if (event.detail?.enabled !== undefined) {
+        console.log('GlobalActionButton received extension state change:', event.detail.enabled);
+        setIsEnabled(event.detail.enabled);
+      }
+    };
+    
     window.addEventListener("settingsUpdated", handleSettingsChange);
+    window.addEventListener('isEnabledChanged', handleEnabledChange as EventListener);
+    window.addEventListener('extensionStateChanged', handleExtensionStateChange as EventListener);
+    
     return () => {
       window.removeEventListener("settingsUpdated", handleSettingsChange);
+      window.removeEventListener('isEnabledChanged', handleEnabledChange as EventListener);
+      window.removeEventListener('extensionStateChanged', handleExtensionStateChange as EventListener);
     };
   }, []);
   
@@ -73,8 +99,8 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
     };
   };
 
-  // If popup is visible or button is disabled in settings, don't show the button
-  if (isPopupVisible || !buttonVisible) {
+  // If popup is visible, extension is disabled, or button is disabled in settings, don't show the button
+  if (isPopupVisible || !buttonVisible || !isEnabled) {
     return null;
   }
 

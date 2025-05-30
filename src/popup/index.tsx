@@ -9,6 +9,7 @@ import type { Mode, TranslationSettings, Settings } from "~types/settings"
 import { LANGUAGES } from "~utils/constants"
 import { useSettings } from "~hooks/useSettings"
 import { useRateLimit } from "~hooks/useRateLimit"
+import { useEnabled } from "~hooks/useEnabled"
 
 // Import the popup-specific CSS file for fonts only
 import "./popup-style.css"
@@ -162,7 +163,27 @@ const ContentWrapper = styled.div`
   flex: 1;
   padding: 20px 0 0px 18px;
   overflow: hidden; // Prevents the wrapper itself from scrolling
-  
+  position: relative; // For positioning the overlay
+`
+
+// Overlay that appears when extension is disabled
+const DisabledOverlay = styled(motion.div)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color:rgb(36 36 36 / 93%);
+  backdrop-filter: blur(2px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 2rem;
+  color: white;
+  text-align: center;
+  border-radius: 0 0 10px 10px;
 `
 
 // Sidebar
@@ -442,6 +463,7 @@ const Logo = () => (
 const IndexPopup = () => {
   const { settings, setSettings, isConfigured } = useSettings()
   const { remainingActions, isLoading, error, refreshRateLimit } = useRateLimit()
+  const { isEnabled, handleEnabledChange } = useEnabled()
   
   const [activeTab, setActiveTab] = useState('general')
   const [activeModeConfig, setActiveModeConfig] = useState(false)
@@ -617,6 +639,13 @@ const IndexPopup = () => {
     }
   }, [(settings?.customization as any)?.defaultMode])
   
+  // We're using the useEnabled hook instead of a custom implementation
+  // This hook handles loading the current state from storage and provides
+  // the handleEnabledChange function to toggle the state
+  
+  // Use the handleEnabledChange function from the useEnabled hook
+  // This function handles all the necessary storage updates and event notifications
+  
   // Icons for the different modes
   const modeIcons = {
     summarize: (
@@ -654,12 +683,96 @@ const IndexPopup = () => {
           <LogoImage src={logoUrl} alt="LightUp Logo" />
           <HeaderTitle>LightUp</HeaderTitle>
         </HeaderLogoWrapper>
-        <VersionBadgeContainer>
-          <BetaBadge>Beta </BetaBadge>
-          <VersionNumber>v1.1.12</VersionNumber>
-        </VersionBadgeContainer>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)' }}>
+              {isEnabled ? 'On' : 'Off'}
+            </span>
+            <ToggleContainer 
+              onClick={async (e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                try {
+                  // Update the state optimistically for instant feedback
+                  const newState = !isEnabled;
+                  // Call the handler to update the state in storage and notify other components
+                  await handleEnabledChange(newState);
+                } catch (error) {
+                  console.error('Failed to update enabled state:', error);
+                }
+              }} 
+              style={{ cursor: 'pointer' }}
+              aria-label={isEnabled ? 'Turn off' : 'Turn on'}
+              role="switch"
+              aria-checked={isEnabled}
+            >
+              <ToggleInput 
+                type="checkbox" 
+                checked={isEnabled}
+                onChange={() => {}} // Empty onChange to avoid React warning about readonly input with no handler
+                aria-hidden="true"
+                tabIndex={-1}
+              />
+              <ToggleSlider />
+            </ToggleContainer>
+          </div>
+          
+          <VersionBadgeContainer>
+            <BetaBadge>Beta </BetaBadge>
+            <VersionNumber>v1.1.12</VersionNumber>
+          </VersionBadgeContainer>
+        </div>
       </Header>
       <ContentWrapper>
+        {/* Overlay when extension is disabled */}
+        <AnimatePresence>
+          {!isEnabled && (
+            <DisabledOverlay
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 9V11M12 15H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0378 2.66667 10.268 4L3.33978 16C2.56998 17.3333 3.53223 19 5.07183 19Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <h2 style={{ fontSize: '1.5rem', marginTop: '1.5rem', marginBottom: '1rem', fontWeight: 'bold' }}>LightUp is currently Off</h2>
+              <p style={{ fontSize: '1rem', opacity: 0.8, maxWidth: '400px', lineHeight: '1.5' }}>
+                Toggle the switch in the header to enable LightUp and access all features.
+              </p>
+              <button 
+                onClick={async () => {
+                  try {
+                    await handleEnabledChange(true);
+                  } catch (error) {
+                    console.error('Failed to enable extension:', error);
+                  }
+                }}
+                style={{
+                  marginTop: '1.5rem',
+                  backgroundColor: "#46b875",
+                  border: 'none',
+                  color: 'white',
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '27px',
+                  cursor: 'pointer',
+                  fontWeight: 'bold',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+              >
+                <svg  width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+</svg>
+
+                
+                Turn On LightUp
+              </button>
+            </DisabledOverlay>
+          )}
+        </AnimatePresence>
         <Sidebar>
           {/* Main Navigation */}
           <SidebarItem active={activeTab === 'general'} onClick={() => setActiveTab('general')}>

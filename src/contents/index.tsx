@@ -59,6 +59,35 @@ import { useMode } from "~hooks/useMode"
 
 // Add message listener for settings updates
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.type === "EXTENSION_STATE_CHANGED") {
+    console.log('Content script received EXTENSION_STATE_CHANGED message:', message.enabled);
+    
+    // Immediately dispatch event to update UI components
+    window.dispatchEvent(
+      new CustomEvent('isEnabledChanged', { 
+        detail: { isEnabled: message.enabled } 
+      })
+    );
+    
+    // Also dispatch the extensionStateChanged event for consistency
+    window.dispatchEvent(
+      new CustomEvent('extensionStateChanged', { 
+        detail: { enabled: message.enabled } 
+      })
+    );
+    
+    // Update storage asynchronously
+    const storage = new Storage();
+    storage.set("isEnabled", message.enabled.toString()).then(() => {
+      sendResponse({ success: true });
+    }).catch(error => {
+      console.error('Failed to update isEnabled in storage:', error);
+      sendResponse({ success: false, error: error.message });
+    });
+    
+    return true; // Indicate we'll respond asynchronously
+  }
+  
   if (message.type === "SETTINGS_UPDATED") {
     // Force a refresh of the settings in the content script
     const storage = new Storage();
@@ -98,6 +127,42 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         } 
       });
       window.dispatchEvent(event);
+      
+      // Send response to confirm receipt
+      sendResponse({ success: true });
+    });
+    
+    // Return true to indicate we'll send a response asynchronously
+    return true;
+  }
+  
+  if (message.type === "EXTENSION_STATE_CHANGED") {
+    console.log("Extension state changed to:", message.enabled);
+    // Update the isEnabled state in storage
+    const storage = new Storage();
+    storage.set("isEnabled", message.enabled.toString()).then(() => {
+      // Dispatch a custom event that our hooks can listen for
+      const event = new CustomEvent('extensionStateChanged', { 
+        detail: { 
+          enabled: message.enabled
+        } 
+      });
+      window.dispatchEvent(event);
+      
+      // Also dispatch the isEnabledChanged event for consistency
+      const enabledEvent = new CustomEvent('isEnabledChanged', { 
+        detail: { 
+          isEnabled: message.enabled
+        } 
+      });
+      window.dispatchEvent(enabledEvent);
+      
+      // Handle UI visibility in real-time when extension is disabled
+      if (!message.enabled) {
+        // Force any active LightUp UIs to close immediately
+        // This will immediately hide any visible UI elements
+        document.dispatchEvent(new CustomEvent('lightup-force-hide'));
+      }
       
       // Send response to confirm receipt
       sendResponse({ success: true });
@@ -368,6 +433,37 @@ const FollowUpInput = React.memo(({
       window.removeEventListener('settingsUpdated', handleSettingsUpdated as EventListener);
     };
   }, []);
+
+  // Listen for extension state changes
+  useEffect(() => {
+    const handleExtensionStateChange = (event: CustomEvent) => {
+      if (event.detail?.enabled !== undefined) {
+        console.log('Extension state changed event received:', event.detail.enabled);
+        
+        // Immediately update the UI by dispatching an event before storage update
+        window.dispatchEvent(
+          new CustomEvent('isEnabledChanged', { detail: { isEnabled: event.detail.enabled } })
+        );
+        
+        // Force re-render to immediately reflect the new state
+        forceUpdate({});
+        
+        // Update the storage to persist the state
+        const storage = new Storage();
+        storage.set("isEnabled", event.detail.enabled.toString()).then(() => {
+          // Log successful storage update
+          console.log('Extension state updated in storage:', event.detail.enabled);
+        }).catch(error => {
+          console.error('Failed to update extension state in storage:', error);
+        });
+      }
+    };
+    
+    window.addEventListener('extensionStateChanged', handleExtensionStateChange as EventListener);
+    return () => {
+      window.removeEventListener('extensionStateChanged', handleExtensionStateChange as EventListener);
+    };
+  }, []);
   
   // Function to auto-resize the textarea
   const autoResizeTextarea = () => {
@@ -528,6 +624,8 @@ function Content() {
   const { settings, setSettings, isConfigured, currentTheme, targetLanguage, fontSize } = useSettings();
   const { activeMode, preferredModes, translationSettings } = useMode();
 
+  // This section will be moved after state variables are declared
+
   // Add effect to ensure visibility on Reddit
   useEffect(() => {
     if (isReddit) {
@@ -584,6 +682,31 @@ function Content() {
     updateConversation,
     clearConversation
   } = useConversation();
+  
+  // Add effect to listen for force-hide events (for real-time extension disabling)
+  useEffect(() => {
+    const handleForceHide = () => {
+      // Immediately hide all UI elements when extension is toggled off
+      if (setIsVisible) setIsVisible(false);
+      if (setIsInteractingWithPopup) setIsInteractingWithPopup(false);
+      if (setIsInputFocused) setIsInputFocused(false);
+      
+      // Reset any other UI states as needed
+      if (setIsLoading) setIsLoading(false);
+      if (setError) setError(null);
+      if (setStreamingText) setStreamingText('');
+      if (setFollowUpQAs) setFollowUpQAs([]);
+      
+      console.log('LightUp UI forcibly hidden due to extension disable');
+    };
+    
+    // Listen for the custom force-hide event
+    document.addEventListener('lightup-force-hide', handleForceHide);
+    
+    return () => {
+      document.removeEventListener('lightup-force-hide', handleForceHide);
+    };
+  }, []);
 
   const handleRegenerate = async () => {
     if (!selectedText || isLoading) return;
