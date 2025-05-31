@@ -6,7 +6,9 @@ import type { CSSProperties } from "react"
 import MarkdownText from "../components/content/MarkdownText"
 import { Logo, CloseIcon } from "../components/icons"
 import GlobalActionButton from "../components/content/GlobalActionButton"
-import type { Settings } from "~types/settings"
+import TextSelectionButton from "../components/content/TextSelectionButton"
+import type { Settings, Mode } from "~types/settings"
+import { useTextSelection } from "~hooks/useTextSelection"
 
 // Import styles as text using Plasmo's data-text scheme
 import cssText from "data-text:./styles.css"
@@ -623,6 +625,14 @@ function Content() {
   // Use our custom hooks
   const { settings, setSettings, isConfigured, currentTheme, targetLanguage, fontSize } = useSettings();
   const { activeMode, preferredModes, translationSettings } = useMode();
+  
+  // Text selection bubble state from our new hook
+  const {
+    selectedText: selectionBubbleText,
+    position: selectionBubblePosition,
+    isVisible: isSelectionBubbleVisible,
+    setIsVisible: setIsSelectionBubbleVisible
+  } = useTextSelection();
 
   // This section will be moved after state variables are declared
 
@@ -732,6 +742,53 @@ function Content() {
     } catch (err) {
       setError("Failed to regenerate response. Please try again.");
       setIsLoading(false);
+    }
+  };
+  
+
+  // Handler for processing text selected via the selection bubble
+  const handleSelectionBubbleProcess = async (text: string, selectedMode: string) => {
+    // Clear previous results
+    setStreamingText?.("");
+    setFollowUpQAs?.([]);
+    setError?.(null);
+    
+    // Hide the selection bubble
+    setIsSelectionBubbleVisible(false);
+    
+    // Show the main popup
+    setSelectedText(text);
+    setIsVisible(true);
+    setIsLoading(true);
+    
+    // Set the mode to the one selected in the bubble
+    handleModeChange(selectedMode as Mode);
+    
+    // Process the text
+    try {
+      if (!port) {
+        throw new Error('Connection not established');
+      }
+
+      const storage = new Storage();
+      const translationSettings = await storage.get("translationSettings");
+
+      port.postMessage({
+        type: "PROCESS_TEXT",
+        payload: {
+          text,
+          mode: selectedMode,
+          settings: {
+            ...settings,
+            translationSettings
+          },
+          connectionId,
+          id: Date.now()
+        }
+      });
+    } catch (err) {
+      setError?.('Failed to process text');
+      setIsLoading?.(false);
     }
   };
 
@@ -2224,14 +2281,28 @@ function Content() {
       )}
 
       {/* Add GlobalActionButton if enabled */}
-      {isEnabled && (
+      {isEnabled && settings?.customization?.showGlobalActionButton !== false && (
         <GlobalActionButton 
           onProcess={handleProcessEntirePage}
           mode={mode}
           isPopupVisible={isVisible}
-          currentTheme={normalizedTheme}
+          currentTheme={currentTheme === "system" ? "dark" : currentTheme}
         />
       )}
+      
+      {/* Add the macOS Notes-style text selection button */}
+      <AnimatePresence>
+        {isSelectionBubbleVisible && (
+          <TextSelectionButton
+            onProcess={handleSelectionBubbleProcess}
+            position={selectionBubblePosition}
+            selectedText={selectionBubbleText}
+            currentTheme={currentTheme === "system" ? "dark" : currentTheme}
+            isVisible={isSelectionBubbleVisible}
+            setIsVisible={setIsSelectionBubbleVisible}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

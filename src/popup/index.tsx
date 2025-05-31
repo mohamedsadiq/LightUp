@@ -240,7 +240,7 @@ const SidebarSectionTitle = styled.div`
 // Content area
 const ContentArea = styled.div`
   flex: 1;
-  padding: 9px 35px 0 35px;
+  padding: 9px 33px 0 35px;
   background: ${theme.dark.background};
   overflow-y: auto; // Enables vertical scrolling
   overflow-x: hidden; // Prevents horizontal scrolling
@@ -665,9 +665,11 @@ const IndexPopup = () => {
       </svg>
     ),
     translate: (
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M3 5h12M9 3v2m1.048 8.5A18.022 18.022 0 008 5.3m3.048 8.2l1.452 3.2m-1.452-3.2a18.019 18.019 0 002.048-3.2M9 19l3-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
+     
+      <svg  width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802" />
+    </svg>
+    
     ),
     free: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -687,7 +689,7 @@ const IndexPopup = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)' }}>
-              {isEnabled ? 'On' : 'Off'}
+              {isEnabled ? 'Turn On' : 'Turn Off'}
             </span>
             <ToggleContainer 
               onClick={async (e) => {
@@ -739,7 +741,7 @@ const IndexPopup = () => {
               </svg>
               <h2 style={{ fontSize: '1.5rem', marginTop: '1.5rem', marginBottom: '1rem', fontWeight: 'bold' }}>LightUp is currently Off</h2>
               <p style={{ fontSize: '1rem', opacity: 0.8, maxWidth: '400px', lineHeight: '1.5' }}>
-                Toggle the switch in the header to enable LightUp and access all features.
+                Toggle the switch in the header or the button below to enable LightUp and access all features.
               </p>
               <button 
                 onClick={async () => {
