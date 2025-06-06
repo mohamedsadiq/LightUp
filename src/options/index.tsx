@@ -954,7 +954,8 @@ function IndexOptions() {
       persistHighlight: false,
       layoutMode: "sidebar",
       activationMode: "manual",
-      enablePDFSupport: false
+      enablePDFSupport: false,
+      showTextSelectionButton: true
     }
   });
 
@@ -989,7 +990,8 @@ function IndexOptions() {
               automaticActivation: savedSettings.customization?.automaticActivation ?? false,
               contextAwareness: savedSettings.customization?.contextAwareness ?? false,
               activationMode: savedSettings.customization?.activationMode ?? "manual",
-              enablePDFSupport: savedSettings.customization?.enablePDFSupport ?? false
+              enablePDFSupport: savedSettings.customization?.enablePDFSupport ?? false,
+              showTextSelectionButton: savedSettings.customization?.showTextSelectionButton ?? true
             }
           });
         }
@@ -1317,47 +1319,37 @@ function IndexOptions() {
                      <SectionDivider />
                      
                      <FormRow>
-                       <div>
-                         <Label>Quick View</Label>
-                         <Description>Show floating button to instantly process page content</Description>
-                       </div>
-                       <ToggleContainer>
-                         <ToggleInput 
-                           type="checkbox" 
-                           checked={settings.customization?.quickView}
-                           onChange={(e) => handleImmediateSettingUpdate('quickView', e.target.checked)}
-                         />
-                         <ToggleSlider />
-                       </ToggleContainer>
-                     </FormRow>
-                     
-                     <SectionDivider />
-                     
-                     <FormRow>
-                       <div>
-                         <Label>Radically Focus Mode</Label>
-                         <Description>Blur background when viewing results</Description>
-                       </div>
-                       <ToggleContainer>
-                         <ToggleInput 
-                           type="checkbox" 
-                           checked={settings.customization?.radicallyFocus}
-                           onChange={(e) => handleImmediateSettingUpdate('radicallyFocus', e.target.checked)}
-                         />
-                         <ToggleSlider />
-                       </ToggleContainer>
-                     </FormRow>
-
-                     <SectionDivider />
-                   </SectionContainer>
-            
-                   <SectionContainer>
-                     {/* <SectionHeader>Activation & Layout</SectionHeader> */}
-                  
-                     
+                        <div>
+                          <Label>Quick View</Label>
+                          <Description>Show floating button to instantly process page content</Description>
+                        </div>
+                        <ToggleContainer>
+                          <ToggleInput 
+                            type="checkbox" 
+                            checked={settings.customization?.quickView}
+                            onChange={(e) => handleImmediateSettingUpdate('quickView', e.target.checked)}
+                          />
+                          <ToggleSlider />
+                        </ToggleContainer>
+                      </FormRow>
                       
+                      <SectionDivider />
                       
-                      
+                      <FormRow>
+                        <div>
+                          <Label>Text Selection Button</Label>
+                          <Description>Show button when text is selected</Description>
+                        </div>
+                        <ToggleContainer>
+                          <ToggleInput 
+                            type="checkbox" 
+                            checked={settings.customization?.showTextSelectionButton !== false}
+                            onChange={(e) => handleImmediateSettingUpdate('showTextSelectionButton', e.target.checked)}
+                          />
+                          <ToggleSlider />
+                        </ToggleContainer>
+                      </FormRow>
+                      <SectionDivider />
                       <div style={{ marginTop: '0', marginBottom: '16px' }}>
                         <Label>Layout Mode</Label>
                         <Description>Choose how LightUp appears on the page</Description>
@@ -2031,14 +2023,6 @@ function IndexOptions() {
                     
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '16px' }}>
                       <FontSizeButton 
-                        selected={settings.customization?.fontSize === 'xx-small'}
-                        onClick={() => handleImmediateSettingUpdate('fontSize', 'xx-small')}
-                      >
-                        <div className="size-preview" style={{ fontSize: '0.7rem' }}>Aa</div>
-                        <div className="size-label">XX-Small</div>
-                      </FontSizeButton>
-
-                      <FontSizeButton 
                         selected={settings.customization?.fontSize === 'x-small'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'x-small')}
                       >
@@ -2050,7 +2034,7 @@ function IndexOptions() {
                         selected={settings.customization?.fontSize === 'small'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'small')}
                       >
-                        <div className="size-preview" style={{ fontSize: '0.875rem' }}>Aa</div>
+                        <div className="size-preview" style={{ fontSize: '0.9rem' }}>Aa</div>
                         <div className="size-label">Small</div>
                       </FontSizeButton>
                        
@@ -2066,7 +2050,7 @@ function IndexOptions() {
                         selected={settings.customization?.fontSize === 'large'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'large')}
                       >
-                        <div className="size-preview" style={{ fontSize: '1.125rem' }}>Aa</div>
+                        <div className="size-preview" style={{ fontSize: '1.15rem' }}>Aa</div>
                         <div className="size-label">Large</div>
                       </FontSizeButton>
                        
@@ -2074,7 +2058,7 @@ function IndexOptions() {
                         selected={settings.customization?.fontSize === 'x-large'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'x-large')}
                       >
-                        <div className="size-preview" style={{ fontSize: '1.25rem' }}>Aa</div>
+                        <div className="size-preview" style={{ fontSize: '1.3rem' }}>Aa</div>
                         <div className="size-label">X-Large</div>
                       </FontSizeButton>
 
@@ -2082,7 +2066,7 @@ function IndexOptions() {
                         selected={settings.customization?.fontSize === 'xx-large'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'xx-large')}
                       >
-                        <div className="size-preview" style={{ fontSize: '1.4rem' }}>Aa</div>
+                        <div className="size-preview" style={{ fontSize: '1.45rem' }}>Aa</div>
                         <div className="size-label">XX-Large</div>
                       </FontSizeButton>
                     </div>

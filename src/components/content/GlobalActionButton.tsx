@@ -4,6 +4,8 @@ import { Z_INDEX } from "~utils/constants";
 import { Logo } from "../icons";
 import { Storage } from "@plasmohq/storage";
 import type { Settings } from "~types/settings";
+import getPageContent from "~utils/contentExtractor";
+import debugContentExtraction from "~utils/debugExtraction";
 
 interface GlobalActionButtonProps {
   onProcess: (text: string) => void;
@@ -71,15 +73,44 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
   }, []);
   
   const handleClick = () => {
-    // Get all visible text from the page
-    const visibleText = document.body.innerText;
-    onProcess(visibleText);
+    // Extract the main content using Defuddle-based content extractor with mode-aware optimization
+    const extractedContent = getPageContent(mode);
+    
+    // Check if debug mode is enabled
+    const storage = new Storage();
+    storage.get("settings").then((value) => {
+      try {
+        // Parse the value as Settings object if it's a string
+        const settings = typeof value === 'string' ? JSON.parse(value) as Settings : value as Settings;
+        
+        // If debug mode is enabled in settings, show the comparison popup
+        if (settings?.debug?.enableContentExtractionDebug) {
+          debugContentExtraction();
+        }
+      } catch (err) {
+        console.error("Error parsing settings:", err);
+      }
+    });
+    
+    onProcess(extractedContent);
+  };
+  
+  // Add Option+Click handler to show debug info regardless of settings
+  // Using altKey which is Option key on Mac
+  const handleAltClick = (e: React.MouseEvent) => {
+    if (e.altKey || e.metaKey) { // altKey (Option) or metaKey (Command) on Mac
+      e.preventDefault();
+      debugContentExtraction();
+      console.log("🔍 Content extraction debug mode activated");
+    } else {
+      handleClick();
+    }
   };
 
   // Define the aria label text based on the current mode
   const getAriaLabel = () => {
     switch(mode) {
-      case "summarize": return "Summarize entire page";
+      case "summarize": return "Smart summarize page content";
       case "explain": return "Explain entire page";
       case "analyze": return "Analyze entire page";
       case "translate": return "Translate entire page";
@@ -121,7 +152,7 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
-          onClick={handleClick}
+          onClick={handleAltClick}
           style={{
             width: "48px",
             height: "48px",

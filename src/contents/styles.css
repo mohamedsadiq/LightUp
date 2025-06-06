@@ -3,6 +3,9 @@
   font-family: 'K2D', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   color: #1a1a1a;
+  /* Performance optimizations */
+  will-change: auto;
+  transform: translateZ(0); /* Force hardware acceleration */
 }
 
 /* Dialog styles */
@@ -14,6 +17,9 @@
   width: 100%;
   margin: 1rem;
   padding: 1.5rem;
+  /* Performance optimizations */
+  will-change: auto;
+  transform: translateZ(0);
 }
 
 /* Dark mode styles */
@@ -22,29 +28,35 @@
   color: #ffffff;
 }
 
-/* Animation classes */
+/* Animation classes - Optimized for performance */
 .lightup-fade-in {
   animation: fadeIn 0.2s ease-in-out;
+  will-change: opacity;
 }
 
 .lightup-scale-in {
   animation: scaleIn 0.2s ease-in-out;
+  will-change: transform, opacity;
 }
 
 .lu-animate-fade-in {
   animation: fadeIn 0.3s ease-out;
+  will-change: opacity;
 }
 
 .lu-animate-scale-in {
   animation: scaleIn 0.3s ease-out;
+  will-change: transform, opacity;
 }
 
 .lu-animate-slide-up {
   animation: slideUp 0.3s ease-out;
+  will-change: transform, opacity;
 }
 
 .lu-animate-slide-down {
   animation: slideDown 0.3s ease-out;
+  will-change: transform, opacity;
 }
 
 @keyframes fadeIn {
@@ -89,6 +101,179 @@
   }
 }
 
+/* Enhanced skeleton loading animations with hardware acceleration */
+
+/* Optimized shimmer animation with better performance */
+@keyframes advancedShimmer {
+  0% {
+    background-position: -200% 0%;
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    background-position: 200% 0%;
+    opacity: 0.8;
+  }
+}
+
+/* Smooth radial glow animation */
+@keyframes radialGlow {
+  0% {
+    transform: translateX(-150%) translateZ(0);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.6;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateX(150%) translateZ(0);
+    opacity: 0;
+  }
+}
+
+/* Micro-shimmer for subtle detail */
+@keyframes microShimmer {
+  0% {
+    background-position: -50% 0%;
+  }
+  100% {
+    background-position: 150% 0%;
+  }
+}
+
+/* Smooth wave animation with hardware acceleration */
+@keyframes smoothWave {
+  0% {
+    transform: translateX(-100%) scaleX(0.8) translateZ(0);
+    opacity: 0;
+  }
+  50% {
+    transform: translateX(0%) scaleX(1) translateZ(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%) scaleX(0.8) translateZ(0);
+    opacity: 0;
+  }
+}
+
+/* Enhanced pulse with subtle scale */
+@keyframes enhancedPulse {
+  0%, 100% {
+    transform: scale(1) translateZ(0);
+    opacity: 0.95;
+  }
+  50% {
+    transform: scale(1.005) translateZ(0);
+    opacity: 1;
+  }
+}
+
+/* Performance-optimized skeleton classes */
+.skeleton-optimized {
+  /* Force hardware acceleration */
+  transform: translateZ(0);
+  will-change: transform, opacity;
+  
+  /* Optimize rendering */
+  backface-visibility: hidden;
+  perspective: 1000px;
+  
+  /* Smooth transitions */
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.skeleton-shimmer {
+  animation: advancedShimmer 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  animation-fill-mode: both;
+}
+
+.skeleton-glow {
+  animation: radialGlow 2.8s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+  animation-fill-mode: both;
+}
+
+.skeleton-micro {
+  animation: microShimmer 1.8s linear infinite;
+  animation-fill-mode: both;
+}
+
+.skeleton-wave {
+  animation: smoothWave 2.5s cubic-bezier(0.4, 0.0, 0.6, 1) infinite;
+  animation-fill-mode: both;
+}
+
+.skeleton-pulse {
+  animation: enhancedPulse 3s cubic-bezier(0.4, 0.0, 0.6, 1) infinite;
+  animation-fill-mode: both;
+}
+
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer,
+  .skeleton-glow,
+  .skeleton-micro,
+  .skeleton-wave,
+  .skeleton-pulse {
+    animation: none;
+  }
+  
+  .skeleton-optimized {
+    transition: none;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .skeleton-optimized {
+    border: 1px solid currentColor;
+    opacity: 0.8;
+  }
+}
+
+/* Performance hints for browsers */
+.skeleton-container {
+  contain: layout style paint;
+  will-change: contents;
+}
+
+/* Smooth scrolling optimization */
+.skeleton-scroll-optimized {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* CSS classes for skeleton animations */
+.lu-skeleton-shimmer {
+  animation: advancedShimmer 2.5s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+  background-size: 400% 100%;
+}
+
+.lu-skeleton-glow {
+  animation: radialGlow 3s ease-in-out infinite;
+}
+
+.lu-skeleton-wave {
+  animation: smoothWave 2.5s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+}
+
+.lu-loading-dots {
+  animation: loadingDots 1.2s ease-in-out infinite;
+}
+
+.lu-progress-bar {
+  animation: progressBar 2s ease-in-out infinite;
+}
+
+.lu-typewriter {
+  animation: typewriter 2s ease-in-out infinite;
+}
+
 /* Highlight styles */
 .lightup-highlight {
   display: inline;
@@ -98,6 +283,8 @@
   cursor: pointer;
   position: relative;
   color: #000000 !important;
+  /* Performance optimization */
+  will-change: filter;
 }
 
 .lightup-highlight:hover {
@@ -139,17 +326,58 @@
   50% { opacity: 1; }
 }
 
-/* Ensure popup is above blur overlay */
+/* Ensure popup is above blur overlay - Optimized */
 [data-plasmo-popup] {
   position: relative;
   z-index: 2147483647;
+  /* Performance optimizations */
+  will-change: auto;
+  transform: translateZ(0); /* Force hardware acceleration */
+  contain: layout style paint; /* CSS containment for better performance */
+}
+
+/* Optimized scrolling containers */
+[data-plasmo-popup] .lu-scroll-container {
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  scroll-behavior: smooth;
+  will-change: scroll-position;
+  transform: translateZ(0); /* Force hardware acceleration */
+  
+  /* Custom scrollbar styling for better UX */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+}
+
+[data-plasmo-popup] .lu-scroll-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+[data-plasmo-popup] .lu-scroll-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+[data-plasmo-popup] .lu-scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+[data-plasmo-popup] .lu-scroll-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(155, 155, 155, 0.8);
 }
 
 #plasmo-blur-overlay {
   pointer-events: none;
 }
 
-/* Resize handle styles */
+/* Resize handle styles - Optimized */
+.lu-resize-handle {
+  will-change: background;
+}
+
 .lu-resize-handle:hover {
   background: rgba(0, 0, 0, 0.1) !important;
 }
@@ -167,4 +395,65 @@
   height: 6px;
   border-right: 2px solid rgba(0, 0, 0, 0.2);
   border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Performance optimization for text content */
+.lu-prose {
+  contain: layout style;
+  will-change: auto;
+}
+
+/* Optimize motion elements */
+.lu-motion-element {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
+/* Reduce repaints for frequently updated elements */
+.lu-loading-indicator {
+  will-change: transform;
+  transform: translateZ(0);
+  contain: layout style paint;
+}
+
+/* Add optimized textarea styles for better performance */
+.lu-optimized-textarea {
+  /* Optimize font rendering */
+  font-variant-numeric: tabular-nums;
+  text-rendering: optimizeSpeed;
+  
+  /* Reduce layout calculations */
+  contain: layout style;
+  
+  /* Hardware acceleration */
+  transform: translateZ(0);
+  will-change: height;
+  
+  /* Ensure proper sizing */
+  width: 100%;
+  box-sizing: border-box;
+  resize: none;
+  min-height: 24px;
+  max-height: 48px;
+  
+  /* Smooth height transitions */
+  transition: height 0.1s ease-out;
+}
+
+/* Reduce paint operations for better performance */
+.lu-search-container {
+  contain: layout style;
+  transform: translateZ(0);
+}
+
+.lu-search-container * {
+  /* Reduce repaints */
+  contain: style;
+}
+
+/* Optimize button animations */
+.lu-search-send-button {
+  contain: layout style;
+  transform: translateZ(0);
+  will-change: transform, opacity;
 } 

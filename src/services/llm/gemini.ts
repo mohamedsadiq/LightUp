@@ -7,6 +7,11 @@ export const processGeminiText = async function*(request: ProcessTextRequest) {
   
   // Get the system prompt (custom or default)
   const getSystemPrompt = () => {
+    // For follow-up questions, use conversational system prompt
+    if (isFollowUp) {
+      return "You are a helpful assistant who answers questions directly and conversationally. Provide clear, concise answers without unnecessary repetition or summaries unless specifically asked for them.";
+    }
+    
     // If custom system prompt is available, use it
     if (settings.customPrompts?.systemPrompts?.[mode]) {
       return settings.customPrompts.systemPrompts[mode];
@@ -18,7 +23,11 @@ export const processGeminiText = async function*(request: ProcessTextRequest) {
   const getUserPrompt = () => {
     if (isFollowUp) {
       // Include original context and previous conversation for follow-ups
-      return `Context from previous conversation:\n${request.context || ''}\n\nFollow-up question:\n${text}`;
+      return `Based on the previous content: "${request.context || ''}"
+
+Please answer this follow-up question directly and conversationally: ${text}
+
+Provide a clear, direct answer without repeating the original content or providing another summary. Just answer the specific question asked.`;
     }
     
     // For translate mode

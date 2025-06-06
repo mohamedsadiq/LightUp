@@ -267,6 +267,12 @@ Guidelines:
 3. Don't mention topic changes or previous context unless directly relevant
 4. Don't apologize for not knowing something - just state what you know or don't know
 5. Keep responses focused and concise`
+      : isFollowUp
+        ? `Based on the previous content: "${context || ''}"
+
+Please answer this follow-up question directly and conversationally: ${text}
+
+Provide a clear, direct answer without repeating the original content or providing another summary. Just answer the specific question asked.`
       : mode === "translate" && requestSettings?.translationSettings 
         ? typeof USER_PROMPTS[mode] === 'function'
           ? USER_PROMPTS[mode](text, `${requestSettings.translationSettings.fromLanguage}:${requestSettings.translationSettings.toLanguage}`)
@@ -488,7 +494,9 @@ Guidelines:
       messages: [
         {
           role: "system",
-          content: SYSTEM_PROMPTS[mode]
+          content: isFollowUp 
+            ? "You are a helpful assistant who answers questions directly and conversationally. Provide clear, concise answers without unnecessary repetition or summaries unless specifically asked for them."
+            : SYSTEM_PROMPTS[mode]
         },
         {
           role: "user",

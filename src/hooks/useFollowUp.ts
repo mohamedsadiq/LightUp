@@ -6,6 +6,7 @@ export interface FollowUpQA {
   answer: string;
   id: number;
   isComplete: boolean;
+  historyUpdated?: boolean;
 }
 
 interface UseFollowUpReturn {

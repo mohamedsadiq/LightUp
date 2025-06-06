@@ -80,10 +80,17 @@ export interface Settings {
     contextAwareness?: boolean // New setting for context awareness
     activationMode?: "automatic" | "manual" // Controls whether popup shows automatically or requires context menu
     enablePDFSupport: boolean
+    showTextSelectionButton: boolean // Controls visibility of the text selection button
   }
   translationSettings?: {
     fromLanguage: string
     toLanguage: string
+  }
+  
+  // Debug settings
+  debug?: {
+    enableContentExtractionDebug?: boolean // Enables debug visualization of content extraction
+    verboseLogging?: boolean // Enables more detailed logging
   }
 }
 

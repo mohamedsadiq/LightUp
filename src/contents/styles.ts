@@ -1,6 +1,33 @@
 import { THEME_COLORS, Z_INDEX } from "~utils/constants";
 
-export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" = "ltr", fontSize: "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem" = "1rem") => ({
+// Font size mapping type - now exported for use in other files
+export interface FontSizes {
+  base: string;
+  xs: string;
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
+  xxl: string;
+  button: string;
+  input: string;
+  loading: string;
+  model: string;
+  icon: string;
+  welcome: {
+    emoji: string;
+    heading: string;
+    description: string;
+  };
+  connection: string;
+  error: string;
+}
+
+export const getStyles = (
+  theme: "light" | "dark", 
+  textDirection: "ltr" | "rtl" = "ltr", 
+  fontSizes: FontSizes
+) => ({
   popup: {
     width: "340px",
     height: "auto",
@@ -13,7 +40,7 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     maxHeight: "400px",
     overflow: "auto",
-    fontSize: fontSize
+    fontSize: fontSizes.base
   },
   buttonContainer: {
     height: "fit-content",
@@ -34,24 +61,23 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     cursor: "pointer",
     padding: 4,
     fontFamily: "'K2D', sans-serif",
+    fontSize: fontSizes.button
   },
   text: {
-    fontSize: fontSize,
+    fontSize: fontSizes.base,
     lineHeight: 1.5,
     margin: "0 0 16px 0",
     color: THEME_COLORS[theme].text,
     fontFamily: "'K2D', sans-serif"
   },
   explanation: {
-    fontSize: fontSize,
+    fontSize: fontSizes.base,
     lineHeight: 1.6,
     color: THEME_COLORS[theme].text,
     backgroundColor: THEME_COLORS[theme].popupBackground,
     padding: "5px 9px",
     borderRadius: 8,
-    // marginTop: 16,
     fontFamily: "'K2D', sans-serif",
-   
     direction: textDirection,
     textAlign: textDirection === "rtl" ? "right" : "left" as const
   },
@@ -65,13 +91,13 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
   },
   error: {
     color: 'red',
-    fontSize: 14,
+    fontSize: fontSizes.error,
     marginTop: 8,
     fontFamily: "'K2D', sans-serif"
   },
   loadingText: {
     fontFamily: "'K2D', sans-serif",
-    fontSize: 14,
+    fontSize: fontSizes.loading,
     color: THEME_COLORS[theme].secondaryText,
     display: 'flex',
     alignItems: 'center',
@@ -84,9 +110,8 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     gap: 8,
     fontFamily: "'K2D', sans-serif",
     backgroundColor: theme === "light" ? "#FFFFFF" : THEME_COLORS[theme].buttonBackground,
-    padding: "12px 16px",
+    padding: "11px 14px",
     borderRadius: "31px",
-    // border: theme === "light" ? "1px solid #E5E5E5" : "1px solid transparent",
     boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
     transition: "all 0.2s ease",
     transform: 'translateZ(0)',
@@ -111,6 +136,7 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     color: theme === "light" ? "#2C2C2C" : "#fff",
     transform: 'translateZ(0)',
     willChange: 'transform, opacity',
+    fontSize: fontSizes.button,
     "&:disabled": {
       opacity: 0.5,
       cursor: "not-allowed",
@@ -133,7 +159,7 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     flex: 1,
     padding: "8px 12px",
     border: "none",
-    fontSize: 14,
+    fontSize: fontSizes.input,
     fontFamily: "'K2D', sans-serif",
     backgroundColor: "transparent",
     color: THEME_COLORS[theme].text,
@@ -162,7 +188,7 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     marginTop: "17px",
     marginLeft: 'auto',
     marginBottom: '8px',
-    fontSize: fontSize,
+    fontSize: fontSizes.base,
     fontFamily: "'K2D', sans-serif",
     boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
     direction: textDirection,
@@ -178,16 +204,15 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     borderBottomLeftRadius: '4px',
     maxWidth: '85%',
     marginRight: 'auto',
-    fontSize: fontSize,
+    fontSize: fontSizes.base,
     lineHeight: 1.6,
     fontFamily: "'K2D', sans-serif",
-    // boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
     direction: textDirection,
     textAlign: textDirection === "rtl" ? "right" : "left" as const,
     transform: 'translateZ(0)',
     willChange: 'transform',
+    overflow: 'scroll'
   },
-  // ... rest of the existing styles with theme colors
   popupContainer: {
     position: 'fixed' as const,
     left: 0,
@@ -215,7 +240,7 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     padding: 20,
     fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     overflow: 'auto',
-    fontSize: fontSize,
+    fontSize: fontSizes.base,
     zIndex: 3147483645,
     borderRadius: 12,
     minWidth: "400px",
@@ -251,7 +276,7 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
     padding: 25,
     fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     overflow: 'auto',
-    fontSize: fontSize,
+    fontSize: fontSizes.base,
     zIndex: Z_INDEX.CENTERED_POPUP,
     borderRadius: 12,
     minWidth: "600px",
@@ -290,4 +315,36 @@ export const getStyles = (theme: "light" | "dark", textDirection: "ltr" | "rtl" 
   },
 });
 
-export const styles = getStyles("light"); // Default theme
+// Create a default fontSizes object for backward compatibility
+const createDefaultFontSizes = (fontSize: string = "1rem"): FontSizes => {
+  const parseSize = (size: string): number => {
+    const match = size.match(/^([\d.]+)rem$/);
+    return match ? parseFloat(match[1]) : 1;
+  };
+
+  const baseSize = parseSize(fontSize);
+  
+  return {
+    base: `${baseSize}rem`,
+    xs: `${Math.max(0.6, baseSize * 0.75)}rem`,
+    sm: `${Math.max(0.7, baseSize * 0.85)}rem`,
+    md: `${baseSize}rem`,
+    lg: `${baseSize * 1.15}rem`,
+    xl: `${baseSize * 1.3}rem`,
+    xxl: `${baseSize * 1.5}rem`,
+    button: `${Math.max(0.8, baseSize * 0.9)}rem`,
+    input: `${Math.max(0.8, baseSize * 0.9)}rem`,
+    loading: `${Math.max(0.75, baseSize * 0.8)}rem`,
+    model: `${Math.max(0.7, baseSize * 0.75)}rem`,
+    icon: `${Math.max(0.7, baseSize * 0.7)}rem`,
+    welcome: {
+      emoji: `${baseSize * 1.8}rem`,
+      heading: `${baseSize * 1.2}rem`,
+      description: `${Math.max(0.8, baseSize * 0.9)}rem`
+    },
+    connection: `${Math.max(0.7, baseSize * 0.75)}rem`,
+    error: `${Math.max(0.8, baseSize * 0.85)}rem`
+  };
+};
+
+export const styles = getStyles("light", "ltr", createDefaultFontSizes()); // Default theme

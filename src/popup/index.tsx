@@ -58,14 +58,15 @@ const flexBetween = css`
 const PopupContainer = styled.div`
   width: 700px;
   min-height: 480px;
-  max-height: 600px; // Set a reasonable max height
+  max-height: 600px;
   background: ${theme.dark.background};
   color: ${theme.dark.foreground};
-  overflow: hidden; // Prevents the whole container from scrolling
+  overflow: hidden;
   position: relative;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
+  will-change: auto; /* Optimize for performance */
 `
 
 // Header - Matches the dark header in the reference image
@@ -80,7 +81,7 @@ const Header = styled.header`
 const HeaderTitle = styled.h1`
   font-size: 1.4rem; 
   font-weight: 600; 
-  color: ${props => props.theme.foreground};
+  color: ${theme.dark.foreground};
   margin: 0; 
   display: flex;
   align-items: center;
@@ -237,13 +238,37 @@ const SidebarSectionTitle = styled.div`
   padding: 16px 16px 8px;
 `
 
-// Content area
+// Content area - Fixed scrolling issues
 const ContentArea = styled.div`
   flex: 1;
   padding: 9px 33px 0 35px;
   background: ${theme.dark.background};
-  overflow-y: auto; // Enables vertical scrolling
-  overflow-x: hidden; // Prevents horizontal scrolling
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 0; /* Allow shrinking */
+  scroll-behavior: smooth;
+  
+  /* Optimize scrolling performance */
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0); /* Force hardware acceleration */
+  
+  /* Custom scrollbar styling */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: ${theme.dark.background};
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: ${theme.dark.border};
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb:hover {
+    background: ${theme.dark.divider};
+  }
 `
 
 // Section styling
@@ -371,7 +396,7 @@ const Select = styled.select`
   font-size: 15px;
   min-width: 120px;
   appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
   background-repeat: no-repeat;
   background-position: right 8px center;
   
@@ -470,7 +495,7 @@ const IndexPopup = () => {
   const [activeMode, setActiveMode] = useState<string>('explain')
   
   // Get preferred modes from settings or use defaults
-  const preferredModes = (settings?.customization as any)?.preferredModes || ['summarize', 'analyze', 'explain', 'translate']
+  const preferredModes: string[] = Array.from(new Set((settings?.customization as any)?.preferredModes || ['summarize', 'analyze', 'explain', 'translate'])) as string[]
   const allModes = ['summarize', 'analyze', 'explain', 'translate', 'free']
   
   // Handler for updating a single setting
@@ -561,8 +586,9 @@ const IndexPopup = () => {
   
   // Handler for toggling modes in preferences
   const togglePreferredMode = async (mode: string) => {
-    const currentModes = [...((settings?.customization as any)?.preferredModes || preferredModes)]
-    let newModes
+    // Use Set to ensure no duplicates in the current modes
+    const currentModes: string[] = [...new Set((settings?.customization as any)?.preferredModes || preferredModes)] as string[]
+    let newModes: string[]
     
     if (currentModes.includes(mode)) {
       // Don't allow removing all modes - keep at least one
@@ -655,7 +681,7 @@ const IndexPopup = () => {
       </svg>
     ),
     analyze: (
-      <svg width="20" height="20" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg width="20" height="20" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-6">
         <path d="M35.9064 0.109375C16.194 0.109375 0.136719 16.1667 0.136719 35.8791C0.136719 55.5914 16.194 71.6487 35.9064 71.6487C44.44 71.6487 52.2816 68.6328 58.4391 63.6205L83.5695 95.1014C83.5695 95.1014 89.0738 95.9195 92.4913 92.358C95.9325 88.7694 95.1254 83.5488 95.1254 83.5488L63.6478 58.4117C68.6602 52.2543 71.6761 44.4127 71.6761 35.8791C71.6761 16.1667 55.6188 0.109375 35.9064 0.109375ZM35.9064 7.26397C51.7528 7.26397 64.5215 20.0327 64.5215 35.8791C64.5215 51.7254 51.7528 64.4941 35.9064 64.4941C20.06 64.4941 7.29132 51.7254 7.29132 35.8791C7.29132 20.0327 20.06 7.26397 35.9064 7.26397Z" fill="currentColor"/>
       </svg>
     ),
@@ -665,11 +691,9 @@ const IndexPopup = () => {
       </svg>
     ),
     translate: (
-     
-      <svg  width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802" />
-    </svg>
-    
+      <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+        <path strokeLinecap="round" strokeLinejoin="round" d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802" />
+      </svg>
     ),
     free: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -739,7 +763,7 @@ const IndexPopup = () => {
               <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 9V11M12 15H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0378 2.66667 10.268 4L3.33978 16C2.56998 17.3333 3.53223 19 5.07183 19Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <h2 style={{ fontSize: '1.5rem', marginTop: '1.5rem', marginBottom: '1rem', fontWeight: 'bold' }}>LightUp is currently Off</h2>
+              <h2 style={{ fontSize: '1.5rem', marginTop: '0', marginBottom: '0', fontWeight: 'bold' }}>LightUp is currently Off</h2>
               <p style={{ fontSize: '1rem', opacity: 0.8, maxWidth: '400px', lineHeight: '1.5' }}>
                 Toggle the switch in the header or the button below to enable LightUp and access all features.
               </p>
@@ -752,7 +776,7 @@ const IndexPopup = () => {
                   }
                 }}
                 style={{
-                  marginTop: '1.5rem',
+                  marginTop: '0.5rem',
                   backgroundColor: "#46b875",
                   border: 'none',
                   color: 'white',
@@ -765,8 +789,8 @@ const IndexPopup = () => {
                   gap: '0.5rem'
                 }}
               >
-                <svg  width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                <svg  width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
 </svg>
 
                 
@@ -779,8 +803,8 @@ const IndexPopup = () => {
           {/* Main Navigation */}
           <SidebarItem active={activeTab === 'general'} onClick={() => setActiveTab('general')}>
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
 </svg>
 
 
@@ -789,7 +813,7 @@ const IndexPopup = () => {
           </SidebarItem>
           <SidebarItem active={activeTab === 'appearance'} onClick={() => setActiveTab('appearance')}>
             <SidebarIcon>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
   <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" />
 </svg>
             </SidebarIcon>
@@ -822,9 +846,9 @@ const IndexPopup = () => {
             }}
           >
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
-  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
 </svg>
 
             </SidebarIcon>
@@ -872,8 +896,8 @@ const IndexPopup = () => {
             active={false}
           >
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m20.893 13.393-1.135-1.135a2.252 2.252 0 0 1-.421-.585l-1.08-2.16a.414.414 0 0 0-.663-.107.827.827 0 0 1-.812.21l-1.273-.363a.89.89 0 0 0-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.212.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 0 1-1.81 1.025 1.055 1.055 0 0 1-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.655-.261a2.25 2.25 0 0 1-1.383-2.46l.007-.042a2.25 2.25 0 0 1 .29-.787l.09-.15a2.25 2.25 0 0 1 2.37-1.048l1.178.236a1.125 1.125 0 0 0 1.302-.795l.208-.73a1.125 1.125 0 0 0-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 0 1-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 0 1-1.458-1.137l1.411-2.353a2.25 2.25 0 0 0 .286-.76m11.928 9.869A9 9 0 0 0 8.965 3.525m11.928 9.868A9 9 0 1 1 8.965 3.525" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m20.893 13.393-1.135-1.135a2.252 2.252 0 0 1-.421-.585l-1.08-2.16a.414.414 0 0 0-.663-.107.827.827 0 0 1-.812.21l-1.273-.363a.89.89 0 0 0-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.212.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 0 1-1.81 1.025 1.055 1.055 0 0 1-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.655-.261a2.25 2.25 0 0 1-1.383-2.46l.007-.042a2.25 2.25 0 0 1 .29-.787l.09-.15a2.25 2.25 0 0 1 2.37-1.048l1.178.236a1.125 1.125 0 0 0 1.302-.795l.208-.73a1.125 1.125 0 0 0-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 0 1-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 0 1-1.458-1.137l1.411-2.353a2.25 2.25 0 0 0 .286-.76m11.928 9.869A9 9 0 0 0 8.965 3.525m11.928 9.868A9 9 0 1 1 8.965 3.525" />
 </svg>
 
             </SidebarIcon>
@@ -885,8 +909,8 @@ const IndexPopup = () => {
             active={false}
           >
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
 </svg>
 
             </SidebarIcon>
@@ -913,15 +937,15 @@ const IndexPopup = () => {
                 ) : (
                   <div style={{ padding: '16px', background: '#333333', borderRadius: '8px', marginTop: '12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                      <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px' }}>Actions Remaining Today</span>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px' }}>Free Uses Remaining</span>
                       <span style={{ fontWeight: 500, fontSize: '14px' }}>
-                        {remainingActions} / {settings?.rateLimit?.maxDailyActions || 20}
+                        {remainingActions} / {(settings?.rateLimit as any)?.maxDailyActions || 50}
                       </span>
                     </div>
                     <div style={{ width: '100%', height: '8px', backgroundColor: '#444444', borderRadius: '4px', overflow: 'hidden' }}>
                       <div 
                         style={{ 
-                          width: `${Math.min(100, (remainingActions / (settings?.rateLimit?.maxDailyActions || 20)) * 100)}%`, 
+                          width: `${Math.min(100, (remainingActions / ((settings?.rateLimit as any)?.maxDailyActions || 50)) * 100)}%`, 
                           height: '100%', 
                           backgroundColor: theme.dark.toggle.active, 
                           borderRadius: '4px' 
@@ -979,7 +1003,16 @@ const IndexPopup = () => {
                             </svg>
                           )}
                           {modeIcons[mode as keyof typeof modeIcons]}
-                          {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                            <span>{mode.charAt(0).toUpperCase() + mode.slice(1)}</span>
+                            {mode === 'translate' && (
+                              <span style={{ fontSize: '10px', opacity: 0.8 }}>
+                                {settings?.translationSettings?.fromLanguage ? 
+                                  `${LANGUAGES[settings.translationSettings.fromLanguage] || 'Auto'} → ${LANGUAGES[settings.translationSettings.toLanguage] || 'English'}` : 
+                                  'Auto → English'}
+                              </span>
+                            )}
+                          </div>
                         </Button>
                       ))}
                     </div>
@@ -995,7 +1028,16 @@ const IndexPopup = () => {
                         style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '8px 16px', borderRadius: '20px' }}
                       >
                         {modeIcons[mode as keyof typeof modeIcons]}
-                        {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                          <span>{mode.charAt(0).toUpperCase() + mode.slice(1)}</span>
+                          {mode === 'translate' && (
+                            <span style={{ fontSize: '10px', opacity: 0.8 }}>
+                              {settings?.translationSettings?.fromLanguage ? 
+                                `${LANGUAGES[settings.translationSettings.fromLanguage] || 'Auto'} → ${LANGUAGES[settings.translationSettings.toLanguage] || 'English'}` : 
+                                'Auto → English'}
+                            </span>
+                          )}
+                        </div>
                       </Button>
                     ))}
                   </div>
@@ -1007,7 +1049,130 @@ const IndexPopup = () => {
               <Section>
                 {/* <SectionTitle>General Settings</SectionTitle>
                 <Description>Configure the basic settings for your extension</Description> */}
-                
+                   <FormRow>
+                  <Label>Translation Settings</Label>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <Select 
+                      value={settings?.translationSettings?.fromLanguage || "auto"}
+                      onChange={(e) => {
+                        const translationSettings = {
+                          ...(settings?.translationSettings || {}),
+                          fromLanguage: e.target.value,
+                          toLanguage: settings?.translationSettings?.toLanguage || "en"
+                        }
+                        const newSettings = {
+                          ...settings,
+                          translationSettings
+                        }
+                        setSettings(newSettings)
+                        
+                        const storage = new Storage()
+                        storage.set("settings", newSettings)
+                        
+                        // Also save dedicated translationSettings
+                        storage.set("translationSettings", translationSettings)
+                        
+                        // Notify all tabs about the translation settings change
+                        if (typeof chrome !== 'undefined' && chrome.tabs) {
+                          chrome.tabs.query({}, (tabs) => {
+                            tabs.forEach(tab => {
+                              if (tab.id) {
+                                chrome.tabs.sendMessage(tab.id, { 
+                                  type: "TRANSLATION_SETTINGS_UPDATED", 
+                                  translationSettings: translationSettings
+                                }).catch(err => {
+                                  // Ignore errors for tabs that don't have the content script running
+                                  console.log(`Could not send message to tab ${tab.id}:`, err);
+                                });
+                              }
+                            });
+                          });
+                        }
+                        
+                        // Dispatch event for other components in the same window
+                        window.dispatchEvent(
+                          new CustomEvent('settingsUpdated', { detail: { settings: newSettings } })
+                        )
+                      }}
+                      style={{ flex: 1 }}
+                    >
+                      <option value="auto">Auto-detect</option>
+                      <option value="en">English</option>
+                      <option value="es">Spanish</option>
+                      <option value="fr">French</option>
+                      <option value="de">German</option>
+                      <option value="it">Italian</option>
+                      <option value="pt">Portuguese</option>
+                      <option value="ru">Russian</option>
+                      <option value="zh">Chinese</option>
+                      <option value="ja">Japanese</option>
+                      <option value="ko">Korean</option>
+                    </Select>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', margin: '0 4px' }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
+                    
+                    <Select 
+                      value={settings?.translationSettings?.toLanguage || "en"}
+                      onChange={(e) => {
+                        const translationSettings = {
+                          ...(settings?.translationSettings || {}),
+                          fromLanguage: settings?.translationSettings?.fromLanguage || "auto",
+                          toLanguage: e.target.value
+                        }
+                        const newSettings = {
+                          ...settings,
+                          translationSettings
+                        }
+                        setSettings(newSettings)
+                        
+                        const storage = new Storage()
+                        storage.set("settings", newSettings)
+                        
+                        // Also save dedicated translationSettings
+                        storage.set("translationSettings", translationSettings)
+                        
+                        // Notify all tabs about the translation settings change
+                        if (typeof chrome !== 'undefined' && chrome.tabs) {
+                          chrome.tabs.query({}, (tabs) => {
+                            tabs.forEach(tab => {
+                              if (tab.id) {
+                                chrome.tabs.sendMessage(tab.id, { 
+                                  type: "TRANSLATION_SETTINGS_UPDATED", 
+                                  translationSettings: translationSettings
+                                }).catch(err => {
+                                  // Ignore errors for tabs that don't have the content script running
+                                  console.log(`Could not send message to tab ${tab.id}:`, err);
+                                });
+                              }
+                            });
+                          });
+                        }
+                        
+                        // Dispatch event for other components in the same window
+                        window.dispatchEvent(
+                          new CustomEvent('settingsUpdated', { detail: { settings: newSettings } })
+                        )
+                      }}
+                      style={{ flex: 1 }}
+                    >
+                      <option value="en">English</option>
+                      <option value="es">Spanish</option>
+                      <option value="fr">French</option>
+                      <option value="de">German</option>
+                      <option value="it">Italian</option>
+                      <option value="pt">Portuguese</option>
+                      <option value="ru">Russian</option>
+                      <option value="zh">Chinese</option>
+                      <option value="ja">Japanese</option>
+                      <option value="ko">Korean</option>
+                    </Select>
+                  </div>
+                </FormRow>
+                <SectionDivider />
                 <FormRow>
                   <div>
                     <Label>Show Selected Text</Label>
@@ -1023,29 +1188,7 @@ const IndexPopup = () => {
                   </ToggleContainer>
                 </FormRow>
                 
-                <SectionDivider />
-                
-                <FormRow>
-                  <div>
-                    <Label>Automatic Activation</Label>
-                    <Description>Show popup automatically when text is selected</Description>
-                  </div>
-                  <ToggleContainer>
-                    <ToggleInput 
-                      type="checkbox" 
-                      checked={settings?.customization?.automaticActivation === true}
-                      onChange={(e) => {
-                        // Update both settings to ensure consistency with options page
-                        const newValue = e.target.checked;
-                        updateMultipleSettings({
-                          'automaticActivation': newValue,
-                          'activationMode': newValue ? "automatic" : "manual"
-                        });
-                      }}
-                    />
-                    <ToggleSlider />
-                  </ToggleContainer>
-                </FormRow>
+               
                 
                 <SectionDivider />
                 
@@ -1101,62 +1244,45 @@ const IndexPopup = () => {
                 <SectionDivider />
                 
                 <FormRow>
-                  <Label>Language</Label>
-                  <Select 
-                    value={settings?.translationSettings?.toLanguage || "auto"}
-                    onChange={(e) => {
-                      const translationSettings = {
-                        ...(settings?.translationSettings || {}),
-                        toLanguage: e.target.value
-                      }
-                      const newSettings = {
-                        ...settings,
-                        translationSettings
-                      }
-                      setSettings(newSettings)
-                      
-                      const storage = new Storage()
-                      storage.set("settings", newSettings)
-                      
-                      // Also save dedicated translationSettings
-                      storage.set("translationSettings", translationSettings)
-                      
-                      // Notify all tabs about the translation settings change
-                      if (typeof chrome !== 'undefined' && chrome.tabs) {
-                        chrome.tabs.query({}, (tabs) => {
-                          tabs.forEach(tab => {
-                            if (tab.id) {
-                              chrome.tabs.sendMessage(tab.id, { 
-                                type: "TRANSLATION_SETTINGS_UPDATED", 
-                                translationSettings: translationSettings
-                              }).catch(err => {
-                                // Ignore errors for tabs that don't have the content script running
-                                console.log(`Could not send message to tab ${tab.id}:`, err);
-                              });
-                            }
-                          });
-                        });
-                      }
-                      
-                      // Dispatch event for other components in the same window
-                      window.dispatchEvent(
-                        new CustomEvent('settingsUpdated', { detail: { settings: newSettings } })
-                      )
-                    }}
-                  >
-                    <option value="auto">Auto-detect</option>
-                    <option value="en">English</option>
-                    <option value="es">Spanish</option>
-                    <option value="fr">French</option>
-                    <option value="de">German</option>
-                    <option value="it">Italian</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="ru">Russian</option>
-                    <option value="zh">Chinese</option>
-                    <option value="ja">Japanese</option>
-                    <option value="ko">Korean</option>
-                  </Select>
+                  <div>
+                    <Label>Text Selection Button</Label>
+                    <Description>Show button when text is selected</Description>
+                  </div>
+                  <ToggleContainer>
+                    <ToggleInput 
+                      type="checkbox" 
+                      checked={settings?.customization?.showTextSelectionButton !== false}
+                      onChange={(e) => updateSettings('showTextSelectionButton', e.target.checked)}
+                    />
+                    <ToggleSlider />
+                  </ToggleContainer>
                 </FormRow>
+                
+                <SectionDivider />
+                
+                <FormRow>
+                  <div>
+                    <Label>Automatic Activation</Label>
+                    <Description>Show popup automatically when text is selected</Description>
+                  </div>
+                  <ToggleContainer>
+                    <ToggleInput 
+                      type="checkbox" 
+                      checked={settings?.customization?.automaticActivation === true}
+                      onChange={(e) => {
+                        // Update both settings to ensure consistency with options page
+                        const newValue = e.target.checked;
+                        updateMultipleSettings({
+                          'automaticActivation': newValue,
+                          'activationMode': newValue ? "automatic" : "manual"
+                        });
+                      }}
+                    />
+                    <ToggleSlider />
+                  </ToggleContainer>
+                </FormRow>
+                
+             
               </Section>
               
               
@@ -1432,7 +1558,6 @@ const IndexPopup = () => {
                       onChange={(e) => updateSettings('fontSize', e.target.value)}
                       style={{ width: '120px' }}
                     >
-                      <option value="xx-small">XX-Small</option>
                       <option value="x-small">X-Small</option>
                       <option value="small">Small</option>
                       <option value="medium">Medium</option>

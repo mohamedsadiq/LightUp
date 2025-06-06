@@ -4,9 +4,10 @@ import { Logo } from "../icons"
 interface SelectionButtonProps {
   position: { x: number, y: number }
   onClick: () => void
+  theme?: "light" | "dark"
 }
 
-export const SelectionButton: React.FC<SelectionButtonProps> = ({ position, onClick }) => {
+export const SelectionButton: React.FC<SelectionButtonProps> = ({ position, onClick, theme = "light" }) => {
   return (
     <motion.button
       initial={{ scale: 0, opacity: 0 }}
@@ -33,7 +34,7 @@ export const SelectionButton: React.FC<SelectionButtonProps> = ({ position, onCl
         padding: 0
       }}
     >
-      <Logo />
+      {Logo(theme)}
     </motion.button>
   )
 } 

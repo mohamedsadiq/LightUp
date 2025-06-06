@@ -13,7 +13,7 @@ interface PopupModeSelectorProps {
 }
 
 // Default modes if user hasn't configured any
-const DEFAULT_MODES: Mode[] = ["summarize", "analyze", "explain", "free"]
+const DEFAULT_MODES: Mode[] = ["summarize", "analyze", "explain", "translate"]
 
 // All available modes
 const ALL_MODES: Mode[] = ["summarize", "analyze", "explain", "translate", "free"]
@@ -34,11 +34,30 @@ export const PopupModeSelector = ({
     const loadPreferredModes = async () => {
       try {
         const storage = new Storage()
-        const savedPreferredModes = await storage.get("preferredModes") as Mode[] | undefined
+        
+        // Check settings first (newer way)
+        const settings = await storage.get("settings") as any
+        let savedPreferredModes = settings?.customization?.preferredModes as Mode[] | undefined
+        
+        // Fallback to direct storage key (older way)
+        if (!savedPreferredModes || savedPreferredModes.length === 0) {
+          savedPreferredModes = await storage.get("preferredModes") as Mode[] | undefined
+        }
         
         if (savedPreferredModes && savedPreferredModes.length > 0) {
           // Limit to 4 modes
           setPreferredModes(savedPreferredModes.slice(0, 4))
+        }
+        
+        // Load translation settings
+        const translationSettings = settings?.translationSettings || await storage.get("translationSettings") as any
+        if (translationSettings) {
+          if (translationSettings.fromLanguage) {
+            setFromLanguage(translationSettings.fromLanguage)
+          }
+          if (translationSettings.toLanguage) {
+            setToLanguage(translationSettings.toLanguage)
+          }
         }
       } catch (error) {
         console.error("Error loading preferred modes:", error)
@@ -74,6 +93,69 @@ export const PopupModeSelector = ({
 
   // Use the preferred modes or default to the first 4 modes
   const displayModes = preferredModes.length > 0 ? preferredModes : DEFAULT_MODES
+
+  // Fixed styles without dynamic font sizing
+  const getModeSelectorStyles = () => {
+    return {
+      container: {
+        display: "flex",
+        justifyContent: "center",
+        padding: "4px 0",
+        marginBottom: "8px",
+      },
+      modeContainer: {
+        display: "flex",
+        gap: "4px",
+        padding: "4px",
+        borderRadius: "24px",
+      },
+      modeButton: {
+        display: "flex",
+        alignItems: "center",
+        gap: "6px",
+        padding: "6px 12px",
+        borderRadius: "20px",
+        fontSize: "0.7rem",
+        fontFamily: "'K2D', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        cursor: "pointer",
+        height: "28px",
+        lineHeight: "16px",
+        fontWeight: "500",
+        border: "none",
+        outline: "none",
+        transition: "background-color 0.2s, color 0.2s",
+      },
+      iconWrapper: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+      },
+      icon: {
+        fontWeight: "bold",
+        fontSize: "0.6rem",
+        marginRight: "2px"
+      },
+      loadingIndicator: {
+        fontSize: "0.8rem",
+        color: "#8e8e8e",
+        lineHeight: 1,
+        marginLeft: "0",
+      },
+      contextIndicator: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        marginLeft: "2px",
+      },
+      languageSelectors: {
+        display: "flex",
+        gap: "8px",
+        marginTop: "8px"
+      }
+    } as const;
+  };
+
+  const styles = getModeSelectorStyles();
 
   return (
     <>
@@ -185,64 +267,6 @@ export const PopupModeSelector = ({
     </>
   )
 }
-
-const styles = {
-  container: {
-    display: "flex",
-    justifyContent: "center",
-    padding: "4px 0",
-    marginBottom: "8px",
-  },
-  modeContainer: {
-    display: "flex",
-    gap: "4px",
-    padding: "4px",
-    borderRadius: "24px",
-  },
-  modeButton: {
-    display: "flex",
-    alignItems: "center",
-    gap: "6px",
-    padding: "2px 11px",
-    borderRadius: "20px",
-    fontSize: "10px",
-    fontFamily: "'K2D', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    cursor: "pointer",
-    height: "28px",
-    lineHeight: "16px",
-    fontWeight: "500",
-    border: "none",
-    outline: "none",
-    transition: "background-color 0.2s, color 0.2s",
-  },
-  iconWrapper: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
-  },
-  icon: {
-    fontWeight: "bold",
-    fontSize: "12px",
-    marginRight: "2px"
-  },
-  loadingIndicator: {
-    fontSize: "16px",
-    color: "#8e8e8e",
-    lineHeight: 1,
-    marginLeft: "0",
-  },
-  contextIndicator: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    marginLeft: "2px",
-  },
-  languageSelectors: {
-    display: "flex",
-    gap: "8px",
-    marginTop: "8px"
-  }
-} as const 
 
 const GlobalStyles = `
   @keyframes spin {

@@ -12,6 +12,11 @@ export const processLocalText = async function*(request: ProcessTextRequest) {
     
     // Get the system prompt (custom or default)
     const getSystemPrompt = () => {
+      // For follow-up questions, use conversational system prompt
+      if (request.isFollowUp) {
+        return "You are a helpful assistant who answers questions directly and conversationally. Provide clear, concise answers without unnecessary repetition or summaries unless specifically asked for them.";
+      }
+      
       // If custom system prompt is available, use it
       const customSystemPrompt = settings.customPrompts?.systemPrompts?.[mode];
       if (customSystemPrompt) {
@@ -37,6 +42,15 @@ export const processLocalText = async function*(request: ProcessTextRequest) {
 
     // Get the user prompt (custom or default)
     const getUserPrompt = () => {
+      // For follow-up questions
+      if (request.isFollowUp) {
+        return `Based on the previous content: "${request.context || ''}"
+
+Please answer this follow-up question directly and conversationally: ${text}
+
+Provide a clear, direct answer without repeating the original content or providing another summary. Just answer the specific question asked.`;
+      }
+      
       // For translate mode
       if (mode === "translate") {
         // Use custom user prompt if available
