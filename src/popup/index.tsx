@@ -208,6 +208,8 @@ const SidebarItem = styled.button<{ active: boolean }>`
   cursor: pointer;
   border-radius:7px;
   margin-bottom: 4px;
+  transition: all 0.2s ease;
+  
   &:hover {
     background: ${props => props.active ? theme.dark.sidebarActive : 'rgba(255, 255, 255, 0.05)'};
     color: ${theme.dark.foreground};
@@ -1423,6 +1425,14 @@ const IndexPopup = () => {
                     <div 
                       key={themeOption.value}
                       onClick={() => updateSettings('theme', themeOption.value)}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#3a3a3a';
+                        e.currentTarget.style.borderColor = themeOption.value === (settings?.customization?.theme || 'dark') ? '#2DCA6E' : 'rgba(255, 255, 255, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#333333';
+                        e.currentTarget.style.borderColor = themeOption.value === (settings?.customization?.theme || 'dark') ? '#2DCA6E' : 'transparent';
+                      }}
                       style={{
                         padding: '16px',
                         background: '#333333',
@@ -1432,7 +1442,7 @@ const IndexPopup = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         cursor: 'pointer',
-                        border: themeOption.value === (settings?.customization?.theme || 'dark') ? `2px solid ${theme.dark.primary}` : '2px solid transparent',
+                        border: themeOption.value === (settings?.customization?.theme || 'dark') ? '2px solid #2DCA6E' : '2px solid transparent',
                         transition: 'all 0.2s ease-in-out'
                       }}
                     >
@@ -1529,6 +1539,14 @@ const IndexPopup = () => {
                       <div 
                         key={layoutOption.value}
                         onClick={() => updateSettings('layoutMode', layoutOption.value)}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                          e.currentTarget.style.borderColor = layoutOption.value === (settings?.customization?.layoutMode || 'floating') ? '#2DCA6E' : 'rgba(255, 255, 255, 0.2)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = '#333333';
+                          e.currentTarget.style.borderColor = layoutOption.value === (settings?.customization?.layoutMode || 'floating') ? '#2DCA6E' : 'transparent';
+                        }}
                         style={{
                           padding: '16px',
                           background: '#333333',
@@ -1538,7 +1556,7 @@ const IndexPopup = () => {
                           alignItems: 'center',
                           justifyContent: 'center',
                           cursor: 'pointer',
-                          border: layoutOption.value === (settings?.customization?.layoutMode || 'floating') ? `2px solid ${theme.dark.primary}` : '2px solid transparent',
+                          border: layoutOption.value === (settings?.customization?.layoutMode || 'floating') ? '2px solid #2DCA6E' : '2px solid transparent',
                           transition: 'all 0.2s ease-in-out'
                         }}
                       >

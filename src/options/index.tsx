@@ -2,13 +2,29 @@ import { useEffect, useState, useRef } from "react"
 import { Storage } from "@plasmohq/storage"
 // Animation imports removed
 import styled from "@emotion/styled"
-import { css } from "@emotion/react"
+import { css, keyframes } from "@emotion/react"
 
 import type { Settings, ModelType, GeminiModel, GrokModel, LocalModel, Mode } from "~types/settings"
 import { useRateLimit } from "~hooks/useRateLimit"
 import ErrorMessage from "~components/common/ErrorMessage"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "../utils/constants"
 import { useSettings } from "~hooks/useSettings"
+
+// Import enhanced notification components
+import {
+  ToastNotification,
+  ToastContainer,
+  Toast,
+  ToastIcon,
+  ToastContent,
+  ToastTitle,
+  ToastMessage,
+  ToastCloseButton,
+  UnsavedChangesIndicator,
+  AutoSaveStatus,
+  LoadingSpinner,
+  EnhancedSaveButton
+} from "~components/options/NotificationComponents"
 
 // Import the options-specific CSS file for fonts only
 import "./options-style.css"
@@ -737,6 +753,7 @@ const ContentArea = styled.div`
   background: #2A2A2A;
   overflow-y: auto; // Enables vertical scrolling
   overflow-x: hidden; // Prevents horizontal scrolling
+  padding-bottom: 58px;
 `
 
 // Section styling - Exactly matching popup component
@@ -933,6 +950,120 @@ const Logo = () => (
   </HeaderLogoWrapper>
 );
 
+// Custom hook for toast notifications
+const useToastNotifications = () => {
+  const [toasts, setToasts] = useState<ToastNotification[]>([]);
+  const [exitingToasts, setExitingToasts] = useState<Set<string>>(new Set());
+
+  const addToast = (toast: Omit<ToastNotification, 'id'>) => {
+    const id = Math.random().toString(36).substr(2, 9);
+    const newToast: ToastNotification = {
+      id,
+      duration: 5000,
+      ...toast,
+    };
+
+    setToasts(prev => [...prev, newToast]);
+
+    if (!newToast.persistent && newToast.duration) {
+      setTimeout(() => {
+        removeToast(id);
+      }, newToast.duration);
+    }
+
+    return id;
+  };
+
+  const removeToast = (id: string) => {
+    setExitingToasts(prev => new Set([...prev, id]));
+    
+    setTimeout(() => {
+      setToasts(prev => prev.filter(toast => toast.id !== id));
+      setExitingToasts(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
+    }, 300);
+  };
+
+  return { toasts, addToast, removeToast, exitingToasts };
+};
+
+// Auto-save hook with debouncing
+const useAutoSave = (
+  settings: Settings, 
+  storage: Storage, 
+  addToast: (toast: Omit<ToastNotification, 'id'>) => string
+) => {
+  const [autoSaveStatus, setAutoSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastSavedRef = useRef<string>('');
+
+  const autoSave = async (immediateSettings?: Settings, updateInitialSettings?: (settings: Settings) => void) => {
+    const settingsToSave = immediateSettings || settings;
+    const settingsString = JSON.stringify(settingsToSave);
+    
+    // Skip if settings haven't changed
+    if (settingsString === lastSavedRef.current) {
+      return;
+    }
+
+    try {
+      setAutoSaveStatus('saving');
+      await storage.set("settings", settingsToSave);
+      lastSavedRef.current = settingsString;
+      setAutoSaveStatus('saved');
+      
+      // Update initial settings to mark as saved (this fixes the unsaved changes conflict)
+      if (updateInitialSettings) {
+        updateInitialSettings(settingsToSave);
+      }
+      
+      // Notify all tabs about the settings change
+      if (typeof chrome !== 'undefined' && chrome.tabs) {
+        chrome.tabs.query({}, (tabs) => {
+          tabs.forEach(tab => {
+            if (tab.id) {
+              chrome.tabs.sendMessage(tab.id, { 
+                type: "SETTINGS_UPDATED", 
+                settings: settingsToSave 
+              }).catch(() => {
+                // Ignore errors for tabs without content script
+              });
+            }
+          });
+        });
+      }
+
+      setTimeout(() => {
+        setAutoSaveStatus('idle');
+      }, 2000);
+    } catch (error) {
+      console.error("Auto-save failed:", error);
+      setAutoSaveStatus('error');
+      addToast({
+        type: 'error',
+        title: 'Auto-save Failed',
+        message: 'Your changes were not saved automatically. Please save manually.',
+        persistent: true
+      });
+    }
+  };
+
+  const debouncedAutoSave = (immediateSettings?: Settings, updateInitialSettings?: (settings: Settings) => void) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    
+    timeoutRef.current = setTimeout(() => {
+      autoSave(immediateSettings, updateInitialSettings);
+    }, 10000); // Auto-save after 10 seconds of inactivity
+  };
+
+  return { autoSaveStatus, debouncedAutoSave, autoSave, timeoutRef };
+};
+
 function IndexOptions() {
   const storage = useRef(new Storage()).current;
   const [settings, setSettings] = useState<Settings>({
@@ -962,6 +1093,14 @@ function IndexOptions() {
   const [error, setError] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [initialSettings, setInitialSettings] = useState<Settings | null>(null);
+  
+  // Enhanced notification system
+  const { toasts, addToast, removeToast, exitingToasts } = useToastNotifications();
+  
+  // Auto-save functionality
+  const { autoSaveStatus, debouncedAutoSave, autoSave, timeoutRef } = useAutoSave(settings, storage, addToast);
 
   const [activePromptMode, setActivePromptMode] = useState<Mode>("explain");
   const [isEditingSystemPrompt, setIsEditingSystemPrompt] = useState(false);
@@ -975,7 +1114,7 @@ function IndexOptions() {
       try {
         const savedSettings = await storage.get("settings") as Settings | undefined;
         if (savedSettings) {
-          setSettings({
+          const loadedSettings = {
             ...savedSettings,
             customization: {
               showSelectedText: savedSettings.customization?.showSelectedText ?? true,
@@ -993,16 +1132,118 @@ function IndexOptions() {
               enablePDFSupport: savedSettings.customization?.enablePDFSupport ?? false,
               showTextSelectionButton: savedSettings.customization?.showTextSelectionButton ?? true
             }
-          });
+          };
+          setSettings(loadedSettings);
+          setInitialSettings(loadedSettings);
         }
       } catch (err) {
         console.error("Error loading settings:", err);
         setError("Failed to load settings");
+        addToast({
+          type: 'error',
+          title: 'Loading Failed',
+          message: 'Could not load your settings. Using defaults.'
+        });
       }
     };
     
     loadSettings();
   }, []);
+
+  // Track unsaved changes
+  useEffect(() => {
+    if (initialSettings) {
+      const hasChanges = JSON.stringify(settings) !== JSON.stringify(initialSettings);
+      setHasUnsavedChanges(hasChanges);
+      
+      // Check if we should auto-save based on what changed
+      const shouldAutoSave = () => {
+        // If no changes, don't save
+        if (!hasChanges) return false;
+        
+        // Check if only model-related settings changed
+        const modelSettingsChanged = 
+          settings.modelType !== initialSettings.modelType ||
+          settings.geminiModel !== initialSettings.geminiModel ||
+          settings.grokModel !== initialSettings.grokModel ||
+          settings.localModel !== initialSettings.localModel ||
+          settings.geminiApiKey !== initialSettings.geminiApiKey ||
+          settings.xaiApiKey !== initialSettings.xaiApiKey ||
+          settings.serverUrl !== initialSettings.serverUrl;
+        
+        // If non-model settings changed, always auto-save
+        if (!modelSettingsChanged) return true;
+        
+        // If model settings changed, check if configuration is complete
+        if (settings.modelType === 'gemini') {
+          return settings.geminiApiKey && settings.geminiApiKey.trim().length > 0;
+        } else if (settings.modelType === 'grok') {
+          return settings.xaiApiKey && settings.xaiApiKey.trim().length > 0;
+        } else if (settings.modelType === 'local') {
+          return settings.serverUrl && settings.serverUrl.trim().length > 0;
+        }
+        return true; // For 'basic' model type, always allow auto-save
+      };
+      
+      // Trigger auto-save based on the logic above
+      if (shouldAutoSave()) {
+        debouncedAutoSave(settings, setInitialSettings);
+      }
+    }
+  }, [settings, initialSettings, debouncedAutoSave]);
+
+  // Auto-select models when API keys are provided but no model is selected
+  useEffect(() => {
+    let needsUpdate = false;
+    const updatedSettings = { ...settings };
+
+    // Auto-select Gemini model if API key exists but no model selected
+    if (settings.modelType === 'gemini' && settings.geminiApiKey && !settings.geminiModel) {
+      updatedSettings.geminiModel = GEMINI_MODELS[0].value;
+      needsUpdate = true;
+      
+      addToast({
+        type: 'info',
+        title: 'Model Auto-Selected',
+        message: `Automatically selected ${GEMINI_MODELS[0].label} since you provided a Gemini API key.`,
+        duration: 4000
+      });
+    }
+
+    // Auto-select Grok model if API key exists but no model selected
+    if (settings.modelType === 'grok' && settings.xaiApiKey && !settings.grokModel) {
+      updatedSettings.grokModel = GROK_MODELS[0].value;
+      needsUpdate = true;
+      
+      addToast({
+        type: 'info',
+        title: 'Model Auto-Selected',
+        message: `Automatically selected ${GROK_MODELS[0].label} since you provided a Grok API key.`,
+        duration: 4000
+      });
+    }
+
+    // Auto-select Local model if server URL exists but no model selected
+    if (settings.modelType === 'local' && settings.serverUrl && !settings.localModel) {
+      updatedSettings.localModel = LOCAL_MODELS[0].value;
+      needsUpdate = true;
+      
+      addToast({
+        type: 'info',
+        title: 'Model Auto-Selected',
+        message: `Automatically selected ${LOCAL_MODELS[0].label} for your Ollama setup.`,
+        duration: 4000
+      });
+    }
+
+    if (needsUpdate) {
+      setSettings(updatedSettings);
+      // Auto-save when we make model selections due to API key being provided
+      setTimeout(() => handleSave(), 100);
+    }
+  }, [settings.modelType, settings.geminiApiKey, settings.xaiApiKey, settings.serverUrl, settings.geminiModel, settings.grokModel, settings.localModel, addToast]);
+
+
 
   useEffect(() => {
     // const scrollToElement = (id: string) => {
@@ -1033,28 +1274,62 @@ function IndexOptions() {
     // };
   }, []);
 
-  // Helper functions from old options page (commented out for now)
+  // Enhanced save function with better notifications
   const handleSave = async () => {
     try {
       setIsSaving(true);
-      const updatedSettings = {
-        ...settings,
-        modelType: settings.modelType,
-        apiKey: settings.apiKey,
-        geminiApiKey: settings.geminiApiKey,
-        xaiApiKey: settings.xaiApiKey,
-        serverUrl: settings.serverUrl,
-        geminiModel: settings.geminiModel,
-        grokModel: settings.grokModel,
-        localModel: settings.localModel,
-        maxTokens: settings.maxTokens,
-        preferredModes: settings.preferredModes,
-        customPrompts: settings.customPrompts,
-        customization: settings.customization
+      
+      // Validate model configuration before saving
+      const validateModelConfig = () => {
+        if (settings.modelType === 'gemini') {
+          if (!settings.geminiApiKey || settings.geminiApiKey.trim().length === 0) {
+            return {
+              isValid: false,
+              error: 'Gemini API key is required. Please enter your API key from Google AI Studio.'
+            };
+          }
+        } else if (settings.modelType === 'grok') {
+          if (!settings.xaiApiKey || settings.xaiApiKey.trim().length === 0) {
+            return {
+              isValid: false,
+              error: 'xAI API key is required. Please enter your API key from x.ai.'
+            };
+          }
+        } else if (settings.modelType === 'local') {
+          if (!settings.serverUrl || settings.serverUrl.trim().length === 0) {
+            return {
+              isValid: false,
+              error: 'Ollama server URL is required. Please enter your server URL (e.g., http://localhost:11434).'
+            };
+          }
+        }
+        return { isValid: true };
       };
+
+      // Perform validation
+      const validation = validateModelConfig();
+      if (!validation.isValid) {
+        setIsSaving(false);
+        setError(validation.error);
+        
+        addToast({
+          type: 'error',
+          title: 'Configuration Incomplete',
+          message: validation.error,
+          persistent: true
+        });
+        return;
+      }
+      
+      const updatedSettings = { ...settings };
       
       await storage.set("settings", updatedSettings);
       
+      // Update initial settings to reflect saved state
+      setInitialSettings(updatedSettings);
+      setHasUnsavedChanges(false);
+      
+      // Notify all tabs about the settings change
       if (typeof chrome !== 'undefined' && chrome.tabs) {
         chrome.tabs.query({}, (tabs) => {
           tabs.forEach(tab => {
@@ -1062,8 +1337,8 @@ function IndexOptions() {
               chrome.tabs.sendMessage(tab.id, { 
                 type: "SETTINGS_UPDATED", 
                 settings: updatedSettings 
-              }).catch(err => {
-                console.log(`Could not send message to tab ${tab.id}:`, err);
+              }).catch(() => {
+                // Ignore errors for tabs without content script
               });
             }
           });
@@ -1080,6 +1355,14 @@ function IndexOptions() {
       console.error("Failed to save settings:", err);
       setError("Failed to save settings");
       setIsSaving(false);
+      
+      // Show error notification
+      addToast({
+        type: 'error',
+        title: 'Save Failed',
+        message: 'There was an error saving your settings. Please try again.',
+        persistent: true
+      });
     }
   };
 
@@ -1116,8 +1399,8 @@ function IndexOptions() {
       // Update local state
       setSettings(newSettings);
       
-      // Save to storage
-      await storage.set("settings", newSettings);
+      // Use auto-save for immediate updates
+      debouncedAutoSave(newSettings);
       
       // Dispatch event for other components in the same window
       window.dispatchEvent(
@@ -1191,6 +1474,31 @@ function IndexOptions() {
   };
 
   const [activeTab, setActiveTab] = useState("general");
+
+  // Save immediately when user navigates away from a section
+  const previousActiveTab = useRef(activeTab);
+  useEffect(() => {
+    const hasTabChanged = previousActiveTab.current !== activeTab;
+    
+    if (hasTabChanged && hasUnsavedChanges && initialSettings) {
+      // Cancel any pending debounced save
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      
+      // Save immediately when navigating between sections
+      autoSave(settings, setInitialSettings);
+      
+      addToast({
+        type: 'success',
+        title: 'Settings Saved',
+        message: 'Your changes were saved when switching sections.',
+        duration: 2000
+      });
+    }
+    
+    previousActiveTab.current = activeTab;
+  }, [activeTab, hasUnsavedChanges, initialSettings, settings, autoSave, addToast]);
 
   return (
     <OptionsContainer>
@@ -1422,9 +1730,25 @@ function IndexOptions() {
                         value={settings.modelType}
                         onChange={(e) => {
                           const newModelType = e.target.value as ModelType;
-                          setSettings(prev => ({ ...prev, modelType: newModelType }));
-                          // Auto-save when model type changes
-                          setTimeout(() => handleSave(), 100);
+                          setSettings(prev => {
+                            const newSettings = { ...prev, modelType: newModelType };
+                            
+                            // Auto-select first model for Gemini if none selected
+                            if (newModelType === 'gemini' && !prev.geminiModel) {
+                              newSettings.geminiModel = GEMINI_MODELS[0].value;
+                            }
+                            // Auto-select first model for Grok if none selected  
+                            else if (newModelType === 'grok' && !prev.grokModel) {
+                              newSettings.grokModel = GROK_MODELS[0].value;
+                            }
+                            // Auto-select first model for Local if none selected
+                            else if (newModelType === 'local' && !prev.localModel) {
+                              newSettings.localModel = LOCAL_MODELS[0].value;
+                            }
+                            
+                            return newSettings;
+                          });
+                          // Note: No auto-save here - wait for API key to be provided
                         }}
                       >
                         <option value="basic">Basic (Gemini Flash)</option>
@@ -1441,14 +1765,31 @@ function IndexOptions() {
                     <SectionHeader>Gemini Configuration</SectionHeader>
                     <SubContainer>
                       <FormGroup>
-                        <FormLabel htmlFor="geminiApiKey">Gemini API Key</FormLabel>
+                        <FormLabel htmlFor="geminiApiKey">
+                          Gemini API Key
+                          {!settings.geminiApiKey && (
+                            <span style={{ color: '#E74C3C', fontSize: '12px', marginLeft: '8px' }}>
+                              (Required)
+                            </span>
+                          )}
+                        </FormLabel>
                         <FormInput
                           type="password"
                           id="geminiApiKey"
                           value={settings.geminiApiKey}
-                          onChange={(e) => setSettings(prev => ({ ...prev, geminiApiKey: e.target.value }))}
+                          onChange={(e) => {
+                            const newApiKey = e.target.value;
+                            setSettings(prev => ({ ...prev, geminiApiKey: newApiKey }));
+                            // Auto-save when API key is provided (and not empty)
+                            if (newApiKey.trim()) {
+                              setTimeout(() => handleSave(), 100);
+                            }
+                          }}
                           onBlur={handleSave}
                           placeholder="Enter your Gemini API key"
+                          style={{
+                            borderColor: !settings.geminiApiKey ? '#E74C3C' : undefined
+                          }}
                         />
                         <FormDescription>
                           Get your API key from <a href="https://ai.google.dev/" target="_blank" rel="noopener noreferrer" style={{ color: '#93C5FD', textDecoration: 'none', ':hover': { textDecoration: 'underline' } }}>Google AI Studio</a>.
@@ -1468,8 +1809,10 @@ function IndexOptions() {
                               selected={settings.geminiModel === model.value}
                               onChange={() => {
                                 setSettings(prev => ({ ...prev, geminiModel: model.value }));
-                                // Auto-save when model changes
-                                setTimeout(() => handleSave(), 100);
+                                // Auto-save only if API key exists
+                                if (settings.geminiApiKey) {
+                                  setTimeout(() => handleSave(), 100);
+                                }
                               }}
                             />
                           ))}
@@ -1484,14 +1827,31 @@ function IndexOptions() {
                     <SectionHeader>Grok Configuration</SectionHeader>
                     <SubContainer>
                       <FormGroup>
-                        <FormLabel htmlFor="xaiApiKey">xAI API Key</FormLabel>
+                        <FormLabel htmlFor="xaiApiKey">
+                          xAI API Key
+                          {!settings.xaiApiKey && (
+                            <span style={{ color: '#E74C3C', fontSize: '12px', marginLeft: '8px' }}>
+                              (Required)
+                            </span>
+                          )}
+                        </FormLabel>
                         <FormInput
                           type="password"
                           id="xaiApiKey"
                           value={settings.xaiApiKey}
-                          onChange={(e) => setSettings(prev => ({ ...prev, xaiApiKey: e.target.value }))}
+                          onChange={(e) => {
+                            const newApiKey = e.target.value;
+                            setSettings(prev => ({ ...prev, xaiApiKey: newApiKey }));
+                            // Auto-save when API key is provided (and not empty)
+                            if (newApiKey.trim()) {
+                              setTimeout(() => handleSave(), 100);
+                            }
+                          }}
                           onBlur={handleSave}
                           placeholder="Enter your xAI API key"
+                          style={{
+                            borderColor: !settings.xaiApiKey ? '#E74C3C' : undefined
+                          }}
                         />
                         <FormDescription>
                           Get your API key from <a href="https://x.ai/api" target="_blank" rel="noopener noreferrer" style={{ color: '#93C5FD', textDecoration: 'none', ':hover': { textDecoration: 'underline' } }}>x.ai</a>.
@@ -1511,8 +1871,10 @@ function IndexOptions() {
                               selected={settings.grokModel === model.value}
                               onChange={() => {
                                 setSettings(prev => ({ ...prev, grokModel: model.value }));
-                                // Auto-save when model changes
-                                setTimeout(() => handleSave(), 100);
+                                // Auto-save only if API key exists
+                                if (settings.xaiApiKey) {
+                                  setTimeout(() => handleSave(), 100);
+                                }
                               }}
                               showPrice={true}
                             />
@@ -1528,7 +1890,14 @@ function IndexOptions() {
                     <SectionHeader>Ollama Configuration</SectionHeader>
                     <SubContainer>
                       <FormGroup>
-                        <FormLabel htmlFor="serverUrl">Ollama Server URL</FormLabel>
+                        <FormLabel htmlFor="serverUrl">
+                          Ollama Server URL
+                          {!settings.serverUrl && (
+                            <span style={{ color: '#E74C3C', fontSize: '12px', marginLeft: '8px' }}>
+                              (Required)
+                            </span>
+                          )}
+                        </FormLabel>
                         <FormInput
                           type="text"
                           id="serverUrl"
@@ -1536,6 +1905,9 @@ function IndexOptions() {
                           onChange={handleServerUrlChange}
                           onBlur={handleSave}
                           placeholder="http://localhost:11434"
+                          style={{
+                            borderColor: !settings.serverUrl ? '#E74C3C' : undefined
+                          }}
                         />
                         <FormDescription>
                           The URL of your Ollama server. Default is <code style={{ backgroundColor: '#444444', padding: '2px 4px', borderRadius: '4px' }}>http://localhost:11434</code>.
@@ -1555,8 +1927,10 @@ function IndexOptions() {
                               selected={settings.localModel === model.value}
                               onChange={() => {
                                 setSettings(prev => ({ ...prev, localModel: model.value }));
-                                // Auto-save when model changes
-                                setTimeout(() => handleSave(), 100);
+                                // Auto-save only if server URL exists
+                                if (settings.serverUrl) {
+                                  setTimeout(() => handleSave(), 100);
+                                }
                               }}
                               showSize={true}
                             />
@@ -1598,46 +1972,8 @@ function IndexOptions() {
           {activeTab === "prompts" && (
             <div key="prompts">
               <SettingsCard title="Prompt Templates" icon={null}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <div style={{ marginBottom: '16px' }}>
                   <FormDescription>Customize the prompts used for different AI actions. Use {'`{{selectedText}}`'} as a placeholder for the text you select on a page.</FormDescription>
-                  
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    {saveSuccess && (
-                      <div style={{ display: 'flex', alignItems: 'center', fontSize: '14px', fontWeight: 500, color: '#2DCA6E' }}>
-                        <svg style={{ height: '20px', width: '20px', color: '#2DCA6E', marginRight: '6px' }} fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                        </svg>
-                        Reset complete!
-                      </div>
-                    )}
-                    <Button
-                      variant="default"
-                      onClick={() => {
-                        const updatedSettings = {
-                          ...settings,
-                          customPrompts: {
-                            ...settings.customPrompts,
-                            systemPrompts: {
-                              ...settings.customPrompts?.systemPrompts,
-                              [activePromptMode]: undefined
-                            },
-                            userPrompts: {
-                              ...settings.customPrompts?.userPrompts,
-                              [activePromptMode]: undefined
-                            }
-                          }
-                        };
-                        
-                        setSettings(updatedSettings);
-                        storage.set("settings", updatedSettings);
-                        
-                        setSaveSuccess(true);
-                        setTimeout(() => setSaveSuccess(false), 2000);
-                      }}
-                    >
-                      Reset Current Template
-                    </Button>
-                  </div>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '24px' }}>
@@ -1653,8 +1989,8 @@ function IndexOptions() {
                         onClick={() => setActivePromptMode('explain')}
                       >
                         <div style={{ fontSize: '20px', marginBottom: '4px' }}>
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 16V12M12 8H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <svg width="24" height="24" viewBox="0 0 89 99" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M2.55007 23.009C0.994225 23.8875 0.0273438 25.5563 0.0273438 27.3624V71.2893C0.0273438 73.1053 0.994225 74.7642 2.55007 75.6427C10.3882 80.0649 34.2363 93.503 41.8389 97.7877C42.5849 98.2049 43.4045 98.416 44.2291 98.416C45.034 98.416 45.8389 98.2147 46.5702 97.8123C54.1727 93.6159 77.9325 80.5213 85.805 76.1777C87.3903 75.309 88.3719 73.6304 88.3719 71.8046V27.3624C88.3719 25.5563 87.405 23.8875 85.8443 23.009C78.0159 18.5967 54.2169 5.18303 46.5849 0.883599C45.8438 0.466416 45.0193 0.255371 44.1996 0.255371C43.3751 0.255371 42.5554 0.466416 41.8143 0.883599C34.1823 5.18303 10.3784 18.5967 2.55007 23.009ZM81.0098 33.3895V70.3224L47.8806 88.5901V51.397L81.0098 33.3895ZM11.0017 26.7931L44.1996 8.07877L77.5791 26.8962L44.1996 45.1344L11.0017 26.7931Z" fill="currentColor"/>
                           </svg>
                         </div>
                         <div style={{ fontWeight: '500' }}>Explain</div>
@@ -1673,7 +2009,8 @@ function IndexOptions() {
                       >
                         <div style={{ fontSize: '20px', marginBottom: '4px' }}>
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 6H20M4 12H12M4 18H20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M4 4h16v16H4V4z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M4 8h16M8 4v16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         </div>
                         <div style={{ fontWeight: '500' }}>Summarize</div>
@@ -1691,8 +2028,8 @@ function IndexOptions() {
                         onClick={() => setActivePromptMode('analyze')}
                       >
                         <div style={{ fontSize: '20px', marginBottom: '4px' }}>
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M9 22H15M9 7H15M9 4H15M5.5 12H7.5M11.5 12H13.5M17.5 12H19.5M1 12H3M21 12H23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 15H19C20.1046 15 21 14.1046 21 13V11C21 9.89543 20.1046 9 19 9H5C3.89543 9 3 9.89543 3 11V13C3 14.1046 3.89543 15 5 15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <svg width="24" height="24" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M35.9064 0.109375C16.194 0.109375 0.136719 16.1667 0.136719 35.8791C0.136719 55.5914 16.194 71.6487 35.9064 71.6487C44.44 71.6487 52.2816 68.6328 58.4391 63.6205L83.5695 95.1014C83.5695 95.1014 89.0738 95.9195 92.4913 92.358C95.9325 88.7694 95.1254 83.5488 95.1254 83.5488L63.6478 58.4117C68.6602 52.2543 71.6761 44.4127 71.6761 35.8791C71.6761 16.1667 55.6188 0.109375 35.9064 0.109375ZM35.9064 7.26397C51.7528 7.26397 64.5215 20.0327 64.5215 35.8791C64.5215 51.7254 51.7528 64.4941 35.9064 64.4941C20.06 64.4941 7.29132 51.7254 7.29132 35.8791C7.29132 20.0327 20.06 7.26397 35.9064 7.26397Z" fill="currentColor"/>
                           </svg>
                         </div>
                         <div style={{ fontWeight: '500' }}>Analyze</div>
@@ -1710,8 +2047,8 @@ function IndexOptions() {
                         onClick={() => setActivePromptMode('translate')}
                       >
                         <div style={{ fontSize: '20px', marginBottom: '4px' }}>
-                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 8L10 13M10 8L5 13M19 8L14 13M14 8L19 13M2 5H12M22 5H12M2 19H22" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802" />
                           </svg>
                         </div>
                         <div style={{ fontWeight: '500' }}>Translate</div>
@@ -1730,7 +2067,7 @@ function IndexOptions() {
                       >
                         <div style={{ fontSize: '20px', marginBottom: '4px' }}>
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M21 11.5C21.0034 12.8199 20.6951 14.1219 20.1 15.3C19.3944 16.7118 18.3098 17.8992 16.9674 18.7293C15.6251 19.5594 14.0782 19.9994 12.5 20C11.1801 20.0035 9.87812 19.6951 8.7 19.1L3 21L4.9 15.3C4.30493 14.1219 3.99656 12.8199 4 11.5C4.00061 9.92179 4.44061 8.37488 5.27072 7.03258C6.10083 5.69028 7.28825 4.6056 8.7 3.90003C9.87812 3.30496 11.1801 2.99659 12.5 3.00003H13C15.0843 3.11502 17.053 3.99479 18.5291 5.47089C20.0052 6.94699 20.885 8.91568 21 11V11.5Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M8 12h8M12 8v8M12 21a9 9 0 100-18 9 9 0 000 18z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         </div>
                         <div style={{ fontWeight: '500' }}>Free</div>
@@ -1937,6 +2274,58 @@ function IndexOptions() {
                             : settings.customPrompts?.userPrompts?.[activePromptMode] || USER_PROMPTS[activePromptMode]}
                         </div>
                       )}
+                    </div>
+                    
+                    {/* Reset Template Section */}
+                    <div style={{ marginTop: '32px', padding: '16px', backgroundColor: '#333', borderRadius: '8px', border: '1px solid #444' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <Label>Reset Current Template</Label>
+                          <Description style={{ marginTop: '4px' }}>
+                            Restore the {activePromptMode} template to its default prompts
+                          </Description>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                          {saveSuccess && (
+                            <div style={{ display: 'flex', alignItems: 'center', fontSize: '14px', fontWeight: 500, color: '#2DCA6E' }}>
+                              <svg style={{ height: '20px', width: '20px', color: '#2DCA6E', marginRight: '6px' }} fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                              </svg>
+                              Reset complete!
+                            </div>
+                          )}
+                          <Button
+                            variant="destructive"
+                            onClick={() => {
+                              const updatedSettings = {
+                                ...settings,
+                                customPrompts: {
+                                  ...settings.customPrompts,
+                                  systemPrompts: {
+                                    ...settings.customPrompts?.systemPrompts,
+                                    [activePromptMode]: undefined
+                                  },
+                                  userPrompts: {
+                                    ...settings.customPrompts?.userPrompts,
+                                    [activePromptMode]: undefined
+                                  }
+                                }
+                              };
+                              
+                              setSettings(updatedSettings);
+                              storage.set("settings", updatedSettings);
+                              
+                              setSaveSuccess(true);
+                              setTimeout(() => setSaveSuccess(false), 2000);
+                            }}
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '6px' }}>
+                              <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            Reset to Default
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </SectionContainer>
                 </div>
@@ -2278,27 +2667,108 @@ function IndexOptions() {
           {error && <ErrorMessage message={error} />}
 
           {activeTab !== "about" && (
-            <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-              {saveSuccess && (
-                <div style={{ display: 'flex', alignItems: 'center', fontSize: '14px', fontWeight: 500, color: '#2DCA6E' }}>
-                  <svg style={{ height: '20px', width: '20px', color: '#2DCA6E', marginRight: '6px' }} fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Settings saved!
-                </div>
-              )}
-              <Button
-                variant="primary"
-                onClick={handleSave}
-                disabled={isSaving}
-                style={{ opacity: isSaving ? 0.5 : 1 }}
-              >
-                {isSaving ? 'Saving...' : 'Save Settings'}
-              </Button>
+            <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
+              <AutoSaveStatus status={autoSaveStatus}>
+                {autoSaveStatus === 'saving' && (
+                  <>
+                    <LoadingSpinner />
+                    Auto-saving...
+                  </>
+                )}
+                {autoSaveStatus === 'saved' && (
+                  <>
+                    <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Auto-saved
+                  </>
+                )}
+                {autoSaveStatus === 'error' && (
+                  <>
+                    <svg width="12" height="12" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                    Auto-save failed
+                  </>
+                )}
+              </AutoSaveStatus>
+              
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <EnhancedSaveButton
+                  variant="primary"
+                  onClick={handleSave}
+                  disabled={isSaving || !hasUnsavedChanges}
+                  hasUnsavedChanges={hasUnsavedChanges}
+                >
+                  {isSaving ? (
+                    <>
+                      <LoadingSpinner />
+                      Saving...
+                    </>
+                  ) : hasUnsavedChanges ? (
+                    'Save Changes'
+                  ) : (
+                    'All Changes Saved'
+                  )}
+                </EnhancedSaveButton>
+              </div>
             </div>
           )}
         </ContentArea>
       </ContentWrapper>
+      
+      {/* Toast Notifications */}
+      <ToastContainer>
+        {toasts.map((toast) => (
+          <Toast 
+            key={toast.id} 
+            type={toast.type}
+            isExiting={exitingToasts.has(toast.id)}
+          >
+            <ToastIcon>
+              {toast.type === 'success' && (
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              )}
+              {toast.type === 'error' && (
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              )}
+              {toast.type === 'warning' && (
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              )}
+              {toast.type === 'info' && (
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+              )}
+            </ToastIcon>
+            <ToastContent>
+              <ToastTitle>{toast.title}</ToastTitle>
+              {toast.message && <ToastMessage>{toast.message}</ToastMessage>}
+            </ToastContent>
+            {!toast.persistent && (
+              <ToastCloseButton onClick={() => removeToast(toast.id)}>
+                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </ToastCloseButton>
+            )}
+          </Toast>
+        ))}
+      </ToastContainer>
+      
+      {/* Unsaved Changes Indicator */}
+      <UnsavedChangesIndicator visible={hasUnsavedChanges && autoSaveStatus !== 'saving'}>
+        <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor" style={{ marginRight: '3px', marginTop: '4px' }}>
+          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+        </svg>
+        You have unsaved changes
+      </UnsavedChangesIndicator>
     </OptionsContainer>
   );
 }
