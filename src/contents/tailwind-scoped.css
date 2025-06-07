@@ -1,11 +1,7 @@
-/* This file contains scoped Tailwind utilities that won't affect the webpage */
+/* This file contains scoped styles for our extension's components */
 @import url('https://fonts.googleapis.com/css2?family=K2D:wght@300;400;500;600;700&display=swap');
 
-/* Only include components and utilities, not base */
-/* @tailwind components;
-@tailwind utilities; */
-
-/* Scope all Tailwind utilities to our extension's components */
+/* Scope all styles to our extension's components */
 [data-plasmo-popup] {
   /* Add any global styles for our popup here */
   font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

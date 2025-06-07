@@ -302,20 +302,50 @@ const SettingsCard = ({ id = undefined, title, icon, children, className = "" })
   </CardContainer>
 );
 
-const Badge = ({ children, variant = "default", className = "" }) => {
-  const baseStyle = "lu-inline-flex lu-items-center lu-px-2.5 lu-py-0.5 lu-rounded-full lu-text-xs lu-font-medium";
-  const variantStyle = {
-    default: "lu-bg-gray-100 lu-text-gray-800",
-    success: "lu-bg-green-100 lu-text-green-800",
-    warning: "lu-bg-yellow-100 lu-text-yellow-800",
-    danger: "lu-bg-red-100 lu-text-red-800",
-    info: "lu-bg-blue-100 lu-text-blue-800",
-  }[variant];
+const BadgeContainer = styled.span<{ variant?: string }>`
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+  
+  ${props => {
+    switch (props.variant) {
+      case 'success':
+        return `
+          background-color: #dcfce7;
+          color: #166534;
+        `;
+      case 'warning':
+        return `
+          background-color: #fef3c7;
+          color: #92400e;
+        `;
+      case 'danger':
+        return `
+          background-color: #fee2e2;
+          color: #991b1b;
+        `;
+      case 'info':
+        return `
+          background-color: #dbeafe;
+          color: #1e40af;
+        `;
+      default:
+        return `
+          background-color: #f3f4f6;
+          color: #1f2937;
+        `;
+    }
+  }}
+`;
 
+const Badge = ({ children, variant = "default", className = "" }) => {
   return (
-    <span className={`${baseStyle} ${variantStyle} ${className}`}>
+    <BadgeContainer variant={variant} className={className}>
       {children}
-    </span>
+    </BadgeContainer>
   );
 };
 
@@ -606,7 +636,11 @@ const OptionsContainer = styled.div`
   background: #2A2A2A; // Match popup dark background
   color: #FFFFFF;
   overflow: hidden; // Prevents the whole container from scrolling
-  position: relative;
+  position: fixed; // Force fixed positioning to ignore any parent margins
+  top: 0;
+  left: 0;
+  margin: 0 !important;
+  padding: 0 !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
   display: flex;
   flex-direction: column;
@@ -733,7 +767,7 @@ const SidebarItem = styled.button<{ active: boolean }>`
   transition: all 0.2s ease;
   
   &:hover {
-    background: ${props => props.active ? '#2D2D2D' : 'rgba(255, 255, 255, 0.05)'};
+    background: ${props => props.active ? '#ffffff0d' : 'rgba(255, 255, 255, 0.05)'};
     color: #FFFFFF;
   }
 `
@@ -744,6 +778,13 @@ const SidebarIcon = styled.div`
   margin-right: 10px;
   opacity: 0.9;
   ${flexCenter};
+`
+
+const SidebarDivider = styled.div`
+  height: 1px;
+  background: #ffffff0d;
+  margin: 16px 12px;
+  opacity: 0.3;
 `
 
 // Content area - Exactly matching popup component
@@ -1551,6 +1592,9 @@ function IndexOptions() {
             </SidebarIcon>
             Appearance
           </SidebarItem>
+
+         
+          
           <SidebarItem active={activeTab === "about"} onClick={() => setActiveTab("about")}>
             <SidebarIcon>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2155,17 +2199,19 @@ function IndexOptions() {
                             color: '#fff',
                             border: '1px solid #555',
                             borderRadius: '8px',
-                            padding: '12px',
+                           
                             fontFamily: 'monospace',
                             fontSize: '14px',
                             width: '100%',
-                            resize: 'vertical'
+                            resize: 'vertical',
+                              padding: '19px',
+                          lineHeight: '28px'
                           }}
                         />
                       ) : (
                         <div style={{ 
                           backgroundColor: '#444', 
-                          padding: '12px', 
+                         
                           borderRadius: '8px',
                           border: '1px solid #555',
                           color: '#eee',
@@ -2173,7 +2219,9 @@ function IndexOptions() {
                           fontFamily: 'monospace',
                           whiteSpace: 'pre-wrap',
                           maxHeight: '120px',
-                          overflowY: 'auto'
+                          overflowY: 'auto',
+                            padding: '19px',
+                          lineHeight: '28px'
                         }}>
                           {typeof SYSTEM_PROMPTS[activePromptMode] === 'function' 
                             ? '(Function not displayed)' 
@@ -2249,17 +2297,19 @@ function IndexOptions() {
                             color: '#fff',
                             border: '1px solid #555',
                             borderRadius: '8px',
-                            padding: '12px',
+                            
                             fontFamily: 'monospace',
                             fontSize: '14px',
                             width: '100%',
-                            resize: 'vertical'
+                            resize: 'vertical',
+                            padding: '19px',
+                          lineHeight: '28px'
                           }}
                         />
                       ) : (
                         <div style={{ 
                           backgroundColor: '#444', 
-                          padding: '12px', 
+                         
                           borderRadius: '8px',
                           border: '1px solid #555',
                           color: '#eee',
@@ -2267,7 +2317,9 @@ function IndexOptions() {
                           fontFamily: 'monospace',
                           whiteSpace: 'pre-wrap',
                           maxHeight: '120px',
-                          overflowY: 'auto'
+                          overflowY: 'auto',
+                          padding: '19px',
+                          lineHeight: '28px'
                         }}>
                           {typeof USER_PROMPTS[activePromptMode] === 'function' 
                             ? `(Dynamic template - varies based on your selected text)` 

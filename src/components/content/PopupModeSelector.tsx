@@ -94,8 +94,12 @@ export const PopupModeSelector = ({
   // Use the preferred modes or default to the first 4 modes
   const displayModes = preferredModes.length > 0 ? preferredModes : DEFAULT_MODES
 
-  // Fixed styles without dynamic font sizing
+  // Dynamic styles with YouTube compensation
   const getModeSelectorStyles = () => {
+    // Detect if we're on YouTube and need font size compensation
+    const isYouTube = window.location.hostname.includes('youtube.com');
+    const baseFontSize = isYouTube ? "11px" : "0.7rem"; // Use pixels on YouTube, rem elsewhere
+    
     return {
       container: {
         display: "flex",
@@ -115,7 +119,7 @@ export const PopupModeSelector = ({
         gap: "6px",
         padding: "6px 12px",
         borderRadius: "20px",
-        fontSize: "0.7rem",
+        fontSize: baseFontSize,
         fontFamily: "'K2D', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
         cursor: "pointer",
         height: "28px",
@@ -136,7 +140,7 @@ export const PopupModeSelector = ({
         marginRight: "2px"
       },
       loadingIndicator: {
-        fontSize: "0.8rem",
+        fontSize: "1.2rem",
         color: "#8e8e8e",
         lineHeight: 1,
         marginLeft: "0",

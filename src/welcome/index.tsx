@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Storage } from "@plasmohq/storage"
-import "../style.css"
+import "./welcome-styles.css"
 import type { Settings } from "~types/settings"
 
 const Logo = () => (
@@ -82,26 +82,26 @@ function Welcome() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-8 font-k2d">
-      <div className="max-w-2xl mx-auto">
+    <div className="welcome-container">
+      <div className="welcome-content">
         {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex justify-center mb-6">
+        <div className="welcome-header">
+          <div className="welcome-logo-container">
             <Logo />
           </div>
-          <h1 className="text-4xl font-bold mb-4 text-gray-900">Welcome to LightUp</h1>
-          <p className="text-lg text-gray-600">Let's get you set up in just a few steps</p>
+          <h1 className="welcome-title">Welcome to LightUp</h1>
+          <p className="welcome-subtitle">Let's get you set up in just a few steps</p>
         </div>
 
         {/* Progress bar */}
-        <div className="mb-12">
-          <div className="h-2 bg-gray-200 rounded-full">
+        <div className="welcome-progress">
+          <div className="progress-bar">
             <div 
-              className="h-full bg-[#10a37f] rounded-full transition-all duration-300"
+              className="progress-fill"
               style={{ width: `${(currentStep / 4) * 100}%` }}
             />
           </div>
-          <div className="flex justify-between mt-2 text-sm text-gray-500">
+          <div className="progress-labels">
             <span>Choose Model</span>
             <span>API Setup</span>
             <span>Choose Style</span>
@@ -110,7 +110,7 @@ function Welcome() {
         </div>
 
         {/* Step content */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+        <div className="welcome-card">
           {currentStep === 1 && (
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold mb-4">Choose your AI model</h2>

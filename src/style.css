@@ -6,11 +6,6 @@
  * For popup and options pages, use their specific CSS files instead
  */
 
-/* Tailwind directives */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Add these styles */
 .resize-handle:hover {
   background: rgba(0, 0, 0, 0.1) !important;

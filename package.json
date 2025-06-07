@@ -1,7 +1,7 @@
 {
   "name": "lightup",
   "displayName": "LightUp",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "description": "Genius annotations for every page on the web.",
   "author": "Moe Sadiq",
   "scripts": {
@@ -10,65 +10,39 @@
     "package": "plasmo package"
   },
   "dependencies": {
-    "@ai-sdk/anthropic": "^1.2.12",
-    "@ai-sdk/google": "^1.2.18",
-    "@ai-sdk/openai": "^1.3.22",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mozilla/readability": "^0.6.0",
     "@plasmohq/messaging": "^0.6.2",
     "@plasmohq/storage": "^1.12.0",
-    "@recogito/recogito-js": "^1.8.4",
     "@types/dompurify": "^3.2.0",
-    "@types/react-cytoscapejs": "^1.2.5",
-    "ai": "^4.3.16",
-    "comlink": "^4.4.2",
-    "cytoscape": "^3.32.0",
-    "cytoscape-dagre": "^2.5.0",
-    "dagre": "^0.8.5",
     "defuddle": "^0.6.4",
     "dompurify": "^3.2.1",
     "framer-motion": "^11.11.11",
-    "i18next": "^25.0.2",
-    "i18next-browser-languagedetector": "^8.1.0",
-    "jsdom": "^26.1.0",
     "micromark": "^4.0.2",
     "micromark-extension-gfm": "^3.0.0",
     "plasmo": "0.90.5",
     "react": "18.2.0",
-    "react-cytoscapejs": "^2.0.0",
-    "react-dom": "18.2.0",
-    "react-i18next": "^15.5.1",
-    "react-window": "^1.8.11",
-    "vis-data": "^7.1.9",
-    "vis-network": "^9.1.10"
+    "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
     "@swc/types": "^0.1.21",
-    "@tailwindcss/nesting": "0.0.0-insiders.565cd3e",
     "@types/chrome": "0.0.258",
-    "@types/cytoscape": "^3.21.9",
-    "@types/cytoscape-dagre": "^2.3.3",
     "@types/node": "20.11.5",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
-    "@types/react-window": "^1.8.8",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.20",
-    "install": "^0.13.0",
-    "pnpm": "^9.14.2",
     "postcss": "^8.4.49",
     "postcss-import": "^16.1.0",
     "prettier": "3.2.4",
-    "tailwindcss": "^3.4.17",
     "typescript": "5.3.3",
     "uuid": "^11.0.3"
   },
   "manifest": {
     "manifest_version": 3,
     "name": "LightUp - AI Powered Web Annotations. summary, translate, and more",
-    "version": "0.1.12",
+    "version": "0.1.13",
     "description": "Genius annotations for every page on the web. Powered by AI to explain, summarize, analyze, translate, and more.",
     "background": {
       "service_worker": "background.js",
@@ -77,7 +51,12 @@
     "action": {
       "default_popup": "popup.html"
     },
-    "icons": {},
+    "icons": {
+      "16": "assets/icon.png",
+      "32": "assets/icon.png",
+      "48": "assets/icon.png",
+      "128": "assets/icon.png"
+    },
     "host_permissions": [
       "http://127.0.0.1:1234/*",
       "https://*/*",

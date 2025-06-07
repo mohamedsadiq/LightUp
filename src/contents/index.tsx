@@ -77,8 +77,11 @@ const debounce = <T extends (...args: any[]) => void>(func: T, wait: number): T 
   }) as T;
 };
 
-// Comprehensive font size mapping system
+// Comprehensive font size mapping system with YouTube compensation
 const createFontSizeMapping = (baseFontSize: string): FontSizes => {
+  // Detect if we're on YouTube
+  const isYouTube = window.location.hostname.includes('youtube.com');
+  
   // Convert the base font size to a number for calculations
   const parseSize = (size: string): number => {
     if (size === "x-small") return 0.8;        // Increased from 0.7
@@ -98,6 +101,53 @@ const createFontSizeMapping = (baseFontSize: string): FontSizes => {
 
   const baseSize = parseSize(baseFontSize);
   
+  if (isYouTube) {
+    // Use pixel-based sizing for YouTube to avoid rem scaling issues
+    const basePx = 24; // Standard base pixel size
+    const multiplier = baseSize; // User's font size preference multiplier
+    
+    console.log('LightUp: YouTube font mapping', { 
+      baseFontSize, 
+      baseSize, 
+      multiplier, 
+      compensatedBase: Math.round(basePx * multiplier * 0.8) 
+    });
+    
+    return {
+      // Base text size - adjusted for YouTube
+      base: `${Math.round(basePx * multiplier * 0.8)}px`, // Reduced compensation
+      
+      // Relative sizes based on base - all in pixels
+      xs: `${Math.round(Math.max(12, basePx * multiplier * 0.75))}px`,
+      sm: `${Math.round(Math.max(14, basePx * multiplier * 0.85))}px`, 
+      md: `${Math.round(basePx * multiplier)}px`,
+      lg: `${Math.round(basePx * multiplier * 1.15)}px`,
+      xl: `${Math.round(basePx * multiplier * 1.3)}px`,
+      xxl: `${Math.round(basePx * multiplier * 1.5)}px`,
+      
+      // Specific UI element sizes - compensated for YouTube
+      button: `${Math.round(Math.max(14, basePx * multiplier * 0.9))}px`,
+      input: `${Math.round(Math.max(16, basePx * multiplier))}px`,
+      loading: `${Math.round(Math.max(13, basePx * multiplier * 0.8))}px`,
+      model: `${Math.round(Math.max(13, basePx * multiplier * 0.75))}px`,
+      icon: `${Math.round(Math.max(12, basePx * multiplier * 0.7))}px`,
+      
+      // Welcome/guidance messages - compensated
+      welcome: {
+        emoji: `${Math.round(basePx * multiplier * 2)}px`,
+        heading: `${Math.round(basePx * multiplier * 1.4)}px`,
+        description: `${Math.round(Math.max(16, basePx * multiplier))}px`
+      },
+      
+      // Connection status - compensated
+      connection: `${Math.round(Math.max(13, basePx * multiplier * 0.75))}px`,
+      
+      // Error messages - compensated
+      error: `${Math.round(Math.max(14, basePx * multiplier * 0.85))}px`
+    };
+  }
+  
+  // Standard rem-based sizing for non-YouTube sites
   return {
     // Base text size
     base: `${baseSize}rem`,
@@ -356,70 +406,178 @@ if (isReddit) {
 // Add a specific fix for YouTube's CSS that affects font sizing in the extension
 const isYouTube = window.location.hostname.includes('youtube.com');
 if (isYouTube) {
+  console.log('LightUp: YouTube detected, applying font compensation fixes');
   // Add a data attribute to the HTML tag for more specific CSS targeting
   document.documentElement.setAttribute('data-youtube-domain', 'true');
   
   // Create a style element to override YouTube's CSS
   const youtubeFixStyle = document.createElement('style');
+  youtubeFixStyle.id = 'lightup-youtube-font-fix';
   youtubeFixStyle.textContent = `
-    /* Ensure the popup container uses the intended font size variable */
-    [data-plasmo-popup] {
-      font-size: var(--lightup-font-size, 1rem) !important;
-      font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-      line-height: 1.5 !important;
-    }
+         /* YouTube font size compensation - force absolute pixel values with max specificity */
+     html[data-youtube-domain] [data-plasmo-popup],
+     body [data-plasmo-popup] {
+       font-size: 16px !important; /* Use absolute pixels instead of rem */
+       font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+       line-height: 1.5 !important;
+       /* Create a new font-size context to isolate from YouTube's CSS */
+       zoom: 1 !important;
+       transform: scale(1) !important;
+       /* Set CSS custom properties for consistent sizing */
+       --lightup-base-font: 16px;
+       --lightup-large-font: 13px;
+       --lightup-button-font: 11px;
+     }
     
-    /* Force all elements within the popup to inherit the container's font-size */
-    /* This helps override YouTube's aggressive global styles */
-    [data-plasmo-popup] * {
-      font-size: inherit !important;
-      font-family: inherit !important;
-      line-height: inherit !important;
-    }
+         /* Force all elements within the popup to use pixel-based sizing */
+     html[data-youtube-domain] [data-plasmo-popup] *,
+     body [data-plasmo-popup] * {
+       font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+       line-height: 1.5 !important;
+     }
+     
+     /* Specific font size fixes for different components with high specificity */
+     html[data-youtube-domain] [data-plasmo-popup] button,
+     body [data-plasmo-popup] button {
+       font-size: var(--lightup-button-font, 14px) !important;
+     }
+     
+     /* Mode selector buttons need larger font for YouTube */
+     html[data-youtube-domain] [data-plasmo-popup] motion\\.button,
+     html[data-youtube-domain] [data-plasmo-popup] [style*="fontSize"],
+     body [data-plasmo-popup] motion\\.button {
+       font-size: var(--lightup-button-font, 16px) !important;
+     }
+     
+     /* Main content area compensation with high specificity */
+     html[data-youtube-domain] [data-plasmo-popup] [data-markdown-container],
+     html[data-youtube-domain] [data-plasmo-popup] .lu-explanation,
+     html[data-youtube-domain] [data-plasmo-popup] .lu-text,
+     html[data-youtube-domain] [data-plasmo-popup] [data-markdown-text],
+     body [data-plasmo-popup] [data-markdown-container],
+     body [data-plasmo-popup] .lu-explanation,
+     body [data-plasmo-popup] .lu-text,
+           body [data-plasmo-popup] [data-markdown-text],
+      body [data-plasmo-popup] .markdown-content {
+        font-size: var(--lightup-large-font, 13px) !important;
+      }
     
-    /* Specifically ensure the markdown container inherits correctly */
-    [data-plasmo-popup] [data-markdown-container] {
-        font-size: inherit !important; 
-    }
-
-    /* Reset font size for code blocks to prevent double scaling */
-    [data-plasmo-popup] code,
-    [data-plasmo-popup] pre {
-      font-size: 0.875em !important; /* Use em for relative sizing */
-    }
+         /* Input and textarea elements with high specificity */
+     html[data-youtube-domain] [data-plasmo-popup] input,
+     html[data-youtube-domain] [data-plasmo-popup] textarea,
+     body [data-plasmo-popup] input,
+     body [data-plasmo-popup] textarea {
+       font-size: var(--lightup-base-font, 16px) !important;
+     }
+     
+     /* Loading and small text elements with high specificity */
+     html[data-youtube-domain] [data-plasmo-popup] .lu-loading,
+     html[data-youtube-domain] [data-plasmo-popup] .lu-model-display,
+     body [data-plasmo-popup] .lu-loading,
+     body [data-plasmo-popup] .lu-model-display {
+       font-size: 13px !important;
+     }
     
-    /* Override any inline font-size styles potentially added by YouTube */
-    [data-plasmo-popup] [style*="font-size"] {
-      font-size: var(--lightup-set-size, inherit) !important;
-    }
+         /* Code blocks with high specificity */
+     html[data-youtube-domain] [data-plasmo-popup] code,
+     html[data-youtube-domain] [data-plasmo-popup] pre,
+     body [data-plasmo-popup] code,
+     body [data-plasmo-popup] pre {
+       font-size: 14px !important; /* Slightly smaller than base */
+     }
+     
+     /* Headers and titles with high specificity */
+     html[data-youtube-domain] [data-plasmo-popup] h1,
+     body [data-plasmo-popup] h1 { font-size: 28px !important; }
+     html[data-youtube-domain] [data-plasmo-popup] h2,
+     body [data-plasmo-popup] h2 { font-size: 24px !important; }
+     html[data-youtube-domain] [data-plasmo-popup] h3,
+     body [data-plasmo-popup] h3 { font-size: 20px !important; }
+     html[data-youtube-domain] [data-plasmo-popup] h4,
+     body [data-plasmo-popup] h4 { font-size: 18px !important; }
+     html[data-youtube-domain] [data-plasmo-popup] h5,
+     body [data-plasmo-popup] h5 { font-size: 16px !important; }
+     html[data-youtube-domain] [data-plasmo-popup] h6,
+     body [data-plasmo-popup] h6 { font-size: 14px !important; }
+    
+         /* Override any inline styles that might interfere with high specificity */
+     html[data-youtube-domain] [data-plasmo-popup] [style*="font-size"],
+     body [data-plasmo-popup] [style*="font-size"] {
+       font-size: inherit !important;
+     }
+     
+     /* Mode selector specific compensation with high specificity */
+     html[data-youtube-domain] [data-plasmo-popup] [style*="fontSize: \"0.7rem\""],
+     html[data-youtube-domain] [data-plasmo-popup] [style*="fontSize: \"0.8rem\""],
+     html[data-youtube-domain] [data-plasmo-popup] button[style*="fontSize"],
+     body [data-plasmo-popup] [style*="fontSize: \"0.7rem\""],
+     body [data-plasmo-popup] [style*="fontSize: \"0.8rem\""],
+     body [data-plasmo-popup] button[style*="fontSize"] {
+       font-size: var(--lightup-button-font, 16px) !important;
+     }
+     
+     /* Welcome message compensation with high specificity */
+     html[data-youtube-domain] [data-plasmo-popup] [style*="fontSize: \"1.8rem\""],
+     body [data-plasmo-popup] [style*="fontSize: \"1.8rem\""] {
+       font-size: 32px !important; /* Emoji size */
+     }
+     
+     html[data-youtube-domain] [data-plasmo-popup] [style*="fontSize: \"1.2rem\""],
+     body [data-plasmo-popup] [style*="fontSize: \"1.2rem\""] {
+       font-size: 22px !important; /* Heading size */
+     }
   `;
   document.head.appendChild(youtubeFixStyle);
   
   // Add a MutationObserver to ensure our font sizing remains correct
   // even if YouTube's DOM changes
   const observer = new MutationObserver(() => {
-    const storage = new Storage();
-    storage.get("settings").then((data) => {
-      if (data && typeof data === 'object') {
-        // Type checking to ensure we have valid settings
-        const settings = data as unknown as Settings;
-        const fontSize = settings?.customization?.fontSize || '1rem';
-        
-        // Apply the font size to all popup elements
-        const popupElement = document.querySelector('[data-plasmo-popup]');
-        if (popupElement instanceof HTMLElement) {
-          popupElement.style.setProperty('--lightup-font-size', fontSize);
+    const popupElement = document.querySelector('[data-plasmo-popup]');
+    if (popupElement instanceof HTMLElement) {
+      // Force re-apply YouTube font fixes if needed
+      popupElement.style.fontSize = '16px';
+      popupElement.style.fontFamily = "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+      
+      // Ensure mode selector buttons have correct size
+      const modeButtons = popupElement.querySelectorAll('button');
+      modeButtons.forEach(button => {
+        if (button instanceof HTMLElement) {
+          // Check if this is a mode selector button based on content or context
+          const isSmallButton = button.textContent && 
+            ['summarize', 'analyze', 'explain', 'translate', 'free'].includes(button.textContent.toLowerCase());
           
-          // Find elements with inline font-size and ensure they use our size
-          const elementsWithFontSize = popupElement.querySelectorAll('[style*="font-size"]');
-          elementsWithFontSize.forEach(element => {
-            if (element instanceof HTMLElement) {
-              element.style.setProperty('--lightup-set-size', element.style.fontSize);
-            }
-          });
+          if (isSmallButton) {
+            button.style.fontSize = '16px';
+          } else {
+            button.style.fontSize = '14px';
+          }
         }
-      }
-    });
+      });
+      
+             // Fix main content areas
+       const contentAreas = popupElement.querySelectorAll(`
+         [data-markdown-container], 
+         .lu-explanation, 
+         .lu-text,
+         [data-markdown-text],
+         .markdown-content,
+         div[style*="textAlign"],
+         p[style*="fontSize"]
+       `);
+       contentAreas.forEach(area => {
+         if (area instanceof HTMLElement) {
+           area.style.fontSize = '24px';
+         }
+       });
+       
+       // Fix input and textarea elements
+       const inputElements = popupElement.querySelectorAll('input, textarea');
+       inputElements.forEach(input => {
+         if (input instanceof HTMLElement) {
+           input.style.fontSize = '16px';
+         }
+       });
+    }
   });
   
   // Start observing the document with the configured parameters
