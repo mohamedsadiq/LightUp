@@ -29,7 +29,7 @@ import {
 // Import the options-specific CSS file for fonts only
 import "./options-style.css"
 
-import logoUrl from '../../assets/lightup.png';
+import logoUrl from '../../assets/icon.png';
 
 const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
   {

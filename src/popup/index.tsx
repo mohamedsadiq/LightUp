@@ -14,7 +14,7 @@ import { useEnabled } from "~hooks/useEnabled"
 // Import the popup-specific CSS file for fonts only
 import "./popup-style.css"
 
-import logoUrl from '../../assets/lightup.png';
+import logoUrl from '../../assets/icon.png';
 
 // Define theme colors to exactly match the reference image
 const theme = {
