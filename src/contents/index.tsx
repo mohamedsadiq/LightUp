@@ -801,6 +801,7 @@ const FollowUpInput = React.memo(({
           transition={{ type: "spring", stiffness: 400, damping: 17 }}
           style={themedStyles.searchSendButton}
           className="lu-search-send-button"
+          title={!followUpQuestion.trim() ? "Type a question first" : isAskingFollowUp ? "Sending..." : "Send message"}
         >
           {buttonContent}
         </motion.button>
@@ -982,6 +983,16 @@ function Content() {
 
   // Handler for processing text selected via the selection bubble
   const handleSelectionBubbleProcess = async (text: string, selectedMode: string) => {
+    // Import the cleaning function
+    const { cleanTextForMode } = await import("~utils/textProcessing");
+    
+    // Apply text cleaning based on the selected mode
+    const cleanedText = cleanTextForMode(text, selectedMode);
+    if (!cleanedText) {
+      setError?.('Selected text appears to contain only technical content and cannot be processed.');
+      return;
+    }
+    
     // Clear previous results
     setStreamingText?.("");
     setFollowUpQAs?.([]);
@@ -1000,7 +1011,7 @@ function Content() {
     setIsSelectionBubbleVisible(false);
     
     // Show the main popup
-    setSelectedText(text);
+    setSelectedText(cleanedText);
     setIsVisible(true);
     setIsLoading(true);
     
@@ -1019,7 +1030,7 @@ function Content() {
       port.postMessage({
         type: "PROCESS_TEXT",
         payload: {
-          text,
+          text: cleanedText,
           mode: selectedMode,
           settings: {
             ...settings,
@@ -1625,6 +1636,7 @@ function Content() {
             }}
             variants={iconButtonVariants}
             whileHover="hover"
+            title="Close LightUp"
           >
             <CloseIcon theme={normalizedTheme} />
           </motion.button>
@@ -1827,8 +1839,11 @@ function Content() {
                         borderRadius: '4px',
                         color: '#666'
                       }}
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
+
                       whileTap={{ scale: 0.9 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                      title={copiedId === 'initial' ? "Copied!" : "Copy to clipboard"}
                     >
                       {copiedId === 'initial' ? (
                         <svg width="13" height="15" viewBox="0 0 24 24" fill="none">
@@ -1853,8 +1868,10 @@ function Content() {
                         borderRadius: '4px',
                         color: speakingId === 'main' ? '#14742F' : '#666'
                       }}
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
+
                       whileTap={{ scale: 0.9 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
                       title={speakingId === 'main' ? "Stop speaking" : "Read text aloud"}
                     >
                       {speakingId === 'main' ? (
@@ -1879,9 +1896,11 @@ function Content() {
                         borderRadius: '4px',
                         color: isLoading ? '#14742F' : '#666'
                       }}
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
+
                       whileTap={{ scale: 0.9 }}
-                      title="Regenerate response"
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                      title={isLoading ? "Regenerating..." : "Regenerate response"}
                       disabled={isLoading}
                     >
                       <svg width="14" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1909,7 +1928,9 @@ function Content() {
                         backgroundColor: currentTheme === 'dark' ? '#494949' : '#f0f0f0',
                         padding: '2px 10px',
                         borderRadius: '11px',
-                      }}>
+                      }}
+                      title={currentModel ? `AI Model: ${currentModel}` : 'Loading AI model...'}
+                      >
                         {currentModel || 'Loading...'}
                       </span>
                     </motion.div>
@@ -1950,8 +1971,9 @@ function Content() {
                         marginTop: '1px',
                         marginLeft: 'auto' // Push to far right
                       }}
-                      whileHover={{ scale: 1.1 }}
+                      whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
                       whileTap={{ scale: 0.9 }}
+                      transition={{ type: "spring", stiffness: 400, damping: 17 }}
                       title={isSearchVisible ? "Hide Search Input" : "Show Search Input"}
                     >
                       {isSearchVisible ? (
@@ -2460,7 +2482,7 @@ const DynamicSkeletonLines = React.memo(({ currentTheme, containerRef, fontSizes
               right: 0,
               bottom: 0,
               background: currentTheme === "dark"
-                ? 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)'
+                ? 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.24) 50%, transparent 100%)'
                 : 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%)',
               backgroundSize: '200% 100%',
               borderRadius: '4px',
@@ -2469,11 +2491,11 @@ const DynamicSkeletonLines = React.memo(({ currentTheme, containerRef, fontSizes
               backgroundPosition: ['-100% 0%', '100% 0%']
             }}
             transition={{
-              duration: 1.5,
+              duration: 1,
               repeat: Infinity,
               ease: "linear",
-              repeatDelay: 0.8,
-              delay: i * 0.1
+              repeatDelay: 0,
+              delay:  0.3
             }}
           />
         </motion.div>
@@ -2483,6 +2505,138 @@ const DynamicSkeletonLines = React.memo(({ currentTheme, containerRef, fontSizes
 });
 
 DynamicSkeletonLines.displayName = 'DynamicSkeletonLines';
+
+// Loading Thinking Text Component with alternating words
+interface LoadingThinkingTextProps {
+  currentTheme: 'light' | 'dark' | 'system';
+  fontSizes: FontSizes;
+  onCycleComplete?: () => void;
+}
+
+const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycleComplete }: LoadingThinkingTextProps) => {
+  const [currentWord, setCurrentWord] = useState(0);
+  const [cycleCount, setCycleCount] = useState(0);
+  const words = ['Thinking', 'Generating'];
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWord(prev => {
+        const nextWord = (prev + 1) % words.length;
+        
+        // If we're going back to the first word, increment cycle count
+        if (nextWord === 0) {
+          setCycleCount(prevCount => {
+            const newCount = prevCount + 1;
+            // Complete cycle after first full rotation (Thinking -> Generating -> Thinking)
+            if (newCount === 1 && onCycleComplete) {
+              setTimeout(() => onCycleComplete(), 100); // Small delay to ensure smooth transition
+            }
+            return newCount;
+          });
+        }
+        
+        return nextWord;
+      });
+    }, 1500); // Switch every 1.5 seconds
+    
+    return () => clearInterval(interval);
+  }, [onCycleComplete]);
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, filter: 'blur(4px)', y: 5 }}
+      animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+      exit={{ 
+        opacity: 0, 
+        filter: 'blur(8px)',
+        y: -5,
+        transition: { 
+          duration: 0.4, 
+          ease: 'easeInOut',
+          filter: { duration: 0.3 }
+        }
+      }}
+      transition={{ 
+        duration: 0.4, 
+        ease: 'easeInOut',
+        filter: { duration: 0.3 }
+      }}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: '8px',
+        padding: '8px 0',
+        minHeight: '24px', // Match the content container height
+        position: 'relative'
+      }}
+    >
+      <AnimatePresence mode="wait">
+        <motion.span
+          key={words[currentWord]}
+          initial={{ 
+            opacity: 0, 
+            filter: 'blur(6px)',
+            y: 8,
+            scale: 0.95
+          }}
+          animate={{ 
+            opacity: 1, 
+            filter: 'blur(0px)',
+            y: 0,
+            scale: 1
+          }}
+          exit={{ 
+            opacity: 0, 
+            filter: 'blur(6px)',
+            y: -8,
+            scale: 0.95
+          }}
+          transition={{
+            duration: 0.35,
+            ease: 'easeInOut',
+            filter: { duration: 0.25 },
+            scale: { duration: 0.3 }
+          }}
+          style={{ 
+            fontWeight: 500,
+            fontSize: fontSizes.base,
+            backgroundImage: currentTheme === "dark" 
+              ? 'linear-gradient(90deg, #fff 0%, #505050 50%, #fff 100%)'
+              : 'linear-gradient(90deg, #c0c0c0 0%, #161616 50%, #c0c0c0 100%)',
+            backgroundSize: '200% auto',
+            color: 'transparent',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            position: 'relative',
+            display: 'inline-block'
+          }}
+        >
+          <motion.span
+            animate={{
+              backgroundPosition: ['0% center', '200% center']
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            style={{
+              background: 'inherit',
+              WebkitBackgroundClip: 'inherit',
+              backgroundClip: 'inherit',
+              backgroundSize: 'inherit'
+            }}
+          >
+            {words[currentWord]}
+          </motion.span>
+        </motion.span>
+      </AnimatePresence>
+    </motion.div>
+  );
+});
+
+LoadingThinkingText.displayName = 'LoadingThinkingText';
 
 // Define a new component for the Q&A item
 interface FollowUpQAItemProps {
@@ -2512,6 +2666,14 @@ interface FollowUpQAItemProps {
 const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentTheme, targetLanguage, settings, fontSizes, handleCopy, copiedId, handleSpeak, speakingId, handleRegenerateFollowUp, activeAnswerId, isAskingFollowUp, popupRef, currentModel }: FollowUpQAItemProps) => {
   const { question, answer, id, isComplete } = qa;
   const answerRef = useRef<HTMLDivElement>(null);
+  const [animationCycleComplete, setAnimationCycleComplete] = useState(false);
+  
+  // Reset animation cycle when this item becomes active
+  useEffect(() => {
+    if (activeAnswerId === id && !isComplete && answer === '') {
+      setAnimationCycleComplete(false);
+    }
+  }, [activeAnswerId, id, isComplete, answer]);
 
   useEffect(() => {
     if (isComplete && answerRef.current && popupRef.current) {
@@ -2613,55 +2775,52 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
           ...themedStyles.followUpAnswer,
           textAlign: textDirection === "rtl" ? "right" : "left"
         }}>
-          {activeAnswerId === id && !isComplete && answer === '' ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                gap: '8px',
-                padding: '8px 0'
-              }}
-            >
-              <motion.span 
-                style={{ 
-                  fontWeight: 500,
-                  fontSize: fontSizes.base,
-                  backgroundImage: currentTheme === "dark" 
-                    ? 'linear-gradient(90deg, #fff 0%, #505050 50%, #fff 100%)'
-                    : 'linear-gradient(90deg, #c0c0c0 0%, #161616 50%, #c0c0c0 100%)',
-                  backgroundSize: '200% auto',
-                  color: 'transparent',
-                  WebkitBackgroundClip: 'text',
-                  backgroundClip: 'text',
-                  animation: 'gradientAnimation 2s linear infinite'
+          <AnimatePresence mode="wait">
+            {activeAnswerId === id && !isComplete && (answer === '' || !animationCycleComplete) ? (
+              <LoadingThinkingText 
+                key="loading"
+                currentTheme={currentTheme}
+                fontSizes={fontSizes}
+                onCycleComplete={() => setAnimationCycleComplete(true)}
+              />
+            ) : (
+              <motion.div
+                key="content"
+                initial={{ opacity: 0, filter: 'blur(4px)', y: 5, scale: 0.98 }}
+                animate={{ 
+                  opacity: 1, 
+                  filter: 'blur(0px)', 
+                  y: 0, 
+                  scale: 1,
+                  transition: {
+                    delay: 0.1, // Small delay to ensure loading exits first
+                    duration: 0.5,
+                    ease: 'easeInOut',
+                    filter: { duration: 0.3, delay: 0.15 },
+                    scale: { duration: 0.4, delay: 0.1 }
+                  }
                 }}
-                initial={{}}
-                animate={{
-                  backgroundPosition: ['0% center', '200% center']
+                exit={{ opacity: 0, filter: 'blur(4px)', y: -5, scale: 0.98 }}
+                transition={{ 
+                  duration: 0.4, 
+                  ease: 'easeInOut',
+                  filter: { duration: 0.3 }
                 }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "linear"
+                style={{
+                  minHeight: '24px' // Prevent layout shift
                 }}
               >
-                Thinking
-              </motion.span>
-            </motion.div>
-          ) : (
-            <MarkdownText
-              text={answer}
-              isStreaming={activeAnswerId === id && !isComplete}
-              language={targetLanguage}
-              theme={currentTheme === "system" ? "light" : currentTheme}
-              fontSize={settings?.customization?.fontSize}
-              fontSizes={fontSizes}
-            />
-          )}
+                <MarkdownText
+                  text={answer}
+                  isStreaming={activeAnswerId === id && !isComplete}
+                  language={targetLanguage}
+                  theme={currentTheme === "system" ? "light" : currentTheme}
+                  fontSize={settings?.customization?.fontSize}
+                  fontSizes={fontSizes}
+                />
+              </motion.div>
+            )}
+          </AnimatePresence>
           
           {isComplete && (
             <motion.div 
@@ -2690,6 +2849,7 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                title={copiedId === `followup-${id}` ? "Copied!" : "Copy to clipboard"}
               >
                 {copiedId === `followup-${id}` ? (
                   <motion.svg 
@@ -2722,7 +2882,7 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
               <motion.button
                 onClick={() => handleSpeak(answer, `followup-${id}`)}
                 style={{
-                  marginTop: '3px',
+                  marginTop: '1px',
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
@@ -2776,7 +2936,7 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                title="Regenerate response"
+                title={(activeAnswerId === id && !isComplete) ? "Regenerating..." : "Regenerate response"}
                 disabled={activeAnswerId === id && !isComplete}
               >
                 <motion.svg 
@@ -2819,7 +2979,9 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
                   backgroundColor: currentTheme === 'dark' ? '#494949' : '#f0f0f0',
                   padding: '2px 10px',
                   borderRadius: '11px',
-                }}>
+                }}
+                title={currentModel ? `AI Model: ${currentModel}` : 'Loading AI model...'}
+                >
                   {currentModel || 'Loading...'}
                 </span>
               </motion.div>

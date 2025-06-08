@@ -1,13 +1,13 @@
 import type { ProcessTextRequest } from "~types/messages"
-import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
+import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS } from "../../utils/constants"
 import { RateLimitService } from "../rateLimit"
 
 // The proxy endpoint URL for the basic version
 const PROXY_URL = "https://www.boimaginations.com/api/v1/basic/generate";
 
-// Add debug logging
+// Add debug logging (disabled for production)
 const logDebug = (message: string, data?: any) => {
-  console.log(`[Basic Service] ${message}`, data || '');
+  // console.log(`[Basic Service] ${message}`, data || '');
 };
 
 // Retry configuration
@@ -68,6 +68,18 @@ export const processBasicText = async function*(request: ProcessTextRequest) {
     
     // Get the system prompt (custom or default)
     const getSystemPrompt = () => {
+      // For follow-up questions, use enhanced context-aware prompts
+      if (isFollowUp) {
+        // If custom system prompt is available for follow-ups, use it
+        if (settings.customPrompts?.systemPrompts?.[mode]) {
+          return `${settings.customPrompts.systemPrompts[mode]} 
+
+FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.`;
+        }
+        // Otherwise use enhanced follow-up prompt
+        return FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
+      }
+      
       // If custom system prompt is available, use it
       if (settings.customPrompts?.systemPrompts?.[mode]) {
         return settings.customPrompts.systemPrompts[mode];
@@ -78,8 +90,16 @@ export const processBasicText = async function*(request: ProcessTextRequest) {
 
     const getUserPrompt = () => {
       if (isFollowUp) {
-        // Include original context and previous conversation for follow-ups
-        return `Context from previous conversation:\n${request.context || ''}\n\nFollow-up question:\n${text}`;
+        // Include rich context for follow-ups with original content and conversation history
+        const contextText = request.context || '';
+        const originalContent = contextText.length > 500 ? contextText.substring(0, 500) + "..." : contextText;
+        
+        return `ORIGINAL CONTENT CONTEXT:
+${originalContent}
+
+FOLLOW-UP QUESTION: ${text}
+
+Instructions: Build on your previous analysis/explanation of this content. If the question asks for "more" or "other" aspects (like "what else is strange/unusual/problematic"), provide genuinely new insights you haven't covered yet. Avoid repeating previous points unless directly relevant to the new question.`;
       }
       
       // For translate mode

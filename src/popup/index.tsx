@@ -243,7 +243,7 @@ const SidebarSectionTitle = styled.div`
 // Content area - Fixed scrolling issues
 const ContentArea = styled.div`
   flex: 1;
-  padding: 9px 33px 0 35px;
+  padding: 9px 24px 0 35px;
   background: ${theme.dark.background};
   overflow-y: auto;
   overflow-x: hidden;
@@ -748,7 +748,7 @@ const IndexPopup = () => {
           
           <VersionBadgeContainer>
             <BetaBadge>Beta </BetaBadge>
-            <VersionNumber>v1.1.12</VersionNumber>
+            <VersionNumber>v1.1.13</VersionNumber>
           </VersionBadgeContainer>
         </div>
       </Header>
@@ -1010,7 +1010,7 @@ const IndexPopup = () => {
                             {mode === 'translate' && (
                               <span style={{ fontSize: '10px', opacity: 0.8 }}>
                                 {settings?.translationSettings?.fromLanguage ? 
-                                  `${LANGUAGES[settings.translationSettings.fromLanguage] || 'Auto'} → ${LANGUAGES[settings.translationSettings.toLanguage] || 'English'}` : 
+                                  `${LANGUAGES[settings.translationSettings.fromLanguage] || LANGUAGES['auto']} → ${LANGUAGES[settings.translationSettings.toLanguage] || LANGUAGES['en']}` : 
                                   'Auto → English'}
                               </span>
                             )}
@@ -1035,7 +1035,7 @@ const IndexPopup = () => {
                           {mode === 'translate' && (
                             <span style={{ fontSize: '10px', opacity: 0.8 }}>
                               {settings?.translationSettings?.fromLanguage ? 
-                                `${LANGUAGES[settings.translationSettings.fromLanguage] || 'Auto'} → ${LANGUAGES[settings.translationSettings.toLanguage] || 'English'}` : 
+                                `${LANGUAGES[settings.translationSettings.fromLanguage] || LANGUAGES['auto']} → ${LANGUAGES[settings.translationSettings.toLanguage] || LANGUAGES['en']}` : 
                                 'Auto → English'}
                             </span>
                           )}
@@ -1056,7 +1056,7 @@ const IndexPopup = () => {
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <Select 
                       value={settings?.translationSettings?.fromLanguage || "auto"}
-                      onChange={(e) => {
+                      onChange={async (e) => {
                         const translationSettings = {
                           ...(settings?.translationSettings || {}),
                           fromLanguage: e.target.value,
@@ -1066,13 +1066,17 @@ const IndexPopup = () => {
                           ...settings,
                           translationSettings
                         }
+                        
+                        console.log('Translation settings updated:', translationSettings)
+                        
+                        // Update local state immediately for instant UI feedback
                         setSettings(newSettings)
                         
                         const storage = new Storage()
-                        storage.set("settings", newSettings)
+                        await storage.set("settings", newSettings)
                         
                         // Also save dedicated translationSettings
-                        storage.set("translationSettings", translationSettings)
+                        await storage.set("translationSettings", translationSettings)
                         
                         // Notify all tabs about the translation settings change
                         if (typeof chrome !== 'undefined' && chrome.tabs) {
@@ -1098,17 +1102,9 @@ const IndexPopup = () => {
                       }}
                       style={{ flex: 1 }}
                     >
-                      <option value="auto">Auto-detect</option>
-                      <option value="en">English</option>
-                      <option value="es">Spanish</option>
-                      <option value="fr">French</option>
-                      <option value="de">German</option>
-                      <option value="it">Italian</option>
-                      <option value="pt">Portuguese</option>
-                      <option value="ru">Russian</option>
-                      <option value="zh">Chinese</option>
-                      <option value="ja">Japanese</option>
-                      <option value="ko">Korean</option>
+                      {Object.entries(LANGUAGES).map(([code, name]) => (
+                        <option key={code} value={code}>{name}</option>
+                      ))}
                     </Select>
                     
                     <div style={{ display: 'flex', alignItems: 'center', margin: '0 4px' }}>
@@ -1119,7 +1115,7 @@ const IndexPopup = () => {
                     
                     <Select 
                       value={settings?.translationSettings?.toLanguage || "en"}
-                      onChange={(e) => {
+                      onChange={async (e) => {
                         const translationSettings = {
                           ...(settings?.translationSettings || {}),
                           fromLanguage: settings?.translationSettings?.fromLanguage || "auto",
@@ -1129,13 +1125,17 @@ const IndexPopup = () => {
                           ...settings,
                           translationSettings
                         }
+                        
+                        console.log('Translation settings updated (toLanguage):', translationSettings)
+                        
+                        // Update local state immediately for instant UI feedback
                         setSettings(newSettings)
                         
                         const storage = new Storage()
-                        storage.set("settings", newSettings)
+                        await storage.set("settings", newSettings)
                         
                         // Also save dedicated translationSettings
-                        storage.set("translationSettings", translationSettings)
+                        await storage.set("translationSettings", translationSettings)
                         
                         // Notify all tabs about the translation settings change
                         if (typeof chrome !== 'undefined' && chrome.tabs) {
@@ -1161,16 +1161,9 @@ const IndexPopup = () => {
                       }}
                       style={{ flex: 1 }}
                     >
-                      <option value="en">English</option>
-                      <option value="es">Spanish</option>
-                      <option value="fr">French</option>
-                      <option value="de">German</option>
-                      <option value="it">Italian</option>
-                      <option value="pt">Portuguese</option>
-                      <option value="ru">Russian</option>
-                      <option value="zh">Chinese</option>
-                      <option value="ja">Japanese</option>
-                      <option value="ko">Korean</option>
+                      {Object.entries(LANGUAGES).filter(([code]) => code !== 'auto').map(([code, name]) => (
+                        <option key={code} value={code}>{name}</option>
+                      ))}
                     </Select>
                   </div>
                 </FormRow>
@@ -1461,7 +1454,8 @@ const IndexPopup = () => {
                 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '16px' }}>
                   {[
-                    { value: 'default', label: 'Default', color: '#fff8bc' },
+                    { value: 'default', label: 'Default', color: 'linear-gradient(45deg, rgb(211, 232, 255), rgb(197, 225, 255))' },
+                    { value: 'yellow', label: 'Yellow', color: '#fff8bc' },
                     { value: 'orange', label: 'Orange', color: '#FFBF5A' },
                     { value: 'blue', label: 'Blue', color: '#93C5FD' },
                     { value: 'green', label: 'Green', color: '#86EFAC' },
@@ -1484,7 +1478,8 @@ const IndexPopup = () => {
                           width: '36px',
                           height: '36px',
                           borderRadius: '50%',
-                          backgroundColor: colorOption.color,
+                          background: colorOption.color,
+                          backgroundColor: colorOption.value === 'default' ? undefined : colorOption.color,
                           border: colorOption.value === (settings?.customization?.highlightColor || 'default') ? `2px solid ${theme.dark.primary}` : '2px solid transparent',
                           cursor: 'pointer',
                           display: 'flex',
@@ -1701,44 +1696,98 @@ const IndexPopup = () => {
           {activeTab === 'privacy' && (
             <Section>
               <SectionTitle>Privacy Policy</SectionTitle>
-              <Description>Information about how we handle your data</Description>
+              <Description>How we handle your data and protect your privacy</Description>
               
               <div style={{ background: '#333333', borderRadius: '8px', padding: '20px', marginTop: '16px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '16px' }}>Privacy Commitment</h3>
-                
-                <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)', lineHeight: '1.6' }}>
-                  <p style={{ marginBottom: '16px' }}>
-                    We take your privacy seriously. LightUp processes text locally by default and only sends data to our servers when explicitly requested.
-                  </p>
-                  
-                  <p style={{ marginBottom: '16px' }}>
-                    The extension does not collect any personal information without your consent. We do not sell or share your data with third parties.
-                  </p>
-                  
-                  <p style={{ marginBottom: '16px' }}>
-                    By using this extension, you agree to our privacy policy and terms of service.
-                  </p>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" strokeWidth="1.5" stroke="currentColor" style={{ marginRight: '12px', color: '#2DCA6E' }}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                  </svg>
+                  <h3 style={{ fontSize: '18px', fontWeight: 600, margin: 0, color: '#FFFFFF' }}>Zero Data Collection</h3>
                 </div>
                 
-                <div style={{ display: 'flex', gap: '12px', marginTop: '24px' }}>
-                  <Button variant="primary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)', lineHeight: '1.6', marginBottom: '24px' }}>
+                  <p style={{ margin: '0 0 16px 0' }}>
+                    LightUp does not collect, store, or track any personal information. All processing happens locally or directly with your chosen AI service.
+                  </p>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '24px' }}>
+                  <div style={{ padding: '16px', background: 'rgba(45, 202, 110, 0.1)', borderRadius: '8px', border: '1px solid rgba(45, 202, 110, 0.2)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#2DCA6E' }}>
+                        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>Local Storage</span>
+                    </div>
+                    <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                      Settings and API keys stored securely in your browser only
+                    </p>
+                  </div>
+
+                  <div style={{ padding: '16px', background: 'rgba(0, 120, 212, 0.1)', borderRadius: '8px', border: '1px solid rgba(0, 120, 212, 0.2)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#0078D4' }}>
+                        <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>Direct Processing</span>
+                    </div>
+                    <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                      Text sent directly to AI services - no intermediaries
+                    </p>
+                  </div>
+
+                  <div style={{ padding: '16px', background: 'rgba(156, 39, 176, 0.1)', borderRadius: '8px', border: '1px solid rgba(156, 39, 176, 0.2)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#9C27B0' }}>
+                        <path d="M18.364 5.636L16.95 7.05A7 7 0 1019 12h2a9 9 0 11-2.636-6.364z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>No Tracking</span>
+                    </div>
+                    <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                      No analytics, cookies, or behavior monitoring
+                    </p>
+                  </div>
+
+                  <div style={{ padding: '16px', background: 'rgba(255, 193, 7, 0.1)', borderRadius: '8px', border: '1px solid rgba(255, 193, 7, 0.2)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#FFC107' }}>
+                        <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" stroke="currentColor" strokeWidth="2" fill="none"/>
+                      </svg>
+                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>Your Control</span>
+                    </div>
+                    <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                      Full control over your data and settings
+                    </p>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
+                  <Button 
+                    variant="primary" 
+                    onClick={() => window.open('https://www.boimaginations.com/lightup/privacy-policy', '_blank')}
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}
+                  >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 2h6v6M11 13L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    Full Privacy Policy
+                    Full Policy
                   </Button>
-                  {/* <Button variant="default" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Button 
+                    variant="default" 
+                    onClick={() => window.open('mailto:boimaginations@gmail.com?subject=Privacy Inquiry - LightUp', '_blank')}
+                    style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}
+                  >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    Terms of Service
-                  </Button> */}
+                    Contact
+                  </Button>
                 </div>
               </div>
-              
-           
-              
-            
             </Section>
           )}
           

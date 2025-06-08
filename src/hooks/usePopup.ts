@@ -4,6 +4,7 @@ import { Storage } from "@plasmohq/storage";
 import type { Mode, Settings } from '~types/settings';
 import { getHighlightColor } from '~utils/highlight';
 import type { FollowUpQA } from "~types/followup";
+import { cleanTextForMode } from '~utils/textProcessing';
 
 // Check if we're on Reddit
 const isReddit = typeof window !== 'undefined' && window.location.hostname.includes('reddit.com');
@@ -104,7 +105,12 @@ export const usePopup = (
       if (popup?.contains(event.target as Node)) return;
 
       const selection = window.getSelection();
-      const text = selection?.toString().trim();
+      let text = selection?.toString().trim();
+
+      // Apply text cleaning based on the current mode
+      if (text) {
+        text = cleanTextForMode(text, mode);
+      }
 
       // For all modes, require text selection to show popup on click
       if (!text || !/\S/.test(text)) {
@@ -208,7 +214,11 @@ export const usePopup = (
     const handleContextMenuSelection = async (event: CustomEvent) => {
       if (!isEnabled) return;
       
-      const text = event.detail?.text || '';
+      let text = event.detail?.text || '';
+      if (!text) return;
+
+      // Apply text cleaning based on the current mode
+      text = cleanTextForMode(text, mode);
       if (!text) return;
 
       // Check if we're in manual mode and this is not from the context menu

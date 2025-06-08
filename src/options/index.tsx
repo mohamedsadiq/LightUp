@@ -12,7 +12,7 @@ import { useSettings } from "~hooks/useSettings"
 
 // Import enhanced notification components
 import {
-  ToastNotification,
+  type ToastNotification,
   ToastContainer,
   Toast,
   ToastIcon,
@@ -535,19 +535,21 @@ const FormTextarea = styled.textarea`
 `
 
 const SectionHeader = styled.h4`
-  font-size: 20px;
-  font-weight: 500;
-  margin: 0 0 14px 0;
-  color: #FFFFFF;
-  padding-bottom: 8px;
+   font-size: 20px;
+    font-weight: 500;
+    margin: 0;
+    color: rgb(255, 255, 255);
+    /* padding-bottom: 8px; */
+    margin-top: 23px;
   // border-bottom: 1px solid rgba(157, 157, 157, 0.3);
 `
 
 const SectionContainer = styled.div`
-  margin-bottom: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
+      margin-bottom: 21px;
+    display: flex
+;
+    flex-direction: column;
+    gap: 6px;
 `
 
 const Button = styled.button<{ variant?: 'primary' | 'destructive' | 'default' }>`
@@ -1419,7 +1421,8 @@ function IndexOptions() {
   };
 
   const colorOptions = [
-    { value: 'default', label: 'Default (System)', color: 'lu-bg-[#fff8bc]' },
+    { value: 'default', label: 'Default (System)', color: 'lu-bg-gradient-to-r lu-from-blue-500 lu-to-green-500' },
+    { value: 'yellow', label: 'Yellow', color: 'lu-bg-[#fff8bc]' },
     { value: 'orange', label: 'Orange', color: 'lu-bg-[#FFBF5A]' },
     { value: 'blue', label: 'Blue', color: 'lu-bg-[#93C5FD]' },
     { value: 'green', label: 'Green', color: 'lu-bg-[#86EFAC]' },
@@ -1547,7 +1550,7 @@ function IndexOptions() {
         <Logo />
         <VersionBadgeContainer>
           <BetaBadge>BETA</BetaBadge>
-          <VersionNumber>v1.1.12</VersionNumber>
+          <VersionNumber>v1.1.13</VersionNumber>
         </VersionBadgeContainer>
         {/* <CloseButton onClick={() => window.close()}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1560,8 +1563,8 @@ function IndexOptions() {
         <Sidebar>
           <SidebarItem active={activeTab === "general"} onClick={() => setActiveTab("general")}>
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
 </svg>
 
             </SidebarIcon>
@@ -1569,8 +1572,8 @@ function IndexOptions() {
           </SidebarItem>
           <SidebarItem active={activeTab === "model"} onClick={() => setActiveTab("model")}>
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z" />
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z" />
 </svg>
 
             </SidebarIcon>
@@ -1804,6 +1807,62 @@ function IndexOptions() {
                   </SubContainer>
                 </SectionContainer>
 
+                {settings.modelType === "basic" && (
+                  <SectionContainer>
+                    <div style={{
+                      background: 'linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 152, 0, 0.1) 100%)',
+                      border: '1px solid rgba(255, 193, 7, 0.3)',
+                      borderRadius: '8px',
+                      padding: '16px',
+                      marginTop: '12px'
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'flex-start',
+                        gap: '12px'
+                      }}>
+                        <div style={{
+                          fontSize: '20px',
+                          flexShrink: 0,
+                          marginTop: '2px'
+                        }}>
+                          ⚠️
+                        </div>
+                        <div>
+                          <h4 style={{
+                            color: '#FFC107',
+                            fontSize: '14px',
+                            fontWeight: '600',
+                            margin: '0 0 8px 0',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.5px'
+                          }}>
+                            Data Privacy Notice
+                          </h4>
+                          <p style={{
+                            color: '#E0E0E0',
+                            fontSize: '13px',
+                            lineHeight: '1.5',
+                            margin: '0 0 8px 0'
+                          }}>
+                            <strong>Please be careful with your data.</strong> The Basic tier uses a shared proxy service to access AI models. 
+                            While we don't store your data, your content will be processed through our servers before reaching the AI provider.
+                          </p>
+                          <p style={{
+                            color: '#B0B0B0',
+                            fontSize: '12px',
+                            lineHeight: '1.4',
+                            margin: '0'
+                          }}>
+                            For maximum privacy and security, consider upgrading to a direct API model (Gemini, Grok, or Local) where your data 
+                            goes directly to the provider or stays on your device.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </SectionContainer>
+                )}
+
                 {settings.modelType === "gemini" && (
                   <SectionContainer>
                     <SectionHeader>Gemini Configuration</SectionHeader>
@@ -1836,7 +1895,7 @@ function IndexOptions() {
                           }}
                         />
                         <FormDescription>
-                          Get your API key from <a href="https://ai.google.dev/" target="_blank" rel="noopener noreferrer" style={{ color: '#93C5FD', textDecoration: 'none', ':hover': { textDecoration: 'underline' } }}>Google AI Studio</a>.
+                          Get your API key from <a href="https://ai.google.dev/" target="_blank" rel="noopener noreferrer" style={{ color: '#93C5FD', textDecoration: 'none' }}>Google AI Studio</a>.
                         </FormDescription>
                       </FormGroup>
                     </SubContainer>
@@ -1898,7 +1957,7 @@ function IndexOptions() {
                           }}
                         />
                         <FormDescription>
-                          Get your API key from <a href="https://x.ai/api" target="_blank" rel="noopener noreferrer" style={{ color: '#93C5FD', textDecoration: 'none', ':hover': { textDecoration: 'underline' } }}>x.ai</a>.
+                          Get your API key from <a href="https://x.ai/api" target="_blank" rel="noopener noreferrer" style={{ color: '#93C5FD', textDecoration: 'none' }}>x.ai</a>.
                         </FormDescription>
                       </FormGroup>
                     </SubContainer>
@@ -2519,7 +2578,8 @@ function IndexOptions() {
                     
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '16px' }}>
                       {[
-                        { value: 'default', label: 'Default', color: '#fff8bc' },
+                        { value: 'default', label: 'Default', color: 'linear-gradient(45deg, rgb(211, 232, 255), rgb(197, 225, 255))' },
+                        { value: 'yellow', label: 'Yellow', color: '#fff8bc' },
                         { value: 'orange', label: 'Orange', color: '#FFBF5A' },
                         { value: 'blue', label: 'Blue', color: '#93C5FD' },
                         { value: 'green', label: 'Green', color: '#86EFAC' },
@@ -2542,7 +2602,8 @@ function IndexOptions() {
                               width: '36px',
                               height: '36px',
                               borderRadius: '50%',
-                              backgroundColor: colorOption.color,
+                              background: colorOption.color,
+                              backgroundColor: colorOption.value === 'default' ? undefined : colorOption.color,
                               border: colorOption.value === (settings.customization?.highlightColor || 'default') ? `2px solid #2DCA6E` : '2px solid transparent',
                               cursor: 'pointer',
                               display: 'flex',
@@ -2593,37 +2654,120 @@ function IndexOptions() {
             <div key="about">
               <SettingsCard title="About LightUp" icon={null}>
                 <SectionContainer>
-                  {/* <SectionHeader>About</SectionHeader> */}
-                  <FormDescription style={{ marginBottom: '16px' }}>LightUp is an open-source browser extension designed to enhance your reading experience by providing instant AI-powered explanations and insights on selected text.</FormDescription>
+                  <div style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
+                    <img 
+                      src={logoUrl} 
+                      alt="LightUp Logo" 
+                      style={{ 
+                        width: '48px', 
+                        height: '48px', 
+                        marginRight: '16px', 
+                        borderRadius: '12px',
+                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+                      }} 
+                    />
+                    <div>
+                      <h2 style={{ fontSize: '24px', fontWeight: 700, margin: 0, color: '#FFFFFF' }}>LightUp</h2>
+                      <p style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.7)', margin: '4px 0 0 0' }}>AI-Powered Web Annotations</p>
+                    </div>
+                  </div>
                   
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ color: '#FFFFFF', fontSize: '14px', fontWeight: 500 }}>Version:</span>
-                      <Badge variant="info">v1.1.12</Badge>
+                  <FormDescription style={{ marginBottom: '24px', fontSize: '15px', lineHeight: '1.6' }}>
+                    Transform your online reading with LightUp, the ultimate Chrome extension for summarizing, translating, and annotating selected text on any webpage. 
+                    Whether you're a student, professional, researcher, or curious learner, LightUp leverages advanced AI to provide instant summaries, 
+                    seamless translations, and insightful annotations right at your fingertips.
+                  </FormDescription>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
+                    <div style={{ padding: '16px', background: 'rgba(45, 202, 110, 0.08)', borderRadius: '8px', border: '1px solid rgba(45, 202, 110, 0.2)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#2DCA6E' }}>
+                          <path d="M4 6h16M4 12h16M4 18h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '14px' }}>Instant Summaries</span>
+                      </div>
+                      <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                        Get concise summaries of selected text to quickly grasp key points
+                      </p>
+                    </div>
+
+                    <div style={{ padding: '16px', background: 'rgba(0, 120, 212, 0.08)', borderRadius: '8px', border: '1px solid rgba(0, 120, 212, 0.2)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#0078D4' }}>
+                          <path d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '14px' }}>Real-Time Translation</span>
+                      </div>
+                      <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                        Break language barriers with immediate translations of any selected content
+                      </p>
+                    </div>
+
+                    <div style={{ padding: '16px', background: 'rgba(156, 39, 176, 0.08)', borderRadius: '8px', border: '1px solid rgba(156, 39, 176, 0.2)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#9C27B0' }}>
+                          <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '14px' }}>Advanced AI Models</span>
+                      </div>
+                      <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                        Choose from Grok, Gemini, and local models for versatile applications
+                      </p>
+                    </div>
+
+                    <div style={{ padding: '16px', background: 'rgba(255, 193, 7, 0.08)', borderRadius: '8px', border: '1px solid rgba(255, 193, 7, 0.2)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#FFC107' }}>
+                          <path d="M8 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9L3 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '14px' }}>Interactive Chat</span>
+                      </div>
+                      <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                        Engage with chat-style follow-up questions to clarify and expand understanding
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', fontWeight: 500, minWidth: '80px' }}>Version:</span>
+                      <Badge variant="info">v0.1.13</Badge>
                     </div>
                     
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ color: '#FFFFFF', fontSize: '14px', fontWeight: 500 }}>Developed by:</span>
-                      <span style={{ color: '#FFFFFF', fontSize: '14px' }}>Your Name/Organization</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', fontWeight: 500, minWidth: '80px' }}>Developer:</span>
+                      <span style={{ color: '#FFFFFF', fontSize: '14px' }}>Moe Sadiq</span>
                     </div>
                     
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ color: '#FFFFFF', fontSize: '14px', fontWeight: 500 }}>Source Code:</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', fontWeight: 500, minWidth: '80px' }}>Website:</span>
                       <a 
-                        href="https://github.com/your-repo/lightup" 
+                        href="https://www.boimaginations.com/lightup" 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        style={{ color: '#93C5FD', textDecoration: 'none', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                        onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
+                        onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
+                      >
+                        boimaginations.com/lightup
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </a>
+                    </div>
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', fontWeight: 500, minWidth: '80px' }}>Contact:</span>
+                      <a 
+                        href="mailto:boimaginations@gmail.com" 
                         target="_blank" 
                         rel="noopener noreferrer" 
                         style={{ color: '#93C5FD', textDecoration: 'none', fontSize: '14px' }}
                         onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
                         onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
                       >
-                        GitHub
+                        boimaginations@gmail.com
                       </a>
-                    </div>
-                    
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <span style={{ color: '#FFFFFF', fontSize: '14px', fontWeight: 500 }}>License:</span>
-                      <span style={{ color: '#FFFFFF', fontSize: '14px' }}>MIT License</span>
                     </div>
                   </div>
                 </SectionContainer>
@@ -2650,35 +2794,176 @@ function IndexOptions() {
 
                 <SectionContainer>
                   <SectionHeader>Privacy Policy</SectionHeader>
-                  <FormDescription style={{ marginBottom: '16px' }}>Information about how we handle your data</FormDescription>
+                  <FormDescription style={{ marginBottom: '16px' }}>How we handle your data and protect your privacy</FormDescription>
                   
-                  <div style={{ background: '#333333', borderRadius: '8px', padding: '20px', marginTop: '16px' }}>
-                    <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '16px', color: '#FFFFFF' }}>Privacy Commitment</h3>
+                  <div style={{ background: '#333333', borderRadius: '8px', padding: '24px', marginTop: '16px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
+                      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" strokeWidth="1.5" stroke="currentColor" style={{ marginRight: '12px', color: '#2DCA6E' }}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+                      </svg>
+                      <h3 style={{ fontSize: '20px', fontWeight: 600, margin: 0, color: '#FFFFFF' }}>Zero Data Collection</h3>
+                    </div>
                     
-                    <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)', lineHeight: '1.6' }}>
-                      <p style={{ marginBottom: '16px' }}>
-                        We take your privacy seriously. LightUp processes text locally by default and only sends data to our servers when explicitly requested.
+                    <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.6', marginBottom: '28px' }}>
+                      <p style={{ margin: '0 0 20px 0', fontSize: '15px' }}>
+                        LightUp does not collect, store, or track any personal information. All processing happens locally or directly with your chosen AI service.
                       </p>
-                      
-                      <p style={{ marginBottom: '16px' }}>
-                        The extension does not collect any personal information without your consent. We do not sell or share your data with third parties.
-                      </p>
-                      
-                      <p style={{ marginBottom: '16px' }}>
-                        By using this extension, you agree to our privacy policy and terms of service.
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px', marginBottom: '32px' }}>
+                      <div style={{ padding: '20px', background: 'rgba(45, 202, 110, 0.08)', borderRadius: '10px', border: '1px solid rgba(45, 202, 110, 0.2)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px', color: '#2DCA6E' }}>
+                            <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '16px' }}>Local Storage</span>
+                        </div>
+                        <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
+                          Settings and API keys stored securely in your browser only. Never transmitted to external servers.
+                        </p>
+                      </div>
+
+                      <div style={{ padding: '20px', background: 'rgba(0, 120, 212, 0.08)', borderRadius: '10px', border: '1px solid rgba(0, 120, 212, 0.2)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px', color: '#0078D4' }}>
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '16px' }}>Direct Processing</span>
+                        </div>
+                        <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
+                          Text sent directly to AI services using secure HTTPS. No intermediary servers or data logging.
                       </p>
                     </div>
                     
+                      <div style={{ padding: '20px', background: 'rgba(156, 39, 176, 0.08)', borderRadius: '10px', border: '1px solid rgba(156, 39, 176, 0.2)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px', color: '#9C27B0' }}>
+                            <path d="M18.364 5.636L16.95 7.05A7 7 0 1019 12h2a9 9 0 11-2.636-6.364z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '16px' }}>No Tracking</span>
+                        </div>
+                        <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
+                          Zero analytics, cookies, or behavior monitoring. Your browsing activity remains private.
+                        </p>
+                      </div>
+
+                      <div style={{ padding: '20px', background: 'rgba(255, 193, 7, 0.08)', borderRadius: '10px', border: '1px solid rgba(255, 193, 7, 0.2)' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '12px' }}>
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px', color: '#FFC107' }}>
+                            <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <rect x="8" y="2" width="8" height="4" rx="1" ry="1" stroke="currentColor" strokeWidth="2" fill="none"/>
+                          </svg>
+                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '16px' }}>Your Control</span>
+                        </div>
+                        <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
+                          Complete control over your data and settings. Clear everything instantly or remove anytime.
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div style={{ display: 'flex', gap: '12px', marginTop: '24px', flexWrap: 'wrap' }}>
                     <Button
                       variant="primary"
-                      onClick={() => window.open('https://www.boimaginations.com/privacy', '_blank')}
-                      style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+                        onClick={() => window.open('https://www.boimaginations.com/lightup/privacy-policy', '_blank')}
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: '140px' }}
                     >
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 2h6v6M11 13L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                      Full Privacy Policy
+                        Full Policy
+                      </Button>
+                      <Button
+                        variant="default"
+                        onClick={() => window.open('mailto:boimaginations@gmail.com?subject=Privacy Inquiry - LightUp Extension', '_blank')}
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: '120px' }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Contact
+                      </Button>
+                      <Button
+                        variant="default"
+                        onClick={async () => {
+                          const confirmed = confirm(
+                            'This will permanently delete ALL LightUp extension data including:\n\n' +
+                            '• API keys and credentials\n' +
+                            '• All settings and preferences\n' +
+                            '• Theme and customization settings\n' +
+                            'This action cannot be undone. Are you sure you want to continue?'
+                          );
+                          
+                          if (confirmed) {
+                            try {
+                                                             // Clear chrome storage with proper error handling
+                               await new Promise<void>((resolve, reject) => {
+                                 chrome.storage.local.clear(() => {
+                                   if (chrome.runtime.lastError) {
+                                     reject(chrome.runtime.lastError);
+                                   } else {
+                                     resolve();
+                                   }
+                                 });
+                               });
+                               
+                               await new Promise<void>((resolve, reject) => {
+                                 chrome.storage.sync.clear(() => {
+                                   if (chrome.runtime.lastError) {
+                                     reject(chrome.runtime.lastError);
+                                   } else {
+                                     resolve();
+                                   }
+                                 });
+                               });
+                               
+                               // Clear session storage if available
+                               if (chrome.storage.session) {
+                                 await new Promise<void>((resolve, reject) => {
+                                   chrome.storage.session.clear(() => {
+                                     if (chrome.runtime.lastError) {
+                                       reject(chrome.runtime.lastError);
+                                     } else {
+                                       resolve();
+                                     }
+                                   });
+                                 });
+                               }
+                              
+                              // Clear any background script caches
+                              try {
+                                await chrome.runtime.sendMessage({ action: 'clearAllData' });
+                              } catch (e) {
+                                console.log('Background script not available for clearing');
+                              }
+                              
+                              alert('✅ All LightUp extension data has been successfully cleared!\n\nThe page will reload to reflect the changes.');
+                              window.location.reload();
+                              
+                            } catch (error) {
+                              console.error('Error clearing data:', error);
+                              alert('❌ Error clearing data: ' + error.message + '\n\nPlease try again or contact support.');
+                            }
+                          }
+                        }}
+                        style={{ 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          gap: '8px', 
+                          backgroundColor: 'rgba(231, 76, 60, 0.08)', 
+                          borderColor: 'rgba(231, 76, 60, 0.3)', 
+                          color: '#E74C3C',
+                          minWidth: '140px',
+                          fontWeight: 500
+                        }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Clear All Data
                     </Button>
+                    </div>
                   </div>
                 </SectionContainer>
 

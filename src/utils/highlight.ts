@@ -1,6 +1,7 @@
 // Define color mapping
 const highlightColors = {
-  default: '#fff8bc',  // Light yellow
+  default: 'auto',  // Browser's native highlight color
+  yellow: '#fff8bc',  // Light yellow (previously default)
   orange: '#FFBF5A',
   blue: '#93C5FD',
   green: '#86EFAC',
@@ -12,7 +13,8 @@ type HighlightColor = keyof typeof highlightColors;
 
 // Map of highlight color options to their CSS color values
 export const HIGHLIGHT_COLORS = {
-  default: '#fff8bc',  // Light yellow
+  default: 'auto',  // Browser's native highlight color
+  yellow: '#fff8bc',  // Light yellow (previously default)
   orange: '#FFBF5A',
   blue: '#93C5FD',
   green: '#86EFAC',
@@ -48,20 +50,27 @@ export const applyHighlightColor = (color: string | undefined, isEnabled: boolea
   } else {
     // Get the color from the mapping or use the provided color directly
     const highlightColor = (!color || color === 'default') 
-      ? HIGHLIGHT_COLORS.default 
+      ? 'auto' // Use browser's native highlight for default
       : (HIGHLIGHT_COLORS[color as HighlightColor] || color);
     
-    selectionStyle.textContent = `
-      ::selection {
-        background-color: ${highlightColor} !important;
-        color: #000000 !important;
-      }
-      
-      ::-moz-selection {
-        background-color: ${highlightColor} !important;
-        color: #000000 !important;
-      }
-    `;
+    if (highlightColor === 'auto') {
+      // For auto/default, don't override the browser's native selection styling
+      selectionStyle.textContent = `
+        /* Use browser's default selection styling */
+      `;
+    } else {
+      selectionStyle.textContent = `
+        ::selection {
+          background-color: ${highlightColor} !important;
+          color: #000000 !important;
+        }
+        
+        ::-moz-selection {
+          background-color: ${highlightColor} !important;
+          color: #000000 !important;
+        }
+      `;
+    }
   }
 
   // Remove any existing selection style

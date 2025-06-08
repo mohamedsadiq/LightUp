@@ -189,7 +189,7 @@
 }
 
 .skeleton-shimmer {
-  animation: advancedShimmer 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+  animation: advancedShimmer 1.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
   animation-fill-mode: both;
 }
 
@@ -199,7 +199,7 @@
 }
 
 .skeleton-micro {
-  animation: microShimmer 1.8s linear infinite;
+  animation: microShimmer 1.1s linear infinite;
   animation-fill-mode: both;
 }
 
@@ -250,7 +250,7 @@
 
 /* CSS classes for skeleton animations */
 .lu-skeleton-shimmer {
-  animation: advancedShimmer 2.5s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
+  animation: advancedShimmer 1.5s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;
   background-size: 400% 100%;
 }
 

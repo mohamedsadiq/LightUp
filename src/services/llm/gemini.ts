@@ -1,5 +1,5 @@
 import type { ProcessTextRequest } from "~types/messages"
-import { SYSTEM_PROMPTS, USER_PROMPTS } from "../../utils/constants"
+import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS } from "../../utils/constants"
 import type { Settings } from "~types/settings"
 
 export const processGeminiText = async function*(request: ProcessTextRequest) {
@@ -7,9 +7,16 @@ export const processGeminiText = async function*(request: ProcessTextRequest) {
   
   // Get the system prompt (custom or default)
   const getSystemPrompt = () => {
-    // For follow-up questions, use conversational system prompt
+    // For follow-up questions, use enhanced context-aware prompts
     if (isFollowUp) {
-      return "You are a helpful assistant who answers questions directly and conversationally. Provide clear, concise answers without unnecessary repetition or summaries unless specifically asked for them.";
+      // If custom system prompt is available for follow-ups, use it
+      if (settings.customPrompts?.systemPrompts?.[mode]) {
+        return `${settings.customPrompts.systemPrompts[mode]} 
+
+FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.`;
+      }
+      // Otherwise use enhanced follow-up prompt
+      return FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
     }
     
     // If custom system prompt is available, use it
@@ -22,12 +29,16 @@ export const processGeminiText = async function*(request: ProcessTextRequest) {
 
   const getUserPrompt = () => {
     if (isFollowUp) {
-      // Include original context and previous conversation for follow-ups
-      return `Based on the previous content: "${request.context || ''}"
+      // Include rich context for follow-ups with original content and conversation history
+      const contextText = request.context || '';
+      const originalContent = contextText.length > 500 ? contextText.substring(0, 500) + "..." : contextText;
+      
+      return `ORIGINAL CONTENT CONTEXT:
+${originalContent}
 
-Please answer this follow-up question directly and conversationally: ${text}
+FOLLOW-UP QUESTION: ${text}
 
-Provide a clear, direct answer without repeating the original content or providing another summary. Just answer the specific question asked.`;
+Instructions: Build on your previous analysis/explanation of this content. If the question asks for "more" or "other" aspects (like "what else is strange/unusual/problematic"), provide genuinely new insights you haven't covered yet. Avoid repeating previous points unless directly relevant to the new question.`;
     }
     
     // For translate mode

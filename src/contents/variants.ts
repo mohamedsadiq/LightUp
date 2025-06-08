@@ -31,19 +31,19 @@ export const loadingSkeletonVariants = {
     scale: 1,
     transform: 'translateZ(0)',
     transition: {
-      duration: 0.5,
+      duration: 0.3,
       ease: [0.25, 0.46, 0.45, 0.94],
-      staggerChildren: 0.03,
-      delayChildren: 0.1,
+      staggerChildren: 0.02,
+      delayChildren: 0.05,
     }
   },
   exit: {
     opacity: 0,
     scale: 0.99,
     transition: {
-      duration: 0.4,
+      duration: 0.25,
       ease: [0.4, 0.0, 0.2, 1],
-      staggerChildren: 0.02,
+      staggerChildren: 0.015,
       staggerDirection: -1
     }
   }
@@ -64,19 +64,19 @@ export const skeletonLineVariants = {
     rotateX: 0,
     transform: 'translateZ(0)',
     transition: {
-      duration: 0.6,
-      delay: i * 0.04,
+      duration: 0.35,
+      delay: i * 0.025,
       ease: [0.25, 0.46, 0.45, 0.94],
       opacity: {
-        duration: 0.4,
+        duration: 0.25,
         ease: "easeOut"
       },
       scale: {
-        duration: 0.5,
+        duration: 0.3,
         ease: [0.34, 1.56, 0.64, 1]
       },
       y: {
-        duration: 0.6,
+        duration: 0.35,
         ease: [0.25, 0.46, 0.45, 0.94]
       }
     }
@@ -86,7 +86,7 @@ export const skeletonLineVariants = {
     scale: 0.98,
     y: -4,
     transition: {
-      duration: 0.3,
+      duration: 0.2,
       ease: [0.4, 0.0, 0.2, 1]
     }
   }
@@ -100,9 +100,9 @@ export const shimmerVariants = {
     backgroundPosition: "200% 0",
     transition: {
       repeat: Infinity,
-      duration: 2.5,
+      duration: 1.5,
       ease: "linear",
-      repeatDelay: 0.5
+      repeatDelay: 0.3
     }
   }
 }
@@ -117,10 +117,10 @@ export const enhancedShimmerVariants = {
     opacity: [0, 1, 1, 0],
     transition: {
       repeat: Infinity,
-      duration: 2,
+      duration: 1.2,
       ease: "easeInOut",
       times: [0, 0.1, 0.9, 1],
-      repeatDelay: 0.8
+      repeatDelay: 0.4
     }
   }
 }

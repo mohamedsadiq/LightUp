@@ -51,12 +51,6 @@
     "action": {
       "default_popup": "popup.html"
     },
-    "icons": {
-      "16": "assets/icon.png",
-      "32": "assets/icon.png",
-      "48": "assets/icon.png",
-      "128": "assets/icon.png"
-    },
     "host_permissions": [
       "http://127.0.0.1:1234/*",
       "https://*/*",

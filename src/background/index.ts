@@ -43,7 +43,10 @@ const DEFAULT_SETTINGS: Settings = {
     layoutMode: "sidebar",
     showGlobalActionButton: true,
     contextAwareness: false,
-    activationMode: "manual"
+    activationMode: "manual",
+    enablePDFSupport: false,
+    showTextSelectionButton: true,
+    automaticActivation: false
   }
 }
 
@@ -182,7 +185,50 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       throw new Error("Connection lost");
     }
 
-    const { mode, text, context, isFollowUp, settings: requestSettings, conversationContext } = request;
+    let { mode, text, context, isFollowUp, settings: requestSettings, conversationContext } = request;
+    
+    // Apply text cleaning based on mode - this is the key fix!
+    // Import and apply the cleaning function for translate mode specifically
+    if (mode === 'translate' && text) {
+      // Clean the text to remove Next.js metadata, analytics scripts, etc.
+      text = text
+        // Remove Next.js and React-specific content
+        .replace(/\{"props":\{[^}]*\}[^}]*\}/g, '')
+        .replace(/window\.__NEXT_DATA__\s*=\s*\{[^}]*\}/g, '')
+        .replace(/\{"page":"[^"]*","query":\{[^}]*\}[^}]*\}/g, '')
+        
+        // Remove analytics and tracking scripts
+        .replace(/window\.dataLayer\s*=\s*window\.dataLayer\s*\|\|\s*\[\]\s*;?/g, '')
+        .replace(/function\s+gtag\(\)\s*\{[^}]*\}/g, '')
+        .replace(/gtag\([^)]*\)\s*;?/g, '')
+        .replace(/ga\([^)]*\)\s*;?/g, '')
+        .replace(/fbq\([^)]*\)\s*;?/g, '')
+        
+        // Remove build IDs and technical strings
+        .replace(/buildId:\s*["'][^"']*["']/g, '')
+        .replace(/nextExport:\s*(?:true|false)/g, '')
+        .replace(/autoExport:\s*(?:true|false)/g, '')
+        .replace(/isFallback:\s*(?:true|false)/g, '')
+        
+        // Remove localization objects
+        .replace(/locale:\s*["'][^"']*["']/g, '')
+        .replace(/locales:\s*\[[^\]]*\]/g, '')
+        .replace(/defaultLocale:\s*["'][^"']*["']/g, '')
+        
+        // Remove script loader references
+        .replace(/scriptLoader:\s*\{[^}]*\}/g, '')
+        
+        // Clean up whitespace and formatting
+        .replace(/\s*\n\s*\n\s*/g, '\n\n') // Normalize paragraph breaks
+        .replace(/[ \t]+/g, ' ') // Normalize spaces
+        .replace(/^\s+|\s+$/gm, '') // Trim lines
+        .trim();
+      
+      // If after cleaning the text is empty or too short, throw an error
+      if (!text || text.length < 3) {
+        throw new Error("Selected text appears to contain only technical content and cannot be translated.");
+      }
+    }
     
     // Enhanced context handling
     let enhancedContext = conversationContext;
@@ -219,7 +265,13 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         highlightColor: "default",
         popupAnimation: "scale",
         persistHighlight: false,
-        layoutMode: "sidebar"
+        layoutMode: "sidebar",
+        enablePDFSupport: false,
+        showTextSelectionButton: true,
+        showGlobalActionButton: true,
+        contextAwareness: false,
+        activationMode: "manual",
+        automaticActivation: false
       }
     };
     

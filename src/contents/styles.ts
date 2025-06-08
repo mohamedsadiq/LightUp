@@ -52,7 +52,7 @@ export const getStyles = (
     justifyContent: "space-between",
     alignItems: "center",
     gap: "8px",
-    marginBottom: 43
+    marginBottom: 23
   },
   button: {
     width: 19,
@@ -79,7 +79,8 @@ export const getStyles = (
     borderRadius: 8,
     fontFamily: "'K2D', sans-serif",
     direction: textDirection,
-    textAlign: textDirection === "rtl" ? "right" : "left" as const
+    textAlign: textDirection === "rtl" ? "right" : "left" as const,
+    paddingTop: 13
   },
   followUpQA: {
     display: 'flex',

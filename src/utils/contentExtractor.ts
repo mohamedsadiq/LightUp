@@ -285,6 +285,13 @@ const postProcessContent = (content: string, mode?: string): string => {
         .replace(/\[.*?\]/g, '') // Remove link references
         .replace(/\n{2,}/g, '\n\n') // Normalize paragraph breaks
         .replace(/^\s*[\-\*\+]\s*/gm, '') // Remove bullet points that might confuse translation
+        // Remove script and analytics content that might have been captured
+        .replace(/window\.dataLayer[\s\S]*?;/g, '')
+        .replace(/gtag\([^)]*\)\s*;?/g, '')
+        .replace(/function\s+gtag\(\)[\s\S]*?\}/g, '')
+        .replace(/\{"props":\{[^}]*\}[^}]*\}/g, '')
+        .replace(/buildId:\s*["'][^"']*["']/g, '')
+        .replace(/nextExport:\s*(?:true|false)/g, '')
         .trim();
       break;
       

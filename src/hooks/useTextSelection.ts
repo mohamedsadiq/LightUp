@@ -147,7 +147,19 @@ export const useTextSelection = (minLength = 3) => {
   // Handle selections that might come from other sources (like keyboard)
   const handleSelectionWithFallback = useCallback(() => {
     const selection = window.getSelection();
-    const selectedText = selection?.toString().trim() || "";
+    let selectedText = selection?.toString().trim() || "";
+
+    // Apply basic cleaning to remove obvious non-content
+    if (selectedText) {
+      selectedText = selectedText
+        // Remove script content that might be accidentally selected
+        .replace(/window\.dataLayer[\s\S]*?;/g, '')
+        .replace(/gtag\([^)]*\)\s*;?/g, '')
+        .replace(/function\s+gtag\(\)[\s\S]*?\}/g, '')
+        // Clean up whitespace
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
 
     if (selectedText.length >= minLength) {
       // Store the range to preserve the selection
@@ -181,7 +193,19 @@ export const useTextSelection = (minLength = 3) => {
   // Update position when text is selected with mouse - using document coordinates
   const handleTextSelection = useCallback((e: MouseEvent) => {
     const selection = window.getSelection();
-    const selectedText = selection?.toString().trim() || "";
+    let selectedText = selection?.toString().trim() || "";
+
+    // Apply basic cleaning to remove obvious non-content
+    if (selectedText) {
+      selectedText = selectedText
+        // Remove script content that might be accidentally selected
+        .replace(/window\.dataLayer[\s\S]*?;/g, '')
+        .replace(/gtag\([^)]*\)\s*;?/g, '')
+        .replace(/function\s+gtag\(\)[\s\S]*?\}/g, '')
+        // Clean up whitespace
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
 
     // Only proceed if there's sufficient text selected
     if (selectedText.length >= minLength) {

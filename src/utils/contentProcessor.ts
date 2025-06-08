@@ -160,7 +160,29 @@ export class ContentProcessor {
       .replace(/\[Source:.*?\]/gi, '') // Remove source references
       .replace(/Click here/gi, '') // Remove navigation text
       .replace(/Read more/gi, '') // Remove UI text
-      .replace(/\b(Tweet|Share|Like|Follow)\b/gi, ''); // Remove social media actions
+      .replace(/\b(Tweet|Share|Like|Follow)\b/gi, '') // Remove social media actions
+      
+      // Remove Next.js and React-specific content
+      .replace(/\{"props":\{[^}]*\}[^}]*\}/g, '')
+      .replace(/window\.__NEXT_DATA__\s*=\s*\{[^}]*\}/g, '')
+      .replace(/\{"page":"[^"]*","query":\{[^}]*\}[^}]*\}/g, '')
+      
+      // Remove analytics and tracking scripts
+      .replace(/window\.dataLayer\s*=\s*window\.dataLayer\s*\|\|\s*\[\]\s*;?/g, '')
+      .replace(/function\s+gtag\(\)\s*\{[^}]*\}/g, '')
+      .replace(/gtag\([^)]*\)\s*;?/g, '')
+      .replace(/ga\([^)]*\)\s*;?/g, '')
+      
+      // Remove build IDs and technical strings
+      .replace(/buildId:\s*["'][^"']*["']/g, '')
+      .replace(/nextExport:\s*(?:true|false)/g, '')
+      .replace(/autoExport:\s*(?:true|false)/g, '')
+      .replace(/isFallback:\s*(?:true|false)/g, '')
+      
+      // Remove localization objects
+      .replace(/locale:\s*["'][^"']*["']/g, '')
+      .replace(/locales:\s*\[[^\]]*\]/g, '')
+      .replace(/defaultLocale:\s*["'][^"']*["']/g, '');
 
     // Preserve cultural context markers
     processed = this.preserveKeyElements(processed, [
