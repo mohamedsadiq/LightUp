@@ -3,7 +3,7 @@ import { displayImprovements, getImprovementSummary } from "./enhancementDemo";
 
 /**
  * Debug utility to compare content extraction methods
- * This lets you see the difference between basic extraction and Defuddle
+ * This lets you see the difference between basic extraction and Readability
  */
 export const compareExtractionMethods = () => {
   // First: capture elements before they are removed for comparison
@@ -15,8 +15,8 @@ export const compareExtractionMethods = () => {
   // Get the original basic extraction (just innerText)
   const basicExtraction = document.body.innerText;
   
-  // Get the Defuddle-enhanced extraction
-  const defuddleExtraction = getPageContent();
+  // Get the Readability-enhanced extraction
+  const readabilityExtraction = getPageContent();
   
   // Get a clean sample from both methods to better showcase differences
   // For basic extraction, try to eliminate obviously non-content lines
@@ -31,18 +31,18 @@ export const compareExtractionMethods = () => {
   
   // Calculate size difference
   const basicSize = new Blob([basicExtraction]).size;
-  const defuddleSize = new Blob([defuddleExtraction]).size;
-  const sizeDiff = basicSize - defuddleSize;
+  const readabilitySize = new Blob([readabilityExtraction]).size;
+  const sizeDiff = basicSize - readabilitySize;
   const percentReduction = ((sizeDiff / basicSize) * 100).toFixed(2);
   
   // Find specific examples of removed UI text (these would be navigation items, etc.)
   const findRemovedUIElements = () => {
     // Create sets of words from both texts for comparison
     const basicWords = new Set(basicExtraction.split(/[\s.,;:!?]+/).map(w => w.toLowerCase()).filter(w => w.length > 3));
-    const defuddleWords = new Set(defuddleExtraction.split(/[\s.,;:!?]+/).map(w => w.toLowerCase()).filter(w => w.length > 3));
+    const readabilityWords = new Set(readabilityExtraction.split(/[\s.,;:!?]+/).map(w => w.toLowerCase()).filter(w => w.length > 3));
     
     // Find words that only appear in the basic extraction (likely UI elements)
-    const uiWords = Array.from(basicWords).filter(word => !defuddleWords.has(word)).slice(0, 20);
+    const uiWords = Array.from(basicWords).filter(word => !readabilityWords.has(word)).slice(0, 20);
     
     return uiWords.join(', ');
   };
@@ -53,14 +53,14 @@ export const compareExtractionMethods = () => {
   // Create comparison results
   const comparison = {
     originalLength: basicExtraction.length,
-    defuddleLength: defuddleExtraction.length,
-    charsDifference: basicExtraction.length - defuddleExtraction.length,
+    readabilityLength: readabilityExtraction.length,
+    charsDifference: basicExtraction.length - readabilityExtraction.length,
     percentReduction: `${percentReduction}%`,
     bytesReduction: `${sizeDiff} bytes (${percentReduction}%)`,
     totalElements: allElementsCount,
     uiElements: navigationElements,
     basicSample: basicSampleText.substring(0, 300) + "...",
-    defuddleSample: defuddleExtraction.substring(0, 300) + "...",
+    readabilitySample: readabilityExtraction.substring(0, 300) + "...",
     removedUIElements: removedUIElements
   };
   

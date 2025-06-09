@@ -1001,10 +1001,12 @@ function Content() {
     // Set position for the floating popup based on the TextSelectionButton position
     // Use the selectionBubblePosition to position the popup near the button
     if (settings?.customization?.layoutMode === "floating") {
-      // Adjust position to appear below and to the right of the selection button
-      const adjustedX = selectionBubblePosition.x + 20; // 20px to the right
-      const adjustedY = selectionBubblePosition.y + 40; // 40px below
-      setPosition({ x: adjustedX, y: adjustedY });
+      // Use viewport-aware positioning with actual popup dimensions
+      calculateViewportAwarePosition?.(
+        selectionBubblePosition.x + 20, 
+        selectionBubblePosition.y + 40,
+        { width, height }
+      );
     }
     
     // Hide the selection bubble
@@ -1161,7 +1163,8 @@ function Content() {
     setPosition,
     setIsInteractingWithPopup,
     setIsInputFocused,
-    setSelectedText
+    setSelectedText,
+    calculateViewportAwarePosition
   } = usePopup(
     port, 
     connectionId, 
@@ -1183,6 +1186,18 @@ function Content() {
     setSettings,
     showToast
   });
+
+  // Auto-adjust floating popup position when dimensions change
+  useEffect(() => {
+    if (isVisible && settings?.customization?.layoutMode === "floating") {
+      // Delay the adjustment to ensure the popup has been rendered with new dimensions
+      const adjustmentTimer = setTimeout(() => {
+        calculateViewportAwarePosition?.(position.x, position.y, { width, height });
+      }, 50);
+      
+      return () => clearTimeout(adjustmentTimer);
+    }
+  }, [width, height, isVisible, settings?.customization?.layoutMode, position.x, position.y, calculateViewportAwarePosition]);
 
   // Optimized scroll effect with reduced frequency
   useEffect(() => {
@@ -2103,8 +2118,16 @@ function Content() {
                 zIndex: Z_INDEX.POPUP,
                 pointerEvents: 'none'
               }}
-              initial={settings?.customization?.popupAnimation === "none" ? { opacity: 1 } : { opacity: 0 }}
-              animate={{ opacity: 1 }}
+              initial={settings?.customization?.popupAnimation === "none" ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: 0, y: 0 }}
+              animate={{ 
+                opacity: 1,
+                x: 0, 
+                y: 0,
+                transition: {
+                  duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2,
+                  ease: "easeOut"
+                }
+              }}
               exit={{ opacity: 0 }}
               transition={{ duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2 }}
             >

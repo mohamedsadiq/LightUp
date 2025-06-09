@@ -4,8 +4,8 @@ import { Z_INDEX } from "~utils/constants";
 import { Logo } from "../icons";
 import { Storage } from "@plasmohq/storage";
 import type { Settings } from "~types/settings";
-import getPageContent from "~utils/contentExtractor";
-import debugContentExtraction from "~utils/debugExtraction";
+import { getPageContent } from "~utils/contentExtractor";
+import { debugContentExtraction } from "~utils/debugExtraction";
 
 interface GlobalActionButtonProps {
   onProcess: (text: string) => void;
@@ -73,7 +73,7 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
   }, []);
   
   const handleClick = () => {
-    // Extract the main content using Defuddle-based content extractor with mode-aware optimization
+    // Extract the main content using Readability-based content extractor with mode-aware optimization
     const extractedContent = getPageContent(mode);
     
     // Check if debug mode is enabled
@@ -145,7 +145,7 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
           position: "fixed",
           bottom: "80px", // Positioned higher on the page
           right: "20px",
-          zIndex: Z_INDEX.POPUP,
+          zIndex: Z_INDEX.GLOBAL_BUTTON,
         }}
         aria-label={getAriaLabel()}
       >

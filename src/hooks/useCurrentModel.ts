@@ -42,7 +42,7 @@ export const useCurrentModel = () => {
       
         setCurrentModel(getModelDisplay(settings))
       } catch (error) {
-        console.error("[useCurrentModel] Error loading settings:", error)
+        // console.error("[useCurrentModel] Error loading settings:", error)
         setCurrentModel("Error")
       }
     }
@@ -53,10 +53,10 @@ export const useCurrentModel = () => {
     const handleSettingsChange = async () => {
       try {
         const settings = await storage.get("settings") as Settings
-        console.log("[useCurrentModel] Settings changed:", settings)
+        // console.log("[useCurrentModel] Settings changed:", settings)
         setCurrentModel(getModelDisplay(settings))
       } catch (error) {
-        console.error("[useCurrentModel] Error handling settings change:", error)
+        // console.error("[useCurrentModel] Error handling settings change:", error)
         setCurrentModel("Error")
       }
     }

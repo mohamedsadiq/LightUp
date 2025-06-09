@@ -4,7 +4,7 @@ This document describes the content extraction system used in the LightUp extens
 
 ## Current Implementation
 
-The current implementation uses a custom content extraction algorithm that follows principles similar to Mozilla's Readability.js. It employs multiple strategies:
+The current implementation uses Mozilla's Readability.js with custom enhancements for mode-aware processing. It employs multiple strategies:
 
 1. **Semantic Content Extraction**:
    - Prioritizes content in semantic HTML5 tags like `<article>`, `<main>`, etc.
@@ -22,60 +22,24 @@ The current implementation uses a custom content extraction algorithm that follo
    - Removes known UI elements from a clone of the document
    - Returns the remaining text
 
-## Upgrading to Mozilla's Readability.js
+## Mozilla Readability.js Implementation
 
-To upgrade to the official Mozilla Readability library:
+The system now uses Mozilla's Readability.js with the following enhancements:
 
-1. Install the required packages:
-   ```bash
-   npm install @mozilla/readability jsdom
-   ```
+### Key Features
 
-2. Modify `contentExtractor.ts` to use Readability:
-   ```typescript
-   import { Readability } from '@mozilla/readability';
+1. **Mode-Aware Processing**: Content extraction is optimized based on the processing mode (summarize, analyze, explain, translate, free)
+2. **Pre-processing**: Documents are cleaned before Readability processing to remove obvious UI elements
+3. **Post-processing**: Content is further refined based on the specific mode requirements
+4. **Fallback System**: Custom extraction methods are used if Readability fails
 
-   // Update the extractWithReadability function as follows:
-   export const extractWithReadability = (doc: Document): string => {
-     try {
-       const reader = new Readability(doc);
-       const article = reader.parse();
-       if (article && article.textContent) {
-         return article.textContent;
-       }
-       
-       // Fall back to our custom implementation if Readability fails
-       return extractMainContent();
-     } catch (error) {
-       console.error("Error using Readability:", error);
-       return extractMainContent();
-     }
-   };
+### Configuration
 
-   // Then update getPageContent to use extractWithReadability:
-   export const getPageContent = (): string => {
-     // Get the page title for context
-     const pageTitle = document.title;
-     
-     // Extract the main content using Readability
-     const docClone = document.cloneNode(true) as Document;
-     const mainContent = extractWithReadability(docClone);
-     
-     // Include the page title for context
-     if (pageTitle) {
-       return `PAGE: ${pageTitle}\n\n${mainContent}`;
-     }
-     
-     return mainContent;
-   };
-   ```
-
-3. Update imports in GlobalActionButton.tsx:
-   ```typescript
-   // Uncomment the Readability imports at the top of the file
-   import { Readability } from '@mozilla/readability';
-   import { JSDOM } from 'jsdom';
-   ```
+The implementation includes mode-specific configurations:
+- **Translate Mode**: Focuses on pure text content, removes structural noise
+- **Analyze Mode**: Preserves data elements and argumentative structure
+- **Explain Mode**: Maintains definitions, examples, and instructional content
+- **Summarize Mode**: Preserves hierarchical structure and key points
 
 ## Additional Enhancements
 

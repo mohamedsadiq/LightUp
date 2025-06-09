@@ -74,6 +74,7 @@ export interface Settings {
     popupAnimation: "none" | "scale" | "fade" | "slide"
     persistHighlight: boolean
     layoutMode: "floating" | "sidebar" | "centered"
+    popupMargin?: number // Distance from viewport edges in floating mode (default: 8px)
     showGlobalActionButton?: boolean // Controls visibility of the Quick View button
     quickView?: boolean // Controls visibility of floating button for instant page content processing
     automaticActivation?: boolean // Show popup automatically when text is selected

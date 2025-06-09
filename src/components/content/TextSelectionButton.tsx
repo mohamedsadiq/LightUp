@@ -217,7 +217,7 @@ const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
   // Base container style (position set directly, only opacity/scale animated)
   const containerStyle: React.CSSProperties = {
     position: 'absolute',
-    zIndex: Z_INDEX.POPUP,
+    zIndex: Z_INDEX.SELECTION_BUTTON,
     pointerEvents: 'auto',
     transform: 'translate(-50%, -100%)', // Center horizontally, position above the selection
   };
@@ -273,7 +273,7 @@ const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
     borderRadius: '12px',
     boxShadow: themeStyles.boxShadow,
     width: '172px',
-    zIndex: Z_INDEX.POPUP,
+    zIndex: Z_INDEX.SELECTION_BUTTON,
     overflow: 'hidden',
     padding: '10px',
   }), [themeStyles.backgroundColor, themeStyles.boxShadow]);

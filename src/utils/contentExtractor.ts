@@ -1,9 +1,9 @@
-import { parse } from 'defuddle';
-import type { ParseOptions } from 'defuddle';
-import { processContent, type ProcessingMode } from './contentProcessor';
+import { Readability } from '@mozilla/readability';
+import type { ProcessingMode } from './contentProcessor';
+import { processContent } from './contentProcessor';
 
 /**
- * Content extractor using Defuddle for high-quality page content extraction.
+ * Content extractor using Mozilla Readability for high-quality page content extraction.
  * This implementation filters out navigation bars, UI chrome elements, and other non-content areas
  * to provide a cleaner reading experience with mode-aware optimization.
  */
@@ -106,20 +106,20 @@ const getModeExtractionConfig = (mode?: string) => {
 };
 
 /**
- * Extract content from a document using Defuddle with mode-aware optimization
+ * Extract content from a document using Mozilla Readability with mode-aware optimization
  * @param doc - Document to extract content from
  * @param mode - The processing mode for optimization
  * @returns Extracted text content optimized for the specific mode
  */
-export const extractWithDefuddle = (doc: Document, mode?: string): string => {
+export const extractWithReadability = (doc: Document, mode?: string): string => {
   try {
     const config = getModeExtractionConfig(mode);
     
-    // Aggressively pre-clean the document to remove obvious UI elements
-    // This helps Defuddle focus on the main content
+    // Create a clean document clone for Readability processing
     const docClone = doc.cloneNode(true) as Document;
     
-    // First pass: Remove obvious UI elements before Defuddle processing
+    // Pre-process document to enhance Readability's effectiveness
+    // Remove obvious UI elements before Readability processing
     const elementsToRemove = [
       // Navigation and header elements
       'nav', 'header', 'footer', 'aside', 
@@ -158,7 +158,7 @@ export const extractWithDefuddle = (doc: Document, mode?: string): string => {
       });
     }
     
-    // Also remove elements with common roles that are typically UI elements
+    // Remove elements with common roles that are typically UI elements
     const uiRoles = ['navigation', 'banner', 'contentinfo', 'complementary'];
     uiRoles.forEach(role => {
       try {
@@ -169,81 +169,43 @@ export const extractWithDefuddle = (doc: Document, mode?: string): string => {
       }
     });
     
-    // Convert pre-cleaned document to string for Defuddle
-    const docHtml = new XMLSerializer().serializeToString(docClone);
+    // Use Mozilla Readability to extract the main content
+    const reader = new Readability(docClone, {
+      // Configure Readability based on mode requirements
+      debug: false, // Set to true for debugging
+      maxElemsToParse: config.preserveStructure ? 5000 : 3000,
+      nbTopCandidates: 10,
+      charThreshold: mode === 'translate' ? 100 : 500,
+      classesToPreserve: ['data-lightup-important'],
+      keepClasses: config.preserveStructure,
+      serializer: (el: Element) => el.innerHTML
+    });
     
-    // Parse options for Defuddle - use mode-specific configuration
-    const options: ParseOptions = {
-      // Returns plain text by default (not markdown) unless structure is needed
-      markdown: config.preserveStructure,
-      
-      // Mode-specific options for better content extraction
-      includeTitle: config.includeTitle,
-      includeHeadings: config.includeHeadings,
-      
-      // Advanced options for better content quality
-      removeDataAttributes: config.removeDataAttributes,
-      removeEmptyNodes: config.removeEmptyNodes,
-      
-      // Enhanced selector list with mode-specific optimizations
-      removeNodesBySelector: [
-        // Core UI elements that should always be removed
-        'nav', 'header', 'footer', 'aside', 
-        '.nav', '.navbar', '.menu', '.sidebar', '.advertisement', 
-        '.cookie', '.popup', '.modal', '.dialog', '.tooltip',
-        '#navigation', '#nav', '#menu', '#header', '#footer', '#sidebar',
-        '[class*="navigation"]', '[class*="header"]', '[class*="footer"]',
-        '[class*="sidebar"]', '[class*="menu"]', '[class*="navbar"]',
-        '[id*="navigation"]', '[id*="header"]', '[id*="footer"]',
-        '[id*="sidebar"]', '[id*="menu"]', '[id*="navbar"]',
-        
-        // Additional mode-specific removals
-        ...(mode === 'translate' ? [
-          '.share-buttons', '.social-media', '.comments-section',
-          '.related-articles', '.tags', '.categories'
-        ] : []),
-        
-        ...(mode === 'analyze' ? [
-          '.author-bio', '.related-posts', '.newsletter-signup'
-        ] : []),
-        
-        ...(mode === 'explain' ? [
-          '.share-buttons', '.social-media', '.author-info'
-        ] : [])
-      ]
-    };
-    
-    // Parse document with Defuddle
-    const result = parse(docHtml, options);
+    const article = reader.parse();
     
     // Store debug info in window object for comparing results
     (window as any).__lightupExtraction = {
-      usingDefuddle: true,
-      defuddleResult: result,
+      usingReadability: true,
+      readabilityResult: article,
       mode: mode,
       config: config
     };
     
-    // Get the most appropriate content field
-    // Defuddle might return different properties based on version
+    // Extract content from Readability result
     let extractedContent = '';
     
-    if (result) {
-      // Check various possible content fields
-      if (typeof result.content === 'string') {
-        extractedContent = result.content;
-      } else if (typeof result.text === 'string') {
-        extractedContent = result.text;
-      } else if (typeof result.markdown === 'string') {
-        extractedContent = result.markdown;
+    if (article) {
+      // Use textContent for clean text extraction
+      extractedContent = article.textContent || '';
+      
+      // Add title if available and configured
+      if (article.title && config.includeTitle) {
+        extractedContent = `${article.title}\n\n${extractedContent}`;
       }
       
-      // Add title and excerpt if available and content was found
-      if (extractedContent && result.title && config.includeTitle) {
-        extractedContent = `${result.title}\n\n${extractedContent}`;
-      } else if (result.title && result.excerpt && config.includeTitle) {
-        // If no content but we have title and excerpt
-        extractedContent = `${result.title}\n\n${result.excerpt}`;
+      // Add excerpt if available and no main content
+      if (!extractedContent.trim() && article.excerpt) {
+        extractedContent = article.excerpt;
       }
     }
     
@@ -252,15 +214,15 @@ export const extractWithDefuddle = (doc: Document, mode?: string): string => {
       extractedContent = postProcessContent(extractedContent, mode);
       
       // Log success with mode info
-      console.log(`🔍 Defuddle successfully extracted content for ${mode || 'default'} mode`);
+      console.log(`🔍 Readability successfully extracted content for ${mode || 'default'} mode`);
       return extractedContent;
     }
     
-    // Fallback to our own extraction if Defuddle returned nothing useful
-    console.log(`⚠️ Defuddle failed to extract content for ${mode || 'default'} mode, using fallback extraction`);
+    // Fallback to our own extraction if Readability returned nothing useful
+    console.log(`⚠️ Readability failed to extract content for ${mode || 'default'} mode, using fallback extraction`);
     return fallbackExtraction(docClone, mode);
   } catch (error) {
-    console.error("Error using Defuddle:", error);
+    console.error("Error using Readability:", error);
     return fallbackExtraction(doc, mode);
   }
 };
@@ -321,7 +283,7 @@ const postProcessContent = (content: string, mode?: string): string => {
 };
 
 /**
- * Fallback content extraction when Defuddle fails
+ * Fallback content extraction when Readability fails
  * @param doc - Document to extract content from
  * @param mode - Processing mode for optimization
  * @returns Extracted text content
@@ -356,8 +318,8 @@ const getPageContent = (mode?: string): string => {
   // Get the page title for context
   const pageTitle = document.title;
   
-  // Extract the main content using Defuddle with mode-aware optimization
-  let mainContent = extractWithDefuddle(document, mode);
+  // Extract the main content using Readability with mode-aware optimization
+  let mainContent = extractWithReadability(document, mode);
   
   // Apply advanced content processing if mode is specified
   if (mode && ['explain', 'summarize', 'analyze', 'translate', 'free'].includes(mode)) {

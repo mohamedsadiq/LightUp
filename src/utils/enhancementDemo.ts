@@ -12,13 +12,13 @@ interface QualityImprovement {
 }
 
 export const qualityImprovements: QualityImprovement[] = [
-  // Summarize enhancements (already had defuddle)
+  // Summarize enhancements (now using Readability)
   {
     feature: "Content Extraction",
     mode: "summarize",
     impact: "high",
     before: "Uses basic text extraction, includes navigation elements, ads, and UI components",
-    after: "Uses enhanced defuddle extraction with mode-specific filtering to remove UI elements and focus on main content"
+    after: "Uses enhanced Mozilla Readability extraction with mode-specific filtering to remove UI elements and focus on main content"
   },
   
   // Analyze enhancements (NEW)
@@ -27,7 +27,7 @@ export const qualityImprovements: QualityImprovement[] = [
     mode: "analyze",
     impact: "high",
     before: "Basic text extraction without context awareness",
-    after: "Mode-aware defuddle extraction that preserves data elements, statistics, and argumentative structure essential for analysis"
+    after: "Mode-aware Readability extraction that preserves data elements, statistics, and argumentative structure essential for analysis"
   },
   {
     feature: "System Prompt",

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { calculatePosition } from '../utils/position';
+import { calculatePosition, calculateFloatingPosition } from '../utils/position';
 import { Storage } from "@plasmohq/storage";
 import type { Mode, Settings } from '~types/settings';
 import { getHighlightColor } from '~utils/highlight';
@@ -33,6 +33,7 @@ interface UsePopupReturn {
   setIsInteractingWithPopup: React.Dispatch<React.SetStateAction<boolean>>;
   setIsInputFocused: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedText: React.Dispatch<React.SetStateAction<string>>;
+  calculateViewportAwarePosition: (clientX: number, clientY: number, dimensions?: { width: number; height: number }) => void;
 }
 
 export const usePopup = (
@@ -159,11 +160,21 @@ export const usePopup = (
       setFollowUpQAs?.([]);
       setError?.(null);
 
-      // Calculate position and show popup
-      // We pass the mouse position, but the calculatePosition function will
-      // prioritize using the selection's bounding rectangle when available
-      const { top, left } = calculatePosition(event.clientX, event.clientY);
-      setPosition({ x: left, y: top });
+      // Calculate position and show popup for floating mode
+      // Use enhanced positioning for floating mode, fallback to legacy for others
+      if (settings?.customization?.layoutMode === "floating") {
+        const { top, left } = calculateFloatingPosition(
+          event.clientX, 
+          event.clientY, 
+          { width: 350, height: 460 }, // Default dimensions, will be updated by content component
+          { margin: settings?.customization?.popupMargin || 8 }
+        );
+        setPosition({ x: left, y: top });
+      } else {
+        // Legacy positioning for sidebar and centered modes
+        const { top, left } = calculatePosition(event.clientX, event.clientY);
+        setPosition({ x: left, y: top });
+      }
       setSelectedText(text);
       setIsVisible(true);
       setIsLoading?.(true);
@@ -253,12 +264,22 @@ export const usePopup = (
       setError?.(null);
 
       // Calculate position based on mouse position or center of screen if not available
-      // The calculatePosition function will prioritize using the selection's bounding rectangle when available
+      // Use enhanced positioning for floating mode
       const mouseX = event.detail?.x || window.innerWidth / 2;
       const mouseY = event.detail?.y || window.innerHeight / 2;
-      const { top, left } = calculatePosition(mouseX, mouseY);
       
-      setPosition({ x: left, y: top });
+      if (settings?.customization?.layoutMode === "floating") {
+        const { top, left } = calculateFloatingPosition(
+          mouseX, 
+          mouseY, 
+          { width: 350, height: 460 },
+          { margin: settings?.customization?.popupMargin || 8 }
+        );
+        setPosition({ x: left, y: top });
+      } else {
+        const { top, left } = calculatePosition(mouseX, mouseY);
+        setPosition({ x: left, y: top });
+      }
       setSelectedText(text);
       setIsVisible(true);
       setIsLoading?.(true);
@@ -371,8 +392,18 @@ export const usePopup = (
       } else {
         // Default floating mode - position near the center
         // For free mode, we don't have a selection, so this will use the fallback positioning
-        const { top, left } = calculatePosition(window.innerWidth / 2, window.innerHeight / 2);
-        setPosition({ x: left, y: top });
+        if (settings?.customization?.layoutMode === "floating") {
+          const { top, left } = calculateFloatingPosition(
+            window.innerWidth / 2, 
+            window.innerHeight / 2,
+            { width: 350, height: 460 },
+            { margin: settings?.customization?.popupMargin || 8 }
+          );
+          setPosition({ x: left, y: top });
+        } else {
+          const { top, left } = calculatePosition(window.innerWidth / 2, window.innerHeight / 2);
+          setPosition({ x: left, y: top });
+        }
       }
       
       // Show the popup
@@ -432,6 +463,22 @@ export const usePopup = (
       });
     }
   }, [isVisible, port]);
+
+  const calculateViewportAwarePosition = (clientX: number, clientY: number, dimensions = { width: 350, height: 460 }) => {
+    if (settings?.customization?.layoutMode === "floating") {
+      const { top, left } = calculateFloatingPosition(
+        clientX, 
+        clientY, 
+        dimensions,
+        { margin: settings?.customization?.popupMargin || 8 }
+      );
+      setPosition({ x: left, y: top });
+    } else {
+      // Legacy positioning for other modes
+      const { top, left } = calculatePosition(clientX, clientY);
+      setPosition({ x: left, y: top });
+    }
+  };
 
   const handleModeChange = async (newMode: Mode, translationSettings?: any) => {
     setMode(newMode);
@@ -502,6 +549,7 @@ export const usePopup = (
     setPosition,
     setIsInteractingWithPopup,
     setIsInputFocused,
-    setSelectedText
+    setSelectedText,
+    calculateViewportAwarePosition
   };
 }; 

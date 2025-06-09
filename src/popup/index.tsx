@@ -1600,6 +1600,32 @@ const IndexPopup = () => {
                   
                   <SectionDivider />
                   
+                  {(settings?.customization?.layoutMode || 'floating') === 'floating' && (
+                    <>
+                      <FormRow>
+                        <div>
+                          <Label>Popup Margin</Label>
+                          <Description>Distance from viewport edges in floating mode</Description>
+                        </div>
+                        <Select 
+                          value={settings?.customization?.popupMargin || '8'} 
+                          onChange={(e) => updateSettings('popupMargin', parseInt(e.target.value))}
+                          style={{ width: '120px' }}
+                        >
+                          <option value="4">4px</option>
+                          <option value="8">8px</option>
+                          <option value="12">12px</option>
+                          <option value="16">16px</option>
+                          <option value="20">20px</option>
+                          <option value="24">24px</option>
+                        </Select>
+                      </FormRow>
+                      
+                      <SectionDivider />
+                    </>
+                  )}
+                  
+                  
                   <FormRow>
                     <div>
                       <Label>Radical Focus Mode</Label>
