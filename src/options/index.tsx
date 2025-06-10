@@ -1173,7 +1173,8 @@ function IndexOptions() {
               contextAwareness: savedSettings.customization?.contextAwareness ?? false,
               activationMode: savedSettings.customization?.activationMode ?? "manual",
               enablePDFSupport: savedSettings.customization?.enablePDFSupport ?? false,
-              showTextSelectionButton: savedSettings.customization?.showTextSelectionButton ?? true
+              showTextSelectionButton: savedSettings.customization?.showTextSelectionButton ?? true,
+              showWebsiteInfo: savedSettings.customization?.showWebsiteInfo ?? true
             }
           };
           setSettings(loadedSettings);
@@ -1625,6 +1626,23 @@ function IndexOptions() {
                            type="checkbox" 
                            checked={settings.customization?.showSelectedText}
                            onChange={(e) => handleImmediateSettingUpdate('showSelectedText', e.target.checked)}
+                         />
+                         <ToggleSlider />
+                       </ToggleContainer>
+                     </FormRow>
+                     
+                     <SectionDivider />
+                     
+                     <FormRow>
+                       <div>
+                         <Label>Show Website Info</Label>
+                         <Description>Display website favicon and title in the popup for context</Description>
+                       </div>
+                       <ToggleContainer>
+                         <ToggleInput 
+                           type="checkbox" 
+                           checked={settings.customization?.showWebsiteInfo !== false}
+                           onChange={(e) => handleImmediateSettingUpdate('showWebsiteInfo', e.target.checked)}
                          />
                          <ToggleSlider />
                        </ToggleContainer>

@@ -46,7 +46,8 @@ const DEFAULT_SETTINGS: Settings = {
     activationMode: "manual",
     enablePDFSupport: false,
     showTextSelectionButton: true,
-    automaticActivation: false
+    automaticActivation: false,
+    showWebsiteInfo: true
   }
 }
 

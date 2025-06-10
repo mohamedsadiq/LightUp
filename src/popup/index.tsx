@@ -1183,7 +1183,22 @@ const IndexPopup = () => {
                   </ToggleContainer>
                 </FormRow>
                 
-               
+                <SectionDivider />
+                
+                <FormRow>
+                  <div>
+                    <Label>Show Website Info</Label>
+                    <Description>Display website favicon and title in the results</Description>
+                  </div>
+                  <ToggleContainer>
+                    <ToggleInput 
+                      type="checkbox" 
+                      checked={settings?.customization?.showWebsiteInfo !== false}
+                      onChange={(e) => updateSettings('showWebsiteInfo', e.target.checked)}
+                    />
+                    <ToggleSlider />
+                  </ToggleContainer>
+                </FormRow>
                 
                 <SectionDivider />
                 

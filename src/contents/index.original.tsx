@@ -662,7 +662,6 @@ const FollowUpInput = React.memo(({
     display: 'block' as const,
     transition: 'opacity 0.2s ease, height 0.1s ease',
     fontSize: '1rem',
-    textAlign: 'left' as const,
   }), [themedStyles.input, isAskingFollowUp, INITIAL_HEIGHT, fontSizes]);
 
   const containerStyle = useMemo(() => ({
@@ -792,7 +791,7 @@ const FollowUpInput = React.memo(({
           autoCorrect="off"
           autoCapitalize="off"
           inputMode="text"
-          className="lu-optimized-textarea lu-centered-placeholder"
+          className="lu-optimized-textarea"
         />
         <motion.button
           onClick={handleAskFollowUpWrapper}

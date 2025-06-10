@@ -191,6 +191,9 @@ const getDefaultSettings = (): Settings => ({
     persistHighlight: false,
     layoutMode: "sidebar",
     showGlobalActionButton: true,
-    activationMode: "manual"  // Changed default from automatic to manual
+    activationMode: "manual",  // Changed default from automatic to manual
+    enablePDFSupport: false,
+    showTextSelectionButton: true,
+    showWebsiteInfo: true
   }
 }) 

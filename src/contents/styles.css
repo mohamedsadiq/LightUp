@@ -440,6 +440,11 @@
   transition: height 0.1s ease-out;
 }
 
+/* Center placeholder text horizontally while keeping typed text left-aligned */
+.lu-centered-placeholder::placeholder {
+  text-align: center;
+}
+
 /* Reduce paint operations for better performance */
 .lu-search-container {
   contain: layout style;

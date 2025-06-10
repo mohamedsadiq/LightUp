@@ -239,6 +239,7 @@ export const getStyles = (
     borderLeft: `1px solid ${THEME_COLORS[theme].border}`,
     boxShadow: "-2px 0 20px rgba(0,0,0,0.15)",
     padding: 20,
+    paddingBottom: 0,
     fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     overflow: 'auto',
     fontSize: fontSizes.base,

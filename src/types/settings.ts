@@ -82,6 +82,7 @@ export interface Settings {
     activationMode?: "automatic" | "manual" // Controls whether popup shows automatically or requires context menu
     enablePDFSupport: boolean
     showTextSelectionButton: boolean // Controls visibility of the text selection button
+    showWebsiteInfo?: boolean // Controls visibility of website info (favicon and title)
   }
   translationSettings?: {
     fromLanguage: string
