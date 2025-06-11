@@ -440,9 +440,10 @@
   transition: height 0.1s ease-out;
 }
 
-/* Center placeholder text horizontally while keeping typed text left-aligned */
+/* Center placeholder text vertically while keeping typed text left-aligned */
 .lu-centered-placeholder::placeholder {
-  text-align: center;
+  line-height: 20px;
+  vertical-align: middle;
 }
 
 /* Reduce paint operations for better performance */

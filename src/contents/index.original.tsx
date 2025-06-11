@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from "react"
 import type { PlasmoCSConfig } from "plasmo"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, px } from "framer-motion"
 import type { MotionStyle } from "framer-motion"
 import type { CSSProperties } from "react"
 import MarkdownText from "../components/content/MarkdownText"
@@ -1664,6 +1664,8 @@ function Content() {
         <WebsiteInfoComponent
           currentTheme={normalizedTheme}
           fontSizes={fontSizes}
+          selectedText={streamingText || selectedText}
+          loading={isLoading}
         />
       )}
 
@@ -2284,7 +2286,8 @@ function Content() {
                     scrollBehavior: 'smooth',
                     pointerEvents: 'auto',
                     display: 'flex',
-                    flexDirection: 'column'
+                    flexDirection: 'column',
+                    padding: '0 18px'
                   }}
                   data-plasmo-popup
                   className="lu-no-select"

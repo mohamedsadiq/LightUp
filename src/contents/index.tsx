@@ -37,7 +37,7 @@ import {
 } from "~styles/motionStyles"
 import type { Theme } from "~types/theme"
 import { applyHighlightColor } from "~utils/highlight"
-import { calculatePosition } from "~utils/position"
+import { calculatePosition, needsRepositioning } from "~utils/position"
 import { Storage } from "@plasmohq/storage"
 import { Z_INDEX } from "~utils/constants"
 import { THEME_COLORS } from "~utils/constants"
@@ -623,6 +623,29 @@ const answerBubbleStyle: MotionStyle = {
   lineHeight: '13px'
 };
 
+// NEW – springy slide-in variants for the Q&A bubbles
+const questionBubbleVariants = {
+  initial: { x: 60, opacity: 0, scale: 0.95 },
+  animate: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: { type: "spring", stiffness: 250, damping: 20 }
+  },
+  exit: { x: 60, opacity: 0, scale: 0.95 }
+};
+
+const answerBubbleVariants = {
+  initial: { x: -60, opacity: 0, scale: 0.95 },
+  animate: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: { type: "spring", stiffness: 250, damping: 22, delay: 0.15 }
+  },
+  exit: { x: -60, opacity: 0, scale: 0.95 }
+};
+
 // Add this near the top of the file, after imports
 interface FollowUpInputProps {
   inputRef: React.RefObject<HTMLTextAreaElement>;
@@ -658,7 +681,7 @@ const FollowUpInput = React.memo(({
     resize: 'none' as const,
     height: `21.2px`,
     lineHeight: "20px",
-    padding: '0 8px',
+    padding: '1px 8px',
     display: 'block' as const,
     transition: 'opacity 0.2s ease, height 0.1s ease',
     fontSize: '1rem',
@@ -668,6 +691,7 @@ const FollowUpInput = React.memo(({
   const containerStyle = useMemo(() => ({
     ...themedStyles.followUpInputContainer,
     marginTop: '8px',
+    marginBottom: '16px',
     paddingTop: '8px',
   }), [themedStyles.followUpInputContainer]);
 
@@ -865,26 +889,6 @@ function Content() {
     isVisible: isSelectionBubbleVisible,
     setIsVisible: setIsSelectionBubbleVisible
   } = useTextSelection();
-
-  // This section will be moved after state variables are declared
-
-  // Add effect to ensure visibility on Reddit
-  useEffect(() => {
-    if (isReddit) {
-      const ensureVisibility = () => {
-        const popupElement = document.querySelector('[data-plasmo-popup]');
-        if (popupElement instanceof HTMLElement) {
-          popupElement.style.visibility = 'visible';
-        }
-      };
-      
-      // Apply immediately and after a short delay to ensure it works
-      ensureVisibility();
-      const timeoutId = setTimeout(ensureVisibility, 100);
-      
-      return () => clearTimeout(timeoutId);
-    }
-  }, []);
 
   // Initialize all our hooks
   const { width, height, handleResizeStart } = useResizable({
@@ -1151,6 +1155,59 @@ function Content() {
     }
   );
 
+  // Track request id to reset progress animation
+  const [requestId, setRequestId] = useState(0);
+
+  // Increment when a new loading cycle starts
+  useEffect(() => {
+    if (isLoading && streamingText === "") {
+      setRequestId((prev) => prev + 1);
+    }
+  }, [isLoading, streamingText]);
+
+  // -------- Progress for AI streaming --------
+   const currentWordCount = useMemo(() => {
+     if (!streamingText) return 0;
+     return streamingText.trim().split(/\s+/).filter(Boolean).length;
+   }, [streamingText]);
+ 
+  // ----- Time-based fallback progress so the bar moves right away -----
+  const [fallbackProgress, setFallbackProgress] = useState(0);
+  const [hasFallbackStarted, setHasFallbackStarted] = useState(false);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout | undefined;
+
+    if (isLoading) {
+      // New request → reset to 0
+      setFallbackProgress(0);
+      setHasFallbackStarted(false);
+
+      timer = setInterval(() => {
+        setFallbackProgress(prev => {
+          const next = Math.min(prev + 0.01, 0.85); // advance ~1 % every 120 ms
+          if (!hasFallbackStarted) setHasFallbackStarted(true);
+          if (next >= 0.85 && timer) clearInterval(timer); // stop at 85 %
+          return next;
+        });
+      }, 120);
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+      if (!isLoading) {
+        setHasFallbackStarted(false);
+      }
+    };
+  }, [isLoading, requestId]);
+
+  // Jump to 100 % as soon as any text has streamed or when loading finishes
+  const progress = (!isLoading || streamingText !== "")
+    ? 1
+    : hasFallbackStarted
+      ? fallbackProgress
+      : 0;
+ 
   const {
     isVisible,
     position,
@@ -1194,7 +1251,23 @@ function Content() {
     if (isVisible && settings?.customization?.layoutMode === "floating") {
       // Delay the adjustment to ensure the popup has been rendered with new dimensions
       const adjustmentTimer = setTimeout(() => {
-        calculateViewportAwarePosition?.(position.x, position.y, { width, height });
+        // Check if the current popup rectangle still fits in the viewport. If it
+        // does, skip repositioning to avoid jitter when focusing / clicking.
+        const margin = settings?.customization?.popupMargin || 8;
+        const requiresReposition = needsRepositioning(
+          { left: position.x, top: position.y },
+          { width, height },
+          margin
+        );
+
+        if (!requiresReposition) return;
+
+        // Convert absolute co-ordinates back to viewport-relative before calling
+        // the viewport-aware helper (it expects clientX / clientY values).
+        const clientX = position.x - window.scrollX;
+        const clientY = position.y - window.scrollY;
+
+        calculateViewportAwarePosition?.(clientX, clientY, { width, height });
       }, 50);
       
       return () => clearTimeout(adjustmentTimer);
@@ -1665,6 +1738,10 @@ function Content() {
         <WebsiteInfoComponent
           currentTheme={normalizedTheme}
           fontSizes={fontSizes}
+          selectedText={streamingText || selectedText}
+          loading={isLoading}
+          progress={progress}
+          requestId={requestId}
         />
       )}
 
@@ -2243,6 +2320,7 @@ function Content() {
                 flex: 1,
                 overflow: 'auto',
                 minHeight: 0,
+                paddingTop: 0,
                 WebkitOverflowScrolling: 'touch',
                 transform: 'translateZ(0)' // Force hardware acceleration
               }}>
@@ -2750,6 +2828,7 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
   return (
     <motion.div
       key={id}
+      layout="position"
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ 
         opacity: 1, 
@@ -2766,17 +2845,10 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
     >
       {/* Question bubble */}
       <motion.div
-        initial={{ x: 20, opacity: 0 }}
-        animate={{ 
-          x: 0, 
-          opacity: 1,
-          transition: {
-            type: "spring",
-            stiffness: 120,
-            damping: 20,
-            delay: 0.1
-          }
-        }}
+        variants={questionBubbleVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
         style={questionBubbleStyle}
       >
         <div style={{
@@ -2791,17 +2863,10 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
       <motion.div
         ref={answerRef}
         id={`qa-answer-${id}`}
-        initial={{ x: -20, opacity: 0 }}
-        animate={{ 
-          x: 0, 
-          opacity: 1,
-          transition: {
-            type: "spring",
-            stiffness: 120,
-            damping: 20,
-            delay: 0.2
-          }
-        }}
+        variants={answerBubbleVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
         style={answerBubbleStyle}
       >
         <div style={{

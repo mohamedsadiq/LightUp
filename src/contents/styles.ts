@@ -40,7 +40,9 @@ export const getStyles = (
     fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     maxHeight: "400px",
     overflow: "auto",
-    fontSize: fontSizes.base
+    fontSize: fontSizes.base,
+    paddingTop: 0,
+    paddingBottom: 0
   },
   buttonContainer: {
     height: "fit-content",
@@ -52,7 +54,8 @@ export const getStyles = (
     justifyContent: "space-between",
     alignItems: "center",
     gap: "8px",
-    marginBottom: 23
+    marginBottom: 23,
+    paddingTop: 18
   },
   button: {
     width: 19,
@@ -240,6 +243,7 @@ export const getStyles = (
     boxShadow: "-2px 0 20px rgba(0,0,0,0.15)",
     padding: 20,
     paddingBottom: 0,
+    paddingTop: 0,
     fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     overflow: 'auto',
     fontSize: fontSizes.base,
@@ -275,7 +279,7 @@ export const getStyles = (
     background: THEME_COLORS[theme].background,
     border: `1px solid ${THEME_COLORS[theme].border}`,
     boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
-    padding: 25,
+    padding: '0 25px',
     fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     overflow: 'auto',
     fontSize: fontSizes.base,

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import type { WebsiteInfo } from "~utils/websiteInfo";
 import { getWebsiteInfo, isValidFavicon } from "~utils/websiteInfo";
 
@@ -11,14 +11,45 @@ interface WebsiteInfoProps {
     md: string;
     [key: string]: any;
   };
+  selectedText?: string;
+  loading?: boolean;
+  progress?: number;
+  requestId?: number;
 }
 
 const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
   currentTheme,
-  fontSizes
+  fontSizes,
+  selectedText = "",
+  loading = false,
+  progress,
+  requestId = 0
 }) => {
   const [websiteInfo, setWebsiteInfo] = useState<WebsiteInfo | null>(null);
   const [faviconValid, setFaviconValid] = useState<boolean>(true);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isHover, setIsHover] = useState(false);
+
+  const { wordCount, readTimeLabel } = React.useMemo(() => {
+    if (!selectedText) return { wordCount: 0, readTimeLabel: '<1 min' };
+
+    // Strip markdown and code fences to avoid counting symbols
+    const clean = selectedText
+      .replace(/```[\s\S]*?```/g, ' ')       // remove triple-backtick blocks
+      .replace(/`[^`]*`/g, ' ')               // inline code
+      .replace(/[#>*_\-]+/g, ' ')            // markdown bullets, headings, emphasis
+      .replace(/\[(.*?)\]\((.*?)\)/g, '$1') // markdown links keep label
+      .replace(/[\u2019’]/g, "'")          // normalize apostrophes
+      .replace(/[^\p{L}\p{N}\s]+/gu, ' ')  // drop symbols (unicode letters/numbers)
+      .replace(/\s+/g, ' ')                  // collapse spaces
+      .trim();
+
+    const words = clean ? clean.split(' ').length : 0;
+    const minutes = words / 200; // avg reading speed
+    const label = minutes < 0.5 ? 'Less than 1 min' : `${Math.round(minutes)} min`;
+
+    return { wordCount: words, readTimeLabel: `${label} read` };
+  }, [selectedText]);
 
   useEffect(() => {
     const info = getWebsiteInfo();
@@ -26,6 +57,10 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
 
     // Check if favicon is valid
     isValidFavicon(info.favicon).then(setFaviconValid);
+
+    // Simulate minimal delay for graceful entrance (spatial continuity)
+    const timer = setTimeout(() => setIsLoaded(true), 280); // ~0.28s feels instant yet allows anim
+    return () => clearTimeout(timer);
   }, []);
 
   if (!websiteInfo) return null;
@@ -46,6 +81,7 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
     marginBottom: '13px',
     fontSize: fontSizes.sm,
     color: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+    position: 'relative',
   };
 
   const faviconStyle: React.CSSProperties = {
@@ -69,13 +105,84 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
     marginLeft: '4px',
   };
 
+  // Skeleton placeholder styles
+  const skeletonStyle: React.CSSProperties = {
+    height: '22px',
+    flex: 1,
+    borderRadius: '4px',
+    background: currentTheme === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+  };
+
   return (
     <motion.div
       style={containerStyle}
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.2 }}
+      transition={{ duration: 0.25 }}
+      onMouseEnter={() => setIsHover(true)}
+      onMouseLeave={() => setIsHover(false)}
+      onFocus={() => setIsHover(true)}
+      onBlur={() => setIsHover(false)}
+      role="group"
+      aria-label="Current page information"
     >
+      {/* Loading progress overlay */}
+      {loading && typeof progress === 'number' ? (
+        <motion.div
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            height: '100%',
+            width: '100%',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            pointerEvents: 'none'
+          }}
+        >
+          <motion.div
+            key={requestId}
+            animate={{ x: `${(1 - (progress ?? 0)) * 100}%` }}
+            transition={{ ease: 'linear', duration: 0.2 }}
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              width: '100%',
+              height: '100%',
+              background: currentTheme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
+            }}
+          />
+        </motion.div>
+      ) : loading && (
+        <motion.div
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            height: '100%',
+            width: '100%',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            pointerEvents: 'none'
+          }}
+        >
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: '-100%' }}
+            transition={{ repeat: Infinity, duration: 2, ease: 'linear' }}
+            style={{
+              position: 'absolute',
+              top: 0,
+              right: 0,
+              width: '100%',
+              height: '100%',
+              background: currentTheme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
+            }}
+          />
+        </motion.div>
+      )}
+
       {/* Favicon */}
       {faviconValid ? (
         <img
@@ -100,13 +207,50 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
       )}
 
       {/* Website title and hostname */}
-      <div style={{ overflow: 'hidden', flex: 1 }}>
-        <div style={textStyle} title={websiteInfo.title}>
-          {truncatedTitle}
-        </div>
-        <div style={hostnameStyle}>
-          {websiteInfo.hostname}
-        </div>
+      <div style={{ flex: 1, minHeight: '38px' }}>
+        {/* Loading placeholder */}
+        {!isLoaded ? (
+          <motion.div
+            style={skeletonStyle}
+            initial={{ opacity: 0.4, filter: 'blur(6px)' }}
+            animate={{ opacity: 0.6, filter: 'blur(6px)' }}
+            transition={{ repeat: Infinity, duration: 1, ease: 'easeInOut' }}
+          />
+        ) : (
+          <AnimatePresence mode="wait" initial={false}>
+            {isHover && wordCount > 0 ? (
+              <motion.div
+                key="stats"
+                initial={{ opacity: 0, filter: 'blur(6px)', y: 10, x: 0,  }}
+                animate={{ opacity: 1, filter: 'blur(0px)', y: 0, x: 0,  }}
+                exit={{ opacity: 0, filter: 'blur(6px)', y: 10, x: 0,  }}
+                transition={{ duration: 0.2, ease: 'easeInOut', filter: {duration:0.1} }}
+                style={{
+                  fontSize: fontSizes.sm,
+                  fontWeight: 500,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}
+              >
+                {wordCount} words
+                <span style={{ fontSize: fontSizes.xs, opacity: 0.7 }}>{readTimeLabel}</span>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="info"
+                initial={{ opacity: 0, filter: 'blur(6px)', y: 10, x: 0, }}
+                animate={{ opacity: 1, filter: 'blur(0px)', y: 0, x: 0,  }}
+                exit={{ opacity: 0, filter: 'blur(6px)', y: 10, x: 0 }}
+                transition={{ duration: 0.2, ease: 'easeInOut', filter: {duration:0.1} }}
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
+              >
+                <span style={textStyle} title={websiteInfo.title}>{truncatedTitle}</span>
+                <span style={hostnameStyle}>{websiteInfo.hostname}</span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
       </div>
     </motion.div>
   );
