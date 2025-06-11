@@ -766,12 +766,16 @@ const createContextMenu = () => {
 // Handle context menu clicks
 chrome.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === "lightup-process-text" && tab?.id) {
-    chrome.tabs.sendMessage(tab.id, {
-      type: "PROCESS_SELECTED_TEXT",
-      selectionText: info.selectionText
-    });
+    requestLoadUI(tab.id)
+    // Delay to allow UI bundle to load, then deliver selection text
+    setTimeout(() => {
+      chrome.tabs.sendMessage(tab.id!, {
+        type: "PROCESS_SELECTED_TEXT",
+        selectionText: info.selectionText
+      })
+    }, 300)
   }
-});
+})
 
 // Listen for extension installation
 chrome.runtime.onInstalled.addListener((details) => {
@@ -787,23 +791,35 @@ chrome.runtime.onInstalled.addListener((details) => {
   }
 });
 
+// Utility to request the content UI to load on-demand
+const requestLoadUI = (tabId: number) => {
+  chrome.tabs.sendMessage(tabId, { type: "LOAD_LIGHTUP_UI" }).catch(() => {
+    /* The loader may not be injected yet (first page load). Since loader is declarative content script, message will be delivered once ready */
+  })
+}
+
+// Handle toolbar (action) click to open LightUp
+chrome.action.onClicked.addListener((tab) => {
+  if (tab.id !== undefined) {
+    requestLoadUI(tab.id)
+  }
+})
+
 // Listen for commands
 chrome.commands.onCommand.addListener((command) => {
   if (command === "open-welcome") {
-    chrome.tabs.create({ url: ONBOARDING_URL });
+    chrome.tabs.create({ url: ONBOARDING_URL })
   } else if (command === "open-free-popup") {
-    // Get the current active tab
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      const activeTab = tabs[0];
-      if (activeTab && activeTab.id) {
-        // Send a message to the content script to open the popup in free mode
-        chrome.tabs.sendMessage(activeTab.id, {
-          type: "OPEN_FREE_POPUP"
-        });
+      const activeTab = tabs[0]
+      if (activeTab?.id) {
+        // Ensure UI is loaded, then request free popup
+        requestLoadUI(activeTab.id)
+        chrome.tabs.sendMessage(activeTab.id, { type: "OPEN_FREE_POPUP" })
       }
-    });
+    })
   }
-});
+})
 
 // Listen for port connections
 chrome.runtime.onConnect.addListener((port) => {

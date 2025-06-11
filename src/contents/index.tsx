@@ -68,6 +68,7 @@ import { useLastResult } from "~hooks/useLastResult"
 import { useCurrentModel } from "~hooks/useCurrentModel"
 import { useConversation } from "~hooks/useConversation"
 import { useMode } from "~hooks/useMode"
+import { createRoot } from "react-dom/client";
 
 // Add optimized debounce utility
 const debounce = <T extends (...args: any[]) => void>(func: T, wait: number): T => {
@@ -366,9 +367,7 @@ export const getStyle = () => {
 }
 
 // Plasmo config
-export const config: PlasmoCSConfig = {
-  matches: ["<all_urls>", "*://*/*.pdf"]
-}
+export const config: PlasmoCSConfig = {}
 
 // Add a specific fix for Reddit's CSS that hides custom elements
 const isReddit = window.location.hostname.includes('reddit.com');
@@ -2786,44 +2785,49 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
     }
   }, [activeAnswerId, id, isComplete, answer]);
 
+  // --------------------------------------------------
+  // Unified scroll effect – triggers once answer is complete
+  // --------------------------------------------------
   useEffect(() => {
-    if (isComplete && answerRef.current && popupRef.current) {
-      const scrollContainer = popupRef.current.querySelector('.lu-scroll-container') as HTMLElement;
-      if (!scrollContainer) return;
+    if (!isComplete || !answerRef.current || !popupRef.current) return;
 
-      const performScroll = () => {
-        const containerRect = scrollContainer.getBoundingClientRect();
-        const answerRect = answerRef.current.getBoundingClientRect();
-        
-        // Check if the answer's top is already visible
-        const isTopVisible = answerRect.top >= containerRect.top;
-        const isBottomVisible = answerRect.bottom <= containerRect.bottom;
+    const scrollContainer = popupRef.current.querySelector('.lu-scroll-container') as HTMLElement | null;
+    if (!scrollContainer) return;
 
-        // If the entire answer is already visible, don't scroll
-        if(isTopVisible && isBottomVisible) return;
+    const topPadding = 16; // px to leave above the answer
 
-        // If the answer is shorter than the container, scroll to the bottom to reveal the input
-        if (answerRect.height < containerRect.height - 120) { 
-          scrollContainer.scrollTo({
-            top: scrollContainer.scrollHeight,
-            behavior: 'smooth'
-          });
-        } else {
-          // If the answer is tall, scroll to its top with some padding
-          const offset = answerRect.top - containerRect.top;
-          const scrollTop = scrollContainer.scrollTop + offset;
-          const topPadding = 20; 
-          scrollContainer.scrollTo({
-            top: scrollTop - topPadding,
-            behavior: 'smooth'
-          });
-        }
-      };
-      // Use a small timeout to ensure the DOM has updated with the final answer height
-      setTimeout(performScroll, 100);
-    }
-  }, [isComplete, answer, popupRef]);
+    const scrollIfNeeded = () => {
+      if (!answerRef.current) return;
 
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const answerRect   = answerRef.current.getBoundingClientRect();
+
+      // If the answer's top is above visible area OR below 40 % of viewport -> scroll
+      const upperComfort = containerRect.top + containerRect.height * 0.4;
+      const needsScroll  = answerRect.top < containerRect.top + topPadding || answerRect.top > upperComfort;
+
+      if (needsScroll) {
+        const offsetWithinContainer = answerRect.top - containerRect.top; // px between top edges
+        const targetScrollTop      = scrollContainer.scrollTop + offsetWithinContainer - topPadding;
+
+        scrollContainer.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
+      }
+    };
+
+    // Initial attempt after paint
+    requestAnimationFrame(scrollIfNeeded);
+
+    // Watch for further growth for ~3 s
+    const ro = new ResizeObserver(scrollIfNeeded);
+    ro.observe(answerRef.current);
+
+    const timeout = setTimeout(() => ro.disconnect(), 3000);
+
+    return () => {
+      ro.disconnect();
+      clearTimeout(timeout);
+    };
+  }, [isComplete]);
 
   return (
     <motion.div
@@ -3090,3 +3094,34 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
     </motion.div>
   )
 });
+
+export const mountLightUp = () => {
+  // Prevent multiple mounts
+  if (document.querySelector('[data-plasmo-popup]')) {
+    return
+  }
+
+  // Host element that will live in the page DOM
+  const host = document.createElement('div')
+  host.setAttribute('data-plasmo-popup', 'true')
+  host.style.all = 'unset'
+
+  // Attach Shadow DOM for style isolation
+  const shadowRoot = host.attachShadow({ mode: 'open' })
+  // Inject extension styles inside the shadowRoot
+  try {
+    shadowRoot.appendChild(getStyle())
+  } catch (err) {
+    console.warn('LightUp: failed to inject styles', err)
+  }
+
+  // Container for React root
+  const container = document.createElement('div')
+  shadowRoot.appendChild(container)
+
+  // Make it visible in the actual document
+  document.body.appendChild(host)
+
+  // Mount React application
+  createRoot(container).render(<Content />)
+}
