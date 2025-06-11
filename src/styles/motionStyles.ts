@@ -29,6 +29,39 @@ export const scaleMotionVariants = {
   }
 };
 
+export const slideMotionVariants = {
+  initial: { 
+    opacity: 0, 
+    y: -20 ,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 10,
+      mass: 0.8
+    }
+  },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 500,
+      damping: 40,
+      mass: 1
+    }
+  },
+  exit: { 
+    opacity: 0, 
+    y: -20,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 10,
+      mass: 0.8
+    }
+  }
+};
+
 export const sidebarScaleMotionVariants = {
   initial: { 
     opacity: 0, 
@@ -49,28 +82,49 @@ export const sidebarScaleMotionVariants = {
 
 export const sidebarSlideMotionVariants = {
   initial: { 
-    opacity: 0,
-    x: 150
+    // opacity: 0,
+    x: 550,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 10,
+      mass: 0.8
+    }
   },
   animate: { 
-    opacity: 1,
-    x: 0
+    // opacity: 1,
+    x: 0,
+    transition: {
+      type: "spring",
+      stiffness: 500,
+      damping: 40,
+      mass: 1
+    }
   },
   exit: { 
-    opacity: 0,
-    x: 150
+    // opacity: 0,
+    x: 550,
+    transition: {
+      type: "spring",
+      stiffness: 400,
+      damping: 40,
+      mass: 1
+    }
   }
 };
 
 export const fadeMotionVariants = {
   initial: { 
-    opacity: 0
+    opacity: 0,
+    
   },
   animate: { 
-    opacity: 1
+    opacity: 1,
+   
   },
   exit: { 
-    opacity: 0
+    opacity: 0,
+  
   }
 };
 

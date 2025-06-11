@@ -187,7 +187,7 @@ const getDefaultSettings = (): Settings => ({
     radicallyFocus: false,
     fontSize: "1rem",
     highlightColor: "default",
-    popupAnimation: "scale",
+    popupAnimation: "slide",
     persistHighlight: false,
     layoutMode: "sidebar",
     showGlobalActionButton: true,

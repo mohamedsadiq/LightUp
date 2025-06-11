@@ -168,7 +168,7 @@ export const PopupModeSelector = ({
         style={styles.container}
         initial={{ scale: 0.5 }}
         animate={{ scale: 1 }}
-        exit={{ scale: 2, opacity: 0 }}
+        exit={{ scale: 1.3, opacity: 0}}
         transition={{
           type: "spring",
           bounce: 0.2,

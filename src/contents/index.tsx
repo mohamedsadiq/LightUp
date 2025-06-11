@@ -29,6 +29,7 @@ import { truncateText } from "~utils/textProcessing"
 import { 
   flexMotionStyle, 
   scaleMotionVariants, 
+  slideMotionVariants,
   fadeMotionVariants, 
   noMotionVariants, 
   toastMotionVariants,
@@ -1852,18 +1853,18 @@ function Content() {
       <AnimatePresence mode="wait">
         {isLoading && !streamingText ? (
           <motion.div 
-            className="skeleton-container skeleton-optimized"
+            // className="skeleton-container skeleton-optimized"
             style={{
               ...flexMotionStyle,
               transform: 'translateZ(0)', // Hardware acceleration
               willChange: 'transform, opacity',
-              contain: 'layout style paint', // Performance optimization
+              // contain: 'layout style paint', // Performance optimization
             }} 
             variants={loadingSkeletonVariants}
             initial="initial"
             animate="animate"
             exit="exit"
-            layout
+            // layout
           >
             <DynamicSkeletonLines 
               currentTheme={normalizedTheme}
@@ -2247,9 +2248,11 @@ function Content() {
                   variants={
                     settings?.customization?.popupAnimation === "scale" 
                       ? scaleMotionVariants 
-                      : settings?.customization?.popupAnimation === "fade"
-                        ? fadeMotionVariants
-                        : noMotionVariants
+                      : settings?.customization?.popupAnimation === "slide"
+                        ? slideMotionVariants
+                        : settings?.customization?.popupAnimation === "fade"
+                          ? fadeMotionVariants
+                          : noMotionVariants
                   }
                 >
                   {/* Popup Content with proper scrolling container */}
@@ -2303,9 +2306,9 @@ function Content() {
               onMouseDown={(e) => e.stopPropagation()}
               onMouseEnter={() => setIsInteractingWithPopup(true)}
               onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-              initial={{ x: 200, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: 200, opacity: 0 }}
+              initial={settings?.customization?.popupAnimation === "none" ? { x: 0, opacity: 1 } : "initial"}
+              animate={settings?.customization?.popupAnimation === "none" ? { x: 0, opacity: 1 } : "animate"}
+              exit={settings?.customization?.popupAnimation === "none" ? { x: 0, opacity: 0 } : "exit"}
               transition={{ 
                 type: settings?.customization?.popupAnimation === "none" ? "tween" : "spring",
                 stiffness: 300,
@@ -2313,6 +2316,15 @@ function Content() {
                 mass: 0.8,
                 duration: settings?.customization?.popupAnimation === "none" ? 0 : undefined
               }}
+              variants={
+                settings?.customization?.popupAnimation === "scale" 
+                  ? sidebarScaleMotionVariants 
+                  : settings?.customization?.popupAnimation === "slide"
+                    ? sidebarSlideMotionVariants
+                    : settings?.customization?.popupAnimation === "fade"
+                      ? fadeMotionVariants
+                      : noMotionVariants
+              }
             >
               {/* Sidebar Popup Content with proper scrolling */}
               <div className="lu-scroll-container" style={{
@@ -2371,10 +2383,22 @@ function Content() {
                   onMouseDown={(e) => e.stopPropagation()}
                   onMouseEnter={() => setIsInteractingWithPopup(true)}
                   onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-                  initial={{ scale: 0.95, opacity: 0, y: 10 }}
-                  animate={{ scale: 1, opacity: 1, y: 0 }}
-                  exit={{ scale: 0.95, opacity: 0, y: 10 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  initial={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "initial"}
+                  animate={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "animate"}
+                  exit={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 0 } : "exit"}
+                  transition={{ 
+                    duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2, 
+                    ease: "easeOut" 
+                  }}
+                  variants={
+                    settings?.customization?.popupAnimation === "scale" 
+                      ? scaleMotionVariants 
+                      : settings?.customization?.popupAnimation === "slide"
+                        ? slideMotionVariants
+                        : settings?.customization?.popupAnimation === "fade"
+                          ? fadeMotionVariants
+                          : noMotionVariants
+                  }
                 >
                   {/* Centered Popup Content with proper scrolling */}
                   <div className="lu-scroll-container" style={{

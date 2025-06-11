@@ -1603,12 +1603,13 @@ const IndexPopup = () => {
                       <Description>Animation when the popup appears</Description>
                     </div>
                     <Select 
-                      value={settings?.customization?.popupAnimation || 'fade'} 
+                      value={settings?.customization?.popupAnimation || 'slide'} 
                       onChange={(e) => updateSettings('popupAnimation', e.target.value)}
                       style={{ width: '120px' }}
                     >
                       <option value="fade">Fade</option>
                       <option value="slide">Slide</option>
+                      <option value="scale">Scale</option>
                       <option value="none">None</option>
                     </Select>
                   </FormRow>

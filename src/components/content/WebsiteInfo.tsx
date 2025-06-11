@@ -75,13 +75,14 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
     alignItems: 'center',
     gap: '8px',
     padding: '7px 10px',
-    backgroundColor: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
+    backgroundColor: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgb(255 255 255 / 28%)',
     borderRadius: '8px',
-    border: `1px solid ${currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)'}`,
+    border: `1px solid ${currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '0000000f'}`,
     marginBottom: '13px',
     fontSize: fontSizes.sm,
     color: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
     position: 'relative',
+    // height: '43px',
   };
 
   const faviconStyle: React.CSSProperties = {
@@ -207,7 +208,7 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
       )}
 
       {/* Website title and hostname */}
-      <div style={{ flex: 1, minHeight: '38px' }}>
+      <div style={{ flex: 1, height: '38px', lineHeight: '18px'}}>
         {/* Loading placeholder */}
         {!isLoaded ? (
           <motion.div

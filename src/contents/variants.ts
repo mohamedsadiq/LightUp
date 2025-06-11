@@ -22,30 +22,14 @@ export const textVariants = {
 
 export const loadingSkeletonVariants = {
   initial: {
-    opacity: 0,
-    scale: 0.98,
-    transform: 'translateZ(0)',
+   y: 100
+ 
   },
   animate: {
-    opacity: 1,
-    scale: 1,
-    transform: 'translateZ(0)',
-    transition: {
-      duration: 0.3,
-      ease: [0.25, 0.46, 0.45, 0.94],
-      staggerChildren: 0.02,
-      delayChildren: 0.05,
-    }
+    y: 0
   },
   exit: {
-    opacity: 0,
-    scale: 0.99,
-    transition: {
-      duration: 0.25,
-      ease: [0.4, 0.0, 0.2, 1],
-      staggerChildren: 0.015,
-      staggerDirection: -1
-    }
+    y: -100
   }
 }
 
@@ -53,7 +37,7 @@ export const skeletonLineVariants = {
   initial: {
     opacity: 0,
     scale: 0.95,
-    y: 8,
+    y: 10,
     rotateX: -5,
     transform: 'translateZ(0)',
   },
