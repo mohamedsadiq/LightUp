@@ -1693,6 +1693,23 @@ function IndexOptions() {
                      
                      <FormRow>
                         <div>
+                          <Label>Context Awareness</Label>
+                          <Description>Use broader page context to improve responses</Description>
+                        </div>
+                        <ToggleContainer>
+                          <ToggleInput 
+                            type="checkbox" 
+                            checked={settings.customization?.contextAwareness}
+                            onChange={(e) => handleImmediateSettingUpdate('contextAwareness', e.target.checked)}
+                          />
+                          <ToggleSlider />
+                        </ToggleContainer>
+                      </FormRow>
+
+                      <SectionDivider />
+
+                      <FormRow>
+                        <div>
                           <Label>Quick View</Label>
                           <Description>Show floating button to instantly process page content</Description>
                         </div>

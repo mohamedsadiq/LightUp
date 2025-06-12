@@ -1292,6 +1292,20 @@ const IndexPopup = () => {
                   </ToggleContainer>
                 </FormRow>
                 
+                <FormRow>
+                  <div>
+                    <Label>Context Awareness</Label>
+                    <Description>Enable deeper page context for better results</Description>
+                  </div>
+                  <ToggleContainer>
+                    <ToggleInput 
+                      type="checkbox" 
+                      checked={settings?.customization?.contextAwareness === true}
+                      onChange={(e) => updateSettings('contextAwareness', e.target.checked)}
+                    />
+                    <ToggleSlider />
+                  </ToggleContainer>
+                </FormRow>
              
               </Section>
               

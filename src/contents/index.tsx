@@ -70,6 +70,8 @@ import { useCurrentModel } from "~hooks/useCurrentModel"
 import { useConversation } from "~hooks/useConversation"
 import { useMode } from "~hooks/useMode"
 import { createRoot } from "react-dom/client";
+// Add import for page content extraction utility
+import getPageContent from "~utils/contentExtractor"
 
 // Add optimized debounce utility
 const debounce = <T extends (...args: any[]) => void>(func: T, wait: number): T => {
@@ -899,13 +901,15 @@ function Content() {
   const { toast, showToast } = useToast();
   const { isEnabled, handleEnabledChange } = useEnabled(showToast);
   const { voicesLoaded, speakingId, handleSpeak } = useSpeech();
-  const { copiedId, handleCopy } = useCopy();
+  const { copiedId, imageCopiedId, handleCopy, handleCopyAsImage, isImageCopySupported } = useCopy();
   const { lastResult, updateLastResult } = useLastResult();
   const currentModel = useCurrentModel();
   
   // Add a ref for the popup element
   const popupRef = useRef<HTMLDivElement>(null);
-  
+  // Ref to capture main AI response content for image copying
+  const responseContentRef = useRef<HTMLDivElement>(null);
+
   // Smooth scroll function
   const scrollToBottom = useCallback(() => {
     // Use requestAnimationFrame for better performance
@@ -967,12 +971,20 @@ function Content() {
     setError(null);
 
     try {
+      let regenPayloadText = selectedText
+      let regenTrimmedContext = ""
+      if (settings?.customization?.contextAwareness) {
+        const regenPageContent = getPageContent(mode)
+        regenTrimmedContext = truncateText(regenPageContent, 5000)
+        regenPayloadText = `${selectedText}\n\n----\nContext:\n${regenTrimmedContext}`
+      }
+
       port.postMessage({
         type: "PROCESS_TEXT",
         payload: {
-          text: selectedText,
-          context: "",
-          pageContext: "",
+          text: regenPayloadText,
+          context: regenTrimmedContext,
+          pageContext: regenTrimmedContext,
           mode: mode,
           settings: settings,
           isFollowUp: false,
@@ -1032,13 +1044,22 @@ function Content() {
         throw new Error('Connection not established');
       }
 
+      let payloadText = cleanedText
+      let trimmedContext = ""
+      if (settings?.customization?.contextAwareness) {
+        const pageContent = getPageContent(selectedMode)
+        trimmedContext = truncateText(pageContent, 5000)
+        payloadText = `${cleanedText}\n\n----\nContext:\n${trimmedContext}`
+      }
+
       const storage = new Storage();
       const translationSettings = await storage.get("translationSettings");
 
       port.postMessage({
         type: "PROCESS_TEXT",
         payload: {
-          text: cleanedText,
+          text: payloadText,
+          context: trimmedContext,
           mode: selectedMode,
           settings: {
             ...settings,
@@ -1903,10 +1924,12 @@ function Content() {
               <motion.div
                 style={{
                   ...themedStyles.explanation,
-                  textAlign: textDirection === "rtl" ? "right" : "left"
+                  textAlign: textDirection === "rtl" ? "right" : "left",
+                  paddingBottom:"12px"
                 }}
                 initial={{ y: 50 }}
                 animate={{ y: 0 }}
+                data-main-response-content
               >
                 <div style={{ marginBottom: '8px' }}>
                   {streamingText && (
@@ -1914,7 +1937,13 @@ function Content() {
                       ...themedStyles.explanation,
                       textAlign: themedStyles.explanation.textAlign as "left" | "right"
                     }} className="">
-                      <motion.div initial={{ filter: "blur(8px)" }} animate={{ filter: "blur(0px)" }} transition={{ duration: 0.1, delay: 0.1 }}>
+                      <motion.div 
+                        initial={{ filter: "blur(8px)" }} 
+                        animate={{ filter: "blur(0px)" }} 
+                        transition={{ duration: 0.1, delay: 0.1 }}
+                        data-lightup-response-content
+                        ref={responseContentRef}
+                      >
                         <MarkdownText 
                           text={streamingText} 
                           useReferences={(settings as any).enableReferences || false} 
@@ -1930,22 +1959,25 @@ function Content() {
                 {/* Action buttons */}
                 {!isLoading && streamingText && (
                   <motion.div style={{ display: 'flex', gap: '8px', alignItems: 'center' } as const}>
-                    {/* Copy button */}
+                    {/* Copy text button */}
                     <motion.button
                       onClick={() => handleCopy(streamingText, 'initial')}
                       style={{
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
-                        padding: '4px',
+                        width: '24px',
+                        height: '24px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         borderRadius: '4px',
                         color: '#666'
                       }}
                       whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
-
                       whileTap={{ scale: 0.9 }}
                       transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                      title={copiedId === 'initial' ? "Copied!" : "Copy to clipboard"}
+                      title={copiedId === 'initial' ? "Copied!" : "Copy text to clipboard"}
                     >
                       {copiedId === 'initial' ? (
                         <svg width="13" height="15" viewBox="0 0 24 24" fill="none">
@@ -1958,15 +1990,59 @@ function Content() {
                       )}
                     </motion.button>
 
+                    {/* Copy as image button */}
+                    {isImageCopySupported && (
+                      <motion.button
+                        onClick={() => {
+                          if (responseContentRef.current) {
+                            handleCopyAsImage(responseContentRef.current, 'initial-image');
+                          } else {
+                            handleCopyAsImage('[data-lightup-response-content]', 'initial-image');
+                          }
+                        }}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          width: '24px',
+                          height: '24px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderRadius: '4px',
+                          color: '#666'
+                        }}
+                        whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                        title={imageCopiedId === 'initial-image' ? "Copied as image!" : "Copy as image"}
+                      >
+                        {imageCopiedId === 'initial-image' ? (
+                          <svg width="13" height="15" viewBox="0 0 24 24" fill="none">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                          </svg>
+                        ) : (
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                            <circle cx="9" cy="9" r="2"/>
+                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                          </svg>
+                        )}
+                      </motion.button>
+                    )}
+
                     {/* Speak button */}
                     <motion.button
                       onClick={() => handleSpeak(streamingText, 'main')}
                       style={{
-                        marginTop: '3px',
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
-                        padding: '4px',
+                        width: '24px',
+                        height: '24px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         borderRadius: '4px',
                         color: speakingId === 'main' ? '#14742F' : '#666'
                       }}
@@ -1994,7 +2070,11 @@ function Content() {
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
-                        padding: '4px',
+                        width: '24px',
+                        height: '24px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         borderRadius: '4px',
                         color: isLoading ? '#14742F' : '#666'
                       }}
@@ -2067,10 +2147,13 @@ function Content() {
                         background: 'none',
                         border: 'none',
                         cursor: 'pointer',
-                        padding: '4px',
+                        width: '24px',
+                        height: '24px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         borderRadius: '4px',
                         color: currentTheme === "dark" ? "#fff" : "#000", // Theme-dependent color
-                        marginTop: '1px',
                         marginLeft: 'auto' // Push to far right
                       }}
                       whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
@@ -2109,6 +2192,9 @@ function Content() {
                 fontSizes={fontSizes}
                 handleCopy={handleCopy}
                 copiedId={copiedId}
+                handleCopyAsImage={handleCopyAsImage}
+                imageCopiedId={imageCopiedId}
+                isImageCopySupported={isImageCopySupported}
                 handleSpeak={handleSpeak}
                 speakingId={speakingId}
                 handleRegenerateFollowUp={handleRegenerateFollowUp}
@@ -2788,6 +2874,9 @@ interface FollowUpQAItemProps {
   fontSizes: FontSizes;
   handleCopy: (text: string, id: string) => void;
   copiedId: string | null;
+  handleCopyAsImage: (elementSelector: string, id: string) => Promise<void>;
+  imageCopiedId: string | null;
+  isImageCopySupported: boolean;
   handleSpeak: (text: string, id: string) => void;
   speakingId: string | null;
   handleRegenerateFollowUp: (question: string, id: number) => void;
@@ -2797,7 +2886,7 @@ interface FollowUpQAItemProps {
   currentModel: string | null;
 }
 
-const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentTheme, targetLanguage, settings, fontSizes, handleCopy, copiedId, handleSpeak, speakingId, handleRegenerateFollowUp, activeAnswerId, isAskingFollowUp, popupRef, currentModel }: FollowUpQAItemProps) => {
+const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentTheme, targetLanguage, settings, fontSizes, handleCopy, copiedId, handleCopyAsImage, imageCopiedId, isImageCopySupported, handleSpeak, speakingId, handleRegenerateFollowUp, activeAnswerId, isAskingFollowUp, popupRef, currentModel }: FollowUpQAItemProps) => {
   const { question, answer, id, isComplete } = qa;
   const answerRef = useRef<HTMLDivElement>(null);
   const [animationCycleComplete, setAnimationCycleComplete] = useState(false);
@@ -2961,21 +3050,25 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
                 }
               }}
             >
+              {/* Copy text button */}
               <motion.button
                 onClick={() => handleCopy(answer, `followup-${id}`)}
                 style={{
-                  
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  padding: '4px',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   borderRadius: '4px',
                   color: copiedId === `followup-${id}` ? '#666' : '#666'
                 }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
                 transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                title={copiedId === `followup-${id}` ? "Copied!" : "Copy to clipboard"}
+                title={copiedId === `followup-${id}` ? "Copied!" : "Copy text to clipboard"}
               >
                 {copiedId === `followup-${id}` ? (
                   <motion.svg 
@@ -3004,15 +3097,79 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
                 )}
               </motion.button>
 
+              {/* Copy as image button */}
+              {isImageCopySupported && (
+                <motion.button
+                  onClick={() => {
+                    if (answerRef.current) {
+                      handleCopyAsImage(answerRef.current as any, `followup-image-${id}`);
+                    } else {
+                      handleCopyAsImage(`#qa-answer-${id}`, `followup-image-${id}`);
+                    }
+                  }}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    cursor: 'pointer',
+                    width: '24px',
+                    height: '24px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: '4px',
+                    color: '#666'
+                  }}
+                  whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
+                  whileTap={{ scale: 0.9 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  title={imageCopiedId === `followup-image-${id}` ? "Copied as image!" : "Copy as image"}
+                >
+                  {imageCopiedId === `followup-image-${id}` ? (
+                    <motion.svg 
+                      width="13" 
+                      height="15" 
+                      viewBox="0 0 24 24" 
+                      fill="currentColor"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                    >
+                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                    </motion.svg>
+                  ) : (
+                    <motion.svg 
+                      width="14" 
+                      height="14" 
+                      viewBox="0 0 24 24" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      strokeWidth="2" 
+                      strokeLinecap="round" 
+                      strokeLinejoin="round"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                    >
+                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                      <circle cx="9" cy="9" r="2"/>
+                      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                    </motion.svg>
+                  )}
+                </motion.button>
+              )}
+
               {/* Speak button */}
               <motion.button
                 onClick={() => handleSpeak(answer, `followup-${id}`)}
                 style={{
-                  marginTop: '1px',
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  padding: '4px',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   borderRadius: '4px',
                   color: speakingId === `followup-${id}` ? '#14742F' : '#666'
                 }}
@@ -3055,7 +3212,11 @@ const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentThe
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  padding: '4px',
+                  width: '24px',
+                  height: '24px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   borderRadius: '4px',
                   color: (activeAnswerId === id && !isComplete) ? '#14742F' : '#666'
                 }}
