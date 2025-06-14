@@ -167,7 +167,7 @@ export const SharingMenu: React.FC<SharingMenuProps> = ({
                 <div style={{ fontSize: '14px', fontWeight: '500' }}>
                   {exportingDocId === txtExportId ? 'Exported!' : 'Text Document'}
                 </div>
-                <div style={{ fontSize: '12px', opacity: 0.7 }}>
+                <div style={{  marginTop: '4px', fontSize: '12px', opacity: 0.7 }}>
                   Export as .txt file
                 </div>
               </div>
@@ -221,7 +221,7 @@ export const SharingMenu: React.FC<SharingMenuProps> = ({
                 <div style={{ fontSize: '14px', fontWeight: '500' }}>
                   {exportingMdId === mdExportId ? 'Exported!' : 'Markdown'}
                 </div>
-                <div style={{ fontSize: '12px', opacity: 0.7 }}>
+                <div style={{  marginTop: '4px', fontSize: '12px', opacity: 0.7 }}>
                   Export as .md file
                 </div>
               </div>
@@ -279,7 +279,7 @@ export const SharingMenu: React.FC<SharingMenuProps> = ({
                 <div style={{ fontSize: '14px', fontWeight: '500' }}>
                   {richCopiedId === richCopyId ? 'Copied!' : 'Copy Rich Text'}
                 </div>
-                <div style={{ fontSize: '12px', opacity: 0.7 }}>
+                <div style={{ marginTop: '4px', fontSize: '12px', opacity: 0.7 }}>
                   Copy with formatting
                 </div>
               </div>
@@ -330,7 +330,7 @@ export const SharingMenu: React.FC<SharingMenuProps> = ({
                 <div style={{ fontSize: '14px', fontWeight: '500' }}>
                   Print
                 </div>
-                <div style={{ fontSize: '12px', opacity: 0.7 }}>
+                <div style={{  marginTop: '4px', fontSize: '12px', opacity: 0.7 }}>
                   Print this response
                 </div>
               </div>
