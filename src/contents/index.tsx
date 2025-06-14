@@ -73,119 +73,19 @@ import { createRoot } from "react-dom/client";
 // Add import for page content extraction utility
 import getPageContent from "~utils/contentExtractor"
 
-// Add optimized debounce utility
-const debounce = <T extends (...args: any[]) => void>(func: T, wait: number): T => {
-  let timeout: NodeJS.Timeout;
-  return ((...args: any[]) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  }) as T;
-};
-
-// Comprehensive font size mapping system with YouTube compensation
-const createFontSizeMapping = (baseFontSize: string): FontSizes => {
-  // Detect if we're on YouTube
-  const isYouTube = window.location.hostname.includes('youtube.com');
-  
-  // Convert the base font size to a number for calculations
-  const parseSize = (size: string): number => {
-    if (size === "x-small") return 0.8;        // Increased from 0.7
-    if (size === "small") return 0.9;          // Increased from 0.75
-    if (size === "medium") return 1.0;         // Increased from 0.875
-    if (size === "large") return 1.15;        // Increased from 1
-    if (size === "x-large") return 1.3;       // Increased from 1.125
-    if (size === "xx-large") return 1.45;     // Increased from 1.25
-    
-    // Handle rem values
-    const match = size.match(/^([\d.]+)rem$/);
-    if (match) return parseFloat(match[1]);
-    
-    // Default to medium
-    return 1.0;
-  };
-
-  const baseSize = parseSize(baseFontSize);
-  
-  if (isYouTube) {
-    // Use pixel-based sizing for YouTube to avoid rem scaling issues
-    const basePx = 24; // Standard base pixel size
-    const multiplier = baseSize; // User's font size preference multiplier
-    
-    console.log('LightUp: YouTube font mapping', { 
-      baseFontSize, 
-      baseSize, 
-      multiplier, 
-      compensatedBase: Math.round(basePx * multiplier * 0.8) 
-    });
-    
-    return {
-      // Base text size - adjusted for YouTube
-      base: `${Math.round(basePx * multiplier * 0.8)}px`, // Reduced compensation
-      
-      // Relative sizes based on base - all in pixels
-      xs: `${Math.round(Math.max(12, basePx * multiplier * 0.75))}px`,
-      sm: `${Math.round(Math.max(14, basePx * multiplier * 0.85))}px`, 
-      md: `${Math.round(basePx * multiplier)}px`,
-      lg: `${Math.round(basePx * multiplier * 1.15)}px`,
-      xl: `${Math.round(basePx * multiplier * 1.3)}px`,
-      xxl: `${Math.round(basePx * multiplier * 1.5)}px`,
-      
-      // Specific UI element sizes - compensated for YouTube
-      button: `${Math.round(Math.max(14, basePx * multiplier * 0.9))}px`,
-      input: `${Math.round(Math.max(16, basePx * multiplier))}px`,
-      loading: `${Math.round(Math.max(13, basePx * multiplier * 0.8))}px`,
-      model: `${Math.round(Math.max(13, basePx * multiplier * 0.75))}px`,
-      icon: `${Math.round(Math.max(12, basePx * multiplier * 0.7))}px`,
-      
-      // Welcome/guidance messages - compensated
-      welcome: {
-        emoji: `${Math.round(basePx * multiplier * 2)}px`,
-        heading: `${Math.round(basePx * multiplier * 1.4)}px`,
-        description: `${Math.round(Math.max(16, basePx * multiplier))}px`
-      },
-      
-      // Connection status - compensated
-      connection: `${Math.round(Math.max(13, basePx * multiplier * 0.75))}px`,
-      
-      // Error messages - compensated
-      error: `${Math.round(Math.max(14, basePx * multiplier * 0.85))}px`
-    };
-  }
-  
-  // Standard rem-based sizing for non-YouTube sites
-  return {
-    // Base text size
-    base: `${baseSize}rem`,
-    
-    // Relative sizes based on base
-    xs: `${Math.max(0.6, baseSize * 0.75)}rem`,      // 75% of base, minimum 0.6rem (increased from 0.5)
-    sm: `${Math.max(0.7, baseSize * 0.85)}rem`,      // 85% of base, minimum 0.7rem (increased from 0.6)
-    md: `${baseSize}rem`,                             // Same as base
-    lg: `${baseSize * 1.15}rem`,                     // 115% of base
-    xl: `${baseSize * 1.3}rem`,                      // 130% of base
-    xxl: `${baseSize * 1.5}rem`,                     // 150% of base
-    
-    // Specific UI element sizes
-    button: `${Math.max(0.8, baseSize * 0.9)}rem`,   // Slightly smaller for buttons (increased from 0.7)
-    input: `${Math.max(0.8, baseSize * 0.9)}rem`,    // Input field text (increased from 0.7)
-    loading: `${Math.max(0.75, baseSize * 0.8)}rem`, // Loading indicators (increased from 0.65)
-    model: `${Math.max(0.7, baseSize * 0.75)}rem`,   // Model display (increased from 0.6)
-    icon: `${Math.max(0.7, baseSize * 0.7)}rem`,     // Icon sizes (increased from 0.6)
-    
-    // Welcome/guidance messages
-    welcome: {
-      emoji: `${baseSize * 1.8}rem`,                 // Large emoji
-      heading: `${baseSize * 1.2}rem`,               // Heading text
-      description: `${Math.max(0.8, baseSize * 0.9)}rem` // Description text (increased from 0.7)
-    },
-    
-    // Connection status
-    connection: `${Math.max(0.7, baseSize * 0.75)}rem`, // Increased from 0.6
-    
-    // Error messages
-    error: `${Math.max(0.8, baseSize * 0.85)}rem`   // Increased from 0.7
-  };
-};
+// Import utilities
+import { debounce } from "./utils/debounce"
+import { createFontSizeMapping } from "./utils/fontMapping"
+import { ShowSearchIcon, HideSearchIcon } from "./components/icons/SearchIcons"
+import { DynamicSkeletonLines } from "./components/loading/DynamicSkeletonLines"
+import { LoadingThinkingText } from "./components/loading/LoadingThinkingText"
+import { LoadingSkeletonContainer } from "./components/loading/LoadingSkeletonContainer"
+import { FollowUpQAItem } from "./components/followup/FollowUpQAItem"
+import { FollowUpInput } from "./components/followup/FollowUpInput"
+import { ConnectionStatus } from "./components/status/ConnectionStatus"
+import { PopupLayoutContainer } from "./components/layout/PopupLayoutContainer"
+import { FollowUpSection } from "./components/followup/FollowUpSection"
+import { SharingMenu } from "./components/common/SharingMenu"
 
 // Add message listener for settings updates
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -649,222 +549,9 @@ const answerBubbleVariants = {
 };
 
 // Add this near the top of the file, after imports
-interface FollowUpInputProps {
-  inputRef: React.RefObject<HTMLTextAreaElement>;
-  followUpQuestion: string;
-  handleFollowUpQuestion: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleAskFollowUpWrapper: () => void;
-  isAskingFollowUp: boolean;
-  setIsInputFocused: (focused: boolean) => void;
-  themedStyles: any; // Use the actual type if available
-  currentTheme: "light" | "dark";
-  fontSizes: FontSizes; // Now properly typed
-}
 
-const FollowUpInput = React.memo(({ 
-  inputRef, 
-  followUpQuestion, 
-  handleFollowUpQuestion, 
-  handleAskFollowUpWrapper, 
-  isAskingFollowUp, 
-  setIsInputFocused,
-  themedStyles,
-  currentTheme,
-  fontSizes
-}: FollowUpInputProps) => {
-  // Optimized constants
-  const INITIAL_HEIGHT = parseFloat(fontSizes.base) * 16 * 1.5; // Convert rem to px and add line height
-  const MAX_HEIGHT = INITIAL_HEIGHT * 2;
-  
-  // Memoized styles to prevent recalculation
-  const textareaStyle = useMemo(() => ({
-    ...themedStyles.input,
-    opacity: isAskingFollowUp ? 0.7 : 1,
-    resize: 'none' as const,
-    height: `21.2px`,
-    lineHeight: "20px",
-    padding: '1px 8px',
-    display: 'block' as const,
-    transition: 'opacity 0.2s ease, height 0.1s ease',
-    fontSize: '1rem',
-    textAlign: 'left' as const,
-  }), [themedStyles.input, isAskingFollowUp, INITIAL_HEIGHT, fontSizes]);
 
-  const containerStyle = useMemo(() => ({
-    ...themedStyles.followUpInputContainer,
-    marginTop: '8px',
-    marginBottom: '16px',
-    paddingTop: '8px',
-  }), [themedStyles.followUpInputContainer]);
 
-  // Optimized auto-resize with debouncing and minimal DOM manipulation
-  const autoResizeTextarea = useCallback(
-    debounce(() => {
-      const textarea = inputRef.current;
-      if (!textarea) return;
-      
-      // Use requestAnimationFrame for better performance
-      requestAnimationFrame(() => {
-        // Only manipulate DOM if content actually changed
-        const currentHeight = parseInt(textarea.style.height) || INITIAL_HEIGHT;
-        
-        // Reset height to measure content
-        textarea.style.height = 'auto';
-        const scrollHeight = textarea.scrollHeight;
-        const newHeight = Math.max(INITIAL_HEIGHT, Math.min(scrollHeight, MAX_HEIGHT));
-        
-        // Only update if height actually changed
-        if (currentHeight !== newHeight) {
-          textarea.style.height = `${newHeight}px`;
-          
-          // Update overflow only when necessary
-          const shouldShowScroll = scrollHeight > MAX_HEIGHT;
-          const currentOverflow = textarea.style.overflowY;
-          const newOverflow = shouldShowScroll ? 'auto' : 'hidden';
-          
-          if (currentOverflow !== newOverflow) {
-            textarea.style.overflowY = newOverflow;
-          }
-        } else {
-          // Restore height if no change needed
-          textarea.style.height = `${currentHeight}px`;
-        }
-      });
-    }, 16), // ~60fps
-    [INITIAL_HEIGHT, MAX_HEIGHT]
-  );
-
-  // Optimized change handler
-  const handleTextareaChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    handleFollowUpQuestion(e);
-    autoResizeTextarea();
-  }, [handleFollowUpQuestion, autoResizeTextarea]);
-
-  // Optimized key handler
-  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    e.stopPropagation();
-    if (e.key === 'Enter' && !e.shiftKey && !isAskingFollowUp) {
-      e.preventDefault();
-      if (followUpQuestion.trim()) {
-        handleAskFollowUpWrapper();
-      }
-    }
-  }, [followUpQuestion, handleAskFollowUpWrapper, isAskingFollowUp]);
-
-  // Optimized focus handlers
-  const handleFocus = useCallback(() => setIsInputFocused(true), [setIsInputFocused]);
-  const handleBlur = useCallback(() => setIsInputFocused(false), [setIsInputFocused]);
-
-  // Initial resize on mount and theme change only
-  useEffect(() => {
-    autoResizeTextarea();
-  }, [currentTheme, autoResizeTextarea]);
-
-  // Memoized button content
-  const buttonContent = useMemo(() => {
-    if (isAskingFollowUp) {
-      return (
-        <motion.svg 
-          width="18" 
-          height="18" 
-          viewBox="0 0 24 24" 
-          fill="none"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-        >
-          <path
-            d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </motion.svg>
-      );
-    }
-    
-    return (
-      <motion.svg 
-        width="18" 
-        height="18" 
-        viewBox="0 0 24 24" 
-        fill="none"
-        initial={{ scale: 1 }}
-        animate={{ scale: 1 }}
-        exit={{ scale: 0 }}
-      >
-        <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-      </motion.svg>
-    );
-  }, [isAskingFollowUp]);
-
-  return (
-    <div style={containerStyle}>
-      <div style={themedStyles.searchContainer} className="lu-search-container">
-        <textarea
-          ref={inputRef}
-          value={followUpQuestion}
-          onChange={handleTextareaChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Ask anything..."
-          style={textareaStyle}
-          disabled={isAskingFollowUp}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
-          rows={1}
-          autoComplete="off"
-          spellCheck={false}
-          autoCorrect="off"
-          autoCapitalize="off"
-          inputMode="text"
-          className="lu-optimized-textarea lu-centered-placeholder"
-        />
-        <motion.button
-          onClick={handleAskFollowUpWrapper}
-          disabled={!followUpQuestion.trim() || isAskingFollowUp}
-          whileHover={{ scale: 1.05, rotate: 5 }}
-          whileTap={{ scale: 0.95 }}
-          animate={isAskingFollowUp ? { scale: 0.9, opacity: 0.7 } : { scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 400, damping: 17 }}
-          style={themedStyles.searchSendButton}
-          className="lu-search-send-button"
-          title={!followUpQuestion.trim() ? "Type a question first" : isAskingFollowUp ? "Sending..." : "Send message"}
-        >
-          {buttonContent}
-        </motion.button>
-      </div>
-    </div>
-  );
-}, (prevProps: FollowUpInputProps, nextProps: FollowUpInputProps) => {
-  // Optimized comparison function
-  return (
-    prevProps.followUpQuestion === nextProps.followUpQuestion &&
-    prevProps.isAskingFollowUp === nextProps.isAskingFollowUp &&
-    prevProps.currentTheme === nextProps.currentTheme
-  );
-});
-
-// Add display name for debugging
-FollowUpInput.displayName = 'FollowUpInput';
-
-// Define icons for Show/Hide Search
-const ShowSearchIcon = ({ theme, size = "18" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={theme === "dark" ? "#fff" : "#000"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    {/* Magnifying glass */}  
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-  </svg>
-);
-
-const HideSearchIcon = ({ theme, size = "18" }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={theme === "dark" ? "#fff" : "#000"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    {/* Slashed Magnifying glass */}  
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="16.65" y1="16.65" x2="21" y2="21"></line>
-    <line x1="4" y1="4" x2="18" y2="18"></line> {/* Adjusted slash */}
-  </svg>
-);
 
 function Content() {
   // Generate a stable connection ID
@@ -884,6 +571,9 @@ function Content() {
   // Create font size mapping based on user setting
   const fontSizes = useMemo(() => createFontSizeMapping(fontSize), [fontSize]);
   
+  // Calculate layout mode from settings
+  const layoutMode = settings?.customization?.layoutMode || "popup";
+  
   // Text selection bubble state from our new hook
   const {
     selectedText: selectionBubbleText,
@@ -902,6 +592,172 @@ function Content() {
   const { isEnabled, handleEnabledChange } = useEnabled(showToast);
   const { voicesLoaded, speakingId, handleSpeak } = useSpeech();
   const { copiedId, imageCopiedId, handleCopy, handleCopyAsImage, isImageCopySupported } = useCopy();
+  
+  // Export states
+  const [exportingDocId, setExportingDocId] = useState<string | null>(null);
+  const [exportingMdId, setExportingMdId] = useState<string | null>(null);
+  
+  // Rich copy state
+  const [richCopiedId, setRichCopiedId] = useState<string | null>(null);
+  
+  // Export functions
+  const handleExportAsDoc = useCallback(async (text: string, id: string, filename: string = 'lightup-export.txt') => {
+    try {
+      setExportingDocId(id);
+      
+      // Format text with rich formatting (similar to print function)
+      const formatTextForDocument = async (text: string) => {
+        // Convert HTML to clean plain text first if needed
+        const { stripHtml } = await import("~utils/textProcessing");
+        let cleanText = text.includes('<') ? stripHtml(text) : text;
+        
+        return cleanText
+          // Enhanced bold formatting - keep asterisks for emphasis
+          .replace(/\*\*(.*?)\*\*/g, '**$1**')
+          // Enhanced italic formatting
+          .replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '*$1*')
+          // Convert bullet points to enhanced bullets with indentation
+          .replace(/^\s*[\*\-\+]\s+(.+)$/gm, '  • $1')
+          // Add proper spacing for headings (if any)
+          .replace(/^#{1,6}\s+(.+)$/gm, '\n$1\n' + '─'.repeat(20))
+          // Preserve paragraph breaks with better spacing
+          .replace(/\n\s*\n\s*\n/g, '\n\n')
+          // Clean up multiple spaces but preserve intentional formatting
+          .replace(/[ \t]+/g, ' ')
+          // Enhance list formatting with better spacing
+          .replace(/(  •.*\n)(  •)/g, '$1\n$2')
+          // Add spacing around formatted sections
+          .replace(/(\*\*.*?\*\*)/g, '\n$1\n')
+          .replace(/\n\n\n+/g, '\n\n')
+          .trim();
+      };
+      
+      const formattedText = await formatTextForDocument(text);
+      
+      // Create a professional document with header
+      const documentHeader = `
+╔════════════════════════════════════════╗
+║             LIGHTUP RESPONSE           ║
+╚════════════════════════════════════════╝
+
+Generated on: ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}
+
+${'-'.repeat(50)}
+
+`;
+
+      const documentFooter = `
+
+${'-'.repeat(50)}
+
+Generated by LightUp - AI-Powered Web Enhancement
+Website: boimaginations.com/lightup
+
+${'-'.repeat(50)}`;
+      
+      const finalContent = documentHeader + formattedText + documentFooter;
+      
+      const blob = new Blob([finalContent], { 
+        type: 'text/plain;charset=utf-8' 
+      });
+      
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      // Use .txt extension for universal compatibility
+      const baseFilename = filename.replace(/\.(docx?|html?|rtf|txt)$/i, '');
+      link.download = `${baseFilename}.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      setTimeout(() => setExportingDocId(null), 2000);
+    } catch (err) {
+      console.error('Failed to export as TXT:', err);
+      setExportingDocId(null);
+    }
+  }, []);
+  
+  const handleExportAsMd = useCallback(async (text: string, id: string, filename: string = 'lightup-export.md') => {
+    try {
+      setExportingMdId(id);
+      
+      // Format text for markdown with enhanced formatting
+      const formatTextForMarkdown = async (text: string) => {
+        // If text contains HTML, we need to clean it for markdown
+        const { stripHtml } = await import("~utils/textProcessing");
+        let cleanText = text.includes('<') ? stripHtml(text) : text;
+        
+        return cleanText
+          // Preserve and enhance bold formatting
+          .replace(/\*\*(.*?)\*\*/g, '**$1**')
+          // Preserve and enhance italic formatting
+          .replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '*$1*')
+          // Convert bullet points to markdown bullets
+          .replace(/^\s*[\*\-\+]\s+(.+)$/gm, '- $1')
+          // Add proper spacing for better readability
+          .replace(/\n\s*\n\s*\n/g, '\n\n')
+          // Clean up multiple spaces
+          .replace(/[ \t]+/g, ' ')
+          // Enhance list formatting with proper spacing
+          .replace(/(^- .*\n)(^- )/gm, '$1\n$2')
+          .trim();
+      };
+      
+      const formattedContent = await formatTextForMarkdown(text);
+      
+      // Create a professional markdown document with header
+      const markdownHeader = `# LightUp AI Response
+
+**Generated on:** ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}
+
+---
+
+`;
+
+      const markdownFooter = `
+
+---
+
+*Generated by **LightUp** - AI-Powered Web Enhancement*  
+*Website: [boimaginations.com/lightup](https://boimaginations.com/lightup)*`;
+      
+      const finalMarkdown = markdownHeader + formattedContent + markdownFooter;
+      
+      const blob = new Blob([finalMarkdown], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename.endsWith('.md') ? filename : `${filename}.md`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      setTimeout(() => setExportingMdId(null), 2000);
+    } catch (err) {
+      console.error('Failed to export as MD:', err);
+      setExportingMdId(null);
+    }
+  }, []);
+  
+  // Rich copy function with feedback
+  const handleRichCopy = useCallback(async (text: string, id: string) => {
+    try {
+      // Copy with basic formatting preserved
+      const formattedText = text
+        .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold asterisks
+        .replace(/^\s*\*\s+/gm, '• '); // Convert to bullet points
+      
+      await navigator.clipboard.writeText(formattedText);
+      setRichCopiedId(id);
+      setTimeout(() => setRichCopiedId(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy rich text:', err);
+    }
+  }, []);
+  
   const { lastResult, updateLastResult } = useLastResult();
   const currentModel = useCurrentModel();
   
@@ -1189,7 +1045,9 @@ function Content() {
   // -------- Progress for AI streaming --------
    const currentWordCount = useMemo(() => {
      if (!streamingText) return 0;
-     return streamingText.trim().split(/\s+/).filter(Boolean).length;
+     const trimmed = streamingText.trim();
+     if (!trimmed) return 0;
+     return trimmed.split(/\s+/).filter(word => word.length > 0).length;
    }, [streamingText]);
  
   // ----- Time-based fallback progress so the bar moves right away -----
@@ -1605,67 +1463,7 @@ function Content() {
     }
   };
 
-  // Add a connection status indicator component
-  const ConnectionStatus = () => {
-    if (connectionStatus === 'connected') return null;
-    
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -10 }}
-        style={{
-          position: 'absolute',
-          top: '8px',
-          right: '8px',
-          zIndex: 50
-        }}
-      >
-        <div style={{
-          padding: '8px 12px',
-          borderRadius: '20px',
-          fontSize: fontSizes.connection,
-          fontWeight: 500,
-          display: 'flex',
-          alignItems: 'center',
-          gap: '4px',
-          backgroundColor: connectionStatus === 'connecting' 
-            ? (currentTheme === 'dark' ? '#4A4A00' : '#FEF3C7')
-            : (currentTheme === 'dark' ? '#4A0000' : '#FEE2E2'),
-          color: connectionStatus === 'connecting' 
-            ? (currentTheme === 'dark' ? '#FBBF24' : '#92400E')
-            : (currentTheme === 'dark' ? '#F87171' : '#991B1B')
-        }}>
-          <span style={{
-            width: '8px',
-            height: '8px',
-            borderRadius: '50%',
-            backgroundColor: connectionStatus === 'connecting' 
-              ? '#FBBF24' 
-              : '#F87171',
-            animation: connectionStatus === 'connecting' ? 'pulse 2s infinite' : 'none'
-          }}></span>
-          {connectionStatus === 'connecting' ? 'Connecting...' : 'Disconnected'}
-          {connectionStatus === 'disconnected' && (
-            <button 
-              onClick={handleReconnect}
-              style={{
-                marginLeft: '4px',
-                textDecoration: 'underline',
-                background: 'none',
-                border: 'none',
-                color: 'inherit',
-                cursor: 'pointer',
-                fontSize: 'inherit'
-              }}
-            >
-              Reconnect
-            </button>
-          )}
-        </div>
-      </motion.div>
-    );
-  };
+
 
   // Function to process the entire page content
   const handleProcessEntirePage = async (pageContent: string) => {
@@ -1678,7 +1476,6 @@ function Content() {
     setError(null);
     
     // Position the popup in a fixed position (center or side)
-    const layoutMode = settings?.customization?.layoutMode || "popup";
     let popupPosition = { x: 0, y: 0 };
     
     if (layoutMode === "sidebar") {
@@ -1723,7 +1520,12 @@ function Content() {
   const renderPopupContent = () => (
     <>
       <div style={{ position: 'relative' }}>
-        <ConnectionStatus />
+        <ConnectionStatus 
+          connectionStatus={connectionStatus}
+          currentTheme={normalizedTheme}
+          fontSizes={fontSizes}
+          handleReconnect={handleReconnect}
+        />
       </div>
       
       {/* Header */}
@@ -1873,43 +1675,14 @@ function Content() {
       {/* Main Content */}
       <AnimatePresence mode="wait">
         {isLoading && !streamingText ? (
-          <motion.div 
-            // className="skeleton-container skeleton-optimized"
-            style={{
-              ...flexMotionStyle,
-              transform: 'translateZ(0)', // Hardware acceleration
-              willChange: 'transform, opacity',
-              // contain: 'layout style paint', // Performance optimization
-            }} 
-            variants={loadingSkeletonVariants}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            // layout
-          >
-            <DynamicSkeletonLines 
-              currentTheme={normalizedTheme}
-              containerRef={popupRef}
-              fontSizes={fontSizes}
-            />
-            
-            {/* Enhanced loading indicator */}
-            <motion.div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                marginTop: '16px',
-                gap: '8px',
-                transform: 'translateZ(0)', // Hardware acceleration
-              }}
-              variants={pulseVariants}
-              initial="initial"
-              animate="animate"
-            >
-              
-            </motion.div>
-          </motion.div>
+          <LoadingSkeletonContainer
+            normalizedTheme={normalizedTheme}
+            popupRef={popupRef}
+            fontSizes={fontSizes}
+            flexMotionStyle={flexMotionStyle}
+            loadingSkeletonVariants={loadingSkeletonVariants}
+            pulseVariants={pulseVariants}
+          />
         ) : error ? (
           <ErrorMessage message={error} />
         ) : (
@@ -1972,33 +1745,56 @@ function Content() {
                         alignItems: 'center',
                         justifyContent: 'center',
                         borderRadius: '4px',
-                        color: '#666'
+                        color: copiedId === 'initial' ? '#14742F' : '#666'
                       }}
                       whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
                       whileTap={{ scale: 0.9 }}
                       transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                      title={copiedId === 'initial' ? "Copied!" : "Copy text to clipboard"}
+                      title={copiedId === 'initial' ? "Copied!" : "Copy text"}
                     >
                       {copiedId === 'initial' ? (
-                        <svg width="13" height="15" viewBox="0 0 24 24" fill="none">
+                        <motion.svg 
+                          width="15" 
+                          height="15" 
+                          viewBox="0 0 24 24" 
+                          fill="currentColor"
+                          // initial={{ scale: 0 }}
+                          // animate={{ scale: 1 }}
+                          // transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                        >
                           <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                        </svg>
+                        </motion.svg>
                       ) : (
-                        <svg width="13" height="15" viewBox="0 0 62 61" fill="none">
-                          <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
-                        </svg>
+                        <motion.svg 
+                          width="15" 
+                          height="15" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round"
+                         
+                        >
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                        </motion.svg>
                       )}
                     </motion.button>
 
                     {/* Copy as image button */}
                     {isImageCopySupported && (
                       <motion.button
-                        onClick={() => {
-                          if (responseContentRef.current) {
-                            handleCopyAsImage(responseContentRef.current, 'initial-image');
-                          } else {
-                            handleCopyAsImage('[data-lightup-response-content]', 'initial-image');
-                          }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // Use setTimeout to defer execution and prevent performance violations
+                          setTimeout(() => {
+                            if (responseContentRef.current) {
+                              handleCopyAsImage(responseContentRef.current, 'initial-image');
+                            } else {
+                              handleCopyAsImage('[data-lightup-response-content]', 'initial-image');
+                            }
+                          }, 0);
                         }}
                         style={{
                           background: 'none',
@@ -2014,6 +1810,7 @@ function Content() {
                         }}
                         whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
                         whileTap={{ scale: 0.9 }}
+                        
                         transition={{ type: "spring", stiffness: 400, damping: 17 }}
                         title={imageCopiedId === 'initial-image' ? "Copied as image!" : "Copy as image"}
                       >
@@ -2031,6 +1828,103 @@ function Content() {
                       </motion.button>
                     )}
 
+                    {/* Sharing menu for exports */}
+                    <SharingMenu
+                      onExportTxt={() => handleExportAsDoc(streamingText, 'initial-doc')}
+                      onExportMd={() => handleExportAsMd(streamingText, 'initial-md')}
+                      onCopyFormatted={() => handleRichCopy(streamingText, 'initial-rich-copy')}
+                      onPrint={() => {
+                        // Create printable version with proper formatting
+                        const formatTextForPrint = (text: string) => {
+                          return text
+                            // Convert markdown bold to HTML bold
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                            // Convert markdown italic to HTML italic
+                            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                            // Convert bullet points to HTML list items
+                            .replace(/^\s*[\*\-\+]\s+(.+)$/gm, '<li>$1</li>')
+                            // Wrap consecutive list items in ul tags
+                            .replace(/(<li>.*<\/li>)/gs, (match) => {
+                              const items = match.match(/<li>.*?<\/li>/g);
+                              return items ? `<ul>${items.join('')}</ul>` : match;
+                            })
+                            // Convert line breaks to paragraphs
+                            .split('\n\n')
+                            .map(paragraph => paragraph.trim())
+                            .filter(paragraph => paragraph.length > 0)
+                            .map(paragraph => {
+                              // Don't wrap if it's already a list
+                              if (paragraph.includes('<ul>') || paragraph.includes('<li>')) {
+                                return paragraph;
+                              }
+                              return `<p>${paragraph.replace(/\n/g, '<br>')}</p>`;
+                            })
+                            .join('');
+                        };
+
+                        const formattedContent = formatTextForPrint(streamingText);
+                        
+                        const printWindow = window.open('', '_blank');
+                        printWindow?.document.write(`
+                          <html>
+                            <head>
+                              <title>LightUp Response</title>
+                              <style>
+                                body { 
+                                  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+                                  line-height: 1.6; 
+                                  margin: 40px; 
+                                  color: #333;
+                                  max-width: 800px;
+                                }
+                                h1, h2, h3 { color: #2c3345; margin-top: 24px; margin-bottom: 16px; }
+                                p { margin-bottom: 16px; }
+                                ul { padding-left: 24px; margin-bottom: 16px; }
+                                li { margin-bottom: 8px; }
+                                strong { font-weight: 600; }
+                                .header { 
+                                  border-bottom: 2px solid #e5e7eb; 
+                                  padding-bottom: 16px; 
+                                  margin-bottom: 32px; 
+                                }
+                                .footer { 
+                                  margin-top: 40px; 
+                                  padding-top: 20px; 
+                                  border-top: 1px solid #ccc; 
+                                  font-size: 12px; 
+                                  color: #666; 
+                                  text-align: center;
+                                }
+                                @media print {
+                                  body { margin: 20px; }
+                                  .header { page-break-after: avoid; }
+                                }
+                              </style>
+                            </head>
+                            <body>
+                              <div class="header">
+                                <h1>LightUp AI Response</h1>
+                                <p style="color: #666; font-size: 14px; margin: 0;">${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString()}</p>
+                              </div>
+                              <div class="content">
+                                ${formattedContent}
+                              </div>
+                              <div class="footer">Generated by LightUp • boimaginations.com/lightup</div>
+                            </body>
+                          </html>
+                        `);
+                        printWindow?.document.close();
+                        printWindow?.print();
+                      }}
+                      currentTheme={currentTheme}
+                      exportingDocId={exportingDocId}
+                      exportingMdId={exportingMdId}
+                      richCopiedId={richCopiedId}
+                      txtExportId="initial-doc"
+                      mdExportId="initial-md"
+                      richCopyId="initial-rich-copy"
+                    />
+
                     {/* Speak button */}
                     <motion.button
                       onClick={() => handleSpeak(streamingText, 'main')}
@@ -2047,7 +1941,6 @@ function Content() {
                         color: speakingId === 'main' ? '#14742F' : '#666'
                       }}
                       whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
-
                       whileTap={{ scale: 0.9 }}
                       transition={{ type: "spring", stiffness: 400, damping: 17 }}
                       title={speakingId === 'main' ? "Stop speaking" : "Read text aloud"}
@@ -2079,7 +1972,6 @@ function Content() {
                         color: isLoading ? '#14742F' : '#666'
                       }}
                       whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
-
                       whileTap={{ scale: 0.9 }}
                       transition={{ type: "spring", stiffness: 400, damping: 17 }}
                       title={isLoading ? "Regenerating..." : "Regenerate response"}
@@ -2093,7 +1985,7 @@ function Content() {
                     {/* Model display */}
                     <motion.div
                       style={{
-                        fontSize: "0.8rem",
+                        fontSize: "0.75rem",
                         display: 'flex',
                         alignItems: 'center',
                         gap: '4px',
@@ -2180,57 +2072,40 @@ function Content() {
             )}
 
             {/* Follow-up QAs */}
-            {followUpQAs.map((qa) => (
-              <FollowUpQAItem
-                key={qa.id}
-                qa={qa}
-                themedStyles={themedStyles}
-                textDirection={textDirection}
-                currentTheme={normalizedTheme}
-                targetLanguage={targetLanguage}
-                settings={settings}
-                fontSizes={fontSizes}
-                handleCopy={handleCopy}
-                copiedId={copiedId}
-                handleCopyAsImage={handleCopyAsImage}
-                imageCopiedId={imageCopiedId}
-                isImageCopySupported={isImageCopySupported}
-                handleSpeak={handleSpeak}
-                speakingId={speakingId}
-                handleRegenerateFollowUp={handleRegenerateFollowUp}
-                activeAnswerId={activeAnswerId}
-                isAskingFollowUp={isAskingFollowUp}
-                popupRef={popupRef}
-                currentModel={currentModel}
-              />
-            ))}
+            <FollowUpSection
+              followUpQAs={followUpQAs}
+              isSearchVisible={isSearchVisible}
+              inputRef={inputRef}
+              followUpQuestion={followUpQuestion}
+              themedStyles={themedStyles}
+              textDirection={textDirection}
+              normalizedTheme={normalizedTheme}
+              targetLanguage={targetLanguage}
+              settings={settings}
+              fontSizes={fontSizes}
+              handleCopy={handleCopy}
+              copiedId={copiedId}
+              handleCopyAsImage={handleCopyAsImage}
+              imageCopiedId={imageCopiedId}
+              isImageCopySupported={isImageCopySupported}
+              handleSpeak={handleSpeak}
+              speakingId={speakingId}
+              handleRegenerateFollowUp={handleRegenerateFollowUp}
+              activeAnswerId={activeAnswerId}
+              isAskingFollowUp={isAskingFollowUp}
+              popupRef={popupRef}
+              currentModel={currentModel}
+              handleFollowUpQuestion={handleFollowUpQuestion}
+              handleAskFollowUpWrapper={handleAskFollowUpWrapper}
+              setIsInputFocused={setIsInputFocused}
+              handleExportAsDoc={handleExportAsDoc}
+              handleExportAsMd={handleExportAsMd}
+              handleRichCopy={handleRichCopy}
+              exportingDocId={exportingDocId}
+              exportingMdId={exportingMdId}
+              richCopiedId={richCopiedId}
+            />
 
-            {/* Spacer to push the search input to the bottom */}
-            <div style={{ flexGrow: 1 }}></div>
-
-            {/* Input section - now at the bottom */}
-            <AnimatePresence>
-              {isSearchVisible && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <FollowUpInput
-                    inputRef={inputRef}
-                    followUpQuestion={followUpQuestion}
-                    handleFollowUpQuestion={handleFollowUpQuestion}
-                    handleAskFollowUpWrapper={handleAskFollowUpWrapper}
-                    isAskingFollowUp={isAskingFollowUp}
-                    setIsInputFocused={setIsInputFocused}
-                    themedStyles={themedStyles}
-                    currentTheme={normalizedTheme}
-                    fontSizes={fontSizes}
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
@@ -2280,243 +2155,30 @@ function Content() {
       </AnimatePresence>
 
       {/* Main popup */}
-      <AnimatePresence mode="sync">
-        {isVisible && isEnabled && isConfigured && (
-          settings?.customization?.layoutMode === "floating" ? (
-            <motion.div
-              style={{
-                position: 'fixed',
-                left: `${position.x}px`,
-                top: `${position.y}px`,
-                zIndex: Z_INDEX.POPUP,
-                pointerEvents: 'none'
-              }}
-              initial={settings?.customization?.popupAnimation === "none" ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: 0, y: 0 }}
-              animate={{ 
-                opacity: 1,
-                x: 0, 
-                y: 0,
-                transition: {
-                  duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2,
-                  ease: "easeOut"
-                }
-              }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2 }}
-            >
-              <div style={{
-                ...themedStyles.popupPositioner,
-                pointerEvents: 'auto'
-              }}>
-                <motion.div 
-                  ref={popupRef}
-                  style={{
-                    ...themedStyles.popup,
-                    width: `${width}px`,
-                    height: `${height}px`,
-                    overflow: 'hidden', // Changed from 'auto' to 'hidden'
-                    position: 'relative',
-                    scrollBehavior: 'smooth',
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }}
-                  data-plasmo-popup
-                  className="lu-no-select"
-                  onClick={(e) => e.stopPropagation()}
-                  onMouseUp={(e) => e.stopPropagation()}
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onMouseEnter={() => setIsInteractingWithPopup(true)}
-                  onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-                  initial={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "initial"}
-                  animate={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "animate"}
-                  exit={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 0 } : "exit"}
-                  layout={false} // Disable layout animations for better performance
-                  variants={
-                    settings?.customization?.popupAnimation === "scale" 
-                      ? scaleMotionVariants 
-                      : settings?.customization?.popupAnimation === "slide"
-                        ? slideMotionVariants
-                        : settings?.customization?.popupAnimation === "fade"
-                          ? fadeMotionVariants
-                          : noMotionVariants
-                  }
-                >
-                  {/* Popup Content with proper scrolling container */}
-                  <div 
-                    className="lu-scroll-container"
-                    style={{
-                      flex: 1,
-                      overflow: 'auto',
-                      minHeight: 0
-                    }}
-                  >
-                    {renderPopupContent()}
-                  </div>
-                  
-                  {/* Resize handle */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      right: 0,
-                      width: '15px',
-                      height: '15px',
-                      cursor: 'se-resize',
-                      background: 'transparent'
-                    }}
-                    onMouseDown={handleResizeStart}
-                    className="lu-resize-handle"
-                  />
-                </motion.div>
-              </div>
-            </motion.div>
-          ) : settings?.customization?.layoutMode === "sidebar" ? (
-            // Sidebar Mode - Optimized
-            <motion.div
-              ref={popupRef}
-              style={{
-                ...themedStyles.sidebarPopup,
-                width: `${width}px`,
-                minWidth: "35%",
-                maxWidth: "800px",
-                resize: "horizontal",
-                overflow: "hidden", // Changed from 'auto' to 'hidden'
-                scrollBehavior: 'smooth',
-                display: 'flex',
-                flexDirection: 'column'
-              }}
-              data-plasmo-popup
-              className="lu-no-select"
-              onClick={(e) => e.stopPropagation()}
-              onMouseUp={(e) => e.stopPropagation()}
-              onMouseDown={(e) => e.stopPropagation()}
-              onMouseEnter={() => setIsInteractingWithPopup(true)}
-              onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-              initial={settings?.customization?.popupAnimation === "none" ? { x: 0, opacity: 1 } : "initial"}
-              animate={settings?.customization?.popupAnimation === "none" ? { x: 0, opacity: 1 } : "animate"}
-              exit={settings?.customization?.popupAnimation === "none" ? { x: 0, opacity: 0 } : "exit"}
-              transition={{ 
-                type: settings?.customization?.popupAnimation === "none" ? "tween" : "spring",
-                stiffness: 300,
-                damping: 25,
-                mass: 0.8,
-                duration: settings?.customization?.popupAnimation === "none" ? 0 : undefined
-              }}
-              variants={
-                settings?.customization?.popupAnimation === "scale" 
-                  ? sidebarScaleMotionVariants 
-                  : settings?.customization?.popupAnimation === "slide"
-                    ? sidebarSlideMotionVariants
-                    : settings?.customization?.popupAnimation === "fade"
-                      ? fadeMotionVariants
-                      : noMotionVariants
-              }
-            >
-              {/* Sidebar Popup Content with proper scrolling */}
-              <div className="lu-scroll-container" style={{
-                flex: 1,
-                overflow: 'auto',
-                minHeight: 0,
-                paddingTop: 0,
-                WebkitOverflowScrolling: 'touch',
-                transform: 'translateZ(0)' // Force hardware acceleration
-              }}>
-                {renderPopupContent()}
-              </div>
-            </motion.div>
-          ) : (
-            // Centered Mode - Optimized
-            <>
-              {/* Background overlay with blur */}
-              <motion.div
-                style={themedStyles.centeredPopupOverlay}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                onClick={() => setIsVisible(false)}
-              />
-              
-              {/* Centered popup */}
-              <div style={{
-                position: 'fixed',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                zIndex: Z_INDEX.CENTERED_POPUP,
-                pointerEvents: 'none'
-              }}>
-                <motion.div
-                  ref={popupRef}
-                  style={{
-                    ...themedStyles.centeredPopup,
-                    width: `${Math.max(width, 650)}px`,
-                    height: `${Math.max(height, 450)}px`,
-                    overflow: "hidden", // Changed from 'auto' to 'hidden'
-                    scrollBehavior: 'smooth',
-                    pointerEvents: 'auto',
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }}
-                  data-plasmo-popup
-                  className="lu-no-select"
-                  onClick={(e) => e.stopPropagation()}
-                  onMouseUp={(e) => e.stopPropagation()}
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onMouseEnter={() => setIsInteractingWithPopup(true)}
-                  onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-                  initial={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "initial"}
-                  animate={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "animate"}
-                  exit={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 0 } : "exit"}
-                  transition={{ 
-                    duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2, 
-                    ease: "easeOut" 
-                  }}
-                  variants={
-                    settings?.customization?.popupAnimation === "scale" 
-                      ? scaleMotionVariants 
-                      : settings?.customization?.popupAnimation === "slide"
-                        ? slideMotionVariants
-                        : settings?.customization?.popupAnimation === "fade"
-                          ? fadeMotionVariants
-                          : noMotionVariants
-                  }
-                >
-                  {/* Centered Popup Content with proper scrolling */}
-                  <div className="lu-scroll-container" style={{
-                    flex: 1,
-                    overflow: 'auto',
-                    minHeight: 0,
-                    WebkitOverflowScrolling: 'touch',
-                    transform: 'translateZ(0)' // Force hardware acceleration
-                  }}>
-                    {renderPopupContent()}
-                  </div>
-                  
-                  {/* Resize handle - smaller and less visible */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      bottom: 0,
-                      right: 0,
-                      width: '12px',
-                      height: '12px',
-                      cursor: 'se-resize',
-                      background: 'transparent'
-                    }}
-                    onMouseDown={handleResizeStart}
-                    className="lu-resize-handle"
-                  />
-                </motion.div>
-              </div>
-            </>
-          )
-        )}
-      </AnimatePresence>
+      <PopupLayoutContainer
+        isVisible={isVisible}
+        isEnabled={isEnabled}
+        isConfigured={isConfigured}
+        layoutMode={layoutMode}
+        position={position}
+        width={width}
+        height={height}
+        settings={settings}
+        themedStyles={themedStyles}
+        popupRef={popupRef}
+        isInputFocused={isInputFocused}
+        handleResizeStart={handleResizeStart}
+        setIsInteractingWithPopup={setIsInteractingWithPopup}
+        setIsVisible={setIsVisible}
+        renderPopupContent={renderPopupContent}
+        Z_INDEX={Z_INDEX}
+        scaleMotionVariants={scaleMotionVariants}
+        slideMotionVariants={slideMotionVariants}
+        fadeMotionVariants={fadeMotionVariants}
+        noMotionVariants={noMotionVariants}
+        sidebarScaleMotionVariants={sidebarScaleMotionVariants}
+        sidebarSlideMotionVariants={sidebarSlideMotionVariants}
+      />
 
       {/* Blur overlay */}
       {isBlurActive && (
@@ -2566,719 +2228,9 @@ function Content() {
 
 export default Content;
 
-// Dynamic Skeleton Lines Component
-interface DynamicSkeletonLinesProps {
-  currentTheme: "light" | "dark";
-  containerRef: React.RefObject<HTMLDivElement>;
-  fontSizes: FontSizes;
-}
 
-const DynamicSkeletonLines = React.memo(({ currentTheme, containerRef, fontSizes }: DynamicSkeletonLinesProps) => {
-  const [lineCount, setLineCount] = useState(6); // Better default fallback
-  
-  useEffect(() => {
-    const calculateLines = () => {
-      if (!containerRef.current) return;
-      
-      // Get actual container dimensions
-      const containerRect = containerRef.current.getBoundingClientRect();
-      const containerHeight = containerRect.height;
-      
-      // Calculate header and UI element heights more accurately
-      const headerElement = containerRef.current.querySelector('[data-header]') || 
-                           containerRef.current.querySelector('.lu-header') ||
-                           containerRef.current.firstElementChild;
-      
-      const headerHeight = headerElement ? headerElement.getBoundingClientRect().height : 60;
-      
-      // Account for different layout modes
-      const isFloating = containerRect.width < 400;
-      const isSidebar = containerRect.width > 600;
-      
-      // Dynamic spacing based on layout
-      const lineHeight = 25;
-      const lineSpacing = isFloating ? 6 : 8; // Tighter spacing for small layouts
-      const topPadding = 20;
-      const bottomPadding = isFloating ? 60 : 80; // Less bottom space for floating
-      const loadingIndicatorSpace = 50;
-      
-      // More accurate available height calculation
-      const usedSpace = headerHeight + topPadding + bottomPadding + loadingIndicatorSpace;
-      const availableHeight = Math.max(100, containerHeight - usedSpace);
-      
-      // Calculate lines with better logic
-      const totalLineSpace = lineHeight + lineSpacing;
-      const maxPossibleLines = Math.floor(availableHeight / totalLineSpace);
-      
-      // Adaptive line count based on layout
-      let optimalLines;
-      if (isFloating) {
-        optimalLines = Math.max(3, Math.min(maxPossibleLines, 8)); // 3-8 lines for floating
-      } else if (isSidebar) {
-        optimalLines = Math.max(6, Math.min(maxPossibleLines, 20)); // 6-20 lines for sidebar
-      } else {
-        optimalLines = Math.max(4, Math.min(maxPossibleLines, 15)); // 4-15 lines for centered
-      }
-      
-      // Smooth transition - don't change too drastically
-      const currentCount = lineCount;
-      const difference = Math.abs(optimalLines - currentCount);
-      
-      if (difference > 2) {
-        // Gradual adjustment for large changes
-        const adjustment = difference > 5 ? 3 : 1;
-        const newCount = optimalLines > currentCount 
-          ? currentCount + adjustment 
-          : currentCount - adjustment;
-        setLineCount(Math.max(3, Math.min(newCount, 20)));
-      } else if (difference > 0) {
-        setLineCount(optimalLines);
-      }
-    };
-    
-    // Initial calculation with delay to ensure DOM is ready
-    const timeoutId = setTimeout(calculateLines, 100);
-    
-    // Debounced resize observer for better performance
-    let resizeTimeout: NodeJS.Timeout;
-    const debouncedCalculate = () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(calculateLines, 150);
-    };
-    
-    const resizeObserver = new ResizeObserver(debouncedCalculate);
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-    }
-    
-    return () => {
-      clearTimeout(timeoutId);
-      clearTimeout(resizeTimeout);
-      resizeObserver.disconnect();
-    };
-  }, [containerRef, lineCount]);
-  
-  // Better width distribution for more realistic content
-  const getRandomWidth = (index: number) => {
-    const patterns = [
-      ['100%', '85%', '70%', '92%', '78%'], // Paragraph pattern
-      ['95%', '88%', '82%', '90%', '75%'],  // Article pattern  
-      ['100%', '93%', '87%', '96%', '73%'], // List pattern
-    ];
-    
-    const patternIndex = Math.floor(index / 5) % patterns.length;
-    const pattern = patterns[patternIndex];
-    return pattern[index % pattern.length];
-  };
-  
-  return (
-    <>
-      {[...Array(10)].map((_, i) => (
-        <motion.div
-          key={i}
-          style={{
-            height: '20px',
-            background: currentTheme === "dark" 
-              ? '#2a2a2a'
-              : '#f0f0f0',
-            borderRadius: '4px',
-            width: getRandomWidth(i),
-            overflow: 'hidden',
-            position: 'relative',
-            // marginBottom: '8px',
-          }}
-          variants={skeletonLineVariants}
-          initial="initial"
-          animate="animate"
-          exit="exit"
-          custom={i}
-        >
-          {/* Simple single shimmer */}
-          <motion.div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: currentTheme === "dark"
-                ? 'linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.24) 50%, transparent 100%)'
-                : 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%)',
-              backgroundSize: '200% 100%',
-              borderRadius: '4px',
-            }}
-            animate={{
-              backgroundPosition: ['-100% 0%', '100% 0%']
-            }}
-            transition={{
-              duration: 1,
-              repeat: Infinity,
-              ease: "linear",
-              repeatDelay: 0,
-              delay:  0.3
-            }}
-          />
-        </motion.div>
-      ))}
-    </>
-  );
-});
 
-DynamicSkeletonLines.displayName = 'DynamicSkeletonLines';
 
-// Loading Thinking Text Component with alternating words
-interface LoadingThinkingTextProps {
-  currentTheme: 'light' | 'dark' | 'system';
-  fontSizes: FontSizes;
-  onCycleComplete?: () => void;
-}
-
-const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycleComplete }: LoadingThinkingTextProps) => {
-  const [currentWord, setCurrentWord] = useState(0);
-  const [cycleCount, setCycleCount] = useState(0);
-  const words = ['Thinking', 'Generating'];
-  
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentWord(prev => {
-        const nextWord = (prev + 1) % words.length;
-        
-        // If we're going back to the first word, increment cycle count
-        if (nextWord === 0) {
-          setCycleCount(prevCount => {
-            const newCount = prevCount + 1;
-            // Complete cycle after first full rotation (Thinking -> Generating -> Thinking)
-            if (newCount === 1 && onCycleComplete) {
-              setTimeout(() => onCycleComplete(), 100); // Small delay to ensure smooth transition
-            }
-            return newCount;
-          });
-        }
-        
-        return nextWord;
-      });
-    }, 1500); // Switch every 1.5 seconds
-    
-    return () => clearInterval(interval);
-  }, [onCycleComplete]);
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, filter: 'blur(4px)', y: 5 }}
-      animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
-      exit={{ 
-        opacity: 0, 
-        filter: 'blur(8px)',
-        y: -5,
-        transition: { 
-          duration: 0.4, 
-          ease: 'easeInOut',
-          filter: { duration: 0.3 }
-        }
-      }}
-      transition={{ 
-        duration: 0.4, 
-        ease: 'easeInOut',
-        filter: { duration: 0.3 }
-      }}
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        gap: '8px',
-        padding: '8px 0',
-        minHeight: '24px', // Match the content container height
-        position: 'relative'
-      }}
-    >
-      <AnimatePresence mode="wait">
-        <motion.span
-          key={words[currentWord]}
-          initial={{ 
-            opacity: 0, 
-            filter: 'blur(6px)',
-            y: 8,
-            scale: 0.95
-          }}
-          animate={{ 
-            opacity: 1, 
-            filter: 'blur(0px)',
-            y: 0,
-            scale: 1
-          }}
-          exit={{ 
-            opacity: 0, 
-            filter: 'blur(6px)',
-            y: -8,
-            scale: 0.95
-          }}
-          transition={{
-            duration: 0.35,
-            ease: 'easeInOut',
-            filter: { duration: 0.25 },
-            scale: { duration: 0.3 }
-          }}
-          style={{ 
-            fontWeight: 500,
-            fontSize: fontSizes.base,
-            backgroundImage: currentTheme === "dark" 
-              ? 'linear-gradient(90deg, #fff 0%, #505050 50%, #fff 100%)'
-              : 'linear-gradient(90deg, #c0c0c0 0%, #161616 50%, #c0c0c0 100%)',
-            backgroundSize: '200% auto',
-            color: 'transparent',
-            WebkitBackgroundClip: 'text',
-            backgroundClip: 'text',
-            position: 'relative',
-            display: 'inline-block'
-          }}
-        >
-          <motion.span
-            animate={{
-              backgroundPosition: ['0% center', '200% center']
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-            style={{
-              background: 'inherit',
-              WebkitBackgroundClip: 'inherit',
-              backgroundClip: 'inherit',
-              backgroundSize: 'inherit'
-            }}
-          >
-            {words[currentWord]}
-          </motion.span>
-        </motion.span>
-      </AnimatePresence>
-    </motion.div>
-  );
-});
-
-LoadingThinkingText.displayName = 'LoadingThinkingText';
-
-// Define a new component for the Q&A item
-interface FollowUpQAItemProps {
-  qa: {
-    question: string;
-    answer: string;
-    id: number;
-    isComplete: boolean;
-  };
-  themedStyles: any;
-  textDirection: 'ltr' | 'rtl';
-  currentTheme: 'light' | 'dark' | 'system';
-  targetLanguage: string;
-  settings: any;
-  fontSizes: FontSizes;
-  handleCopy: (text: string, id: string) => void;
-  copiedId: string | null;
-  handleCopyAsImage: (elementSelector: string, id: string) => Promise<void>;
-  imageCopiedId: string | null;
-  isImageCopySupported: boolean;
-  handleSpeak: (text: string, id: string) => void;
-  speakingId: string | null;
-  handleRegenerateFollowUp: (question: string, id: number) => void;
-  activeAnswerId: number | null;
-  isAskingFollowUp: boolean;
-  popupRef: React.RefObject<HTMLDivElement>;
-  currentModel: string | null;
-}
-
-const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentTheme, targetLanguage, settings, fontSizes, handleCopy, copiedId, handleCopyAsImage, imageCopiedId, isImageCopySupported, handleSpeak, speakingId, handleRegenerateFollowUp, activeAnswerId, isAskingFollowUp, popupRef, currentModel }: FollowUpQAItemProps) => {
-  const { question, answer, id, isComplete } = qa;
-  const answerRef = useRef<HTMLDivElement>(null);
-  const [animationCycleComplete, setAnimationCycleComplete] = useState(false);
-  
-  // Reset animation cycle when this item becomes active
-  useEffect(() => {
-    if (activeAnswerId === id && !isComplete && answer === '') {
-      setAnimationCycleComplete(false);
-    }
-  }, [activeAnswerId, id, isComplete, answer]);
-
-  // --------------------------------------------------
-  // Unified scroll effect – triggers once answer is complete
-  // --------------------------------------------------
-  useEffect(() => {
-    if (!isComplete || !answerRef.current || !popupRef.current) return;
-
-    const scrollContainer = popupRef.current.querySelector('.lu-scroll-container') as HTMLElement | null;
-    if (!scrollContainer) return;
-
-    const topPadding = 16; // px to leave above the answer
-
-    const scrollIfNeeded = () => {
-      if (!answerRef.current) return;
-
-      const containerRect = scrollContainer.getBoundingClientRect();
-      const answerRect   = answerRef.current.getBoundingClientRect();
-
-      // If the answer's top is above visible area OR below 40 % of viewport -> scroll
-      const upperComfort = containerRect.top + containerRect.height * 0.4;
-      const needsScroll  = answerRect.top < containerRect.top + topPadding || answerRect.top > upperComfort;
-
-      if (needsScroll) {
-        const offsetWithinContainer = answerRect.top - containerRect.top; // px between top edges
-        const targetScrollTop      = scrollContainer.scrollTop + offsetWithinContainer - topPadding;
-
-        scrollContainer.scrollTo({ top: targetScrollTop, behavior: 'smooth' });
-      }
-    };
-
-    // Initial attempt after paint
-    requestAnimationFrame(scrollIfNeeded);
-
-    // Watch for further growth for ~3 s
-    const ro = new ResizeObserver(scrollIfNeeded);
-    ro.observe(answerRef.current);
-
-    const timeout = setTimeout(() => ro.disconnect(), 3000);
-
-    return () => {
-      ro.disconnect();
-      clearTimeout(timeout);
-    };
-  }, [isComplete]);
-
-  return (
-    <motion.div
-      key={id}
-      layout="position"
-      initial={{ opacity: 0, y: 20, scale: 0.95 }}
-      animate={{ 
-        opacity: 1, 
-        y: 0, 
-        scale: 1,
-        transition: {
-          type: "spring",
-          stiffness: 100,
-          damping: 15
-        }
-      }}
-      exit={{ opacity: 0, y: -20, transition: { duration: 0.2 } }}
-      style={themedStyles.followUpQA}
-    >
-      {/* Question bubble */}
-      <motion.div
-        variants={questionBubbleVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        style={questionBubbleStyle}
-      >
-        <div style={{
-          ...themedStyles.followUpQuestion,
-          textAlign: textDirection === "rtl" ? "right" : "left"
-        }}>
-          {question}
-        </div>
-      </motion.div>
-
-      {/* Answer bubble */}
-      <motion.div
-        ref={answerRef}
-        id={`qa-answer-${id}`}
-        variants={answerBubbleVariants}
-        initial="initial"
-        animate="animate"
-        exit="exit"
-        style={answerBubbleStyle}
-      >
-        <div style={{
-          ...themedStyles.followUpAnswer,
-          textAlign: textDirection === "rtl" ? "right" : "left"
-        }}>
-          <AnimatePresence mode="wait">
-            {activeAnswerId === id && !isComplete && (answer === '' || !animationCycleComplete) ? (
-              <LoadingThinkingText 
-                key="loading"
-                currentTheme={currentTheme}
-                fontSizes={fontSizes}
-                onCycleComplete={() => setAnimationCycleComplete(true)}
-              />
-            ) : (
-              <motion.div
-                key="content"
-                initial={{ opacity: 0, filter: 'blur(4px)', y: 5, scale: 0.98 }}
-                animate={{ 
-                  opacity: 1, 
-                  filter: 'blur(0px)', 
-                  y: 0, 
-                  scale: 1,
-                  transition: {
-                    delay: 0.1, // Small delay to ensure loading exits first
-                    duration: 0.5,
-                    ease: 'easeInOut',
-                    filter: { duration: 0.3, delay: 0.15 },
-                    scale: { duration: 0.4, delay: 0.1 }
-                  }
-                }}
-                exit={{ opacity: 0, filter: 'blur(4px)', y: -5, scale: 0.98 }}
-                transition={{ 
-                  duration: 0.4, 
-                  ease: 'easeInOut',
-                  filter: { duration: 0.3 }
-                }}
-                style={{
-                  minHeight: '24px' // Prevent layout shift
-                }}
-              >
-                <MarkdownText
-                  text={answer}
-                  isStreaming={activeAnswerId === id && !isComplete}
-                  language={targetLanguage}
-                  theme={currentTheme === "system" ? "light" : currentTheme}
-                  fontSize={settings?.customization?.fontSize}
-                  fontSizes={fontSizes}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
-          
-          {isComplete && (
-            <motion.div 
-              style={{ display: 'flex', gap: '8px', alignItems: 'center' }}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ 
-                opacity: 1, 
-                y: 0,
-                transition: {
-                  delay: 0.3,
-                  duration: 0.2
-                }
-              }}
-            >
-              {/* Copy text button */}
-              <motion.button
-                onClick={() => handleCopy(answer, `followup-${id}`)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  width: '24px',
-                  height: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '4px',
-                  color: copiedId === `followup-${id}` ? '#666' : '#666'
-                }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                title={copiedId === `followup-${id}` ? "Copied!" : "Copy text to clipboard"}
-              >
-                {copiedId === `followup-${id}` ? (
-                  <motion.svg 
-                    width="13" 
-                    height="15" 
-                    viewBox="0 0 24 24" 
-                    fill="currentColor"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                  >
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                  </motion.svg>
-                ) : (
-                  <motion.svg 
-                    width="13" 
-                    height="15" 
-                    viewBox="0 0 62 61" 
-                    fill="currentColor"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                  >
-                    <path d="M12.6107 48.8146V57.9328C12.6107 59.8202 14.1912 60.9722 15.6501 60.9722H58.2018C59.6546 60.9722 61.2412 59.8202 61.2412 57.9328V15.3811C61.2412 13.9283 60.0893 12.3417 58.2018 12.3417H49.0836V3.22349C49.0836 1.77065 47.9317 0.184082 46.0442 0.184082H3.49253C1.6081 0.184082 0.453125 1.76153 0.453125 3.22349V45.7752C0.453125 47.6626 2.03362 48.8146 3.49253 48.8146H12.6107ZM44.5245 12.3417H15.6501C13.7657 12.3417 12.6107 13.9192 12.6107 15.3811V44.2554H5.01223V4.74319H44.5245V12.3417Z" fill="currentColor"/>
-                  </motion.svg>
-                )}
-              </motion.button>
-
-              {/* Copy as image button */}
-              {isImageCopySupported && (
-                <motion.button
-                  onClick={() => {
-                    if (answerRef.current) {
-                      handleCopyAsImage(answerRef.current as any, `followup-image-${id}`);
-                    } else {
-                      handleCopyAsImage(`#qa-answer-${id}`, `followup-image-${id}`);
-                    }
-                  }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    width: '24px',
-                    height: '24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '4px',
-                    color: '#666'
-                  }}
-                  whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
-                  whileTap={{ scale: 0.9 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  title={imageCopiedId === `followup-image-${id}` ? "Copied as image!" : "Copy as image"}
-                >
-                  {imageCopiedId === `followup-image-${id}` ? (
-                    <motion.svg 
-                      width="13" 
-                      height="15" 
-                      viewBox="0 0 24 24" 
-                      fill="currentColor"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                    >
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                    </motion.svg>
-                  ) : (
-                    <motion.svg 
-                      width="14" 
-                      height="14" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                    >
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                      <circle cx="9" cy="9" r="2"/>
-                      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
-                    </motion.svg>
-                  )}
-                </motion.button>
-              )}
-
-              {/* Speak button */}
-              <motion.button
-                onClick={() => handleSpeak(answer, `followup-${id}`)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  width: '24px',
-                  height: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '4px',
-                  color: speakingId === `followup-${id}` ? '#14742F' : '#666'
-                }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                title={speakingId === `followup-${id}` ? "Stop speaking" : "Read text aloud"}
-              >
-                {speakingId === `followup-${id}` ? (
-                  <motion.svg 
-                    width="18" 
-                    height="18" 
-                    viewBox="0 0 24 24" 
-                    fill="currentColor"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                  >
-                    <path d="M6 6h4v12H6V6zm8 0h4v12h-4V6z" fill="currentColor"/>
-                  </motion.svg>
-                ) : (
-                  <motion.svg 
-                    width="18" 
-                    height="18" 
-                    viewBox="0 0 24 24" 
-                    fill="currentColor"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                  >
-                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
-                  </motion.svg>
-                )}
-              </motion.button>
-
-              {/* Add regenerate button for follow-up */}
-              <motion.button
-                onClick={() => handleRegenerateFollowUp(question, id)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  width: '24px',
-                  height: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '4px',
-                  color: (activeAnswerId === id && !isComplete) ? '#14742F' : '#666'
-                }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                title={(activeAnswerId === id && !isComplete) ? "Regenerating..." : "Regenerate response"}
-                disabled={activeAnswerId === id && !isComplete}
-              >
-                <motion.svg 
-                  width="14" 
-                  height="15" 
-                  viewBox="0 0 24 24" 
-                  fill="none" 
-                  stroke="currentColor" 
-                  strokeWidth="2" 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round"
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                >
-                  <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/>
-                </motion.svg>
-              </motion.button>
-
-              {/* Add model display */}
-              <motion.div
-                style={{
-                  fontSize: fontSizes.model,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  marginLeft: '4px',
-                  minWidth: '80px',
-                  justifyContent: 'center'
-                }}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-              >
-                <span style={{ 
-                  textTransform: 'capitalize',
-                  fontWeight: 500,
-                  color: currentTheme === 'dark' ? 'rgb(132, 132, 132)' : 'rgb(102, 102, 102)',
-                  userSelect: 'none',
-                  backgroundColor: currentTheme === 'dark' ? '#494949' : '#f0f0f0',
-                  padding: '2px 10px',
-                  borderRadius: '11px',
-                }}
-                title={currentModel ? `AI Model: ${currentModel}` : 'Loading AI model...'}
-                >
-                  {currentModel || 'Loading...'}
-                </span>
-              </motion.div>
-            </motion.div>
-          )}
-        </div>
-      </motion.div>
-    </motion.div>
-  )
-});
 
 export const mountLightUp = () => {
   // Prevent multiple mounts

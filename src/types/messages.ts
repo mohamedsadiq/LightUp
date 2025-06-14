@@ -41,9 +41,15 @@ export interface ProcessTextRequest {
       | "gemini-2.0-flash"
       | "gemini-2.0-flash-lite-preview-02-05"
       | "gemini-2.0-flash-thinking-exp-01-21";
-    grokModel?: "grok-2" | "grok-2-latest" | "grok-beta";
+    grokModel?:
+      | "grok-3"
+      | "grok-3-mini"
+      | "grok-3-fast"
+      | "grok-3-mini-fast"
+      | "grok-2-1212";
     localModel?: LocalModel;
     maxTokens?: number;
+    temperature?: number;
     stream?: boolean;
     translationSettings?: {
       fromLanguage: string;

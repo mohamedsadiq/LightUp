@@ -34,17 +34,23 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
     if (!selectedText) return { wordCount: 0, readTimeLabel: '<1 min' };
 
     // Strip markdown and code fences to avoid counting symbols
-    const clean = selectedText
+    let clean = selectedText
       .replace(/```[\s\S]*?```/g, ' ')       // remove triple-backtick blocks
       .replace(/`[^`]*`/g, ' ')               // inline code
       .replace(/[#>*_\-]+/g, ' ')            // markdown bullets, headings, emphasis
-      .replace(/\[(.*?)\]\((.*?)\)/g, '$1') // markdown links keep label
-      .replace(/[\u2019’]/g, "'")          // normalize apostrophes
-      .replace(/[^\p{L}\p{N}\s]+/gu, ' ')  // drop symbols (unicode letters/numbers)
-      .replace(/\s+/g, ' ')                  // collapse spaces
+      .replace(/\[(.*?)\]\((.*?)\)/g, '$1'); // markdown links keep label
+
+    // Handle contractions BEFORE removing symbols to prevent word splitting
+    clean = clean
+      .replace(/\b(\w+)['\u2019](\w+)\b/g, '$1$2')  // Convert contractions: "I'm" -> "Im", "don't" -> "dont"
+      .replace(/[^\p{L}\p{N}\s]+/gu, ' ')            // drop symbols (unicode letters/numbers)
+      .replace(/\s+/g, ' ')                          // collapse spaces
       .trim();
 
-    const words = clean ? clean.split(' ').length : 0;
+    // Proper empty string handling after cleaning
+    if (!clean) return { wordCount: 0, readTimeLabel: '<1 min' };
+
+    const words = clean.split(' ').filter(word => word.length > 0).length;
     const minutes = words / 200; // avg reading speed
     const label = minutes < 0.5 ? 'Less than 1 min' : `${Math.round(minutes)} min`;
 

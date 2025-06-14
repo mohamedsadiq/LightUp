@@ -8,7 +8,12 @@ export type Mode = "explain" | "summarize" | "analyze" | "translate" | "free"
 export type FeedbackType = "like" | "dislike"
 
 // Grok model types
-export type GrokModel = "grok-2" | "grok-2-latest" | "grok-beta";
+export type GrokModel =
+  | "grok-3"            // Standard Grok-3 model
+  | "grok-3-mini"       // Lightweight variant
+  | "grok-3-fast"       // Latency-optimised Grok-3
+  | "grok-3-mini-fast" // Mini + fast variant
+  | "grok-2-1212";     // Latest Grok-2 build
 
 // Local model types
 export type LocalModel = 
@@ -27,7 +32,7 @@ export type LocalModel =
 export interface RateLimit {
   actionsRemaining: number;  // Number of actions remaining for the day
   lastResetDate: string;     // ISO string of when the count was last reset
-  dailyLimit: number;        // Maximum number of actions per day (default 20)
+  dailyLimit: number;        // Maximum number of actions per day (default 10)
 }
 
 // Add a new interface for custom prompts

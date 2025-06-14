@@ -138,7 +138,32 @@ const isConfigurationValid = (settings: Settings): boolean => {
         return !!settings.geminiApiKey;
       case "xai": {
         const xaiKey = settings.xaiApiKey || '';
-        return xaiKey.length > 0;
+        // Enhanced xAI API key validation
+        if (!xaiKey || xaiKey.trim().length === 0) {
+          console.error('xAI API key is missing or empty');
+          return false;
+        }
+        
+        // Check if API key has the correct format
+        if (!xaiKey.startsWith('xai-')) {
+          console.error('xAI API key must start with "xai-"');
+          return false;
+        }
+        
+        // Check minimum length (xAI keys are typically 64+ characters)
+        if (xaiKey.length < 50) {
+          console.error('xAI API key appears to be too short');
+          return false;
+        }
+        
+        // Check for common formatting issues
+        if (xaiKey.includes(' ') || xaiKey.includes('\n') || xaiKey.includes('\t')) {
+          console.error('xAI API key contains invalid whitespace characters');
+          return false;
+        }
+        
+        console.log('xAI API key validation passed');
+        return true;
       }
       case "basic":
         return true; // Basic version doesn't require configuration

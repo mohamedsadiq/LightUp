@@ -82,17 +82,17 @@ export const sidebarScaleMotionVariants = {
 
 export const sidebarSlideMotionVariants = {
   initial: { 
-    // opacity: 0,
-    x: 550,
+    
+    x: '100vw',
     transition: {
       type: "spring",
       stiffness: 400,
-      damping: 10,
+      damping: 70,
       mass: 0.8
     }
   },
   animate: { 
-    // opacity: 1,
+  
     x: 0,
     transition: {
       type: "spring",
@@ -102,12 +102,12 @@ export const sidebarSlideMotionVariants = {
     }
   },
   exit: { 
-    // opacity: 0,
-    x: 550,
+
+    x: '100vw',
     transition: {
       type: "spring",
-      stiffness: 400,
-      damping: 40,
+      stiffness: 300,
+      damping: 70,
       mass: 1
     }
   }

@@ -165,6 +165,16 @@ const FormRow = styled.div`
   justify-content: space-between;
   padding: 16px 0;
   min-height: 48px;
+  gap: 20px;
+  
+  > div:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  > div:last-child {
+    flex-shrink: 0;
+  }
 `
 
 // Label and description - matching popup screenshot exactly
@@ -1551,7 +1561,7 @@ function IndexOptions() {
         <Logo />
         <VersionBadgeContainer>
           <BetaBadge>BETA</BetaBadge>
-          <VersionNumber>v1.1.13</VersionNumber>
+          <VersionNumber>v1.1.14</VersionNumber>
         </VersionBadgeContainer>
         {/* <CloseButton onClick={() => window.close()}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1652,7 +1662,7 @@ function IndexOptions() {
                      
                      <FormRow>
                        <div>
-                         <Label>Persist Highlight</Label>
+                         <Label>Keep Highlighted Text After Popup Closes</Label>
                          <Description>Keep the highlight on the selected text after the popup closes</Description>
                        </div>
                        <ToggleContainer>
@@ -1669,8 +1679,8 @@ function IndexOptions() {
                      
                      <FormRow>
                        <div>
-                         <Label>Automatic Activation</Label>
-                         <Description>Automatically activate LightUp when text is selected</Description>
+                         <Label>Auto-Open LightUp on Text Selection</Label>
+                         <Description>Opens LightUp automatically whenever you select text</Description>
                        </div>
                        <ToggleContainer>
                          <ToggleInput 
@@ -1710,8 +1720,8 @@ function IndexOptions() {
 
                       <FormRow>
                         <div>
-                          <Label>Quick View</Label>
-                          <Description>Show floating button to instantly process page content</Description>
+                          <Label>Show 'Instant AI' Button</Label>
+                          <Description>Add a floating 'Instant AI' button that summarizes or explains the whole page with one click</Description>
                         </div>
                         <ToggleContainer>
                           <ToggleInput 
@@ -1727,8 +1737,8 @@ function IndexOptions() {
                       
                       <FormRow>
                         <div>
-                          <Label>Text Selection Button</Label>
-                          <Description>Show button when text is selected</Description>
+                          <Label>Show Action Button on Text Selection</Label>
+                          <Description>Display a small button when text is highlighted</Description>
                         </div>
                         <ToggleContainer>
                           <ToggleInput 

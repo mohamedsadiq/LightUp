@@ -171,10 +171,10 @@ export const PopupModeSelector = ({
         exit={{ scale: 1.3, opacity: 0}}
         transition={{
           type: "spring",
-          bounce: 0.2,
+          bounce: 0.1,
           duration: 0.3
         }}
-        layout="preserve-aspect"
+        layout
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -185,12 +185,12 @@ export const PopupModeSelector = ({
           }}
           initial={{ filter: "blur(8px)" }}
           animate={{ filter: "blur(0)" }}
-          exit={{ scale: 2, opacity: 0 }}
+          exit={{ scale: 1, opacity: 0 }}
           transition={{
             type: "spring",
-            stiffness: 300,
-            damping: 20,
-            mass: 0.8
+            stiffness: 400,
+            damping: 50,
+            mass: 0.8,
           }}
           layout="preserve-aspect"
           layoutId="mode-container"

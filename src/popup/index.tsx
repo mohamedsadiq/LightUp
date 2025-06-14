@@ -56,7 +56,7 @@ const flexBetween = css`
 
 // Main container - With increased width as requested
 const PopupContainer = styled.div`
-  width: 700px;
+  width: 750px;
   min-height: 480px;
   max-height: 600px;
   background: ${theme.dark.background};
@@ -302,6 +302,16 @@ const FormRow = styled.div`
   padding: 12px 0;
   min-height: 42px;
   border-radius: 3px;
+  gap: 20px;
+  
+  > div:first-child {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  > div:last-child {
+    flex-shrink: 0;
+  }
 `
 
 const Label = styled.label`
@@ -748,7 +758,7 @@ const IndexPopup = () => {
           
           <VersionBadgeContainer>
             <BetaBadge>Beta </BetaBadge>
-            <VersionNumber>v1.1.13</VersionNumber>
+            <VersionNumber>v1.1.14</VersionNumber>
           </VersionBadgeContainer>
         </div>
       </Header>
@@ -941,13 +951,13 @@ const IndexPopup = () => {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                       <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px' }}>Free Uses Remaining</span>
                       <span style={{ fontWeight: 500, fontSize: '14px' }}>
-                        {remainingActions} / {(settings?.rateLimit as any)?.maxDailyActions || 50}
+                        {remainingActions} / {(settings?.rateLimit as any)?.dailyLimit ?? 30}
                       </span>
                     </div>
                     <div style={{ width: '100%', height: '8px', backgroundColor: '#444444', borderRadius: '4px', overflow: 'hidden' }}>
                       <div 
                         style={{ 
-                          width: `${Math.min(100, (remainingActions / ((settings?.rateLimit as any)?.maxDailyActions || 50)) * 100)}%`, 
+                          width: `${Math.min(100, (remainingActions / ((settings?.rateLimit as any)?.dailyLimit ?? 30)) * 100)}%`, 
                           height: '100%', 
                           backgroundColor: theme.dark.toggle.active, 
                           borderRadius: '4px' 
@@ -1170,18 +1180,19 @@ const IndexPopup = () => {
                 <SectionDivider />
                 <FormRow>
                   <div>
-                    <Label>Show Selected Text</Label>
-                    <Description>Display the text you've selected in the results</Description>
+                    <Label>Use Page Context for Better Answers</Label>
+                    <Description>Enable deeper page context for better results</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput 
                       type="checkbox" 
-                      checked={settings?.customization?.showSelectedText !== false}
-                      onChange={(e) => updateSettings('showSelectedText', e.target.checked)}
+                      checked={settings?.customization?.contextAwareness === true}
+                      onChange={(e) => updateSettings('contextAwareness', e.target.checked)}
                     />
                     <ToggleSlider />
                   </ToggleContainer>
                 </FormRow>
+                
                 
                 <SectionDivider />
                 
@@ -1201,12 +1212,27 @@ const IndexPopup = () => {
                 </FormRow>
                 
                 <SectionDivider />
-                
                 <FormRow>
                   <div>
-                    <Label>Quick View</Label>
-                    <Description>Show floating button to instantly process page content</Description>
+                    <Label>Show Selected Text</Label>
+                    <Description>Display the text you've selected in the results</Description>
                   </div>
+                  <ToggleContainer>
+                    <ToggleInput 
+                      type="checkbox" 
+                      checked={settings?.customization?.showSelectedText !== false}
+                      onChange={(e) => updateSettings('showSelectedText', e.target.checked)}
+                    />
+                    <ToggleSlider />
+                  </ToggleContainer>
+                </FormRow>
+                <SectionDivider />
+                
+                                     <FormRow>
+                       <div>
+                         <Label>Show 'Instant AI' Button</Label>
+                         <Description>Add a floating 'Instant AI' button that summarizes or explains the whole page with one click</Description>
+                       </div>
                   <ToggleContainer>
                     <ToggleInput 
                       type="checkbox" 
@@ -1221,8 +1247,8 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Radical Focus Mode</Label>
-                    <Description>Blur background when viewing results</Description>
+                    <Label>Distraction-Free Mode</Label>
+                    <Description>Hides non-essential UI and dims the page behind LightUp so you can focus on the AI answer</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput 
@@ -1238,7 +1264,7 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Persistent Highlighting</Label>
+                    <Label>Keep Highlighted Text After Popup Closes</Label>
                     <Description>Keep text highlighted after closing popup</Description>
                   </div>
                   <ToggleContainer>
@@ -1255,8 +1281,8 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Text Selection Button</Label>
-                    <Description>Show button when text is selected</Description>
+                    <Label>Show Action Button on Text Selection</Label>
+                    <Description>Display a small button when text is highlighted</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput 
@@ -1272,8 +1298,8 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Automatic Activation</Label>
-                    <Description>Show popup automatically when text is selected</Description>
+                    <Label>Auto-Open LightUp on Text Selection</Label>
+                    <Description>Opens LightUp automatically whenever you select text</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput 
@@ -1292,20 +1318,7 @@ const IndexPopup = () => {
                   </ToggleContainer>
                 </FormRow>
                 
-                <FormRow>
-                  <div>
-                    <Label>Context Awareness</Label>
-                    <Description>Enable deeper page context for better results</Description>
-                  </div>
-                  <ToggleContainer>
-                    <ToggleInput 
-                      type="checkbox" 
-                      checked={settings?.customization?.contextAwareness === true}
-                      onChange={(e) => updateSettings('contextAwareness', e.target.checked)}
-                    />
-                    <ToggleSlider />
-                  </ToggleContainer>
-                </FormRow>
+               
              
               </Section>
               
@@ -1881,7 +1894,7 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Context Awareness</Label>
+                    <Label>Use Page Context for Better Answers</Label>
                     <Description>Enable deeper page context for better results</Description>
                   </div>
                   <ToggleContainer>
@@ -1894,8 +1907,8 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Maximum Content Length</Label>
-                    <Description>Set the maximum number of characters to process</Description>
+                    <Label>Maximum Characters to Send</Label>
+                    <Description>Truncate selected text after this number of characters before sending to the AI</Description>
                   </div>
                   <Select defaultValue="4000" style={{ width: '120px' }}>
                     <option value="2000">2,000</option>

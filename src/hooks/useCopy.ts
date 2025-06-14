@@ -37,169 +37,98 @@ export const useCopy = (): UseCopyReturn => {
       return;
     }
 
-    // Determine elementSelector if string, or direct element
-    let elementSelector: string | null = null;
+    // Use requestIdleCallback to defer heavy work and prevent performance violations
+    const performImageCapture = () => new Promise<void>((resolve, reject) => {
+      const callback = async () => {
+        try {
+          await captureAndCopyImage(target, id);
+          resolve();
+        } catch (error) {
+          reject(error);
+        }
+      };
 
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(callback, { timeout: 1000 });
+      } else {
+        // Fallback for browsers without requestIdleCallback
+        setTimeout(callback, 0);
+      }
+    });
+
+    try {
+      await performImageCapture();
+    } catch (err) {
+      console.error('Failed to copy as image:', err);
+      // Fallback to text copy if image copy fails
+      if (typeof target === 'string') {
+        const textContent = document.querySelector(target)?.textContent || '';
+        if (textContent) {
+          await handleCopy(textContent, id);
+        }
+      }
+    }
+  };
+
+  const captureAndCopyImage = async (target: HTMLElement | string, id: string) => {
     try {
       let element: HTMLElement | null = null;
 
+      // If we already have a direct element reference, use it immediately
       if (typeof target !== 'string' && target) {
         element = target as HTMLElement;
-        console.log('Received direct HTMLElement target');
       } else {
-        elementSelector = target as string;
-      }
-
-      if (elementSelector) {
-        console.log('Looking for element with selector:', elementSelector);
-      }
-
-      // Strategy 1: Find the button that triggered this and work backwards to find the popup
-      const allButtons = document.querySelectorAll('button');
-      let popupContainer: HTMLElement | null = null;
-      
-      for (const button of allButtons) {
-        if (button.title?.includes('Copy as image')) {
-          // Found our button, now find its parent popup container
-          let parent = button.parentElement;
-          while (parent) {
-            // Look for a container that looks like our popup
-            if (parent.style.position === 'fixed' || 
-                parent.getAttribute('data-plasmo-popup') !== null ||
-                parent.classList.contains('lu-popup') ||
-                parent.querySelector('.lu-scroll-container')) {
-              popupContainer = parent;
-              console.log('Found popup container via button:', popupContainer);
+        // Use optimized element selection for string selectors
+        const elementSelector = target as string;
+        
+        // Try direct selector first (fastest)
+        element = document.querySelector(elementSelector) as HTMLElement;
+        
+        // If that fails, try a more targeted search
+        if (!element) {
+          // Look for fixed position containers first (likely our popup)
+          const fixedContainers = document.querySelectorAll('[style*="position: fixed"], [data-plasmo-popup]');
+          
+          for (const container of fixedContainers) {
+            element = container.querySelector(elementSelector) as HTMLElement;
+            if (element) break;
+            
+            // Also try fallback selectors within this container
+            const fallbackSelectors = [
+              '[data-lightup-response-content]',
+              '[data-main-response-content]',
+              '.lu-explanation',
+              '.lu-scroll-container'
+            ];
+            
+            for (const selector of fallbackSelectors) {
+              element = container.querySelector(selector) as HTMLElement;
+              if (element) break;
+            }
+            if (element) break;
+          }
+        }
+        
+        // Final fallback: use any substantial content element
+        if (!element) {
+          const candidates = document.querySelectorAll('div');
+          for (const candidate of candidates) {
+            const htmlEl = candidate as HTMLElement;
+            if (htmlEl.textContent && 
+                htmlEl.textContent.length > 100 && 
+                htmlEl.offsetWidth > 200 && 
+                htmlEl.offsetHeight > 50 &&
+                htmlEl.style.position === 'fixed') {
+              element = htmlEl;
               break;
             }
-            parent = parent.parentElement;
-          }
-          break;
-        }
-      }
-      
-      // Strategy 2: Look for any fixed position elements that contain substantial content
-      if (!popupContainer) {
-        const fixedElements = document.querySelectorAll('div[style*="position: fixed"], div[style*="position:fixed"]');
-        for (const el of fixedElements) {
-          const htmlEl = el as HTMLElement;
-          if (htmlEl.offsetWidth > 300 && htmlEl.offsetHeight > 200 && 
-              htmlEl.textContent && htmlEl.textContent.length > 100) {
-            popupContainer = htmlEl;
-            console.log('Found popup container via fixed positioning:', popupContainer);
-            break;
           }
         }
-      }
-      
-      // Strategy 3: Search in document for our specific data attributes
-      const searchContext = popupContainer || document;
-      console.log('Final search context:', searchContext);
-      
-      // Function to search within the correct context
-      const findElement = (selector: string, context: Document | ShadowRoot | Element): HTMLElement | null => {
-        if (selector.startsWith('#')) {
-          if (context === document) {
-            return document.getElementById(selector.slice(1));
-          } else {
-            return (context as ShadowRoot | Element).querySelector(selector) as HTMLElement;
-          }
-        } else {
-          return (context as Document | ShadowRoot | Element).querySelector(selector) as HTMLElement;
-        }
-      };
-      
-      // Try to find element in the appropriate context
-      if (elementSelector) {
-        element = findElement(elementSelector, searchContext);
-        console.log('Found element by selector:', element);
       }
 
       if (!element) {
-        console.log('Primary selector failed, trying fallbacks...');
-        // Fallback: try to find the main content area with more specific selectors
-        const fallbackSelectors = [
-          '[data-lightup-response-content]',
-          '[data-main-response-content]',
-          '[data-markdown-container]', 
-          '.lu-explanation',
-          '[data-markdown-text]',
-          '.markdown-content',
-          'div[style*="textAlign"]',
-          '.lu-scroll-container'
-        ];
-        
-        for (const selector of fallbackSelectors) {
-          element = findElement(selector, searchContext);
-          console.log(`Trying fallback selector "${selector}":`, element);
-          if (element) break;
-        }
-        
-        // Additional fallback: search globally in document for any matching elements
-        if (!element) {
-          console.log('Trying global document search...');
-          for (const selector of fallbackSelectors) {
-            element = document.querySelector(selector) as HTMLElement;
-            console.log(`Global search for "${selector}":`, element);
-            if (element) break;
-          }
-        }
-        
-        // Try searching for extension-specific content only
-        if (!element) {
-          console.log('Trying to find extension content specifically...');
-          
-          // Look for elements that are clearly part of the extension
-          const extensionSelectors = [
-            // Try to find any element inside the extension popup
-            '[data-plasmo-popup] div',
-            'div[style*="position: fixed"] div',
-            // Look for React component containers
-            'div[data-reactroot] div',
-            // Look for elements with extension-specific classes or attributes
-            '.lu-explanation',
-            '.lu-scroll-container > div',
-            // Look for divs containing the actual response text
-            'div[dir="ltr"]',
-            'div[dir="rtl"]'
-          ];
-          
-          for (const selector of extensionSelectors) {
-            const elements = document.querySelectorAll(selector);
-            for (const el of elements) {
-              const htmlEl = el as HTMLElement;
-              // Check if this element contains substantial text and looks like AI response
-              if (htmlEl.textContent && 
-                  htmlEl.textContent.length > 100 && 
-                  htmlEl.offsetWidth > 200 && 
-                  htmlEl.offsetHeight > 50 &&
-                  // Make sure it's not the website content
-                  !htmlEl.closest('[id="_nex"]') &&
-                  !htmlEl.closest('[class*="website"]') &&
-                  !htmlEl.closest('[class*="page"]')) {
-                element = htmlEl;
-                console.log('Found extension content element:', element);
-                break;
-              }
-            }
-            if (element) break;
-          }
-        }
-      }
-
-      if (!element && popupContainer) {
-        // Last resort: capture the entire popup content
-        element = popupContainer;
-        console.log('Last resort - using entire popup container:', element);
-      }
-
-      if (!element) {
-        console.error('All element selection methods failed');
-        console.error('Available elements in context:', searchContext);
         throw new Error('Could not find element to capture');
       }
-      
-      console.log('Final element selected for capture:', element, 'Dimensions:', element.offsetWidth, 'x', element.offsetHeight);
 
       // Configure html2canvas options for better quality
       const canvas = await html2canvas(element, {
@@ -211,6 +140,8 @@ export const useCopy = (): UseCopyReturn => {
         scrollY: 0,
         width: element.scrollWidth,
         height: element.scrollHeight,
+        logging: false, // Disable html2canvas logging
+        foreignObjectRendering: false, // Prevent document.write() usage
         // Style overrides to ensure proper rendering
         onclone: (clonedDoc: Document) => {
           // Enhance the cloned document for better image quality
@@ -278,17 +209,13 @@ export const useCopy = (): UseCopyReturn => {
             throw new Error('Failed to create image blob');
           }
 
-          console.log('Canvas blob created:', blob.size, 'bytes, type:', blob.type);
-
           // Create ClipboardItem and copy to clipboard
           const clipboardItem = new ClipboardItem({
             [blob.type]: blob
           });
 
-          console.log('Writing to clipboard...');
           await navigator.clipboard.write([clipboardItem]);
           
-          console.log('Successfully copied image to clipboard!');
           setImageCopiedId(id);
           setTimeout(() => {
             setImageCopiedId(null);
@@ -303,7 +230,6 @@ export const useCopy = (): UseCopyReturn => {
             link.download = `lightup-response-${Date.now()}.png`;
             link.click();
             URL.revokeObjectURL(url);
-            console.log('Fallback: Triggered download instead');
           } catch (downloadError) {
             console.error('Download fallback also failed:', downloadError);
             throw new Error('Both clipboard and download failed');
@@ -312,12 +238,7 @@ export const useCopy = (): UseCopyReturn => {
       }, 'image/png', 0.95);
 
     } catch (err) {
-      console.error('Failed to copy as image:', err);
-      // Fallback to text copy if image copy fails
-      const textContent = elementSelector ? (document.querySelector(elementSelector)?.textContent || '') : '';
-      if (textContent) {
-        await handleCopy(textContent, id);
-      }
+      throw err; // Re-throw to be handled by the outer try-catch
     }
   };
 
