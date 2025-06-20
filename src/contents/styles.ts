@@ -38,7 +38,7 @@ export const getStyles = (
     boxShadow: "0 2px 20px rgba(0,0,0,0.15)",
     maxWidth: 500,
     fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-    maxHeight: "400px",
+    // maxHeight: "400px",
     overflow: "auto",
     fontSize: fontSizes.base,
     paddingTop: 0,
@@ -116,6 +116,7 @@ export const getStyles = (
     backgroundColor: theme === "light" ? "#FFFFFF" : THEME_COLORS[theme].buttonBackground,
     padding: "11px 14px",
     borderRadius: "31px",
+    border: theme === "light" ? "1px solid #dedede" : "1px solid rgb(84 84 84)",
     boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
     transition: "all 0.2s ease",
     transform: 'translateZ(0)',
@@ -322,34 +323,34 @@ export const getStyles = (
 });
 
 // Create a default fontSizes object for backward compatibility
-const createDefaultFontSizes = (fontSize: string = "1rem"): FontSizes => {
+const createDefaultFontSizes = (fontSize: string = "16px"): FontSizes => {
   const parseSize = (size: string): number => {
-    const match = size.match(/^([\d.]+)rem$/);
-    return match ? parseFloat(match[1]) : 1;
+    const match = size.match(/^([\d.]+)px$/);
+    return match ? parseFloat(match[1]) : 16;
   };
 
   const baseSize = parseSize(fontSize);
   
   return {
-    base: `${baseSize}rem`,
-    xs: `${Math.max(0.6, baseSize * 0.75)}rem`,
-    sm: `${Math.max(0.7, baseSize * 0.85)}rem`,
-    md: `${baseSize}rem`,
-    lg: `${baseSize * 1.15}rem`,
-    xl: `${baseSize * 1.3}rem`,
-    xxl: `${baseSize * 1.5}rem`,
-    button: `${Math.max(0.8, baseSize * 0.9)}rem`,
-    input: `${Math.max(0.8, baseSize * 0.9)}rem`,
-    loading: `${Math.max(0.75, baseSize * 0.8)}rem`,
-    model: `${Math.max(0.7, baseSize * 0.75)}rem`,
-    icon: `${Math.max(0.7, baseSize * 0.7)}rem`,
+    base: `${baseSize}px`,
+    xs: `${Math.max(10, Math.round(baseSize * 0.75))}px`,
+    sm: `${Math.max(11, Math.round(baseSize * 0.85))}px`,
+    md: `${baseSize}px`,
+    lg: `${Math.round(baseSize * 1.15)}px`,
+    xl: `${Math.round(baseSize * 1.3)}px`,
+    xxl: `${Math.round(baseSize * 1.5)}px`,
+    button: `${Math.max(13, Math.round(baseSize * 0.9))}px`,
+    input: `${Math.max(13, Math.round(baseSize * 0.9))}px`,
+    loading: `${Math.max(12, Math.round(baseSize * 0.8))}px`,
+    model: `${Math.max(11, Math.round(baseSize * 0.75))}px`,
+    icon: `${Math.max(11, Math.round(baseSize * 0.7))}px`,
     welcome: {
-      emoji: `${baseSize * 1.8}rem`,
-      heading: `${baseSize * 1.2}rem`,
-      description: `${Math.max(0.8, baseSize * 0.9)}rem`
+      emoji: `${Math.round(baseSize * 1.8)}px`,
+      heading: `${Math.round(baseSize * 1.2)}px`,
+      description: `${Math.max(13, Math.round(baseSize * 0.9))}px`
     },
-    connection: `${Math.max(0.7, baseSize * 0.75)}rem`,
-    error: `${Math.max(0.8, baseSize * 0.85)}rem`
+    connection: `${Math.max(11, Math.round(baseSize * 0.75))}px`,
+    error: `${Math.max(13, Math.round(baseSize * 0.85))}px`
   };
 };
 

@@ -74,7 +74,7 @@ export interface Settings {
     showSelectedText: boolean
     theme: "light" | "dark" | "system"
     radicallyFocus: boolean
-    fontSize: "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem" | "0.875rem" | "1.125rem" | "small" | "medium" | "large" | "x-large" | "xx-small" | "x-small" | "xx-large"
+    fontSize: "13px" | "14px" | "16px" | "18px" | "19px" | "21px" | "small" | "medium" | "large" | "x-large" | "xx-small" | "x-small" | "xx-large"
     highlightColor: "default" | "yellow" | "orange" | "blue" | "green" | "purple" | "pink"
     popupAnimation: "none" | "scale" | "fade" | "slide"
     persistHighlight: boolean

@@ -185,7 +185,7 @@ const getDefaultSettings = (): Settings => ({
     showSelectedText: false,
     theme: "system",
     radicallyFocus: false,
-    fontSize: "1rem",
+    fontSize: "16px",
     highlightColor: "default",
     popupAnimation: "slide",
     persistHighlight: false,

@@ -98,7 +98,7 @@ export const PopupModeSelector = ({
   const getModeSelectorStyles = () => {
     // Detect if we're on YouTube and need font size compensation
     const isYouTube = window.location.hostname.includes('youtube.com');
-    const baseFontSize = isYouTube ? "11px" : "0.7rem"; // Use pixels on YouTube, rem elsewhere
+    const baseFontSize = isYouTube ? "11px" : "11px"; // Use pixels consistently
     
     return {
       container: {
@@ -136,11 +136,11 @@ export const PopupModeSelector = ({
       },
       icon: {
         fontWeight: "bold",
-        fontSize: "0.6rem",
+        fontSize: "10px",
         marginRight: "2px"
       },
       loadingIndicator: {
-        fontSize: "1.2rem",
+        fontSize: "19px",
         color: "#8e8e8e",
         lineHeight: 1,
         marginLeft: "0",

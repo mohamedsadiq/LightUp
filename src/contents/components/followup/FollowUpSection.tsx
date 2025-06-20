@@ -105,10 +105,7 @@ export const FollowUpSection = ({
         />
       ))}
 
-      {/* Spacer to push the search input to the bottom */}
-      <div style={{ flexGrow: 1 }}></div>
-
-      {/* Input section - now at the bottom */}
+      {/* Sticky input section pinned to the bottom of the scrollable area */}
       <AnimatePresence>
         {isSearchVisible && (
           <motion.div
@@ -116,6 +113,20 @@ export const FollowUpSection = ({
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
             transition={{ duration: 0.2 }}
+            // Keep the search section visible while the Q&A list scrolls
+            style={{
+              position: 'sticky',
+              bottom: -21,
+              zIndex: 15, // ensure it stays above scrolling text
+              // Use the popup background so the bar looks seamless
+              // background: themedStyles.popup?.background || (normalizedTheme === 'dark' ? '#1e1e1e' : '#ffffff'),
+              // Add a subtle backdrop blur for better readability when it overlays content
+              // backdropFilter: 'blur(6px)',
+              // Small negative margin to visually tighten spacing with the previous element
+              marginTop: 'auto',
+              paddingTop: '8px',
+              paddingBottom: '8px'
+            }}
           >
             <FollowUpInput
               inputRef={inputRef}

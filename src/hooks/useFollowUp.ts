@@ -50,7 +50,7 @@ export const useFollowUp = (): UseFollowUpReturn => {
     // Update the state with debouncing to reduce render cycles
     debounceTimerRef.current = setTimeout(() => {
       setFollowUpQuestion(value);
-    }, 10); // Very short debounce time to maintain responsiveness while reducing renders
+    }, 150); // Increased debounce time to significantly reduce re-renders while typing
   }, []);
   
   // Clean up the debounce timer on unmount

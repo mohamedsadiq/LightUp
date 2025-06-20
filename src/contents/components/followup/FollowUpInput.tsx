@@ -1,5 +1,6 @@
-import React, { useMemo, useCallback, useEffect } from "react"
+import React, { useMemo, useCallback, useEffect, useState } from "react"
 import { motion } from "framer-motion"
+import TextareaAutosize from "react-textarea-autosize"
 import { debounce } from "../../utils/debounce"
 import type { FontSizes } from "../../styles"
 
@@ -27,7 +28,7 @@ export const FollowUpInput = React.memo(({
   fontSizes
 }: FollowUpInputProps) => {
   // Optimized constants
-  const INITIAL_HEIGHT = parseFloat(fontSizes.base) * 16 * 1.5; // Convert rem to px and add line height
+  const INITIAL_HEIGHT = parseFloat(fontSizes.base.replace('px', '')) * 1.5; // Parse px values and apply line height
   const MAX_HEIGHT = INITIAL_HEIGHT * 2;
   
   // Memoized styles to prevent recalculation
@@ -40,7 +41,7 @@ export const FollowUpInput = React.memo(({
     padding: '1px 8px',
     display: 'block' as const,
     transition: 'opacity 0.2s ease, height 0.1s ease',
-    fontSize: '1rem',
+          fontSize: '16px',
     textAlign: 'left' as const,
   }), [themedStyles.input, isAskingFollowUp, INITIAL_HEIGHT, fontSizes]);
 
@@ -51,68 +52,79 @@ export const FollowUpInput = React.memo(({
     paddingTop: '8px',
   }), [themedStyles.followUpInputContainer]);
 
-  // Optimized auto-resize with debouncing and minimal DOM manipulation
-  const autoResizeTextarea = useCallback(
-    debounce(() => {
-      const textarea = inputRef.current;
-      if (!textarea) return;
+  // We don't need the custom autoResizeTextarea logic anymore, as the library handles this efficiently
+
+  // Local state for the textarea value to make it uncontrolled
+  const [localInputValue, setLocalInputValue] = useState("");
+  
+  // Initialize local state with the prop value
+  useEffect(() => {
+    setLocalInputValue(followUpQuestion);
+  }, []);
+  
+  // Debounced function to update parent state
+  const debouncedUpdateParent = useMemo(
+    () => debounce((value: string) => {
+      // Create a synthetic event object to maintain API compatibility
+      const syntheticEvent = {
+        target: { value },
+        preventDefault: () => {},
+        stopPropagation: () => {}
+      } as React.ChangeEvent<HTMLTextAreaElement>;
       
-      // Use requestAnimationFrame for better performance
-      requestAnimationFrame(() => {
-        // Only manipulate DOM if content actually changed
-        const currentHeight = parseInt(textarea.style.height) || INITIAL_HEIGHT;
-        
-        // Reset height to measure content
-        textarea.style.height = 'auto';
-        const scrollHeight = textarea.scrollHeight;
-        const newHeight = Math.max(INITIAL_HEIGHT, Math.min(scrollHeight, MAX_HEIGHT));
-        
-        // Only update if height actually changed
-        if (currentHeight !== newHeight) {
-          textarea.style.height = `${newHeight}px`;
-          
-          // Update overflow only when necessary
-          const shouldShowScroll = scrollHeight > MAX_HEIGHT;
-          const currentOverflow = textarea.style.overflowY;
-          const newOverflow = shouldShowScroll ? 'auto' : 'hidden';
-          
-          if (currentOverflow !== newOverflow) {
-            textarea.style.overflowY = newOverflow;
-          }
-        } else {
-          // Restore height if no change needed
-          textarea.style.height = `${currentHeight}px`;
-        }
-      });
-    }, 16), // ~60fps
-    [INITIAL_HEIGHT, MAX_HEIGHT]
+      handleFollowUpQuestion(syntheticEvent);
+    }, 200), // Longer debounce for parent updates
+    [handleFollowUpQuestion]
   );
-
-  // Optimized change handler
+  
+  // Optimized change handler that updates local state immediately
+  // but only updates parent state after debounce
   const handleTextareaChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    handleFollowUpQuestion(e);
-    autoResizeTextarea();
-  }, [handleFollowUpQuestion, autoResizeTextarea]);
+    const value = e.target.value;
+    setLocalInputValue(value); // Update local state immediately for responsive UI
+    debouncedUpdateParent(value); // Debounced update to parent state
+    // The TextareaAutosize component handles resizing automatically
+  }, [debouncedUpdateParent]);
 
-  // Optimized key handler
+  // Optimized key handler using local state
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     e.stopPropagation();
     if (e.key === 'Enter' && !e.shiftKey && !isAskingFollowUp) {
       e.preventDefault();
-      if (followUpQuestion.trim()) {
-        handleAskFollowUpWrapper();
+      if (localInputValue.trim()) {
+        // Immediately sync local state to parent before submitting
+        // to ensure the parent has the complete current value
+        const syntheticEvent = {
+          target: { value: localInputValue },
+          preventDefault: () => {},
+          stopPropagation: () => {}
+        } as React.ChangeEvent<HTMLTextAreaElement>;
+        
+        handleFollowUpQuestion(syntheticEvent);
+        
+        // Small delay to ensure state update, then submit
+        setTimeout(() => {
+          handleAskFollowUpWrapper();
+        }, 10);
       }
     }
-  }, [followUpQuestion, handleAskFollowUpWrapper, isAskingFollowUp]);
+  }, [localInputValue, handleFollowUpQuestion, handleAskFollowUpWrapper, isAskingFollowUp]);
 
   // Optimized focus handlers
   const handleFocus = useCallback(() => setIsInputFocused(true), [setIsInputFocused]);
   const handleBlur = useCallback(() => setIsInputFocused(false), [setIsInputFocused]);
 
-  // Initial resize on mount and theme change only
+  // No need for manual resize on mount as TextareaAutosize handles this
+  
+  // Sync from parent to local state when followUpQuestion changes externally
+  // (e.g., when cleared after submission)
   useEffect(() => {
-    autoResizeTextarea();
-  }, [currentTheme, autoResizeTextarea]);
+    // Only update local state if it's significantly different
+    // to avoid disrupting user typing
+    if (followUpQuestion === "" && localInputValue !== "") {
+      setLocalInputValue("");
+    }
+  }, [followUpQuestion]);
 
   // Memoized button content
   const buttonContent = useMemo(() => {
@@ -156,9 +168,9 @@ export const FollowUpInput = React.memo(({
   return (
     <div style={containerStyle}>
       <div style={themedStyles.searchContainer} className="lu-search-container">
-        <textarea
-          ref={inputRef}
-          value={followUpQuestion}
+        <TextareaAutosize
+          ref={inputRef as React.RefObject<HTMLTextAreaElement>}
+          value={localInputValue}
           onChange={handleTextareaChange}
           onKeyDown={handleKeyDown}
           placeholder="Ask anything..."
@@ -166,7 +178,9 @@ export const FollowUpInput = React.memo(({
           disabled={isAskingFollowUp}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          rows={1}
+          minRows={1}
+          maxRows={2} // Equivalent to MAX_HEIGHT with our line height
+          cacheMeasurements={true} // Optimize performance
           autoComplete="off"
           spellCheck={false}
           autoCorrect="off"
@@ -176,14 +190,14 @@ export const FollowUpInput = React.memo(({
         />
         <motion.button
           onClick={handleAskFollowUpWrapper}
-          disabled={!followUpQuestion.trim() || isAskingFollowUp}
+          disabled={!localInputValue.trim() || isAskingFollowUp}
           whileHover={{ scale: 1.05, rotate: 5 }}
           whileTap={{ scale: 0.95 }}
           animate={isAskingFollowUp ? { scale: 0.9, opacity: 0.7 } : { scale: 1, opacity: 1 }}
           transition={{ type: "spring", stiffness: 400, damping: 17 }}
           style={themedStyles.searchSendButton}
           className="lu-search-send-button"
-          title={!followUpQuestion.trim() ? "Type a question first" : isAskingFollowUp ? "Sending..." : "Send message"}
+          title={!localInputValue.trim() ? "Type a question first" : isAskingFollowUp ? "Sending..." : "Send message"}
         >
           {buttonContent}
         </motion.button>
@@ -191,13 +205,18 @@ export const FollowUpInput = React.memo(({
     </div>
   );
 }, (prevProps: FollowUpInputProps, nextProps: FollowUpInputProps) => {
-  // Optimized comparison function
+  // Enhanced comparison function for uncontrolled component
+  // We can skip re-renders when followUpQuestion changes during typing
+  // since we're now managing that locally with useState
   return (
-    prevProps.followUpQuestion === nextProps.followUpQuestion &&
+    // We only care about major state changes from parent, not every keystroke
+    // Only re-render when followUpQuestion is cleared (becomes empty)
+    ((prevProps.followUpQuestion === "" && nextProps.followUpQuestion === "") ||
+     (prevProps.followUpQuestion !== "" && nextProps.followUpQuestion !== "")) &&
     prevProps.isAskingFollowUp === nextProps.isAskingFollowUp &&
     prevProps.currentTheme === nextProps.currentTheme
   );
 });
 
 // Add display name for debugging
-FollowUpInput.displayName = 'FollowUpInput'; 
+FollowUpInput.displayName = "OptimizedFollowUpInput";

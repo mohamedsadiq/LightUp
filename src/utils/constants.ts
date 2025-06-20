@@ -78,9 +78,9 @@ export const Z_INDEX = {
   TOAST: 2147483647,          // Highest - System notifications
   CENTERED_POPUP: 2147483647, // Same as toast for modal popups
   POPUP_OVERLAY: 2147483646,  // For the overlay behind centered popup
-  BLUR_OVERLAY: 2147483645,   // Below popup
-  POPUP: 2147483644,          // Main popup content
-  GLOBAL_BUTTON: 2147483644,  // Global action button (same level as popup)
+  POPUP: 2147483645,          // Main popup content - Above blur overlay
+  BLUR_OVERLAY: 2147483644,   // Below popup - Fixed z-index order
+  GLOBAL_BUTTON: 2147483644,  // Global action button (same level as blur)
   SELECTION_BUTTON: 2147483643, // Text selection button (below popup)
   PAGE_CONTENT: 1             // Normal page content
 } as const;

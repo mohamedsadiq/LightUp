@@ -9,7 +9,7 @@ interface UseSettingsReturn {
   isConfigured: boolean;
   currentTheme: Theme;
   targetLanguage: string;
-  fontSize: "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem";
+  fontSize: "13px" | "14px" | "16px" | "18px" | "19px" | "21px" | "small" | "medium" | "large" | "x-large" | "xx-small" | "x-small" | "xx-large";
 }
 
 export const useSettings = (): UseSettingsReturn => {
@@ -95,7 +95,7 @@ export const useSettings = (): UseSettingsReturn => {
     return themePreference as Theme;
   })();
   const targetLanguage = settings?.translationSettings?.toLanguage || 'en'
-  const fontSize = settings?.customization?.fontSize || "1rem" as "0.8rem" | "0.9rem" | "1rem" | "1.1rem" | "1.2rem" | "1.3rem"
+  const fontSize = settings?.customization?.fontSize || "16px" as "13px" | "14px" | "16px" | "18px" | "19px" | "21px" | "small" | "medium" | "large" | "x-large" | "xx-small" | "x-small" | "xx-large"
 
   // Listen for system theme changes
   useEffect(() => {

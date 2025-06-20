@@ -79,7 +79,7 @@ const Header = styled.header`
 `
 
 const HeaderTitle = styled.h1`
-  font-size: 1.4rem; 
+        font-size: 22px; 
   font-weight: 600; 
   color: ${theme.dark.foreground};
   margin: 0; 
@@ -103,7 +103,7 @@ const BetaBadge = styled.span`
   position: relative;
   background: linear-gradient(135deg, rgb(56 56 56) 0%, rgb(33 33 33) 100%);
   color: white;
-  font-size: 0.65rem;
+        font-size: 10px;
   font-weight: 700;
   padding: 3px 8px;
   border-radius: 4px;
@@ -129,7 +129,7 @@ const BetaBadge = styled.span`
 
 const VersionNumber = styled.span`
   color: rgba(255, 255, 255, 0.75);
-  font-size: 0.7rem;
+        font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.5px;
   background: rgba(0, 0, 0, 0.2);
@@ -725,7 +725,7 @@ const IndexPopup = () => {
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)' }}>
-              {isEnabled ? 'Turn On' : 'Turn Off'}
+              {isEnabled ? 'Turn Off' : 'Turn On'}
             </span>
             <ToggleContainer 
               onClick={async (e) => {
@@ -758,7 +758,7 @@ const IndexPopup = () => {
           
           <VersionBadgeContainer>
             <BetaBadge>Beta </BetaBadge>
-            <VersionNumber>v1.1.14</VersionNumber>
+            <VersionNumber>v1.1.15</VersionNumber>
           </VersionBadgeContainer>
         </div>
       </Header>
@@ -775,8 +775,8 @@ const IndexPopup = () => {
               <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 9V11M12 15H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0378 2.66667 10.268 4L3.33978 16C2.56998 17.3333 3.53223 19 5.07183 19Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <h2 style={{ fontSize: '1.5rem', marginTop: '0', marginBottom: '0', fontWeight: 'bold' }}>LightUp is currently Off</h2>
-              <p style={{ fontSize: '1rem', opacity: 0.8, maxWidth: '400px', lineHeight: '1.5' }}>
+              <h2 style={{ fontSize: '24px', marginTop: '0', marginBottom: '0', fontWeight: 'bold' }}>LightUp is currently Off</h2>
+              <p style={{ fontSize: '16px', opacity: 0.8, maxWidth: '400px', lineHeight: '1.5' }}>
                 Toggle the switch in the header or the button below to enable LightUp and access all features.
               </p>
               <button 

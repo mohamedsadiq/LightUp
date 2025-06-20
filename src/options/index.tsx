@@ -668,7 +668,7 @@ const Header = styled.header`
 `
 
 const HeaderTitle = styled.h1`
-  font-size: 1.4rem;
+        font-size: 22px;
   font-weight: 600; 
   color: white;
   margin: 0; 
@@ -692,7 +692,7 @@ const BetaBadge = styled.span`
   position: relative;
   background: linear-gradient(135deg, rgb(56 56 56) 0%, rgb(33 33 33) 100%);
   color: white;
-  font-size: 0.65rem;
+        font-size: 10px;
   font-weight: 700;
   padding: 3px 8px;
   border-radius: 4px;
@@ -718,7 +718,7 @@ const BetaBadge = styled.span`
 
 const VersionNumber = styled.span`
   color: rgba(255, 255, 255, 0.75);
-  font-size: 0.7rem;
+        font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.5px;
   background: rgba(0, 0, 0, 0.2);
@@ -964,7 +964,7 @@ const LayoutButton = styled.button<{ selected?: boolean }>`
   }
   
   .layout-label {
-    font-size: 0.85rem;
+          font-size: 14px;
     font-weight: 500;
   }
   
@@ -1132,7 +1132,7 @@ function IndexOptions() {
       showSelectedText: false,
       theme: "light",
       radicallyFocus: false,
-      fontSize: "1rem",
+              fontSize: "16px",
       highlightColor: "default",
       popupAnimation: "scale",
       persistHighlight: false,
@@ -1561,7 +1561,7 @@ function IndexOptions() {
         <Logo />
         <VersionBadgeContainer>
           <BetaBadge>BETA</BetaBadge>
-          <VersionNumber>v1.1.14</VersionNumber>
+          <VersionNumber>v1.1.15</VersionNumber>
         </VersionBadgeContainer>
         {/* <CloseButton onClick={() => window.close()}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2571,7 +2571,7 @@ function IndexOptions() {
                         selected={settings.customization?.fontSize === 'x-small'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'x-small')}
                       >
-                        <div className="size-preview" style={{ fontSize: '0.8rem' }}>Aa</div>
+                        <div className="size-preview" style={{ fontSize: '13px' }}>Aa</div>
                         <div className="size-label">X-Small</div>
                       </FontSizeButton>
                        
@@ -2579,7 +2579,7 @@ function IndexOptions() {
                         selected={settings.customization?.fontSize === 'small'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'small')}
                       >
-                        <div className="size-preview" style={{ fontSize: '0.9rem' }}>Aa</div>
+                        <div className="size-preview" style={{ fontSize: '14px' }}>Aa</div>
                         <div className="size-label">Small</div>
                       </FontSizeButton>
                        
@@ -2587,7 +2587,7 @@ function IndexOptions() {
                         selected={settings.customization?.fontSize === 'medium'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'medium')}
                       >
-                        <div className="size-preview" style={{ fontSize: '1rem' }}>Aa</div>
+                        <div className="size-preview" style={{ fontSize: '16px' }}>Aa</div>
                         <div className="size-label">Medium</div>
                       </FontSizeButton>
                        
@@ -2595,7 +2595,7 @@ function IndexOptions() {
                         selected={settings.customization?.fontSize === 'large'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'large')}
                       >
-                        <div className="size-preview" style={{ fontSize: '1.15rem' }}>Aa</div>
+                        <div className="size-preview" style={{ fontSize: '18px' }}>Aa</div>
                         <div className="size-label">Large</div>
                       </FontSizeButton>
                        
@@ -2603,7 +2603,7 @@ function IndexOptions() {
                         selected={settings.customization?.fontSize === 'x-large'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'x-large')}
                       >
-                        <div className="size-preview" style={{ fontSize: '1.3rem' }}>Aa</div>
+                        <div className="size-preview" style={{ fontSize: '21px' }}>Aa</div>
                         <div className="size-label">X-Large</div>
                       </FontSizeButton>
 
@@ -2611,7 +2611,7 @@ function IndexOptions() {
                         selected={settings.customization?.fontSize === 'xx-large'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'xx-large')}
                       >
-                        <div className="size-preview" style={{ fontSize: '1.45rem' }}>Aa</div>
+                        <div className="size-preview" style={{ fontSize: '23px' }}>Aa</div>
                         <div className="size-label">XX-Large</div>
                       </FontSizeButton>
                     </div>

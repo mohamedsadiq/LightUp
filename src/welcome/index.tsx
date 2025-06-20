@@ -51,7 +51,7 @@ function Welcome() {
       showSelectedText: false,
       theme: "light",
       radicallyFocus: false,
-      fontSize: "1rem",
+      fontSize: "16px",
       highlightColor: "default",
       popupAnimation: "scale",
       persistHighlight: false,

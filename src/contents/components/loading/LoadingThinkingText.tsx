@@ -115,7 +115,7 @@ export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycl
         justifyContent: 'flex-start',
         gap: '6px',
         color: currentTheme === "dark" ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.6)',
-        fontSize: '1rem',
+        fontSize: '16px',
         fontWeight: '500',
         textAlign: 'left',
         marginTop: '12px',
