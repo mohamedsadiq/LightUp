@@ -1209,9 +1209,14 @@ function Content() {
   }, [followUpQAs.length]); // Only depend on length changes
 
   // Wrap handleAskFollowUp to include necessary context
-  const handleAskFollowUpWrapper = () => {
-    if (!followUpQuestion.trim() || isAskingFollowUp) return;
+  const handleAskFollowUpWrapper = (questionText?: string) => {
+    const questionSource = questionText ?? followUpQuestion;
+    const trimmedQuestion = questionSource.trim();
+    if (!trimmedQuestion || isAskingFollowUp) return;
 
+    // Ensure state stays in sync – update immediately
+    setFollowUpQuestion(trimmedQuestion);
+ 
     setIsAskingFollowUp(true);
     const newId = Date.now();
     
@@ -1220,7 +1225,7 @@ function Content() {
     setFollowUpQAs(prev => [
       ...prev,
       { 
-        question: followUpQuestion, 
+        question: trimmedQuestion, 
         answer: '', 
         id: newId,
         isComplete: false,
@@ -1229,8 +1234,8 @@ function Content() {
     ]);
 
     // Update conversation context with the new question
-    updateConversation(followUpQuestion);
-
+    updateConversation(trimmedQuestion);
+ 
     try {
       // Check if we need to reconnect
       if (!port || connectionStatus !== 'connected') {
@@ -1240,7 +1245,7 @@ function Content() {
       const message = {
         type: "PROCESS_TEXT",
         payload: {
-          text: followUpQuestion,
+          text: trimmedQuestion,
           context: mode === "free" ? "" : selectedText,
           conversationContext, // Add conversation context
           mode: mode,

@@ -8,7 +8,7 @@ interface FollowUpInputProps {
   inputRef: React.RefObject<HTMLTextAreaElement>;
   followUpQuestion: string;
   handleFollowUpQuestion: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleAskFollowUpWrapper: () => void;
+  handleAskFollowUpWrapper: (question?: string) => void;
   isAskingFollowUp: boolean;
   setIsInputFocused: (focused: boolean) => void;
   themedStyles: any; // Use the actual type if available
@@ -104,7 +104,7 @@ export const FollowUpInput = React.memo(({
         
         // Small delay to ensure state update, then submit
         setTimeout(() => {
-          handleAskFollowUpWrapper();
+          handleAskFollowUpWrapper(localInputValue);
         }, 10);
       }
     }
@@ -189,7 +189,7 @@ export const FollowUpInput = React.memo(({
           className="lu-optimized-textarea lu-centered-placeholder"
         />
         <motion.button
-          onClick={handleAskFollowUpWrapper}
+          onClick={() => handleAskFollowUpWrapper(localInputValue)}
           disabled={!localInputValue.trim() || isAskingFollowUp}
           whileHover={{ scale: 1.05, rotate: 5 }}
           whileTap={{ scale: 0.95 }}

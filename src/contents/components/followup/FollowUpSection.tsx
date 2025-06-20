@@ -27,7 +27,7 @@ interface FollowUpSectionProps {
   popupRef: React.RefObject<HTMLDivElement>;
   currentModel: string | null;
   handleFollowUpQuestion: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  handleAskFollowUpWrapper: () => void;
+  handleAskFollowUpWrapper: (question?: string) => void;
   setIsInputFocused: (focused: boolean) => void;
   // Export props
   handleExportAsDoc: (text: string, id: string, filename?: string) => Promise<void>;
