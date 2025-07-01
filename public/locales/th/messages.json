@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - การเพิ่มเติมเว็บไซต์ที่ใช้พลังงาน AI สรุป แปล และอื่นๆ",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "การเพิ่มเติมที่ชาญฉลาดสำหรับทุกหน้าเว็บ ใช้พลังงาน AI เพื่ออธิบาย สรุป วิเคราะห์ แปล และอื่นๆ",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "ยินดีต้อนรับสู่ LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "สรุป",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "อธิบาย",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "แปล",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "วิเคราะห์",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "การตั้งค่า",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "ภาษา",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "เลือกภาษาที่คุณต้องการ",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "บันทึก",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "ยกเลิก",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "เปิดใช้งาน",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "ปิดใช้งาน",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "ส่งข้อเสนอแนะ",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "กำลังโหลด...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "การใช้งานฟรีที่เหลืออยู่",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "การเลือกโหมด",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "กำหนดค่าโหมด",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "ไปที่พรอมต์",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "ซ่อนการกำหนดค่าโหมด",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "ซ่อนการกำหนดค่า",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "แสดงข้อมูลเว็บไซต์",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "แสดง favicon และชื่อเว็บไซต์ในผลลัพธ์",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "แสดงข้อความที่เลือก",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "แสดงข้อความที่คุณเลือกไว้ในผลลัพธ์",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "แสดงปุ่ม 'AI ทันที'",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "เพิ่มปุ่ม 'AI ทันที' ที่ลอยอยู่ ซึ่งจะสรุปหรืออธิบายทั้งหน้าเว็บด้วยการคลิกเพียงครั้งเดียว",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "โหมดปราศจากสิ่งรบกวน",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "ซ่อน UI ที่ไม่จำเป็นและหรี่แสงหน้าเว็บด้านหลัง LightUp เพื่อให้คุณสามารถโฟกัสที่คำตอบของ AI ได้",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "เก็บข้อความที่ไฮไลต์ไว้หลังจากปิดป๊อปอัป",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "เก็บข้อความที่ไฮไลต์ไว้หลังจากปิดป๊อปอัป",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "แสดงปุ่มดำเนินการเมื่อเลือกข้อความ",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "แสดงปุ่มขนาดเล็กเมื่อไฮไลต์ข้อความ",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "เปิด LightUp โดยอัตโนมัติเมื่อเลือกข้อความ",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "เปิด LightUp โดยอัตโนมัติเมื่อใดก็ตามที่คุณเลือกข้อความ",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "การไฮไลต์อย่างต่อเนื่อง",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "ทางลัดแป้นพิมพ์",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "ใช้ทางลัดเหล่านี้เพื่อเข้าถึงคุณสมบัติของ LightUp ได้อย่างรวดเร็ว",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "เปลี่ยนไปใช้โหมดอธิบาย",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "เปลี่ยนไปใช้โหมดสรุป",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "เปลี่ยนไปใช้โหมดวิเคราะห์",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "เปลี่ยนไปใช้โหมดแปล",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "เปิดป๊อปอัปในโหมดฟรี",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "หลังจากตั้งค่าโหมดผ่านทางลัดแล้ว ให้เลือกข้อความใดๆ และ LightUp จะปรากฏขึ้นพร้อมกับโหมดที่คุณเลือก",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "การสลับคุณสมบัติ",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "ทางลัดสำหรับการสลับคุณสมบัติต่างๆ",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "สลับ LightUp เปิด/ปิด",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "สลับโหมดโฟกัสอย่างรุนแรง",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "สลับธีมสีอ่อน/สีเข้ม",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "รีเซ็ตทางลัดทั้งหมด",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "คืนค่าทางลัดทั้งหมดเป็นค่าเริ่มต้น",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "รีเซ็ต",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "ถามอะไรก็ได้",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "กำหนดค่าตัวเลือกโหมด (เลือกได้สูงสุด 4 โหมด)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "โหมดเหล่านี้จะปรากฏในตัวเลือกโหมดของคุณ คลิกเพื่อสลับ",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "การกระทำที่มีอยู่",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "ฟรี",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "โลโก้ LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp ปิดอยู่ขณะนี้",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "สลับสวิตช์ในส่วนหัวหรือปุ่มด้านล่างเพื่อเปิดใช้งาน LightUp และเข้าถึงคุณสมบัติทั้งหมด",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "เปิดใช้งาน LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "อัตโนมัติ → อังกฤษ",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "ทั่วไป",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "ทางลัดแป้นพิมพ์",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "การตั้งค่าขั้นสูง",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "ความเป็นส่วนตัว",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "นโยบายความเป็นส่วนตัว",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "เว็บไซต์",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "ให้คะแนนเรา",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "ข้อเสนอแนะ",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "ช่วยเราปรับปรุง LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "ประเภทข้อเสนอแนะ",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "เลือกประเภทข้อเสนอแนะที่คุณต้องการให้",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "ข้อเสนอแนะทั่วไป",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "รายงานข้อผิดพลาด",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "คำขอคุณสมบัติ",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "อื่นๆ",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "ข้อเสนอแนะของคุณ",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "บอกเราว่าคุณคิดอย่างไรหรืออธิบายปัญหาที่คุณพบ...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "พิมพ์ข้อเสนอแนะของคุณที่นี่...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "อีเมล (ไม่บังคับ)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "ใส่อีเมลของคุณหากคุณต้องการให้เราติดตาม",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "คุณ@ตัวอย่าง.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "ส่งข้อเสนอแนะ",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "สีไฮไลต์",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "เลือกสีสำหรับการไฮไลต์ข้อความ",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "เริ่มต้น",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "เหลือง",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "ส้ม",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "น้ำเงิน",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "เขียว",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "ม่วง",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "ชมพู",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "ความเป็นส่วนตัวและข้อมูล",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "ความเป็นส่วนตัวของคุณเป็นสิ่งสำคัญที่สุดสำหรับเรา",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "ไม่มีการเก็บรวบรวมข้อมูล",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp เคารพความเป็นส่วนตัวของคุณและจัดการข้อมูลของคุณอย่างมีความรับผิดชอบ",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "ที่เก็บข้อมูลภายในเครื่อง",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "การตั้งค่าทั้งหมดของคุณจะถูกเก็บไว้ในเครื่องของคุณ",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "การประมวลผลโดยตรง",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "ข้อความจะถูกประมวลผลโดยตรงโดยไม่ต้องจัดเก็บ",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "ไม่มีการติดตาม",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "เราไม่ติดตามการท่องเว็บหรือจัดเก็บข้อมูลส่วนบุคคลของคุณ",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "การควบคุมของคุณ",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "การตั้งค่าและข้อมูลทั้งหมดอยู่ภายใต้การควบคุมของคุณ",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "นโยบายฉบับเต็ม",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "ติดต่อ",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "บันทึกไม่สำเร็จ",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "มีข้อผิดพลาดในการบันทึกการตั้งค่าของคุณ โปรดลองอีกครั้ง",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "บันทึกการตั้งค่าแล้ว",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "การเปลี่ยนแปลงของคุณถูกบันทึกเมื่อเปลี่ยนส่วนต่างๆ",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "ปิดการแจ้งเตือน",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "หยุดพูด",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "อ่านข้อความออกเสียง",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "สรุป",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "อธิบาย",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "แปล",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "วิเคราะห์",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "แชทเกี่ยวกับ",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "ตัวเลือกการเลือก",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "การใช้งานรายวัน",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "ธีม",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "เลือกธีมสีที่คุณต้องการสำหรับส่วนขยาย",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "ธีมสีเข้ม",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "ธีมสีอ่อน",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "ค่าเริ่มต้นของระบบ",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "ภาษาเปลี่ยนไปแล้ว",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "UI จะอัปเดตเพื่อแสดงถึงการเลือกภาษาของคุณ",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "ข้อผิดพลาด",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "ไม่สามารถเปลี่ยนภาษาได้",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "ระยะขอบป๊อปอัป",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "ระยะห่างจากขอบของ viewport ในโหมดลอยตัว",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "การตั้งค่าการแปล",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "ใช้บริบทหน้าเว็บสำหรับคำตอบที่ดีกว่า",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "เปิดใช้งานบริบทหน้าเว็บที่ลึกกว่าเพื่อให้ได้ผลลัพธ์ที่ดีขึ้น",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "รูปลักษณ์",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "ข้อเสนอแนะ",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "เค้าโครงและการแสดงผล",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "ปรับแต่งเค้าโครงและรูปลักษณ์ของส่วนขยาย",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "โหมดเค้าโครง",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "ลอยตัว",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "แถบด้านข้าง",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "ตรงกลาง",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "ขนาดตัวอักษรผลลัพธ์",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "ควบคุมขนาดของข้อความในแผงผลลัพธ์",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "เล็กมาก",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "เล็ก",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "กลาง",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "ใหญ่",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "ใหญ่พิเศษ",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "ใหญ่พิเศษมาก",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "แอนิเมชันป๊อปอัป",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "แอนิเมชันเมื่อป๊อปอัปปรากฏขึ้น",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "จางหายไป",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "เลื่อน",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "ปรับขนาด",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "ไม่มี",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "โหมดโฟกัสอย่างรุนแรง",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "เบลอพื้นหลังเมื่อดูผลลัพธ์",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(จำเป็น)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "ราคา:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "ขนาด:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "คัดลอกที่อยู่ไปยังคลิปบอร์ดแล้ว!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "ขีดจำกัดอัตราที่เหลืออยู่:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "รีเซ็ตใน:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "บันทึกอัตโนมัติไม่สำเร็จ",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "การเปลี่ยนแปลงของคุณไม่ได้ถูกบันทึกโดยอัตโนมัติ โปรดบันทึกด้วยตนเอง",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "โหลดไม่สำเร็จ",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "ไม่สามารถโหลดการตั้งค่าของคุณได้ กำลังใช้ค่าเริ่มต้น",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "กำลังโหลดข้อมูลการใช้งาน...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "โมเดลเลือกอัตโนมัติ",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "เลือก {0} โดยอัตโนมัติเนื่องจากคุณได้ระบุคีย์ API ของ Gemini แล้ว",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "เลือก {0} โดยอัตโนมัติเนื่องจากคุณได้ระบุคีย์ API ของ Grok แล้ว",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "เลือก {0} โดยอัตโนมัติสำหรับการตั้งค่า Ollama ของคุณ",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(ฟังก์ชันไม่แสดง)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(เทมเพลตแบบไดนามิก - แตกต่างกันไปตามข้อความที่คุณเลือก)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "การเพิ่มเติมเว็บไซต์ที่ใช้พลังงาน AI",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "เวอร์ชัน:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "นักพัฒนา:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "เว็บไซต์:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "สรุปทันที",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "การแปลแบบเรียลไทม์",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "แบบจำลอง AI ขั้นสูง",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "การแชทแบบโต้ตอบ",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "ไม่มีการเก็บรวบรวมข้อมูล",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "ที่เก็บข้อมูลภายในเครื่อง",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "เวอร์ชันล่าสุดพร้อมความสามารถที่ได้รับการปรับปรุงและเวลาตอบสนองที่เร็วขึ้น",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "เวอร์ชันน้ำหนักเบาที่ปรับให้เหมาะสมสำหรับประสิทธิภาพและความเร็ว",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "แบบจำลองการทดลองที่เน้นการให้เหตุผลและงานวิเคราะห์",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "เวอร์ชันที่เสถียรพร้อมประสิทธิภาพที่สมดุล",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "แบบจำลองที่เร็วขึ้นและมีขนาดเล็กลงสำหรับการตอบสนองที่รวดเร็ว",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "เวอร์ชันที่ปรับขนาด 8 บิตสำหรับการประมวลผลที่มีประสิทธิภาพ",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "แบบจำลอง Grok-3 มาตรฐาน",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "2.00 ดอลลาร์สหรัฐต่อโทเค็น 1 ล้านโทเค็น",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "ตัวแปรน้ำหนักเบา",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1.00 ดอลลาร์สหรัฐต่อโทเค็น 1 ล้านโทเค็น",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3 ที่ปรับให้เหมาะสมสำหรับเวลาแฝง",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "2.50 ดอลลาร์สหรัฐต่อโทเค็น 1 ล้านโทเค็น",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "ตัวแปร Mini + เร็ว",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1.50 ดอลลาร์สหรัฐต่อโทเค็น 1 ล้านโทเค็น",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "การสร้าง Grok-2 ล่าสุด",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1.80 ดอลลาร์สหรัฐต่อโทเค็น 1 ล้านโทเค็น",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "แบบจำลอง Llama 2 ที่ทรงพลังที่สุด เหมาะสำหรับงานที่ซับซ้อน",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "พารามิเตอร์ 70B",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "แบบจำลอง DeepSeek ล่าสุดพร้อมความสามารถในการให้เหตุผลที่ได้รับการปรับปรุง",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "พารามิเตอร์ 67B",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "แบบจำลองผู้เชี่ยวชาญแบบผสมที่มีประสิทธิภาพสูง",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "พารามิเตอร์ 47B",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "ประสิทธิภาพและการใช้ทรัพยากรที่สมดุล",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "พารามิเตอร์ 13B",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "แบบจำลองการปฏิบัติตามคำแนะนำที่มีประสิทธิภาพ",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "พารามิเตอร์ 7B",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "ปรับให้เหมาะสมสำหรับการสนทนาตามธรรมชาติ",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "พารามิเตอร์ 7B",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "เวอร์ชันที่เบากว่าของ DeepSeek ที่มีความสามารถในการให้เหตุผลที่ดี",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "พารามิเตอร์ 7B",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "แบบจำลองน้ำหนักเบาสำหรับงานพื้นฐาน",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "พารามิเตอร์ 3B",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "กะทัดรัดแต่ทรงพลังสำหรับขนาดของมัน",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "พารามิเตอร์ 2.7B",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "ปรับให้เหมาะสมสำหรับการโต้ตอบการแชท",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "พารามิเตอร์ 7B",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "เบต้า",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "ทั่วไป",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "แบบจำลอง AI",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "เทมเพลตพรอมต์",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "รูปลักษณ์",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "เกี่ยวกับ",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "การตั้งค่าทั่วไป",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "การกำหนดค่าแบบจำลอง AI",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "รูปลักษณ์และการปรับแต่ง",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "เทมเพลตพรอมต์",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "เกี่ยวกับ LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "แสดงข้อความที่คุณเลือกไว้ในผลลัพธ์",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "แสดง favicon และชื่อเว็บไซต์ในผลลัพธ์",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "เก็บข้อความที่ไฮไลต์ไว้หลังจากปิดป๊อปอัป",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "เปิด LightUp โดยอัตโนมัติเมื่อเลือกข้อความ",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "เปิด LightUp โดยอัตโนมัติเมื่อใดก็ตามที่คุณเลือกข้อความ",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "การรับรู้บริบท",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "ใช้บริบทหน้าเว็บเพื่อให้คำตอบที่ดีขึ้นและเกี่ยวข้องมากขึ้น",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "การเลือก AI Engine",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "เลือกประเภทแบบจำลอง AI",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "เลือกบริการ AI ที่คุณต้องการใช้ในการสร้างการตอบสนอง",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "พื้นฐาน (ฟรี จำกัด)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (ต้องใช้คีย์ API)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok โดย xAI (ต้องใช้คีย์ API)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "ภายในเครื่อง/Ollama (โฮสต์ด้วยตนเอง)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "ประกาศความเป็นส่วนตัวของข้อมูล",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "เมื่อใช้ระดับพื้นฐาน ข้อความที่คุณเลือกและบริบทหน้าเว็บจะถูกส่งไปยังเซิร์ฟเวอร์ของเราเพื่อการประมวลผล เราไม่ได้จัดเก็บข้อมูลนี้ไว้ถาวร",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "สำหรับความเป็นส่วนตัวอย่างสมบูรณ์ พิจารณาใช้คีย์ API ของคุณเองกับ Google Gemini, Grok หรือแบบจำลองภายในเครื่อง",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "การกำหนดค่า Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "คีย์ API ของ Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "ป้อนคีย์ API Google AI Studio ของคุณ",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "รับคีย์ API ฟรีของคุณจาก Google AI Studio {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "เลือกแบบจำลอง Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "เลือกแบบจำลอง Google Gemini ที่จะใช้ในการสร้างการตอบสนอง",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "การกำหนดค่า Grok โดย xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "คีย์ API ของ xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "ป้อนคีย์ API xAI ของคุณ",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "รับคีย์ API ของคุณจาก xAI เยี่ยมชม {0} เพื่อเริ่มต้น",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "เลือกแบบจำลอง Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "เลือกแบบจำลอง Grok ที่จะใช้ในการสร้างการตอบสนอง",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "การกำหนดค่าภายในเครื่อง/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "URL เซิร์ฟเวอร์ Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "เลือกแบบจำลองภายในเครื่อง",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "เลือกแบบจำลองที่จะใช้จากการติดตั้ง Ollama ของคุณ",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "การตั้งค่าการตอบสนอง",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "ความยาวการตอบสนองสูงสุด",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "จำนวนโทเค็น (คำ/อักขระ) สูงสุดในการตอบสนองของ AI",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "โหมดพรอมต์",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "เลือกประเภทพรอมต์ที่คุณต้องการปรับแต่ง",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "พรอมต์ระบบ",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "พรอมต์นี้กำหนดวิธีการที่ AI ควรทำงานและตอบสนอง",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "เทมเพลตพรอมต์ผู้ใช้",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "เทมเพลตนี้ใช้ในการจัดรูปแบบคำขอของผู้ใช้ไปยัง AI",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "แก้ไข",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "บันทึก",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "รีเซ็ตเป็นค่าเริ่มต้น",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "รีเซ็ตพรอมต์โหมด {0} กลับไปเป็นค่าเริ่มต้นดั้งเดิม",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "รีเซ็ตเป็นค่าเริ่มต้น",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "รีเซ็ตสำเร็จ",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "พรอมต์นี้ใช้ตรรกะแบบไดนามิกและไม่สามารถแก้ไขได้",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "วิธีใช้เทมเพลตที่กำหนดเองของคุณ:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "พรอมต์ที่กำหนดเองของคุณจะถูกใช้โดยอัตโนมัติเมื่อคุณเลือกข้อความและเลือกโหมดที่เกี่ยวข้อง\nการเปลี่ยนแปลงมีผลทันที - ไม่จำเป็นต้องรีสตาร์ท\nคุณสามารถรีเซ็ตพรอมต์ใดๆ กลับไปเป็นค่าเริ่มต้นได้โดยใช้ปุ่มรีเซ็ต",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "ธีมและรูปลักษณ์",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "ธีมสี",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "ธีมสีเข้ม",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "ธีมสีอ่อน",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "ค่าเริ่มต้นของระบบ",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "ขนาดตัวอักษร",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "ปรับขนาดข้อความในผลลัพธ์ป๊อปอัป",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "สีไฮไลต์",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "เลือกสีสำหรับการไฮไลต์ข้อความที่เลือก",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "เลือกวิธีที่ป๊อปอัปปรากฏบนหน้าเว็บ",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "ลอยตัว",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "แถบด้านข้าง",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "ตรงกลาง",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "เอฟเฟ็กต์แอนิเมชันเมื่อป๊อปอัปปรากฏขึ้น",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "จางหายไป",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "เลื่อน",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "ปรับขนาด",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "ไม่มี",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "การตั้งค่าแอนิเมชัน",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp คือส่วนขยายเบราว์เซอร์ที่ใช้พลังงาน AI ซึ่งให้สรุป อธิบาย การแปล และการวิเคราะห์แบบทันทีสำหรับข้อความใดๆ บนเว็บ",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "ลิงก์",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "ลิงก์และแหล่งข้อมูลที่มีประโยชน์",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "เยี่ยมชมเว็บไซต์",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "ให้คะแนนใน Chrome Store",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "ล้างข้อมูลทั้งหมด",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "อธิบาย",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "สรุป",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "วิเคราะห์",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "แปล",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "ฟรี",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "รายละเอียดพรอมต์",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "ดูและปรับแต่งพรอมต์ที่ใช้สำหรับโหมดนี้",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "รับสรุปแบบทันทีของข้อความใดๆ ด้วยการคลิกเพียงครั้งเดียว",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "แปลข้อความเป็นภาษาใดๆ ได้ทันที",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "เลือกจากแบบจำลอง AI หลายแบบ รวมถึง GPT, Gemini และแบบจำลองภายในเครื่อง",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "สนทนากับ AI เกี่ยวกับเนื้อหาที่คุณกำลังอ่าน",
+    "description": "Description for interactive chat feature"
+  }
+}

@@ -1,30 +1,42 @@
 import type { ProcessTextRequest } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS } from "../../utils/constants"
+import { getSelectedLocale } from "../../utils/i18n"
 
 export const processOpenAIText = async function*(request: ProcessTextRequest) {
   const { text, mode, settings, isFollowUp } = request
   
+  // Get the user's selected language for AI responses
+  // Priority: 1) aiResponseLanguage setting (from website info selector)
+  //          2) Extension UI language (from popup/options) as fallback
+  const responseLanguage = settings.aiResponseLanguage || await getSelectedLocale()
+  
   try {
     // Get the system prompt (custom or default)
     const getSystemPrompt = () => {
+      // Language instruction to add to all system prompts
+      const languageInstruction = responseLanguage !== "en" 
+        ? `\n\nIMPORTANT: Respond in ${responseLanguage} language. Adapt your response to be culturally appropriate for speakers of this language.` 
+        : "";
+        
       // For follow-up questions, use enhanced context-aware prompts
       if (isFollowUp) {
         // If custom system prompt is available for follow-ups, use it
         if (settings.customPrompts?.systemPrompts?.[mode]) {
           return `${settings.customPrompts.systemPrompts[mode]} 
 
-FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.`;
+FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.${languageInstruction}`;
         }
         // Otherwise use enhanced follow-up prompt
-        return FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
+        const basePrompt = FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
+        return basePrompt + languageInstruction;
       }
       
       // If custom system prompt is available, use it
       if (settings.customPrompts?.systemPrompts?.[mode]) {
-        return settings.customPrompts.systemPrompts[mode];
+        return settings.customPrompts.systemPrompts[mode] + languageInstruction;
       }
       // Otherwise use default
-      return SYSTEM_PROMPTS[mode];
+      return SYSTEM_PROMPTS[mode] + languageInstruction;
     };
 
     // Get the user prompt (custom or default)

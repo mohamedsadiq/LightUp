@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - AI搭載ウェブ注釈。要約、翻訳など",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "ウェブ上のあらゆるページに天才的な注釈を。AIの力で説明、要約、分析、翻訳などを実現します。",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "LightUpへようこそ",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "要約",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "説明",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "翻訳",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "分析",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "設定",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "言語",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "優先言語を選択してください",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "保存",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "キャンセル",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "有効",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "無効",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "フィードバックを送信",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "読み込み中...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "残りの無料利用回数",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "モード選択",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "モードの設定",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "プロンプトへ移動",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "モード設定を非表示",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "設定を非表示",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "ウェブサイト情報を表示",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "結果にウェブサイトのファビコンとタイトルを表示します",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "選択したテキストを表示",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "結果に選択したテキストを表示します",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "'インスタントAI'ボタンを表示",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "ワンクリックでページ全体の要約や説明を行うフローティング「インスタントAI」ボタンを追加します",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "邪魔にならないモード",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "不要なUIを非表示にし、LightUpの後ろのページを暗くして、AIの回答に集中できるようにします",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "ポップアップを閉じた後も強調表示されたテキストを保持",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "ポップアップを閉じた後もテキストを強調表示したままにします",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "テキスト選択時にアクションボタンを表示",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "テキストが強調表示されているときに小さなボタンを表示します",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "テキスト選択時にLightUpを自動的に開く",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "テキストを選択するたびにLightUpを自動的に開きます",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "永続的な強調表示",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "キーボードショートカット",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "これらのショートカットを使用して、LightUp機能にすばやくアクセスできます",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "説明モードに切り替える",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "要約モードに切り替える",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "分析モードに切り替える",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "翻訳モードに切り替える",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "フリーモードでポップアップを開く",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "ショートカットでモードを設定した後、任意のテキストを選択すると、選択したモードでLightUpが表示されます。",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "機能の切り替え",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "機能のオン/オフを切り替えるためのショートカット",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "LightUpのオン/オフを切り替える",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "徹底的なフォーカスモードを切り替える",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "明/暗テーマを切り替える",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "すべてのショートカットをリセット",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "すべてのショートカットをデフォルト値に復元します",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "リセット",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "何でも聞いてください",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "モードセレクターの設定（最大4つ選択）",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "これらのモードがモードセレクターに表示されます。クリックして切り替えます。",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "利用可能なアクション",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "フリー",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "LightUpロゴ",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUpは現在オフになっています",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "ヘッダーまたは下のボタンのスウィッチを切り替えて、LightUpを有効にし、すべての機能にアクセスしてください。",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "LightUpを有効にする",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "自動→英語",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "一般",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "キーボードショートカット",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "詳細設定",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "プライバシー",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "プライバシーポリシー",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "ウェブサイト",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "評価する",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "フィードバック",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "LightUpの改善にご協力ください",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "フィードバックの種類",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "提供するフィードバックの種類を選択してください",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "一般的なフィードバック",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "バグレポート",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "機能リクエスト",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "その他",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "あなたのフィードバック",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "ご意見や、発生している問題についてお聞かせください...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "ここにフィードバックを入力してください...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "メールアドレス（任意）",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "フォローアップをご希望の場合は、メールアドレスを入力してください",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "フィードバックを送信",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "強調表示の色",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "テキスト強調表示の色を選択してください",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "デフォルト",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "黄色",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "オレンジ",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "青",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "緑",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "紫",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "ピンク",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "プライバシーとデータ",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "あなたのプライバシーは私たちの最優先事項です",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "データの収集なし",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUpはあなたのプライバシーを尊重し、あなたのデータを責任ある方法で扱います。",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "ローカルストレージ",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "すべての設定はデバイスのローカルに保存されます",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "直接処理",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "テキストは保存せずに直接処理されます",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "トラッキングなし",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "閲覧履歴や個人データは追跡しません",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "あなたの管理下",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "すべての設定とデータはあなたの管理下にあります",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "全文ポリシー",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "お問い合わせ",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "保存に失敗しました",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "設定の保存中にエラーが発生しました。もう一度お試しください。",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "設定が保存されました",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "セクションを切り替えたときに変更が保存されました。",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "通知を閉じる",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "読み上げを停止",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "テキストを読み上げる",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "要約",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "説明",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "翻訳",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "分析",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "についてチャット",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "選択オプション",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "1日の利用状況",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "テーマ",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "拡張機能の優先するカラースキームを選択してください",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "ダークテーマ",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "ライトテーマ",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "システムデフォルト",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "言語が変更されました",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "UIがあなたの言語選択を反映するように更新されます",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "エラー",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "言語の変更に失敗しました",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "ポップアップのマージン",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "フローティングモードでのビューポート端からの距離",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "翻訳設定",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "より良い回答を得るためのページコンテキストの使用",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "より良い結果を得るために、より深いページコンテキストを有効にします",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "外観",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "フィードバック",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "レイアウトと表示",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "拡張機能のレイアウトと外観をカスタマイズします",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "レイアウトモード",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "フローティング",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "サイドバー",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "中央寄せ",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "結果のフォントサイズ",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "結果パネルのテキストサイズを調整します",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "極小",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "小",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "中",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "大",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "特大",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "最大",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "ポップアップアニメーション",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "ポップアップが表示される際のアニメーション",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "フェードイン",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "スライド",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "拡大縮小",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "なし",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "徹底的なフォーカスモード",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "結果を表示する際に背景をぼかします",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "（必須）",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "価格：",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "サイズ：",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "アドレスがクリップボードにコピーされました！",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "残りのレート制限：",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "あとでリセット：",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "自動保存に失敗しました",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "変更内容は自動的に保存されませんでした。手動で保存してください。",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "読み込みに失敗しました",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "設定を読み込めませんでした。デフォルトを使用しています。",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "利用状況情報をロードしています...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "モデルが自動選択されました",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Gemini APIキーを提供したため、{0}が自動的に選択されました。",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Grok APIキーを提供したため、{0}が自動的に選択されました。",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Ollama設定のために{0}が自動的に選択されました。",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "（関数が表示されていません）",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "（動的テンプレート - 選択したテキストに基づいて変化します）",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "AI搭載ウェブ注釈",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "バージョン：",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "開発者：",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "ウェブサイト：",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "インスタント要約",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "リアルタイム翻訳",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "高度なAIモデル",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "インタラクティブチャット",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "データ収集なし",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "ローカルストレージ",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "強化された機能と高速な応答時間を実現した最新バージョン",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "効率と速度を最適化された軽量バージョン",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "推論と分析タスクに焦点を当てた実験的なモデル",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "バランスの取れたパフォーマンスを持つ安定したバージョン",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "迅速な応答のための高速で小型のモデル",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "効率的な処理のための8ビット量子化バージョン",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "標準的なGrok-3モデル",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "100万トークンあたり2.00ドル",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "軽量バリアント",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "100万トークンあたり1.00ドル",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "レイテンシ最適化Grok-3",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "100万トークンあたり2.50ドル",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "ミニ+高速バリアント",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "100万トークンあたり1.50ドル",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "最新のGrok-2ビルド",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "100万トークンあたり1.80ドル",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "最も強力なLlama 2モデルで、複雑なタスクに最適",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "700億パラメーター",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "強化された推論機能を備えた最新のDeepSeekモデル",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "670億パラメーター",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "高性能なエキスパートモデルの混合",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "470億パラメーター",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "バランスの取れたパフォーマンスとリソース使用量",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "130億パラメーター",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "効率的な指示に従うモデル",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "70億パラメーター",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "自然な会話のために最適化されています",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "70億パラメーター",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "優れた推論機能を備えたDeepSeekの軽量バージョン",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "70億パラメーター",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "基本的なタスクのための軽量モデル",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "30億パラメーター",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "コンパクトでありながら、そのサイズに比べて強力",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "27億パラメーター",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "チャットインタラクションのために最適化されています",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "70億パラメーター",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "ベータ版",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "一般",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "AIモデル",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "プロンプトテンプレート",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "外観",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "LightUpについて",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "一般設定",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "AIモデル設定",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "外観とカスタマイズ",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "プロンプトテンプレート",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "LightUpについて",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "結果に選択したテキストを表示します",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "結果にウェブサイトのファビコンとタイトルを表示します",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "ポップアップを閉じた後もテキストを強調表示したままにします",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "テキスト選択時にLightUpを自動的に開く",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "テキストを選択するたびにLightUpを自動的に開きます",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "コンテキスト認識",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "ページコンテキストを使用して、より良く、より関連性の高い回答を提供します",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "AIエンジン選択",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "AIモデルの種類を選択",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "応答の生成に使用するAIサービスを選択します",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "基本（無料、制限付き）",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini（APIキーが必要です）",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "xAIによるGrok（APIキーが必要です）",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "ローカル/Ollama（自己ホスト型）",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "データプライバシーに関する通知",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "基本プランを使用する際、選択したテキストとページコンテキストは処理のためにサーバーに送信されます。このデータは永続的に保存されません。",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "完全なプライバシーのために、Google Gemini、Grok、またはローカルモデルで独自のAPIキーを使用することを検討してください。",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Google Gemini設定",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Google Gemini APIキー",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Google AI Studio APIキーを入力してください",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Google AI Studioから無料のAPIキーを取得します。{0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Geminiモデルを選択",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "応答の生成に使用するGoogle Geminiモデルを選択します",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "xAIによるGrok設定",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "xAI APIキー",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "xAI APIキーを入力してください",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "xAIからAPIキーを取得します。開始するには{0}にアクセスしてください。",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Grokモデルを選択",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "応答の生成に使用するGrokモデルを選択します",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "ローカル/Ollama設定",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "OllamaサーバーURL",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "ローカルモデルを選択",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Ollamaインストールから使用するモデルを選択します",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "応答設定",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "最大応答の長さ",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "AI応答の最大トークン数（単語/文字）",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "プロンプトモード",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "カスタマイズするプロンプトの種類を選択します",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "システムプロンプト",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "このプロンプトは、AIがどのように動作し、応答するかを定義します",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "ユーザープロンプトテンプレート",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "このテンプレートは、AIへのユーザーリクエストのフォーマットに使用されます",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "編集",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "保存",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "デフォルトにリセット",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "{0}モードのプロンプトを元のデフォルトにリセットします",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "デフォルトに戻す",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "リセットが成功しました",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "このプロンプトは動的ロジックを使用しており、編集できません",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "カスタムテンプレートの適用方法：",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "テキストを選択して対応するモードを選択すると、カスタムプロンプトが自動的に使用されます\n変更はすぐに有効になります - 再起動は必要ありません\nリセットボタンを使用して、任意のプロンプトをデフォルトにリセットできます",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "テーマと外観",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "カラースキーム",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "ダークテーマ",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "ライトテーマ",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "システムデフォルト",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "フォントサイズ",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "ポップアップ結果のテキストサイズを調整します",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "強調表示の色",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "選択したテキストを強調表示する色を選択します",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "ポップアップがページにどのように表示されるかを選択します",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "フローティング",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "サイドバー",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "中央寄せ",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "ポップアップが表示される際のアニメーション効果",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "フェードイン",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "スライド",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "拡大縮小",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "なし",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "アニメーション設定",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUpは、ウェブ上のあらゆるテキストのインスタント要約、説明、翻訳、分析を提供するAI搭載ブラウザ拡張機能です。",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "リンク",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "便利なリンクとリソース",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "ウェブサイトにアクセス",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Chromeストアで評価",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "すべてのデータをクリア",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "説明",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "要約",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "分析",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "翻訳",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "フリー",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "プロンプトの詳細",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "このモードで使用されるプロンプトを表示およびカスタマイズします",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "ワンクリックで任意のテキストのインスタント要約を取得",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "テキストを任意の言語に瞬時に翻訳",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "GPT、Gemini、ローカルモデルなど、複数のAIモデルから選択",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "読んでいるコンテンツについてAIと会話",
+    "description": "Description for interactive chat feature"
+  }
+}

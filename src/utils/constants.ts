@@ -38,19 +38,67 @@ export const USER_PROMPTS: Record<string, string | ((text: string, context?: str
 } as const;
 
 export const LANGUAGES = {
-  auto: "Auto-detect",
-  ar: "Arabic (العربية)",
+  // Major Global Languages
   en: "English",
-  es: "Spanish (Español)",
+  es: "Spanish",
+  "zh-CN": "Chinese (Simplified)",
+  "zh-TW": "Chinese (Traditional)", 
+  hi: "Hindi",
+  ar: "Arabic",
+  pt: "Portuguese",
+  bn: "Bengali",
+  ru: "Russian",
+  ja: "Japanese",
+  
+  // European Languages
   fr: "French",
   de: "German",
   it: "Italian",
-  pt: "Portuguese",
-  ru: "Russian",
-  tr: "Turkish (Türkçe)",
-  zh: "Chinese",
-  ja: "Japanese",
-  ko: "Korean"
+  pl: "Polish",
+  uk: "Ukrainian",
+  nl: "Dutch",
+  sv: "Swedish",
+  da: "Danish",
+  no: "Norwegian",
+  fi: "Finnish",
+  cs: "Czech",
+  sk: "Slovak",
+  hu: "Hungarian",
+  ro: "Romanian",
+  bg: "Bulgarian",
+  hr: "Croatian",
+  sl: "Slovenian",
+  et: "Estonian",
+  lv: "Latvian",
+  lt: "Lithuanian",
+  el: "Greek",
+  tr: "Turkish",
+  
+  // Asian Languages
+  ko: "Korean",
+  th: "Thai",
+  vi: "Vietnamese",
+  id: "Indonesian",
+  ms: "Malay",
+  tl: "Filipino",
+  ta: "Tamil",
+  te: "Telugu",
+  ur: "Urdu",
+  fa: "Persian",
+  he: "Hebrew",
+  
+  // Americas
+  "pt-BR": "Portuguese (Brazil)",
+  "es-MX": "Spanish (Mexico)",
+  
+  // African Languages
+  sw: "Swahili",
+  am: "Amharic",
+  yo: "Yoruba",
+  ig: "Igbo",
+  ha: "Hausa",
+  zu: "Zulu",
+  af: "Afrikaans"
 } as const 
 
 export const THEME_COLORS = {

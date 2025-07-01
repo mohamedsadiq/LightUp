@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - Maelezo ya Tovuti Yenye Nguvu ya Akili Bandia. muhtasari, tafsiri, na zaidi",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Maelezo ya kina kwa kila ukurasa kwenye wavuti. Imetengenezwa kwa akili bandia ili kuelezea, kufanya muhtasari, kuchambua, kutafsiri, na zaidi.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Karibu LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Fanya Muhtasari",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Eleza",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Tafsiri",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Chambua",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Mipangilio",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Lugha",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Chagua lugha yako unayopendelea",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Hifadhi",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Ghairi",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Imeshawezeshwa",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Imezimwa",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Tuma Maoni",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Inapakia...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Matumizi ya Bila Malipo Yaliyosalia",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Uchaguzi wa Njia",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Sanidi Njia",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Nenda kwa Maagizo",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Ficha Sanidi ya Njia",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Ficha Sanidi",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Onyesha Maelezo ya Tovuti",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Onyesha nembo na kichwa cha tovuti kwenye matokeo",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Onyesha Nakala Iliyochaguliwa",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Onyesha maandishi uliyochagua kwenye matokeo",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Onyesha Kitufe cha 'Akili Bandia Papo Hapo'",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Ongeza kitufe kinachoelea cha 'Akili Bandia Papo Hapo' ambacho kinafanya muhtasari au kuelezea ukurasa mzima kwa kubofya mara moja",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Njia Isiyo na Usumbufu",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Inaficha UI isiyo muhimu na inafifia ukurasa nyuma ya LightUp ili uweze kuzingatia jibu la Akili Bandia",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Weka Nakala Iliyoangaziwa Baada ya Kifungu Kufungwa",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Weka maandishi yaliyoangaziwa baada ya kufunga dirisha ibukizi",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Onyesha Kitufe cha Kitendo kwenye Uchaguzi wa Nakala",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Onyesha kitufe kidogo wakati maandishi yameangaziwa",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Fungua LightUp Kiotomatiki kwenye Uchaguzi wa Nakala",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Inafungua LightUp kiotomatiki kila wakati unachagua maandishi",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Kuangazia Kudumu",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Mikato ya Kibodi",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Tumia mikato hii kufikia vipengele vya LightUp haraka",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Badilisha kwa njia ya Eleza",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Badilisha kwa njia ya Fanya Muhtasari",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Badilisha kwa njia ya Chambua",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Badilisha kwa njia ya Tafsiri",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Fungua dirisha ibukizi kwa njia ya Bila Malipo",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "Baada ya kuweka njia kupitia njia fupi, chagua maandishi yoyote na LightUp itaonekana kwa njia uliyochagua.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Vigezo vya Kipengele",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Mikato ya kuwasha na kuzima vipengele",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Washa/Zima LightUp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Washa/Zima njia ya Kuzingatia Kabisa",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Washa/Zima mandhari ya Mwanga/Giza",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Rudisha Mikato Yote",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Rudisha mikato yote kwenye maadili yake ya msingi",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Rudisha",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Uliza Chochote",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Sanidi Kichaguzi cha Njia (Chagua hadi 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Njia hizi zitaonekana kwenye kichaguzi chako cha njia. Bofya kuwasha au kuzima.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Vitendo vinavyopatikana",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Bila Malipo",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "Nembo ya LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp imezimwa kwa sasa",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Washa swichi kwenye kichwa au kitufe kilicho chini ili kuwezesha LightUp na kupata vipengele vyote.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Washa LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Kiotomatiki → Kiingereza",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "Jumla",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Mikato ya Kibodi",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Mipangilio Iliyoendelea",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Faragha",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Sera ya Faragha",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Tovuti",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Tukadirie",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Maoni",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Tusaidie kuboresha LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Aina ya Maoni",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Chagua aina ya maoni ungependa kutoa",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Maoni ya Jumla",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Ripoti ya Hitilafu",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Ombi la Kipengele",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Mengine",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Maoni Yako",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Tuambie unachofikiria au eleza tatizo unalopata...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Andika maoni yako hapa...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "Barua pepe (hiari)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Acha barua pepe yako ikiwa ungependa tufuatilie",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "wewe@mfano.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Tuma Maoni",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Rangi ya Kuangazia",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Chagua rangi ya kuangazia maandishi",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "Msingi",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Manjano",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Chungwa",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Bluu",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Kijani",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Zambarau",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Pinki",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Faragha & Takwimu",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Faragha yako ndio kipaumbele chetu",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Hakuna Ukusanyaji wa Takwimu",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp huheshimu faragha yako na hushughulikia data yako kwa uwajibikaji.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Hifadhi ya Ndani",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Mipangilio yako yote imehifadhiwa ndani kwenye kifaa chako",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Usindikaji wa Moja kwa Moja",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Maandishi yanachakatwa moja kwa moja bila kuhifadhi",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Hakuna Ufuatiliaji",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Hatufuatilii utazamaji wako au kuhifadhi data ya kibinafsi",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Udhibiti Wako",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Mipangilio yote na data inabaki chini ya udhibiti wako",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Sera Kamili",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Wasiliana Nasi",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Hifadhi Imeshindwa",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "Kulikuwa na hitilafu kuhifadhi mipangilio yako. Tafadhali jaribu tena.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "Mipangilio Imehifadhiwa",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "Mabadiliko yako yalihifadhiwa wakati wa kubadilisha sehemu.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Funga arifa",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Acha kuzungumza",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Soma maandishi kwa sauti",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Fanya Muhtasari",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Eleza",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Tafsiri",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Chambua",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Ongea kuhusu",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Chaguo za Uchaguzi",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Matumizi ya Kila Siku",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Mandhari",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Chagua mandhari ya rangi unayopendelea kwa kiendelezi",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Mandhari ya Giza",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Mandhari ya Mwanga",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Msingi wa Mfumo",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "Lugha Imebadilishwa",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "UI itaboresha ili kuakisi uchaguzi wako wa lugha",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Hitilafu",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Imeshindwa kubadilisha lugha",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Pembezoni mwa Dirisha ibukizi",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Umbali kutoka pembezoni mwa viewport kwa njia ya kuelea",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Mipangilio ya Tafsiri",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Tumia Maandishi ya Ukurasa kwa Majibu Bora",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Washa mazingira ya ukurasa kwa matokeo bora zaidi",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Muonekano",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Maoni",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Mpangilio & Onyesha",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Badilisha mpangilio na muonekano wa kiendelezi",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Njia ya Mpangilio",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Kuelea",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Upau wa pembeni",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Katikati",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Ukubwa wa Herufi za Matokeo",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Dhibiti ukubwa wa maandishi kwenye paneli ya matokeo",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "Ndogo Sana",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Ndogo",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Kati",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Kubwa",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "Kubwa Sana",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "Kubwa Zaidi",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Uhuishaji wa Dirisha ibukizi",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Uhuishaji wakati dirisha ibukizi linaonekana",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Kufifia",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Kuteleza",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Kupanua",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Hakuna",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Njia ya Kuzingatia Kabisa",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Futa usuli unapotazama matokeo",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Lazima)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Bei:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Ukubwa:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "Anwani imenakiliwa kwenye ubao wa kunakili!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Kiwango cha Kikomo Kilichobaki:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Rudisha kwa:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Hifadhi Kiotomatiki Imeshindwa",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Mabadiliko yako hayakuhifadhiwa kiotomatiki. Tafadhali hifadhi mwenyewe.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Kupakia Kumeshindwa",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Haiwezi kupakua mipangilio yako. Kutumia chaguo-msingi.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Inapakia taarifa za matumizi...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "Mfumo Ulichaguliwa Kiotomatiki",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Imechagua {0} kiotomatiki tangu utoe ufunguo wa API wa Gemini.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Imechagua {0} kiotomatiki tangu utoe ufunguo wa API wa Grok.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Imechagua {0} kiotomatiki kwa usanidi wako wa Ollama.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Kazi haionyeshwa)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Kiolezo chenye nguvu - kinabadilika kulingana na maandishi uliyochagua)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "Maelezo ya Tovuti Yenye Nguvu ya Akili Bandia",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Toleo:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Mtengenezaji:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Tovuti:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Muhtasari wa Papo Hapo",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Tafsiri ya Muda Halisi",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Mifumo ya Akili Bandia Iliyoendelea",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Mazungumzo Yanayofanya kazi",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Hakuna Ukusanyaji wa Takwimu",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Hifadhi ya Ndani",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Toleo la hivi punde lenye uwezo ulioimarishwa na nyakati za majibu zilizo kasi",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Toleo nyepesi linalofaa kwa ufanisi na kasi",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Mfumo wa majaribio unaolenga katika hoja na kazi za uchambuzi",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Toleo thabiti lenye utendaji mzuri",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "Mfumo wa haraka na mdogo kwa majibu ya haraka",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "Toleo lililopingika kwa biti 8 kwa usindikaji mzuri",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Mfumo wa kawaida wa Grok-3",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "$2.00 kwa alama milioni 1",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Chaguo nyepesi",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "$1.00 kwa alama milioni 1",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3 iliyozingatia muda wa majibu",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "$2.50 kwa alama milioni 1",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Mini + chaguo la kasi",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "$1.50 kwa alama milioni 1",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Toleo la hivi punde la Grok-2",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "$1.80 kwa alama milioni 1",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Mfumo wenye nguvu zaidi wa Llama 2, bora kwa kazi ngumu",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "Vigezo vya 70B",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Mfumo wa hivi punde wa DeepSeek wenye uwezo wa hoja ulioimarishwa",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "Vigezo vya 67B",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Mfumo wenye utendaji mzuri wa wataalamu mchanganyiko",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "Vigezo vya 47B",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Utendaji mzuri na matumizi ya rasilimali",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "Vigezo vya 13B",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Mfumo ufuatao maagizo kwa ufanisi",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "Vigezo vya 7B",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "Imeboreshwa kwa mazungumzo ya kawaida",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "Vigezo vya 7B",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Toleo nyepesi la DeepSeek lenye hoja nzuri",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "Vigezo vya 7B",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Mfumo mwepesi kwa kazi za msingi",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "Vigezo vya 3B",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Imefungwa lakini yenye nguvu kwa ukubwa wake",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "Vigezo vya 2.7B",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "Imeboreshwa kwa maingiliano ya mazungumzo",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "Vigezo vya 7B",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BETA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "Jumla",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "Mifumo ya Akili Bandia",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Violezo vya Maagizo",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Muonekano",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "Kuhusu",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Mipangilio ya Jumla",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "Sanidi ya Mfumo wa Akili Bandia",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Muonekano & Marekebisho",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Violezo vya Maagizo",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "Kuhusu LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Onyesha maandishi uliyochagua kwenye matokeo",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Onyesha nembo na kichwa cha tovuti kwenye matokeo",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Weka maandishi yaliyoangaziwa baada ya kufunga dirisha ibukizi",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Fungua LightUp Kiotomatiki kwenye Uchaguzi wa Nakala",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Inafungua LightUp kiotomatiki kila wakati unachagua maandishi",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Ufahamu wa Mazingira",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Tumia mazingira ya ukurasa kutoa majibu bora zaidi na yanayofaa",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "Uchaguzi wa injini ya Akili Bandia",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Chagua Aina ya Mfumo wa Akili Bandia",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Chagua huduma gani ya Akili Bandia unayotaka kutumia kutengeneza majibu",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "Msingi (Bure, Kizuizi)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (Ufunguo wa API Unahitajika)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok na xAI (Ufunguo wa API Unahitajika)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Mahali/Ollama (Iliyowekwa mwenyewe)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Arifa ya Faragha ya Takwimu",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "Unapotumia safu ya Msingi, maandishi uliyochagua na mazingira ya ukurasa yanatumwa kwa seva zetu kwa usindikaji. Hatuhifadhi data hii kwa muda mrefu.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "Kwa faragha kamili, fikiria kutumia ufunguo wako wa API mwenyewe na Google Gemini, Grok, au mfumo wa mahali.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Sanidi ya Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Ufunguo wa API wa Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Ingiza ufunguo wako wa API wa Google AI Studio",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Pata ufunguo wako wa bure wa API kutoka Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Chagua Mfumo wa Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Chagua mfumo gani wa Google Gemini utumie kutengeneza majibu",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Sanidi ya Grok na xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "Ufunguo wa API wa xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Ingiza ufunguo wako wa API wa xAI",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Pata ufunguo wako wa API kutoka xAI. Tembelea {0} kuanza.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Chagua Mfumo wa Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Chagua mfumo gani wa Grok utumie kutengeneza majibu",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Sanidi ya Mahali/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "URL ya Seva ya Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Chagua Mfumo wa Mahali",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Chagua mfumo gani utumie kutoka kwa usanidi wako wa Ollama",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Mipangilio ya Majibu",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Urefu wa Upeo wa Majibu",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Idadi ya juu ya alama (maneno/herufi) katika jibu la Akili Bandia",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Njia ya Maagizo",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Chagua aina gani ya maagizo unayotaka kubadilisha",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Maagizo ya Mfumo",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Maagizo haya yanafafanua jinsi Akili Bandia inapaswa kujiendesha na kujibu",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Kiolezo cha Maagizo ya Mtumiaji",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Kiolezo hiki hutumiwa kupanga maombi ya mtumiaji kwa Akili Bandia",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Hariri",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Hifadhi",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Rudisha kwa Msingi",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Rudisha maagizo ya njia ya {0} kwenye maadili yake ya msingi",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Rudisha kwa Msingi",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "Imebadilishwa kwa Mafanikio",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Maagizo haya hutumia mantiki yenye nguvu na hayawezi kuhaririwa",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Jinsi ya kutumia violezo vyako vya kurekebisha:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "Maagizo yako ya kurekebisha yatafanya kazi kiotomatiki unapochagua maandishi na kuchagua njia inayolingana\nMabadiliko huanza kutumika mara moja - hakuna haja ya kuanzisha upya\nUnaweza kurudisha maagizo yoyote kwenye maadili yake ya msingi kwa kutumia kitufe cha rudisha",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Mandhari & Muonekano",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Mandhari ya Rangi",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Mandhari ya Giza",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Mandhari ya Mwanga",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Msingi wa Mfumo",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Ukubwa wa Herufi",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Badilisha ukubwa wa maandishi katika matokeo ya dirisha ibukizi",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Rangi ya Kuangazia",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Chagua rangi ya kuangazia maandishi yaliyochaguliwa",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Chagua jinsi dirisha ibukizi linaonekana kwenye ukurasa",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Kuelea",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Upau wa pembeni",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Katikati",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Athari ya uhuishaji wakati dirisha ibukizi linaonekana",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Kufifia",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Kuteleza",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Kupanua",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Hakuna",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Mipangilio ya Uhuishaji",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp ni kiendelezi cha kivinjari chenye nguvu ya Akili Bandia ambacho hutoa muhtasari wa papo hapo, maelezo, tafsiri, na uchambuzi wa maandishi yoyote kwenye wavuti.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Viungo",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Viungo na rasilimali muhimu",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Tembelea Tovuti",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "kadiria kwenye Chrome Store",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Futa Takwimu Zote",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Eleza",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Fanya Muhtasari",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Chambua",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Tafsiri",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Bure",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Maelezo ya Maagizo",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Tazama na badilisha maagizo yanayotumiwa kwa njia hii",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Pata muhtasari wa papo hapo wa maandishi yoyote kwa kubofya mara moja",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Tafsiri maandishi kwa lugha yoyote mara moja",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Chagua kutoka kwa mifumo mingi ya Akili Bandia ikiwa ni pamoja na GPT, Gemini, na mifumo ya mahali",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Fanya mazungumzo na Akili Bandia kuhusu yaliyomo unayosoma",
+    "description": "Description for interactive chat feature"
+  }
+}

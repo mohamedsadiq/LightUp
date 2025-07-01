@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - Bayyana Rubutu Ta Yanar Gizo Da Taimakon AI. Takaitawa, fassara, da sauran abubuwa",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Bayyana rubutu mai kyau ga kowace shafi a yanar gizo. An yi amfani da AI don bayyana, takaitawa, nazari, fassara, da sauran abubuwa.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Maraba da LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Takaitawa",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Bayyana",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Fassara",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Nazari",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Saituna",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Yare",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Zaɓi yaren da kuka fi so",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Ajiye",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Soke",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "An kunna",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "An kashe",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Aika Amsa",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Ana lodawa...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Amfani Kyauta Da Ya Rage",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Zaɓin Yanayin",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Saita Yanayin",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Je zuwa tambayoyi",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Boye Tsarin Yanayin",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Boye Saituna",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Nuna Bayanin Yanar Gizo",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Nuna alamar yanar gizo da taken a cikin sakamakon",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Nuna Rubutun Da Aka Zaɓa",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Nuna rubutun da kuka zaɓa a cikin sakamakon",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Nuna Maɓallin 'Instant AI'",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Ƙara maɓallin 'Instant AI' mai iyo wanda ke takaitawa ko bayyana duk shafin da dannawa ɗaya",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Yanayin Babu Abinda Ke Sata Hankali",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Yana ɓoye UI wanda ba dole ba ne kuma yana rage hasken shafin a bayan LightUp don haka za ku iya mai da hankali kan amsar AI",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Ajiye Rubutun Da Aka Haska Bayan Rufe Popup",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Ajiye rubutu da aka haska bayan rufe tag.",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Nuna Maɓallin Aiki Lokacin Zaɓin Rubutu",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Nuna ƙaramin maɓalli lokacin da aka haska rubutu",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Buɗe LightUp Ta Atomatik Lokacin Zaɓin Rubutu",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Yana buɗe LightUp ta atomatik duk lokacin da kuka zaɓi rubutu",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Haskawa Mai Dorewa",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Gajeren Hanya Na Keyboard",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Yi amfani da waɗannan gajerun hanyoyin don samun damar fasalolin LightUp da sauri",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Koma Yanayin Bayani",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Koma Yanayin Takaitawa",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Koma Yanayin Nazari",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Koma Yanayin Fassara",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Bude tag a yanayin Kyauta",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "Bayan saita yanayin ta hanyar gajeren hanya, zaɓi duk wani rubutu kuma LightUp zai bayyana tare da yanayin da kuka zaɓa.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Canjin Fasali",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Gajerun hanyoyi don kunnawa da kashe fasalulluka",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Kunna/kashe LightUp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Kunna/kashe yanayin mai da hankali sosai",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Kunna/kashe jigo mai haske/duhu",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Dawo Da Duk Gajerun Hanyoyi",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Dawo da duk gajerun hanyoyi zuwa ƙimar tsoho",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Dawo",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Tambayi Komai",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Saita Zaɓin Yanayin (Zaɓi har zuwa 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Wadannan yanayin zasu bayyana a cikin zaɓin yanayin ku. Danna don kunnawa/kashewa.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Ayyuka masu samuwa",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Kyauta",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "Alamar LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp a yanzu haka an kashe shi",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Kunna maɓallin a saman ko maɓallin da ke ƙasa don kunna LightUp da samun damar dukkan abubuwa.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Kunna LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Atomatik → Turanci",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "Gaba ɗaya",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Gajerun Hanya Na Keyboard",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Saituna Masu Ci Gaba",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Sirri",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Kudancin Sirri",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Yanar Gizo",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Bamu Daraja",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Amsa",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Taimaka mana inganta LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Irin Amsa",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Zaɓi irin amsa da kake so ka bayar",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Amsa Gaba ɗaya",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Rahoton Kuskure",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Buƙatar Fasali",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Sauran",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Amsar Ku",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Fada mana abinda kuke tunani ko bayyana matsalar da kuka fuskanta...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Rubuta amsar ku a nan...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "Imel (na zaɓi)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Bar imel ɗinku idan kuna son mu bi diddigin",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "kai@misali.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Aika Amsa",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Launin Haska",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Zaɓi launin don haska rubutu",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "Tsoho",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Raha",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Orange",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Shudi",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Kore",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Ja",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Pink",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Sirri & Bayanai",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Sirrinku shine fifikonmu",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Babu Tarin Bayanai",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp yana girmama sirrinku kuma yana sarrafa bayanan ku yadda ya kamata.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Ajiyar Wuri",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Duk saitunanku ana adana su a gida a na'urarka",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Sarrafa Kai Tsaye",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Ana sarrafa rubutu kai tsaye ba tare da ajiya ba",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Babu Bibiyar",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Ba mu bin diddigin bincikenku ko adana bayanan sirri ba",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Sarrafa Naku",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Duk saituna da bayanai suna ƙarƙashin ikonku",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Cikakken Tsarin",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Tuntuba",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Ajiyewa Ya Gaure",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "Akwai matsala wajen ajiye saitunanku. Da fatan za a sake ƙoƙari.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "An Ajiye Saituna",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "An ajiye canjin ku lokacin canja sassa.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Rufe sanarwa",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Dakatar da magana",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Karanta rubutu a fili",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Takaitawa",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Bayyana",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Fassara",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Nazari",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Tattauka game da",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Zabuka",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Amfani na yau da kullun",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Jigo",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Zaɓi jigin launi da kuka fi so don ƙarin",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Jigo Mai Duhu",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Jigo Mai Haske",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Tsohon Tsarin",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "An Canja Yare",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "UI za ta sabunta don nuna zaɓin yarenku",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Kuskure",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Bai yi nasarar canja yare ba",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Gefen Popup",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Nisa daga gefunan viewport a yanayin iyo",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Saitunan Fassara",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Yi amfani da mahallin shafi don samun amsoshi masu kyau",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Kunna zurfin mahallin shafi don samun sakamako masu kyau",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Bayyanar",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Amsa",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Tsari & Bayyanar",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Canza tsarin da bayyanar ƙarin",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Yanayin Tsari",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Iyo",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Sidebar",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Tsakiya",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Girman Font na Sakamako",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Sarrafa girman rubutu a cikin panel na sakamako",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "X-Small",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Small",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Medium",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Large",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "X-Large",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "XX-Large",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Motsin Popup",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Motsin lokacin da popup ya bayyana",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Fade",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Slide",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Scale",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Babu",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Yanayin Mai Da Hankali Sosai",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Boge bango lokacin kallon sakamako",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Wajibi)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Farashi:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Girman:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "An kwafi adireshin zuwa kwamfutar!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Iyakar Kudin Da Ya Rage:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Dawo a ciki:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Ajiyar Atomatik Ya Gaure",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Bai ajiye canjin ku ta atomatik ba. Da fatan za a ajiye da hannu.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Loda Ya Gaure",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Bai iya loda saitunanku ba. Ana amfani da tsoho.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Ana lodawa bayanan amfani...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "An Zaɓi Samfurin Ta Atomatik",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "An zaɓi {0} ta atomatik tun da kuka bayar da maɓallin Gemini API.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "An zaɓi {0} ta atomatik tun da kuka bayar da maɓallin Grok API.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "An zaɓi {0} ta atomatik don saitunanku na Ollama.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Aikin bai nuna ba)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Samfurin dinamik - ya bambanta dangane da rubutun da kuka zaɓa)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "Bayyana Rubutu Ta Yanar Gizo Da Taimakon AI",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Sigar:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Mai Haɓakawa:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Yanar Gizo:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Takaitawa na Nan take",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Fassara A Lokaci Guda",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Samfuran AI Masu Ci Gaba",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Tattaunawa Mai Tasiri",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Babu Tarin Bayanai",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Ajiyar Wuri",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Sabuwar sigar da ingantattun iyawa da saurin amsawa",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Sigar mai sauƙi wanda aka ƙara inganta don inganci da gudu",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Tunani",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Samfurin gwaji wanda ke mai da hankali kan tunani da ayyukan nazari",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Sigar da ta tabbata tare da aiki mai daidaito",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "Samfurin da ya fi sauri, ƙarami don amsoshi masu sauri",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "Sigar da aka ƙididdige ta 8-bit don sarrafawa mai inganci",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Samfurin Grok-3 na yau da kullun",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "$2.00 a kowace 1M tokens",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Nau'in haske",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "$1.00 a kowace 1M tokens",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3 wanda aka inganta don gudu",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "$2.50 a kowace 1M tokens",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Mini + sauri",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "$1.50 a kowace 1M tokens",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Sabon ginin Grok-2",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "$1.80 a kowace 1M tokens",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Mafi ƙarfin samfurin Llama 2, mafi kyau ga ayyuka masu rikitarwa",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70B parameters",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Sabon samfurin DeepSeek tare da ƙaruwar iyawar tunani",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67B parameters",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Samfurin masu kwarewa mai ƙarfi",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47B parameters",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Aiki mai daidaito da amfani da albarkatu",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13B parameters",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Samfurin mai sauƙin biyayya ga umarni",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7B parameters",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "An ƙara inganta don tattaunawa na halitta",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7B parameters",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Sigar DeepSeek mai sauƙi tare da tunani mai kyau",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7B parameters",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Samfurin haske don ayyuka masu sauƙi",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3B parameters",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Mai ƙanƙanta amma mai ƙarfi ga girmansa",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2.7B parameters",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "An ƙara inganta don hulɗar taɗi",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7B parameters",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BETA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "Gaba ɗaya",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "Samfuran AI",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Samfuran Tambayoyi",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Bayyanar",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "Game da",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Saitunan Gaba ɗaya",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "Saitunan Samfurin AI",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Bayyanar & Canji",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Samfuran Tambayoyi",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "Game da LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Nuna rubutun da kuka zaɓa a cikin sakamakon",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Nuna alamar yanar gizo da taken a cikin sakamakon",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Ajiye rubutu da aka haska bayan rufe tag.",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Buɗe LightUp Ta Atomatik Lokacin Zaɓin Rubutu",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Yana buɗe LightUp ta atomatik duk lokacin da kuka zaɓi rubutu",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Sanin Mahalli",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Yi amfani da mahallin shafi don samar da amsoshi masu kyau da suka dace",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "Zaɓin Injin AI",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Zaɓi Irin Samfurin AI",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Zaɓi aikin AI da kake son amfani da shi don samar da amsoshi",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "Na asali (Kyauta, Iyakance)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (Ana buƙatar Maɓallin API)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok ta xAI (Ana buƙatar Maɓallin API)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Na Gida/Ollama (An shigar da kai)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Sanarwar Sirrin Bayanai",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "Lokacin amfani da matakin Na asali, rubutun da kuka zaɓa da mahallin shafi ana aika su zuwa sabarmu don sarrafawa. Ba mu adana wannan bayanin har abada ba.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "Don cikakken sirri, yi la'akari da amfani da maɓallin API naka tare da Google Gemini, Grok, ko samfurin gida.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Saitunan Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Maɓallin Google Gemini API",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Shigar da maɓallin Google AI Studio API ɗinka",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Samu maɓallin API ɗinka kyauta daga Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Zaɓi Samfurin Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Zaɓi samfurin Google Gemini da za a yi amfani da shi don samar da amsoshi",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Saitunan Grok ta xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "Maɓallin xAI API",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Shigar da maɓallin xAI API ɗinka",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Samu maɓallin API ɗinka daga xAI. Ziyarci {0} don fara.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Zaɓi Samfurin Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Zaɓi samfurin Grok da za a yi amfani da shi don samar da amsoshi",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Saitunan Gida/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "Adireshin Sabar Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Zaɓi Samfurin Gida",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Zaɓi samfurin da za a yi amfani da shi daga shigarwar Ollama ɗinka",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Saitunan Amsa",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Tsawon Amsa Mai Yawa",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Yawan lambobin kalmomi (kalmomi/haruffa) a cikin amsar AI",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Yanayin Tambaya",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Zaɓi irin tambayar da kake son gyara",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Tambayar Tsarin",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Wannan tambayar tana bayyana yadda AI yakamata ya yi aiki da amsawa",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Samfurin Tambayar Mai Amfani",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Ana amfani da wannan samfurin don tsarawa buƙatun mai amfani ga AI",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Gyara",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Ajiye",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Dawo Da Tsoho",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Dawo da tambayoyin yanayin {0} zuwa tsohon su",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Dawo Da Tsoho",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "An Dawo Da Shi Da Nasara",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Wannan tambayar tana amfani da dabara ta musamman kuma ba za a iya gyarawa ba",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Yadda za a yi amfani da samfuran da aka keɓance:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "An riga an yi amfani da tambayoyin da aka keɓance lokacin da kuka zaɓi rubutu kuma ku zaɓi yanayin da ya dace\nCanje-canje zasu fara aiki nan take - ba buƙatar sake farawa ba\nZa ku iya dawo da duk wani tambaya zuwa tsoho ta hanyar amfani da maɓallin dawo da",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Jigo & Bayyanar",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Jigon Launi",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Jigo Mai Duhu",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Jigo Mai Haske",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Tsohon Tsarin",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Girman Font",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Daidaita girman rubutu a cikin sakamakon tag",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Launin Haska",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Zaɓi launin don haska rubutun da aka zaɓa",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Zaɓi yadda tag ɗin zai bayyana a shafin",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Iyo",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Sidebar",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Tsakiya",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Tasirin motsin lokacin da tag ɗin ya bayyana",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Fade",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Slide",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Scale",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Babu",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Saitunan Motsin",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp ƙari ne na bincike wanda ke amfani da AI wanda ke samar da takaitawa nan take, bayani, fassarori, da nazari ga kowane rubutu a yanar gizo.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Hanyoyi",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Hanyoyi masu amfani da albarkatu",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Ziyarci Yanar Gizo",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Bamu Daraja a Chrome Store",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Share Duk Bayanai",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Bayyana",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Takaitawa",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Nazari",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Fassara",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Kyauta",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Bayanan Tambaya",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Duba kuma gyara tambayoyin da ake amfani da su don wannan yanayin",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Samu takaitawa nan take na kowane rubutu da dannawa ɗaya",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Fassara rubutu zuwa kowane yare nan take",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Zaɓa daga samfuran AI da yawa ciki har da GPT, Gemini, da samfuran gida",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Yi tattaunawa tare da AI game da abubuwan da kuke karantawa",
+    "description": "Description for interactive chat feature"
+  }
+}

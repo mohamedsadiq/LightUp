@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "லைட்அப் - AI சக்திவாய்ந்த வலை குறிப்புகள். சுருக்கம், மொழிபெயர்ப்பு மற்றும் மேலும்",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "வலைத்தளத்தின் ஒவ்வொரு பக்கத்திற்கும் புத்திசாலித்தனமான குறிப்புகள். விளக்கம், சுருக்கம், பகுப்பாய்வு, மொழிபெயர்ப்பு மற்றும் மேலும் AI மூலம் இயக்கப்படுகிறது.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "லைட்அப்புக்கு வரவேற்பு",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "சுருக்கம்",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "விளக்கம்",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "மொழிபெயர்ப்பு",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "பகுப்பாய்வு",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "அமைப்புகள்",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "மொழி",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "உங்களுக்குப் பிடித்த மொழியைத் தேர்ந்தெடுக்கவும்",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "சேமி",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "ரத்து செய்",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "செயலில் உள்ளது",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "செயல்படவில்லை",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "கருத்தை அனுப்பு",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "ஏற்றுகொள்கிறது...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "ಉಳಿದ இலவச பயன்பாடுகள்",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "முறை தேர்வு",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "முறைகளை உள்ளமை",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "குறிப்புகளுக்குச் செல்லவும்",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "முறை உள்ளமைவை மறை",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "உள்ளமைவை மறை",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "வலைத்தள தகவலைக் காட்டு",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "முடிவுகளில் வலைத்தள ஃபேவிக்கானையும் தலைப்பையும் காட்டவும்",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "தேர்ந்தெடுக்கப்பட்ட உரையைக் காட்டு",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "முடிவுகளில் நீங்கள் தேர்ந்தெடுத்த உரையைக் காட்டவும்",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "'உடனடி AI' பொத்தானைக் காட்டு",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "ஒரு கிளிக்கில் முழுப் பக்கத்தையும் சுருக்கமாகவோ அல்லது விளக்கமாகவோ காட்டும் மிதக்கும் 'உடனடி AI' பொத்தானைச் சேர்க்கவும்",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "கவனச்சிதறல் இல்லாத முறை",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "அத்தியாவசியமற்ற UI ஐ மறைத்து, AI பதிலில் நீங்கள் கவனம் செலுத்தும் வகையில் லைட்அப்பின் பின்னால் உள்ள பக்கத்தை மங்கச் செய்யவும்",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "போப்அப் மூடிய பின்னரும் அடிக்கோடிட்ட உரையை வைத்திருங்கள்",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "போப்அப் மூடிய பின்னரும் உரையை அடிக்கோடிட்டுக் காட்டவும்",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "உரை தேர்வில் செயல் பொத்தானைக் காட்டு",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "உரை அடிக்கோடிட்டுக் காட்டப்படும்போது ஒரு சிறிய பொத்தானைக் காட்டவும்",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "உரை தேர்வில் லைட்அப்பை தானாகத் திற",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "நீங்கள் உரையைத் தேர்ந்தெடுக்கும்போதெல்லாம் லைட்அப்பை தானாகத் திறக்கவும்",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "நிலையான அடிக்கோடிடல்",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "கீபோர்ட் குறுக்குவழிகள்",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "லைட்அப் அம்சங்களை விரைவாக அணுக இந்த குறுக்குவழிகளைப் பயன்படுத்தவும்",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "விளக்க முறைக்கு மாறு",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "சுருக்க முறைக்கு மாறு",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "பகுப்பாய்வு முறைக்கு மாறு",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "மொழிபெயர்ப்பு முறைக்கு மாறு",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "இலவச முறையில் பாப்அப்பைத் திற",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "குறுக்குவழி மூலம் முறையை அமைத்த பின், எந்த உரையையும் தேர்ந்தெடுக்கவும், உங்கள் தேர்ந்தெடுத்த முறையுடன் லைட்அப் தோன்றும்.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "அம்சத் திறவுகோல்கள்",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "அம்சங்களை இயக்கவும் அல்லது அணைக்கவும் குறுக்குவழிகள்",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "லைட்அப்பை இயக்கவும்/அணைக்கவும்",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "ரேடிக்கல் ஃபோகஸ் முறையை இயக்கவும்/அணைக்கவும்",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "ஒளி/இருள் கருப்பொருளை இயக்கவும்/அணைக்கவும்",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "அனைத்து குறுக்குவழிகளையும் மீட்டமை",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "அனைத்து குறுக்குவழிகளையும் அவற்றின் இயல்புநிலை மதிப்புகளுக்கு மீட்டமைக்கவும்",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "மீட்டமை",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "எதையும் கேளுங்கள்",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "முறை தேர்வு செலக்டரை உள்ளமை (4 வரை தேர்வு செய்யவும்)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "இந்த முறைகள் உங்கள் முறை தேர்வு செலக்டரில் தோன்றும். இயக்க/அணைக்க கிளிக் செய்யவும்.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "கிடைக்கும் செயல்கள்",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "இலவசம்",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "லைட்அப் லோகோ",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "லைட்அப் தற்போது அணைக்கப்பட்டுள்ளது",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "லைட்அப்பை இயக்கவும் மற்றும் அனைத்து அம்சங்களையும் அணுகவும் தலைப்பு அல்லது கீழே உள்ள பொத்தானில் உள்ள சுவிட்சை மாற்றவும்.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "லைட்அப்பை இயக்கு",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "தானியங்கி → ஆங்கிலம்",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "பொது",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "கீபோர்ட் குறுக்குவழிகள்",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "மேம்பட்ட அமைப்புகள்",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "தனியுரிமை",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "தனியுரிமைக் கொள்கை",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "வலைத்தளம்",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "எங்களுக்கு மதிப்பிடு",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "கருத்து",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "லைட்அப்பை மேம்படுத்த எங்களுக்கு உதவுங்கள்",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "கருத்துக் வகை",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "நீங்கள் வழங்க விரும்பும் கருத்துக் வகையைத் தேர்ந்தெடுக்கவும்",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "பொது கருத்து",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "பிழை அறிக்கை",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "அம்சக் கோரிக்கை",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "மற்றவை",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "உங்கள் கருத்து",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "உங்கள் எண்ணங்களை எங்களிடம் சொல்லுங்கள் அல்லது நீங்கள் சந்திக்கும் சிக்கலை விவரிக்கவும்...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "உங்கள் கருத்தை இங்கே தட்டச்சு செய்யவும்...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "மின்னஞ்சல் (விருப்பமானது)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "எங்கள் பின்தொடர்ச்சிக்கு உங்கள் மின்னஞ்சலை விட்டுச் செல்லவும்",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "கருத்தை அனுப்பு",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "அடிக்கோடிட்டு காட்டும் நிறம்",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "உரை அடிக்கோடிட்டுக் காட்டும் நிறத்தைத் தேர்ந்தெடுக்கவும்",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "இயல்புநிலை",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "மஞ்சள்",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "ஆரஞ்சு",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "நீலம்",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "பச்சை",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "ஊதா",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "இளஞ்சிவப்பு",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "தனியுரிமை & தரவு",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "உங்கள் தனியுரிமை எங்கள் முன்னுரிமை",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "பூஜ்ஜிய தரவு சேகரிப்பு",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "லைட்அப் உங்கள் தனியுரிமையை மதிக்கிறது மற்றும் உங்கள் தரவை பொறுப்புடன் கையாள்கிறது.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "உள்ளூர் சேமிப்பு",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "உங்கள் அனைத்து அமைப்புகளும் உங்கள் சாதனத்தில் உள்ளூர் சேமிக்கப்படுகின்றன",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "நேரடி செயலாக்கம்",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "சேமிக்காமல் உரை நேரடியாக செயலாக்கப்படுகிறது",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "எந்த கண்காணிப்பும் இல்லை",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "நாங்கள் உங்கள் உலாவலைக் கண்காணிக்கவோ அல்லது தனிப்பட்ட தரவுகளை சேமிக்கவோ இல்லை",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "உங்கள் கட்டுப்பாடு",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "அனைத்து அமைப்புகள் மற்றும் தரவுகளும் உங்கள் கட்டுப்பாட்டில் உள்ளன",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "முழு கொள்கை",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "தொடர்பு",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "சேமிப்பு தோல்வி",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "உங்கள் அமைப்புகளைச் சேமிப்பதில் பிழை ஏற்பட்டது. மீண்டும் முயற்சிக்கவும்.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "அமைப்புகள் சேமிக்கப்பட்டது",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "பிரிவுகளை மாற்றும்போது உங்கள் மாற்றங்கள் சேமிக்கப்பட்டன.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "அறிவிப்பை மூடு",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "பேசுவதை நிறுத்து",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "உரையை சத்தமாகப் படி",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "சுருக்கம்",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "விளக்கம்",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "மொழிபெயர்ப்பு",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "பகுப்பாய்வு",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "பற்றி அரட்டை",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "தேர்வு விருப்பங்கள்",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "நாளைய பயன்பாடு",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "கருப்பொருள்",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "விரிவாக்கத்திற்கான உங்களுக்குப் பிடித்த வண்ணக் கருப்பொருளைத் தேர்ந்தெடுக்கவும்",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "இருள் கருப்பொருள்",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "ஒளி கருப்பொருள்",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "சிரஸ்டம் இயல்புநிலை",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "மொழி மாற்றப்பட்டது",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "UI உங்கள் மொழி தேர்வை பிரதிபலிக்கும் வகையில் புதுப்பிக்கப்படும்",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "பிழை",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "மொழியை மாற்ற முடியவில்லை",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "பாப்அப் விளிம்பு",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "மிதக்கும் முறையில் வியூபோர்ட் விளிம்புகளிலிருந்து தூரம்",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "மொழிபெயர்ப்பு அமைப்புகள்",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "சிறந்த பதில்களுக்குப் பக்க சூழலைப் பயன்படுத்தவும்",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "சிறந்த முடிவுகளுக்கு ஆழமான பக்கச் சூழலை இயக்கவும்",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "தோற்றம்",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "கருத்து",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "அமைப்பு & காட்சி",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "விரிவாக்கத்தின் அமைப்பு மற்றும் தோற்றத்தைத் தனிப்பயனாக்கவும்",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "அமைப்பு முறை",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "மிதவை",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "சைட்பார்",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "மையத்தில்",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "முடிவுகள் எழுத்துரு அளவு",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "முடிவுகள் பேனலில் உள்ள உரையின் அளவைக் கட்டுப்படுத்தவும்",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "X-சிறியது",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "சிறியது",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "நடுத்தரம்",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "பெரியது",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "X-பெரியது",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "XX-பெரியது",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "பாப்அப் அனிமேஷன்",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "பாப்அப் தோன்றும் போது அனிமேஷன்",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "மங்கல்",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "நழுவுதல்",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "அளவிடுதல்",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "இல்லை",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "ரேடிக்கல் ஃபோகஸ் முறை",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "முடிவுகளைக் காணும்போது பின்னணியை மங்கச் செய்யவும்",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(தேவை)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "விலை:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "அளவு:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "முகவரி கிளிப்போர்டில் நகலெடுக்கப்பட்டது!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "ரேட் லிமிட் மீதமுள்ளது:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "மீட்டமைக்கப்படும்:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "தானாகச் சேமிப்பது தோல்வி",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "உங்கள் மாற்றங்கள் தானாகச் சேமிக்கப்படவில்லை. கைமுறையாகச் சேமிக்கவும்.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "ஏற்றுதல் தோல்வி",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "உங்கள் அமைப்புகளை ஏற்ற முடியவில்லை. இயல்புநிலைகளைப் பயன்படுத்துகிறது.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "பயன்பாட்டுத் தகவலை ஏற்றுகொள்கிறது...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "மாதிரி தானாகத் தேர்ந்தெடுக்கப்பட்டது",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "நீங்கள் ஜெமினி API விசையை வழங்கியதால் {0} தானாகத் தேர்ந்தெடுக்கப்பட்டது.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "நீங்கள் Grok API விசையை வழங்கியதால் {0} தானாகத் தேர்ந்தெடுக்கப்பட்டது.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "உங்கள் Ollama அமைப்பிற்கு {0} தானாகத் தேர்ந்தெடுக்கப்பட்டது.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(செயல்பாடு காட்டப்படவில்லை)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(டைனமிக் டெம்ப்ளேட் - உங்கள் தேர்ந்தெடுக்கப்பட்ட உரையைப் பொறுத்து மாறுபடும்)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "AI சக்திவாய்ந்த வலை குறிப்புகள்",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "பதிப்பு:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "டெவலப்பர்:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "வலைத்தளம்:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "உடனடி சுருக்கங்கள்",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "உடனடி மொழிபெயர்ப்பு",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "மேம்பட்ட AI மாதிரிகள்",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "இடைசெயல் அரட்டை",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "பூஜ்ஜிய தரவு சேகரிப்பு",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "உள்ளூர் சேமிப்பு",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "ஜெமினி 2.0 ஃப்ளாஷ்",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "மேம்படுத்தப்பட்ட திறன்கள் மற்றும் வேகமான பதில் நேரங்களுடன் சமீபத்திய பதிப்பு",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "ஜெமினி 2.0 ஃப்ளாஷ்-லைட்",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "திறன் மற்றும் வேகத்திற்காக மேம்படுத்தப்பட்ட லேசான பதிப்பு",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "ஜெமினி 2.0 ஃப்ளாஷ் சிந்தனை",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "காரணம் மற்றும் பகுப்பாய்வு பணிகளில் கவனம் செலுத்தும் சோதனை மாதிரி",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "ஜெமினி 1.5 புரோ",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "சமநிலையான செயல்திறனுடன் நிலையான பதிப்பு",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "ஜெமினி 1.5 ஃப்ளாஷ்",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "வேகமான, சிறிய மாதிரி விரைவான பதில்களுக்கு",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "ஜெமினி 1.5 ஃப்ளாஷ்-8பி",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "திறமையான செயலாக்கத்திற்கான 8-பிட் குவாண்டைஸ் செய்யப்பட்ட பதிப்பு",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "தரநிலை Grok-3 மாதிரி",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "1M டோக்கன்களுக்கு $2.00",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 மினி",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "லேசான மாறுபாடு",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1M டோக்கன்களுக்கு $1.00",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 வேகமானது",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "லேட்டன்சி-மேம்படுத்தப்பட்ட Grok-3",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "1M டோக்கன்களுக்கு $2.50",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 மினி வேகமானது",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "மினி + வேகமான மாறுபாடு",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1M டோக்கன்களுக்கு $1.50",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "சமீபத்திய Grok-2 பில்ட்",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1M டோக்கன்களுக்கு $1.80",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B அரட்டை",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "மிகவும் சக்திவாய்ந்த Llama 2 மாதிரி, சிக்கலான பணிகளுக்கு சிறந்தது",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70B அளவுருக்கள்",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "மேம்படுத்தப்பட்ட காரண திறன்களுடன் சமீபத்திய DeepSeek மாதிரி",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67B அளவுருக்கள்",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B வழிமுறை",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "உயர் செயல்திறன் நிபுணர் கலப்பு மாதிரி",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47B அளவுருக்கள்",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B அரட்டை",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "சமநிலையான செயல்திறன் மற்றும் வளப் பயன்பாடு",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13B அளவுருக்கள்",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B வழிமுறை",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "திறமையான வழிமுறை பின்பற்றும் மாதிரி",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7B அளவுருக்கள்",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "நியூரல் அரட்டை V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "இயற்கையான உரையாடல்களுக்கு மேம்படுத்தப்பட்டது",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7B அளவுருக்கள்",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 அடிப்படை",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "நல்ல காரணத்துடன் DeepSeek இன் லேசான பதிப்பு",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7B அளவுருக்கள்",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B வழிமுறை",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "அடிப்படை பணிகளுக்கான லேசான மாதிரி",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3B அளவுருக்கள்",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "அதன் அளவிற்கு காம்பேக்ட் ஆனால் சக்திவாய்ந்தது",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2.7B அளவுருக்கள்",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "சாட் தொடர்புக்காக மேம்படுத்தப்பட்டது",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7B அளவுருக்கள்",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "பீட்டா",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "பொது",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "AI மாதிரிகள்",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "குறிப்பு டெம்ப்ளேட்டுகள்",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "தோற்றம்",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "பற்றி",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "பொது அமைப்புகள்",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "AI மாதிரி உள்ளமைவு",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "தோற்றம் & தனிப்பயனாக்கம்",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "குறிப்பு டெம்ப்ளேட்டுகள்",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "லைட்அப் பற்றி",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "முடிவுகளில் நீங்கள் தேர்ந்தெடுத்த உரையைக் காட்டவும்",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "முடிவுகளில் வலைத்தள ஃபேவிக்கானையும் தலைப்பையும் காட்டவும்",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "போப்அப் மூடிய பின்னரும் உரையை அடிக்கோடிட்டுக் காட்டவும்",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "உரை தேர்வில் லைட்அப்பை தானாகத் திற",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "நீங்கள் உரையைத் தேர்ந்தெடுக்கும்போதெல்லாம் லைட்அப்பை தானாகத் திறக்கவும்",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "சூழல் விழிப்புணர்வு",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "சிறந்த, பொருத்தமான பதில்களை வழங்க பக்க சூழலைப் பயன்படுத்தவும்",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "AI இயந்திர தேர்வு",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "AI மாதிரி வகையைத் தேர்வு செய்யவும்",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "பதில்களை உருவாக்க நீங்கள் பயன்படுத்த விரும்பும் AI சேவையைத் தேர்ந்தெடுக்கவும்",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "அடிப்படை (இலவசம், வரையறுக்கப்பட்டது)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google ஜெமினி (API விசை தேவை)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "xAI மூலம் Grok (API விசை தேவை)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "உள்ளூர்/Ollama (சுய-ஹோஸ்ட் செய்யப்பட்டது)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "தரவு தனியுரிமை அறிவிப்பு",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "அடிப்படை அடுக்கைப் பயன்படுத்தும்போது, உங்கள் தேர்ந்தெடுக்கப்பட்ட உரை மற்றும் பக்க சூழல் செயலாக்கத்திற்காக எங்கள் சர்வர்களுக்கு அனுப்பப்படும். நாங்கள் இந்த தரவை நிரந்தரமாக சேமிப்பதில்லை.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "முழுமையான தனியுரிமைக்காக, Google ஜெமினி, Grok அல்லது உள்ளூர் மாதிரியுடன் உங்கள் சொந்த API விசையைப் பயன்படுத்தவும்.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Google ஜெமினி உள்ளமைவு",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Google ஜெமினி API விசை",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "உங்கள் Google AI ஸ்டுடியோ API விசையை உள்ளிடவும்",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "உங்கள் இலவச API விசையை Google AI ஸ்டுடியோவில் பெறுங்கள். {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "ஜெமினி மாதிரியைத் தேர்வு செய்யவும்",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "பதில்களை உருவாக்க எந்த Google ஜெமினி மாதிரியைப் பயன்படுத்த வேண்டும் என்பதைத் தேர்வு செய்யவும்",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "xAI மூலம் Grok உள்ளமைவு",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "xAI API விசை",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "உங்கள் xAI API விசையை உள்ளிடவும்",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "உங்கள் API விசையை xAI இலிருந்து பெறுங்கள். தொடங்க {0} ஐப் பார்வையிடவும்.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Grok மாதிரியைத் தேர்வு செய்யவும்",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "பதில்களை உருவாக்க எந்த Grok மாதிரியைப் பயன்படுத்த வேண்டும் என்பதைத் தேர்வு செய்யவும்",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "உள்ளூர்/Ollama உள்ளமைவு",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "Ollama சர்வர் URL",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "உள்ளூர் மாதிரியைத் தேர்வு செய்யவும்",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "உங்கள் Ollama நிறுவலில் இருந்து எந்த மாதிரியைப் பயன்படுத்த வேண்டும் என்பதைத் தேர்வு செய்யவும்",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "பதில் அமைப்புகள்",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "அதிகபட்ச பதில் நீளம்",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "AI பதிலில் அதிகபட்ச டோக்கன்கள் (சொற்கள்/எழுத்துகள்)",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "குறிப்பு முறை",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "நீங்கள் தனிப்பயனாக்க விரும்பும் குறிப்பு வகையைத் தேர்வு செய்யவும்",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "சிரஸ்டம் குறிப்பு",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "இந்த குறிப்பு AI எவ்வாறு நடந்து கொள்ள வேண்டும் மற்றும் பதிலளிக்க வேண்டும் என்பதை வரையறுக்கிறது",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "பயனர் குறிப்பு டெம்ப்ளேட்",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "இந்த டெம்ப்ளேட் AI க்கு பயனர் கோரிக்கைகளை வடிவமைக்கப் பயன்படுகிறது",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "திருத்து",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "சேமி",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "இயல்புநிலைக்கு மீட்டமை",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "{0} முறை குறிப்புகளை அவற்றின் அசல் இயல்புநிலைகளுக்கு மீட்டமைக்கவும்",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "இயல்புநிலைக்கு மீட்டமை",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "சிறப்பாக மீட்டமைக்கப்பட்டது",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "இந்த குறிப்பு டைனமிக் லாஜிக்கைப் பயன்படுத்துகிறது மற்றும் திருத்த முடியாது",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "உங்கள் தனிப்பயன் டெம்ப்ளேட்டுகளை எவ்வாறு பயன்படுத்துவது:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "உரை தேர்ந்தெடுத்து தொடர்புடைய முறையைத் தேர்ந்தெடுக்கும்போது உங்கள் தனிப்பயன் குறிப்புகள் தானாகவே பயன்படுத்தப்படும்\nமாற்றங்கள் உடனடியாக செயல்படும் - மீண்டும் தொடங்க வேண்டிய அவசியமில்லை\nமீட்டமை பொத்தானைப் பயன்படுத்தி எந்த குறிப்பையும் இயல்புநிலைக்கு மீட்டமைக்கலாம்",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "கருப்பொருள் & தோற்றம்",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "வண்ண கருப்பொருள்",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "இருள் கருப்பொருள்",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "ஒளி கருப்பொருள்",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "சிரஸ்டம் இயல்புநிலை",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "எழுத்துரு அளவு",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "பாப்அப் முடிவுகளில் உள்ள உரை அளவை சரிசெய்யவும்",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "அடிக்கோடிட்டு காட்டும் நிறம்",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "தேர்ந்தெடுக்கப்பட்ட உரையை அடிக்கோடிட்டுக் காட்டும் நிறத்தைத் தேர்வு செய்யவும்",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "பாப்அப் பக்கத்தில் எவ்வாறு தோன்ற வேண்டும் என்பதைத் தேர்வு செய்யவும்",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "மிதவை",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "சைட்பார்",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "மையத்தில்",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "பாப்அப் தோன்றும் போது அனிமேஷன் விளைவு",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "மங்கல்",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "நழுவுதல்",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "அளவிடுதல்",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "இல்லை",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "அனிமேஷன் அமைப்புகள்",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "லைட்அப் என்பது வலைத்தளத்தில் உள்ள எந்த உரையையும் உடனடி சுருக்கங்கள், விளக்கங்கள், மொழிபெயர்ப்புகள் மற்றும் பகுப்பாய்வுகளை வழங்கும் AI-சக்திவாய்ந்த பிரவுசர் விரிவாக்கம் ஆகும்.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "இணைப்புகள்",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "பயனுள்ள இணைப்புகள் மற்றும் வளங்கள்",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "வலைத்தளத்தைப் பார்வையிடவும்",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Chrome Store இல் மதிப்பிடவும்",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "அனைத்து தரவுகளையும் அழி",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "விளக்கு",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "சுருக்கம்",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "பகுப்பாய்வு",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "மொழிபெயர்ப்பு",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "இலவசம்",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "குறிப்பு விவரங்கள்",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "இந்த முறைக்குப் பயன்படுத்தப்படும் குறிப்புகளைப் பார்க்கவும் மற்றும் தனிப்பயனாக்கவும்",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "ஒரு கிளிக்கில் எந்த உரையையும் உடனடி சுருக்கங்களைப் பெறுங்கள்",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "உரையை எந்த மொழிக்கும் உடனடியாக மொழிபெயர்க்கவும்",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "GPT, ஜெமினி மற்றும் உள்ளூர் மாதிரிகள் உள்ளிட்ட பல AI மாதிரிகளில் இருந்து தேர்வு செய்யவும்",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "நீங்கள் படிக்கும் உள்ளடக்கம் பற்றி AI உடன் உரையாடல்களை மேற்கொள்ளவும்",
+    "description": "Description for interactive chat feature"
+  }
+}

@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - AI赋能的网页标注。摘要、翻译等",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "适用于网页上每个页面的智能标注。由AI提供支持，可解释、总结、分析、翻译等。",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "欢迎使用LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "摘要",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "解释",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "翻译",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "分析",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "设置",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "语言",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "选择您首选的语言",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "保存",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "取消",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "已启用",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "已禁用",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "发送反馈",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "加载中...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "剩余免费使用次数",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "模式选择",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "配置模式",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "转到提示词",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "隐藏模式配置",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "隐藏配置",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "显示网站信息",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "在结果中显示网站图标和标题",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "显示选定文本",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "在结果中显示您选择的文本",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "显示“即时AI”按钮",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "添加一个浮动的“即时AI”按钮，一键总结或解释整个页面",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "无干扰模式",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "隐藏不必要的UI并调暗LightUp后面的页面，以便您可以专注于AI答案",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "弹出窗口关闭后保留高亮显示文本",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "关闭弹出窗口后保持文本高亮显示",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "在文本选择时显示操作按钮",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "高亮显示文本时显示一个小按钮",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "自动在文本选择时打开LightUp",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "每当您选择文本时自动打开LightUp",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "持久高亮显示",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "键盘快捷键",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "使用这些快捷键快速访问LightUp功能",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "切换到解释模式",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "切换到摘要模式",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "切换到分析模式",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "切换到翻译模式",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "以自由模式打开弹出窗口",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "通过快捷键设置模式后，选择任何文本，LightUp将以您选择的模式出现。",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "功能切换",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "用于切换功能的快捷键",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "切换LightUp的开关",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "切换极度专注模式",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "切换浅色/深色主题",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "重置所有快捷键",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "将所有快捷键恢复到默认值",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "重置",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "提问",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "配置模式选择器（最多选择4个）",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "这些模式将显示在您的模式选择器中。点击切换。",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "可用操作",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "自由",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "LightUp标识",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp当前已关闭",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "切换标题或下面的按钮中的开关以启用LightUp并访问所有功能。",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "启用LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "自动→英语",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "常规",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "键盘快捷键",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "高级设置",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "隐私",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "隐私政策",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "网站",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "给我们评分",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "反馈",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "帮助我们改进LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "反馈类型",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "选择您想提供的反馈类型",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "一般反馈",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "错误报告",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "功能请求",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "其他",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "您的反馈",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "告诉我们您的想法或描述您遇到的问题……",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "在此处输入您的反馈……",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "邮箱（可选）",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "如果您希望我们跟进，请留下您的邮箱",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "提交反馈",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "高亮颜色",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "选择文本高亮显示的颜色",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "默认",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "黄色",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "橙色",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "蓝色",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "绿色",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "紫色",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "粉色",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "隐私与数据",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "您的隐私是我们的首要任务",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "零数据收集",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp尊重您的隐私，并负责任地处理您的数据。",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "本地存储",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "所有设置都存储在您的设备本地",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "直接处理",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "文本直接处理，无需存储",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "无跟踪",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "我们不会跟踪您的浏览或存储个人数据",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "您的控制",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "所有设置和数据都由您控制",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "完整政策",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "联系",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "保存失败",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "保存设置时出错。请重试。",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "设置已保存",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "切换部分时保存了您的更改。",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "关闭通知",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "停止朗读",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "朗读文本",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "摘要",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "解释",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "翻译",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "分析",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "关于……的聊天",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "选择选项",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "每日使用情况",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "主题",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "选择您首选的扩展程序颜色主题",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "深色主题",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "浅色主题",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "系统默认",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "语言已更改",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "UI将更新以反映您的语言选择",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "错误",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "更改语言失败",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "弹出窗口边距",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "浮动模式下距视口边缘的距离",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "翻译设置",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "使用页面上下文以获得更好的答案",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "启用更深入的页面上下文以获得更好的结果",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "外观",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "反馈",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "布局与显示",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "自定义扩展程序的布局和外观",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "布局模式",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "浮动",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "侧边栏",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "居中",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "结果字体大小",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "控制结果面板中文本的大小",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "特小",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "小",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "中等",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "大",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "特大",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "超大",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "弹出窗口动画",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "弹出窗口出现时的动画",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "淡入",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "滑动",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "缩放",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "无",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "极度专注模式",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "查看结果时模糊背景",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "（必填）",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "价格：",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "大小：",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "地址已复制到剪贴板！",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "剩余速率限制：",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "将在：",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "自动保存失败",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "您的更改未自动保存。请手动保存。",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "加载失败",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "无法加载您的设置。使用默认设置。",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "正在加载使用信息...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "模型自动选择",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "由于您提供了Gemini API密钥，因此自动选择了{0}。",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "由于您提供了Grok API密钥，因此自动选择了{0}。",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "为您Ollama设置自动选择了{0}。",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "（未显示函数）",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "（动态模板 - 根据您选择的文本而有所不同）",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "AI驱动的网页标注",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "版本：",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "开发者：",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "网站：",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "即时摘要",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "实时翻译",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "高级AI模型",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "互动聊天",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "零数据收集",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "本地存储",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "最新版本，具有改进的功能和更快的响应时间",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "轻量级版本，针对效率和速度进行了优化",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "专注于推理和分析任务的实验性模型",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "性能平衡的稳定版本",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "更快速、更小的模型，可快速响应",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "8位量化版本，用于高效处理",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "标准Grok-3模型",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "每100万个token 2.00美元",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "轻量级变体",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "每100万个token 1.00美元",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "延迟优化的Grok-3",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "每100万个token 2.50美元",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Mini + 快速变体",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "每100万个token 1.50美元",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "最新的Grok-2版本",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "每100万个token 1.80美元",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "功能最强大的Llama 2模型，最适合复杂任务",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "700亿参数",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "最新的DeepSeek模型，具有增强的推理能力",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "670亿参数",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "高性能专家混合模型",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "470亿参数",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "性能和资源使用率均衡",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "130亿参数",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "高效的指令遵循模型",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "70亿参数",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "针对自然对话进行了优化",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "70亿参数",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "DeepSeek的轻量级版本，具有良好的推理能力",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "70亿参数",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "适用于基本任务的轻量级模型",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "30亿参数",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "紧凑但功能强大",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "27亿参数",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "针对聊天互动进行了优化",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "70亿参数",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BETA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "常规",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "AI模型",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "提示词模板",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "外观",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "关于",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "常规设置",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "AI模型配置",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "外观与自定义",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "提示词模板",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "关于LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "在结果中显示您选择的文本",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "在结果中显示网站图标和标题",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "关闭弹出窗口后保持文本高亮显示",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "自动在文本选择时打开LightUp",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "每当您选择文本时自动打开LightUp",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "上下文感知",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "使用页面上下文提供更好、更相关的答案",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "AI引擎选择",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "选择AI模型类型",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "选择要用于生成响应的AI服务",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "基础版（免费，有限制）",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini（需要API密钥）",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "xAI的Grok（需要API密钥）",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "本地/Ollama（自托管）",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "数据隐私声明",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "使用基础版时，您的选定文本和页面上下文将发送到我们的服务器进行处理。我们不会永久存储这些数据。",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "为了完全保护隐私，请考虑使用您自己的API密钥与Google Gemini、Grok或本地模型。",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Google Gemini配置",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Google Gemini API密钥",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "输入您的Google AI Studio API密钥",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "从Google AI Studio获取您的免费API密钥。{0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "选择Gemini模型",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "选择要用于生成响应的Google Gemini模型",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "xAI的Grok配置",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "xAI API密钥",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "输入您的xAI API密钥",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "从xAI获取您的API密钥。访问{0}开始使用。",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "选择Grok模型",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "选择要用于生成响应的Grok模型",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "本地/Ollama配置",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "Ollama服务器URL",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "选择本地模型",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "从您的Ollama安装中选择要使用的模型",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "响应设置",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "最大响应长度",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "AI响应中的最大token（单词/字符）数",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "提示词模式",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "选择要自定义的提示词类型",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "系统提示词",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "此提示词定义了AI的行为和响应方式",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "用户提示词模板",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "此模板用于格式化对AI的用户请求",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "编辑",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "保存",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "重置为默认值",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "将{0}模式提示词重置为其原始默认值",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "重置为默认值",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "重置成功",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "此提示词使用动态逻辑，无法编辑",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "如何应用您的自定义模板：",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "选择文本并选择相应的模式时，将自动使用您的自定义提示词\n更改会立即生效 - 无需重启\n您可以使用重置按钮将任何提示词重置为默认值",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "主题与外观",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "颜色主题",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "深色主题",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "浅色主题",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "系统默认",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "字体大小",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "调整弹出窗口结果中的文本大小",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "高亮颜色",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "选择突出显示所选文本的颜色",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "选择弹出窗口在页面上的显示方式",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "浮动",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "侧边栏",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "居中",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "弹出窗口出现时的动画效果",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "淡入",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "滑动",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "缩放",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "无",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "动画设置",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp是一款AI驱动的浏览器扩展程序，可为网页上的任何文本提供即时摘要、解释、翻译和分析。",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "链接",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "有用的链接和资源",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "访问网站",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "评价Chrome网上应用店",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "清除所有数据",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "解释",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "摘要",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "分析",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "翻译",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "自由",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "提示词详情",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "查看和自定义此模式使用的提示词",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "一键获取任何文本的即时摘要",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "立即将文本翻译成任何语言",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "从多个AI模型中选择，包括GPT、Gemini和本地模型",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "与AI就您正在阅读的内容进行对话",
+    "description": "Description for interactive chat feature"
+  }
+}

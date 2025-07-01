@@ -3,13 +3,29 @@ import { Storage } from "@plasmohq/storage"
 import { sendToBackground } from "@plasmohq/messaging"
 import { motion, AnimatePresence } from "framer-motion"
 import styled from "@emotion/styled"
-import { css } from "@emotion/react"
+import { css, keyframes } from "@emotion/react"
 
 import type { Mode, TranslationSettings, Settings } from "~types/settings"
 import { LANGUAGES } from "~utils/constants"
 import { useSettings } from "~hooks/useSettings"
 import { useRateLimit } from "~hooks/useRateLimit"
 import { useEnabled } from "~hooks/useEnabled"
+import { useLocale } from "~hooks/useLocale"
+import { getMessage, SUPPORTED_LANGUAGES } from "~utils/i18n"
+import { useMessage } from "~hooks/useMessage"
+import LanguageSelector from "~components/LanguageSelector"
+
+// Import toast notification components
+import {
+  type ToastNotification,
+  ToastContainer,
+  Toast,
+  ToastIcon,
+  ToastContent,
+  ToastTitle,
+  ToastMessage,
+  ToastCloseButton
+} from "~components/options/NotificationComponents"
 
 // Import the popup-specific CSS file for fonts only
 import "./popup-style.css"
@@ -496,16 +512,74 @@ const Logo = () => (
   </svg>
 )
 
+// Custom hook for toast notifications
+const useToastNotifications = () => {
+  const [toasts, setToasts] = useState<ToastNotification[]>([]);
+  const [exitingToasts, setExitingToasts] = useState<Set<string>>(new Set());
+
+  const addToast = (toast: Omit<ToastNotification, 'id'>) => {
+    const id = Math.random().toString(36).substr(2, 9);
+    const newToast: ToastNotification = {
+      id,
+      duration: 5000,
+      ...toast,
+    };
+
+    setToasts(prev => [...prev, newToast]);
+
+    if (!newToast.persistent && newToast.duration) {
+      setTimeout(() => {
+        removeToast(id);
+      }, newToast.duration);
+    }
+
+    return id;
+  };
+
+  const removeToast = (id: string) => {
+    setExitingToasts(prev => new Set([...prev, id]));
+    
+    setTimeout(() => {
+      setToasts(prev => prev.filter(toast => toast.id !== id));
+      setExitingToasts(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(id);
+        return newSet;
+      });
+    }, 300);
+  };
+
+  return { toasts, addToast, removeToast, exitingToasts };
+};
+
 // Main popup component
 const IndexPopup = () => {
   const { settings, setSettings, isConfigured } = useSettings()
   const { remainingActions, isLoading, error, refreshRateLimit } = useRateLimit()
   const { isEnabled, handleEnabledChange } = useEnabled()
+  const { locale, isLoading: isLocaleLoading, changeLocale } = useLocale()
   
   const [activeTab, setActiveTab] = useState('general')
   const [activeModeConfig, setActiveModeConfig] = useState(false)
   const [activeMode, setActiveMode] = useState<string>('explain')
-  
+    const { toasts, addToast, removeToast, exitingToasts } = useToastNotifications()
+
+  // Localized strings
+  const logoAlt = useMessage("logoAlt", "LightUp Logo")
+  const extensionName = "LightUp"
+  const turnOffText = useMessage("turnOff", "Turn Off")
+  const turnOnText = useMessage("turnOn", "Turn On")
+  const betaLabel = useMessage("betaLabel", "Beta")
+  const extensionDisabledText = useMessage("extensionDisabled", "LightUp is currently Off")
+  const enableExtensionMessage = useMessage(
+    "enableExtensionMessage",
+    "Toggle the switch in the header or the button below to enable LightUp and access all features."
+  )
+  const enableButtonText = useMessage("enableButton", "Enable LightUp")
+  const tabGeneral = useMessage("tabGeneral", "General")
+  const tabAppearance = useMessage("tabAppearance", "Appearance")
+  const tabKeyboard = useMessage("tabKeyboard", "Keyboard Shortcuts")
+
   // Get preferred modes from settings or use defaults
   const preferredModes: string[] = Array.from(new Set((settings?.customization as any)?.preferredModes || ['summarize', 'analyze', 'explain', 'translate'])) as string[]
   const allModes = ['summarize', 'analyze', 'explain', 'translate', 'free']
@@ -716,16 +790,59 @@ const IndexPopup = () => {
   
   return (
     <PopupContainer>
+      {/* Toast container for notifications */}
+      <ToastContainer>
+        {toasts.map((toast) => (
+          <Toast 
+            key={toast.id} 
+            type={toast.type} 
+            isExiting={exitingToasts.has(toast.id)}
+          >
+            <ToastIcon>
+              {toast.type === 'success' && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M22 4L12 14.01l-3-3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+              {toast.type === 'error' && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+              {toast.type === 'warning' && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+              {toast.type === 'info' && (
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </ToastIcon>
+            <ToastContent>
+              <ToastTitle>{toast.title}</ToastTitle>
+              {toast.message && <ToastMessage>{toast.message}</ToastMessage>}
+            </ToastContent>
+            <ToastCloseButton onClick={() => removeToast(toast.id)} aria-label={getMessage("closeNotification")}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </ToastCloseButton>
+          </Toast>
+        ))}
+      </ToastContainer>
       <Header>
         <HeaderLogoWrapper>
-          <LogoImage src={logoUrl} alt="LightUp Logo" />
-          <HeaderTitle>LightUp</HeaderTitle>
+                              <LogoImage src={logoUrl} alt={logoAlt} />
+                              <HeaderTitle>{extensionName}</HeaderTitle>
         </HeaderLogoWrapper>
         
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)' }}>
-              {isEnabled ? 'Turn Off' : 'Turn On'}
+                                          {isEnabled ? turnOffText : turnOnText}
             </span>
             <ToggleContainer 
               onClick={async (e) => {
@@ -741,7 +858,7 @@ const IndexPopup = () => {
                 }
               }} 
               style={{ cursor: 'pointer' }}
-              aria-label={isEnabled ? 'Turn off' : 'Turn on'}
+                                          aria-label={isEnabled ? turnOffText : turnOnText}
               role="switch"
               aria-checked={isEnabled}
             >
@@ -757,7 +874,7 @@ const IndexPopup = () => {
           </div>
           
           <VersionBadgeContainer>
-            <BetaBadge>Beta </BetaBadge>
+                                    <BetaBadge>{betaLabel}</BetaBadge>
             <VersionNumber>v1.1.15</VersionNumber>
           </VersionBadgeContainer>
         </div>
@@ -775,9 +892,11 @@ const IndexPopup = () => {
               <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 9V11M12 15H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0378 2.66667 10.268 4L3.33978 16C2.56998 17.3333 3.53223 19 5.07183 19Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <h2 style={{ fontSize: '24px', marginTop: '0', marginBottom: '0', fontWeight: 'bold' }}>LightUp is currently Off</h2>
+              <h2 style={{ fontSize: '24px', marginTop: '0', marginBottom: '0', fontWeight: 'bold' }}>
+                                                {extensionDisabledText}
+              </h2>
               <p style={{ fontSize: '16px', opacity: 0.8, maxWidth: '400px', lineHeight: '1.5' }}>
-                Toggle the switch in the header or the button below to enable LightUp and access all features.
+                                                {enableExtensionMessage}
               </p>
               <button 
                 onClick={async () => {
@@ -806,7 +925,7 @@ const IndexPopup = () => {
 </svg>
 
                 
-                Turn On LightUp
+                                                {enableButtonText}
               </button>
             </DisabledOverlay>
           )}
@@ -821,7 +940,7 @@ const IndexPopup = () => {
 
 
             </SidebarIcon>
-            General
+                                    {tabGeneral}
           </SidebarItem>
           <SidebarItem active={activeTab === 'appearance'} onClick={() => setActiveTab('appearance')}>
             <SidebarIcon>
@@ -829,7 +948,7 @@ const IndexPopup = () => {
   <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" />
 </svg>
             </SidebarIcon>
-            Appearance
+                                    {tabAppearance}
           </SidebarItem>
           <SidebarItem active={activeTab === 'keyboard'} onClick={() => setActiveTab('keyboard')}>
             <SidebarIcon>
@@ -847,7 +966,7 @@ const IndexPopup = () => {
 </svg>
 
             </SidebarIcon>
-            Keyboard Shortcuts
+                                    {tabKeyboard}
           </SidebarItem>
           <SidebarItem 
             active={false} 
@@ -864,7 +983,7 @@ const IndexPopup = () => {
 </svg>
 
             </SidebarIcon>
-            Advanced Settings
+            {getMessage("tabAdvanced")}
           </SidebarItem>
 
           {/* Divider */}
@@ -880,14 +999,14 @@ const IndexPopup = () => {
             </SidebarIcon>
             Documentation
           </SidebarItem> */}
-          <SidebarItem active={false} onClick={() => window.open('https://boi.featurebase.app/', '_blank')}>
+          <SidebarItem active={activeTab === 'feedback'} onClick={() => setActiveTab('feedback')}>
             <SidebarIcon>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
 </svg>
 
             </SidebarIcon>
-            Feedback
+            {getMessage("tabFeedback")}
           </SidebarItem>
           <SidebarItem active={activeTab === 'privacy'} onClick={() => setActiveTab('privacy')}>
             <SidebarIcon>
@@ -896,7 +1015,7 @@ const IndexPopup = () => {
 </svg>
 
             </SidebarIcon>
-            Privacy Policy
+            {getMessage("tabPrivacy")}
           </SidebarItem>
           
 
@@ -913,7 +1032,7 @@ const IndexPopup = () => {
 </svg>
 
             </SidebarIcon>
-            Website
+            {getMessage("website")}
           </SidebarItem>
           
           <SidebarItem 
@@ -926,7 +1045,7 @@ const IndexPopup = () => {
 </svg>
 
             </SidebarIcon>
-            Rate Us
+            {getMessage("rateUs")}
           </SidebarItem>
         </Sidebar>
         
@@ -937,10 +1056,10 @@ const IndexPopup = () => {
            
               
               <Section>
-                <SectionTitle>Daily Usage</SectionTitle>
+                <SectionTitle>{getMessage("dailyUsage")}</SectionTitle>
                 {isLoading ? (
                   <div style={{ padding: '16px', background: '#333333', borderRadius: '8px', marginTop: '12px' }}>
-                    <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px' }}>Loading usage info...</span>
+                    <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px' }}>{getMessage("loadingUsageInfo")}</span>
                   </div>
                 ) : error ? (
                   <div style={{ padding: '16px', background: '#333333', borderRadius: '8px', marginTop: '12px', borderLeft: '4px solid #E74C3C' }}>
@@ -949,7 +1068,7 @@ const IndexPopup = () => {
                 ) : (
                   <div style={{ padding: '16px', background: '#333333', borderRadius: '8px', marginTop: '12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                      <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px' }}>Free Uses Remaining</span>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px' }}>{getMessage("freeUsesRemaining")}</span>
                       <span style={{ fontWeight: 500, fontSize: '14px' }}>
                         {remainingActions} / {(settings?.rateLimit as any)?.dailyLimit ?? 30}
                       </span>
@@ -971,36 +1090,65 @@ const IndexPopup = () => {
               <SectionDivider />
               <Section>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                  <SectionTitle>Mode Selection</SectionTitle>
-                  <Button 
-                    onClick={() => setActiveModeConfig(!activeModeConfig)} 
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      borderRadius: '12px',
-                      padding: '8px 14px',
-                      border: `1px solid ${theme.dark.border}`,
-                      background: activeModeConfig ? theme.dark.card : 'transparent',
-                      color: theme.dark.foreground,
-                      fontWeight: 500,
-                      transition: 'background-color 0.2s ease-in-out, border-color 0.2s ease-in-out',
-                      cursor: 'pointer',
-                      outline: 'none'
-                    }}
-                    aria-label={activeModeConfig ? 'Hide Mode Configuration' : 'Configure Modes'}
-                  >
-                    {activeModeConfig ? 'Hide Mode Config' : 'Configure Modes'}
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M12 6v12m-6-6h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
-                        transform={activeModeConfig ? "rotate(45, 12, 12)" : ""}/>
-                    </svg>
-                  </Button>
+                  <SectionTitle>{getMessage("modeSelection")}</SectionTitle>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <Button 
+                      onClick={() => setActiveModeConfig(!activeModeConfig)} 
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        borderRadius: '12px',
+                        padding: '8px 14px',
+                        border: `1px solid ${theme.dark.border}`,
+                        background: activeModeConfig ? theme.dark.card : 'transparent',
+                        color: theme.dark.foreground,
+                        fontWeight: 500,
+                        transition: 'background-color 0.2s ease-in-out, border-color 0.2s ease-in-out',
+                        cursor: 'pointer',
+                        outline: 'none'
+                      }}
+                      aria-label={activeModeConfig ? getMessage("hideModeConfig") : getMessage("configureModes")}
+                    >
+                      {activeModeConfig ? getMessage("hideModeConfigShort") : getMessage("configureModes")}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 6v12m-6-6h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
+                          transform={activeModeConfig ? "rotate(45, 12, 12)" : ""}/>
+                      </svg>
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        if (typeof chrome !== 'undefined' && chrome.runtime) {
+                          chrome.runtime.openOptionsPage();
+                        }
+                      }}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        borderRadius: '12px',
+                        padding: '8px 14px',
+                        border: `1px solid ${theme.dark.border}`,
+                        background: 'transparent',
+                        color: theme.dark.foreground,
+                        fontWeight: 500,
+                        transition: 'background-color 0.2s ease-in-out, border-color 0.2s ease-in-out',
+                        cursor: 'pointer',
+                        outline: 'none'
+                      }}
+                      aria-label={getMessage("goToPrompts")}
+                    >
+                      {getMessage("goToPrompts")}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 6v12m-6-6h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </Button>
+                  </div>
                 </div>
               
                 {activeModeConfig ? (
                   <div style={{ marginBottom: '20px', padding: '16px', background: '#333333', borderRadius: '8px' }}>
-                    <h3 style={{ fontSize: '16px', marginBottom: '12px', color: theme.dark.foreground }}>Configure Mode Selector (Choose up to 4)</h3>
+                    <h3 style={{ fontSize: '16px', marginBottom: '12px', color: theme.dark.foreground }}>{getMessage("configureModeSelector")}</h3>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
                       {allModes.map((mode) => (
                         <Button
@@ -1021,14 +1169,14 @@ const IndexPopup = () => {
                               <span style={{ fontSize: '10px', opacity: 0.8 }}>
                                 {settings?.translationSettings?.fromLanguage ? 
                                   `${LANGUAGES[settings.translationSettings.fromLanguage] || LANGUAGES['auto']} → ${LANGUAGES[settings.translationSettings.toLanguage] || LANGUAGES['en']}` : 
-                                  'Auto → English'}
+                                  getMessage("autoTranslate")}
                               </span>
                             )}
                           </div>
                         </Button>
                       ))}
                     </div>
-                    <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)' }}>These modes will appear in your mode selector. Click to toggle.</p>
+                    <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)' }}>{getMessage("modeSelectorHelp")}</p>
                   </div>
                 ) : (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '20px' }}>
@@ -1062,15 +1210,15 @@ const IndexPopup = () => {
                 {/* <SectionTitle>General Settings</SectionTitle>
                 <Description>Configure the basic settings for your extension</Description> */}
                    <FormRow>
-                  <Label>Translation Settings</Label>
+                  <Label>{getMessage("translationSettings")}</Label>
                   <div style={{ display: 'flex', gap: '8px' }}>
                     <Select 
-                      value={settings?.translationSettings?.fromLanguage || "auto"}
+                      value={settings?.translationSettings?.fromLanguage}
                       onChange={async (e) => {
                         const translationSettings = {
                           ...(settings?.translationSettings || {}),
                           fromLanguage: e.target.value,
-                          toLanguage: settings?.translationSettings?.toLanguage || "en"
+                          toLanguage: settings?.translationSettings?.toLanguage
                         }
                         const newSettings = {
                           ...settings,
@@ -1112,8 +1260,8 @@ const IndexPopup = () => {
                       }}
                       style={{ flex: 1 }}
                     >
-                      {Object.entries(LANGUAGES).map(([code, name]) => (
-                        <option key={code} value={code}>{name}</option>
+                      {SUPPORTED_LANGUAGES.map((lang) => (
+                        <option key={lang.code} value={lang.code}>{lang.nativeName} ({lang.name})</option>
                       ))}
                     </Select>
                     
@@ -1124,11 +1272,11 @@ const IndexPopup = () => {
                     </div>
                     
                     <Select 
-                      value={settings?.translationSettings?.toLanguage || "en"}
+                      value={settings?.translationSettings?.toLanguage}
                       onChange={async (e) => {
                         const translationSettings = {
                           ...(settings?.translationSettings || {}),
-                          fromLanguage: settings?.translationSettings?.fromLanguage || "auto",
+                          fromLanguage: settings?.translationSettings?.fromLanguage,
                           toLanguage: e.target.value
                         }
                         const newSettings = {
@@ -1171,8 +1319,8 @@ const IndexPopup = () => {
                       }}
                       style={{ flex: 1 }}
                     >
-                      {Object.entries(LANGUAGES).filter(([code]) => code !== 'auto').map(([code, name]) => (
-                        <option key={code} value={code}>{name}</option>
+                      {SUPPORTED_LANGUAGES.filter((lang) => lang.code !== 'auto').map((lang) => (
+                        <option key={lang.code} value={lang.code}>{lang.nativeName} ({lang.name})</option>
                       ))}
                     </Select>
                   </div>
@@ -1180,8 +1328,8 @@ const IndexPopup = () => {
                 <SectionDivider />
                 <FormRow>
                   <div>
-                    <Label>Use Page Context for Better Answers</Label>
-                    <Description>Enable deeper page context for better results</Description>
+                    <Label>{getMessage("pageContextLabel")}</Label>
+                    <Description>{getMessage("pageContextDesc")}</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput 
@@ -1198,8 +1346,8 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Show Website Info</Label>
-                    <Description>Display website favicon and title in the results</Description>
+                    <Label>{getMessage("showWebsiteInfoLabel")}</Label>
+                    <Description>{getMessage("showWebsiteInfoDesc")}</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput 
@@ -1214,8 +1362,8 @@ const IndexPopup = () => {
                 <SectionDivider />
                 <FormRow>
                   <div>
-                    <Label>Show Selected Text</Label>
-                    <Description>Display the text you've selected in the results</Description>
+                    <Label>{getMessage("showSelectedTextLabel")}</Label>
+                    <Description>{getMessage("showSelectedTextDesc")}</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput 
@@ -1230,8 +1378,8 @@ const IndexPopup = () => {
                 
                                      <FormRow>
                        <div>
-                         <Label>Show 'Instant AI' Button</Label>
-                         <Description>Add a floating 'Instant AI' button that summarizes or explains the whole page with one click</Description>
+                         <Label>{getMessage("showInstantAIButtonLabel")}</Label>
+                         <Description>{getMessage("showInstantAIButtonDesc")}</Description>
                        </div>
                   <ToggleContainer>
                     <ToggleInput 
@@ -1247,8 +1395,8 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Distraction-Free Mode</Label>
-                    <Description>Hides non-essential UI and dims the page behind LightUp so you can focus on the AI answer</Description>
+                    <Label>{getMessage("distractionFreeModeLabel")}</Label>
+                    <Description>{getMessage("distractionFreeModeDesc")}</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput 
@@ -1264,8 +1412,8 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Keep Highlighted Text After Popup Closes</Label>
-                    <Description>Keep text highlighted after closing popup</Description>
+                    <Label>{getMessage("keepHighlightedTextLabel")}</Label>
+                    <Description>{getMessage("keepHighlightedTextDesc")}</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput 
@@ -1281,8 +1429,8 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Show Action Button on Text Selection</Label>
-                    <Description>Display a small button when text is highlighted</Description>
+                    <Label>{getMessage("showActionButtonLabel")}</Label>
+                    <Description>{getMessage("showActionButtonDesc")}</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput 
@@ -1298,8 +1446,8 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Auto-Open LightUp on Text Selection</Label>
-                    <Description>Opens LightUp automatically whenever you select text</Description>
+                    <Label>{getMessage("autoOpenLabel")}</Label>
+                    <Description>{getMessage("autoOpenDesc")}</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput 
@@ -1330,8 +1478,8 @@ const IndexPopup = () => {
           {activeTab === 'keyboard' && (
             <>
               <Section>
-                <SectionTitle>Keyboard Shortcuts</SectionTitle>
-                <Description>Use these shortcuts to quickly access LightUp features</Description>
+                <SectionTitle>{getMessage("keyboardShortcuts")}</SectionTitle>
+                <Description>{getMessage("keyboardShortcutsDesc")}</Description>
                 
                 <div style={{ background: '#333333', borderRadius: '8px', padding: '16px', marginTop: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
@@ -1348,11 +1496,11 @@ const IndexPopup = () => {
                   
                   <div style={{ marginBottom: '20px' }}>
                     {[
-                      { key: "Ctrl+Shift+Z", description: "Switch to Explain mode" },
-                      { key: "Ctrl+Shift+S", description: "Switch to Summarize mode" },
-                      { key: "Ctrl+Shift+A", description: "Switch to Analyze mode" },
-                      { key: "Ctrl+Shift+T", description: "Switch to Translate mode" },
-                      { key: "Ctrl+Shift+F", description: "Open popup in Free mode" }
+                      { key: "Ctrl+Shift+Z", description: getMessage("shortcutExplainMode") },
+                      { key: "Ctrl+Shift+S", description: getMessage("shortcutSummarizeMode") },
+                      { key: "Ctrl+Shift+A", description: getMessage("shortcutAnalyzeMode") },
+                      { key: "Ctrl+Shift+T", description: getMessage("shortcutTranslateMode") },
+                      { key: "Ctrl+Shift+F", description: getMessage("shortcutFreeMode") }
                     ].map((shortcut, index) => (
                       <div key={index} className="shortcut-row" style={{ 
                         display: 'flex', 
@@ -1382,14 +1530,14 @@ const IndexPopup = () => {
               <SectionDivider />
               
               <Section>
-                <SectionTitle>Feature Toggles</SectionTitle>
-                <Description>Shortcuts for toggling features on and off</Description>
+                <SectionTitle>{getMessage("featureToggles")}</SectionTitle>
+                <Description>{getMessage("featureTogglesDesc")}</Description>
                 
                 <div style={{ background: '#333333', borderRadius: '8px', padding: '16px', marginTop: '16px' }}>
                   {[
-                    { key: "Ctrl+Shift+X", description: "Toggle LightUp on/off" },
-                    { key: "Ctrl+Shift+R", description: "Toggle Radically Focus mode" },
-                    { key: "Ctrl+Shift+D", description: "Toggle Light/Dark theme" }
+                    { key: "Ctrl+Shift+X", description: getMessage("shortcutToggleOnOff") },
+                    { key: "Ctrl+Shift+R", description: getMessage("shortcutToggleFocus") },
+                    { key: "Ctrl+Shift+D", description: getMessage("shortcutToggleTheme") }
                   ].map((shortcut, index) => (
                     <div key={index} className="shortcut-row" style={{ 
                       display: 'flex', 
@@ -1419,15 +1567,15 @@ const IndexPopup = () => {
               
               <Section>
                 <Description style={{ marginTop: '8px' }}>
-                  After setting the mode via shortcut, select any text and LightUp will appear with your chosen mode.
+                  {getMessage("shortcutAfterSettingDesc")}
                 </Description>
-                {/* <FormRow style={{ marginTop: '20px' }}>
+                <FormRow style={{ marginTop: '20px' }}>
                   <div>
-                    <Label>Reset All Shortcuts</Label>
-                    <Description>Restore all shortcuts to their default values</Description>
+                    <Label>{getMessage("resetAllShortcutsLabel")}</Label>
+                    <Description>{getMessage("resetAllShortcutsDesc")}</Description>
                   </div>
-                  <Button variant="destructive">Reset</Button>
-                </FormRow> */}
+                  <Button variant="destructive">{getMessage("resetButton")}</Button>
+                </FormRow>
               </Section>
             </>
           )}
@@ -1436,22 +1584,22 @@ const IndexPopup = () => {
           {activeTab === 'appearance' && (
             <>
               <Section>
-                <SectionTitle>Theme</SectionTitle>
-                <Description>Choose your preferred color theme</Description>
+                <SectionTitle>{getMessage("themeTitle")}</SectionTitle>
+                <Description>{getMessage("themeDescription")}</Description>
                 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginTop: '16px' }}>
                   {[
-                    { value: 'dark', label: 'Dark Theme', icon: (
+                    { value: 'dark', label: getMessage("darkTheme"), icon: (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     )},
-                    { value: 'light', label: 'Light Theme', icon: (
+                    { value: 'light', label: getMessage("lightTheme"), icon: (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     )},
-                    { value: 'system', label: 'System Default', icon: (
+                    { value: 'system', label: getMessage("systemTheme"), icon: (
                       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
@@ -1462,11 +1610,11 @@ const IndexPopup = () => {
                       onClick={() => updateSettings('theme', themeOption.value)}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = '#3a3a3a';
-                        e.currentTarget.style.borderColor = themeOption.value === (settings?.customization?.theme || 'dark') ? '#2DCA6E' : 'rgba(255, 255, 255, 0.3)';
+                        e.currentTarget.style.borderColor = themeOption.value === (settings?.customization?.theme) ? '#2DCA6E' : 'rgba(255, 255, 255, 0.3)';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = '#333333';
-                        e.currentTarget.style.borderColor = themeOption.value === (settings?.customization?.theme || 'dark') ? '#2DCA6E' : 'transparent';
+                        e.currentTarget.style.borderColor = themeOption.value === (settings?.customization?.theme) ? '#2DCA6E' : 'transparent';
                       }}
                       style={{
                         padding: '16px',
@@ -1477,7 +1625,7 @@ const IndexPopup = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         cursor: 'pointer',
-                        border: themeOption.value === (settings?.customization?.theme || 'dark') ? '2px solid #2DCA6E' : '2px solid transparent',
+                        border: themeOption.value === (settings?.customization?.theme) ? '2px solid #2DCA6E' : '2px solid transparent',
                         transition: 'all 0.2s ease-in-out'
                       }}
                     >
@@ -1491,18 +1639,18 @@ const IndexPopup = () => {
               <SectionDivider />
               
               <Section>
-                <SectionTitle>Highlight Color</SectionTitle>
-                <Description>Choose the color for text highlighting</Description>
+                <SectionTitle>{getMessage("highlightColorTitle")}</SectionTitle>
+                <Description>{getMessage("highlightColorDesc")}</Description>
                 
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '16px' }}>
                   {[
-                    { value: 'default', label: 'Default', color: 'linear-gradient(45deg, rgb(211, 232, 255), rgb(197, 225, 255))' },
-                    { value: 'yellow', label: 'Yellow', color: '#fff8bc' },
-                    { value: 'orange', label: 'Orange', color: '#FFBF5A' },
-                    { value: 'blue', label: 'Blue', color: '#93C5FD' },
-                    { value: 'green', label: 'Green', color: '#86EFAC' },
-                    { value: 'purple', label: 'Purple', color: '#C4B5FD' },
-                    { value: 'pink', label: 'Pink', color: '#FDA4AF' }
+                    { value: 'default', label: getMessage("colorDefault"), color: 'linear-gradient(45deg, rgb(211, 232, 255), rgb(197, 225, 255))' },
+                    { value: 'yellow', label: getMessage("colorYellow"), color: '#fff8bc' },
+                    { value: 'orange', label: getMessage("colorOrange"), color: '#FFBF5A' },
+                    { value: 'blue', label: getMessage("colorBlue"), color: '#93C5FD' },
+                    { value: 'green', label: getMessage("colorGreen"), color: '#86EFAC' },
+                    { value: 'purple', label: getMessage("colorPurple"), color: '#C4B5FD' },
+                    { value: 'pink', label: getMessage("colorPink"), color: '#FDA4AF' }
                   ].map(colorOption => (
                     <div 
                       key={colorOption.value}
@@ -1522,7 +1670,7 @@ const IndexPopup = () => {
                           borderRadius: '50%',
                           background: colorOption.color,
                           backgroundColor: colorOption.value === 'default' ? undefined : colorOption.color,
-                          border: colorOption.value === (settings?.customization?.highlightColor || 'default') ? `2px solid ${theme.dark.primary}` : '2px solid transparent',
+                          border: colorOption.value === (settings?.customization?.highlightColor) ? `2px solid ${theme.dark.primary}` : '2px solid transparent',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
@@ -1530,7 +1678,7 @@ const IndexPopup = () => {
                           transition: 'all 0.2s ease-in-out'
                         }}
                       >
-                        {colorOption.value === (settings?.customization?.highlightColor || 'default') && (
+                        {colorOption.value === (settings?.customization?.highlightColor) && (
                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M5 13l4 4L19 7" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
@@ -1545,14 +1693,14 @@ const IndexPopup = () => {
               <SectionDivider />
               
               <Section>
-                <SectionTitle>Layout & Display</SectionTitle>
-                <Description>Customize the layout and appearance of the extension</Description>
+                <SectionTitle>{getMessage("layoutDisplayTitle")}</SectionTitle>
+                <Description>{getMessage("layoutDisplayDesc")}</Description>
                 
                 <div style={{ marginTop: '16px' }}>
-                  <h3 style={{ fontSize: '16px', marginBottom: '16px', color: theme.dark.foreground }}>Layout Mode</h3>
+                  <h3 style={{ fontSize: '16px', marginBottom: '16px', color: theme.dark.foreground }}>{getMessage("layoutModeLabel")}</h3>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '12px', marginBottom: '24px' }}>
                     {[
-                      { value: 'floating', label: 'Floating', icon: (
+                      { value: 'floating', label: getMessage("layoutOptionFloating"), icon: (
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <rect x="4" y="4" width="16" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
                           <circle cx="12" cy="12" r="1" stroke="currentColor" strokeWidth="2" />
@@ -1560,13 +1708,13 @@ const IndexPopup = () => {
                           <circle cx="12" cy="16" r="1" stroke="currentColor" strokeWidth="2" />
                         </svg>
                       )},
-                      { value: 'sidebar', label: 'Sidebar', icon: (
+                      { value: 'sidebar', label: getMessage("layoutOptionSidebar"), icon: (
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2" />
                           <line x1="15" y1="3" x2="15" y2="21" stroke="currentColor" strokeWidth="2" />
                         </svg>
                       )},
-                      { value: 'centered', label: 'Centered', icon: (
+                      { value: 'centered', label: getMessage("layoutOptionCentered"), icon: (
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <rect x="2" y="4" width="20" height="16" rx="2" stroke="currentColor" strokeWidth="2" />
                           <rect x="6" y="8" width="12" height="8" rx="1" stroke="currentColor" strokeWidth="2" />
@@ -1578,11 +1726,11 @@ const IndexPopup = () => {
                         onClick={() => updateSettings('layoutMode', layoutOption.value)}
                         onMouseEnter={(e) => {
                           e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                          e.currentTarget.style.borderColor = layoutOption.value === (settings?.customization?.layoutMode || 'floating') ? '#2DCA6E' : 'rgba(255, 255, 255, 0.2)';
+                          e.currentTarget.style.borderColor = layoutOption.value === (settings?.customization?.layoutMode) ? '#2DCA6E' : 'rgba(255, 255, 255, 0.2)';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.backgroundColor = '#333333';
-                          e.currentTarget.style.borderColor = layoutOption.value === (settings?.customization?.layoutMode || 'floating') ? '#2DCA6E' : 'transparent';
+                          e.currentTarget.style.borderColor = layoutOption.value === (settings?.customization?.layoutMode) ? '#2DCA6E' : 'transparent';
                         }}
                         style={{
                           padding: '16px',
@@ -1593,7 +1741,7 @@ const IndexPopup = () => {
                           alignItems: 'center',
                           justifyContent: 'center',
                           cursor: 'pointer',
-                          border: layoutOption.value === (settings?.customization?.layoutMode || 'floating') ? '2px solid #2DCA6E' : '2px solid transparent',
+                          border: layoutOption.value === (settings?.customization?.layoutMode) ? '2px solid #2DCA6E' : '2px solid transparent',
                           transition: 'all 0.2s ease-in-out'
                         }}
                       >
@@ -1605,20 +1753,20 @@ const IndexPopup = () => {
                   
                   <FormRow>
                     <div>
-                      <Label>Results Font Size</Label>
-                      <Description>Control the size of text in the results panel</Description>
+                      <Label>{getMessage("resultsFontSizeLabel")}</Label>
+                      <Description>{getMessage("resultsFontSizeDesc")}</Description>
                     </div>
                     <Select 
-                      value={settings?.customization?.fontSize || 'medium'} 
+                      value={settings?.customization?.fontSize} 
                       onChange={(e) => updateSettings('fontSize', e.target.value)}
                       style={{ width: '120px' }}
                     >
-                      <option value="x-small">X-Small</option>
-                      <option value="small">Small</option>
-                      <option value="medium">Medium</option>
-                      <option value="large">Large</option>
-                      <option value="x-large">X-Large</option>
-                      <option value="xx-large">XX-Large</option>
+                      <option value="x-small">{getMessage("fontSizeXSmall")}</option>
+                      <option value="small">{getMessage("fontSizeSmall")}</option>
+                      <option value="medium">{getMessage("fontSizeMedium")}</option>
+                      <option value="large">{getMessage("fontSizeLarge")}</option>
+                      <option value="x-large">{getMessage("fontSizeXLarge")}</option>
+                      <option value="xx-large">{getMessage("fontSizeXXLarge")}</option>
                     </Select>
                   </FormRow>
                   
@@ -1626,32 +1774,32 @@ const IndexPopup = () => {
                   
                   <FormRow>
                     <div>
-                      <Label>Popup Animation</Label>
-                      <Description>Animation when the popup appears</Description>
+                      <Label>{getMessage("popupAnimationLabel")}</Label>
+                      <Description>{getMessage("popupAnimationDesc")}</Description>
                     </div>
                     <Select 
-                      value={settings?.customization?.popupAnimation || 'slide'} 
+                      value={settings?.customization?.popupAnimation} 
                       onChange={(e) => updateSettings('popupAnimation', e.target.value)}
                       style={{ width: '120px' }}
                     >
-                      <option value="fade">Fade</option>
-                      <option value="slide">Slide</option>
-                      <option value="scale">Scale</option>
-                      <option value="none">None</option>
+                      <option value="fade">{getMessage("popupAnimationOptionFade")}</option>
+                      <option value="slide">{getMessage("popupAnimationOptionSlide")}</option>
+                      <option value="scale">{getMessage("popupAnimationOptionScale")}</option>
+                      <option value="none">{getMessage("popupAnimationOptionNone")}</option>
                     </Select>
                   </FormRow>
                   
                   <SectionDivider />
                   
-                  {(settings?.customization?.layoutMode || 'floating') === 'floating' && (
+                  {(settings?.customization?.layoutMode) === 'floating' && (
                     <>
                       <FormRow>
                         <div>
-                          <Label>Popup Margin</Label>
-                          <Description>Distance from viewport edges in floating mode</Description>
+                          <Label>{getMessage("popupMarginLabel")}</Label>
+                          <Description>{getMessage("popupMarginDesc")}</Description>
                         </div>
                         <Select 
-                          value={settings?.customization?.popupMargin || '8'} 
+                          value={settings?.customization?.popupMargin} 
                           onChange={(e) => updateSettings('popupMargin', parseInt(e.target.value))}
                           style={{ width: '120px' }}
                         >
@@ -1671,8 +1819,8 @@ const IndexPopup = () => {
                   
                   <FormRow>
                     <div>
-                      <Label>Radical Focus Mode</Label>
-                      <Description>Blur background when viewing results</Description>
+                      <Label>{getMessage("radicalFocusLabel")}</Label>
+                      <Description>{getMessage("radicalFocusDesc")}</Description>
                     </div>
                     <ToggleContainer>
                       <ToggleInput 
@@ -1688,8 +1836,8 @@ const IndexPopup = () => {
                   
                   <FormRow>
                     <div>
-                      <Label>Persistent Highlighting</Label>
-                      <Description>Keep text highlighted after closing popup</Description>
+                      <Label>{getMessage("persistentHighlightingLabel")}</Label>
+                      <Description>{getMessage("keepHighlightedTextDesc")}</Description>
                     </div>
                     <ToggleContainer>
                       <ToggleInput 
@@ -1700,6 +1848,40 @@ const IndexPopup = () => {
                       <ToggleSlider />
                     </ToggleContainer>
                   </FormRow>
+                  
+                  <SectionDivider />
+                  
+                  <FormRow>
+                    <div>
+                      <Label>{getMessage("languageLabel")}</Label>
+                      <Description>{getMessage("languageDesc")}</Description>
+                    </div>
+                    <div style={{ width: '160px' }}>
+                      <LanguageSelector 
+                        onChange={(newLocale) => {
+                          // Change the locale using the useLocale hook
+                          changeLocale(newLocale).then(() => {
+                            // Show notification that language has been changed
+                            addToast({
+                              type: 'success',
+                              title: getMessage('languageChanged'),
+                              message: getMessage('languageChangeMessage'),
+                              duration: 3000
+                            });
+                          }).catch(error => {
+                            console.error('Error changing locale:', error);
+                            addToast({
+                              type: 'error',
+                              title: getMessage('languageChangeError'),
+                              message: getMessage('languageChangeErrorMessage'),
+                              duration: 5000
+                            });
+                          });
+                        }} 
+                        compact={true}
+                      />
+                    </div>
+                  </FormRow>
                 </div>
               </Section>
             </>
@@ -1708,27 +1890,27 @@ const IndexPopup = () => {
           {/* Feedback */}
           {activeTab === 'feedback' && (
             <Section>
-              <SectionTitle>Provide Feedback</SectionTitle>
-              <Description>Help us improve the extension by sharing your experience</Description>
+              <SectionTitle>{getMessage("feedbackTitle")}</SectionTitle>
+              <Description>{getMessage("feedbackDesc")}</Description>
               
               <div style={{ background: '#333333', borderRadius: '8px', padding: '20px', marginTop: '16px' }}>
                 <FormGroup>
-                  <Label htmlFor="feedback-type" style={{ marginBottom: '8px' }}>Feedback Type</Label>
-                  <Description style={{ marginBottom: '8px' }}>Select the type of feedback you'd like to provide</Description>
+                  <Label htmlFor="feedback-type" style={{ marginBottom: '8px' }}>{getMessage("feedbackTypeLabel")}</Label>
+                  <Description style={{ marginBottom: '8px' }}>{getMessage("feedbackTypeDesc")}</Description>
                   <Select id="feedback-type" defaultValue="general">
-                    <option value="general">General Feedback</option>
-                    <option value="bug">Bug Report</option>
-                    <option value="feature">Feature Request</option>
-                    <option value="other">Other</option>
+                    <option value="general">{getMessage("feedbackTypeGeneral")}</option>
+                    <option value="bug">{getMessage("feedbackTypeBug")}</option>
+                    <option value="feature">{getMessage("feedbackTypeFeature")}</option>
+                    <option value="other">{getMessage("feedbackTypeOther")}</option>
                   </Select>
                 </FormGroup>
                 
                 <FormGroup style={{ marginTop: '16px' }}>
-                  <Label htmlFor="feedback-content" style={{ marginBottom: '8px' }}>Your Feedback</Label>
-                  <Description style={{ marginBottom: '8px' }}>Tell us what you think or describe the issue you're experiencing...</Description>
+                  <Label htmlFor="feedback-content" style={{ marginBottom: '8px' }}>{getMessage("feedbackContentLabel")}</Label>
+                  <Description style={{ marginBottom: '8px' }}>{getMessage("feedbackContentDesc")}</Description>
                   <textarea 
                     id="feedback-content" 
-                    placeholder="Type your feedback here..."
+                    placeholder={getMessage("feedbackContentPlaceholder")}
                     style={{
                       width: "100%",
                       backgroundColor: theme.dark.content,
@@ -1744,9 +1926,9 @@ const IndexPopup = () => {
                 </FormGroup>
                 
                 <FormGroup style={{ marginTop: '16px' }}>
-                  <Label htmlFor="feedback-email" style={{ marginBottom: '8px' }}>Email (optional)</Label>
-                  <Description style={{ marginBottom: '8px' }}>Leave your email if you'd like us to follow up</Description>
-                  <Input id="feedback-email" type="email" placeholder="your@email.com" />
+                  <Label htmlFor="feedback-email" style={{ marginBottom: '8px' }}>{getMessage("feedbackEmailLabel")}</Label>
+                  <Description style={{ marginBottom: '8px' }}>{getMessage("feedbackEmailDesc")}</Description>
+                  <Input id="feedback-email" type="email" placeholder={getMessage("feedbackEmailPlaceholder")} />
                 </FormGroup>
                 
                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
@@ -1754,7 +1936,7 @@ const IndexPopup = () => {
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M2 21l.66-3.97a9 9 0 1115.38-6.13A9 9 0 0116.95 21H2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    Submit Feedback
+                    {getMessage("feedbackSubmit")}
                   </Button>
                 </div>
               </div>
@@ -1764,20 +1946,20 @@ const IndexPopup = () => {
           {/* Privacy Policy */}
           {activeTab === 'privacy' && (
             <Section>
-              <SectionTitle>Privacy Policy</SectionTitle>
-              <Description>How we handle your data and protect your privacy</Description>
+              <SectionTitle>{getMessage("privacyTitle")}</SectionTitle>
+              <Description>{getMessage("privacyDesc")}</Description>
               
               <div style={{ background: '#333333', borderRadius: '8px', padding: '20px', marginTop: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" strokeWidth="1.5" stroke="currentColor" style={{ marginRight: '12px', color: '#2DCA6E' }}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
                   </svg>
-                  <h3 style={{ fontSize: '18px', fontWeight: 600, margin: 0, color: '#FFFFFF' }}>Zero Data Collection</h3>
+                  <h3 style={{ fontSize: '18px', fontWeight: 600, margin: 0, color: '#FFFFFF' }}>{getMessage("zeroDataCollection")}</h3>
                 </div>
                 
                 <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)', lineHeight: '1.6', marginBottom: '24px' }}>
                   <p style={{ margin: '0 0 16px 0' }}>
-                    LightUp does not collect, store, or track any personal information. All processing happens locally or directly with your chosen AI service.
+                    {getMessage("privacyMainText")}
                   </p>
                 </div>
 
@@ -1787,10 +1969,10 @@ const IndexPopup = () => {
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#2DCA6E' }}>
                         <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>Local Storage</span>
+                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>{getMessage("localStorage")}</span>
                     </div>
                     <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                      Settings and API keys stored securely in your browser only
+                      {getMessage("localStorageDesc")}
                     </p>
                   </div>
 
@@ -1799,10 +1981,10 @@ const IndexPopup = () => {
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#0078D4' }}>
                         <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>Direct Processing</span>
+                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>{getMessage("directProcessing")}</span>
                     </div>
                     <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                      Text sent directly to AI services - no intermediaries
+                      {getMessage("directProcessingDesc")}
                     </p>
                   </div>
 
@@ -1812,10 +1994,10 @@ const IndexPopup = () => {
                         <path d="M18.364 5.636L16.95 7.05A7 7 0 1019 12h2a9 9 0 11-2.636-6.364z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
-                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>No Tracking</span>
+                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>{getMessage("noTracking")}</span>
                     </div>
                     <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                      No analytics, cookies, or behavior monitoring
+                      {getMessage("noTrackingDesc")}
                     </p>
                   </div>
 
@@ -1825,10 +2007,10 @@ const IndexPopup = () => {
                         <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         <rect x="8" y="2" width="8" height="4" rx="1" ry="1" stroke="currentColor" strokeWidth="2" fill="none"/>
                       </svg>
-                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>Your Control</span>
+                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>{getMessage("yourControl")}</span>
                     </div>
                     <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                      Full control over your data and settings
+                      {getMessage("yourControlDesc")}
                     </p>
                   </div>
                 </div>
@@ -1842,7 +2024,7 @@ const IndexPopup = () => {
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    Full Policy
+                    {getMessage("fullPolicy")}
                   </Button>
                   <Button 
                     variant="default" 
@@ -1853,7 +2035,7 @@ const IndexPopup = () => {
                       <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    Contact
+                    {getMessage("contact")}
                   </Button>
                 </div>
               </div>
@@ -1864,38 +2046,38 @@ const IndexPopup = () => {
           {/* Advanced Settings */}
           {activeTab === 'advanced' && (
             <Section>
-              <SectionTitle>Advanced Settings</SectionTitle>
-              <Description>Configure advanced features and API options</Description>
+              <SectionTitle>{getMessage("advancedSettingsTitle")}</SectionTitle>
+              <Description>{getMessage("advancedSettingsDesc")}</Description>
               
               <div style={{ background: '#333333', borderRadius: '8px', padding: '20px', marginTop: '16px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '16px' }}>API Configuration</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '16px' }}>{getMessage("apiConfigTitle")}</h3>
                 
                 <FormGroup>
-                  <Label htmlFor="api-key" style={{ marginBottom: '8px' }}>API Key</Label>
-                  <Description style={{ marginBottom: '8px' }}>Enter your API key for custom processing</Description>
-                  <Input id="api-key" type="password" placeholder="Enter your API key" />
+                  <Label htmlFor="api-key" style={{ marginBottom: '8px' }}>{getMessage("apiKeyLabel")}</Label>
+                  <Description style={{ marginBottom: '8px' }}>{getMessage("apiKeyDesc")}</Description>
+                  <Input id="api-key" type="password" placeholder={getMessage("apiKeyPlaceholder")} />
                 </FormGroup>
                 
                 <FormGroup style={{ marginTop: '16px' }}>
-                  <Label htmlFor="api-endpoint" style={{ marginBottom: '8px' }}>API Endpoint</Label>
-                  <Description style={{ marginBottom: '8px' }}>Custom endpoint URL (advanced users only)</Description>
-                  <Input id="api-endpoint" type="text" placeholder="https://api.example.com/v1" />
+                  <Label htmlFor="api-endpoint" style={{ marginBottom: '8px' }}>{getMessage("apiEndpointLabel")}</Label>
+                  <Description style={{ marginBottom: '8px' }}>{getMessage("apiEndpointDesc")}</Description>
+                  <Input id="api-endpoint" type="text" placeholder={getMessage("apiEndpointPlaceholder")} />
                 </FormGroup>
                 
                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
-                  <Button variant="primary">Save API Settings</Button>
+                  <Button variant="primary">{getMessage("saveApiSettings")}</Button>
                 </div>
               </div>
               
               <SectionDivider />
               
               <div style={{ marginTop: '16px' }}>
-                <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '16px' }}>Advanced Options</h3>
+                <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '16px' }}>{getMessage("advancedOptionsTitle")}</h3>
                 
                 <FormRow>
                   <div>
-                    <Label>Use Page Context for Better Answers</Label>
-                    <Description>Enable deeper page context for better results</Description>
+                    <Label>{getMessage("pageContextLabel")}</Label>
+                    <Description>{getMessage("pageContextDesc")}</Description>
                   </div>
                   <ToggleContainer>
                     <ToggleInput type="checkbox" />
@@ -1907,14 +2089,14 @@ const IndexPopup = () => {
                 
                 <FormRow>
                   <div>
-                    <Label>Maximum Characters to Send</Label>
-                    <Description>Truncate selected text after this number of characters before sending to the AI</Description>
+                    <Label>{getMessage("maxCharsLabel")}</Label>
+                    <Description>{getMessage("maxCharsDesc")}</Description>
                   </div>
                   <Select defaultValue="4000" style={{ width: '120px' }}>
-                    <option value="2000">2,000</option>
-                    <option value="4000">4,000</option>
-                    <option value="8000">8,000</option>
-                    <option value="16000">16,000</option>
+                    <option value="2000">{getMessage("chars2000")}</option>
+                    <option value="4000">{getMessage("chars4000")}</option>
+                    <option value="8000">{getMessage("chars8000")}</option>
+                    <option value="16000">{getMessage("chars16000")}</option>
                   </Select>
                 </FormRow>
                 
@@ -1925,13 +2107,13 @@ const IndexPopup = () => {
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    Prompt Templates
+                    {getMessage("promptTemplates")}
                   </Button>
                   <Button variant="default" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
-                    Export Settings
+                    {getMessage("exportSettings")}
                   </Button>
                 </div>
               </div>

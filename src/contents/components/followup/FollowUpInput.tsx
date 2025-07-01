@@ -41,7 +41,7 @@ export const FollowUpInput = React.memo(({
     padding: '1px 8px',
     display: 'block' as const,
     transition: 'opacity 0.2s ease, height 0.1s ease',
-          fontSize: '16px',
+    fontSize: '16px',
     textAlign: 'left' as const,
   }), [themedStyles.input, isAskingFollowUp, INITIAL_HEIGHT, fontSizes]);
 

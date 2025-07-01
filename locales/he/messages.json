@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - הערות אינטליגנטיות מבוססות בינה מלאכותית. סיכום, תרגום ועוד",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "הערות גאוניות לכל דף באינטרנט. מופעל על ידי בינה מלאכותית להסבר, סיכום, ניתוח, תרגום ועוד.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "ברוכים הבאים ל-LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "סיכום",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "הסבר",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "תרגום",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "ניתוח",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "הגדרות",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "שפה",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "בחר את השפה המועדפת עליך",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "שמור",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "בטל",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "מופעל",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "מושבת",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "שלח משוב",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "טוען...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "שימושים חינמיים שנותרו",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "בחירת מצב",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "הגדר מצבים",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "עבור להנחיות",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "הסתר הגדרות מצב",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "הסתר הגדרות",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "הצג מידע על אתר",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "הצג סמל אתר וכותרת בתוצאות",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "הצג טקסט שנבחר",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "הצג את הטקסט שבחרת בתוצאות",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "הצג כפתור 'בינה מלאכותית מיידית'",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "הוסף כפתור צף 'בינה מלאכותית מיידית' המסכם או מסביר את כל הדף בלחיצה אחת",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "מצב ללא הסחות דעת",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "מסתיר ממשק משתמש לא חיוני ומעמעם את הדף מאחורי LightUp כדי שתוכל להתמקד בתשובה של הבינה המלאכותית",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "שמור טקסט מודגש לאחר סגירת חלון קופץ",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "שמור טקסט מודגש לאחר סגירת חלון קופץ",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "הצג כפתור פעולה בבחירת טקסט",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "הצג כפתור קטן כאשר טקסט מודגש",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "פתיחה אוטומטית של LightUp בבחירת טקסט",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "פותח את LightUp באופן אוטומטי בכל פעם שאתה בוחר טקסט",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "הדגשה מתמשכת",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "קיצורי מקשים",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "השתמש בקיצורי מקשים אלה כדי לגשת במהירות לתכונות LightUp",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "החלף למצב הסבר",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "החלף למצב סיכום",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "החלף למצב ניתוח",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "החלף למצב תרגום",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "פתח חלון קופץ במצב חופשי",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "לאחר הגדרת המצב באמצעות קיצור מקשים, בחר טקסט כלשהו ו-LightUp יופיע עם המצב שבחרת.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "מתגים לתכונות",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "קיצורי מקשים להפעלה וכיבוי של תכונות",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "הפעלה/כיבוי של LightUp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "הפעלה/כיבוי מצב מיקוד רדיקלי",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "החלפה בין ערכת נושא בהירה/כהה",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "איפוס כל קיצורי המקשים",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "שחזר את כל קיצורי המקשים לערכים המוגדרים כברירת מחדל",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "אפס",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "שאל כל דבר",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "הגדר בורר מצבים (בחר עד 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "מצבים אלה יופיעו בבוחר המצבים שלך. לחץ כדי להפעיל/לכבות.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "פעולות זמינות",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "חופשי",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "לוגו LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp כבוי כרגע",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "הקש על המתג בכותרת או על הכפתור למטה כדי להפעיל את LightUp ולגשת לכל התכונות.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "הפעל LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "אוטו → אנגלית",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "כללי",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "קיצורי מקשים",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "הגדרות מתקדמות",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "פרטיות",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "מדיניות פרטיות",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "אתר אינטרנט",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "דרג אותנו",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "משוב",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "עזור לנו לשפר את LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "סוג משוב",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "בחר את סוג המשוב שברצונך לספק",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "משוב כללי",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "דיווח באג",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "בקשת תכונה",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "אחר",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "המשוב שלך",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "ספר לנו מה אתה חושב או תאר את הבעיה שאתה נתקל בה...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "הקלד את המשוב שלך כאן...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "דוא\"ל (אופציונלי)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "השאיר את הדוא\"ל שלך אם תרצה שנעקוב אחר העניין",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "שלח משוב",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "צבע הדגשה",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "בחר את הצבע להדגשת טקסט",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "ברירת מחדל",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "צהוב",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "כתום",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "כחול",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "ירוק",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "סגול",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "ורוד",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "פרטיות ונתונים",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "הפרטיות שלך היא בראש סדר העדיפויות שלנו",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "איסוף אפס נתונים",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp מכבד את פרטיותך ומטפל בנתונים שלך באופן אחראי.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "אחסון מקומי",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "כל ההגדרות שלך מאוחסנות באופן מקומי במכשיר שלך",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "עיבוד ישיר",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "טקסט מעובד ישירות מבלי לאחסן",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "ללא מעקב",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "אנחנו לא עוקבים אחר הגלישה שלך או מאחסנים נתונים אישיים",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "השליטה שלך",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "כל ההגדרות והנתונים נותרים בשליטתך",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "מדיניות מלאה",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "יצירת קשר",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "שמירה נכשלה",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "הייתה שגיאה בשמירת ההגדרות שלך. אנא נסה שוב.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "הגדרות נשמרו",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "השנויים שלך נשמרו בעת החלפת מקטעים.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "סגור הודעה",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "הפסק קריאה בקול רם",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "קרא טקסט בקול רם",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "סיכום",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "הסבר",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "תרגום",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "ניתוח",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "שוחח על",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "אפשרויות בחירה",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "שימוש יומי",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "ערכת נושא",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "בחר את ערכת הנושא הצבעונית המועדפת עליך עבור התוסף",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "ערכת נושא כהה",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "ערכת נושא בהירה",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "ברירת מחדל של המערכת",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "שפה שונתה",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "ה-UI יעודכן כדי לשקף את בחירת השפה שלך",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "שגיאה",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "לא ניתן לשנות את השפה",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "שוליים של חלון קופץ",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "מרחק מקצוות צג במצב צף",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "הגדרות תרגום",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "השתמש בהקשר הדף לתשובות טובות יותר",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "הפעל הקשר דף עמוק יותר לתוצאות טובות יותר",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "מראה",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "משוב",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "פריסה ותצוגה",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "התאם אישית את הפריסה והמראה של התוסף",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "מצב פריסה",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "צף",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "סרגל צד",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "מרכז",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "גודל גופן של תוצאות",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "שלוט בגודל הטקסט בחלון תוצאות",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "X-קטן",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "קטן",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "בינוני",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "גדול",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "X-גדול",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "XX-גדול",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "אנימציה של חלון קופץ",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "אנימציה כאשר חלון הקופץ מופיע",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "היעלמות הדרגתית",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "החלקה",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "קנה מידה",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "ללא",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "מצב מיקוד רדיקלי",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "טשטוש רקע בעת צפייה בתוצאות",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(נדרש)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "מחיר:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "גודל:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "הכתובת הועתקה ללוח!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "מגבלה שנותרה:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "איפוס ב:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "שמירה אוטומטית נכשלה",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "השנויים שלך לא נשמרו באופן אוטומטי. אנא שמור ידנית.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "טעינה נכשלה",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "לא ניתן לטעון את ההגדרות שלך. שימוש בהגדרות ברירת מחדל.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "טוען מידע על שימוש...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "מודל נבחר אוטומטית",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "נבחר אוטומטית {0} מכיוון שסיפקת מפתח API של Gemini.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "נבחר אוטומטית {0} מכיוון שסיפקת מפתח API של Grok.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "נבחר אוטומטית {0} עבור הגדרת Ollama שלך.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(פונקציה לא מוצגת)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(תבנית דינמית - משתנה בהתאם לטקסט שבחרת)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "הערות אינטרנט מבוססות בינה מלאכותית",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "גרסה:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "מפתח:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "אתר אינטרנט:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "סיכומים מיידיים",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "תרגום בזמן אמת",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "מודלים מתקדמים של בינה מלאכותית",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "צ'אט אינטראקטיבי",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "איסוף אפס נתונים",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "אחסון מקומי",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "הגרסה העדכנית ביותר עם יכולות משופרות וזמני תגובה מהירים יותר",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "גרסה קלה במשקל הממוטבת ליעילות ומהירות",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "מודל ניסיוני המתמקד במשימות חשיבה וניתוח",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "גרסה יציבה עם ביצועים מאוזנים",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "מודל מהיר יותר וקטן יותר לתגובות מהירות",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "גרסה כמתת 8 סיביות לעיבוד יעיל",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "מודל Grok-3 סטנדרטי",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "2.00$ ל-1M אסימונים",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "וריאנט קל משקל",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1.00$ ל-1M אסימונים",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3 הממוטב לעיכוב",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "2.50$ ל-1M אסימונים",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "וריאנט מיני + מהיר",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1.50$ ל-1M אסימונים",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "הבנייה העדכנית ביותר של Grok-2",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1.80$ ל-1M אסימונים",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "המודל החזק ביותר של Llama 2, הטוב ביותר למשימות מורכבות",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70 מיליארד פרמטרים",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "המודל העדכני ביותר של DeepSeek עם יכולות חשיבה משופרות",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67 מיליארד פרמטרים",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "מודל בעל ביצועים גבוהים של מומחים מעורבים",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47 מיליארד פרמטרים",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "ביצועים מאוזנים ושימוש במשאבים",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13 מיליארד פרמטרים",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "מודל יעיל להוראות",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7 מיליארד פרמטרים",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "מופעל עבור שיחות טבעיות",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7 מיליארד פרמטרים",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "גרסה קלה יותר של DeepSeek עם חשיבה טובה",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7 מיליארד פרמטרים",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "מודל קל משקל למשימות בסיסיות",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3 מיליארד פרמטרים",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "קומפקטי אך חזק לגודלו",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2.7 מיליארד פרמטרים",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "מופעל עבור אינטראקציות צ'אט",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7 מיליארד פרמטרים",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "בטא",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "כללי",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "מודלי בינה מלאכותית",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "תבניות הנחיות",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "מראה",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "אודות",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "הגדרות כלליות",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "תצורת מודל בינה מלאכותית",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "מראה והתאמה אישית",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "תבניות הנחיות",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "אודות LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "הצג את הטקסט שבחרת בתוצאות",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "הצג סמל אתר וכותרת בתוצאות",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "שמור טקסט מודגש לאחר סגירת חלון קופץ",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "פתיחה אוטומטית של LightUp בבחירת טקסט",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "פותח את LightUp באופן אוטומטי בכל פעם שאתה בוחר טקסט",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "מודעות להקשר",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "השתמש בהקשר הדף כדי לספק תשובות טובות יותר ורלוונטיות יותר",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "בחירת מנוע בינה מלאכותית",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "בחר סוג מודל בינה מלאכותית",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "בחר באיזו שירות בינה מלאכותית תרצה להשתמש כדי ליצור תגובות",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "בסיסי (חינמי, מוגבל)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (נדרש מפתח API)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok מאת xAI (נדרש מפתח API)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "מקומי/Ollama (מאוחסן בעצמי)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "הודעת פרטיות נתונים",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "בעת שימוש במדרגה בסיסית, הטקסט שנבחר והקשר הדף נשלחים לשרתים שלנו לעיבוד. איננו מאחסנים נתונים אלה לצמיתות.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "לפרטיות מלאה, שקול להשתמש במפתח API שלך עם Google Gemini, Grok, או מודל מקומי.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "תצורת Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "מפתח API של Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "הזן את מפתח ה-API של Google AI Studio",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "קבל את מפתח ה-API החינמי שלך מ-Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "בחר מודל Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "בחר באיזה מודל Google Gemini להשתמש כדי ליצור תגובות",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "תצורת Grok מאת xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "מפתח API של xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "הזן את מפתח ה-API של xAI",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "קבל את מפתח ה-API שלך מ-xAI. בקר ב-{0} כדי להתחיל.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "בחר מודל Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "בחר באיזה מודל Grok להשתמש כדי ליצור תגובות",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "תצורה מקומית/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "כתובת URL של שרת Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "בחר מודל מקומי",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "בחר באיזה מודל להשתמש מהתקנת Ollama שלך",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "הגדרות תגובה",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "אורך תגובה מרבי",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "מספר מרבי של אסימונים (מילים/תווים) בתגובה של הבינה המלאכותית",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "מצב הנחיה",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "בחר באיזה סוג הנחיה תרצה להתאים אישית",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "הנחיה של מערכת",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "הנחיה זו מגדירה כיצד הבינה המלאכותית צריכה להתנהג ולהגיב",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "תבנית הנחיה של משתמש",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "תבנית זו משמשת לעיצוב בקשות משתמשים לבינה המלאכותית",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "ערוך",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "שמור",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "איפוס לברירת מחדל",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "אפס את הנחיות מצב {0} בחזרה לערכי ברירת המחדל המקוריים שלהם",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "אפס לברירת מחדל",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "איפוס מוצלח",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "הנחיה זו משתמשת בלוגיקה דינמית ואינה ניתנת לעריכה",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "כיצד להחיל את התבניות המותאמות אישית שלך:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "ההנחיות המותאמות אישית שלך ישמשו באופן אוטומטי כאשר תבחר טקסט ותבחר את המצב המתאים\nשינויים ייכנסו לתוקף באופן מיידי - אין צורך בהפעלה מחדש\nאתה יכול לאפס כל הנחיה בחזרה לערכי ברירת מחדל באמצעות לחצן האיפוס",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "נושא ומראה",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "ערכת צבעים",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "ערכת נושא כהה",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "ערכת נושא בהירה",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "ברירת מחדל של המערכת",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "גודל גופן",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "התאם את גודל הטקסט בתוצאות החלון הקופץ",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "צבע הדגשה",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "בחר את הצבע להדגשת טקסט שנבחר",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "בחר כיצד חלון הקופץ יופיע בדף",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "צף",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "סרגל צד",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "מרכז",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "אפקט אנימציה כאשר חלון הקופץ מופיע",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "היעלמות הדרגתית",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "החלקה",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "קנה מידה",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "ללא",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "הגדרות אנימציה",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp הוא תוסף דפדפן המופעל על ידי בינה מלאכותית המספק סיכומים מיידיים, הסברים, תרגומים וניתוחים לכל טקסט באינטרנט.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "קישורים",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "קישורים ומשאבים שימושיים",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "בקרו באתר האינטרנט",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "דרגו בחנות Chrome",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "נקה את כל הנתונים",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "הסבר",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "סיכום",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "ניתוח",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "תרגום",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "חינם",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "פרטי הנחיה",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "צפה והתאם אישית את ההנחיות המשמשות למצב זה",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "קבל סיכומים מיידיים של כל טקסט בלחיצה אחת",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "תרגם טקסט לכל שפה באופן מיידי",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "בחר בין מודלים מרובים של בינה מלאכותית, כולל GPT, Gemini ומודלים מקומיים",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "קיים שיחות עם בינה מלאכותית על התוכן שאתה קורא",
+    "description": "Description for interactive chat feature"
+  }
+}

@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState, useRef, useMemo } from "react"
 import { Storage } from "@plasmohq/storage"
 // Animation imports removed
 import styled from "@emotion/styled"
@@ -8,9 +8,10 @@ import type { Settings, ModelType, GeminiModel, GrokModel, LocalModel, Mode } fr
 import { useRateLimit } from "~hooks/useRateLimit"
 import ErrorMessage from "~components/common/ErrorMessage"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "../utils/constants"
-import { useSettings } from "~hooks/useSettings"
-
-// Import enhanced notification components
+import { getMessage } from "~utils/i18n";
+import { useLocale } from "~hooks/useLocale"
+import LanguageSelector from "~components/LanguageSelector";
+import SavedSuccessIndicator from "~components/SavedSuccessIndicator";
 import {
   type ToastNotification,
   ToastContainer,
@@ -26,131 +27,155 @@ import {
   EnhancedSaveButton
 } from "~components/options/NotificationComponents"
 
+// Reusable component for required field labels
+const RequiredLabel = () => (
+  <span style={{ color: '#E74C3C', fontSize: '12px', marginLeft: '8px' }}>
+    {getMessage("requiredFieldLabel")}
+  </span>
+)
+
+// Note: SavedSuccessIndicator is now imported from components
+
 // Import the options-specific CSS file for fonts only
 import "./options-style.css"
 
 import logoUrl from '../../assets/icon.png';
 
+// 2. Add useLocaleStore import after existing imports
+import { useLocaleStore } from "~hooks/useLocaleStore";
+
 const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
   {
     value: "gemini-2.0-flash",
-    label: "Gemini 2.0 Flash",
-    description: "Latest version with improved capabilities and faster response times"
+    label: getMessage("gemini20FlashLabel"),
+    description: getMessage("gemini20FlashDesc")
   },
   {
     value: "gemini-2.0-flash-lite-preview-02-05",
-    label: "Gemini 2.0 Flash-Lite",
-    description: "Lightweight version optimized for efficiency and speed"
+    label: getMessage("gemini20FlashLiteLabel"),
+    description: getMessage("gemini20FlashLiteDesc")
   },
   {
     value: "gemini-2.0-flash-thinking-exp-01-21",
-    label: "Gemini 2.0 Flash Thinking",
-    description: "Experimental model focused on reasoning and analytical tasks"
+    label: getMessage("gemini20FlashThinkingLabel"),
+    description: getMessage("gemini20FlashThinkingDesc")
   },
   {
     value: "gemini-1.5-pro",
-    label: "Gemini 1.5 Pro",
-    description: "Stable version with balanced performance"
+    label: getMessage("gemini15ProLabel"),
+    description: getMessage("gemini15ProDesc")
   },
   {
     value: "gemini-1.5-flash",
-    label: "Gemini 1.5 Flash",
-    description: "Faster, smaller model for quick responses"
+    label: getMessage("gemini15FlashLabel"),
+    description: getMessage("gemini15FlashDesc")
   },
   {
     value: "gemini-1.5-flash-8b",
-    label: "Gemini 1.5 Flash-8B",
-    description: "8-bit quantized version for efficient processing"
+    label: getMessage("gemini15Flash8BLabel"),
+    description: getMessage("gemini15Flash8BDesc")
   }
 ];
 
 const GROK_MODELS: { value: GrokModel; label: string; description: string; price: string }[] = [
   {
-    value: "grok-2",
-    label: "Grok 2",
-    description: "Standard text model with balanced performance",
-    price: "$2.00 per 1M tokens"
+    value: "grok-3",
+    label: getMessage("grok3Label"),
+    description: getMessage("grok3Desc"),
+    price: getMessage("grok3Price")
   },
   {
-    value: "grok-2-latest",
-    label: "Grok 2 Latest",
-    description: "Latest version with improved capabilities",
-    price: "$2.00 per 1M tokens"
+    value: "grok-3-mini",
+    label: getMessage("grok3MiniLabel"),
+    description: getMessage("grok3MiniDesc"),
+    price: getMessage("grok3MiniPrice")
   },
   {
-    value: "grok-beta",
-    label: "Grok Beta",
-    description: "Beta version with experimental features",
-    price: "$5.00 per 1M tokens"
+    value: "grok-3-fast",
+    label: getMessage("grok3FastLabel"),
+    description: getMessage("grok3FastDesc"),
+    price: getMessage("grok3FastPrice")
+  },
+  {
+    value: "grok-3-mini-fast",
+    label: getMessage("grok3MiniFastLabel"),
+    description: getMessage("grok3MiniFastDesc"),
+    price: getMessage("grok3MiniFastPrice")
+  },
+  {
+    value: "grok-2-1212",
+    label: getMessage("grok21212Label"),
+    description: getMessage("grok21212Desc"),
+    price: getMessage("grok21212Price")
   }
 ];
 
 const LOCAL_MODELS: { value: LocalModel; label: string; description: string; size: string }[] = [
   {
     value: "llama-2-70b-chat",
-    label: "Llama 2 70B Chat",
-    description: "Most powerful Llama 2 model, best for complex tasks",
-    size: "70B parameters"
+    label: getMessage("llama270bLabel"),
+    description: getMessage("llama270bDesc"),
+    size: getMessage("llama270bSize")
   },
   {
     value: "deepseek-v3",
-    label: "DeepSeek V3",
-    description: "Latest DeepSeek model with enhanced reasoning capabilities",
-    size: "67B parameters"
+    label: getMessage("deepseekV3Label"),
+    description: getMessage("deepseekV3Desc"),
+    size: getMessage("deepseekV3Size")
   },
   {
     value: "mixtral-8x7b-instruct",
-    label: "Mixtral 8x7B Instruct",
-    description: "High-performance mixture of experts model",
-    size: "47B parameters"
+    label: getMessage("mixtral8x7bLabel"),
+    description: getMessage("mixtral8x7bDesc"),
+    size: getMessage("mixtral8x7bSize")
   },
   {
     value: "llama-2-13b-chat",
-    label: "Llama 2 13B Chat",
-    description: "Balanced performance and resource usage",
-    size: "13B parameters"
+    label: getMessage("llama213bLabel"),
+    description: getMessage("llama213bDesc"),
+    size: getMessage("llama213bSize")
   },
   {
     value: "mistral-7b-instruct",
-    label: "Mistral 7B Instruct",
-    description: "Efficient instruction-following model",
-    size: "7B parameters"
+    label: getMessage("mistral7bLabel"),
+    description: getMessage("mistral7bDesc"),
+    size: getMessage("mistral7bSize")
   },
   {
     value: "neural-chat-7b-v3-1",
-    label: "Neural Chat V3.1",
-    description: "Optimized for natural conversations",
-    size: "7B parameters"
+    label: getMessage("neuralChatV31Label"),
+    description: getMessage("neuralChatV31Desc"),
+    size: getMessage("neuralChatV31Size")
   },
   {
     value: "deepseek-v3-base",
-    label: "DeepSeek V3 Base",
-    description: "Lighter version of DeepSeek with good reasoning",
-    size: "7B parameters"
+    label: getMessage("deepseekV3BaseLabel"),
+    description: getMessage("deepseekV3BaseDesc"),
+    size: getMessage("deepseekV3BaseSize")
   },
   {
     value: "llama-3.2-3b-instruct",
-    label: "Llama 3.2 3B Instruct",
-    description: "Lightweight model for basic tasks",
-    size: "3B parameters"
+    label: getMessage("llama32_3bLabel"),
+    description: getMessage("llama32_3bDesc"),
+    size: getMessage("llama32_3bSize")
   },
   {
     value: "phi-2",
-    label: "Phi-2",
-    description: "Compact but powerful for its size",
-    size: "2.7B parameters"
+    label: getMessage("phi2Label"),
+    description: getMessage("phi2Desc"),
+    size: getMessage("phi2Size")
   },
   {
     value: "openchat-3.5",
-    label: "OpenChat 3.5",
-    description: "Optimized for chat interactions",
-    size: "7B parameters"
+    label: getMessage("openchat35Label"),
+    description: getMessage("openchat35Desc"),
+    size: getMessage("openchat35Size")
   }
 ];
 
 const copyToClipboard = (text) => {
   navigator.clipboard.writeText(text).then(() => {
-    alert('Address copied to clipboard!');
+    alert(getMessage("addressCopiedToClipboard"));
   }, (err) => {
     console.error('Could not copy text: ', err);
   });
@@ -268,8 +293,8 @@ const RateLimitDisplay = ({ rateLimitRemaining, rateLimitReset }) => {
 
   return (
     <div className="lu-flex lu-items-center lu-justify-between lu-text-xs lu-text-gray-500 lu-mt-2">
-      <span>Rate Limit Remaining: {rateLimitRemaining}</span>
-      <span>Reset in: {formatTime(rateLimitReset)}</span>
+      <span>{getMessage("rateLimitRemaining")} {rateLimitRemaining}</span>
+      <span>{getMessage("resetIn")} {formatTime(rateLimitReset)}</span>
     </div>
   );
 };
@@ -425,10 +450,10 @@ const ModelOption = ({ model, selected, onChange, showPrice = false, showSize = 
       <ModelTitle>{model.label}</ModelTitle>
       <ModelDescription>{model.description}</ModelDescription>
       {showPrice && model.price && (
-        <ModelMetadata>Price: {model.price}</ModelMetadata>
+        <ModelMetadata>{getMessage("price")} {model.price}</ModelMetadata>
       )}
       {showSize && model.size && (
-        <ModelMetadata>Size: {model.size}</ModelMetadata>
+        <ModelMetadata>{getMessage("size")}{model.size}</ModelMetadata>
       )}
     </ModelContentContainer>
   </ModelOptionLabel>
@@ -560,40 +585,6 @@ const SectionContainer = styled.div`
 ;
     flex-direction: column;
     gap: 6px;
-`
-
-const Button = styled.button<{ variant?: 'primary' | 'destructive' | 'default' }>`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px 16px;
-  border-radius: 30px; /* More rounded buttons to match popup */
-  font-size: 15px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  border: none;
-  
-  background-color: ${props => {
-    if (props.variant === 'primary') return '#0078D4';
-    if (props.variant === 'destructive') return '#E74C3C';
-    return '#444444';
-  }};
-  
-  color: #FFFFFF;
-  
-  &:hover {
-    background-color: ${props => {
-      if (props.variant === 'primary') return '#106EBE';
-      if (props.variant === 'destructive') return '#C0392B';
-      return '#505050';
-    }};
-  }
-  
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.3);
-  }
 `
 
 const SubContainer = styled.div`
@@ -744,6 +735,57 @@ const CloseButton = styled.button`
   
   &:hover {
     background: rgba(255, 255, 255, 0.1);
+  }
+`
+
+const Button = styled.button<{ variant?: 'primary' | 'secondary' | 'destructive'; disabled?: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
+  opacity: ${props => props.disabled ? 0.7 : 1};
+  
+  ${props => {
+    switch (props.variant) {
+      case 'destructive':
+        return `
+          background-color: #E74C3C;
+          color: white;
+          &:hover {
+            background-color: ${props.disabled ? '#E74C3C' : '#C0392B'};
+          }
+        `;
+      case 'secondary':
+        return `
+          background-color: #444444;
+          color: white;
+          border: 1px solid #555555;
+          &:hover {
+            background-color: ${props.disabled ? '#444444' : '#555555'};
+          }
+        `;
+      case 'primary':
+      default:
+        return `
+          background-color: #0078D4;
+          color: white;
+          &:hover {
+            background-color: ${props.disabled ? '#0078D4' : '#0069BA'};
+          }
+        `;
+    }
+  }}
+  
+  svg {
+    width: 16px;
+    height: 16px;
   }
 `
 
@@ -942,6 +984,7 @@ const FontSizeButton = styled.button<{ selected: boolean }>`
   }
   
   .size-label {
+  }
 `
 
 const LayoutButton = styled.button<{ selected?: boolean }>`
@@ -1097,8 +1140,8 @@ const useAutoSave = (
       setAutoSaveStatus('error');
       addToast({
         type: 'error',
-        title: 'Auto-save Failed',
-        message: 'Your changes were not saved automatically. Please save manually.',
+        title: getMessage('autoSaveFailedTitle'),
+        message: getMessage('autoSaveFailedMessage'),
         persistent: true
       });
     }
@@ -1119,6 +1162,149 @@ const useAutoSave = (
 
 function IndexOptions() {
   const storage = useRef(new Storage()).current;
+  const { locale, changeLocale } = useLocale();
+  // Subscribe to messages to re-render when translations load/change
+  const messages = useLocaleStore((state) => state.messages);
+
+  // Localized model option definitions – rebuilt whenever locale/messages change
+  const GEMINI_MODELS = useMemo(
+    () => [
+      {
+        value: "gemini-2.0-flash",
+        label: getMessage("gemini20FlashLabel"),
+        description: getMessage("gemini20FlashDesc")
+      },
+      {
+        value: "gemini-2.0-flash-lite-preview-02-05",
+        label: getMessage("gemini20FlashLiteLabel"),
+        description: getMessage("gemini20FlashLiteDesc")
+      },
+      {
+        value: "gemini-2.0-flash-thinking-exp-01-21",
+        label: getMessage("gemini20FlashThinkingLabel"),
+        description: getMessage("gemini20FlashThinkingDesc")
+      },
+      {
+        value: "gemini-1.5-pro",
+        label: getMessage("gemini15ProLabel"),
+        description: getMessage("gemini15ProDesc")
+      },
+      {
+        value: "gemini-1.5-flash",
+        label: getMessage("gemini15FlashLabel"),
+        description: getMessage("gemini15FlashDesc")
+      },
+      {
+        value: "gemini-1.5-flash-8b",
+        label: getMessage("gemini15Flash8BLabel"),
+        description: getMessage("gemini15Flash8BDesc")
+      }
+    ],
+    [locale, messages]
+  );
+
+  const GROK_MODELS = useMemo(
+    () => [
+      {
+        value: "grok-3",
+        label: getMessage("grok3Label"),
+        description: getMessage("grok3Desc"),
+        price: getMessage("grok3Price")
+      },
+      {
+        value: "grok-3-mini",
+        label: getMessage("grok3MiniLabel"),
+        description: getMessage("grok3MiniDesc"),
+        price: getMessage("grok3MiniPrice")
+      },
+      {
+        value: "grok-3-fast",
+        label: getMessage("grok3FastLabel"),
+        description: getMessage("grok3FastDesc"),
+        price: getMessage("grok3FastPrice")
+      },
+      {
+        value: "grok-3-mini-fast",
+        label: getMessage("grok3MiniFastLabel"),
+        description: getMessage("grok3MiniFastDesc"),
+        price: getMessage("grok3MiniFastPrice")
+      },
+      {
+        value: "grok-2-1212",
+        label: getMessage("grok21212Label"),
+        description: getMessage("grok21212Desc"),
+        price: getMessage("grok21212Price")
+      }
+    ],
+    [locale, messages]
+  );
+
+  const LOCAL_MODELS = useMemo(
+    () => [
+      {
+        value: "llama-2-70b-chat",
+        label: getMessage("llama270bLabel"),
+        description: getMessage("llama270bDesc"),
+        size: getMessage("llama270bSize")
+      },
+      {
+        value: "deepseek-v3",
+        label: getMessage("deepseekV3Label"),
+        description: getMessage("deepseekV3Desc"),
+        size: getMessage("deepseekV3Size")
+      },
+      {
+        value: "mixtral-8x7b-instruct",
+        label: getMessage("mixtral8x7bLabel"),
+        description: getMessage("mixtral8x7bDesc"),
+        size: getMessage("mixtral8x7bSize")
+      },
+      {
+        value: "llama-2-13b-chat",
+        label: getMessage("llama213bLabel"),
+        description: getMessage("llama213bDesc"),
+        size: getMessage("llama213bSize")
+      },
+      {
+        value: "mistral-7b-instruct",
+        label: getMessage("mistral7bLabel"),
+        description: getMessage("mistral7bDesc"),
+        size: getMessage("mistral7bSize")
+      },
+      {
+        value: "neural-chat-7b-v3-1",
+        label: getMessage("neuralChatV31Label"),
+        description: getMessage("neuralChatV31Desc"),
+        size: getMessage("neuralChatV31Size")
+      },
+      {
+        value: "deepseek-v3-base",
+        label: getMessage("deepseekV3BaseLabel"),
+        description: getMessage("deepseekV3BaseDesc"),
+        size: getMessage("deepseekV3BaseSize")
+      },
+      {
+        value: "llama-3.2-3b-instruct",
+        label: getMessage("llama32_3bLabel"),
+        description: getMessage("llama32_3bDesc"),
+        size: getMessage("llama32_3bSize")
+      },
+      {
+        value: "phi-2",
+        label: getMessage("phi2Label"),
+        description: getMessage("phi2Desc"),
+        size: getMessage("phi2Size")
+      },
+      {
+        value: "openchat-3.5",
+        label: getMessage("openchat35Label"),
+        description: getMessage("openchat35Desc"),
+        size: getMessage("openchat35Size")
+      }
+    ],
+    [locale, messages]
+  );
+
   const [settings, setSettings] = useState<Settings>({
     modelType: "basic",
     maxTokens: 2048,
@@ -1132,7 +1318,7 @@ function IndexOptions() {
       showSelectedText: false,
       theme: "light",
       radicallyFocus: false,
-              fontSize: "16px",
+      fontSize: "16px",
       highlightColor: "default",
       popupAnimation: "scale",
       persistHighlight: false,
@@ -1140,6 +1326,10 @@ function IndexOptions() {
       activationMode: "manual",
       enablePDFSupport: false,
       showTextSelectionButton: true
+    },
+    customPrompts: {
+      systemPrompts: {},
+      userPrompts: {}
     }
   });
 
@@ -1184,7 +1374,8 @@ function IndexOptions() {
               activationMode: savedSettings.customization?.activationMode ?? "manual",
               enablePDFSupport: savedSettings.customization?.enablePDFSupport ?? false,
               showTextSelectionButton: savedSettings.customization?.showTextSelectionButton ?? true,
-              showWebsiteInfo: savedSettings.customization?.showWebsiteInfo ?? true
+              showWebsiteInfo: savedSettings.customization?.showWebsiteInfo ?? true,
+              sidebarPinned: savedSettings.customization?.sidebarPinned ?? false
             }
           };
           setSettings(loadedSettings);
@@ -1195,8 +1386,8 @@ function IndexOptions() {
         setError("Failed to load settings");
         addToast({
           type: 'error',
-          title: 'Loading Failed',
-          message: 'Could not load your settings. Using defaults.'
+          title: getMessage('loadingFailedTitle'),
+          message: getMessage('loadingFailedMessage')
         });
       }
     };
@@ -1258,8 +1449,8 @@ function IndexOptions() {
       
       addToast({
         type: 'info',
-        title: 'Model Auto-Selected',
-        message: `Automatically selected ${GEMINI_MODELS[0].label} since you provided a Gemini API key.`,
+        title: getMessage('modelAutoSelectedTitle'),
+        message: getMessage('geminiModelAutoSelectedMessage', GEMINI_MODELS[0].label),
         duration: 4000
       });
     }
@@ -1271,8 +1462,8 @@ function IndexOptions() {
       
       addToast({
         type: 'info',
-        title: 'Model Auto-Selected',
-        message: `Automatically selected ${GROK_MODELS[0].label} since you provided a Grok API key.`,
+        title: getMessage('modelAutoSelectedTitle'),
+        message: getMessage('grokModelAutoSelectedMessage', GROK_MODELS[0].label),
         duration: 4000
       });
     }
@@ -1284,8 +1475,8 @@ function IndexOptions() {
       
       addToast({
         type: 'info',
-        title: 'Model Auto-Selected',
-        message: `Automatically selected ${LOCAL_MODELS[0].label} for your Ollama setup.`,
+        title: getMessage('modelAutoSelectedTitle'),
+        message: getMessage('localModelAutoSelectedMessage', LOCAL_MODELS[0].label),
         duration: 4000
       });
     }
@@ -1368,7 +1559,7 @@ function IndexOptions() {
         
         addToast({
           type: 'error',
-          title: 'Configuration Incomplete',
+          title: getMessage('configurationIncompleteTitle'),
           message: validation.error,
           persistent: true
         });
@@ -1413,8 +1604,8 @@ function IndexOptions() {
       // Show error notification
       addToast({
         type: 'error',
-        title: 'Save Failed',
-        message: 'There was an error saving your settings. Please try again.',
+        title: getMessage('saveFailedTitle'),
+        message: getMessage('saveFailedMessage'),
         persistent: true
       });
     }
@@ -1546,8 +1737,8 @@ function IndexOptions() {
       
       addToast({
         type: 'success',
-        title: 'Settings Saved',
-        message: 'Your changes were saved when switching sections.',
+        title: getMessage('settingsSavedTitle'),
+        message: getMessage('settingsSavedMessage'),
         duration: 2000
       });
     }
@@ -1560,7 +1751,7 @@ function IndexOptions() {
       <Header>
         <Logo />
         <VersionBadgeContainer>
-          <BetaBadge>BETA</BetaBadge>
+          <BetaBadge>{getMessage("betaBadgeLabel")}</BetaBadge>
           <VersionNumber>v1.1.15</VersionNumber>
         </VersionBadgeContainer>
         {/* <CloseButton onClick={() => window.close()}>
@@ -1579,7 +1770,7 @@ function IndexOptions() {
 </svg>
 
             </SidebarIcon>
-            General
+            {getMessage("generalTabLabel")}
           </SidebarItem>
           <SidebarItem active={activeTab === "model"} onClick={() => setActiveTab("model")}>
             <SidebarIcon>
@@ -1588,15 +1779,15 @@ function IndexOptions() {
 </svg>
 
             </SidebarIcon>
-            Model Settings
+            {getMessage("modelSettingsTabLabel")}
           </SidebarItem>
           <SidebarItem active={activeTab === "prompts"} onClick={() => setActiveTab("prompts")}>
             <SidebarIcon>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
               </svg>
             </SidebarIcon>
-            Prompt Templates
+            {getMessage("promptTemplatesTabLabel")}
           </SidebarItem>
           <SidebarItem active={activeTab === "customization"} onClick={() => setActiveTab("customization")}>
             <SidebarIcon>
@@ -1604,32 +1795,32 @@ function IndexOptions() {
   <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" />
 </svg>
             </SidebarIcon>
-            Appearance
+            {getMessage("appearanceTabLabel")}
           </SidebarItem>
 
          
           
           <SidebarItem active={activeTab === "about"} onClick={() => setActiveTab("about")}>
             <SidebarIcon>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM11 15H13V17H11V15ZM11 7H13V13H11V7Z" fill="currentColor"/>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
               </svg>
             </SidebarIcon>
-            About
+            {getMessage("aboutTabLabel")}
           </SidebarItem>
         </Sidebar>
         <ContentArea>
           {activeTab === "general" && (
             <div key="general">
-               <SettingsCard title="General Settings" icon={null}>
+               <SettingsCard title={getMessage("generalSettingsTitle")} icon={null}>
                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '24px' }}>
                    <SectionContainer>
                      {/* <SectionHeader>Display Options</SectionHeader> */}
                      
                      <FormRow>
                        <div>
-                         <Label>Show Selected Text</Label>
-                         <Description>Display the selected text in the popup for context</Description>
+                         <Label>{getMessage("showSelectedTextLabel")}</Label>
+                         <Description>{getMessage("showSelectedTextDescription")}</Description>
                        </div>
                        <ToggleContainer>
                          <ToggleInput 
@@ -1645,8 +1836,8 @@ function IndexOptions() {
                      
                      <FormRow>
                        <div>
-                         <Label>Show Website Info</Label>
-                         <Description>Display website favicon and title in the popup for context</Description>
+                         <Label>{getMessage("showWebsiteInfoLabel")}</Label>
+                         <Description>{getMessage("showWebsiteInfoDescription")}</Description>
                        </div>
                        <ToggleContainer>
                          <ToggleInput 
@@ -1662,8 +1853,8 @@ function IndexOptions() {
                      
                      <FormRow>
                        <div>
-                         <Label>Keep Highlighted Text After Popup Closes</Label>
-                         <Description>Keep the highlight on the selected text after the popup closes</Description>
+                         <Label>{getMessage("keepHighlightedTextLabel")}</Label>
+                         <Description>{getMessage("keepHighlightedTextDescription")}</Description>
                        </div>
                        <ToggleContainer>
                          <ToggleInput 
@@ -1679,8 +1870,8 @@ function IndexOptions() {
                      
                      <FormRow>
                        <div>
-                         <Label>Auto-Open LightUp on Text Selection</Label>
-                         <Description>Opens LightUp automatically whenever you select text</Description>
+                         <Label>{getMessage("autoOpenLightUpLabel")}</Label>
+                         <Description>{getMessage("autoOpenLightUpDescription")}</Description>
                        </div>
                        <ToggleContainer>
                          <ToggleInput 
@@ -1703,8 +1894,8 @@ function IndexOptions() {
                      
                      <FormRow>
                         <div>
-                          <Label>Context Awareness</Label>
-                          <Description>Use broader page context to improve responses</Description>
+                          <Label>{getMessage("contextAwarenessLabel")}</Label>
+                          <Description>{getMessage("contextAwarenessDescription")}</Description>
                         </div>
                         <ToggleContainer>
                           <ToggleInput 
@@ -1720,8 +1911,8 @@ function IndexOptions() {
 
                       <FormRow>
                         <div>
-                          <Label>Show 'Instant AI' Button</Label>
-                          <Description>Add a floating 'Instant AI' button that summarizes or explains the whole page with one click</Description>
+                          <Label>{getMessage("showInstantAIButtonLabel")}</Label>
+                          <Description>{getMessage("showInstantAIButtonDesc")}</Description>
                         </div>
                         <ToggleContainer>
                           <ToggleInput 
@@ -1737,8 +1928,8 @@ function IndexOptions() {
                       
                       <FormRow>
                         <div>
-                          <Label>Show Action Button on Text Selection</Label>
-                          <Description>Display a small button when text is highlighted</Description>
+                          <Label>{getMessage("showActionButtonLabel")}</Label>
+                          <Description>{getMessage("showActionButtonDesc")}</Description>
                         </div>
                         <ToggleContainer>
                           <ToggleInput 
@@ -1751,8 +1942,8 @@ function IndexOptions() {
                       </FormRow>
                       <SectionDivider />
                       <div style={{ marginTop: '0', marginBottom: '16px' }}>
-                        <Label>Layout Mode</Label>
-                        <Description>Choose how LightUp appears on the page</Description>
+                        <Label>{getMessage("layoutModeLabel")}</Label>
+                        <Description>{getMessage("layoutModeDesc")}</Description>
                         
                         <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
                           <LayoutButton 
@@ -1767,7 +1958,7 @@ function IndexOptions() {
                                 <circle cx="12" cy="16" r="1" stroke="white" strokeWidth="2" />
                               </svg>
                             </div>
-                            <div className="layout-label">Floating</div>
+                            <div className="layout-label">{getMessage("layoutOptionFloatingLabel")}</div>
                           </LayoutButton>
                           
                           <LayoutButton 
@@ -1780,7 +1971,7 @@ function IndexOptions() {
                                 <line x1="15" y1="3" x2="15" y2="21" stroke="white" strokeWidth="2" />
                               </svg>
                             </div>
-                            <div className="layout-label">Sidebar</div>
+                            <div className="layout-label">{getMessage("layoutOptionSidebarLabel")}</div>
                           </LayoutButton>
                           
                           <LayoutButton 
@@ -1793,7 +1984,7 @@ function IndexOptions() {
                                 <rect x="6" y="8" width="12" height="8" rx="1" stroke="white" strokeWidth="2" />
                               </svg>
                             </div>
-                            <div className="layout-label">Centered</div>
+                            <div className="layout-label">{getMessage("layoutOptionCenteredLabel")}</div>
                           </LayoutButton>
                         </div>
                       </div>
@@ -1810,13 +2001,13 @@ function IndexOptions() {
 
           {activeTab === "model" && (
             <div key="model">
-              <SettingsCard title="Model Settings" icon={null}>
+               <SettingsCard title={getMessage("modelSettingsTitle")} icon={null}>
                 <SectionContainer>
-                  <SectionHeader>AI Engine Selection</SectionHeader>
+                  <SectionHeader>{getMessage("aiEngineSelectionHeader")}</SectionHeader>
                   <SubContainer>
                     <FormGroup>
-                      <FormLabel htmlFor="modelType">Choose Model Type</FormLabel>
-                      <FormDescription>Select which AI provider to use for generating responses.</FormDescription>
+                      <FormLabel htmlFor="modelType">{getMessage("chooseModelTypeLabel")}</FormLabel>
+                      <FormDescription>{getMessage("chooseModelTypeDescription")}</FormDescription>
                       <FormSelect
                         id="modelType"
                         value={settings.modelType}
@@ -1843,10 +2034,10 @@ function IndexOptions() {
                           // Note: No auto-save here - wait for API key to be provided
                         }}
                       >
-                        <option value="basic">Basic (Gemini Flash)</option>
-                        <option value="gemini">Gemini (Google)</option>
-                        <option value="grok">Grok (xAI)</option>
-                        <option value="local">Local (Ollama)</option>
+                        <option value="basic">{getMessage("basicModelTypeOption")}</option>
+                        <option value="gemini">{getMessage("geminiModelTypeOption")}</option>
+                        <option value="grok">{getMessage("grokModelTypeOption")}</option>
+                        <option value="local">{getMessage("localModelTypeOption")}</option>
                       </FormSelect>
                     </FormGroup>
                   </SubContainer>
@@ -1867,7 +2058,7 @@ function IndexOptions() {
                         gap: '12px'
                       }}>
                         <div style={{
-                          fontSize: '20px',
+                          fontSize:'20px',
                           flexShrink: 0,
                           marginTop: '2px'
                         }}>
@@ -1876,31 +2067,29 @@ function IndexOptions() {
                         <div>
                           <h4 style={{
                             color: '#FFC107',
-                            fontSize: '14px',
+                            fontSize:'14px',
                             fontWeight: '600',
                             margin: '0 0 8px 0',
                             textTransform: 'uppercase',
                             letterSpacing: '0.5px'
                           }}>
-                            Data Privacy Notice
+                            {getMessage("dataPrivacyNoticeTitle")}
                           </h4>
                           <p style={{
                             color: '#E0E0E0',
-                            fontSize: '13px',
+                            fontSize:'13px',
                             lineHeight: '1.5',
                             margin: '0 0 8px 0'
                           }}>
-                            <strong>Please be careful with your data.</strong> The Basic tier uses a shared proxy service to access AI models. 
-                            While we don't store your data, your content will be processed through our servers before reaching the AI provider.
+                            {getMessage("basicTierPrivacyWarningPrimary")}
                           </p>
                           <p style={{
                             color: '#B0B0B0',
-                            fontSize: '12px',
+                            fontSize:'12px',
                             lineHeight: '1.4',
                             margin: '0'
                           }}>
-                            For maximum privacy and security, consider upgrading to a direct API model (Gemini, Grok, or Local) where your data 
-                            goes directly to the provider or stays on your device.
+                            {getMessage("basicTierPrivacyWarningSecondary")}
                           </p>
                         </div>
                       </div>
@@ -1910,16 +2099,12 @@ function IndexOptions() {
 
                 {settings.modelType === "gemini" && (
                   <SectionContainer>
-                    <SectionHeader>Gemini Configuration</SectionHeader>
+                    <SectionHeader>{getMessage("geminiConfigurationHeader")}</SectionHeader>
                     <SubContainer>
                       <FormGroup>
                         <FormLabel htmlFor="geminiApiKey">
-                          Gemini API Key
-                          {!settings.geminiApiKey && (
-                            <span style={{ color: '#E74C3C', fontSize: '12px', marginLeft: '8px' }}>
-                              (Required)
-                            </span>
-                          )}
+                          {getMessage("geminiApiKeyLabel")}
+                          {!settings.geminiApiKey && <RequiredLabel />}
                         </FormLabel>
                         <FormInput
                           type="password"
@@ -1934,21 +2119,21 @@ function IndexOptions() {
                             }
                           }}
                           onBlur={handleSave}
-                          placeholder="Enter your Gemini API key"
+                          placeholder={getMessage("geminiApiKeyPlaceholder")}
                           style={{
                             borderColor: !settings.geminiApiKey ? '#E74C3C' : undefined
                           }}
                         />
                         <FormDescription>
-                          Get your API key from <a href="https://ai.google.dev/" target="_blank" rel="noopener noreferrer" style={{ color: '#93C5FD', textDecoration: 'none' }}>Google AI Studio</a>.
+                          {getMessage("geminiApiKeyDescription", "<a href=\"https://ai.google.dev/\" target=\"_blank\" rel=\"noopener noreferrer\" style={{ color: '#93C5FD', textDecoration: 'none' }}>Google AI Studio</a>")}
                         </FormDescription>
                       </FormGroup>
                     </SubContainer>
                     
                     <SubContainer>
                       <FormGroup>
-                        <FormLabel>Gemini Model</FormLabel>
-                        <FormDescription>Select which Gemini model version to use.</FormDescription>
+                        <FormLabel>{getMessage("geminiModelLabel")}</FormLabel>
+                        <FormDescription>{getMessage("geminiModelDescription")}</FormDescription>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px' }}>
                           {GEMINI_MODELS.map((model) => (
                             <ModelOption
@@ -1972,16 +2157,12 @@ function IndexOptions() {
 
                 {settings.modelType === "grok" && (
                   <SectionContainer>
-                    <SectionHeader>Grok Configuration</SectionHeader>
+                    <SectionHeader>{getMessage("grokConfigurationHeader")}</SectionHeader>
                     <SubContainer>
                       <FormGroup>
                         <FormLabel htmlFor="xaiApiKey">
-                          xAI API Key
-                          {!settings.xaiApiKey && (
-                            <span style={{ color: '#E74C3C', fontSize: '12px', marginLeft: '8px' }}>
-                              (Required)
-                            </span>
-                          )}
+                          {getMessage("xaiApiKeyLabel")}
+                          {!settings.xaiApiKey && <RequiredLabel />}
                         </FormLabel>
                         <FormInput
                           type="password"
@@ -1996,21 +2177,21 @@ function IndexOptions() {
                             }
                           }}
                           onBlur={handleSave}
-                          placeholder="Enter your xAI API key"
+                          placeholder={getMessage("xaiApiKeyPlaceholder")}
                           style={{
                             borderColor: !settings.xaiApiKey ? '#E74C3C' : undefined
                           }}
                         />
                         <FormDescription>
-                          Get your API key from <a href="https://x.ai/api" target="_blank" rel="noopener noreferrer" style={{ color: '#93C5FD', textDecoration: 'none' }}>x.ai</a>.
+                          {getMessage("xaiApiKeyDescription", "<a href=\"https://x.ai/api\" target=\"_blank\" rel=\"noopener noreferrer\" style={{ color: '#93C5FD', textDecoration: 'none' }}>x.ai</a>")}
                         </FormDescription>
                       </FormGroup>
                     </SubContainer>
                     
                     <SubContainer>
                       <FormGroup>
-                        <FormLabel>Grok Model</FormLabel>
-                        <FormDescription>Select which Grok model version to use.</FormDescription>
+                        <FormLabel>{getMessage("grokModelLabel")}</FormLabel>
+                        <FormDescription>{getMessage("grokModelDescription")}</FormDescription>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px' }}>
                           {GROK_MODELS.map((model) => (
                             <ModelOption
@@ -2035,38 +2216,34 @@ function IndexOptions() {
 
                 {settings.modelType === "local" && (
                   <SectionContainer>
-                    <SectionHeader>Ollama Configuration</SectionHeader>
+                    <SectionHeader>{getMessage("ollamaConfigurationHeader")}</SectionHeader>
                     <SubContainer>
                       <FormGroup>
                         <FormLabel htmlFor="serverUrl">
-                          Ollama Server URL
-                          {!settings.serverUrl && (
-                            <span style={{ color: '#E74C3C', fontSize: '12px', marginLeft: '8px' }}>
-                              (Required)
-                            </span>
-                          )}
+                          {getMessage("ollamaServerUrlLabel")}
+                          {!settings.serverUrl && <RequiredLabel />}
                         </FormLabel>
                         <FormInput
                           type="text"
                           id="serverUrl"
-                          value={settings.serverUrl || ""}
+                          value={settings.serverUrl}
                           onChange={handleServerUrlChange}
                           onBlur={handleSave}
-                          placeholder="http://localhost:11434"
+                          placeholder={getMessage("ollamaServerUrlPlaceholder")}
                           style={{
                             borderColor: !settings.serverUrl ? '#E74C3C' : undefined
                           }}
                         />
                         <FormDescription>
-                          The URL of your Ollama server. Default is <code style={{ backgroundColor: '#444444', padding: '2px 4px', borderRadius: '4px' }}>http://localhost:11434</code>.
+                          {getMessage("ollamaServerUrlDescription", "<code style={{ backgroundColor: '#444444', padding: '2px 4px', borderRadius: '4px' }}>http://localhost:11434</code>")}
                         </FormDescription>
                       </FormGroup>
                     </SubContainer>
                     
                     <SubContainer>
                       <FormGroup>
-                        <FormLabel>Local Model</FormLabel>
-                        <FormDescription>Select which local model to use with Ollama.</FormDescription>
+                        <FormLabel>{getMessage("localModelLabel")}</FormLabel>
+                        <FormDescription>{getMessage("localModelDescription")}</FormDescription>
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px' }}>
                           {LOCAL_MODELS.map((model) => (
                             <ModelOption
@@ -2093,11 +2270,11 @@ function IndexOptions() {
 
                 <SectionContainer>
                   
-                  <SectionHeader>Response Settings</SectionHeader>
+                  <SectionHeader>{getMessage("responseSettingsHeader")}</SectionHeader>
                   <SubContainer>
                     <FormGroup>
-                      <FormLabel htmlFor="maxTokens">Max Tokens (Response Length)</FormLabel>
-                      <FormDescription>Maximum number of tokens (words/characters) in the AI's response.</FormDescription>
+                      <FormLabel htmlFor="maxTokens">{getMessage("maxTokensLabel")}</FormLabel>
+                      <FormDescription>{getMessage("maxTokensDescription")}</FormDescription>
                       <FormInput
                         type="number"
                         id="maxTokens"
@@ -2119,15 +2296,15 @@ function IndexOptions() {
 
           {activeTab === "prompts" && (
             <div key="prompts">
-              <SettingsCard title="Prompt Templates" icon={null}>
+              <SettingsCard title={getMessage("promptTemplatesTitle")} icon={null}>
                 <div style={{ marginBottom: '16px' }}>
-                  <FormDescription>Customize the prompts used for different AI actions. Use {'`{{selectedText}}`'} as a placeholder for the text you select on a page.</FormDescription>
+                  <FormDescription>{getMessage("promptTemplatesDescription")}</FormDescription>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '24px' }}>
                   <SectionContainer>
-                    <SectionHeader>Prompt Mode</SectionHeader>
-                    <FormDescription>Choose how LightUp will process your selected text</FormDescription>
+                    <SectionHeader>{getMessage("promptModeHeader")}</SectionHeader>
+                    <FormDescription>{getMessage("promptModeDescription")}</FormDescription>
                     
                     <SectionDivider />
                     
@@ -2136,12 +2313,12 @@ function IndexOptions() {
                         selected={activePromptMode === 'explain'}
                         onClick={() => setActivePromptMode('explain')}
                       >
-                        <div style={{ fontSize: '20px', marginBottom: '4px' }}>
+                        <div style={{ fontSize:'20px', marginBottom: '4px' }}>
                           <svg width="24" height="24" viewBox="0 0 89 99" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M2.55007 23.009C0.994225 23.8875 0.0273438 25.5563 0.0273438 27.3624V71.2893C0.0273438 73.1053 0.994225 74.7642 2.55007 75.6427C10.3882 80.0649 34.2363 93.503 41.8389 97.7877C42.5849 98.2049 43.4045 98.416 44.2291 98.416C45.034 98.416 45.8389 98.2147 46.5702 97.8123C54.1727 93.6159 77.9325 80.5213 85.805 76.1777C87.3903 75.309 88.3719 73.6304 88.3719 71.8046V27.3624C88.3719 25.5563 87.405 23.8875 85.8443 23.009C78.0159 18.5967 54.2169 5.18303 46.5849 0.883599C45.8438 0.466416 45.0193 0.255371 44.1996 0.255371C43.3751 0.255371 42.5554 0.466416 41.8143 0.883599C34.1823 5.18303 10.3784 18.5967 2.55007 23.009ZM81.0098 33.3895V70.3224L47.8806 88.5901V51.397L81.0098 33.3895ZM11.0017 26.7931L44.1996 8.07877L77.5791 26.8962L44.1996 45.1344L11.0017 26.7931Z" fill="currentColor"/>
                           </svg>
                         </div>
-                        <div style={{ fontWeight: '500' }}>Explain</div>
+                        <div style={{ fontWeight: '500' }}>{getMessage("explainButtonText")}</div>
                         {activePromptMode === 'explain' && (
                           <div style={{ position: 'absolute', top: '5px', right: '5px', color: '#2DCA6E' }}>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2155,13 +2332,13 @@ function IndexOptions() {
                         selected={activePromptMode === 'summarize'}
                         onClick={() => setActivePromptMode('summarize')}
                       >
-                        <div style={{ fontSize: '20px', marginBottom: '4px' }}>
+                        <div style={{ fontSize:'20px', marginBottom: '4px' }}>
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M4 4h16v16H4V4z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             <path d="M4 8h16M8 4v16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         </div>
-                        <div style={{ fontWeight: '500' }}>Summarize</div>
+                        <div style={{ fontWeight: '500' }}>{getMessage("summarizeButtonText")}</div>
                         {activePromptMode === 'summarize' && (
                           <div style={{ position: 'absolute', top: '5px', right: '5px', color: '#2DCA6E' }}>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2175,12 +2352,12 @@ function IndexOptions() {
                         selected={activePromptMode === 'analyze'}
                         onClick={() => setActivePromptMode('analyze')}
                       >
-                        <div style={{ fontSize: '20px', marginBottom: '4px' }}>
+                        <div style={{ fontSize:'20px', marginBottom: '4px' }}>
                           <svg width="24" height="24" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M35.9064 0.109375C16.194 0.109375 0.136719 16.1667 0.136719 35.8791C0.136719 55.5914 16.194 71.6487 35.9064 71.6487C44.44 71.6487 52.2816 68.6328 58.4391 63.6205L83.5695 95.1014C83.5695 95.1014 89.0738 95.9195 92.4913 92.358C95.9325 88.7694 95.1254 83.5488 95.1254 83.5488L63.6478 58.4117C68.6602 52.2543 71.6761 44.4127 71.6761 35.8791C71.6761 16.1667 55.6188 0.109375 35.9064 0.109375ZM35.9064 7.26397C51.7528 7.26397 64.5215 20.0327 64.5215 35.8791C64.5215 51.7254 51.7528 64.4941 35.9064 64.4941C20.06 64.4941 7.29132 51.7254 7.29132 35.8791C7.29132 20.0327 20.06 7.26397 35.9064 7.26397Z" fill="currentColor"/>
                           </svg>
                         </div>
-                        <div style={{ fontWeight: '500' }}>Analyze</div>
+                        <div style={{ fontWeight: '500' }}>{getMessage("analyzeButtonText")}</div>
                         {activePromptMode === 'analyze' && (
                           <div style={{ position: 'absolute', top: '5px', right: '5px', color: '#2DCA6E' }}>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2194,12 +2371,12 @@ function IndexOptions() {
                         selected={activePromptMode === 'translate'}
                         onClick={() => setActivePromptMode('translate')}
                       >
-                        <div style={{ fontSize: '20px', marginBottom: '4px' }}>
+                        <div style={{ fontSize:'20px', marginBottom: '4px' }}>
                           <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802" />
                           </svg>
                         </div>
-                        <div style={{ fontWeight: '500' }}>Translate</div>
+                        <div style={{ fontWeight: '500' }}>{getMessage("translateButtonText")}</div>
                         {activePromptMode === 'translate' && (
                           <div style={{ position: 'absolute', top: '5px', right: '5px', color: '#2DCA6E' }}>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2213,12 +2390,12 @@ function IndexOptions() {
                         selected={activePromptMode === 'free'}
                         onClick={() => setActivePromptMode('free')}
                       >
-                        <div style={{ fontSize: '20px', marginBottom: '4px' }}>
+                        <div style={{ fontSize:'20px', marginBottom: '4px' }}>
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M8 12h8M12 8v8M12 21a9 9 0 100-18 9 9 0 000 18z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         </div>
-                        <div style={{ fontWeight: '500' }}>Free</div>
+                        <div style={{ fontWeight: '500' }}>{getMessage("freeButtonText")}</div>
                         {activePromptMode === 'free' && (
                           <div style={{ position: 'absolute', top: '5px', right: '5px', color: '#2DCA6E' }}>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2231,23 +2408,16 @@ function IndexOptions() {
                   </SectionContainer>
                   
                   <SectionContainer>
-                    <SectionHeader>Prompt Details</SectionHeader>
-                    <FormDescription>View and customize the selected prompt</FormDescription>
+                    <SectionHeader>{getMessage("promptDetailsHeader")}</SectionHeader>
+                    <FormDescription>{getMessage("promptDetailsDescription")}</FormDescription>
                     
                     <SectionDivider />
                     
                     <div style={{ marginTop: '16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                        <Label>System Prompt</Label>
+                        <Label>{getMessage("systemPromptLabel")}</Label>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          {saveSuccess && (
-                            <div style={{ display: 'flex', alignItems: 'center', fontSize: '14px', fontWeight: 500, color: '#2DCA6E' }}>
-                              <svg style={{ height: '20px', width: '20px', color: '#2DCA6E', marginRight: '6px' }} fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                              </svg>
-                              Saved!
-                            </div>
-                          )}
+                          {saveSuccess && <SavedSuccessIndicator />}
                           <Button
                             variant="primary"
                             onClick={() => {
@@ -2287,11 +2457,11 @@ function IndexOptions() {
                               }
                             }}
                           >
-                            {isEditingSystemPrompt ? 'Save' : 'Edit'}
+                            {isEditingSystemPrompt ? (getMessage("saveButtonText")) : (getMessage("editButtonText"))}
                           </Button>
                         </div>
                       </div>
-                      <Description style={{ marginBottom: '12px' }}>Instructions that guide the AI's behavior</Description>
+                      <Description style={{ marginBottom: '12px' }}>{getMessage("systemPromptDescription")}</Description>
                       
                       {isEditingSystemPrompt ? (
                         <FormTextarea
@@ -2305,7 +2475,7 @@ function IndexOptions() {
                             borderRadius: '8px',
                            
                             fontFamily: 'monospace',
-                            fontSize: '14px',
+                            fontSize:'14px',
                             width: '100%',
                             resize: 'vertical',
                               padding: '19px',
@@ -2319,7 +2489,7 @@ function IndexOptions() {
                           borderRadius: '8px',
                           border: '1px solid #555',
                           color: '#eee',
-                          fontSize: '14px',
+                          fontSize:'14px',
                           fontFamily: 'monospace',
                           whiteSpace: 'pre-wrap',
                           maxHeight: '120px',
@@ -2328,7 +2498,7 @@ function IndexOptions() {
                           lineHeight: '28px'
                         }}>
                           {typeof SYSTEM_PROMPTS[activePromptMode] === 'function' 
-                            ? '(Function not displayed)' 
+                            ? getMessage("functionPromptPlaceholder") 
                             : settings.customPrompts?.systemPrompts?.[activePromptMode] || SYSTEM_PROMPTS[activePromptMode]}
                         </div>
                       )}
@@ -2336,16 +2506,9 @@ function IndexOptions() {
                     
                     <div style={{ marginTop: '24px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
-                        <Label>User Prompt</Label>
+                        <Label>{getMessage("userPromptLabel")}</Label>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          {saveSuccess && (
-                            <div style={{ display: 'flex', alignItems: 'center', fontSize: '14px', fontWeight: 500, color: '#2DCA6E' }}>
-                              <svg style={{ height: '20px', width: '20px', color: '#2DCA6E', marginRight: '6px' }} fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                              </svg>
-                              Saved!
-                            </div>
-                          )}
+                          {saveSuccess && <SavedSuccessIndicator />}
                           <Button
                             variant="primary"
                             onClick={() => {
@@ -2378,18 +2541,18 @@ function IndexOptions() {
                                 const currentPrompt = settings.customPrompts?.userPrompts?.[activePromptMode] || 
                                   (typeof USER_PROMPTS[activePromptMode] !== 'function' ? 
                                    USER_PROMPTS[activePromptMode] as string : 
-                                   'Cannot edit function-based prompts');
+                                   getMessage('cannotEditFunctionPrompt'));
                                 
                                 setEditedUserPrompt(currentPrompt);
                                 setIsEditingUserPrompt(true);
                               }
                             }}
                           >
-                            {isEditingUserPrompt ? 'Save' : 'Edit'}
+                            {isEditingUserPrompt ? (getMessage("saveButtonText")) : (getMessage("editButtonText"))}
                           </Button>
                         </div>
                       </div>
-                      <Description style={{ marginBottom: '12px' }}>Template for how your selection is sent to the AI</Description>
+                      <Description style={{ marginBottom: '12px' }}>{getMessage("userPromptDescription")}</Description>
                       
                       {isEditingUserPrompt ? (
                         <FormTextarea
@@ -2403,7 +2566,7 @@ function IndexOptions() {
                             borderRadius: '8px',
                             
                             fontFamily: 'monospace',
-                            fontSize: '14px',
+                            fontSize:'14px',
                             width: '100%',
                             resize: 'vertical',
                             padding: '19px',
@@ -2417,7 +2580,7 @@ function IndexOptions() {
                           borderRadius: '8px',
                           border: '1px solid #555',
                           color: '#eee',
-                          fontSize: '14px',
+                          fontSize:'14px',
                           fontFamily: 'monospace',
                           whiteSpace: 'pre-wrap',
                           maxHeight: '120px',
@@ -2426,7 +2589,7 @@ function IndexOptions() {
                           lineHeight: '28px'
                         }}>
                           {typeof USER_PROMPTS[activePromptMode] === 'function' 
-                            ? `(Dynamic template - varies based on your selected text)` 
+                            ? getMessage("dynamicTemplatePlaceholder") 
                             : settings.customPrompts?.userPrompts?.[activePromptMode] || USER_PROMPTS[activePromptMode]}
                         </div>
                       )}
@@ -2436,20 +2599,13 @@ function IndexOptions() {
                     <div style={{ marginTop: '32px', padding: '16px', backgroundColor: '#333', borderRadius: '8px', border: '1px solid #444' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                         <div>
-                          <Label>Reset Current Template</Label>
+                          <Label>{getMessage("resetTemplateLabel")}</Label>
                           <Description style={{ marginTop: '4px' }}>
-                            Restore the {activePromptMode} template to its default prompts
+                            {getMessage("resetTemplateDescription", [activePromptMode])}
                           </Description>
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                          {saveSuccess && (
-                            <div style={{ display: 'flex', alignItems: 'center', fontSize: '14px', fontWeight: 500, color: '#2DCA6E' }}>
-                              <svg style={{ height: '20px', width: '20px', color: '#2DCA6E', marginRight: '6px' }} fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                              </svg>
-                              Reset complete!
-                            </div>
-                          )}
+                          {saveSuccess && <SavedSuccessIndicator message={getMessage("resetSuccessText")} />}
                           <Button
                             variant="destructive"
                             onClick={() => {
@@ -2478,7 +2634,7 @@ function IndexOptions() {
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '6px' }}>
                               <path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6h14zM10 11v6M14 11v6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
-                            Reset to Default
+                            {getMessage("resetToDefaultButtonText")}
                           </Button>
                         </div>
                       </div>
@@ -2497,13 +2653,13 @@ function IndexOptions() {
                 borderRadius: '8px',
                 border: '1px solid #555'
               }}>
-                <p style={{ fontSize: '14px', color: '#CCC', margin: '0 0 8px 0' }}>
-                  <strong>How to apply your custom templates:</strong>
+                <p style={{ fontSize:'14px', color: '#CCC', margin: '0 0 8px 0' }}>
+                                          <strong>{getMessage("templateApplicationNote")}</strong>
                 </p>
-                <ul style={{ fontSize: '14px', color: '#CCC', margin: '0', paddingLeft: '16px' }}>
-                  <li style={{ marginBottom: '4px' }}>Custom templates apply to all new conversations</li>
-                  <li style={{ marginBottom: '4px' }}>To apply changes to an existing conversation, close and reopen the popup</li>
-                  <li>For global action button, changes are applied immediately</li>
+                <ul style={{ fontSize:'14px', color: '#CCC', margin: '0', paddingLeft: '16px' }}>
+                                      {(getMessage("templateApplicationInstructions")).split('\n').map((instruction, index) => (
+                      <li key={index} style={{ marginBottom: index < 2 ? '4px' : '0' }}>{instruction}</li>
+                    ))}
                 </ul>
               </div>
             </div>
@@ -2511,13 +2667,13 @@ function IndexOptions() {
 
           {activeTab === "customization" && (
             <div key="customization">
-              <SettingsCard title="Customization" icon={null}>
+              <SettingsCard title={getMessage("customizationTabTitle")} icon={null}>
                 <SectionContainer>
-                  <SectionHeader>Appearance</SectionHeader>
+                  <SectionHeader>{getMessage("appearanceSectionHeader")}</SectionHeader>
                   
                   <div>
-                    <Label>Theme</Label>
-                    <Description>Choose your preferred color theme</Description>
+                    <Label>{getMessage("themeLabel")}</Label>
+                    <Description>{getMessage("themeDescription")}</Description>
                     
                     <div style={{ display: 'flex', gap: '12px', marginTop: '16px' }}>
                       <ThemeButton 
@@ -2529,7 +2685,7 @@ function IndexOptions() {
                         <path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                         </ThemeIcon>
-                        <div>Dark Theme</div>
+                        <div>{getMessage("darkThemeText")}</div>
                       </ThemeButton>
                       
                       <ThemeButton 
@@ -2542,7 +2698,7 @@ function IndexOptions() {
                             <path d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
                         </ThemeIcon>
-                        <div>Light Theme</div>
+                        <div>{getMessage("lightThemeText")}</div>
                       </ThemeButton>
                       
                       <ThemeButton 
@@ -2557,79 +2713,111 @@ function IndexOptions() {
                             <path d="M8 21H16" stroke="white" strokeWidth="2"/>
                           </svg>
                         </ThemeIcon>
-                        <div>System Default</div>
+                        <div>{getMessage("systemDefaultThemeText")}</div>
                       </ThemeButton>
                     </div>
                   </div>
                   
                   <div style={{ marginTop: '32px' }}>
-                    <Label>Font Size</Label>
-                    <Description>Adjust the text size of the LightUp popup content</Description>
+                    <Label>{getMessage("languageLabel")}</Label>
+                    <Description>{getMessage("languageDesc")}</Description>
+                    
+                    <div style={{ marginTop: '16px', maxWidth: '240px' }}>
+                      <LanguageSelector 
+                        onChange={(newLocale) => {
+                          // Change the locale using the useLocale hook
+                          changeLocale(newLocale).then(() => {
+                            // Show notification that language has been changed
+                            addToast({
+                              type: 'success',
+                              title: getMessage('languageChanged'),
+                              message: getMessage('languageChangeMessage'),
+                              duration: 3000
+                            });
+                          }).catch(error => {
+                            console.error('Error changing locale:', error);
+                            addToast({
+                              type: 'error',
+                              title: getMessage('languageChangeError'),
+                              message: getMessage('languageChangeErrorMessage'),
+                              duration: 5000
+                            });
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                  
+                  <SectionDivider />
+                  
+                  <div style={{ marginTop: '32px' }}>
+                    <Label>{getMessage("fontSizeLabel")}</Label>
+                    <Description>{getMessage("fontSizeDescription")}</Description>
                     
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '16px' }}>
                       <FontSizeButton 
                         selected={settings.customization?.fontSize === 'x-small'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'x-small')}
                       >
-                        <div className="size-preview" style={{ fontSize: '13px' }}>Aa</div>
-                        <div className="size-label">X-Small</div>
+                        <div className="size-preview" style={{ fontSize:'13px' }}>Aa</div>
+                        <div className="size-label">{getMessage("fontSizeXSmall")}</div>
                       </FontSizeButton>
                        
                       <FontSizeButton 
                         selected={settings.customization?.fontSize === 'small'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'small')}
                       >
-                        <div className="size-preview" style={{ fontSize: '14px' }}>Aa</div>
-                        <div className="size-label">Small</div>
+                        <div className="size-preview" style={{ fontSize:'14px' }}>Aa</div>
+                        <div className="size-label">{getMessage("fontSizeSmall")}</div>
                       </FontSizeButton>
                        
                       <FontSizeButton 
                         selected={settings.customization?.fontSize === 'medium'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'medium')}
                       >
-                        <div className="size-preview" style={{ fontSize: '16px' }}>Aa</div>
-                        <div className="size-label">Medium</div>
+                        <div className="size-preview" style={{ fontSize:'16px' }}>Aa</div>
+                        <div className="size-label">{getMessage("fontSizeMedium")}</div>
                       </FontSizeButton>
                        
                       <FontSizeButton 
                         selected={settings.customization?.fontSize === 'large'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'large')}
                       >
-                        <div className="size-preview" style={{ fontSize: '18px' }}>Aa</div>
-                        <div className="size-label">Large</div>
+                        <div className="size-preview" style={{ fontSize:'18px' }}>Aa</div>
+                        <div className="size-label">{getMessage("fontSizeLarge")}</div>
                       </FontSizeButton>
                        
                       <FontSizeButton 
                         selected={settings.customization?.fontSize === 'x-large'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'x-large')}
                       >
-                        <div className="size-preview" style={{ fontSize: '21px' }}>Aa</div>
-                        <div className="size-label">X-Large</div>
+                        <div className="size-preview" style={{ fontSize:'21px' }}>Aa</div>
+                        <div className="size-label">{getMessage("fontSizeXLarge")}</div>
                       </FontSizeButton>
 
                       <FontSizeButton 
                         selected={settings.customization?.fontSize === 'xx-large'}
                         onClick={() => handleImmediateSettingUpdate('fontSize', 'xx-large')}
                       >
-                        <div className="size-preview" style={{ fontSize: '23px' }}>Aa</div>
-                        <div className="size-label">XX-Large</div>
+                        <div className="size-preview" style={{ fontSize:'23px' }}>Aa</div>
+                        <div className="size-label">{getMessage("fontSizeXXLarge")}</div>
                       </FontSizeButton>
                     </div>
                   </div>
                   
                   <div style={{ marginTop: '32px' }}>
-                    <Label>Highlight Color</Label>
-                    <Description>Choose the color for text highlighting</Description>
+                    <Label>{getMessage("highlightColorLabel")}</Label>
+                    <Description>{getMessage("highlightColorDescription")}</Description>
                     
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '16px' }}>
                       {[
-                        { value: 'default', label: 'Default', color: 'linear-gradient(45deg, rgb(211, 232, 255), rgb(197, 225, 255))' },
-                        { value: 'yellow', label: 'Yellow', color: '#fff8bc' },
-                        { value: 'orange', label: 'Orange', color: '#FFBF5A' },
-                        { value: 'blue', label: 'Blue', color: '#93C5FD' },
-                        { value: 'green', label: 'Green', color: '#86EFAC' },
-                        { value: 'purple', label: 'Purple', color: '#C4B5FD' },
-                        { value: 'pink', label: 'Pink', color: '#FDA4AF' }
+                        { value: 'default', label: getMessage("colorDefault"), color: 'linear-gradient(45deg, rgb(211, 232, 255), rgb(197, 225, 255))' },
+                        { value: 'yellow', label: getMessage("colorYellow"), color: '#fff8bc' },
+                        { value: 'orange', label: getMessage("colorOrange"), color: '#FFBF5A' },
+                        { value: 'blue', label: getMessage("colorBlue"), color: '#93C5FD' },
+                        { value: 'green', label: getMessage("colorGreen"), color: '#86EFAC' },
+                        { value: 'purple', label: getMessage("colorPurple"), color: '#C4B5FD' },
+                        { value: 'pink', label: getMessage("colorPink"), color: '#FDA4AF' }
                       ].map(colorOption => (
                         <div 
                           key={colorOption.value}
@@ -2649,7 +2837,7 @@ function IndexOptions() {
                               borderRadius: '50%',
                               background: colorOption.color,
                               backgroundColor: colorOption.value === 'default' ? undefined : colorOption.color,
-                              border: colorOption.value === (settings.customization?.highlightColor || 'default') ? `2px solid #2DCA6E` : '2px solid transparent',
+                              border: colorOption.value === (settings.customization?.highlightColor) ? `2px solid #2DCA6E` : '2px solid transparent',
                               cursor: 'pointer',
                               display: 'flex',
                               alignItems: 'center',
@@ -2657,37 +2845,37 @@ function IndexOptions() {
                               transition: 'all 0.2s ease-in-out'
                             }}
                           >
-                            {colorOption.value === (settings.customization?.highlightColor || 'default') && (
+                            {colorOption.value === (settings.customization?.highlightColor) && (
                               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M5 13l4 4L19 7" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                               </svg>
                             )}
                           </div>
-                          <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.8)' }}>{colorOption.label}</span>
+                          <span style={{ fontSize:'12px', color: 'rgba(255, 255, 255, 0.8)' }}>{colorOption.label}</span>
                         </div>
                       ))}
                     </div>
                   </div>
                 </SectionContainer>
                 <SectionContainer>
-                  <SectionHeader>Animation Settings</SectionHeader>
+                  <SectionHeader>{getMessage("animationSettingsHeader")}</SectionHeader>
                   <FormGroup>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <FormLabel htmlFor="popupAnimation">Popup Animation</FormLabel>
+                      <FormLabel htmlFor="popupAnimation">{getMessage("popupAnimationLabel")}</FormLabel>
                       <FormSelect
                         id="popupAnimation"
                         value={settings.customization?.popupAnimation}
                         onChange={(e) => handleImmediateSettingUpdate('popupAnimation', e.target.value)}
                         style={{ minWidth: '140px' }}
                       >
-                        <option value="fade">Fade</option>
-                        <option value="slide">Slide</option>
-                        <option value="scale">Scale</option>
-                        <option value="none">None</option>
+                        <option value="fade">{getMessage("animationFade")}</option>
+                        <option value="slide">{getMessage("animationSlide")}</option>
+                        <option value="scale">{getMessage("animationScale")}</option>
+                        <option value="none">{getMessage("animationNone")}</option>
                       </FormSelect>
                     </div>
                     <FormDescription>
-                      Choose how the popup appears when activated
+                      {getMessage("popupAnimationDescription")}
                     </FormDescription>
                   </FormGroup>
                 </SectionContainer>
@@ -2697,7 +2885,7 @@ function IndexOptions() {
 
           {activeTab === "about" && (
             <div key="about">
-              <SettingsCard title="About LightUp" icon={null}>
+              <SettingsCard title={getMessage("aboutTabTitle")} icon={null}>
                 <SectionContainer>
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
                     <img 
@@ -2712,15 +2900,13 @@ function IndexOptions() {
                       }} 
                     />
                     <div>
-                      <h2 style={{ fontSize: '24px', fontWeight: 700, margin: 0, color: '#FFFFFF' }}>LightUp</h2>
-                      <p style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.7)', margin: '4px 0 0 0' }}>AI-Powered Web Annotations</p>
+                      <h2 style={{ fontSize:'24px', fontWeight: 700, margin: 0, color: '#FFFFFF' }}>LightUp</h2>
+                      <p style={{ fontSize:'16px', color: 'rgba(255, 255, 255, 0.7)', margin: '4px 0 0 0' }}>{getMessage("aboutSubtitle")}</p>
                     </div>
                   </div>
                   
-                  <FormDescription style={{ marginBottom: '24px', fontSize: '15px', lineHeight: '1.6' }}>
-                    Transform your online reading with LightUp, the ultimate Chrome extension for summarizing, translating, and annotating selected text on any webpage. 
-                    Whether you're a student, professional, researcher, or curious learner, LightUp leverages advanced AI to provide instant summaries, 
-                    seamless translations, and insightful annotations right at your fingertips.
+                  <FormDescription style={{ marginBottom: '24px', fontSize:'15px', lineHeight: '1.6' }}>
+                    {getMessage("aboutDescription")}
                   </FormDescription>
                   
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '24px' }}>
@@ -2729,10 +2915,10 @@ function IndexOptions() {
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#2DCA6E' }}>
                           <path d="M4 6h16M4 12h16M4 18h7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '14px' }}>Instant Summaries</span>
+                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize:'14px' }}>{getMessage("featureInstantSummaries")}</span>
                       </div>
-                      <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.75)' }}>
-                        Get concise summaries of selected text to quickly grasp key points
+                      <p style={{ margin: 0, fontSize:'13px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                        {getMessage("featureInstantSummariesDesc")}
                       </p>
                     </div>
 
@@ -2741,10 +2927,10 @@ function IndexOptions() {
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#0078D4' }}>
                           <path d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '14px' }}>Real-Time Translation</span>
+                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize:'14px' }}>{getMessage("featureTranslation")}</span>
                       </div>
-                      <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.75)' }}>
-                        Break language barriers with immediate translations of any selected content
+                      <p style={{ margin: 0, fontSize:'13px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                        {getMessage("featureTranslationDesc")}
                       </p>
                     </div>
 
@@ -2753,10 +2939,10 @@ function IndexOptions() {
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#9C27B0' }}>
                           <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '14px' }}>Advanced AI Models</span>
+                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize:'14px' }}>{getMessage("featureAdvancedModels")}</span>
                       </div>
-                      <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.75)' }}>
-                        Choose from Grok, Gemini, and local models for versatile applications
+                      <p style={{ margin: 0, fontSize:'13px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                        {getMessage("featureAdvancedModelsDesc")}
                       </p>
                     </div>
 
@@ -2765,32 +2951,32 @@ function IndexOptions() {
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#FFC107' }}>
                           <path d="M8 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M19 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9L3 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '14px' }}>Interactive Chat</span>
+                        <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize:'14px' }}>{getMessage("featureInteractiveChat")}</span>
                       </div>
-                      <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.75)' }}>
-                        Engage with chat-style follow-up questions to clarify and expand understanding
+                      <p style={{ margin: 0, fontSize:'13px', color: 'rgba(255, 255, 255, 0.75)' }}>
+                        {getMessage("featureInteractiveChatDesc")}
                       </p>
                     </div>
                   </div>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', fontWeight: 500, minWidth: '80px' }}>Version:</span>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize:'14px', fontWeight: 500, minWidth: '80px' }}>{getMessage("aboutVersion")}</span>
                       <Badge variant="info">v0.1.13</Badge>
                     </div>
                     
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', fontWeight: 500, minWidth: '80px' }}>Developer:</span>
-                      <span style={{ color: '#FFFFFF', fontSize: '14px' }}>Moe Sadiq</span>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize:'14px', fontWeight: 500, minWidth: '80px' }}>{getMessage("aboutDeveloper")}</span>
+                      <span style={{ color: '#FFFFFF', fontSize:'14px' }}>Moe Sadiq</span>
                     </div>
                     
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', fontWeight: 500, minWidth: '80px' }}>Website:</span>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize:'14px', fontWeight: 500, minWidth: '80px' }}>{getMessage("aboutWebsite")}</span>
                       <a 
                         href="https://www.boimaginations.com/lightup" 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        style={{ color: '#93C5FD', textDecoration: 'none', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '6px' }}
+                        style={{ color: '#93C5FD', textDecoration: 'none', fontSize:'14px', display: 'flex', alignItems: 'center', gap: '6px' }}
                         onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
                         onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
                       >
@@ -2802,12 +2988,12 @@ function IndexOptions() {
                     </div>
                     
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px', fontWeight: 500, minWidth: '80px' }}>Contact:</span>
+                      <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize:'14px', fontWeight: 500, minWidth: '80px' }}>{getMessage("contact")}:</span>
                       <a 
                         href="mailto:boimaginations@gmail.com" 
                         target="_blank" 
                         rel="noopener noreferrer" 
-                        style={{ color: '#93C5FD', textDecoration: 'none', fontSize: '14px' }}
+                        style={{ color: '#93C5FD', textDecoration: 'none', fontSize:'14px' }}
                         onMouseOver={(e) => e.currentTarget.style.textDecoration = 'underline'}
                         onMouseOut={(e) => e.currentTarget.style.textDecoration = 'none'}
                       >
@@ -2820,8 +3006,8 @@ function IndexOptions() {
                 <SectionDivider />
 
                 <SectionContainer>
-                  <SectionHeader>Feedback</SectionHeader>
-                  <FormDescription style={{ marginBottom: '16px' }}>Help us improve the extension by sharing your experience</FormDescription>
+                  <SectionHeader>{getMessage("feedbackTitle")}</SectionHeader>
+                  <FormDescription style={{ marginBottom: '16px' }}>{getMessage("feedbackDesc")}</FormDescription>
                   
                   <Button
                     variant="primary"
@@ -2831,27 +3017,27 @@ function IndexOptions() {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" style={{ width: '20px', height: '20px' }}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
                     </svg>
-                    Provide Feedback
+                    {getMessage("feedbackLabel")}
                   </Button>
                 </SectionContainer>
 
                 <SectionDivider />
 
                 <SectionContainer>
-                  <SectionHeader>Privacy Policy</SectionHeader>
-                  <FormDescription style={{ marginBottom: '16px' }}>How we handle your data and protect your privacy</FormDescription>
+                  <SectionHeader>{getMessage("privacyTitle")}</SectionHeader>
+                  <FormDescription style={{ marginBottom: '16px' }}>{getMessage("privacyDesc")}</FormDescription>
                   
                   <div style={{ background: '#333333', borderRadius: '8px', padding: '24px', marginTop: '16px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '24px' }}>
                       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" strokeWidth="1.5" stroke="currentColor" style={{ marginRight: '12px', color: '#2DCA6E' }}>
                         <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
                       </svg>
-                      <h3 style={{ fontSize: '20px', fontWeight: 600, margin: 0, color: '#FFFFFF' }}>Zero Data Collection</h3>
+                      <h3 style={{ fontSize:'20px', fontWeight: 600, margin: 0, color: '#FFFFFF' }}>{getMessage("zeroDataCollectionTitle")}</h3>
                     </div>
                     
-                    <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.6', marginBottom: '28px' }}>
-                      <p style={{ margin: '0 0 20px 0', fontSize: '15px' }}>
-                        LightUp does not collect, store, or track any personal information. All processing happens locally or directly with your chosen AI service.
+                    <div style={{ fontSize:'14px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.6', marginBottom: '28px' }}>
+                      <p style={{ margin: '0 0 20px 0', fontSize:'15px' }}>
+                        {getMessage("privacyMainText")}
                       </p>
                     </div>
 
@@ -2861,10 +3047,10 @@ function IndexOptions() {
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px', color: '#2DCA6E' }}>
                             <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
-                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '16px' }}>Local Storage</span>
+                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize:'16px' }}>{getMessage("localStorageTitle")}</span>
                         </div>
-                        <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
-                          Settings and API keys stored securely in your browser only. Never transmitted to external servers.
+                        <p style={{ margin: 0, fontSize:'14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
+                          {getMessage("localStorageDesc")}
                         </p>
                       </div>
 
@@ -2873,10 +3059,10 @@ function IndexOptions() {
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '10px', color: '#0078D4' }}>
                             <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
-                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '16px' }}>Direct Processing</span>
+                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize:'16px' }}>{getMessage("directProcessing")}</span>
                         </div>
-                        <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
-                          Text sent directly to AI services using secure HTTPS. No intermediary servers or data logging.
+                        <p style={{ margin: 0, fontSize:'14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
+                          {getMessage("directProcessingDesc")}
                       </p>
                     </div>
                     
@@ -2886,10 +3072,10 @@ function IndexOptions() {
                             <path d="M18.364 5.636L16.95 7.05A7 7 0 1019 12h2a9 9 0 11-2.636-6.364z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                           </svg>
-                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '16px' }}>No Tracking</span>
+                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize:'16px' }}>{getMessage("noTracking")}</span>
                         </div>
-                        <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
-                          Zero analytics, cookies, or behavior monitoring. Your browsing activity remains private.
+                        <p style={{ margin: 0, fontSize:'14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
+                          {getMessage("noTrackingDesc")}
                         </p>
                       </div>
 
@@ -2899,10 +3085,10 @@ function IndexOptions() {
                             <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                             <rect x="8" y="2" width="8" height="4" rx="1" ry="1" stroke="currentColor" strokeWidth="2" fill="none"/>
                           </svg>
-                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize: '16px' }}>Your Control</span>
+                          <span style={{ fontWeight: 600, color: '#FFFFFF', fontSize:'16px' }}>{getMessage("yourControl")}</span>
                         </div>
-                        <p style={{ margin: 0, fontSize: '14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
-                          Complete control over your data and settings. Clear everything instantly or remove anytime.
+                        <p style={{ margin: 0, fontSize:'14px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: '1.5' }}>
+                          {getMessage("yourControlDesc")}
                         </p>
                       </div>
                     </div>
@@ -2919,7 +3105,7 @@ function IndexOptions() {
                         Full Policy
                       </Button>
                       <Button
-                        variant="default"
+                        variant="secondary"
                         onClick={() => window.open('mailto:boimaginations@gmail.com?subject=Privacy Inquiry - LightUp Extension', '_blank')}
                         style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: '120px' }}
                       >
@@ -2930,7 +3116,7 @@ function IndexOptions() {
                         Contact
                       </Button>
                       <Button
-                        variant="default"
+                        variant="destructive"
                         onClick={async () => {
                           const confirmed = confirm(
                             'This will permanently delete ALL LightUp extension data including:\n\n' +
@@ -3006,7 +3192,7 @@ function IndexOptions() {
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
-                        Clear All Data
+                        {getMessage("clearAllDataButton")}
                     </Button>
                     </div>
                   </div>
@@ -3015,31 +3201,31 @@ function IndexOptions() {
                 <SectionDivider />
 
                 <SectionContainer>
-                  <SectionHeader>Links</SectionHeader>
-                  <FormDescription style={{ marginBottom: '16px' }}>Useful resources and external links</FormDescription>
+                  <SectionHeader>{getMessage("linksHeader")}</SectionHeader>
+                  <FormDescription style={{ marginBottom: '16px' }}>{getMessage("linksDescription")}</FormDescription>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    <Button
-                      variant="default"
-                      onClick={() => window.open('https://www.boimaginations.com/lightup', '_blank')}
-                      style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-start' }}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" style={{ width: '20px', height: '20px' }}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m20.893 13.393-1.135-1.135a2.252 2.252 0 0 1-.421-.585l-1.08-2.16a.414.414 0 0 0-.663-.107.827.827 0 0 1-.812.21l-1.273-.363a.89.89 0 0 0-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.212.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 0 1-1.81 1.025 1.055 1.055 0 0 1-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.655-.261a2.25 2.25 0 0 1-1.383-2.46l.007-.042a2.25 2.25 0 0 1 .29-.787l.09-.15a2.25 2.25 0 0 1 2.37-1.048l1.178.236a1.125 1.125 0 0 0 1.302-.795l.208-.73a1.125 1.125 0 0 0-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 0 1-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 0 1-1.458-1.137l1.411-2.353a2.25 2.25 0 0 0 .286-.76m11.928 9.869A9 9 0 0 0 8.965 3.525m11.928 9.868A9 9 0 1 1 8.965 3.525" />
-                      </svg>
-                      Visit Website
-                    </Button>
+                                          <Button
+                        variant="secondary"
+                        onClick={() => window.open('https://www.boimaginations.com/lightup', '_blank')}
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-start' }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" style={{ width: '20px', height: '20px' }}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m20.893 13.393-1.135-1.135a2.252 2.252 0 0 1-.421-.585l-1.08-2.16a.414.414 0 0 0-.663-.107.827.827 0 0 1-.812.21l-1.273-.363a.89.89 0 0 0-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.212.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 0 1-1.81 1.025 1.055 1.055 0 0 1-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.655-.261a2.25 2.25 0 0 1-1.383-2.46l.007-.042a2.25 2.25 0 0 1 .29-.787l.09-.15a2.25 2.25 0 0 1 2.37-1.048l1.178.236a1.125 1.125 0 0 0 1.302-.795l.208-.73a1.125 1.125 0 0 0-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 0 1-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 0 1-1.458-1.137l1.411-2.353a2.25 2.25 0 0 0 .286-.76m11.928 9.869A9 9 0 0 0 8.965 3.525m11.928 9.868A9 9 0 1 1 8.965 3.525" />
+                        </svg>
+                        {getMessage("visitWebsiteButton")}
+                      </Button>
                     
-                    <Button
-                      variant="default"
-                      onClick={() => window.open('https://chromewebstore.google.com/detail/lightup-ai-powered-web-an/pncapgeoeedlfppkohlbelelkkihikel/reviews', '_blank')}
-                      style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-start' }}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" style={{ width: '20px', height: '20px' }}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
-                      </svg>
-                      Rate Us on Chrome Web Store
-                    </Button>
+                                          <Button
+                        variant="secondary"
+                        onClick={() => window.open('https://chromewebstore.google.com/detail/lightup-ai-powered-web-an/pncapgeoeedlfppkohlbelelkkihikel/reviews', '_blank')}
+                        style={{ display: 'flex', alignItems: 'center', gap: '8px', justifyContent: 'flex-start' }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" style={{ width: '20px', height: '20px' }}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+                        </svg>
+                        {getMessage("rateChromeStoreButton")}
+                      </Button>
                   </div>
                 </SectionContainer>
               </SettingsCard>

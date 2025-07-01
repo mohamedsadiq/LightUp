@@ -77,7 +77,7 @@ export const getStyles = (
     fontSize: fontSizes.base,
     lineHeight: 1.6,
     color: THEME_COLORS[theme].text,
-    backgroundColor: THEME_COLORS[theme].popupBackground,
+    // backgroundColor: THEME_COLORS[theme].popupBackground,
     padding: "5px 9px",
     borderRadius: 8,
     fontFamily: "'K2D', sans-serif",
@@ -202,7 +202,7 @@ export const getStyles = (
     willChange: 'transform',
   },
   followUpAnswer: {
-    backgroundColor: THEME_COLORS[theme].popupBackground,
+    backgroundColor: 'transparent',
     color: THEME_COLORS[theme].text,
     padding: '12px 16px',
     borderRadius: '18px',

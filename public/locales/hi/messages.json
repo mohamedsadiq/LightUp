@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "लाइटअप - AI संचालित वेब एनोटेशन। सारांश, अनुवाद, और बहुत कुछ",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "वेब पर हर पृष्ठ के लिए प्रतिभाशाली एनोटेशन। AI द्वारा संचालित स्पष्टीकरण, सारांश, विश्लेषण, अनुवाद और बहुत कुछ करने के लिए।",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "लाइटअप में आपका स्वागत है",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "सारांशित करें",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "स्पष्ट करें",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "अनुवाद करें",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "विश्लेषण करें",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "सेटिंग्स",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "भाषा",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "अपनी पसंदीदा भाषा चुनें",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "सहेजें",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "रद्द करें",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "सक्षम",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "अक्षम",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "प्रतिक्रिया भेजें",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "लोड हो रहा है...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "शेष निःशुल्क उपयोग",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "मोड चयन",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "मोड कॉन्फ़िगर करें",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "प्रॉम्प्ट पर जाएँ",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "मोड कॉन्फ़िगरेशन छिपाएँ",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "कॉन्फ़िगरेशन छिपाएँ",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "वेबसाइट की जानकारी दिखाएँ",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "परिणामों में वेबसाइट फ़ेविकॉन और शीर्षक प्रदर्शित करें",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "चुने हुए पाठ को दिखाएँ",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "परिणामों में आपके द्वारा चुने गए पाठ को प्रदर्शित करें",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": " 'इंस्टेंट AI' बटन दिखाएँ",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "एक फ़्लोटिंग 'इंस्टेंट AI' बटन जोड़ें जो एक क्लिक से पूरे पृष्ठ का सारांश या स्पष्टीकरण देता है",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "बिना किसी विक्षेप वाला मोड",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "गैर-आवश्यक UI छुपाता है और लाइटअप के पीछे पृष्ठ को धुंधला करता है ताकि आप AI उत्तर पर ध्यान केंद्रित कर सकें",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "पॉपअप बंद होने के बाद हाइलाइट किए गए पाठ को रखें",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "पॉपअप बंद करने के बाद पाठ को हाइलाइट रखें",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "पाठ चयन पर क्रिया बटन दिखाएँ",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "पाठ हाइलाइट होने पर एक छोटा बटन प्रदर्शित करें",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "पाठ चयन पर लाइटअप स्वतः खोलें",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "जब भी आप पाठ का चयन करते हैं, लाइटअप स्वचालित रूप से खुल जाता है",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "स्थायी हाइलाइटिंग",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "कीबोर्ड शॉर्टकट्स",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "लाइटअप सुविधाओं तक जल्दी पहुँचने के लिए इन शॉर्टकट्स का उपयोग करें",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "स्पष्टीकरण मोड पर जाएँ",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "सारांशित करने के मोड पर जाएँ",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "विश्लेषण मोड पर जाएँ",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "अनुवाद मोड पर जाएँ",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "मुक्त मोड में पॉपअप खोलें",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "शॉर्टकट के माध्यम से मोड सेट करने के बाद, कोई भी पाठ चुनें और लाइटअप आपके चुने हुए मोड के साथ दिखाई देगा।",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "फीचर टॉगल",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "फीचर को चालू और बंद करने के लिए शॉर्टकट्स",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "लाइटअप को चालू/बंद करें",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "रेडिकली फ़ोकस मोड को चालू/बंद करें",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "लाइट/डार्क थीम को चालू/बंद करें",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "सभी शॉर्टकट्स रीसेट करें",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "सभी शॉर्टकट्स को उनके डिफ़ॉल्ट मानों पर पुनर्स्थापित करें",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "रीसेट करें",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "कुछ भी पूछें",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "मोड सेलेक्टर कॉन्फ़िगर करें (अधिकतम 4 चुनें)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "ये मोड आपके मोड चयनकर्ता में दिखाई देंगे। टॉगल करने के लिए क्लिक करें।",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "उपलब्ध क्रियाएँ",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "मुफ़्त",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "लाइटअप लोगो",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "लाइटअप वर्तमान में बंद है",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "लाइटअप को सक्षम करने और सभी सुविधाओं तक पहुँच प्राप्त करने के लिए हेडर या नीचे दिए गए बटन में स्विच को टॉगल करें।",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "लाइटअप सक्षम करें",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "ऑटो → अंग्रेज़ी",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "सामान्य",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "कीबोर्ड शॉर्टकट्स",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "उन्नत सेटिंग्स",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "गोपनीयता",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "गोपनीयता नीति",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "वेबसाइट",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "हमें रेट करें",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "प्रतिक्रिया",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "हमें लाइटअप को बेहतर बनाने में मदद करें",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "प्रतिक्रिया प्रकार",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "उस प्रतिक्रिया के प्रकार का चयन करें जिसे आप प्रदान करना चाहते हैं",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "सामान्य प्रतिक्रिया",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "बग रिपोर्ट",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "सुविधा अनुरोध",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "अन्य",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "आपकी प्रतिक्रिया",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "हमें बताएं कि आप क्या सोचते हैं या उस समस्या का वर्णन करें जिसका आप सामना कर रहे हैं...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "यहाँ अपनी प्रतिक्रिया टाइप करें...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "ईमेल (वैकल्पिक)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "यदि आप चाहते हैं कि हम फ़ॉलोअप करें तो अपना ईमेल छोड़ दें",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "प्रतिक्रिया सबमिट करें",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "हाइलाइट रंग",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "पाठ हाइलाइटिंग के लिए रंग चुनें",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "डिफ़ॉल्ट",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "पीला",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "नारंगी",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "नीला",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "हरा",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "बैंगनी",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "गुलाबी",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "गोपनीयता और डेटा",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "आपकी गोपनीयता हमारी प्राथमिकता है",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "शून्य डेटा संग्रह",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "लाइटअप आपकी गोपनीयता का सम्मान करता है और आपके डेटा को जिम्मेदारी से संभालता है।",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "स्थानीय संग्रहण",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "आपकी सभी सेटिंग्स आपके डिवाइस पर स्थानीय रूप से संग्रहीत हैं",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "प्रत्यक्ष प्रसंस्करण",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "पाठ को संग्रहीत किए बिना सीधे संसाधित किया जाता है",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "कोई ट्रैकिंग नहीं",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "हम आपके ब्राउज़िंग को ट्रैक नहीं करते हैं या व्यक्तिगत डेटा संग्रहीत नहीं करते हैं",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "आपका नियंत्रण",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "सभी सेटिंग्स और डेटा आपके नियंत्रण में रहते हैं",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "पूरी नीति",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "संपर्क करें",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "सेव विफल",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "आपकी सेटिंग्स को सहेजने में एक त्रुटि हुई। कृपया पुनः प्रयास करें।",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "सेटिंग्स सहेजी गईं",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "सेक्शन बदलते समय आपके परिवर्तन सहेजे गए थे।",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "सूचना बंद करें",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "बोलना बंद करें",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "पाठ को ज़ोर से पढ़ें",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "सारांशित करें",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "स्पष्ट करें",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "अनुवाद करें",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "विश्लेषण करें",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "इस बारे में चैट करें",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "चयन विकल्प",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "दैनिक उपयोग",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "थीम",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "एक्सटेंशन के लिए अपनी पसंदीदा रंग थीम चुनें",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "डार्क थीम",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "लाइट थीम",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "सिस्टम डिफ़ॉल्ट",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "भाषा बदल गई",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "UI आपकी भाषा पसंद को दर्शाने के लिए अपडेट होगा",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "त्रुटि",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "भाषा बदलने में विफल",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "पॉपअप मार्जिन",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "फ्लोटिंग मोड में व्यूपोर्ट किनारों से दूरी",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "अनुवाद सेटिंग्स",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "बेहतर उत्तरों के लिए पृष्ठ संदर्भ का उपयोग करें",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "बेहतर परिणामों के लिए गहरा पृष्ठ संदर्भ सक्षम करें",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "रूप-रंग",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "प्रतिक्रिया",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "लेआउट और प्रदर्शन",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "एक्सटेंशन के लेआउट और रूप को कस्टमाइज़ करें",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "लेआउट मोड",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "फ्लोटिंग",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "साइडबार",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "केंद्रित",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "परिणाम फ़ॉन्ट आकार",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "परिणाम पैनल में टेक्स्ट के आकार को नियंत्रित करें",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "एक्स-छोटा",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "छोटा",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "मध्यम",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "बड़ा",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "एक्स-बड़ा",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "एक्सएक्स-बड़ा",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "पॉपअप एनीमेशन",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "जब पॉपअप दिखाई देता है तो एनीमेशन",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "फेड",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "स्लाइड",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "स्केल",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "कोई नहीं",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "रेडिकल फोकस मोड",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "परिणाम देखते समय पृष्ठभूमि धुंधला करें",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(आवश्यक)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "मूल्य:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "आकार:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "पता क्लिपबोर्ड पर कॉपी किया गया!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "रेट लिमिट शेष:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "में रीसेट करें:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "ऑटो-सेव विफल",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "आपके परिवर्तन स्वचालित रूप से सहेजे नहीं गए। कृपया मैन्युअल रूप से सहेजें।",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "लोडिंग विफल",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "आपकी सेटिंग्स लोड नहीं हो सकीं। डिफ़ॉल्ट का उपयोग कर रहा है।",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "उपयोग की जानकारी लोड हो रही है...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "मॉडल ऑटो-चयनित",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "स्वचालित रूप से {0} का चयन किया गया है क्योंकि आपने एक जेमिनी API कुंजी प्रदान की है।",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "स्वचालित रूप से {0} का चयन किया गया है क्योंकि आपने एक ग्रोक API कुंजी प्रदान की है।",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "आपके ओल्लामा सेटअप के लिए स्वचालित रूप से {0} का चयन किया गया है।",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(फ़ंक्शन प्रदर्शित नहीं है)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(डायनामिक टेम्पलेट - आपके चयनित टेक्स्ट के आधार पर भिन्न होता है)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "AI-संचालित वेब एनोटेशन",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "संस्करण:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "डेवलपर:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "वेबसाइट:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "तात्कालिक सारांश",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "रियल-टाइम अनुवाद",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "उन्नत AI मॉडल",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "इंटरैक्टिव चैट",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "शून्य डेटा संग्रह",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "स्थानीय संग्रहण",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "जेमिनी 2.0 फ़्लैश",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "सुधारित क्षमताओं और तेज़ प्रतिक्रिया समय के साथ नवीनतम संस्करण",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "जेमिनी 2.0 फ़्लैश-लाइट",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "दक्षता और गति के लिए अनुकूलित हल्का संस्करण",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "जेमिनी 2.0 फ़्लैश थिंकिंग",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "तर्क और विश्लेषणात्मक कार्यों पर केंद्रित प्रायोगिक मॉडल",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "जेमिनी 1.5 प्रो",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "संतुलित प्रदर्शन वाला स्थिर संस्करण",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "जेमिनी 1.5 फ़्लैश",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "तेज़ प्रतिक्रियाओं के लिए तेज़, छोटा मॉडल",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "जेमिनी 1.5 फ़्लैश-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "कुशल प्रसंस्करण के लिए 8-बिट क्वांटिफाइड संस्करण",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "ग्रोक 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "मानक ग्रोक-3 मॉडल",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "प्रति 1M टोकन $2.00",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "ग्रोक 3 मिनी",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "हल्का संस्करण",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "प्रति 1M टोकन $1.00",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "ग्रोक 3 फ़ास्ट",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "लेटेंसी-ऑप्टिमाइज़्ड ग्रोक-3",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "प्रति 1M टोकन $2.50",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "ग्रोक 3 मिनी फ़ास्ट",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "मिनी + फ़ास्ट संस्करण",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "प्रति 1M टोकन $1.50",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "ग्रोक 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "नवीनतम ग्रोक-2 बिल्ड",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "प्रति 1M टोकन $1.80",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "लामा 2 70B चैट",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "सबसे शक्तिशाली लामा 2 मॉडल, जटिल कार्यों के लिए सर्वोत्तम",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70B पैरामीटर",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "डीपसीक V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "उन्नत तर्क क्षमताओं वाला नवीनतम डीपसीक मॉडल",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67B पैरामीटर",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "मिक्सट्रल 8x7B निर्देश",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "विशेषज्ञों के उच्च-प्रदर्शन मिश्रण मॉडल",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47B पैरामीटर",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "लामा 2 13B चैट",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "संतुलित प्रदर्शन और संसाधन उपयोग",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13B पैरामीटर",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "मिस्ट्रल 7B निर्देश",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "कुशल निर्देश-अनुसरण मॉडल",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7B पैरामीटर",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "न्यूरल चैट V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "प्राकृतिक वार्तालापों के लिए अनुकूलित",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7B पैरामीटर",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "डीपसीक V3 बेस",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "अच्छे तर्क के साथ डीपसीक का हल्का संस्करण",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7B पैरामीटर",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "लामा 3.2 3B निर्देश",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "मूल कार्यों के लिए हल्का मॉडल",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3B पैरामीटर",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "फाई-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "अपने आकार के लिए कॉम्पैक्ट लेकिन शक्तिशाली",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2.7B पैरामीटर",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "ओपनचैट 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "चैट इंटरैक्शन के लिए अनुकूलित",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7B पैरामीटर",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "बीटा",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "सामान्य",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "AI मॉडल",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "प्रॉम्प्ट टेम्प्लेट",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "रूप-रंग",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "इस बारे में",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "सामान्य सेटिंग्स",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "AI मॉडल कॉन्फ़िगरेशन",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "रूप-रंग और अनुकूलन",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "प्रॉम्प्ट टेम्प्लेट",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "लाइटअप के बारे में",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "परिणामों में आपके द्वारा चुने गए पाठ को प्रदर्शित करें",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "परिणामों में वेबसाइट फ़ेविकॉन और शीर्षक प्रदर्शित करें",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "पॉपअप बंद करने के बाद पाठ को हाइलाइट रखें",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "पाठ चयन पर लाइटअप स्वतः खोलें",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "जब भी आप पाठ का चयन करते हैं, लाइटअप स्वचालित रूप से खुल जाता है",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "संदर्भ जागरूकता",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "बेहतर, अधिक प्रासंगिक उत्तर प्रदान करने के लिए पृष्ठ संदर्भ का उपयोग करें",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "AI इंजन चयन",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "AI मॉडल प्रकार चुनें",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "प्रतिक्रियाएँ उत्पन्न करने के लिए आप किस AI सेवा का उपयोग करना चाहते हैं, इसका चयन करें",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "बेसिक (मुफ़्त, सीमित)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "गूगल जेमिनी (API कुंजी आवश्यक)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "xAI द्वारा ग्रोक (API कुंजी आवश्यक)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "स्थानीय/ओल्लामा (स्व-होस्टेड)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "डेटा गोपनीयता सूचना",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "बेसिक टियर का उपयोग करते समय, प्रसंस्करण के लिए आपके चयनित पाठ और पृष्ठ संदर्भ हमारे सर्वर पर भेजे जाते हैं। हम इस डेटा को स्थायी रूप से संग्रहीत नहीं करते हैं।",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "पूर्ण गोपनीयता के लिए, Google जेमिनी, ग्रोक या स्थानीय मॉडल के साथ अपनी स्वयं की API कुंजी का उपयोग करने पर विचार करें।",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "गूगल जेमिनी कॉन्फ़िगरेशन",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "गूगल जेमिनी API कुंजी",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "अपनी Google AI स्टूडियो API कुंजी दर्ज करें",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Google AI स्टूडियो से अपनी मुफ़्त API कुंजी प्राप्त करें। {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "जेमिनी मॉडल चुनें",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "प्रतिक्रियाएँ उत्पन्न करने के लिए उपयोग करने के लिए Google जेमिनी मॉडल का चयन करें",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "xAI द्वारा ग्रोक कॉन्फ़िगरेशन",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "xAI API कुंजी",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "अपनी xAI API कुंजी दर्ज करें",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "xAI से अपनी API कुंजी प्राप्त करें। आरंभ करने के लिए {0} पर जाएँ।",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "ग्रोक मॉडल चुनें",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "प्रतिक्रियाएँ उत्पन्न करने के लिए उपयोग करने के लिए ग्रोक मॉडल का चयन करें",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "स्थानीय/ओल्लामा कॉन्फ़िगरेशन",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "ओल्लामा सर्वर URL",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "स्थानीय मॉडल चुनें",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "अपनी ओल्लामा स्थापना से उपयोग करने के लिए मॉडल का चयन करें",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "प्रतिक्रिया सेटिंग्स",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "अधिकतम प्रतिक्रिया लंबाई",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "AI प्रतिक्रिया में टोकन (शब्द/अक्षर) की अधिकतम संख्या",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "प्रॉम्प्ट मोड",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "आप किस प्रकार के प्रॉम्प्ट को कस्टमाइज़ करना चाहते हैं, उसे चुनें",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "सिस्टम प्रॉम्प्ट",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "यह प्रॉम्प्ट परिभाषित करता है कि AI को कैसे व्यवहार करना चाहिए और प्रतिक्रिया देनी चाहिए",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "उपयोगकर्ता प्रॉम्प्ट टेम्पलेट",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "इस टेम्पलेट का उपयोग AI को उपयोगकर्ता अनुरोधों को प्रारूपित करने के लिए किया जाता है",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "संपादित करें",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "सहेजें",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "डिफ़ॉल्ट पर रीसेट करें",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "{0} मोड प्रॉम्प्ट को उनके मूल डिफ़ॉल्ट में वापस रीसेट करें",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "डिफ़ॉल्ट पर रीसेट करें",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "सफलतापूर्वक रीसेट किया गया",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "यह प्रॉम्प्ट गतिशील तर्क का उपयोग करता है और इसे संपादित नहीं किया जा सकता है",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "अपने कस्टम टेम्पलेट्स को कैसे लागू करें:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "जब आप टेक्स्ट का चयन करते हैं और संगत मोड चुनते हैं तो आपके कस्टम प्रॉम्प्ट स्वचालित रूप से उपयोग किए जाएँगे\nपरिवर्तन तुरंत प्रभावी होते हैं - किसी पुनः आरंभ की आवश्यकता नहीं है\nआप रीसेट बटन का उपयोग करके किसी भी प्रॉम्प्ट को डिफ़ॉल्ट में वापस रीसेट कर सकते हैं",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "थीम और रूप-रंग",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "रंग थीम",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "डार्क थीम",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "लाइट थीम",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "सिस्टम डिफ़ॉल्ट",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "फ़ॉन्ट आकार",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "पॉपअप परिणामों में टेक्स्ट आकार समायोजित करें",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "हाइलाइट रंग",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "चयनित पाठ को हाइलाइट करने के लिए रंग चुनें",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "चुनें कि पॉपअप पृष्ठ पर कैसे दिखाई देता है",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "फ्लोटिंग",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "साइडबार",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "केंद्रित",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "जब पॉपअप दिखाई देता है तो एनीमेशन प्रभाव",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "फेड",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "स्लाइड",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "स्केल",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "कोई नहीं",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "एनीमेशन सेटिंग्स",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "लाइटअप एक AI-संचालित ब्राउज़र एक्सटेंशन है जो वेब पर किसी भी पाठ के लिए तत्काल सारांश, स्पष्टीकरण, अनुवाद और विश्लेषण प्रदान करता है।",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "लिंक्स",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "उपयोगी लिंक और संसाधन",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "वेबसाइट पर जाएँ",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "क्रोम स्टोर पर रेट करें",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "सभी डेटा साफ़ करें",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "स्पष्ट करें",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "सारांशित करें",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "विश्लेषण करें",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "अनुवाद करें",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "मुफ़्त",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "प्रॉम्प्ट विवरण",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "इस मोड के लिए उपयोग किए जाने वाले प्रॉम्प्ट देखें और कस्टमाइज़ करें",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "एक क्लिक से किसी भी पाठ का तुरंत सारांश प्राप्त करें",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "किसी भी भाषा में तुरंत पाठ का अनुवाद करें",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "GPT, जेमिनी और स्थानीय मॉडल सहित कई AI मॉडल में से चुनें",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "आपके द्वारा पढ़ी जा रही सामग्री के बारे में AI के साथ बातचीत करें",
+    "description": "Description for interactive chat feature"
+  }
+}

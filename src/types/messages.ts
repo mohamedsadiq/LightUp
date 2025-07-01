@@ -55,6 +55,7 @@ export interface ProcessTextRequest {
       fromLanguage: string;
       toLanguage: string;
     };
+    aiResponseLanguage?: string;
     modelType: ModelType;
     customPrompts?: {
       systemPrompts: {

@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - AI захранен уеб анотации. резюме, превод и още",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Гениални анотации за всяка страница в мрежата. Задвижвани от изкуствен интелект, за да обясняват, обобщават, анализират, превеждат и още.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Добре дошли в LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Резюме",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Обяснете",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Превод",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Анализ",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Настройки",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Език",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Изберете предпочитания от вас език",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Запази",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Отмени",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Активирано",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Деактивирано",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Изпрати обратна връзка",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Зареждане...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Оставащи безплатни ползвания",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Избор на режим",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Конфигуриране на режими",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Отидете на подканите",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Скриване на конфигурацията на режима",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Скриване на конфигурацията",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Покажи информация за уебсайта",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Покажете иконата и заглавието на уебсайта в резултатите",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Покажи маркирания текст",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Покажете текста, който сте маркирали в резултатите",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Покажи бутон „Бърз AI“",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Добавете плаващ бутон „Бърз AI“, който обобщава или обяснява цялата страница с едно кликване",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Режим без разсейване",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Скрива ненужния UI и затъмнява страницата зад LightUp, за да можете да се фокусирате върху отговора на AI",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Запазване на маркирания текст след затваряне на изскачащия прозорец",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Запазете маркирания текст след затваряне на изскачащия прозорец",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Покажи бутон за действие при маркиране на текст",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Покажете малък бутон, когато текстът е маркиран",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Автоматично отваряне на LightUp при маркиране на текст",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Отваря LightUp автоматично, когато маркирате текст",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Постоянно маркиране",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Клавиатурни комбинации",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Използвайте тези клавишни комбинации за бърз достъп до функциите на LightUp",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Превключване към режим „Обяснение“",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Превключване към режим „Резюме“",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Превключване към режим „Анализ“",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Превключване към режим „Превод“",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Отваряне на изскачащия прозорец в свободен режим",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "След задаване на режима чрез клавишна комбинация, маркирайте произволен текст и LightUp ще се появи с избрания от вас режим.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Превключватели на функции",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Клавишни комбинации за включване и изключване на функции",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Включване/изключване на LightUp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Включване/изключване на режим „Радикален фокус“",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Превключване на светла/тъмна тема",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Нулиране на всички клавишни комбинации",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Възстановяване на всички клавишни комбинации до техните стойности по подразбиране",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Нулиране",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Попитайте каквото и да е",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Конфигуриране на селектора на режим (изберете до 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Тези режими ще се показват в селектора на режим. Кликнете, за да превключите.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Налични действия",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Безплатно",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "Лого на LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp е в момента изключен",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Превключете превключвателя в горната част или бутона по-долу, за да активирате LightUp и да получите достъп до всички функции.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Активирай LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Авто → Английски",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "Общи",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Клавиатурни комбинации",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Разширени настройки",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Поверителност",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Политика за поверителност",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Уебсайт",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Оценете ни",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Обратна връзка",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Помогнете ни да подобрим LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Тип обратна връзка",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Изберете типа обратна връзка, която искате да предоставите",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Обща обратна връзка",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Съобщение за бъг",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Заявка за функция",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Друго",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Вашата обратна връзка",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Кажете ни какво мислите или опишете проблема, който срещате...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Въведете обратната си връзка тук...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "Имейл (по избор)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Оставете вашия имейл, ако искате да ви се обадим",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Изпрати обратна връзка",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Цвят на маркирането",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Изберете цвета за маркиране на текста",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "По подразбиране",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Жълто",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Оранжево",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Синьо",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Зелено",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Лилаво",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Розово",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Поверителност и данни",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Вашата поверителност е наш приоритет",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Няма събиране на данни",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp уважава вашата поверителност и се отнася отговорно към вашите данни.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Локално хранилище",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Всичките ви настройки се съхраняват локално на вашето устройство",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Директно обработване",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Текстът се обработва директно, без да се съхранява",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Без проследяване",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Ние не проследяваме вашето сърфиране или съхраняваме лични данни",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Вашият контрол",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Всички настройки и данни остават под вашия контрол",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Пълна политика",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Контакт",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Грешка при записването",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "Възникна грешка при записването на вашите настройки. Моля, опитайте отново.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "Настройките са записани",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "Вашите промени бяха записани при превключване на секциите.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Затвори известие",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Спри четенето",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Прочети текста на глас",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Резюме",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Обяснете",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Превод",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Анализ",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Чат за",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Опции за селекция",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Дневно ползване",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Тема",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Изберете предпочитаната от вас цветова тема за разширението",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Тъмна тема",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Светла тема",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Системна по подразбиране",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "Езикът е променен",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "UI ще се актуализира, за да отразява вашия избор на език",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Грешка",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Неуспешно променяне на езика",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Марж на изскачащия прозорец",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Разстояние от краищата на визьора в плаващ режим",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Настройки за превод",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Използвайте контекста на страницата за по-добри отговори",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Активирайте по-дълбок контекст на страницата за по-добри резултати",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Външен вид",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Обратна връзка",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Оформление и показване",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Персонализирайте оформлението и външния вид на разширението",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Режим на оформление",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Плаващо",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Странична лента",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Центрирано",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Размер на шрифта на резултатите",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Контролирайте размера на текста в панела с резултати",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "Много малък",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Малък",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Среден",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Голям",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "Много голям",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "Изключително голям",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Анимация на изскачащия прозорец",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Анимация, когато се появи изскачащият прозорец",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Затъмняване",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Плъзгане",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Мащабиране",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Няма",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Режим на радикален фокус",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Замъгляване на фона при преглед на резултатите",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Задължително)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Цена:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Размер:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "Адресът е копиран в клипборда!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Оставащ лимит на заявки:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Нулиране след:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Автоматичното записване е неуспешно",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Вашите промени не бяха запазени автоматично. Моля, запишете ръчно.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Зареждането е неуспешно",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Не можах да заредя вашите настройки. Използват се настройките по подразбиране.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Зареждане на информация за ползване...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "Моделът е избран автоматично",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Автоматично избран {0}, тъй като сте предоставили API ключ на Gemini.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Автоматично избран {0}, тъй като сте предоставили API ключ на Grok.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Автоматично избран {0} за вашата Ollama настройка.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Функцията не се показва)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Динамичен шаблон - варира в зависимост от вашия избран текст)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "AI-захранен уеб анотации",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Версия:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Разработчик:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Уебсайт:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Бързи резюмета",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Превод в реално време",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Разширени AI модели",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Интерактивен чат",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Няма събиране на данни",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Локално хранилище",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Най-нова версия с подобрени възможности и по-бързи времена на отговор",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Олекотена версия, оптимизирана за ефективност и скорост",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Експериментален модел, фокусиран върху разсъждения и аналитични задачи",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Стабилна версия с балансирано представяне",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "По-бърз, по-малък модел за бързи отговори",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "8-битова квантована версия за ефективна обработка",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Стандартен модел Grok-3",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "$2.00 на 1M токена",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Олекотена версия",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "$1.00 на 1M токена",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Оптимизиран за латентност Grok-3",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "$2.50 на 1M токена",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Mini + бърза версия",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "$1.50 на 1M токена",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Най-нова версия на Grok-2",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "$1.80 на 1M токена",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Най-мощният модел Llama 2, най-подходящ за сложни задачи",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70B параметъра",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Най-новият модел DeepSeek с подобрени възможности за разсъждение",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67B параметъра",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Високоефективен модел с микс от експерти",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47B параметъра",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Балансирано представяне и използване на ресурси",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13B параметъра",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Ефективен модел за изпълнение на инструкции",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7B параметъра",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "Оптимизиран за естествени разговори",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7B параметъра",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Олекотена версия на DeepSeek с добро разсъждение",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7B параметъра",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Олекотен модел за основни задачи",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3B параметъра",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Компактен, но мощен за своя размер",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2.7B параметъра",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "Оптимизиран за чат взаимодействия",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7B параметъра",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "БЕТА",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "Общи",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "AI модели",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Шаблони на подкани",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Външен вид",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "За",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Общи настройки",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "Конфигурация на AI модела",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Външен вид и персонализиране",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Шаблони на подкани",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "За LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Покажете текста, който сте маркирали в резултатите",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Покажете иконата и заглавието на уебсайта в резултатите",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Запазете маркирания текст след затваряне на изскачащия прозорец",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Автоматично отваряне на LightUp при маркиране на текст",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Отваря LightUp автоматично, когато маркирате текст",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Осъзнаване на контекста",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Използвайте контекста на страницата, за да предоставите по-добри, по-подходящи отговори",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "Избор на AI двигател",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Изберете тип AI модел",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Изберете кой AI сървис искате да използвате за генериране на отговори",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "Базов (Безплатен, Ограничен)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (Необходим е API ключ)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok от xAI (Необходим е API ключ)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Локален/Ollama (Самохостван)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Известие за поверителност на данните",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "Когато използвате базовия слой, вашият избран текст и контекстът на страницата се изпращат на нашите сървъри за обработка. Ние не съхраняваме тези данни трайно.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "За пълна поверителност, помислете за използване на вашия собствен API ключ с Google Gemini, Grok или локален модел.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Конфигурация на Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "API ключ на Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Въведете вашия API ключ от Google AI Studio",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Вземете вашия безплатен API ключ от Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Изберете модел Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Изберете кой модел Google Gemini да използвате за генериране на отговори",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Конфигурация на Grok от xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "API ключ на xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Въведете вашия API ключ на xAI",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Вземете вашия API ключ от xAI. Посетете {0}, за да започнете.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Изберете модел Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Изберете кой модел Grok да използвате за генериране на отговори",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Конфигурация на локален/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "URL на Ollama сървъра",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Изберете локален модел",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Изберете кой модел да използвате от вашата Ollama инсталация",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Настройки на отговора",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Максимална дължина на отговора",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Максимален брой токени (думи/символи) в отговора на AI",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Режим на подкана",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Изберете кой тип подкана искате да персонализирате",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Системна подкана",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Тази подкана определя как AI трябва да се държи и да отговаря",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Шаблон на потребителска подкана",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Този шаблон се използва за форматиране на заявките на потребителя към AI",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Редактирай",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Запази",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Нулиране по подразбиране",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Нулирайте подканите в режим {0} до техните оригинални стойности по подразбиране",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Нулиране по подразбиране",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "Успешно нулиране",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Тази подкана използва динамична логика и не може да бъде редактирана",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Как да приложите вашите персонализирани шаблони:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "Вашите персонализирани подкани ще се използват автоматично, когато маркирате текст и изберете съответния режим\nПромените влизат в сила веднага - не е необходимо рестартиране\nМожете да нулирате всяка подкана до настройките по подразбиране, като използвате бутона за нулиране",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Тема и външен вид",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Цветова тема",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Тъмна тема",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Светла тема",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Системна по подразбиране",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Размер на шрифта",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Регулирайте размера на текста в изскачащия прозорец с резултати",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Цвят на маркирането",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Изберете цвета за маркиране на избрания текст",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Изберете как да се показва изскачащият прозорец на страницата",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Плаващо",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Странична лента",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Центрирано",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Ефект на анимация, когато се появи изскачащият прозорец",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Затъмняване",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Плъзгане",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Мащабиране",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Няма",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Настройки на анимацията",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp е AI-захранен разширение за браузър, което предоставя незабавни резюмета, обяснения, преводи и анализ за всеки текст в мрежата.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Връзки",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Полезни връзки и ресурси",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Посетете уебсайта",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Оценете в Chrome Store",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Изчисти всички данни",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Обясни",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Резюме",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Анализ",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Превод",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Безплатно",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Подробности за подканата",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Прегледайте и персонализирайте подканите, използвани за този режим",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Получавайте незабавни резюмета на всеки текст с едно кликване",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Превеждайте текст на всеки език мигновено",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Избирайте от множество AI модели, включително GPT, Gemini и локални модели",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Водете разговори с AI за съдържанието, което четете",
+    "description": "Description for interactive chat feature"
+  }
+}

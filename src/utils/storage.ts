@@ -181,6 +181,7 @@ export const validateAndSaveSettings = async (settings: Settings): Promise<boole
 const getDefaultSettings = (): Settings => ({
   modelType: "local",
   maxTokens: 1000,
+  // aiResponseLanguage: undefined by default - will use extension UI language as fallback
   customization: {
     showSelectedText: false,
     theme: "system",
@@ -194,6 +195,7 @@ const getDefaultSettings = (): Settings => ({
     activationMode: "manual",  // Changed default from automatic to manual
     enablePDFSupport: false,
     showTextSelectionButton: true,
-    showWebsiteInfo: true
+    showWebsiteInfo: true,
+    sidebarPinned: false  // Default to unpinned
   }
 }) 

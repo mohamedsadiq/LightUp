@@ -20,6 +20,12 @@ interface UsePortReturn {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
   reconnect: () => void;
+  /**
+   * Preferred way for external code to deliver a message. It automatically
+   * reconnects (once) if the underlying channel was dropped and retries the
+   * send so the user never notices a failure.
+   */
+  sendMessage: (message: any) => boolean;
 }
 
 export const usePort = (
@@ -41,39 +47,72 @@ export const usePort = (
       // Clean up existing port if it exists
       if (portRef.current) {
         try {
-          portRef.current.disconnect();
+          // Disconnect underlying raw port if this is a proxy, otherwise the port itself
+          const rawToClose = (portRef.current as any).__RAW_PORT__ ?? portRef.current;
+          rawToClose.disconnect();
         } catch (e) {
           console.error('Error disconnecting existing port:', e);
         }
       }
       
-      const newPort = chrome.runtime.connect({ 
+      const rawPort = chrome.runtime.connect({ 
         name: `text-processing-${connectionId}`
       });
-      
-      newPort.onMessage.addListener((message: PortMessage) => {
+
+      // Helper that safely delivers a message through the *current* raw port. It
+      // will transparently try to reconnect **once** if the channel has been
+      // severed (tab was backgrounded, page navigated, etc.).
+      const safePostMessage = (message: any): void => {
+        const trySend = (p: chrome.runtime.Port | null, msg: any): boolean => {
+          try {
+            p?.postMessage(msg);
+            return true;
+          } catch (err) {
+            return false;
+          }
+        };
+
+        // Attempt with the present raw port first
+        if (!trySend(rawPort, message)) {
+          console.warn('[LightUp] Port send failed – attempting silent reconnect');
+          const newPort = reconnect();
+          // If we successfully re-established the channel, retry once
+          if (!trySend((newPort as any)?.__RAW_PORT__ ?? null, message)) {
+            console.error('[LightUp] Retried send failed – giving up');
+          }
+        }
+      };
+
+      // Glue the original events so existing listeners still fire.
+      rawPort.onMessage.addListener((message: PortMessage) => {
         handleStreamResponse(message);
       });
 
-      newPort.onDisconnect.addListener(() => {
-        console.log('Port disconnected');
+      rawPort.onDisconnect.addListener(() => {
+        console.log('[LightUp] Port disconnected');
         if (chrome.runtime.lastError) {
-          console.error('Port error:', chrome.runtime.lastError);
+          console.error('[LightUp] Port error:', chrome.runtime.lastError);
         }
-        
-        if (connectionStatus !== 'connecting') {
-          setConnectionStatus('disconnected');
-        }
+        setConnectionStatus('disconnected');
+        // Automatically attempt a silent reconnect so the user never notices
+        reconnect();
       });
 
-      setPort(newPort);
-      portRef.current = newPort;
+      // Build a proxy object so calling code can keep using `port.postMessage`
+      // without changes while we intercept and harden the call.
+      const proxyPort: chrome.runtime.Port & { __RAW_PORT__: chrome.runtime.Port } = Object.assign({}, rawPort, {
+        postMessage: safePostMessage,
+        __RAW_PORT__: rawPort
+      });
+
+      setPort(proxyPort);
+      portRef.current = proxyPort;
       setConnectionStatus('connected');
-      return newPort;
+      return proxyPort;
     } catch (e) {
-      console.error('Failed to connect port:', e);
+      console.error('[LightUp] Failed to connect port:', e);
       setConnectionStatus('disconnected');
-      setError('Connection failed. Please try again.');
+      setError('Connection failed. Trying again…');
       portRef.current = null;
       return null;
     }
@@ -84,29 +123,24 @@ export const usePort = (
     return connect();
   };
 
-  // Safely send a message through the port, with automatic reconnection if needed
+  // Safely send a message through whichever port is current. This remains for
+  // components that prefer explicit control, but most calls now go through the
+  // patched postMessage above.
   const safelySendMessage = (message: any): boolean => {
+    if (!portRef.current) {
+      reconnect();
+    }
     try {
-      if (!portRef.current) {
-        const newPort = reconnect();
-        if (!newPort) return false;
-      }
-      
       portRef.current?.postMessage(message);
       return true;
     } catch (e) {
-      console.error('Error sending message:', e);
-      
-      // Try to reconnect once
+      console.error('[LightUp] Explicit send failed – attempting reconnect', e);
+      const newPort = reconnect();
       try {
-        const newPort = reconnect();
-        if (!newPort) return false;
-        
-        // Try again with the new port
-        newPort.postMessage(message);
+        newPort?.postMessage(message);
         return true;
       } catch (e2) {
-        console.error('Failed to reconnect and send message:', e2);
+        console.error('[LightUp] Explicit retry failed', e2);
         setError('Connection lost. Please try again.');
         return false;
       }
@@ -176,7 +210,7 @@ export const usePort = (
     }
   };
 
-  return {
+  const returnValue: UsePortReturn = {
     port: portRef.current,
     streamingText,
     isLoading,
@@ -186,6 +220,9 @@ export const usePort = (
     setStreamingText,
     setIsLoading,
     setError,
-    reconnect
+    reconnect,
+    sendMessage: safelySendMessage
   };
+
+  return returnValue;
 }; 

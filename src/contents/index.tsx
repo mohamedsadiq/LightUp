@@ -574,6 +574,34 @@ function Content() {
   // Calculate layout mode from settings
   const layoutMode = settings?.customization?.layoutMode || "popup";
   
+  // Pin state for sidebar mode
+  const [isPinned, setIsPinned] = useState(settings?.customization?.sidebarPinned || false);
+  
+  // Sync pin state with settings changes
+  useEffect(() => {
+    setIsPinned(settings?.customization?.sidebarPinned || false);
+  }, [settings?.customization?.sidebarPinned]);
+  
+  // AI response language state - defaults to extension UI language if not set
+  const [aiResponseLanguage, setAiResponseLanguage] = useState<string>("en");
+  
+  // Sync language state with settings changes and extension locale
+  useEffect(() => {
+    const initializeLanguage = async () => {
+      if (settings?.aiResponseLanguage) {
+        // User has explicitly set AI response language
+        setAiResponseLanguage(settings.aiResponseLanguage);
+      } else {
+        // No explicit setting - use extension UI language as default
+        const { getSelectedLocale } = await import("~utils/i18n");
+        const extensionLocale = await getSelectedLocale();
+        setAiResponseLanguage(extensionLocale);
+      }
+    };
+    
+    initializeLanguage();
+  }, [settings?.aiResponseLanguage]);
+  
   // Text selection bubble state from our new hook
   const {
     selectedText: selectionBubbleText,
@@ -757,6 +785,66 @@ ${'-'.repeat(50)}`;
       console.error('Failed to copy rich text:', err);
     }
   }, []);
+  
+  // Pin toggle function
+  const handleTogglePin = useCallback(async () => {
+    const newPinnedState = !isPinned;
+    setIsPinned(newPinnedState);
+    
+    // Update settings storage
+    if (settings) {
+      const storage = new Storage();
+      const updatedSettings = {
+        ...settings,
+        customization: {
+          ...settings.customization,
+          sidebarPinned: newPinnedState
+        }
+      };
+      
+      await storage.set("settings", updatedSettings);
+      setSettings(updatedSettings);
+      
+      // Notify other components of the change
+      window.dispatchEvent(
+        new CustomEvent('settingsUpdated', { 
+          detail: { 
+            settings: updatedSettings,
+            key: 'sidebarPinned',
+            value: newPinnedState
+          } 
+        })
+      );
+    }
+  }, [isPinned, settings, setSettings]);
+  
+  // AI response language change function (does NOT affect extension UI language)
+  const handleLanguageChange = useCallback(async (language: string) => {
+    setAiResponseLanguage(language);
+    
+    // Update settings storage - this only affects AI response language, not extension UI
+    if (settings) {
+      const storage = new Storage();
+      const updatedSettings = {
+        ...settings,
+        aiResponseLanguage: language
+      };
+      
+      await storage.set("settings", updatedSettings);
+      setSettings(updatedSettings);
+      
+      // Notify other components of the change
+      window.dispatchEvent(
+        new CustomEvent('settingsUpdated', { 
+          detail: { 
+            settings: updatedSettings,
+            key: 'aiResponseLanguage',
+            value: language
+          } 
+        })
+      );
+    }
+  }, [settings, setSettings]);
   
   const { lastResult, updateLastResult } = useLastResult();
   const currentModel = useCurrentModel();
@@ -1570,6 +1658,12 @@ ${'-'.repeat(50)}`;
           loading={isLoading}
           progress={progress}
           requestId={requestId}
+          layoutMode={layoutMode}
+          isPinned={isPinned}
+          onTogglePin={handleTogglePin}
+          themedStyles={themedStyles}
+          currentLanguage={aiResponseLanguage}
+          onLanguageChange={handleLanguageChange}
         />
       )}
 
@@ -1591,7 +1685,7 @@ ${'-'.repeat(50)}`;
             textAlign: 'center',
             padding: '20px',
             marginBottom: '20px',
-            background: currentTheme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
+            // background: currentTheme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
             borderRadius: '12px',
             border: `1px solid ${currentTheme === "dark" ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}`,
           }}
@@ -1638,7 +1732,7 @@ ${'-'.repeat(50)}`;
             textAlign: 'center',
             padding: '20px',
             marginBottom: '20px',
-            background: currentTheme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
+            // background: currentTheme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
             borderRadius: '12px',
             border: `1px solid ${currentTheme === "dark" ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}`,
           }}
@@ -1994,7 +2088,6 @@ ${'-'.repeat(50)}`;
                         display: 'flex',
                         alignItems: 'center',
                         gap: '4px',
-                        
                         minWidth: '80px',
                         justifyContent: 'center'
                       }}
@@ -2183,6 +2276,7 @@ ${'-'.repeat(50)}`;
         noMotionVariants={noMotionVariants}
         sidebarScaleMotionVariants={sidebarScaleMotionVariants}
         sidebarSlideMotionVariants={sidebarSlideMotionVariants}
+        isPinned={isPinned}
       />
 
       {/* Blur overlay */}

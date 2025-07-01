@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - Annotations Web alimentées par l'IA. Résumé, traduction et plus",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Annotations intelligentes pour chaque page web. Alimenté par l'IA pour expliquer, résumer, analyser, traduire et plus encore.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Bienvenue sur LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Résumer",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Expliquer",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Traduire",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Analyser",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Paramètres",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Langue",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Choisissez votre langue préférée",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Enregistrer",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Annuler",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Activé",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Désactivé",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Envoyer des commentaires",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Chargement...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Utilisations gratuites restantes",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Sélection du mode",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Configurer les modes",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Accéder aux invites",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Masquer la configuration du mode",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Masquer la config.",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Afficher les informations du site web",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Afficher le favicon et le titre du site web dans les résultats",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Afficher le texte sélectionné",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Afficher le texte que vous avez sélectionné dans les résultats",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Afficher le bouton \"IA instantanée\"",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Ajouter un bouton flottant \"IA instantanée\" qui résume ou explique toute la page en un clic",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Mode sans distraction",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Masque l'interface utilisateur non essentielle et atténue la page derrière LightUp afin que vous puissiez vous concentrer sur la réponse de l'IA",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Conserver le texte surligné après la fermeture de la fenêtre contextuelle",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Conserver le texte surligné après la fermeture de la fenêtre contextuelle",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Afficher le bouton d'action sur la sélection de texte",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Afficher un petit bouton lorsque le texte est surligné",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Ouvrir automatiquement LightUp sur la sélection de texte",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Ouvre LightUp automatiquement lorsque vous sélectionnez du texte",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Surlignage persistant",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Raccourcis clavier",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Utilisez ces raccourcis pour accéder rapidement aux fonctionnalités de LightUp",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Passer en mode Expliquer",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Passer en mode Résumer",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Passer en mode Analyser",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Passer en mode Traduire",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Ouvrir la fenêtre contextuelle en mode Libre",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "Après avoir défini le mode via le raccourci, sélectionnez n'importe quel texte et LightUp apparaîtra avec le mode que vous avez choisi.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Basculement des fonctionnalités",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Raccourcis pour activer et désactiver les fonctionnalités",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Activer/désactiver LightUp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Activer/désactiver le mode Focus radical",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Activer/désactiver le thème clair/sombre",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Réinitialiser tous les raccourcis",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Restaurer tous les raccourcis à leurs valeurs par défaut",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Réinitialiser",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Demander n'importe quoi",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Configurer le sélecteur de mode (choisir jusqu'à 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Ces modes apparaîtront dans votre sélecteur de mode. Cliquez pour basculer.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Actions disponibles",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Libre",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "Logo LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp est actuellement désactivé",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Basculez l'interrupteur dans l'en-tête ou le bouton ci-dessous pour activer LightUp et accéder à toutes les fonctionnalités.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Activer LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Auto → Anglais",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "Général",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Raccourcis clavier",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Paramètres avancés",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Confidentialité",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Politique de confidentialité",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Site web",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Évaluez-nous",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Commentaires",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Aidez-nous à améliorer LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Type de commentaire",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Sélectionnez le type de commentaire que vous souhaitez fournir",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Commentaire général",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Rapport de bug",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Demande de fonctionnalité",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Autre",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Vos commentaires",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Dites-nous ce que vous pensez ou décrivez le problème que vous rencontrez...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Tapez vos commentaires ici...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "Email (facultatif)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Laissez votre email si vous souhaitez que nous vous contactions",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "vous@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Soumettre les commentaires",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Couleur de surlignage",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Choisissez la couleur pour le surlignage du texte",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "Par défaut",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Jaune",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Orange",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Bleu",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Vert",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Violet",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Rose",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Confidentialité et données",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Votre confidentialité est notre priorité",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Collecte de données nulle",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp respecte votre vie privée et gère vos données de manière responsable.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Stockage local",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Tous vos paramètres sont stockés localement sur votre appareil",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Traitement direct",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Le texte est traité directement sans stockage",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Aucun suivi",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Nous ne suivons pas votre navigation ni ne stockons vos données personnelles",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Votre contrôle",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Tous les paramètres et les données restent sous votre contrôle",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Politique complète",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Contact",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Échec de l'enregistrement",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "Une erreur s'est produite lors de l'enregistrement de vos paramètres. Veuillez réessayer.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "Paramètres enregistrés",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "Vos modifications ont été enregistrées lors du changement de sections.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Fermer la notification",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Arrêter la lecture",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Lire le texte à haute voix",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Résumer",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Expliquer",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Traduire",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Analyser",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Discuter de",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Options de sélection",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Utilisation quotidienne",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Thème",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Choisissez votre thème de couleur préféré pour l'extension",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Thème sombre",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Thème clair",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Par défaut du système",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "Langue changée",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "L'interface utilisateur sera mise à jour pour refléter votre choix de langue",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Erreur",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Échec du changement de langue",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Marge de la fenêtre contextuelle",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Distance des bords de la fenêtre d'affichage en mode flottant",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Paramètres de traduction",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Utiliser le contexte de la page pour de meilleures réponses",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Activer un contexte de page plus approfondi pour de meilleurs résultats",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Apparence",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Commentaires",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Disposition et affichage",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Personnalisez la disposition et l'apparence de l'extension",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Mode de disposition",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Flottant",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Barre latérale",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Centré",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Taille de la police des résultats",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Contrôlez la taille du texte dans le panneau des résultats",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "Très petite",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Petite",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Moyenne",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Grande",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "Très grande",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "Extrêmement grande",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Animation de la fenêtre contextuelle",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Animation lorsque la fenêtre contextuelle apparaît",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Fondue",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Glissement",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Mise à l'échelle",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Aucune",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Mode Focus radical",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Flouter l'arrière-plan lors de l'affichage des résultats",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Obligatoire)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Prix :",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Taille :",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "Adresse copiée dans le presse-papiers !",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Limite de taux restante :",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Réinitialisation dans :",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Échec de l'enregistrement automatique",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Vos modifications n'ont pas été enregistrées automatiquement. Veuillez enregistrer manuellement.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Échec du chargement",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Impossible de charger vos paramètres. Utilisation des paramètres par défaut.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Chargement des informations d'utilisation...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "Modèle sélectionné automatiquement",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Sélection automatique de {0} puisque vous avez fourni une clé API Gemini.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Sélection automatique de {0} puisque vous avez fourni une clé API Grok.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Sélection automatique de {0} pour votre configuration Ollama.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Fonction non affichée)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Modèle dynamique - varie en fonction du texte que vous avez sélectionné)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "Annotations Web alimentées par l'IA",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Version :",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Développeur :",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Site web :",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Résumés instantanés",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Traduction en temps réel",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Modèles IA avancés",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Chat interactif",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Collecte de données nulle",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Stockage local",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Dernière version avec des capacités améliorées et des temps de réponse plus rapides",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Version légère optimisée pour l'efficacité et la vitesse",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Modèle expérimental axé sur le raisonnement et les tâches analytiques",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Version stable avec des performances équilibrées",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "Modèle plus rapide et plus petit pour des réponses rapides",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "Version quantifiée 8 bits pour un traitement efficace",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Modèle Grok-3 standard",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "2,00 $ par 1 M de jetons",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Variante légère",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1,00 $ par 1 M de jetons",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3 optimisé pour la latence",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "2,50 $ par 1 M de jetons",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Variante Mini + rapide",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1,50 $ par 1 M de jetons",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Dernière version de Grok-2",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1,80 $ par 1 M de jetons",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Modèle Llama 2 le plus puissant, idéal pour les tâches complexes",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70 milliards de paramètres",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Dernier modèle DeepSeek avec des capacités de raisonnement améliorées",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67 milliards de paramètres",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Modèle performant à base de mélange d'experts",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47 milliards de paramètres",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Performances et utilisation des ressources équilibrées",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13 milliards de paramètres",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Modèle efficace suivant les instructions",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7 milliards de paramètres",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "Optimisé pour les conversations naturelles",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7 milliards de paramètres",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Version plus légère de DeepSeek avec un bon raisonnement",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7 milliards de paramètres",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Modèle léger pour les tâches de base",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3 milliards de paramètres",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Compact mais puissant pour sa taille",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2,7 milliards de paramètres",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "Optimisé pour les interactions de chat",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7 milliards de paramètres",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BÊTA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "Général",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "Modèles IA",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Modèles d'invite",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Apparence",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "À propos",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Paramètres généraux",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "Configuration du modèle IA",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Apparence et personnalisation",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Modèles d'invite",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "À propos de LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Afficher le texte que vous avez sélectionné dans les résultats",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Afficher le favicon et le titre du site web dans les résultats",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Conserver le texte surligné après la fermeture de la fenêtre contextuelle",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Ouvrir automatiquement LightUp sur la sélection de texte",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Ouvre LightUp automatiquement lorsque vous sélectionnez du texte",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Sensibilité au contexte",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Utiliser le contexte de la page pour fournir des réponses meilleures et plus pertinentes",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "Sélection du moteur IA",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Choisir le type de modèle IA",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Sélectionnez le service IA que vous souhaitez utiliser pour générer des réponses",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "Basique (Gratuit, Limité)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (clé API requise)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok par xAI (clé API requise)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Local/Ollama (auto-hébergé)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Avis sur la confidentialité des données",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "Lorsque vous utilisez le niveau Basique, le texte que vous avez sélectionné et le contexte de la page sont envoyés à nos serveurs pour traitement. Nous ne stockons pas ces données de manière permanente.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "Pour une confidentialité totale, envisagez d'utiliser votre propre clé API avec Google Gemini, Grok ou un modèle local.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Configuration de Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Clé API Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Entrez votre clé API Google AI Studio",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Obtenez votre clé API gratuite auprès de Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Choisir le modèle Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Sélectionnez le modèle Google Gemini à utiliser pour générer des réponses",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Configuration de Grok par xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "Clé API xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Entrez votre clé API xAI",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Obtenez votre clé API auprès de xAI. Visitez {0} pour commencer.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Choisir le modèle Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Sélectionnez le modèle Grok à utiliser pour générer des réponses",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Configuration locale/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "URL du serveur Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Choisir le modèle local",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Sélectionnez le modèle à utiliser à partir de votre installation Ollama",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Paramètres de réponse",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Longueur maximale de la réponse",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Nombre maximal de jetons (mots/caractères) dans la réponse de l'IA",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Mode d'invite",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Choisissez le type d'invite que vous souhaitez personnaliser",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Invite système",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Cette invite définit la façon dont l'IA doit se comporter et répondre",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Modèle d'invite utilisateur",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Ce modèle est utilisé pour formater les demandes utilisateur à l'IA",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Modifier",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Enregistrer",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Réinitialiser par défaut",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Réinitialiser les invites du mode {0} à leurs valeurs par défaut d'origine",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Réinitialiser par défaut",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "Réinitialisation réussie",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Cette invite utilise une logique dynamique et ne peut pas être modifiée",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Comment appliquer vos modèles personnalisés :",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "Vos invites personnalisées seront automatiquement utilisées lorsque vous sélectionnez du texte et choisissez le mode correspondant\nLes modifications prennent effet immédiatement - aucun redémarrage requis\nVous pouvez réinitialiser n'importe quelle invite aux valeurs par défaut à l'aide du bouton de réinitialisation",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Thème et apparence",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Thème de couleur",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Thème sombre",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Thème clair",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Par défaut du système",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Taille de la police",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Ajustez la taille du texte dans les résultats de la fenêtre contextuelle",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Couleur de surlignage",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Choisissez la couleur pour surligner le texte sélectionné",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Choisissez comment la fenêtre contextuelle apparaît sur la page",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Flottant",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Barre latérale",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Centré",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Effet d'animation lorsque la fenêtre contextuelle apparaît",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Fondue",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Glissement",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Mise à l'échelle",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Aucune",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Paramètres d'animation",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp est une extension de navigateur alimentée par l'IA qui fournit des résumés, des explications, des traductions et des analyses instantanées pour tout texte sur le Web.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Liens",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Liens et ressources utiles",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Visiter le site web",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Évaluer sur le Chrome Store",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Effacer toutes les données",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Expliquer",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Résumer",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Analyser",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Traduire",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Libre",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Détails de l'invite",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Afficher et personnaliser les invites utilisées pour ce mode",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Obtenez des résumés instantanés de n'importe quel texte en un clic",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Traduisez instantanément du texte dans n'importe quelle langue",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Choisissez parmi plusieurs modèles d'IA, notamment GPT, Gemini et les modèles locaux",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Discutez avec l'IA du contenu que vous lisez",
+    "description": "Description for interactive chat feature"
+  }
+}

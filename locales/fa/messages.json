@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - حاشیه‌نویسی وب با هوش مصنوعی. خلاصه‌سازی، ترجمه و موارد دیگر",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "حاشیه‌نویسی‌های هوشمند برای هر صفحه‌ای در وب. با قدرت هوش مصنوعی برای توضیح، خلاصه‌سازی، تحلیل، ترجمه و موارد دیگر.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "خوش آمدید به LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "خلاصه‌سازی",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "توضیح",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "ترجمه",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "تحلیل",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "تنظیمات",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "زبان",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "زبان مورد نظر خود را انتخاب کنید",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "ذخیره",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "لغو",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "فعال",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "غیرفعال",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "ارسال بازخورد",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "در حال بارگذاری...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "استفاده‌های رایگان باقی‌مانده",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "انتخاب حالت",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "تنظیم حالت‌ها",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "رفتن به درخواست‌ها",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "پنهان کردن تنظیمات حالت",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "پنهان کردن تنظیمات",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "نمایش اطلاعات وب‌سایت",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "نمایش آیکون و عنوان وب‌سایت در نتایج",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "نمایش متن انتخاب‌شده",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "نمایش متنی که انتخاب کرده‌اید در نتایج",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "نمایش دکمه 'هوش مصنوعی آنی'",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "افزودن یک دکمه شناور 'هوش مصنوعی آنی' که با یک کلیک کل صفحه را خلاصه یا توضیح می‌دهد",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "حالت بدون حواس‌پرتی",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "UI غیرضروری را پنهان می‌کند و صفحه را پشت LightUp کم‌رنگ می‌کند تا بتوانید روی پاسخ هوش مصنوعی تمرکز کنید",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "نگه‌داشتن متن هایلایت‌شده پس از بسته شدن پنجره",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "متن هایلایت‌شده را پس از بستن پنجره حفظ کنید",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "نمایش دکمه عمل در انتخاب متن",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "نمایش یک دکمه کوچک هنگام هایلایت شدن متن",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "باز شدن خودکار LightUp در انتخاب متن",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "LightUp را به طور خودکار هر زمان که متنی را انتخاب می‌کنید باز می‌کند",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "هایلایت دائمی",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "کلیدهای میانبر",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "از این میانبرها برای دسترسی سریع به ویژگی‌های LightUp استفاده کنید",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "سوئیچ به حالت توضیح",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "سوئیچ به حالت خلاصه‌سازی",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "سوئیچ به حالت تحلیل",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "سوئیچ به حالت ترجمه",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "باز کردن پنجره در حالت آزاد",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "پس از تنظیم حالت از طریق میانبر، هر متنی را انتخاب کنید و LightUp با حالت انتخابی شما ظاهر می‌شود.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "ویژگی‌های قابل تغییر",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "میانبرها برای فعال و غیرفعال کردن ویژگی‌ها",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "فعال/غیرفعال کردن LightUp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "فعال/غیرفعال کردن حالت تمرکز رادیکال",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "فعال/غیرفعال کردن تم روشن/تاریک",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "بازنشانی همه میانبرها",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "بازگرداندن همه میانبرها به مقادیر پیش‌فرض آن‌ها",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "بازنشانی",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "هر چیزی را بپرسید",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "تنظیم انتخابگر حالت (تا 4 مورد را انتخاب کنید)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "این حالت‌ها در انتخابگر حالت شما ظاهر می‌شوند. برای فعال/غیرفعال کردن کلیک کنید.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "عملکردهای موجود",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "آزاد",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "لوگوی LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp در حال حاضر خاموش است",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "برای فعال کردن LightUp و دسترسی به تمام ویژگی‌ها، سوئیچ را در هدر یا دکمه زیر تغییر دهید.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "فعال کردن LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "خودکار → انگلیسی",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "عمومی",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "کلیدهای میانبر",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "تنظیمات پیشرفته",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "حریم خصوصی",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "سیاست حفظ حریم خصوصی",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "وب‌سایت",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "به ما امتیاز دهید",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "بازخورد",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "به ما در بهبود LightUp کمک کنید",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "نوع بازخورد",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "نوع بازخوردی که می‌خواهید ارائه دهید را انتخاب کنید",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "بازخورد عمومی",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "گزارش اشکال",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "درخواست ویژگی",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "سایر",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "بازخورد شما",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "به ما بگویید چه فکر می‌کنید یا مشکلی که با آن روبرو هستید را توضیح دهید...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "بازخورد خود را اینجا تایپ کنید...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "ایمیل (اختیاری)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "اگر می‌خواهید ما پیگیری کنیم، ایمیل خود را بگذارید",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "ارسال بازخورد",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "رنگ هایلایت",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "رنگ هایلایت متن را انتخاب کنید",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "پیش‌فرض",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "زرد",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "نارنجی",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "آبی",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "سبز",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "بنفش",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "صورتی",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "حریم خصوصی و داده‌ها",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "حریم خصوصی شما اولویت ماست",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "جمع‌آوری داده صفر",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp به حریم خصوصی شما احترام می‌گذارد و با داده‌های شما به طور مسئولانه برخورد می‌کند.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "ذخیره‌سازی محلی",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "همه تنظیمات شما به صورت محلی روی دستگاه شما ذخیره می‌شوند",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "پردازش مستقیم",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "متن بدون ذخیره‌سازی به طور مستقیم پردازش می‌شود",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "بدون ردیابی",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "ما مرور شما را ردیابی نمی‌کنیم یا داده‌های شخصی را ذخیره نمی‌کنیم",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "کنترل شما",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "همه تنظیمات و داده‌ها تحت کنترل شما باقی می‌مانند",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "سیاست کامل",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "تماس",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "ذخیره ناموفق",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "خطایی در ذخیره تنظیمات شما رخ داده است. لطفاً دوباره امتحان کنید.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "تنظیمات ذخیره شد",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "تغییرات شما هنگام تعویض بخش‌ها ذخیره شد.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "بستن اعلان",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "توقف صحبت",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "بلند خواندن متن",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "خلاصه‌سازی",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "توضیح",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "ترجمه",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "تحلیل",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "چت در مورد",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "گزینه‌های انتخاب",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "استفاده روزانه",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "تم",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "تم رنگی مورد نظر خود را برای افزونه انتخاب کنید",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "تم تاریک",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "تم روشن",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "پیش‌فرض سیستم",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "زبان تغییر کرد",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "UI برای انعکاس انتخاب زبان شما به‌روزرسانی می‌شود",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "خطا",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "تغییر زبان با شکست مواجه شد",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "حاشیه پنجره",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "فاصله از لبه‌های viewport در حالت شناور",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "تنظیمات ترجمه",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "استفاده از زمینه صفحه برای پاسخ‌های بهتر",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "برای نتایج بهتر، زمینه عمیق‌تر صفحه را فعال کنید",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "ظاهر",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "بازخورد",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "چیدمان و نمایش",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "چیدمان و ظاهر افزونه را سفارشی کنید",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "حالت چیدمان",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "شناور",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "نوار کناری",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "مرکز",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "اندازه فونت نتایج",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "اندازه متن در پنل نتایج را کنترل کنید",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "خیلی کوچک",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "کوچک",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "متوسط",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "بزرگ",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "خیلی بزرگ",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "خیلی خیلی بزرگ",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "انیمیشن پنجره",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "انیمیشن هنگام ظاهر شدن پنجره",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "محو شدن",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "سر خوردن",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "مقیاس",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "بدون انیمیشن",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "حالت تمرکز رادیکال",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "هنگام مشاهده نتایج، پس‌زمینه را محو کنید",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(ضروری)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "قیمت:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "اندازه:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "آدرس به حافظه کپی شد!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "محدودیت نرخ باقی‌مانده:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "بازنشانی در:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "ذخیره خودکار ناموفق",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "تغییرات شما به طور خودکار ذخیره نشد. لطفاً به صورت دستی ذخیره کنید.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "بارگذاری ناموفق",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "نمی‌توان تنظیمات شما را بارگیری کرد. از تنظیمات پیش‌فرض استفاده می‌شود.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "در حال بارگذاری اطلاعات استفاده...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "مدل به طور خودکار انتخاب شد",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "از آنجایی که کلید API Gemini را ارائه کرده‌اید، {0} به طور خودکار انتخاب شد.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "از آنجایی که کلید API Grok را ارائه کرده‌اید، {0} به طور خودکار انتخاب شد.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "برای راه‌اندازی Ollama شما، {0} به طور خودکار انتخاب شد.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(عملکرد نمایش داده نمی‌شود)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(قالب پویا - بسته به متن انتخابی شما متفاوت است)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "حاشیه‌نویسی وب با قدرت هوش مصنوعی",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "نسخه:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "توسعه‌دهنده:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "وب‌سایت:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "خلاصه‌سازی آنی",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "ترجمه بلادرنگ",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "مدل‌های پیشرفته هوش مصنوعی",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "چت تعاملی",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "جمع‌آوری داده صفر",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "ذخیره‌سازی محلی",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "آخرین نسخه با قابلیت‌های بهبود یافته و زمان پاسخ سریع‌تر",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "نسخه سبک وزن بهینه شده برای کارایی و سرعت",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "مدل آزمایشی متمرکز بر استدلال و وظایف تحلیلی",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "نسخه پایدار با عملکرد متعادل",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "مدل سریع‌تر و کوچک‌تر برای پاسخ‌های سریع",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "نسخه کمی‌سازی شده 8 بیتی برای پردازش کارآمد",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "مدل استاندارد Grok-3",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "2.00 دلار برای هر 1 میلیون توکن",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "نوع سبک وزن",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1.00 دلار برای هر 1 میلیون توکن",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3 بهینه‌سازی‌شده برای کمترین زمان تاخیر",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "2.50 دلار برای هر 1 میلیون توکن",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "نوع Mini + سریع",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1.50 دلار برای هر 1 میلیون توکن",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "آخرین نسخه Grok-2",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1.80 دلار برای هر 1 میلیون توکن",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "قدرتمندترین مدل Llama 2، بهترین برای کارهای پیچیده",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70 میلیارد پارامتر",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "آخرین مدل DeepSeek با قابلیت‌های استدلالی پیشرفته",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67 میلیارد پارامتر",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "مدل ترکیبی کارآمد از متخصصان با عملکرد بالا",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47 میلیارد پارامتر",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "عملکرد و استفاده از منابع متعادل",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13 میلیارد پارامتر",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "مدل پیروی از دستورالعمل‌های کارآمد",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7 میلیارد پارامتر",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "بهینه شده برای مکالمات طبیعی",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7 میلیارد پارامتر",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "نسخه سبک‌تر DeepSeek با استدلال خوب",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7 میلیارد پارامتر",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "مدل سبک وزن برای کارهای اساسی",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3 میلیارد پارامتر",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "کوچک اما قدرتمند برای اندازه خود",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2.7 میلیارد پارامتر",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "بهینه شده برای تعاملات چت",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7 میلیارد پارامتر",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "نسخه بتا",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "عمومی",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "مدل‌های هوش مصنوعی",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "قالب‌های درخواست",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "ظاهر",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "درباره",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "تنظیمات عمومی",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "تنظیمات مدل هوش مصنوعی",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "ظاهر و سفارشی‌سازی",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "قالب‌های درخواست",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "درباره LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "متن انتخاب‌شده را در نتایج نمایش دهید",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "آیکون و عنوان وب‌سایت را در نتایج نمایش دهید",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "متن هایلایت‌شده را پس از بستن پنجره حفظ کنید",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "باز شدن خودکار LightUp در انتخاب متن",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "LightUp را به طور خودکار هر زمان که متنی را انتخاب می‌کنید باز می‌کند",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "آگاهی از زمینه",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "از زمینه صفحه برای ارائه پاسخ‌های بهتر و مرتبط‌تر استفاده کنید",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "انتخاب موتور هوش مصنوعی",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "نوع مدل هوش مصنوعی را انتخاب کنید",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "انتخاب کنید که از کدام سرویس هوش مصنوعی برای تولید پاسخ‌ها استفاده کنید",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "پایه (رایگان، محدود)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (کلید API مورد نیاز)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok توسط xAI (کلید API مورد نیاز)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "محلی/Ollama (خود میزبانی)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "اعلامیه حفظ حریم خصوصی داده‌ها",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "هنگام استفاده از سطح پایه، متن انتخابی و زمینه صفحه برای پردازش به سرورهای ما ارسال می‌شود. ما این داده‌ها را به طور دائم ذخیره نمی‌کنیم.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "برای حریم خصوصی کامل، از کلید API خود با Google Gemini، Grok یا یک مدل محلی استفاده کنید.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "تنظیمات Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "کلید API Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "کلید API Google AI Studio خود را وارد کنید",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "کلید API رایگان خود را از Google AI Studio دریافت کنید. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "مدل Gemini را انتخاب کنید",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "انتخاب کنید که از کدام مدل Google Gemini برای تولید پاسخ‌ها استفاده شود",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "تنظیمات Grok توسط xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "کلید API xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "کلید API xAI خود را وارد کنید",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "کلید API خود را از xAI دریافت کنید. برای شروع، به {0} مراجعه کنید.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "مدل Grok را انتخاب کنید",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "انتخاب کنید که از کدام مدل Grok برای تولید پاسخ‌ها استفاده شود",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "تنظیمات محلی/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "URL سرور Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "مدل محلی را انتخاب کنید",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "انتخاب کنید که از کدام مدل از نصب Ollama خود استفاده کنید",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "تنظیمات پاسخ",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "حداکثر طول پاسخ",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "حداکثر تعداد توکن‌ها (کلمات/کاراکترها) در پاسخ هوش مصنوعی",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "حالت درخواست",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "انتخاب کنید که کدام نوع درخواست را می‌خواهید سفارشی کنید",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "درخواست سیستم",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "این درخواست نحوه رفتار و پاسخگویی هوش مصنوعی را تعریف می‌کند",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "قالب درخواست کاربر",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "این قالب برای قالب‌بندی درخواست‌های کاربر به هوش مصنوعی استفاده می‌شود",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "ویرایش",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "ذخیره",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "بازنشانی به پیش‌فرض",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "درخواست‌های حالت {0} را به مقادیر پیش‌فرض اصلی خود بازنشانی کنید",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "بازنشانی به پیش‌فرض",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "بازنشانی با موفقیت انجام شد",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "این درخواست از منطق پویا استفاده می‌کند و نمی‌توان آن را ویرایش کرد",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "نحوه اعمال قالب‌های سفارشی خود:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "درخواست‌های سفارشی شما به طور خودکار هنگام انتخاب متن و انتخاب حالت مربوطه استفاده می‌شوند\n تغییرات بلافاصله اعمال می‌شوند - نیازی به راه‌اندازی مجدد نیست\nمی‌توانید هر درخواستی را با استفاده از دکمه بازنشانی به مقادیر پیش‌فرض بازنشانی کنید",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "تم و ظاهر",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "تم رنگی",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "تم تاریک",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "تم روشن",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "پیش‌فرض سیستم",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "اندازه فونت",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "اندازه متن را در نتایج پنجره پاپ‌آپ تنظیم کنید",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "رنگ هایلایت",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "رنگ هایلایت متن انتخاب‌شده را انتخاب کنید",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "نحوه ظاهر شدن پنجره پاپ‌آپ را در صفحه انتخاب کنید",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "شناور",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "نوار کناری",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "مرکز",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "اثر انیمیشن هنگام ظاهر شدن پنجره پاپ‌آپ",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "محو شدن",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "سر خوردن",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "مقیاس",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "بدون انیمیشن",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "تنظیمات انیمیشن",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp یک افزونه مرورگر مبتنی بر هوش مصنوعی است که خلاصه‌های آنی، توضیحات، ترجمه‌ها و تحلیل‌ها را برای هر متنی در وب ارائه می‌دهد.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "پیوندها",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "پیوندها و منابع مفید",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "بازدید از وب‌سایت",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "امتیازدهی در فروشگاه کروم",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "پاک کردن همه داده‌ها",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "توضیح",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "خلاصه‌سازی",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "تحلیل",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "ترجمه",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "رایگان",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "جزئیات درخواست",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "مشاهده و سفارشی کردن درخواست‌های استفاده‌شده برای این حالت",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "با یک کلیک، خلاصه‌های آنی از هر متنی دریافت کنید",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "متن را به هر زبانی به طور آنی ترجمه کنید",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "از بین چندین مدل هوش مصنوعی از جمله GPT، Gemini و مدل‌های محلی انتخاب کنید",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "با هوش مصنوعی در مورد محتوایی که می‌خوانید مکالمه کنید",
+    "description": "Description for interactive chat feature"
+  }
+}

@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - Anotasi Web Berbasis AI. Ringkasan, terjemahan, dan lainnya",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Anotasi cerdas untuk setiap halaman web. Didukung oleh AI untuk menjelaskan, meringkas, menganalisis, menerjemahkan, dan lainnya.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Selamat Datang di LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Ringkaskan",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Jelaskan",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Terjemahkan",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Analisis",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Pengaturan",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Bahasa",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Pilih bahasa yang Anda inginkan",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Simpan",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Batal",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Aktif",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Tidak Aktif",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Kirim Umpan Balik",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Memuat...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Sisa Penggunaan Gratis",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Pemilihan Mode",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Konfigurasi Mode",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Buka Petunjuk",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Sembunyikan Konfigurasi Mode",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Sembunyikan Konfigurasi",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Tampilkan Info Situs Web",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Tampilkan favicon dan judul situs web di hasil",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Tampilkan Teks Terpilih",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Tampilkan teks yang telah Anda pilih di hasil",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Tampilkan Tombol 'AI Instan'",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Tambahkan tombol 'AI Instan' yang mengambang yang meringkas atau menjelaskan seluruh halaman dengan satu klik",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Mode Bebas Gangguan",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Menyembunyikan UI yang tidak penting dan meredupkan halaman di belakang LightUp sehingga Anda dapat fokus pada jawaban AI",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Pertahankan Teks yang Disorot Setelah Popup Tertutup",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Pertahankan teks yang disorot setelah menutup popup",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Tampilkan Tombol Aksi pada Pemilihan Teks",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Tampilkan tombol kecil saat teks disorot",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Buka Otomatis LightUp pada Pemilihan Teks",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Membuka LightUp secara otomatis setiap kali Anda memilih teks",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Penyorotan Permanen",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Pintasan Keyboard",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Gunakan pintasan ini untuk mengakses fitur LightUp dengan cepat",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Beralih ke mode Jelaskan",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Beralih ke mode Ringkaskan",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Beralih ke mode Analisis",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Beralih ke mode Terjemahkan",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Buka popup dalam mode Bebas",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "Setelah mengatur mode melalui pintasan, pilih teks apa pun dan LightUp akan muncul dengan mode yang Anda pilih.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Pengalih Fitur",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Pintasan untuk mengaktifkan dan menonaktifkan fitur",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Aktifkan/Nonaktifkan LightUp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Aktifkan/Nonaktifkan mode Fokus Radikal",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Aktifkan/Nonaktifkan tema terang/gelap",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Atur Ulang Semua Pintasan",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Kembalikan semua pintasan ke nilai default-nya",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Atur Ulang",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Tanyakan Apa Saja",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Konfigurasi Pemilih Mode (Pilih hingga 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Mode ini akan muncul di pemilih mode Anda. Klik untuk beralih.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Aksi yang tersedia",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Bebas",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "Logo LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp saat ini Mati",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Aktifkan sakelar di header atau tombol di bawah ini untuk mengaktifkan LightUp dan mengakses semua fitur.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Aktifkan LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Otomatis → Bahasa Inggris",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "Umum",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Pintasan Keyboard",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Pengaturan Lanjutan",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Privasi",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Kebijakan Privasi",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Situs Web",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Beri Nilai Kami",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Umpan Balik",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Bantu kami meningkatkan LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Jenis Umpan Balik",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Pilih jenis umpan balik yang ingin Anda berikan",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Umpan Balik Umum",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Laporan Bug",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Permintaan Fitur",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Lainnya",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Umpan Balik Anda",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Beri tahu kami pendapat Anda atau jelaskan masalah yang Anda alami...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Ketik umpan balik Anda di sini...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "Email (opsional)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Berikan email Anda jika Anda ingin kami menindaklanjuti",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "anda@contoh.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Kirim Umpan Balik",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Warna Sorotan",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Pilih warna untuk penyorotan teks",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "Default",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Kuning",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Jingga",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Biru",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Hijau",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Ungu",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Pink",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Privasi & Data",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Privasi Anda adalah prioritas kami",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Pengumpulan Data Nol",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp menghargai privasi Anda dan menangani data Anda secara bertanggung jawab.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Penyimpanan Lokal",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Semua pengaturan Anda disimpan secara lokal di perangkat Anda",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Pemrosesan Langsung",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Teks diproses langsung tanpa disimpan",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Tidak Ada Pelacakan",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Kami tidak melacak penjelajahan Anda atau menyimpan data pribadi",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Kendali Anda",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Semua pengaturan dan data tetap berada di bawah kendali Anda",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Kebijakan Lengkap",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Kontak",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Gagal Menyimpan",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "Terjadi kesalahan saat menyimpan pengaturan Anda. Silakan coba lagi.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "Pengaturan Tersimpan",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "Perubahan Anda telah disimpan saat beralih bagian.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Tutup pemberitahuan",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Hentikan berbicara",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Bacakan teks dengan lantang",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Ringkaskan",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Jelaskan",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Terjemahkan",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Analisis",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Obrolan tentang",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Opsi Pemilihan",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Penggunaan Harian",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Tema",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Pilih tema warna yang Anda inginkan untuk ekstensi",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Tema Gelap",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Tema Terang",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Default Sistem",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "Bahasa Berubah",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "UI akan diperbarui untuk mencerminkan pilihan bahasa Anda",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Kesalahan",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Gagal mengubah bahasa",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Margin Popup",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Jarak dari tepi viewport dalam mode mengambang",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Pengaturan Terjemahan",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Gunakan Konteks Halaman untuk Jawaban yang Lebih Baik",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Aktifkan konteks halaman yang lebih dalam untuk hasil yang lebih baik",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Tampilan",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Umpan Balik",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Tata Letak & Tampilan",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Sesuaikan tata letak dan tampilan ekstensi",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Mode Tata Letak",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Mengambang",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Sidebar",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Terpusat",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Ukuran Font Hasil",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Kendalikan ukuran teks di panel hasil",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "X-Kecil",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Kecil",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Sedang",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Besar",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "X-Besar",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "XX-Besar",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Animasi Popup",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Animasi saat popup muncul",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Fade",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Geser",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Skala",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Tidak Ada",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Mode Fokus Radikal",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Buramkan latar belakang saat melihat hasil",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Diperlukan)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Harga:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Ukuran:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "Alamat telah disalin ke clipboard!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Sisa Batas Tingkat:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Atur ulang dalam:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Penyimpanan Otomatis Gagal",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Perubahan Anda tidak disimpan secara otomatis. Silakan simpan secara manual.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Pemuatan Gagal",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Tidak dapat memuat pengaturan Anda. Menggunakan default.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Memuat informasi penggunaan...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "Model Dipilih Otomatis",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Secara otomatis memilih {0} karena Anda memberikan kunci API Gemini.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Secara otomatis memilih {0} karena Anda memberikan kunci API Grok.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Secara otomatis memilih {0} untuk pengaturan Ollama Anda.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Fungsi tidak ditampilkan)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Templat dinamis - bervariasi berdasarkan teks yang Anda pilih)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "Anotasi Web Berbasis AI",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Versi:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Pengembang:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Situs Web:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Ringkasan Instan",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Terjemahan Real-Time",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Model AI Lanjutan",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Obrolan Interaktif",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Pengumpulan Data Nol",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Penyimpanan Lokal",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Versi terbaru dengan kemampuan yang ditingkatkan dan waktu respons yang lebih cepat",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Versi ringan yang dioptimalkan untuk efisiensi dan kecepatan",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Model eksperimental yang berfokus pada penalaran dan tugas analitis",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Versi stabil dengan kinerja seimbang",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "Model yang lebih cepat dan lebih kecil untuk respons cepat",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "Versi kuantitatif 8-bit untuk pemrosesan yang efisien",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Model Grok-3 standar",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "$2,00 per 1 juta token",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Varian ringan",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "$1,00 per 1 juta token",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Cepat",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3 yang dioptimalkan untuk latensi",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "$2,50 per 1 juta token",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Cepat",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Varian mini + cepat",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "$1,50 per 1 juta token",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Build Grok-2 terbaru",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "$1,80 per 1 juta token",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Model Llama 2 yang paling kuat, terbaik untuk tugas yang kompleks",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70B parameter",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Model DeepSeek terbaru dengan kemampuan penalaran yang disempurnakan",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67B parameter",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Model pakar campuran berkinerja tinggi",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47B parameter",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Kinerja dan penggunaan sumber daya yang seimbang",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13B parameter",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Model pengikut instruksi yang efisien",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7B parameter",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "Dioptimalkan untuk percakapan alami",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7B parameter",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Versi DeepSeek yang lebih ringan dengan penalaran yang baik",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7B parameter",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Model ringan untuk tugas dasar",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3B parameter",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Kompak tetapi ampuh untuk ukurannya",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2.7B parameter",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "Dioptimalkan untuk interaksi obrolan",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7B parameter",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BETA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "Umum",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "Model AI",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Templat Petunjuk",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Tampilan",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "Tentang",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Pengaturan Umum",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "Konfigurasi Model AI",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Tampilan & Kustomisasi",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Templat Petunjuk",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "Tentang LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Tampilkan teks yang telah Anda pilih dalam hasil",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Tampilkan favicon dan judul situs web dalam hasil",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Pertahankan teks yang disorot setelah menutup popup",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Buka Otomatis LightUp pada Pemilihan Teks",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Membuka LightUp secara otomatis setiap kali Anda memilih teks",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Kesadaran Konteks",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Gunakan konteks halaman untuk memberikan jawaban yang lebih baik dan relevan",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "Pemilihan Mesin AI",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Pilih Jenis Model AI",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Pilih layanan AI mana yang ingin Anda gunakan untuk menghasilkan respons",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "Dasar (Gratis, Terbatas)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (Diperlukan Kunci API)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok oleh xAI (Diperlukan Kunci API)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Lokal/Ollama (Dihosting sendiri)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Pemberitahuan Privasi Data",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "Saat menggunakan tingkatan Dasar, teks yang Anda pilih dan konteks halaman dikirim ke server kami untuk diproses. Kami tidak menyimpan data ini secara permanen.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "Untuk privasi sepenuhnya, pertimbangkan untuk menggunakan kunci API Anda sendiri dengan Google Gemini, Grok, atau model lokal.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Konfigurasi Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Kunci API Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Masukkan kunci API Google AI Studio Anda",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Dapatkan kunci API gratis Anda dari Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Pilih Model Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Pilih model Google Gemini mana yang akan digunakan untuk menghasilkan respons",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Konfigurasi Grok oleh xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "Kunci API xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Masukkan kunci API xAI Anda",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Dapatkan kunci API Anda dari xAI. Kunjungi {0} untuk memulai.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Pilih Model Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Pilih model Grok mana yang akan digunakan untuk menghasilkan respons",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Konfigurasi Lokal/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "URL Server Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Pilih Model Lokal",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Pilih model mana yang akan digunakan dari instalasi Ollama Anda",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Pengaturan Respons",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Panjang Respons Maksimum",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Jumlah token maksimum (kata/karakter) dalam respons AI",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Mode Petunjuk",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Pilih jenis petunjuk yang ingin Anda sesuaikan",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Petunjuk Sistem",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Petunjuk ini menentukan bagaimana AI harus berperilaku dan merespons",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Templat Petunjuk Pengguna",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Templat ini digunakan untuk memformat permintaan pengguna ke AI",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Sunting",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Simpan",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Atur Ulang ke Default",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Atur ulang petunjuk mode {0} kembali ke default aslinya",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Atur Ulang ke Default",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "Atur Ulang Berhasil",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Petunjuk ini menggunakan logika dinamis dan tidak dapat diedit",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Cara menerapkan templat kustom Anda:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "Petunjuk kustom Anda akan secara otomatis digunakan saat Anda memilih teks dan memilih mode yang sesuai\nPerubahan berlaku segera - tidak perlu memulai ulang\nAnda dapat mengatur ulang petunjuk apa pun kembali ke default menggunakan tombol reset",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Tema & Tampilan",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Tema Warna",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Tema Gelap",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Tema Terang",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Default Sistem",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Ukuran Font",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Sesuaikan ukuran teks di hasil popup",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Warna Sorotan",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Pilih warna untuk menyoroti teks yang dipilih",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Pilih bagaimana popup muncul di halaman",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Mengambang",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Sidebar",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Terpusat",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Efek animasi saat popup muncul",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Fade",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Geser",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Skala",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Tidak Ada",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Pengaturan Animasi",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp adalah ekstensi browser berbasis AI yang menyediakan ringkasan, penjelasan, terjemahan, dan analisis instan untuk teks apa pun di web.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Tautan",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Tautan dan sumber daya yang bermanfaat",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Kunjungi Situs Web",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Beri Nilai di Chrome Store",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Hapus Semua Data",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Jelaskan",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Ringkaskan",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Analisis",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Terjemahkan",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Bebas",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Detail Petunjuk",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Lihat dan sesuaikan petunjuk yang digunakan untuk mode ini",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Dapatkan ringkasan instan dari teks apa pun dengan satu klik",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Terjemahkan teks ke bahasa apa pun secara instan",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Pilih dari berbagai model AI termasuk GPT, Gemini, dan model lokal",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Lakukan percakapan dengan AI tentang konten yang Anda baca",
+    "description": "Description for interactive chat feature"
+  }
+}

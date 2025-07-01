@@ -4,6 +4,14 @@ import type { Settings } from "~types/settings";
 import styled from "@emotion/styled";
 import { motion, AnimatePresence } from "framer-motion";
 import { Logo } from "../icons";
+import { useContentI18n } from "../../utils/contentScriptI18n";
+
+// Menu item interface
+interface MenuItem {
+  label: string;
+  mode: string;
+  icon: React.ReactNode;
+}
 
 // Define the props interface for our component
 interface TextSelectionButtonProps {
@@ -13,13 +21,6 @@ interface TextSelectionButtonProps {
   currentTheme: "light" | "dark";
   isVisible: boolean;
   setIsVisible: (visible: boolean) => void;
-}
-
-// Menu item interface
-interface MenuItem {
-  label: string;
-  mode: string;
-  icon: React.ReactNode;
 }
 
 /**
@@ -40,22 +41,44 @@ const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
   // State to track if we're in the process of exiting
   const [isExiting, setIsExiting] = useState(false);
   
-  // Refs for hover timers
-  const showTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const buttonRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const showTimerRef = useRef<NodeJS.Timeout>();
+  const hideTimerRef = useRef<NodeJS.Timeout>();
+  
+  // Use our custom i18n hook for content scripts
+  const { getMessage } = useContentI18n();
+  
+  // Handle clicks outside the menu to close it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current && 
+        buttonRef.current && 
+        !menuRef.current.contains(event.target as Node) && 
+        !buttonRef.current.contains(event.target as Node)
+      ) {
+        setMenuVisible(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   
   // Handle visibility changes from parent component
   useEffect(() => {
     if (!isVisible && !isExiting) {
-      // Start exit animation
       setIsExiting(true);
-      
-      // After animation completes, allow parent to fully remove component
+      // Small delay to allow exit animation to play
       setTimeout(() => {
+        setMenuVisible(false);
         setIsExiting(false);
-      }, 300); // Slightly longer than animation duration to ensure completion
+      }, 200);
     }
-  }, [isVisible]);
+  }, [isVisible, isExiting]);
   
   // Cleanup timers on unmount
   useEffect(() => {
@@ -68,16 +91,20 @@ const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
       }
     };
   }, []);
-
+  
   // Theme-aware SVG icon color
   const iconColor = useMemo(() => {
     return currentTheme === 'dark' ? 'white' : '#333333';
   }, [currentTheme]);
 
+  const buttonText = useMemo(() => {
+    return getMessage("clickToProcess", "Click to process");
+  }, [getMessage]);
+
   // Menu items with our original functions but with theme-aware SVG icons
   const menuItems: MenuItem[] = useMemo(() => [
     { 
-      label: "Summarize", 
+      label: getMessage("actionSummarize", "Summarize"), 
       mode: "summarize", 
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -87,7 +114,7 @@ const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
       ) 
     },
     { 
-      label: "Explain", 
+      label: getMessage("actionExplain", "Explain"), 
       mode: "explain", 
       icon: (
         <svg width="16" height="16" viewBox="0 0 89 99" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -96,7 +123,7 @@ const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
       ) 
     },
     { 
-      label: "Translate", 
+      label: getMessage("actionTranslate", "Translate"), 
       mode: "translate", 
       icon: (
         <svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke={iconColor}>
@@ -105,7 +132,7 @@ const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
       ) 
     },
     { 
-      label: "Analyze", 
+      label: getMessage("actionAnalyze", "Analyze"), 
       mode: "analyze", 
       icon: (
         <svg width="16" height="16" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -114,7 +141,7 @@ const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
       ) 
     },
     { 
-      label: "Chat about", 
+      label: getMessage("actionChat", "Chat about"), 
       mode: "free", 
       icon: (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -122,7 +149,7 @@ const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
         </svg>
       ) 
     }
-  ], [iconColor]);
+  ], [iconColor, getMessage]);
   
   // Handle button hover - show menu with delay
   const handleButtonHover = () => {
@@ -398,7 +425,7 @@ const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
             onMouseUp={(e) => {
               e.stopPropagation();
             }}
-            aria-label="Selection Options"
+            aria-label={getMessage("selectionOptions", "Selection Options")}
             aria-expanded={menuVisible}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.97 }}

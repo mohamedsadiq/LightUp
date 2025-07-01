@@ -1,0 +1,611 @@
+{
+  "extensionName": {
+    "message": "LightUp - AI Powered Web Annotations. summary, translate, and more",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Genius annotations for every page on the web. Powered by AI to explain, summarize, analyze, translate, and more.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Welcome to LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Summarize",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Explain",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Translate",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Analyze",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Settings",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Language",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Choose your preferred language",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Save",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Cancel",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Enabled",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Disabled",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Send Feedback",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Loading...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Free Uses Remaining",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Mode Selection",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Configure Modes",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Go to Prompts",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Hide Mode Configuration",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Hide Config",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Show Website Info",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Display website favicon and title in the results",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Show Selected Text",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Display the text you've selected in the results",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Show 'Instant AI' Button",
+    "description": "Label for the 'Show Instant AI Button' toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Add a floating 'Instant AI' button that summarizes or explains the whole page with one click",
+    "description": "Description for the 'Show Instant AI Button' toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Distraction-Free Mode",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Hides non-essential UI and dims the page behind LightUp so you can focus on the AI answer",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Keep Highlighted Text After Popup Closes",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Keep text highlighted after closing popup",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Show Action Button on Text Selection",
+    "description": "Label for the 'Show Action Button' toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Display a small button when text is highlighted",
+    "description": "Description for the 'Show Action Button' toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Auto-Open LightUp on Text Selection",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Opens LightUp automatically whenever you select text",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Persistent Highlighting",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Keyboard Shortcuts",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Use these shortcuts to quickly access LightUp features",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Switch to Explain mode",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Switch to Summarize mode",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Switch to Analyze mode",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Switch to Translate mode",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Open popup in Free mode",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "After setting the mode via shortcut, select any text and LightUp will appear with your chosen mode.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Feature Toggles",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Shortcuts for toggling features on and off",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Toggle LightUp on/off",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Toggle Radically Focus mode",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Toggle Light/Dark theme",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Reset All Shortcuts",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Restore all shortcuts to their default values",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Reset",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Ask Anything",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Configure Mode Selector (Choose up to 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "These modes will appear in your mode selector. Click to toggle.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Available actions",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Free",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "LightUp Logo",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp is currently Off",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Toggle the switch in the header or the button below to enable LightUp and access all features.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Enable LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Auto → English",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": { "message": "General", "description": "Sidebar tab: General" },
+  "tabKeyboard": { "message": "Keyboard Shortcuts", "description": "Sidebar tab: Keyboard Shortcuts" },
+  "tabAdvanced": { "message": "Advanced Settings", "description": "Sidebar tab: Advanced Settings" },
+  "tabPrivacy": { "message": "Privacy", "description": "Sidebar tab: Privacy" },
+  "privacyPolicy": { "message": "Privacy Policy", "description": "Privacy policy full title" },
+  "website": { "message": "Website", "description": "Sidebar link: Website" },
+  "rateUs": { "message": "Rate Us", "description": "Sidebar link: Rate Us" },
+  "feedbackTitle": {
+    "message": "Provide Feedback",
+    "description": "Title for feedback section"
+  },
+  "feedbackDesc": {
+    "message": "Help us improve the extension by sharing your experience",
+    "description": "Description for feedback section"
+  },
+  "feedbackTypeLabel": {
+    "message": "Feedback Type",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Select the type of feedback you'd like to provide",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "General Feedback",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Bug Report",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Feature Request",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Other",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Your Feedback",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Tell us what you think or describe the issue you're experiencing...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Type your feedback here...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "Email (optional)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Leave your email if you'd like us to follow up",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Submit Feedback",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": { "message": "Highlight Color", "description": "Title for highlight color selection" },
+  "highlightColorDesc": { "message": "Choose the color for text highlighting", "description": "Description for highlight color selection" },
+  "colorDefault": { "message": "Default", "description": "Default highlight color option" },
+  "colorYellow": { "message": "Yellow", "description": "Yellow highlight color option" },
+  "colorOrange": { "message": "Orange", "description": "Orange highlight color option" },
+  "colorBlue": { "message": "Blue", "description": "Blue highlight color option" },
+  "colorGreen": { "message": "Green", "description": "Green highlight color option" },
+  "colorPurple": { "message": "Purple", "description": "Purple highlight color option" },
+  "colorPink": { "message": "Pink", "description": "Pink highlight color option" },
+  "privacyTitle": { "message": "Privacy", "description": "Title for privacy section" },
+  "privacyDesc": { "message": "How we handle your data and protect your privacy", "description": "Description for privacy section" },
+  "zeroDataCollection": { "message": "Zero Data Collection", "description": "Claim of zero data collection" },
+  "privacyMainText": { "message": "LightUp does not collect, store, or track any personal information. All processing happens locally or directly with your chosen AI service.", "description": "Main explanation of privacy policy" },
+  "localStorage": { "message": "Local Storage", "description": "Local storage heading" },
+  "localStorageDesc": { "message": "Settings are stored only in your browser", "description": "Description of local storage practices" },
+  "directProcessing": { "message": "Direct Processing", "description": "Direct processing heading" },
+  "directProcessingDesc": { "message": "Your data is sent directly to AI services you select", "description": "Description of direct processing" },
+  "noTracking": { "message": "No Tracking", "description": "No tracking heading" },
+  "noTrackingDesc": { "message": "We do not track your activity or usage", "description": "Description of no tracking" },
+  "yourControl": { "message": "Your Control", "description": "Your control heading" },
+  "yourControlDesc": { "message": "You can delete all data at any time", "description": "Description of user control" },
+  "fullPolicy": { "message": "Full Policy", "description": "Link text to full privacy policy" },
+  "contact": { "message": "Contact", "description": "Contact link text" },
+  "saveFailedTitle": { "message": "Save Failed", "description": "Title for save failed toast notification" },
+  "saveFailedMessage": { "message": "There was an error saving your settings. Please try again.", "description": "Message for save failed toast notification" },
+  "settingsSavedTitle": { "message": "Settings Saved", "description": "Title for settings saved toast notification" },
+  "settingsSavedMessage": { "message": "Your changes were saved when switching sections.", "description": "Message for settings saved toast notification" },
+  "closeNotification": { "message": "Close notification", "description": "Aria label for close notification button" },
+  "speakerStop": { "message": "Stop speaking", "description": "Aria label for speaker button when speaking" },
+  "speakerStart": { "message": "Read text aloud", "description": "Aria label for speaker button when not speaking" },
+  "actionSummarize": { "message": "Summarize", "description": "Label for summarize action in text selection menu" },
+  "actionExplain": { "message": "Explain", "description": "Label for explain action in text selection menu" },
+  "actionTranslate": { "message": "Translate", "description": "Label for translate action in text selection menu" },
+  "actionAnalyze": { "message": "Analyze", "description": "Label for analyze action in text selection menu" },
+  "actionChat": { "message": "Chat about", "description": "Label for chat action in text selection menu" },
+  "selectionOptions": { "message": "Selection Options", "description": "Aria label for selection options button" },
+  "dailyUsage": { "message": "Daily Usage", "description": "Title for daily usage section" },
+  "themeTitle": { "message": "Theme", "description": "Title for theme selection" },
+  "themeDescription": { "message": "Choose your preferred color theme", "description": "Description for theme selection" },
+  "darkTheme": { "message": "Dark Theme", "description": "Dark theme option" },
+  "lightTheme": { "message": "Light Theme", "description": "Light theme option" },
+  "systemTheme": { "message": "System Default", "description": "System default theme option" },
+  "languageChanged": { "message": "Language Changed", "description": "Title for language change notification" },
+  "languageChangeMessage": { "message": "UI will update to reflect your language choice", "description": "Message for language change notification" },
+  "languageChangeError": { "message": "Error", "description": "Title for language change error notification" },
+  "languageChangeErrorMessage": { "message": "Failed to change language", "description": "Message for language change error notification" },
+  "popupMarginLabel": { "message": "Popup Margin", "description": "Label for popup margin setting" },
+  "popupMarginDesc": { "message": "Distance from viewport edges in floating mode", "description": "Description for popup margin setting" },
+  "translationSettings": { "message": "Translation Settings", "description": "Label for translation settings section" },
+  "pageContextLabel": { "message": "Use Page Context for Better Answers", "description": "Label for page context toggle" },
+  "pageContextDesc": { "message": "Enable deeper page context for better results", "description": "Description for page context toggle" },
+  "tabAppearance": { "message": "Appearance", "description": "Sidebar tab: Appearance" },
+  "tabFeedback": { "message": "Feedback", "description": "Sidebar tab: Feedback" },
+  "layoutDisplayTitle": { "message": "Layout & Display", "description": "Title for layout and display section" },
+  "layoutDisplayDesc": { "message": "Customize the layout and appearance of the extension", "description": "Description for layout and display section" },
+  "layoutModeLabel": { "message": "Layout Mode", "description": "Label for layout mode selection" },
+  "layoutOptionFloating": { "message": "Floating", "description": "Option for floating layout mode" },
+  "layoutOptionSidebar": { "message": "Sidebar", "description": "Option for sidebar layout mode" },
+  "layoutOptionCentered": { "message": "Centered", "description": "Option for centered layout mode" },
+  "resultsFontSizeLabel": { "message": "Results Font Size", "description": "Label for font size setting" },
+  "resultsFontSizeDesc": { "message": "Control the size of text in the results panel", "description": "Description for font size setting" },
+  "fontSizeXSmall": { "message": "X-Small", "description": "Extra small font size option" },
+  "fontSizeSmall": { "message": "Small", "description": "Small font size option" },
+  "fontSizeMedium": { "message": "Medium", "description": "Medium font size option" },
+  "fontSizeLarge": { "message": "Large", "description": "Large font size option" },
+  "fontSizeXLarge": { "message": "X-Large", "description": "Extra large font size option" },
+  "fontSizeXXLarge": { "message": "XX-Large", "description": "Extra extra large font size option" },
+  "popupAnimationLabel": { "message": "Popup Animation", "description": "Label for popup animation setting" },
+  "popupAnimationDesc": { "message": "Animation when the popup appears", "description": "Description for popup animation setting" },
+  "popupAnimationOptionFade": { "message": "Fade", "description": "Fade animation option" },
+  "popupAnimationOptionSlide": { "message": "Slide", "description": "Slide animation option" },
+  "popupAnimationOptionScale": { "message": "Scale", "description": "Scale animation option" },
+  "popupAnimationOptionNone": { "message": "None", "description": "No animation option" },
+  "radicalFocusLabel": { "message": "Radical Focus Mode", "description": "Label for radical focus mode" },
+  "radicalFocusDesc": { "message": "Blur background when viewing results", "description": "Description for radical focus mode" },
+  "requiredFieldLabel": { "message": "(Required)", "description": "Label for required fields" },
+  "price": { "message": "Price:", "description": "Price label" },
+  "size": { "message": "Size:", "description": "Size label" },
+  "addressCopiedToClipboard": { "message": "Address copied to clipboard!", "description": "Message when address is copied" },
+  "rateLimitRemaining": { "message": "Rate Limit Remaining:", "description": "Rate limit remaining label" },
+  "resetIn": { "message": "Reset in:", "description": "Rate limit reset time label" },
+  "autoSaveFailedTitle": { "message": "Auto-save Failed", "description": "Title for auto-save failed notification" },
+  "autoSaveFailedMessage": { "message": "Your changes were not saved automatically. Please save manually.", "description": "Message for auto-save failed notification" },
+  "loadingFailedTitle": { "message": "Loading Failed", "description": "Title for loading failed notification" },
+  "loadingFailedMessage": { "message": "Could not load your settings. Using defaults.", "description": "Message for loading failed notification" },
+  "loadingUsageInfo": { "message": "Loading usage info...", "description": "Loading usage information text" },
+  "modelAutoSelectedTitle": { "message": "Model Auto-Selected", "description": "Title for model auto-selection notification" },
+  "geminiModelAutoSelectedMessage": { "message": "Automatically selected {0} since you provided a Gemini API key.", "description": "Message for Gemini model auto-selection" },
+  "grokModelAutoSelectedMessage": { "message": "Automatically selected {0} since you provided a Grok API key.", "description": "Message for Grok model auto-selection" },
+  "localModelAutoSelectedMessage": { "message": "Automatically selected {0} for your Ollama setup.", "description": "Message for local model auto-selection" },
+  "functionPromptPlaceholder": { "message": "(Function not displayed)", "description": "Placeholder for function prompts" },
+  "dynamicTemplatePlaceholder": { "message": "(Dynamic template - varies based on your selected text)", "description": "Placeholder for dynamic templates" },
+  "aboutSubtitle": { "message": "AI-Powered Web Annotations", "description": "Subtitle for about section" },
+  "aboutVersion": { "message": "Version:", "description": "Version label in about section" },
+  "aboutDeveloper": { "message": "Developer:", "description": "Developer label in about section" },
+  "aboutWebsite": { "message": "Website:", "description": "Website label in about section" },
+  "featureInstantSummaries": { "message": "Instant Summaries", "description": "Feature: Instant summaries" },
+  "featureTranslation": { "message": "Real-Time Translation", "description": "Feature: Real-time translation" },
+  "featureAdvancedModels": { "message": "Advanced AI Models", "description": "Feature: Advanced AI models" },
+  "featureInteractiveChat": { "message": "Interactive Chat", "description": "Feature: Interactive chat" },
+  "zeroDataCollectionTitle": { "message": "Zero Data Collection", "description": "Title for zero data collection section" },
+  "localStorageTitle": { "message": "Local Storage", "description": "Title for local storage section" },
+  "gemini20FlashLabel": { "message": "Gemini 2.0 Flash", "description": "Label for Gemini 2.0 Flash model" },
+  "gemini20FlashDesc": { "message": "Latest version with improved capabilities and faster response times", "description": "Description for Gemini 2.0 Flash model" },
+  "gemini20FlashLiteLabel": { "message": "Gemini 2.0 Flash-Lite", "description": "Label for Gemini 2.0 Flash-Lite model" },
+  "gemini20FlashLiteDesc": { "message": "Lightweight version optimized for efficiency and speed", "description": "Description for Gemini 2.0 Flash-Lite model" },
+  "gemini20FlashThinkingLabel": { "message": "Gemini 2.0 Flash Thinking", "description": "Label for Gemini 2.0 Flash Thinking model" },
+  "gemini20FlashThinkingDesc": { "message": "Experimental model focused on reasoning and analytical tasks", "description": "Description for Gemini 2.0 Flash Thinking model" },
+  "gemini15ProLabel": { "message": "Gemini 1.5 Pro", "description": "Label for Gemini 1.5 Pro model" },
+  "gemini15ProDesc": { "message": "Stable version with balanced performance", "description": "Description for Gemini 1.5 Pro model" },
+  "gemini15FlashLabel": { "message": "Gemini 1.5 Flash", "description": "Label for Gemini 1.5 Flash model" },
+  "gemini15FlashDesc": { "message": "Faster, smaller model for quick responses", "description": "Description for Gemini 1.5 Flash model" },
+  "gemini15Flash8BLabel": { "message": "Gemini 1.5 Flash-8B", "description": "Label for Gemini 1.5 Flash-8B model" },
+  "gemini15Flash8BDesc": { "message": "8-bit quantized version for efficient processing", "description": "Description for Gemini 1.5 Flash-8B model" },
+  "grok3Label": { "message": "Grok 3", "description": "Label for Grok 3 model" },
+  "grok3Desc": { "message": "Standard Grok-3 model", "description": "Description for Grok 3 model" },
+  "grok3Price": { "message": "$2.00 per 1M tokens", "description": "Price for Grok 3 model" },
+  "grok3MiniLabel": { "message": "Grok 3 Mini", "description": "Label for Grok 3 Mini model" },
+  "grok3MiniDesc": { "message": "Lightweight variant", "description": "Description for Grok 3 Mini model" },
+  "grok3MiniPrice": { "message": "$1.00 per 1M tokens", "description": "Price for Grok 3 Mini model" },
+  "grok3FastLabel": { "message": "Grok 3 Fast", "description": "Label for Grok 3 Fast model" },
+  "grok3FastDesc": { "message": "Latency-optimised Grok-3", "description": "Description for Grok 3 Fast model" },
+  "grok3FastPrice": { "message": "$2.50 per 1M tokens", "description": "Price for Grok 3 Fast model" },
+  "grok3MiniFastLabel": { "message": "Grok 3 Mini Fast", "description": "Label for Grok 3 Mini Fast model" },
+  "grok3MiniFastDesc": { "message": "Mini + fast variant", "description": "Description for Grok 3 Mini Fast model" },
+  "grok3MiniFastPrice": { "message": "$1.50 per 1M tokens", "description": "Price for Grok 3 Mini Fast model" },
+  "grok21212Label": { "message": "Grok 2.1212", "description": "Label for Grok 2.1212 model" },
+  "grok21212Desc": { "message": "Latest Grok-2 build", "description": "Description for Grok 2.1212 model" },
+  "grok21212Price": { "message": "$1.80 per 1M tokens", "description": "Price for Grok 2.1212 model" },
+  "llama270bLabel": { "message": "Llama 2 70B Chat", "description": "Label for Llama 2 70B Chat model" },
+  "llama270bDesc": { "message": "Most powerful Llama 2 model, best for complex tasks", "description": "Description for Llama 2 70B Chat model" },
+  "llama270bSize": { "message": "70B parameters", "description": "Size for Llama 2 70B Chat model" },
+  "deepseekV3Label": { "message": "DeepSeek V3", "description": "Label for DeepSeek V3 model" },
+  "deepseekV3Desc": { "message": "Latest DeepSeek model with enhanced reasoning capabilities", "description": "Description for DeepSeek V3 model" },
+  "deepseekV3Size": { "message": "67B parameters", "description": "Size for DeepSeek V3 model" },
+  "mixtral8x7bLabel": { "message": "Mixtral 8x7B Instruct", "description": "Label for Mixtral 8x7B Instruct model" },
+  "mixtral8x7bDesc": { "message": "High-performance mixture of experts model", "description": "Description for Mixtral 8x7B Instruct model" },
+  "mixtral8x7bSize": { "message": "47B parameters", "description": "Size for Mixtral 8x7B Instruct model" },
+  "llama213bLabel": { "message": "Llama 2 13B Chat", "description": "Label for Llama 2 13B Chat model" },
+  "llama213bDesc": { "message": "Balanced performance and resource usage", "description": "Description for Llama 2 13B Chat model" },
+  "llama213bSize": { "message": "13B parameters", "description": "Size for Llama 2 13B Chat model" },
+  "mistral7bLabel": { "message": "Mistral 7B Instruct", "description": "Label for Mistral 7B Instruct model" },
+  "mistral7bDesc": { "message": "Efficient instruction-following model", "description": "Description for Mistral 7B Instruct model" },
+  "mistral7bSize": { "message": "7B parameters", "description": "Size for Mistral 7B Instruct model" },
+  "neuralChatV31Label": { "message": "Neural Chat V3.1", "description": "Label for Neural Chat V3.1 model" },
+  "neuralChatV31Desc": { "message": "Optimized for natural conversations", "description": "Description for Neural Chat V3.1 model" },
+  "neuralChatV31Size": { "message": "7B parameters", "description": "Size for Neural Chat V3.1 model" },
+  "deepseekV3BaseLabel": { "message": "DeepSeek V3 Base", "description": "Label for DeepSeek V3 Base model" },
+  "deepseekV3BaseDesc": { "message": "Lighter version of DeepSeek with good reasoning", "description": "Description for DeepSeek V3 Base model" },
+  "deepseekV3BaseSize": { "message": "7B parameters", "description": "Size for DeepSeek V3 Base model" },
+  "llama32_3bLabel": { "message": "Llama 3.2 3B Instruct", "description": "Label for Llama 3.2 3B Instruct model" },
+  "llama32_3bDesc": { "message": "Lightweight model for basic tasks", "description": "Description for Llama 3.2 3B Instruct model" },
+  "llama32_3bSize": { "message": "3B parameters", "description": "Size for Llama 3.2 3B Instruct model" },
+  "phi2Label": { "message": "Phi-2", "description": "Label for Phi-2 model" },
+  "phi2Desc": { "message": "Compact but powerful for its size", "description": "Description for Phi-2 model" },
+  "phi2Size": { "message": "2.7B parameters", "description": "Size for Phi-2 model" },
+  "openchat35Label": { "message": "OpenChat 3.5", "description": "Label for OpenChat 3.5 model" },
+  "openchat35Desc": { "message": "Optimized for chat interactions", "description": "Description for OpenChat 3.5 model" },
+  "openchat35Size": { "message": "7B parameters", "description": "Size for OpenChat 3.5 model" },
+  "betaBadgeLabel": { "message": "BETA", "description": "Beta badge label" },
+  "generalTabLabel": { "message": "General", "description": "General tab label" },
+  "modelSettingsTabLabel": { "message": "AI Models", "description": "Model settings tab label" },
+  "promptTemplatesTabLabel": { "message": "Prompt Templates", "description": "Prompt templates tab label" },
+  "appearanceTabLabel": { "message": "Appearance", "description": "Appearance tab label" },
+  "aboutTabLabel": { "message": "About", "description": "About tab label" },
+  "generalSettingsTitle": { "message": "General Settings", "description": "General settings section title" },
+  "modelSettingsTitle": { "message": "AI Model Configuration", "description": "Model settings section title" },
+  "customizationTabTitle": { "message": "Appearance & Customization", "description": "Customization tab title" },
+  "promptTemplatesTitle": { "message": "Prompt Templates", "description": "Prompt templates section title" },
+  "aboutTabTitle": { "message": "About LightUp", "description": "About section title" },
+  "showSelectedTextDescription": { "message": "Display the text you've selected in the results", "description": "Description for show selected text toggle" },
+  "showWebsiteInfoDescription": { "message": "Display website favicon and title in the results", "description": "Description for show website info toggle" },
+  "keepHighlightedTextDescription": { "message": "Keep text highlighted after closing popup", "description": "Description for keep highlighted text toggle" },
+  "autoOpenLightUpLabel": { "message": "Auto-Open LightUp on Text Selection", "description": "Label for auto-open toggle" },
+  "autoOpenLightUpDescription": { "message": "Opens LightUp automatically whenever you select text", "description": "Description for auto-open toggle" },
+  "contextAwarenessLabel": { "message": "Context Awareness", "description": "Label for context awareness toggle" },
+  "contextAwarenessDescription": { "message": "Use page context to provide better, more relevant answers", "description": "Description for context awareness toggle" },
+  "aiEngineSelectionHeader": { "message": "AI Engine Selection", "description": "Header for AI engine selection" },
+  "chooseModelTypeLabel": { "message": "Choose AI Model Type", "description": "Label for model type selection" },
+  "chooseModelTypeDescription": { "message": "Select which AI service you want to use for generating responses", "description": "Description for model type selection" },
+  "basicModelTypeOption": { "message": "Basic (Free, Limited)", "description": "Basic model type option" },
+  "geminiModelTypeOption": { "message": "Google Gemini (API Key Required)", "description": "Gemini model type option" },
+  "grokModelTypeOption": { "message": "Grok by xAI (API Key Required)", "description": "Grok model type option" },
+  "localModelTypeOption": { "message": "Local/Ollama (Self-hosted)", "description": "Local model type option" },
+  "dataPrivacyNoticeTitle": { "message": "Data Privacy Notice", "description": "Title for data privacy notice" },
+  "basicTierPrivacyWarningPrimary": { "message": "When using the Basic tier, your selected text and page context are sent to our servers for processing. We do not store this data permanently.", "description": "Primary privacy warning for basic tier" },
+  "basicTierPrivacyWarningSecondary": { "message": "For complete privacy, consider using your own API key with Google Gemini, Grok, or a local model.", "description": "Secondary privacy warning for basic tier" },
+  "geminiConfigurationHeader": { "message": "Google Gemini Configuration", "description": "Header for Gemini configuration" },
+  "geminiApiKeyLabel": { "message": "Google Gemini API Key", "description": "Label for Gemini API key" },
+  "geminiApiKeyPlaceholder": { "message": "Enter your Google AI Studio API key", "description": "Placeholder for Gemini API key" },
+  "geminiApiKeyDescription": { "message": "Get your free API key from Google AI Studio. {0}", "description": "Description for Gemini API key" },
+  "geminiModelLabel": { "message": "Choose Gemini Model", "description": "Label for Gemini model selection" },
+  "geminiModelDescription": { "message": "Select which Google Gemini model to use for generating responses", "description": "Description for Gemini model selection" },
+  "grokConfigurationHeader": { "message": "Grok by xAI Configuration", "description": "Header for Grok configuration" },
+  "xaiApiKeyLabel": { "message": "xAI API Key", "description": "Label for xAI API key" },
+  "xaiApiKeyPlaceholder": { "message": "Enter your xAI API key", "description": "Placeholder for xAI API key" },
+  "xaiApiKeyDescription": { "message": "Get your API key from xAI. Visit {0} to get started.", "description": "Description for xAI API key" },
+  "grokModelLabel": { "message": "Choose Grok Model", "description": "Label for Grok model selection" },
+  "grokModelDescription": { "message": "Select which Grok model to use for generating responses", "description": "Description for Grok model selection" },
+  "ollamaConfigurationHeader": { "message": "Local/Ollama Configuration", "description": "Header for Ollama configuration" },
+  "ollamaServerUrlLabel": { "message": "Ollama Server URL", "description": "Label for Ollama server URL" },
+  "ollamaServerUrlPlaceholder": { "message": "http://localhost:11434", "description": "Placeholder for Ollama server URL" },
+  "localModelLabel": { "message": "Choose Local Model", "description": "Label for local model selection" },
+  "localModelDescription": { "message": "Select which model to use from your Ollama installation", "description": "Description for local model selection" },
+  "responseSettingsHeader": { "message": "Response Settings", "description": "Header for response settings" },
+  "maxTokensLabel": { "message": "Max Response Length", "description": "Label for max tokens setting" },
+  "maxTokensDescription": { "message": "Maximum number of tokens (words/characters) in the AI response", "description": "Description for max tokens setting" },
+  "promptModeHeader": { "message": "Prompt Mode", "description": "Header for prompt mode selection" },
+  "promptModeDescription": { "message": "Choose which type of prompt you want to customize", "description": "Description for prompt mode selection" },
+  "systemPromptLabel": { "message": "System Prompt", "description": "Label for system prompt" },
+  "systemPromptDescription": { "message": "This prompt defines how the AI should behave and respond", "description": "Description for system prompt" },
+  "userPromptLabel": { "message": "User Prompt Template", "description": "Label for user prompt" },
+  "userPromptDescription": { "message": "This template is used to format user requests to the AI", "description": "Description for user prompt" },
+  "editButtonText": { "message": "Edit", "description": "Edit button text" },
+  "saveButtonText": { "message": "Save", "description": "Save button text" },
+  "resetTemplateLabel": { "message": "Reset to Default", "description": "Label for reset template section" },
+  "resetTemplateDescription": { "message": "Reset the {0} mode prompts back to their original defaults", "description": "Description for reset template section" },
+  "resetToDefaultButtonText": { "message": "Reset to Default", "description": "Reset to default button text" },
+  "resetSuccessText": { "message": "Reset Successfully", "description": "Reset success message" },
+  "cannotEditFunctionPrompt": { "message": "This prompt uses dynamic logic and cannot be edited", "description": "Message for function-based prompts" },
+  "templateApplicationNote": { "message": "How to apply your custom templates:", "description": "Note about template application" },
+  "templateApplicationInstructions": { "message": "Your custom prompts will automatically be used when you select text and choose the corresponding mode\nChanges take effect immediately - no restart required\nYou can reset any prompt back to defaults using the reset button", "description": "Instructions for template application" },
+  "appearanceSectionHeader": { "message": "Theme & Appearance", "description": "Header for appearance section" },
+  "themeLabel": { "message": "Color Theme", "description": "Label for theme selection" },
+  "themeDescription": { "message": "Choose your preferred color theme for the extension", "description": "Description for theme selection" },
+  "darkThemeText": { "message": "Dark Theme", "description": "Dark theme option text" },
+  "lightThemeText": { "message": "Light Theme", "description": "Light theme option text" },
+  "systemDefaultThemeText": { "message": "System Default", "description": "System default theme option text" },
+  "fontSizeLabel": { "message": "Font Size", "description": "Label for font size setting" },
+  "fontSizeDescription": { "message": "Adjust the text size in the popup results", "description": "Description for font size setting" },
+  "highlightColorLabel": { "message": "Highlight Color", "description": "Label for highlight color setting" },
+  "highlightColorDescription": { "message": "Choose the color for highlighting selected text", "description": "Description for highlight color setting" },
+  "layoutModeLabel": { "message": "Layout Mode", "description": "Label for layout mode setting" },
+  "layoutModeDesc": { "message": "Choose how the popup appears on the page", "description": "Description for layout mode setting" },
+  "layoutOptionFloatingLabel": { "message": "Floating", "description": "Floating layout option label" },
+  "layoutOptionSidebarLabel": { "message": "Sidebar", "description": "Sidebar layout option label" },
+  "layoutOptionCenteredLabel": { "message": "Centered", "description": "Centered layout option label" },
+  "popupAnimationLabel": { "message": "Popup Animation", "description": "Label for popup animation setting" },
+  "popupAnimationDescription": { "message": "Animation effect when the popup appears", "description": "Description for popup animation setting" },
+  "animationFade": { "message": "Fade", "description": "Fade animation option" },
+  "animationSlide": { "message": "Slide", "description": "Slide animation option" },
+  "animationScale": { "message": "Scale", "description": "Scale animation option" },
+  "animationNone": { "message": "None", "description": "No animation option" },
+  "animationSettingsHeader": { "message": "Animation Settings", "description": "Header for animation settings" },
+  "aboutDescription": { "message": "LightUp is an AI-powered browser extension that provides instant summaries, explanations, translations, and analysis for any text on the web.", "description": "About section description" },
+  "linksHeader": { "message": "Links", "description": "Header for links section" },
+  "linksDescription": { "message": "Useful links and resources", "description": "Description for links section" },
+  "visitWebsiteButton": { "message": "Visit Website", "description": "Visit website button text" },
+  "rateChromeStoreButton": { "message": "Rate on Chrome Store", "description": "Rate on Chrome Store button text" },
+  "clearAllDataButton": { "message": "Clear All Data", "description": "Clear all data button text" },
+  "privacyTitle": { "message": "Privacy & Data", "description": "Privacy section title" },
+  "privacyDesc": { "message": "Your privacy is our priority", "description": "Privacy section description" },
+  "privacyMainText": { "message": "LightUp respects your privacy and handles your data responsibly.", "description": "Main privacy text" },
+  "explainButtonText": { "message": "Explain", "description": "Explain mode button text" },
+  "summarizeButtonText": { "message": "Summarize", "description": "Summarize mode button text" },
+  "analyzeButtonText": { "message": "Analyze", "description": "Analyze mode button text" },
+  "translateButtonText": { "message": "Translate", "description": "Translate mode button text" },
+  "freeButtonText": { "message": "Free", "description": "Free mode button text" },
+  "promptDetailsHeader": { "message": "Prompt Details", "description": "Header for prompt details section" },
+  "promptDetailsDescription": { "message": "View and customize the prompts used for this mode", "description": "Description for prompt details section" },
+  "aboutSubtitle": { "message": "AI-Powered Web Annotations", "description": "Subtitle for about section" },
+  "aboutVersion": { "message": "Version:", "description": "Version label in about section" },
+  "aboutDeveloper": { "message": "Developer:", "description": "Developer label in about section" },
+  "aboutWebsite": { "message": "Website:", "description": "Website label in about section" },
+  "contact": { "message": "Contact", "description": "Contact label" },
+  "feedbackTitle": { "message": "Feedback", "description": "Feedback section title" },
+  "feedbackDesc": { "message": "Help us improve LightUp", "description": "Feedback section description" },
+  "colorDefault": { "message": "Default", "description": "Default color option" },
+  "colorBlue": { "message": "Blue", "description": "Blue color option" },
+  "colorGreen": { "message": "Green", "description": "Green color option" },
+  "colorYellow": { "message": "Yellow", "description": "Yellow color option" },
+  "colorOrange": { "message": "Orange", "description": "Orange color option" },
+  "colorPink": { "message": "Pink", "description": "Pink color option" },
+  "colorPurple": { "message": "Purple", "description": "Purple color option" },
+  "fontSizeXSmall": { "message": "X-Small", "description": "Extra small font size option" },
+  "featureInstantSummariesDesc": { "message": "Get instant summaries of any text with one click", "description": "Description for instant summaries feature" },
+  "featureTranslationDesc": { "message": "Translate text to any language instantly", "description": "Description for translation feature" },
+  "featureAdvancedModelsDesc": { "message": "Choose from multiple AI models including GPT, Gemini, and local models", "description": "Description for advanced models feature" },
+  "featureInteractiveChatDesc": { "message": "Have conversations with AI about the content you're reading", "description": "Description for interactive chat feature" },
+  "noTracking": { "message": "No Tracking", "description": "No tracking label" },
+  "noTrackingDesc": { "message": "We don't track your browsing or store personal data", "description": "No tracking description" },
+  "yourControl": { "message": "Your Control", "description": "Your control label" },
+  "yourControlDesc": { "message": "All settings and data remain under your control", "description": "Your control description" },
+  "directProcessing": { "message": "Direct Processing", "description": "Direct processing label" },
+  "directProcessingDesc": { "message": "Text is processed directly without storing", "description": "Direct processing description" },
+  "localStorageDesc": { "message": "All your settings are stored locally on your device", "description": "Local storage description" },
+  "showActionButtonLabel": { "message": "Show Action Button on Text Selection", "description": "Label for show action button toggle" },
+  "showActionButtonDesc": { "message": "Display a small button when text is highlighted", "description": "Description for show action button toggle" },
+  "showInstantAIButtonLabel": { "message": "Show 'Instant AI' Button", "description": "Label for show instant AI button toggle" },
+  "showInstantAIButtonDesc": { "message": "Add a floating 'Instant AI' button that summarizes or explains the whole page with one click", "description": "Description for show instant AI button toggle" }
+}

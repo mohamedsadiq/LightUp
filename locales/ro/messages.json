@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - Anotări web alimentate de AI. Rezumat, traducere și multe altele",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Anotări geniale pentru fiecare pagină web. Alimentat de AI pentru a explica, rezuma, analiza, traduce și multe altele.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Bun venit la LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Rezumă",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Explică",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Traduce",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Analizează",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Setări",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Limbă",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Alegeți limba preferată",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Salvează",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Anulează",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Activat",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Dezactivat",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Trimite feedback",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Se încarcă...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Utilizări gratuite rămase",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Selecție mod",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Configurează modurile",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Mergi la prompturi",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Ascunde configurația modului",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Ascunde configurația",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Afișează informații despre site",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Afișează pictograma și titlul site-ului web în rezultate",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Afișează textul selectat",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Afișează textul selectat în rezultate",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Afișează butonul „AI instantaneu”",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Adaugă un buton „AI instantaneu” flotant care rezumă sau explică întreaga pagină cu un singur clic",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Mod fără distragere a atenției",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Ascunde interfața de utilizator neesențială și estompează pagina din spatele LightUp, astfel încât să vă puteți concentra asupra răspunsului AI",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Menține textul evidențiat după închiderea ferestrei pop-up",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Menține textul evidențiat după închiderea ferestrei pop-up",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Afișează butonul de acțiune la selectarea textului",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Afișează un buton mic atunci când textul este evidențiat",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Deschide automat LightUp la selectarea textului",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Deschide LightUp automat ori de câte ori selectați text",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Evidențiere persistentă",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Comenzi rapide de la tastatură",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Utilizați aceste comenzi rapide pentru a accesa rapid funcțiile LightUp",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Comută la modul Explică",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Comută la modul Rezumă",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Comută la modul Analizează",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Comută la modul Traduce",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Deschide fereastra pop-up în modul Liber",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "După setarea modului prin comandă rapidă, selectați orice text și LightUp va apărea cu modul ales.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Comutatoare de funcții",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Comenzi rapide pentru activarea și dezactivarea funcțiilor",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Activează/dezactivează LightUp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Activează/dezactivează modul Focus radical",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Activează/dezactivează tema Clară/Întunecată",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Resetează toate comenzile rapide",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Restaurează toate comenzile rapide la valorile implicite",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Resetează",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Întreabă orice",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Configurează selectorul de mod (Alege până la 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Aceste moduri vor apărea în selectorul de mod. Faceți clic pentru a comuta.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Acțiuni disponibile",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Liber",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "Logoul LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp este în prezent dezactivat",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Activați comutatorul din antet sau butonul de mai jos pentru a activa LightUp și a accesa toate funcțiile.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Activează LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Auto → Engleză",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "General",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Comenzi rapide de la tastatură",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Setări avansate",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Confidențialitate",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Politica de confidențialitate",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Site web",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Evaluează-ne",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Feedback",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Ajută-ne să îmbunătățim LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Tip de feedback",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Selectați tipul de feedback pe care doriți să îl furnizați",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Feedback general",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Raport de eroare",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Solicitare funcție",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Altele",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Feedback-ul dvs.",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Spuneți-ne ce credeți sau descrieți problema pe care o întâmpinați...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Tastați feedback-ul dvs. aici...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "E-mail (opțional)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Lăsați-vă e-mailul dacă doriți să vă contactăm",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "dumneavoastră@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Trimite feedback",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Culoare evidențiere",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Alegeți culoarea pentru evidențierea textului",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "Implicit",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Galben",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Portocaliu",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Albastru",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Verde",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Violet",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Roz",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Confidențialitate și date",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Confidențialitatea dvs. este prioritatea noastră",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Zero colectare de date",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp vă respectă confidențialitatea și vă gestionează datele responsabil.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Stocare locală",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Toate setările dvs. sunt stocate local pe dispozitivul dvs.",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Prelucrare directă",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Textul este prelucrat direct fără a fi stocat",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Fără urmărire",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Nu vă urmărim navigarea sau nu stocăm date personale",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Controlul dvs.",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Toate setările și datele rămân sub controlul dvs.",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Politică completă",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Contact",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Salvare nereușită",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "A apărut o eroare la salvarea setărilor. Vă rugăm să încercați din nou.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "Setări salvate",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "Modificările dvs. au fost salvate la schimbarea secțiunilor.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Închide notificarea",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Oprește citirea",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Citește textul cu voce tare",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Rezumă",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Explică",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Traduce",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Analizează",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Discută despre",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Opțiuni de selecție",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Utilizare zilnică",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Temă",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Alegeți tema de culori preferată pentru extensie",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Temă întunecată",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Temă clară",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Implicit sistem",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "Limbă schimbată",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "Interfața cu utilizatorul se va actualiza pentru a reflecta alegerea limbii dvs.",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Eroare",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Modificarea limbii a eșuat",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Marjă fereastră pop-up",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Distanța de marginile viewport-ului în modul flotant",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Setări traducere",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Utilizează contextul paginii pentru răspunsuri mai bune",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Activează un context mai profund al paginii pentru rezultate mai bune",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Aspect",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Feedback",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Aspect și afișare",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Personalizați aspectul și aspectul extensiei",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Mod aspect",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Flotant",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Bară laterală",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Centru",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Mărime font rezultate",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Controlează dimensiunea textului din panoul de rezultate",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "Foarte mic",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Mic",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Mediu",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Mare",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "Foarte mare",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "Extra mare",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Animație fereastră pop-up",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Animație când apare fereastra pop-up",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Estomare",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Glisați",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Scalare",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Niciuna",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Mod Focus radical",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Esompează fundalul atunci când vizualizați rezultatele",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Obligatoriu)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Preț:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Dimensiune:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "Adresa a fost copiată în clipboard!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Limită de rată rămasă:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Resetare în:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Autosalvare nereușită",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Modificările dvs. nu au fost salvate automat. Vă rugăm să salvați manual.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Încărcare nereușită",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Nu s-au putut încărca setările dvs. Se utilizează setările implicite.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Se încarcă informațiile despre utilizare...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "Model selectat automat",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Selectat automat {0} deoarece ați furnizat o cheie API Gemini.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Selectat automat {0} deoarece ați furnizat o cheie API Grok.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Selectat automat {0} pentru configurarea dvs. Ollama.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Funcția nu este afișată)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Șablon dinamic - variază în funcție de textul selectat)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "Anotări web alimentate de AI",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Versiune:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Dezvoltator:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Site web:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Rezumat instantaneu",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Traducere în timp real",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Modele AI avansate",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Chat interactiv",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Zero colectare de date",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Stocare locală",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Ultima versiune cu capacități îmbunătățite și timp de răspuns mai rapid",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Versiune ușoară optimizată pentru eficiență și viteză",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Model experimental concentrat pe raționament și sarcini analitice",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Versiune stabilă cu performanță echilibrată",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "Model mai rapid și mai mic pentru răspunsuri rapide",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "Versiune cuantizată pe 8 biți pentru procesare eficientă",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Model Grok-3 standard",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "2,00 USD per 1 milion de jetoane",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Variantă ușoară",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1,00 USD per 1 milion de jetoane",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Rapid",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3 optimizat pentru latență",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "2,50 USD per 1 milion de jetoane",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Rapid",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Mini + variantă rapidă",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1,50 USD per 1 milion de jetoane",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Ultima versiune Grok-2",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1,80 USD per 1 milion de jetoane",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Cel mai puternic model Llama 2, ideal pentru sarcini complexe",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70 de miliarde de parametri",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Cel mai recent model DeepSeek cu capacități de raționament îmbunătățite",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67 de miliarde de parametri",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Model performant de amestec de experți",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47 de miliarde de parametri",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Performanță echilibrată și utilizare a resurselor",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13 de miliarde de parametri",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Model eficient de urmărire a instrucțiunilor",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7 de miliarde de parametri",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "Optimizat pentru conversații naturale",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7 de miliarde de parametri",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Versiune mai ușoară a DeepSeek cu un bun raționament",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7 de miliarde de parametri",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Model ușor pentru sarcini de bază",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3 de miliarde de parametri",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Compact, dar puternic pentru dimensiunea sa",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2,7 miliarde de parametri",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "Optimizat pentru interacțiunile de chat",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7 de miliarde de parametri",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BETA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "General",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "Modele AI",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Șabloane prompturi",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Aspect",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "Despre",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Setări generale",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "Configurarea modelului AI",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Aspect și personalizare",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Șabloane prompturi",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "Despre LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Afișează textul selectat în rezultate",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Afișează pictograma și titlul site-ului web în rezultate",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Menține textul evidențiat după închiderea ferestrei pop-up",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Deschide automat LightUp la selectarea textului",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Deschide LightUp automat ori de câte ori selectați text",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Conștientizarea contextului",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Utilizează contextul paginii pentru a oferi răspunsuri mai bune și mai relevante",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "Selecția motorului AI",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Alege tipul de model AI",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Selectați ce serviciu AI doriți să utilizați pentru generarea de răspunsuri",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "De bază (Gratuit, limitat)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (Cheie API necesară)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok de la xAI (Cheie API necesară)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Local/Ollama (Auto-gazduit)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Notificare privind confidențialitatea datelor",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "Atunci când utilizați nivelul de bază, textul selectat și contextul paginii sunt trimise la serverele noastre pentru prelucrare. Nu stocăm aceste date permanent.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "Pentru confidențialitate completă, luați în considerare utilizarea propriei chei API cu Google Gemini, Grok sau un model local.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Configurarea Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Cheie API Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Introduceți cheia API Google AI Studio",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Obțineți cheia API gratuită de la Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Alegeți modelul Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Selectați ce model Google Gemini să utilizați pentru generarea de răspunsuri",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Configurarea Grok de la xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "Cheie API xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Introduceți cheia API xAI",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Obțineți cheia API de la xAI. Vizitați {0} pentru a începe.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Alegeți modelul Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Selectați ce model Grok să utilizați pentru generarea de răspunsuri",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Configurarea locală/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "URL server Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Alegeți modelul local",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Selectați ce model să utilizați din instalarea dvs. Ollama",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Setări răspuns",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Lungime maximă a răspunsului",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Numărul maxim de jetoane (cuvinte/caractere) în răspunsul AI",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Mod prompt",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Alegeți ce tip de prompt doriți să personalizați",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Prompt sistem",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Acest prompt definește modul în care AI ar trebui să se comporte și să răspundă",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Șablon prompt utilizator",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Acest șablon este utilizat pentru a formata solicitările utilizatorului către AI",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Editează",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Salvează",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Resetează la implicit",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Resetează prompturile modului {0} la valorile implicite originale",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Resetează la implicit",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "Resetare reușită",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Acest prompt utilizează logică dinamică și nu poate fi editat",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Cum să aplicați șabloanele personalizate:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "Prompturile dvs. personalizate vor fi utilizate automat atunci când selectați textul și alegeți modul corespunzător\nModificările intră în vigoare imediat - nu este necesară nicio repornire\nPuteți reseta orice prompt la valorile implicite utilizând butonul de resetare",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Temă și aspect",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Temă de culori",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Temă întunecată",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Temă clară",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Implicit sistem",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Mărime font",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Ajustați dimensiunea textului în rezultatele pop-up",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Culoare evidențiere",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Alegeți culoarea pentru evidențierea textului selectat",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Alegeți modul în care apare fereastra pop-up pe pagină",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Flotant",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Bară laterală",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Centru",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Efect de animație când apare fereastra pop-up",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Estomare",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Glisați",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Scalare",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Niciuna",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Setări animație",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp este o extensie de browser alimentată de AI care oferă rezumate instantanee, explicații, traduceri și analize pentru orice text de pe web.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Legaturi",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Linkuri și resurse utile",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Vizitează site-ul web",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Evaluează în Magazinul Chrome",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Șterge toate datele",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Explică",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Rezumă",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Analizează",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Traduce",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Liber",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Detalii prompt",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Vizualizați și personalizați prompturile utilizate pentru acest mod",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Obțineți rezumate instantanee ale oricărui text cu un singur clic",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Traduceți textul în orice limbă instantaneu",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Alegeți din mai multe modele AI, inclusiv GPT, Gemini și modele locale",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Purtați conversații cu AI despre conținutul pe care îl citiți",
+    "description": "Description for interactive chat feature"
+  }
+}

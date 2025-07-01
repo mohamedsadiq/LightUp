@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { motion } from "framer-motion"
 
 interface SidebarLayoutProps {
@@ -13,6 +13,7 @@ interface SidebarLayoutProps {
   sidebarSlideMotionVariants: any;
   fadeMotionVariants: any;
   noMotionVariants: any;
+  isPinned?: boolean;
 }
 
 export const SidebarLayout = ({
@@ -26,8 +27,11 @@ export const SidebarLayout = ({
   sidebarScaleMotionVariants,
   sidebarSlideMotionVariants,
   fadeMotionVariants,
-  noMotionVariants
+  noMotionVariants,
+  isPinned = false
 }: SidebarLayoutProps) => {
+  // When pinned, we no longer adjust the page layout. Sidebar remains an overlay.
+
   return (
     <motion.div
       ref={popupRef}
@@ -40,7 +44,10 @@ export const SidebarLayout = ({
         overflow: "hidden", // Changed from 'auto' to 'hidden'
         scrollBehavior: 'smooth',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        // When pinned, embed in page rather than overlay
+        position: isPinned ? 'fixed' as const : 'fixed' as const,
+        zIndex: isPinned ? 1000 : themedStyles.sidebarPopup.zIndex
       }}
       data-plasmo-popup
       className="lu-no-select"

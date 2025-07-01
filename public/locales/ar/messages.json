@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - تعليقات الويب المدعومة بالذكاء الاصطناعي. الملخص، الترجمة، والمزيد",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "تعليقات رائعة لكل صفحة على الويب. مدعومة بالذكاء الاصطناعي لشرح، تلخيص، تحليل، ترجمة، والمزيد.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "أهلاً بك في LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "تلخيص",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "شرح",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "ترجمة",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "تحليل",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "الإعدادات",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "اللغة",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "اختر لغتك المفضلة",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "حفظ",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "إلغاء",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "مفعل",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "معطل",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "إرسال ملاحظات",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "جارٍ التحميل...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "استخدامات مجانية متبقية",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "اختيار الوضع",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "تكوين الأوضاع",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "انتقل إلى المطالبات",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "إخفاء تكوين الوضع",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "إخفاء التكوين",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "إظهار معلومات الموقع",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "عرض أيقونة الموقع وعنوانه في النتائج",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "إظهار النص المحدد",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "عرض النص الذي حددته في النتائج",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "إظهار زر \"الذكاء الاصطناعي الفوري\"",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "أضف زرًا عائمًا لـ \"الذكاء الاصطناعي الفوري\" يلخص أو يشرح الصفحة بأكملها بنقرة واحدة",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "وضع خالٍ من المشتتات",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "يخفي واجهة المستخدم غير الضرورية ويخفت الصفحة خلف LightUp حتى تتمكن من التركيز على إجابة الذكاء الاصطناعي",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "الحفاظ على النص المميز بعد إغلاق النافذة المنبثقة",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "ابق النص مميزًا بعد إغلاق النافذة المنبثقة",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "إظهار زر الإجراء عند تحديد النص",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "عرض زر صغير عند تمييز النص",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "فتح LightUp تلقائيًا عند تحديد النص",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "يفتح LightUp تلقائيًا كلما حددت نصًا",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "تمييز دائم",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "اختصارات لوحة المفاتيح",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "استخدم هذه الاختصارات للوصول السريع إلى ميزات LightUp",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "التبديل إلى وضع الشرح",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "التبديل إلى وضع الملخص",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "التبديل إلى وضع التحليل",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "التبديل إلى وضع الترجمة",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "فتح النافذة المنبثقة في الوضع الحر",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "بعد تعيين الوضع عبر اختصار، حدد أي نص وسيظهر LightUp بالوضع الذي اخترته.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "مفاتيح الميزات",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "اختصارات لتشغيل وإيقاف الميزات",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "تشغيل/إيقاف LightUp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "تشغيل/إيقاف وضع التركيز الجذري",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "تبديل السمة الفاتحة/الداكنة",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "إعادة تعيين جميع الاختصارات",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "استعادة جميع الاختصارات إلى قيمها الافتراضية",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "إعادة تعيين",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "اسأل أي شيء",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "تكوين مُحدد الوضع (اختر ما يصل إلى 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "ستظهر هذه الأوضاع في مُحدد الوضع الخاص بك. انقر للتبديل.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "الإجراءات المتاحة",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "حر",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "شعار LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp معطل حاليًا",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "بدّل المفتاح في الرأس أو الزر أدناه لتمكين LightUp والوصول إلى جميع الميزات.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "تمكين LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "تلقائي → الإنجليزية",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "عام",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "اختصارات لوحة المفاتيح",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "إعدادات متقدمة",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "الخصوصية",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "سياسة الخصوصية",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "الموقع الإلكتروني",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "قيمنا",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "الملاحظات",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "ساعدنا في تحسين LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "نوع الملاحظات",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "حدد نوع الملاحظات التي ترغب في تقديمها",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "ملاحظات عامة",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "إبلاغ عن خلل",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "طلب ميزة",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "أخرى",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "ملاحظاتك",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "أخبرنا برأيك أو صف المشكلة التي تواجهها...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "اكتب ملاحظاتك هنا...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "البريد الإلكتروني (اختياري)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "اترك بريدك الإلكتروني إذا كنت ترغب في متابعتنا",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "إرسال الملاحظات",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "لون التمييز",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "اختر لون تمييز النص",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "افتراضي",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "أصفر",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "برتقالي",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "أزرق",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "أخضر",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "بنفسجي",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "وردي",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "الخصوصية والبيانات",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "خصوصيتك هي أولويتنا",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "جمع بيانات صفري",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "يحترم LightUp خصوصيتك ويتعامل مع بياناتك بمسؤولية.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "التخزين المحلي",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "يتم تخزين جميع إعداداتك محليًا على جهازك",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "معالجة مباشرة",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "يتم معالجة النص مباشرة دون تخزين",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "بدون تتبع",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "نحن لا نتتبع تصفحك أو نخزن بيانات شخصية",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "تحكمك",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "تظل جميع الإعدادات والبيانات تحت سيطرتك",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "السياسة الكاملة",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "اتصل",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "فشل الحفظ",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "حدث خطأ في حفظ إعداداتك. يرجى المحاولة مرة أخرى.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "تم حفظ الإعدادات",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "تم حفظ تغييراتك عند تبديل الأقسام.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "إغلاق الإشعار",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "إيقاف الكلام",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "قراءة النص بصوت عالٍ",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "تلخيص",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "شرح",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "ترجمة",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "تحليل",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "الدردشة حول",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "خيارات التحديد",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "الاستخدام اليومي",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "السمة",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "اختر سمة الألوان المفضلة لديك للإضافة",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "السمة الداكنة",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "السمة الفاتحة",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "الافتراضي للنظام",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "تم تغيير اللغة",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "ستُحدّث واجهة المستخدم لتعكس اختيار لغتك",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "خطأ",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "فشل تغيير اللغة",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "هامش النافذة المنبثقة",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "المسافة من حواف نافذة العرض في الوضع العائم",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "إعدادات الترجمة",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "استخدم سياق الصفحة للحصول على إجابات أفضل",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "تمكين سياق صفحة أعمق للحصول على نتائج أفضل",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "المظهر",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "الملاحظات",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "التخطيط والعرض",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "تخصيص تخطيط ومظهر الإضافة",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "وضع التخطيط",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "عائم",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "شريط جانبي",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "مركز",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "حجم خط النتائج",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "تحكم في حجم النص في لوحة النتائج",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "صغير جدًا",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "صغير",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "متوسط",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "كبير",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "كبير جدًا",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "كبير جدًا جدًا",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "رسوم متحركة منبثقة",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "رسوم متحركة عند ظهور النافذة المنبثقة",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "اختفاء",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "انزلاق",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "تغيير الحجم",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "لا شيء",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "وضع التركيز الجذري",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "تشويش الخلفية عند عرض النتائج",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(مطلوب)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "السعر:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "الحجم:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "تم نسخ العنوان إلى الحافظة!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "حد معدل المتبقي:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "إعادة تعيين في:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "فشل الحفظ التلقائي",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "لم يتم حفظ تغييراتك تلقائيًا. يرجى الحفظ يدويًا.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "فشل التحميل",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "تعذر تحميل إعداداتك. استخدام الإعدادات الافتراضية.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "جارٍ تحميل معلومات الاستخدام...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "تم تحديد النموذج تلقائيًا",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "تم تحديد {0} تلقائيًا نظرًا لأنك قدمت مفتاح API لـ Gemini.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "تم تحديد {0} تلقائيًا نظرًا لأنك قدمت مفتاح API لـ Grok.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "تم تحديد {0} تلقائيًا لإعداد Ollama الخاص بك.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(الوظيفة غير معروضة)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(قالب ديناميكي - يختلف بناءً على النص الذي حددته)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "تعليقات الويب المدعومة بالذكاء الاصطناعي",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "الإصدار:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "المطور:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "الموقع الإلكتروني:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "ملخصات فورية",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "ترجمة في الوقت الحقيقي",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "نماذج ذكاء اصطناعي متقدمة",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "دردشة تفاعلية",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "جمع بيانات صفري",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "التخزين المحلي",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "أحدث إصدار مع إمكانيات محسّنة وأوقات استجابة أسرع",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "إصدار خفيف الوزن مُحسّن من حيث الكفاءة والسرعة",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "نموذج تجريبي يركز على التفكير والمهام التحليلية",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "إصدار مستقر مع أداء متوازن",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "نموذج أسرع وأصغر للحصول على استجابات سريعة",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "إصدار كمي 8 بت لمعالجة فعالة",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "نموذج Grok-3 القياسي",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "2.00 دولار لكل مليون رمز مميز",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "متغير خفيف الوزن",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1.00 دولار لكل مليون رمز مميز",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3 مُحسّن من حيث زمن الوصول",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "2.50 دولار لكل مليون رمز مميز",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "متغير Mini + سريع",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1.50 دولار لكل مليون رمز مميز",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "أحدث إصدار من Grok-2",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1.80 دولار لكل مليون رمز مميز",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "أقوى نموذج Llama 2، الأنسب للمهام المعقدة",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70 مليار معلمة",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "أحدث نموذج DeepSeek مع إمكانيات استنتاج محسّنة",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67 مليار معلمة",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "نموذج عالي الأداء من خليط الخبراء",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47 مليار معلمة",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "أداء متوازن واستخدام موارد",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13 مليار معلمة",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "نموذج فعال لمتابعة التعليمات",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7 مليار معلمة",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "محسّن للمحادثات الطبيعية",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7 مليار معلمة",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "إصدار أخف من DeepSeek مع استنتاج جيد",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7 مليار معلمة",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "نموذج خفيف الوزن للمهام الأساسية",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3 مليار معلمة",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "مدمج ولكنه قوي بالنسبة لحجمه",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2.7 مليار معلمة",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "محسّن لتفاعلات الدردشة",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7 مليار معلمة",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "بيتا",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "عام",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "نماذج الذكاء الاصطناعي",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "قوالب المطالبات",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "المظهر",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "حول",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "إعدادات عامة",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "تكوين نموذج الذكاء الاصطناعي",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "المظهر والتخصيص",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "قوالب المطالبات",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "حول LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "عرض النص الذي حددته في النتائج",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "عرض أيقونة الموقع وعنوانه في النتائج",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "ابق النص مميزًا بعد إغلاق النافذة المنبثقة",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "فتح LightUp تلقائيًا عند تحديد النص",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "يفتح LightUp تلقائيًا كلما حددت نصًا",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "الوعي بالسياق",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "استخدم سياق الصفحة لتقديم إجابات أفضل وأكثر صلة",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "اختيار محرك الذكاء الاصطناعي",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "اختر نوع نموذج الذكاء الاصطناعي",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "حدد خدمة الذكاء الاصطناعي التي تريد استخدامها لإنشاء الاستجابات",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "أساسي (مجاني، محدود)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (مفتاح API مطلوب)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok بواسطة xAI (مفتاح API مطلوب)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "محلي/Ollama (مستضاف ذاتيًا)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "إشعار خصوصية البيانات",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "عند استخدام الطبقة الأساسية، يتم إرسال النص المحدد وسياق الصفحة إلى خوادمنا للمعالجة. نحن لا نخزن هذه البيانات بشكل دائم.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "للحصول على خصوصية كاملة، ضع في اعتبارك استخدام مفتاح API الخاص بك مع Google Gemini أو Grok أو نموذج محلي.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "تكوين Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "مفتاح API لـ Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "أدخل مفتاح API الخاص بك من Google AI Studio",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "احصل على مفتاح API المجاني من Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "اختر نموذج Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "حدد نموذج Google Gemini الذي تريد استخدامه لإنشاء الاستجابات",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "تكوين Grok بواسطة xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "مفتاح API لـ xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "أدخل مفتاح API الخاص بك من xAI",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "احصل على مفتاح API الخاص بك من xAI. قم بزيارة {0} للبدء.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "اختر نموذج Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "حدد نموذج Grok الذي تريد استخدامه لإنشاء الاستجابات",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "تكوين محلي/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "عنوان URL لخادم Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "اختر النموذج المحلي",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "حدد النموذج الذي تريد استخدامه من تثبيت Ollama الخاص بك",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "إعدادات الاستجابة",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "أقصى طول للاستجابة",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "الحد الأقصى لعدد الرموز المميزة (الكلمات/الحروف) في استجابة الذكاء الاصطناعي",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "وضع المطالبة",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "اختر نوع المطالبة التي تريد تخصيصها",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "مطالبة النظام",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "هذه المطالبة تحدد كيفية تصرف الذكاء الاصطناعي والاستجابة",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "قالب مطالبة المستخدم",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "يستخدم هذا القالب لتنسيق طلبات المستخدم إلى الذكاء الاصطناعي",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "تحرير",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "حفظ",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "إعادة تعيين إلى الافتراضي",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "إعادة تعيين مطالبات وضع {0} إلى الإعدادات الافتراضية الأصلية",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "إعادة تعيين إلى الافتراضي",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "تم إعادة التعيين بنجاح",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "تستخدم هذه المطالبة منطقًا ديناميكيًا ولا يمكن تحريرها",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "كيفية تطبيق قوالبك المخصصة:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "ستتم استخدام مطالباتك المخصصة تلقائيًا عند تحديد النص واختيار الوضع المقابل\nتصبح التغييرات سارية المفعول فورًا - لا حاجة لإعادة التشغيل\nيمكنك إعادة تعيين أي مطالبة إلى الإعدادات الافتراضية باستخدام زر إعادة التعيين",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "السمة والمظهر",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "موضوع الألوان",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "السمة الداكنة",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "السمة الفاتحة",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "الافتراضي للنظام",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "حجم الخط",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "ضبط حجم النص في نتائج النافذة المنبثقة",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "لون التمييز",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "اختر لون تمييز النص المحدد",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "اختر كيفية ظهور النافذة المنبثقة على الصفحة",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "عائم",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "شريط جانبي",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "مركز",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "تأثير الرسوم المتحركة عند ظهور النافذة المنبثقة",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "اختفاء",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "انزلاق",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "تغيير الحجم",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "لا شيء",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "إعدادات الرسوم المتحركة",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp هي إضافة متصفح مدعومة بالذكاء الاصطناعي توفر ملخصات، وشروحات، وترجمات، وتحليلات فورية لأي نص على الويب.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "روابط",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "روابط وموارد مفيدة",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "زيارة الموقع الإلكتروني",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "قيم على متجر Chrome",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "مسح جميع البيانات",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "شرح",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "تلخيص",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "تحليل",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "ترجمة",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "حر",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "تفاصيل المطالبة",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "عرض وتخصيص المطالبات المستخدمة لهذا الوضع",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "احصل على ملخصات فورية لأي نص بنقرة واحدة",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "ترجمة النص إلى أي لغة على الفور",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "اختر من بين نماذج ذكاء اصطناعي متعددة بما في ذلك GPT و Gemini والنماذج المحلية",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "أجر محادثات مع الذكاء الاصطناعي حول المحتوى الذي تقرأه",
+    "description": "Description for interactive chat feature"
+  }
+}

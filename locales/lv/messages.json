@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - AI darbinātas tīmekļa anotācijas. Kopsavilkums, tulkošana un vēl daudz kas",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Ģeniālas anotācijas katrai tīmekļa lapai. AI darbināts, lai skaidrotu, apkopotu, analizētu, tulkotu un vēl daudz ko citu.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Laipni lūgti LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Apkopot",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Paskaidrot",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Tulkot",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Analizēt",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Iestatījumi",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Valoda",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Izvēlieties savu vēlamo valodu",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Saglabāt",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Atcelt",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Iespējots",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Atslēgts",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Sūtīt atsauksmes",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Ielādē...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Atlikušās bezmaksas lietošanas reizes",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Režīma izvēle",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Konfigurēt režīmus",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Iet uz uzvednēm",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Paslēpt režīma konfigurāciju",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Paslēpt konfigurāciju",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Rādīt vietnes informāciju",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Rezultātos parādīt vietnes ikonu un nosaukumu",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Rādīt atlasīto tekstu",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Rezultātos parādīt atlasīto tekstu",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Rādīt pogu “Instant AI”",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Pievienot peldošu pogu “Instant AI”, kas ar vienu klikšķi apkopo vai paskaidro visu lapu",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Bez traucējumu režīms",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Paslēpj neesenciālu lietotāja interfeisu un aptumšo lapu aiz LightUp, lai jūs varētu koncentrēties uz AI atbildi",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Saglabāt izcelto tekstu pēc uznirstošā loga aizvēršanas",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Saglabāt tekstu izceltu pēc uznirstošā loga aizvēršanas",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Rādīt darbības pogu uz teksta atlases",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Parādīt nelielu pogu, kad teksts ir izcelts",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Automātiski atvērt LightUp uz teksta atlases",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Automātiski atver LightUp, tiklīdz atlasāt tekstu",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Pastāvīga izcelšana",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Tastatūras saīsnes",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Izmantojiet šīs saīsnes, lai ātri piekļūtu LightUp funkcijām",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Pārslēgties uz skaidrojuma režīmu",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Pārslēgties uz kopsavilkuma režīmu",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Pārslēgties uz analīzes režīmu",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Pārslēgties uz tulkošanas režīmu",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Atvērt uznirstošo logu brīvā režīmā",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "Pēc režīma iestatīšanas, izmantojot saīsni, atlasiet jebkuru tekstu, un LightUp parādīsies ar jūsu izvēlēto režīmu.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Funkciju pārslēgi",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Saīsnes funkciju ieslēgšanai un izslēgšanai",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Pārslēgt LightUp ieslēgšanu/izslēgšanu",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Pārslēgt radikāli fokusēto režīmu",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Pārslēgt gaišo/tumšo tēmu",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Atiestatīt visas saīsnes",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Atjaunot visas saīsnes uz noklusējuma vērtībām",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Atiestatīt",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Pajautāt visu",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Konfigurēt režīma atlasītāju (izvēlēties līdz 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Šie režīmi parādīsies jūsu režīma atlasītājā. Noklikšķiniet, lai pārslēgtu.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Pieejamās darbības",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Brīvs",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "LightUp logotips",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp pašlaik ir izslēgts",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Pārslēdziet slēdzi virsrakstā vai pogu zemāk, lai iespējotu LightUp un piekļūtu visām funkcijām.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Iespējot LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Automātiski → angļu",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "Vispārīgi",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Tastatūras saīsnes",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Papildinātie iestatījumi",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Privātums",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Privātuma politika",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Vietne",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Novērtējiet mūs",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Atsauksmes",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Palīdziet mums uzlabot LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Atsauksmju veids",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Izvēlieties atsauksmju veidu, ko vēlaties sniegt",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Vispārīgas atsauksmes",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Kļūdas ziņojums",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Funkcijas pieprasījums",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Cits",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Jūsu atsauksmes",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Pastāstiet mums, ko jūs domājat, vai aprakstiet problēmu, ar kuru jūs saskaraties...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Ierakstiet savas atsauksmes šeit...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "E-pasts (pēc izvēles)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Atstājiet savu e-pastu, ja vēlaties, lai mēs ar jums sazinātos",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "jūs@piemērs.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Sūtīt atsauksmes",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Izcelšanas krāsa",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Izvēlieties teksta izcelšanas krāsu",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "Noklusējuma",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Dzeltena",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Oranža",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Zila",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Zaļa",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Violeta",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Rozā",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Privātums un dati",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Jūsu privātums ir mūsu prioritāte",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Nulles datu vākšana",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp respektē jūsu privātumu un atbildīgi apstrādā jūsu datus.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Vietējā krātuve",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Visi jūsu iestatījumi tiek saglabāti lokāli jūsu ierīcē",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Tieša apstrāde",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Teksts tiek apstrādāts tieši, neuzglabājot",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Bez izsekošanas",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Mēs neizsekojam jūsu pārlūkošanu vai neuzglabājam personas datus",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Jūsu kontrole",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Visi iestatījumi un dati paliek jūsu kontrolē",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Pilna politika",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Kontakti",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Saglabāšana neizdevās",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "Radās kļūda, saglabājot jūsu iestatījumus. Lūdzu, mēģiniet vēlreiz.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "Iestatījumi saglabāti",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "Jūsu izmaiņas tika saglabātas, pārslēdzot sadaļas.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Aizvērt paziņojumu",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Apturēt runāšanu",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Skaļi nolasīt tekstu",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Apkopot",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Paskaidrot",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Tulkot",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Analizēt",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Tērzēt par",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Atlases opcijas",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Dienas lietošana",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Tēma",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Izvēlieties savu vēlamo krāsu tēmu paplašinājumam",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Tumšā tēma",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Gaišā tēma",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Sistēmas noklusējums",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "Valoda mainīta",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "Lietotāja interfeiss tiks atjaunināts, lai atspoguļotu jūsu valodas izvēli",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Kļūda",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Neizdevās mainīt valodu",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Uznirstošā loga atstarpe",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Attālums no skata lauka malām peldošajā režīmā",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Tulkošanas iestatījumi",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Izmantot lapas kontekstu labākām atbildēm",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Iespējot dziļāku lapas kontekstu labākiem rezultātiem",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Izskats",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Atsauksmes",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Izvietojums un displejs",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Pielāgojiet paplašinājuma izkārtojumu un izskatu",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Izvietojuma režīms",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Peldošs",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Sānu josla",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Centrēts",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Rezultātu fonta izmērs",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Kontrolējiet teksta izmēru rezultātu panelī",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "Ļoti mazs",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Mazs",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Vidējs",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Liels",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "Ļoti liels",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "Īpaši liels",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Uznirstošā loga animācija",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Animācija, kad uznirstošais logs parādās",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Izbalēšana",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Slīdēšana",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Mērogošana",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Neviena",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Radikalās fokusēšanas režīms",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Izplūdināt fonu, skatoties rezultātus",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Obligāti)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Cena:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Izmērs:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "Adrese kopēta starpliktuvē!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Atlikušais ātruma ierobežojums:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Atiestatīt pēc:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Automātiskā saglabāšana neizdevās",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Jūsu izmaiņas netika automātiski saglabātas. Lūdzu, saglabājiet manuāli.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Ielāde neizdevās",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Nevarēja ielādēt jūsu iestatījumus. Izmanto noklusējuma iestatījumus.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Ielādē lietošanas informāciju...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "Modelis automātiski atlasīts",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Automātiski atlasīts {0}, jo jūs sniedzāt Gemini API atslēgu.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Automātiski atlasīts {0}, jo jūs sniedzāt Grok API atslēgu.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Automātiski atlasīts {0} jūsu Ollama iestatījumam.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Funkcija netiek rādīta)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Dinamiska veidne - atšķiras atkarībā no jūsu atlasītā teksta)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "AI darbinātas tīmekļa anotācijas",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Versija:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Izstrādātājs:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Vietne:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Momentāni kopsavilkumi",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Reāllaika tulkošana",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Papildinātie AI modeļi",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Interaktīva tērzēšana",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Nulles datu vākšana",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Vietējā krātuve",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Jaunākā versija ar uzlabotām iespējām un ātrāku reakcijas laiku",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Vieglā versija, kas optimizēta efektivitātei un ātrumam",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Domāšana",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Eksperimentāls modelis, kas koncentrējas uz spriešanu un analītiskiem uzdevumiem",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Stabila versija ar līdzsvarotu veiktspēju",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "Ātrāks, mazāks modelis ātrai atbildēšanai",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "8 bitu kvantizēta versija efektīvai apstrādei",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Standarta Grok-3 modelis",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "2,00 USD par 1 miljonu žetonu",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Vieglā variants",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1,00 USD par 1 miljonu žetonu",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Aiztures optimizēts Grok-3",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "2,50 USD par 1 miljonu žetonu",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Mini + ātrs variants",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1,50 USD par 1 miljonu žetonu",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Jaunākā Grok-2 versija",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1,80 USD par 1 miljonu žetonu",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Jaudīgākais Llama 2 modelis, vislabākais sarežģītiem uzdevumiem",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70 miljardi parametru",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Jaunākais DeepSeek modelis ar uzlabotām spriešanas spējām",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67 miljardi parametru",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Augstas veiktspējas ekspertu maisījuma modelis",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47 miljardi parametru",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Līdzsvarota veiktspēja un resursu izmantošana",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13 miljardi parametru",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Efektīvs instrukciju izpildes modelis",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7 miljardi parametru",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "Optimizēts dabiskām sarunām",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7 miljardi parametru",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Vieglāka DeepSeek versija ar labu spriešanu",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7 miljardi parametru",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Vieglā modelis vienkāršiem uzdevumiem",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3 miljardi parametru",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Kompakts, bet jaudīgs savam izmēram",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2,7 miljardi parametru",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "Optimizēts tērzēšanas mijiedarbībai",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7 miljardi parametru",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BETA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "Vispārīgi",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "AI modeļi",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Uzvedņu veidnes",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Izskats",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "Par",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Vispārīgie iestatījumi",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "AI modeļa konfigurācija",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Izskats un pielāgošana",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Uzvedņu veidnes",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "Par LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Rezultātos parādīt atlasīto tekstu",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Rezultātos parādīt vietnes ikonu un nosaukumu",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Saglabāt tekstu izceltu pēc uznirstošā loga aizvēršanas",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Automātiski atvērt LightUp uz teksta atlases",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Automātiski atver LightUp, tiklīdz atlasāt tekstu",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Konteksta apzināšanās",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Izmantot lapas kontekstu, lai sniegtu labākas, atbilstošākas atbildes",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "AI dzinēja izvēle",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Izvēlēties AI modeļa veidu",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Atlasiet, kuru AI pakalpojumu vēlaties izmantot atbilžu ģenerēšanai",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "Pamata (bezmaksas, ierobežots)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (nepieciešama API atslēga)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok by xAI (nepieciešama API atslēga)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Vietējais/Ollama (paša mitināts)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Datu privātuma paziņojums",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "Izmantojot pamata līmeni, jūsu atlasītais teksts un lapas konteksts tiek nosūtīts uz mūsu serveriem apstrādei. Mēs neuzglabājam šos datus pastāvīgi.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "Lai nodrošinātu pilnīgu privātumu, apsveriet iespēju izmantot savu API atslēgu ar Google Gemini, Grok vai vietējo modeli.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Google Gemini konfigurācija",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Google Gemini API atslēga",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Ievadiet savu Google AI Studio API atslēgu",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Saņemiet savu bezmaksas API atslēgu no Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Izvēlēties Gemini modeli",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Atlasiet, kuru Google Gemini modeli izmantot atbilžu ģenerēšanai",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Grok by xAI konfigurācija",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "xAI API atslēga",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Ievadiet savu xAI API atslēgu",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Saņemiet savu API atslēgu no xAI. Apmeklējiet {0}, lai sāktu.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Izvēlēties Grok modeli",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Atlasiet, kuru Grok modeli izmantot atbilžu ģenerēšanai",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Vietējās/Ollama konfigurācija",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "Ollama servera URL",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Izvēlēties vietējo modeli",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Atlasiet, kuru modeli izmantot no jūsu Ollama instalācijas",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Atbildes iestatījumi",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Maksimālais atbildes garums",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Maksimālais žetonu (vārdu/zīmju) skaits AI atbildē",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Uzvednes režīms",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Izvēlieties, kāda veida uzvedni vēlaties pielāgot",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Sistēmas uzvedne",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Šī uzvedne nosaka, kā AI vajadzētu uzvesties un atbildēt",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Lietotāja uzvednes veidne",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Šī veidne tiek izmantota, lai formatētu lietotāja pieprasījumus AI",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Rediģēt",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Saglabāt",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Atiestatīt uz noklusējumu",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Atiestatīt {0} režīma uzvednes uz to sākotnējiem noklusējumiem",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Atiestatīt uz noklusējumu",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "Atiestatīts veiksmīgi",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Šī uzvedne izmanto dinamisko loģiku un to nevar rediģēt",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Kā lietot savas pielāgotās veidnes:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "Jūsu pielāgotās uzvednes tiks automātiski izmantotas, kad atlasāt tekstu un izvēlaties atbilstošo režīmu\nIzmaiņas stājas spēkā nekavējoties - nav nepieciešama atkārtota palaišana\nJebkuru uzvedni var atiestatīt uz noklusējuma vērtībām, izmantojot atiestatīšanas pogu",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Tēma un izskats",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Krāsu tēma",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Tumšā tēma",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Gaišā tēma",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Sistēmas noklusējums",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Fonta izmērs",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Pielāgojiet teksta izmēru uznirstošā loga rezultātos",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Izcelšanas krāsa",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Izvēlieties krāsu atlasītā teksta izcelšanai",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Izvēlieties, kā uznirstošais logs parādās lapā",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Peldošs",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Sānu josla",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Centrēts",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Animācijas efekts, kad uznirstošais logs parādās",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Izbalēšana",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Slīdēšana",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Mērogošana",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Neviena",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Animācijas iestatījumi",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp ir AI darbināts pārlūkprogrammas paplašinājums, kas nodrošina momentānus kopsavilkumus, skaidrojumus, tulkojumus un analīzi jebkuram tekstam tīmeklī.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Saite",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Noderīgas saites un resursi",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Apmeklēt vietni",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Novērtēt Chrome veikalā",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Notīrīt visus datus",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Paskaidrot",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Apkopot",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Analizēt",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Tulkot",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Brīvs",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Uzvednes detalizācija",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Skatīt un pielāgot šim režīmam izmantotās uzvednes",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Saņemiet momentānus jebkura teksta kopsavilkumus ar vienu klikšķi",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Tulkot tekstu jebkurā valodā momentāni",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Izvēlieties no vairākiem AI modeļiem, ieskaitot GPT, Gemini un vietējiem modeļiem",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Sarunājieties ar AI par saturu, ko lasāt",
+    "description": "Description for interactive chat feature"
+  }
+}

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { WebsiteInfo } from "~utils/websiteInfo";
 import { getWebsiteInfo, isValidFavicon } from "~utils/websiteInfo";
+import { PinButton } from "./PinButton";
+import { LanguageSelectorOverlay } from "./LanguageSelectorOverlay";
 
 interface WebsiteInfoProps {
   currentTheme: "light" | "dark";
@@ -15,6 +17,14 @@ interface WebsiteInfoProps {
   loading?: boolean;
   progress?: number;
   requestId?: number;
+  // Pin button props
+  layoutMode?: string;
+  isPinned?: boolean;
+  onTogglePin?: () => void;
+  themedStyles?: any;
+  // Language selector props
+  currentLanguage?: string;
+  onLanguageChange?: (language: string) => void;
 }
 
 const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
@@ -23,7 +33,13 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
   selectedText = "",
   loading = false,
   progress,
-  requestId = 0
+  requestId = 0,
+  layoutMode,
+  isPinned,
+  onTogglePin,
+  themedStyles,
+  currentLanguage = "en",
+  onLanguageChange
 }) => {
   const [websiteInfo, setWebsiteInfo] = useState<WebsiteInfo | null>(null);
   const [faviconValid, setFaviconValid] = useState<boolean>(true);
@@ -257,6 +273,30 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
               </motion.div>
             )}
           </AnimatePresence>
+        )}
+      </div>
+      
+      {/* Action buttons - Language selector and Pin button */}
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
+        {/* Language Selector */}
+        {onLanguageChange && (
+          <LanguageSelectorOverlay
+            currentLanguage={currentLanguage}
+            onLanguageChange={onLanguageChange}
+            theme={currentTheme}
+            themedStyles={themedStyles}
+          />
+        )}
+        
+        {/* Pin Button - only show in sidebar mode */}
+        {layoutMode === "sidebar" && onTogglePin && (
+          <PinButton
+            isPinned={isPinned || false}
+            onTogglePin={onTogglePin}
+            layoutMode={layoutMode}
+            theme={currentTheme}
+            themedStyles={themedStyles}
+          />
         )}
       </div>
     </motion.div>

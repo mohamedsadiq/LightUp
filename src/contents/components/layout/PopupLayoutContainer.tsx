@@ -27,6 +27,7 @@ interface PopupLayoutContainerProps {
   noMotionVariants: any;
   sidebarScaleMotionVariants: any;
   sidebarSlideMotionVariants: any;
+  isPinned?: boolean;
 }
 
 export const PopupLayoutContainer = ({
@@ -51,11 +52,12 @@ export const PopupLayoutContainer = ({
   fadeMotionVariants,
   noMotionVariants,
   sidebarScaleMotionVariants,
-  sidebarSlideMotionVariants
+  sidebarSlideMotionVariants,
+  isPinned = false
 }: PopupLayoutContainerProps) => {
   return (
     <AnimatePresence mode="sync">
-      {isVisible && isEnabled && isConfigured && (
+      {((isVisible && isEnabled && isConfigured) || (isPinned && layoutMode === "sidebar" && isEnabled && isConfigured)) && (
         layoutMode === "floating" ? (
           <FloatingLayout
             position={position}
@@ -87,6 +89,7 @@ export const PopupLayoutContainer = ({
             sidebarSlideMotionVariants={sidebarSlideMotionVariants}
             fadeMotionVariants={fadeMotionVariants}
             noMotionVariants={noMotionVariants}
+            isPinned={isPinned}
           />
         ) : (
           <CenteredLayout

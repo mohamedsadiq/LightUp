@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - AI-drivna webbannotationer. Sammanfattning, översättning och mer",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Geniala annotationer för varje sida på webben. Drivs av AI för att förklara, sammanfatta, analysera, översätta och mer.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Välkommen till LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Sammanfatta",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Förklara",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Översätt",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Analysera",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Inställningar",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Språk",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Välj ditt önskade språk",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Spara",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Avbryt",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Aktiverad",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Inaktiverad",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Skicka feedback",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Laddar...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Kvarvarande fria användningar",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Lägesval",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Konfigurera lägen",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Gå till anvisningar",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Dölj lägeskonfiguration",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Dölj konfiguration",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Visa webbplatsinformation",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Visa webbplatsens favikon och titel i resultaten",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Visa markerad text",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Visa den text du har markerat i resultaten",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Visa knappen 'Instant AI'",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Lägg till en flytande knapp 'Instant AI' som sammanfattar eller förklarar hela sidan med ett klick",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Distraktionsfritt läge",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Döljer oväsentligt användargränssnitt och dämpar sidan bakom LightUp så att du kan fokusera på AI-svaret",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Behåll markerad text efter att popup-fönstret stängs",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Behåll texten markerad efter att popup-fönstret stängs",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Visa åtgärdsknapp vid textmarkering",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Visa en liten knapp när texten är markerad",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Öppna LightUp automatiskt vid textmarkering",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Öppnar LightUp automatiskt när du markerar text",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Permanent markering",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Tangentbordsgenvägar",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Använd dessa genvägar för att snabbt komma åt LightUps funktioner",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Växla till förklaringsläge",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Växla till sammanfattningsläge",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Växla till analysläge",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Växla till översättningsläge",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Öppna popup i fritt läge",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "Efter att ha ställt in läget via genväg, markera valfri text så visas LightUp med ditt valda läge.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Funktionsväxlingar",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Genvägar för att växla funktioner på och av",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Växla LightUp på/av",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Växla Radkalt fokusläge",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Växla mellan ljust/mörkt tema",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Återställ alla genvägar",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Återställ alla genvägar till deras standardvärden",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Återställ",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Fråga vad som helst",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Konfigurera lägesväljar (Välj upp till 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Dessa lägen visas i din lägesväljar. Klicka för att växla.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Tillgängliga åtgärder",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Fri",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "LightUp-logotyp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp är för närvarande avstängd",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Växla omkopplaren i rubriken eller knappen nedan för att aktivera LightUp och få åtkomst till alla funktioner.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Aktivera LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Auto → Engelska",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "Allmänt",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Tangentbordsgenvägar",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Avancerade inställningar",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Sekretess",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Sekretesspolicy",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Webbplats",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Betygsätt oss",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Feedback",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Hjälp oss att förbättra LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Feedbacktyp",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Välj vilken typ av feedback du vill ge",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Allmän feedback",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Buggrapport",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Funktionsförfrågan",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Annat",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Din feedback",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Berätta vad du tycker eller beskriv problemet du upplever...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Skriv din feedback här...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "E-post (valfritt)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Ange din e-postadress om du vill att vi ska följa upp",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "du@exempel.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Skicka feedback",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Markeringsfärg",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Välj färg för textmarkering",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "Standard",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Gul",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Orange",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Blå",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Grön",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Lila",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Rosa",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Sekretess & data",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Din sekretess är vår prioritet",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Ingen datainsamling",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp respekterar din sekretess och hanterar dina data ansvarsfullt.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Lokal lagring",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Alla dina inställningar lagras lokalt på din enhet",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Direkt bearbetning",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Text bearbetas direkt utan lagring",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Ingen spårning",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Vi spårar inte din surfning eller lagrar personuppgifter",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Din kontroll",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Alla inställningar och data förblir under din kontroll",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Fullständig policy",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Kontakt",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Sparandet misslyckades",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "Det uppstod ett fel vid sparandet av dina inställningar. Försök igen.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "Inställningar sparade",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "Dina ändringar sparades när du bytte avsnitt.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Stäng meddelande",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Sluta tala",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Läs texten högt",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Sammanfatta",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Förklara",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Översätt",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Analysera",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Chatta om",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Markeringsalternativ",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Daglig användning",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Tema",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Välj ditt önskade färgtema för tillägget",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Mörkt tema",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Ljust tema",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Systemstandard",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "Språk ändrat",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "Användargränssnittet uppdateras för att återspegla ditt språksval",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Fel",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Misslyckades med att ändra språk",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Popup-marginal",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Avstånd från visningsportens kanter i flytande läge",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Översättningsinställningar",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Använd sidkontext för bättre svar",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Aktivera djupare sidkontext för bättre resultat",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Utseende",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Feedback",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Layout & visning",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Anpassa layouten och utseendet på tillägget",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Layoutläge",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Flytande",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Sidofält",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Centrerad",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Resultattextstorlek",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Styr textstorleken i resultatpanelen",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "Mycket liten",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Liten",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Medel",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Stor",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "Mycket stor",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "Extremt stor",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Popup-animering",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Animering när popup-fönstret visas",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Tona",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Glid",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Skala",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Ingen",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Radikal fokusläge",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Oskärpa bakgrunden när du tittar på resultat",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Obligatoriskt)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Pris:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Storlek:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "Adressen kopierades till urklippet!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Kvarvarande hastighetsbegränsning:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Återställning om:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Automatisk sparning misslyckades",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Dina ändringar sparades inte automatiskt. Spara manuellt.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Laddningen misslyckades",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Kunde inte ladda dina inställningar. Använder standardinställningar.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Laddar användningsinformation...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "Modell automatiskt vald",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Automatisk val av {0} eftersom du angav en Gemini API-nyckel.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Automatisk val av {0} eftersom du angav en Grok API-nyckel.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Automatisk val av {0} för din Ollama-installation.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Funktion visas inte)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Dynamisk mall - varierar beroende på din markerade text)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "AI-drivna webbannotationer",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Version:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Utvecklare:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Webbplats:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Direktsammanfattningar",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Översättning i realtid",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Avancerade AI-modeller",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Interaktiv chatt",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Ingen datainsamling",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Lokal lagring",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Senaste versionen med förbättrade funktioner och snabbare svarstider",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Lättviktsversion optimerad för effektivitet och hastighet",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Experimentell modell fokuserad på resonemang och analytiska uppgifter",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Stabil version med balanserad prestanda",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "Snabbare, mindre modell för snabba svar",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "8-bitars kvantiserad version för effektiv bearbetning",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Standard Grok-3 modell",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "2,00 USD per 1M tokens",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Lättviktsvariant",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1,00 USD per 1M tokens",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Latensoptimerad Grok-3",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "2,50 USD per 1M tokens",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Mini + snabb variant",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1,50 USD per 1M tokens",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Senaste Grok-2-versionen",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1,80 USD per 1M tokens",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Den mest kraftfulla Llama 2-modellen, bäst för komplexa uppgifter",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70B parametrar",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Senaste DeepSeek-modellen med förbättrade resonemangsförmågor",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67B parametrar",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Högpresterande modell med blandning av experter",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47B parametrar",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Balanserad prestanda och resursanvändning",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13B parametrar",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Effektiv modell för instruktion",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7B parametrar",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "Optimerad för naturliga konversationer",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7B parametrar",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Lättare version av DeepSeek med bra resonemang",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7B parametrar",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Lättviktsmodell för grundläggande uppgifter",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3B parametrar",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Kompakt men kraftfull för sin storlek",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2,7B parametrar",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "Optimerad för chattsamspel",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7B parametrar",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BETA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "Allmänt",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "AI-modeller",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Anvisningsmallar",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Utseende",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "Om",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Allmänna inställningar",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "AI-modellkonfiguration",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Utseende & anpassning",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Anvisningsmallar",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "Om LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Visa den text du har markerat i resultaten",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Visa webbplatsens favikon och titel i resultaten",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Behåll texten markerad efter att popup-fönstret stängs",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Öppna LightUp automatiskt vid textmarkering",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Öppnar LightUp automatiskt när du markerar text",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Kontextmedvetenhet",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Använd sidkontext för att ge bättre, mer relevanta svar",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "AI-motorval",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Välj AI-modelltyp",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Välj vilken AI-tjänst du vill använda för att generera svar",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "Grundläggande (Gratis, begränsat)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (API-nyckel krävs)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok av xAI (API-nyckel krävs)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Lokal/Ollama (Självvärd)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Meddelande om dataskydd",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "När du använder den grundläggande nivån skickas din markerade text och sidkontext till våra servrar för bearbetning. Vi lagrar inte dessa data permanent.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "För fullständig sekretess, överväg att använda din egen API-nyckel med Google Gemini, Grok eller en lokal modell.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Google Gemini-konfiguration",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Google Gemini API-nyckel",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Ange din Google AI Studio API-nyckel",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Skaffa din kostnadsfria API-nyckel från Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Välj Gemini-modell",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Välj vilken Google Gemini-modell som ska användas för att generera svar",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Grok av xAI-konfiguration",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "xAI API-nyckel",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Ange din xAI API-nyckel",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Skaffa din API-nyckel från xAI. Besök {0} för att komma igång.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Välj Grok-modell",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Välj vilken Grok-modell som ska användas för att generera svar",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Lokal/Ollama-konfiguration",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "Ollama-server-URL",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Välj lokal modell",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Välj vilken modell som ska användas från din Ollama-installation",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Svarsinställningar",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Maximal svarslängd",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Maximalt antal tokens (ord/tecken) i AI-svaret",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Anvisningsläge",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Välj vilken typ av anvisning du vill anpassa",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Systemanvisning",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Denna anvisning definierar hur AI ska bete sig och svara",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Mall för användaranvisning",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Denna mall används för att formatera användarförfrågningar till AI",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Redigera",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Spara",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Återställ till standard",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Återställ anvisningarna för {0}-läget till sina ursprungliga standardinställningar",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Återställ till standard",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "Återställning lyckades",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Denna anvisning använder dynamisk logik och kan inte redigeras",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Så här använder du dina anpassade mallar:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "Dina anpassade anvisningar används automatiskt när du markerar text och väljer motsvarande läge\nÄndringarna träder i kraft omedelbart – ingen omstart krävs\nDu kan återställa alla anvisningar till standardinställningarna med återställningsknappen",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Tema & utseende",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Färgtema",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Mörkt tema",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Ljust tema",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Systemstandard",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Textstorlek",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Justera textstorleken i popup-resultaten",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Markeringsfärg",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Välj färg för markering av markerad text",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Välj hur popup-fönstret visas på sidan",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Flytande",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Sidofält",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Centrerad",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Animeringseffekt när popup-fönstret visas",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Tona",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Glid",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Skala",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Ingen",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Animeringinställningar",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp är ett AI-drivet webbläsartillägg som ger direktsammanfattningar, förklaringar, översättningar och analyser för all text på webben.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Länkar",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Användbara länkar och resurser",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Besök webbplatsen",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Betygsätt i Chrome Store",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Rensa all data",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Förklara",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Sammanfatta",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Analysera",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Översätt",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Fri",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Anvisningsdetaljer",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Visa och anpassa anvisningarna som används för detta läge",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Få direktsammanfattningar av all text med ett klick",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Översätt text till vilket språk som helst direkt",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Välj bland flera AI-modeller, inklusive GPT, Gemini och lokala modeller",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Fördjupa dig i konversationer med AI om innehållet du läser",
+    "description": "Description for interactive chat feature"
+  }
+}

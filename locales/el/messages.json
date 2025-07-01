@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - AI Powered Web Annotations. περίληψη, μετάφραση, και πολλά άλλα",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Εξαιρετικές σημειώσεις για κάθε σελίδα στο διαδίκτυο. Τροφοδοτείται από AI για να εξηγεί, να συνοψίζει, να αναλύει, να μεταφράζει και πολλά άλλα.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Καλώς ήρθατε στο LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Περίληψη",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Εξήγηση",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Μετάφραση",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Ανάλυση",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Ρυθμίσεις",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Γλώσσα",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Επιλέξτε την προτιμώμενη γλώσσα σας",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Αποθήκευση",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Ακύρωση",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Ενεργοποιημένο",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Απενεργοποιημένο",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Αποστολή σχολίων",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Φόρτωση...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Δωρεάν Χρήσεις που Απομένουν",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Επιλογή Λειτουργίας",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Ρύθμιση Λειτουργιών",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Μετάβαση σε Υποδείξεις",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Απόκρυψη Ρυθμίσεων Λειτουργίας",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Απόκρυψη Ρυθμίσεων",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Εμφάνιση Πληροφοριών Ιστοσελίδας",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Εμφάνιση εικονιδίου και τίτλου ιστοσελίδας στα αποτελέσματα",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Εμφάνιση Επιλεγμένου Κειμένου",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Εμφάνιση του κειμένου που επιλέξατε στα αποτελέσματα",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Εμφάνιση κουμπιού 'Instant AI'",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Προσθήκη ενός πλωτού κουμπιού 'Instant AI' που συνοψίζει ή εξηγεί ολόκληρη τη σελίδα με ένα κλικ",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Λειτουργία χωρίς περισπασμούς",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Απόκρυψη μη απαραίτητων στοιχείων διεπαφής και θόλωμα της σελίδας πίσω από το LightUp ώστε να μπορείτε να επικεντρωθείτε στην απάντηση του AI",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Διατήρηση επιλεγμένου κειμένου μετά το κλείσιμο του αναδυόμενου παραθύρου",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Διατήρηση επιλεγμένου κειμένου μετά το κλείσιμο του αναδυόμενου παραθύρου",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Εμφάνιση κουμπιού ενέργειας κατά την επιλογή κειμένου",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Εμφάνιση ενός μικρού κουμπιού όταν επιλέγεται κείμενο",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Αυτόματη Άνοιγμα LightUp κατά την επιλογή κειμένου",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Ανοίγει αυτόματα το LightUp κάθε φορά που επιλέγετε κείμενο",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Μόνιμη επισήμανση",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Συντομεύσεις πληκτρολογίου",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Χρησιμοποιήστε αυτές τις συντομεύσεις για γρήγορη πρόσβαση στις λειτουργίες του LightUp",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Εναλλαγή σε λειτουργία εξήγησης",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Εναλλαγή σε λειτουργία περίληψης",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Εναλλαγή σε λειτουργία ανάλυσης",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Εναλλαγή σε λειτουργία μετάφρασης",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Άνοιγμα αναδυόμενου παραθύρου σε ελεύθερη λειτουργία",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "Αφού ορίσετε τη λειτουργία μέσω συντόμευσης, επιλέξτε οποιοδήποτε κείμενο και το LightUp θα εμφανιστεί με την επιλεγμένη λειτουργία.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Εναλλαγές λειτουργιών",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Συντομεύσεις για εναλλαγή λειτουργιών",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Εναλλαγή LightUp on/off",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Εναλλαγή λειτουργίας Radically Focus",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Εναλλαγή φωτεινού/σκούρου θέματος",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Επαναφορά όλων των συντομεύσεων",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Επαναφορά όλων των συντομεύσεων στις προεπιλεγμένες τιμές",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Επαναφορά",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Ρωτήστε οτιδήποτε",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Ρύθμιση επιλογέα λειτουργίας (Επιλέξτε έως 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Αυτές οι λειτουργίες θα εμφανίζονται στον επιλογέα λειτουργίας. Κάντε κλικ για εναλλαγή.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Διαθέσιμες ενέργειες",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Ελεύθερη",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "Λογότυπο LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "Το LightUp είναι αυτή τη στιγμή απενεργοποιημένο",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Ενεργοποιήστε τον διακόπτη στην κεφαλίδα ή το κουμπί παρακάτω για να ενεργοποιήσετε το LightUp και να έχετε πρόσβαση σε όλες τις λειτουργίες.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Ενεργοποίηση LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Αυτόματη → Αγγλικά",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "Γενικά",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Συντομεύσεις πληκτρολογίου",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Ρυθμίσεις για προχωρημένους",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Απόρρητο",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Πολιτική Απορρήτου",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Ιστοσελίδα",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Αξιολογήστε μας",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Σχόλια",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Βοηθήστε μας να βελτιώσουμε το LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Τύπος σχολίου",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Επιλέξτε τον τύπο σχολίου που θέλετε να δώσετε",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Γενικά σχόλια",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Αναφορά σφάλματος",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Αίτηση λειτουργίας",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Άλλο",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Τα σχόλιά σας",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Πείτε μας τι σκέφτεστε ή περιγράψτε το πρόβλημα που αντιμετωπίζετε...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Γράψτε τα σχόλιά σας εδώ...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "Email (προαιρετικό)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Αφήστε το email σας αν θέλετε να σας απαντήσουμε",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Αποστολή σχολίων",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Χρώμα επισήμανσης",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Επιλέξτε το χρώμα για την επισήμανση του κειμένου",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "Προεπιλεγμένο",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Κίτρινο",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Πορτοκαλί",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Μπλε",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Πράσινο",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Μωβ",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Ροζ",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Απόρρητο & Δεδομένα",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Η ιδιωτικότητά σας είναι η προτεραιότητά μας",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Μηδενική συλλογή δεδομένων",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "Το LightUp σέβεται την ιδιωτικότητά σας και χειρίζεται τα δεδομένα σας υπεύθυνα.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Τοπική αποθήκευση",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Όλες οι ρυθμίσεις σας αποθηκεύονται τοπικά στη συσκευή σας",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Άμεση επεξεργασία",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Το κείμενο επεξεργάζεται άμεσα χωρίς αποθήκευση",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Χωρίς παρακολούθηση",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Δεν παρακολουθούμε την περιήγησή σας ούτε αποθηκεύουμε προσωπικά δεδομένα",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Ο έλεγχός σας",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Όλες οι ρυθμίσεις και τα δεδομένα παραμένουν υπό τον έλεγχό σας",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Πλήρης Πολιτική",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Επικοινωνία",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Αποτυχία αποθήκευσης",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "Παρουσιάστηκε σφάλμα κατά την αποθήκευση των ρυθμίσεών σας. Παρακαλούμε δοκιμάστε ξανά.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "Ρυθμίσεις αποθηκεύτηκαν",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "Οι αλλαγές σας αποθηκεύτηκαν κατά την εναλλαγή τμημάτων.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Κλείσιμο ειδοποίησης",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Διακοπή ανάγνωσης",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Ανάγνωση κειμένου",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Περίληψη",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Εξήγηση",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Μετάφραση",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Ανάλυση",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Συζήτηση για",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Επιλογές επιλογής",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Ημερήσια χρήση",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Θέμα",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Επιλέξτε το προτιμώμενο χρωματικό θέμα για την επέκταση",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Σκούρο θέμα",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Φωτεινό θέμα",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Προεπιλογή συστήματος",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "Αλλαγή γλώσσας",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "Η διεπαφή χρήστη θα ενημερωθεί για να αντικατοπτρίζει την επιλογή γλώσσας σας",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Σφάλμα",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Αποτυχία αλλαγής γλώσσας",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Περιθώριο αναδυόμενου παραθύρου",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Απόσταση από τις άκρες του παραθύρου σε πλωτή λειτουργία",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Ρυθμίσεις μετάφρασης",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Χρήση περιβάλλοντος σελίδας για καλύτερες απαντήσεις",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Ενεργοποίηση βαθύτερου περιβάλλοντος σελίδας για καλύτερα αποτελέσματα",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Εμφάνιση",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Σχόλια",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Διάταξη & Εμφάνιση",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Προσαρμογή της διάταξης και της εμφάνισης της επέκτασης",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Λειτουργία διάταξης",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Πλωτή",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Πλαϊνή μπάρα",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Κεντραρισμένη",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Μέγεθος γραμματοσειράς αποτελεσμάτων",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Έλεγχος του μεγέθους του κειμένου στο πλαίσιο αποτελεσμάτων",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "Εξαιρετικά μικρό",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Μικρό",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Μεσαίο",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Μεγάλο",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "Εξαιρετικά μεγάλο",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "Πολύ μεγάλο",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Κίνηση αναδυόμενου παραθύρου",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Κίνηση κατά την εμφάνιση του αναδυόμενου παραθύρου",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Εξασθένιση",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Ολίσθηση",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Κλίμακα",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Κανένα",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Λειτουργία Radical Focus",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Θόλωμα φόντου κατά την προβολή αποτελεσμάτων",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Υποχρεωτικό)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Τιμή:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Μέγεθος:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "Η διεύθυνση αντιγράφηκε στο πρόχειρο!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Όριο ρυθμού που απομένει:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Επαναφορά σε:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Αποτυχία αυτόματης αποθήκευσης",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Οι αλλαγές σας δεν αποθηκεύτηκαν αυτόματα. Παρακαλούμε αποθηκεύστε με μη αυτόματο τρόπο.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Αποτυχία φόρτωσης",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Δεν ήταν δυνατή η φόρτωση των ρυθμίσεών σας. Χρησιμοποιούνται οι προεπιλεγμένες ρυθμίσεις.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Φόρτωση πληροφοριών χρήσης...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "Αυτόματη επιλογή μοντέλου",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Αυτόματη επιλογή {0} αφού δώσατε κλειδί API Gemini.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Αυτόματη επιλογή {0} αφού δώσατε κλειδί API Grok.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Αυτόματη επιλογή {0} για τη ρύθμιση Ollama σας.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Η συνάρτηση δεν εμφανίζεται)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Δυναμικό πρότυπο - ποικίλλει ανάλογα με το επιλεγμένο κείμενο)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "AI-Powered Web Annotations",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Έκδοση:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Προγραμματιστής:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Ιστοσελίδα:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Άμεσες Περιλήψεις",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Μετάφραση σε πραγματικό χρόνο",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Προηγμένα μοντέλα AI",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Διαδραστική συνομιλία",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Μηδενική συλλογή δεδομένων",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Τοπική αποθήκευση",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Τελευταία έκδοση με βελτιωμένες δυνατότητες και ταχύτερους χρόνους απόκρισης",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Ελαφριά έκδοση βελτιστοποιημένη για αποδοτικότητα και ταχύτητα",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Πειραματικό μοντέλο που επικεντρώνεται σε λογικά και αναλυτικά καθήκοντα",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Σταθερή έκδοση με ισορροπημένη απόδοση",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "Ταχύτερο, μικρότερο μοντέλο για γρήγορες απαντήσεις",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "8-bit ποσοτικοποιημένη έκδοση για αποδοτική επεξεργασία",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Standard Grok-3 μοντέλο",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "$2.00 ανά 1 εκατομμύριο tokens",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Ελαφριά παραλλαγή",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "$1.00 ανά 1 εκατομμύριο tokens",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3 βελτιστοποιημένο για χαμηλή καθυστέρηση",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "$2.50 ανά 1 εκατομμύριο tokens",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Mini + γρήγορη παραλλαγή",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "$1.50 ανά 1 εκατομμύριο tokens",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Τελευταία έκδοση Grok-2",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "$1.80 ανά 1 εκατομμύριο tokens",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Το ισχυρότερο μοντέλο Llama 2, ιδανικό για πολύπλοκα καθήκοντα",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70B παράμετροι",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Τελευταίο μοντέλο DeepSeek με βελτιωμένες δυνατότητες συλλογισμού",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67B παράμετροι",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Μοντέλο υψηλής απόδοσης μείγματος εμπειρογνωμόνων",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47B παράμετροι",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Ισορροπημένη απόδοση και χρήση πόρων",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13B παράμετροι",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Αποδοτικό μοντέλο ακολουθίας οδηγιών",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7B παράμετροι",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "Βελτιστοποιημένο για φυσικές συνομιλίες",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7B παράμετροι",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Ελαφρύτερη έκδοση του DeepSeek με καλό συλλογισμό",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7B παράμετροι",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Ελαφρύ μοντέλο για βασικά καθήκοντα",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3B παράμετροι",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Συμπυκνωμένο αλλά ισχυρό για το μέγεθός του",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2.7B παράμετροι",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "Βελτιστοποιημένο για αλληλεπιδράσεις συνομιλίας",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7B παράμετροι",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BETA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "Γενικά",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "Μοντέλα AI",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Πρότυπα υποδείξεων",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Εμφάνιση",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "Σχετικά",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Γενικές Ρυθμίσεις",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "Ρύθμιση παραμέτρων μοντέλου AI",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Εμφάνιση & Προσαρμογή",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Πρότυπα υποδείξεων",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "Σχετικά με το LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Εμφάνιση του κειμένου που επιλέξατε στα αποτελέσματα",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Εμφάνιση εικονιδίου και τίτλου ιστοσελίδας στα αποτελέσματα",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Διατήρηση επιλεγμένου κειμένου μετά το κλείσιμο του αναδυόμενου παραθύρου",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Αυτόματη Άνοιγμα LightUp κατά την επιλογή κειμένου",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Ανοίγει αυτόματα το LightUp κάθε φορά που επιλέγετε κείμενο",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Επίγνωση περιβάλλοντος",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Χρήση περιβάλλοντος σελίδας για την παροχή καλύτερων, πιο σχετικών απαντήσεων",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "Επιλογή μηχανής AI",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Επιλογή τύπου μοντέλου AI",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Επιλέξτε ποια υπηρεσία AI θέλετε να χρησιμοποιήσετε για τη δημιουργία απαντήσεων",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "Βασικό (Δωρεάν, Περιορισμένο)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (Απαιτείται κλειδί API)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok από xAI (Απαιτείται κλειδί API)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Τοπικό/Ollama (Αυτο-φιλοξενουμένο)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Πληροφορίες για την προστασία δεδομένων",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "Κατά τη χρήση του βασικού επιπέδου, το επιλεγμένο κείμενο και το περιβάλλον της σελίδας αποστέλλονται στους διακομιστές μας για επεξεργασία. Δεν αποθηκεύουμε αυτά τα δεδομένα μόνιμα.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "Για πλήρη προστασία της ιδιωτικότητας, εξετάστε τη χρήση του δικού σας κλειδιού API με Google Gemini, Grok ή ένα τοπικό μοντέλο.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Ρύθμιση παραμέτρων Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Κλειδί API Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Εισαγάγετε το κλειδί API του Google AI Studio",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Λάβετε το δωρεάν κλειδί API από το Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Επιλογή μοντέλου Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Επιλέξτε ποιο μοντέλο Google Gemini θα χρησιμοποιηθεί για τη δημιουργία απαντήσεων",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Ρύθμιση παραμέτρων Grok από xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "Κλειδί API xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Εισαγάγετε το κλειδί API xAI",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Λάβετε το κλειδί API από xAI. Επισκεφθείτε {0} για να ξεκινήσετε.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Επιλογή μοντέλου Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Επιλέξτε ποιο μοντέλο Grok θα χρησιμοποιηθεί για τη δημιουργία απαντήσεων",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Ρύθμιση παραμέτρων τοπικού/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "URL διακομιστή Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Επιλογή τοπικού μοντέλου",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Επιλέξτε ποιο μοντέλο θα χρησιμοποιηθεί από την εγκατάσταση Ollama σας",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Ρυθμίσεις απόκρισης",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Μέγιστο μήκος απόκρισης",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Μέγιστος αριθμός tokens (λέξεις/χαρακτήρες) στην απάντηση του AI",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Λειτουργία υποδείξεων",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Επιλέξτε ποιο τύπο υποδείξεων θέλετε να προσαρμόσετε",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Συστημική υπόδειξη",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Αυτή η υπόδειξη ορίζει πώς το AI θα πρέπει να συμπεριφέρεται και να απαντά",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Πρότυπο υποδείξεων χρήστη",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Αυτό το πρότυπο χρησιμοποιείται για τη μορφοποίηση αιτημάτων χρήστη στο AI",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Επεξεργασία",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Αποθήκευση",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Επαναφορά σε προεπιλογή",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Επαναφορά των υποδείξεων λειτουργίας {0} στις αρχικές προεπιλογές",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Επαναφορά σε προεπιλογή",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "Επιτυχημένη επαναφορά",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Αυτή η υπόδειξη χρησιμοποιεί δυναμική λογική και δεν μπορεί να επεξεργαστεί",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Πώς να εφαρμόσετε τα προσαρμοσμένα πρότυπά σας:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "Οι προσαρμοσμένες υποδείξεις σας θα χρησιμοποιηθούν αυτόματα όταν επιλέξετε κείμενο και επιλέξετε την αντίστοιχη λειτουργία\nΟι αλλαγές ισχύουν αμέσως - δεν απαιτείται επανεκκίνηση\nΜπορείτε να επαναφέρετε οποιαδήποτε υπόδειξη στις προεπιλογές χρησιμοποιώντας το κουμπί επαναφοράς",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Θέμα & Εμφάνιση",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Χρωματικό θέμα",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Σκούρο θέμα",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Φωτεινό θέμα",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Προεπιλογή συστήματος",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Μέγεθος γραμματοσειράς",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Ρύθμιση του μεγέθους του κειμένου στα αποτελέσματα του αναδυόμενου παραθύρου",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Χρώμα επισήμανσης",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Επιλογή χρώματος για την επισήμανση του επιλεγμένου κειμένου",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Επιλέξτε πώς θα εμφανίζεται το αναδυόμενο παράθυρο στη σελίδα",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Πλωτή",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Πλαϊνή μπάρα",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Κεντραρισμένη",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Εφέ κίνησης κατά την εμφάνιση του αναδυόμενου παραθύρου",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Εξασθένιση",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Ολίσθηση",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Κλίμακα",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Κανένα",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Ρυθμίσεις κίνησης",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "Το LightUp είναι μια επέκταση προγράμματος περιήγησης με τεχνητή νοημοσύνη που παρέχει άμεσες περιλήψεις, εξηγήσεις, μεταφράσεις και αναλύσεις για οποιοδήποτε κείμενο στο διαδίκτυο.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Σύνδεσμοι",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Χρήσιμοι σύνδεσμοι και πόροι",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Επισκεφθείτε την ιστοσελίδα",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Αξιολογήστε στο Chrome Store",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Εκκαθάριση όλων των δεδομένων",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Εξήγηση",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Περίληψη",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Ανάλυση",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Μετάφραση",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Ελεύθερη",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Λεπτομέρειες υποδείξεων",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Προβολή και προσαρμογή των υποδείξεων που χρησιμοποιούνται για αυτήν τη λειτουργία",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Λάβετε άμεσες περιλήψεις οποιουδήποτε κειμένου με ένα κλικ",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Μεταφράστε κείμενο σε οποιαδήποτε γλώσσα άμεσα",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Επιλέξτε από πολλά μοντέλα AI, όπως GPT, Gemini και τοπικά μοντέλα",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Συζητήστε με το AI για το περιεχόμενο που διαβάζετε",
+    "description": "Description for interactive chat feature"
+  }
+}

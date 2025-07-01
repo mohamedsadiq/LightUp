@@ -2,10 +2,15 @@ import type { ProcessTextRequest } from "~types/messages"
 import { FeedbackProcessor } from "../feedback/feedbackProcessor"
 import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS } from "../../utils/constants"
 import { LANGUAGES } from "../../utils/constants"
+import { getCurrentLocale } from "../../utils/i18n"
 
 export const processLocalText = async function*(request: ProcessTextRequest) {
   const { text, mode, settings } = request
   const feedbackProcessor = new FeedbackProcessor()
+  // Get the user's selected language for AI responses
+  // Priority: 1) aiResponseLanguage setting (from website info selector)
+  //          2) Extension UI language (from popup/options) as fallback
+  const responseLanguage = settings.aiResponseLanguage || await getCurrentLocale()
   
   try {
     const { positivePatterns, negativePatterns } = await feedbackProcessor.getFeedbackContext(text)
@@ -20,6 +25,8 @@ export const processLocalText = async function*(request: ProcessTextRequest) {
 
 FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.
 
+USER LANGUAGE: ${responseLanguage}
+
 Based on user feedback:
 - Include patterns like: ${positivePatterns.slice(0, 3).join(', ')}
 - Avoid patterns like: ${negativePatterns.slice(0, 3).join(', ')}
@@ -28,6 +35,8 @@ Keep responses under 1500 tokens.`;
         // Otherwise use enhanced follow-up prompt with feedback context
         const basePrompt = FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
         return `${basePrompt}
+
+USER LANGUAGE: ${responseLanguage}
 
 Based on user feedback:
 - Include patterns like: ${positivePatterns.slice(0, 3).join(', ')}
@@ -41,6 +50,8 @@ Keep responses under 1500 tokens.`;
         // We still enhance with feedback context
         return `
           ${customSystemPrompt}
+          USER LANGUAGE: ${responseLanguage}
+          
           Based on user feedback:
           - Include patterns like: ${positivePatterns.slice(0, 3).join(', ')}
           - Avoid patterns like: ${negativePatterns.slice(0, 3).join(', ')}
@@ -51,6 +62,8 @@ Keep responses under 1500 tokens.`;
       // Otherwise use default with feedback enhancement
       return `
         ${SYSTEM_PROMPTS[mode]}
+        USER LANGUAGE: ${responseLanguage}
+        
         Based on user feedback:
         - Include patterns like: ${positivePatterns.slice(0, 3).join(', ')}
         - Avoid patterns like: ${negativePatterns.slice(0, 3).join(', ')}

@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - AI podporované webové anotácie. Zhrnutie, preklad a ďalšie",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Genialne anotácie pre každú stránku na webe. Poháňané AI na vysvetlenie, zhrnutie, analýzu, preklad a ďalšie.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Vitajte v LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Zhrnúť",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Vysvetliť",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Preložiť",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Analyzovať",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Nastavenia",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Jazyk",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Vyberte si preferovaný jazyk",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Uložiť",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Zrušiť",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Povolené",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Zakázané",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Poslať spätnú väzbu",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Načítavam...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Zostávajúce bezplatné použitia",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Výber režimu",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Konfigurovať režimy",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Prejsť na výzvy",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Skryť konfiguráciu režimu",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Skryť konfiguráciu",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Zobraziť informácie o webovej stránke",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Zobraziť ikonu webovej stránky a názov vo výsledkoch",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Zobraziť vybraný text",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Zobraziť text, ktorý ste vybrali vo výsledkoch",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Zobraziť tlačidlo \"Instant AI\"",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Pridať plávajúce tlačidlo \"Instant AI\", ktoré zhrnie alebo vysvetlí celú stránku jedným kliknutím",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Režim bez rozptýlenia",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Skryje nepodstatné rozhranie a stlmí stránku za LightUp, aby ste sa mohli sústrediť na odpoveď AI",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Zachovať zvýraznený text po zatvorení okna",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Zachovať zvýraznený text po zatvorení vyskakovacieho okna",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Zobraziť tlačidlo akcie pri výbere textu",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Zobraziť malé tlačidlo, keď je text zvýraznený",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Automatické otvorenie LightUp pri výbere textu",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Automaticky otvorí LightUp vždy, keď vyberiete text",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Pretrvávajúce zvýraznenie",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Klávesové skratky",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Používajte tieto skratky na rýchly prístup k funkciám LightUp",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Prepnúť do režimu Vysvetlenie",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Prepnúť do režimu Zhrnutie",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Prepnúť do režimu Analýza",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Prepnúť do režimu Preklad",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Otvoriť okno v režime Free",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "Po nastavení režimu pomocou skratky vyberte ľubovoľný text a LightUp sa zobrazí s vybraným režimom.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Prepínače funkcií",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Skratky pre zapínanie a vypínanie funkcií",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Prepnúť LightUp zap/vyp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Prepnúť režim Radikálne zameranie",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Prepnúť svetlú/tmavú tému",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Resetovať všetky skratky",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Obnoviť všetky skratky na ich predvolené hodnoty",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Resetovať",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Opýtať sa na čokoľvek",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Konfigurovať výber režimu (vyberte až 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Tieto režimy sa zobrazia vo vašom výbere režimu. Kliknutím prepnete.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Dostupné akcie",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Free",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "Logo LightUp",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp je momentálne vypnutý",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Prepnite prepínač v hlavičke alebo tlačidlo nižšie, aby ste povolili LightUp a získali prístup ku všetkým funkciám.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Povoliť LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Auto → Angličtina",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "Všeobecné",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Klávesové skratky",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Rozšírené nastavenia",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Súkromie",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Zásady ochrany osobných údajov",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Webová stránka",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Ohodnoťte nás",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Spätná väzba",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Pomôžte nám vylepšiť LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Typ spätnej väzby",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Vyberte typ spätnej väzby, ktorú chcete poskytnúť",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Všeobecná spätná väzba",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Hlásenie chyby",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Žiadosť o funkciu",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Iné",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Vaša spätná väzba",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Povedzte nám, čo si myslíte, alebo opíšte problém, s ktorým sa stretávate...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Napíšte sem svoju spätnú väzbu...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "E-mail (voliteľné)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Zanechajte svoj e-mail, ak chcete, aby sme sa s vami skontaktovali",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "vy@priklad.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Odoslať spätnú väzbu",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Farba zvýraznenia",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Vyberte farbu pre zvýraznenie textu",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "Predvolené",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Žltá",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Oranžová",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Modrá",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Zelená",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Fialová",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Ružová",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Súkromie a dáta",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Vaše súkromie je pre nás prioritou",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Žiadny zber dát",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp rešpektuje vaše súkromie a zodpovedne nakladá s vašimi údajmi.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Lokálne úložisko",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Všetky vaše nastavenia sa ukladajú lokálne do vášho zariadenia",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Priame spracovanie",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Text sa spracováva priamo bez ukladania",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Žiadne sledovanie",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Nesledujeme vaše prehliadanie ani neukladáme osobné údaje",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Vaša kontrola",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Všetky nastavenia a dáta zostávajú pod vašou kontrolou",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Kompletné pravidlá",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Kontakt",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Uloženie zlyhalo",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "Pri ukladaní nastavení došlo k chybe. Skúste to znova.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "Nastavenia uložené",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "Vaše zmeny boli uložené pri prepínaní sekcií.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Zatvoriť oznámenie",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Zastaviť prehrávanie",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Prečítať text nahlas",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Zhrnúť",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Vysvetliť",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Preložiť",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Analyzovať",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Chatovať o",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Možnosti výberu",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Denné používanie",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Téma",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Vyberte si preferovanú farebnú tému pre rozšírenie",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Tmavá téma",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Svetlá téma",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Predvolené systémové",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "Jazyk zmenený",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "Rozhranie sa aktualizuje tak, aby odrážalo váš výber jazyka",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Chyba",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Zmena jazyka zlyhala",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Okraj vyskakovacieho okna",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Vzdialenosť od okrajov zobrazenia v režime voľného pohybu",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Nastavenia prekladu",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Použiť kontext stránky pre lepšie odpovede",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Povoliť hlbší kontext stránky pre lepšie výsledky",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Vzhľad",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Spätná väzba",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Rozloženie a zobrazenie",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Prispôsobte rozloženie a vzhľad rozšírenia",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Režim rozloženia",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Plávajúce",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Bočný panel",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Vycentrované",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Veľkosť písma výsledkov",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Ovládajte veľkosť textu v paneli výsledkov",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "Veľmi malé",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Malé",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Stredné",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Veľké",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "Veľmi veľké",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "Extra veľké",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Animácia vyskakovacieho okna",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Animácia pri zobrazení vyskakovacieho okna",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Zmiznutie",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Posunutie",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Zmena mierky",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Žiadna",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Režim radikálneho zamerania",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Rozmazať pozadie pri zobrazovaní výsledkov",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Povinné)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Cena:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Veľkosť:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "Adresa skopírovaná do schránky!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Zostávajúci limit rýchlosti:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Resetovať o:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Automatické ukladanie zlyhalo",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Vaše zmeny neboli automaticky uložené. Uložte ich manuálne.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Načítanie zlyhalo",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Nepodarilo sa načítať vaše nastavenia. Používam predvolené.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Načítavam informácie o používaní...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "Model automaticky vybraný",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Automaticky vybraný {0}, pretože ste poskytli kľúč API Gemini.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Automaticky vybraný {0}, pretože ste poskytli kľúč API Grok.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Automaticky vybraný {0} pre vaše nastavenie Ollama.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Funkcia sa nezobrazuje)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Dynamická šablóna - líši sa v závislosti od vybraného textu)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "AI-poháňané webové anotácie",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Verzia:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Vývojár:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Webová stránka:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Okamžité zhrnutia",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Preklad v reálnom čase",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Pokročilé modely AI",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Interaktívny chat",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Žiadny zber dát",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Lokálne úložisko",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Najnovšia verzia so zlepšenými funkciami a rýchlejšími odozvami",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Ľahká verzia optimalizovaná pre efektivitu a rýchlosť",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Experimentálny model zameraný na uvažovanie a analytické úlohy",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Stabilná verzia s vyváženým výkonom",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "Rýchlejší, menší model pre rýchle odpovede",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "8-bitová kvantizovaná verzia pre efektívne spracovanie",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Štandardný model Grok-3",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "2,00 USD za 1 milión tokenov",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Ľahká varianta",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1,00 USD za 1 milión tokenov",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3 optimalizovaný pre latenciu",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "2,50 USD za 1 milión tokenov",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Mini + rýchla varianta",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1,50 USD za 1 milión tokenov",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Najnovšia zostava Grok-2",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1,80 USD za 1 milión tokenov",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Najvýkonnejší model Llama 2, najlepší pre komplexné úlohy",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70 miliárd parametrov",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Najnovší model DeepSeek so zlepšenými schopnosťami uvažovania",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67 miliárd parametrov",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Výkonná zmes modelov expertov",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47 miliárd parametrov",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Vyvážený výkon a využitie zdrojov",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13 miliárd parametrov",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Efektívny model pre dodržiavanie inštrukcií",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7 miliárd parametrov",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "Optimalizovaný pre prirodzené konverzácie",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7 miliárd parametrov",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Ľahšia verzia DeepSeek s dobrým uvažovaním",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7 miliárd parametrov",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Ľahký model pre základné úlohy",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3 miliardy parametrov",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Kompaktný, ale výkonný pre svoju veľkosť",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2,7 miliardy parametrov",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "Optimalizovaný pre interakcie v chate",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7 miliárd parametrov",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BETA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "Všeobecné",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "Modely AI",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Šablóny výziev",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Vzhľad",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "O aplikácii",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Všeobecné nastavenia",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "Konfigurácia modelu AI",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Vzhľad a prispôsobenie",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Šablóny výziev",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "O LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Zobraziť text, ktorý ste vybrali vo výsledkoch",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Zobraziť ikonu webovej stránky a názov vo výsledkoch",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Zachovať zvýraznený text po zatvorení vyskakovacieho okna",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Automatické otvorenie LightUp pri výbere textu",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Automaticky otvorí LightUp vždy, keď vyberiete text",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Vedomie kontextu",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Použiť kontext stránky na poskytnutie lepších, relevantnejších odpovedí",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "Výber enginu AI",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Vyberte typ modelu AI",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Vyberte, ktorú službu AI chcete použiť na generovanie odpovedí",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "Základné (bezplatné, obmedzené)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (vyžaduje sa kľúč API)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok od xAI (vyžaduje sa kľúč API)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Lokálne/Ollama (samostatne hostované)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Oznámenie o ochrane údajov",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "Pri používaní základnej úrovne sa váš vybraný text a kontext stránky odosielajú na naše servery na spracovanie. Tieto údaje neukladáme natrvalo.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "Pre úplné súkromie zvážte použitie vlastného kľúča API s Google Gemini, Grok alebo lokálnym modelom.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Konfigurácia Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Kľúč API Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Zadajte svoj kľúč API Google AI Studio",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Získajte svoj bezplatný kľúč API od Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Vyberte model Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Vyberte, ktorý model Google Gemini chcete použiť na generovanie odpovedí",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Konfigurácia Grok od xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "Kľúč API xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Zadajte svoj kľúč API xAI",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Získajte svoj kľúč API od xAI. Navštívte {0} a začnite.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Vyberte model Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Vyberte, ktorý model Grok chcete použiť na generovanie odpovedí",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Konfigurácia lokálneho/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "URL servera Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Vyberte lokálny model",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Vyberte, ktorý model chcete použiť z vašej inštalácie Ollama",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Nastavenia odpovedí",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Maximálna dĺžka odpovede",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Maximálny počet tokenov (slov/znakov) v odpovedi AI",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Režim výzvy",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Vyberte typ výzvy, ktorú chcete prispôsobiť",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Systémová výzva",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Táto výzva definuje, ako sa má AI správať a reagovať",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Šablóna používateľskej výzvy",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Táto šablóna sa používa na formátovanie používateľských požiadaviek na AI",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Upraviť",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Uložiť",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Resetovať na predvolené",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Resetovať výzvy režimu {0} na pôvodné predvolené nastavenia",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Resetovať na predvolené",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "Úspešne resetované",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Táto výzva používa dynamickú logiku a nedá sa upraviť",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Ako aplikovať svoje vlastné šablóny:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "Vaše vlastné výzvy sa automaticky použijú, keď vyberiete text a vyberiete zodpovedajúci režim\nZmeny sa prejavia okamžite - nie je potrebný reštart\nMôžete resetovať ľubovoľnú výzvu späť na predvolené nastavenia pomocou tlačidla resetovania",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Téma a vzhľad",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Farebná téma",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Tmavá téma",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Svetlá téma",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Predvolené systémové",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Veľkosť písma",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Upravte veľkosť textu vo vyskakovacích výsledkoch",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Farba zvýraznenia",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Vyberte farbu pre zvýraznenie vybraného textu",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Vyberte, ako sa má vyskakovacie okno zobrazovať na stránke",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Plávajúce",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Bočný panel",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Vycentrované",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Animačný efekt pri zobrazení vyskakovacieho okna",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Zmiznutie",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Posunutie",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Zmena mierky",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Žiadna",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Nastavenia animácie",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp je rozšírenie prehliadača poháňané AI, ktoré poskytuje okamžité zhrnutia, vysvetlenia, preklady a analýzu akéhokoľvek textu na webe.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Odkazy",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Užitočné odkazy a zdroje",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Navštíviť webovú stránku",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Ohodnotiť v Chrome Store",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Vymazať všetky dáta",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Vysvetliť",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Zhrnúť",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Analyzovať",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Preložiť",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Free",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Podrobnosti výzvy",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Zobraziť a prispôsobiť výzvy použité pre tento režim",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Získajte okamžité zhrnutia akéhokoľvek textu jedným kliknutím",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Okamžite prekladajte text do ľubovoľného jazyka",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Vyberte si z viacerých modelov AI vrátane GPT, Gemini a lokálnych modelov",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Porozprávajte sa s AI o obsahu, ktorý čítate",
+    "description": "Description for interactive chat feature"
+  }
+}

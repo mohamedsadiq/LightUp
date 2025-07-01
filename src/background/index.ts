@@ -36,7 +36,7 @@ const DEFAULT_SETTINGS: Settings = {
     showSelectedText: false,
     theme: "system",
     radicallyFocus: false,
-    fontSize: "1rem",
+    fontSize: "16px",
     highlightColor: "default",
     popupAnimation: "slide",
     persistHighlight: false,
@@ -47,7 +47,8 @@ const DEFAULT_SETTINGS: Settings = {
     enablePDFSupport: false,
     showTextSelectionButton: true,
     automaticActivation: false,
-    showWebsiteInfo: true
+    showWebsiteInfo: true,
+    sidebarPinned: false
   }
 }
 

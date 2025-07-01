@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - AI podprta spletna opombe. Povzetek, prevajanje in še več",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Genialne opombe za vsako stran na spletu. Podprto z umetno inteligenco za razlago, povzemanje, analizo, prevajanje in še več.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Dobrodošli v LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Povzemi",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Razloži",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Prevedi",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Analiziraj",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Nastavitve",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Jezik",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Izberite želeni jezik",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Shrani",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Prekliči",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Omogočeno",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Onemogočeno",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Pošlji povratne informacije",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Nalagam...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Preostale brezplačne uporabe",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Izbira načina",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Nastavi načine",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Pojdi na pozive",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Skrij konfiguracijo načina",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Skrij konfiguracijo",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Pokaži informacije o spletnem mestu",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Prikaži ikono spletnega mesta in naslov v rezultatih",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Pokaži izbrano besedilo",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Prikaži besedilo, ki ste ga izbrali v rezultatih",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Pokaži gumb 'Takojšnja AI'",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Dodaj plavajoči gumb 'Takojšnja AI', ki s klikom povzame ali razloži celotno stran",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Način brez motenj",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Skrije nepotreben uporabniški vmesnik in zatemni stran za LightUp, da se lahko osredotočite na odgovor umetne inteligence",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Obdrži označeno besedilo po zaprtju pojavnega okna",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Ohrani označeno besedilo po zaprtju pojavnega okna",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Pokaži gumb dejanja pri izbiri besedila",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Prikaži majhen gumb, ko je besedilo označeno",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Samodejno odpri LightUp pri izbiri besedila",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Samodejno odpre LightUp, kadar izberete besedilo",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Trajno označevanje",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Tipkovniške bližnjice",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Uporabite te bližnjice za hiter dostop do funkcij LightUp",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Preklopi v način Razloži",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Preklopi v način Povzemi",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Preklopi v način Analiziraj",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Preklopi v način Prevedi",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Odpri pojavno okno v prostem načinu",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "Po nastavitvi načina s bližnjico izberite poljubno besedilo in LightUp se bo prikazal z izbranim načinom.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Preklop funkcij",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Bližnjice za vklop in izklop funkcij",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Vklop/izklop LightUp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Vklop/izklop načina radikalnega fokusa",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Preklop svetle/temne teme",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Ponastavi vse bližnjice",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Obnovi vse bližnjice na privzete vrednosti",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Ponastavi",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Vprašaj karkoli",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Nastavi izbirnik načina (izberi do 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Ti načini se bodo prikazali v izbirniku načina. Kliknite za preklop.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Razpoložljiva dejanja",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Prosto",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "LightUp logotip",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp je trenutno izklopljen",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Preklopite stikalo v glavi ali gumb spodaj, da omogočite LightUp in dostopate do vseh funkcij.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Omogoči LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Samodejno → angleščina",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "Splošno",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Tipkovniške bližnjice",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Napredne nastavitve",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Zasebnost",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Politika zasebnosti",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Spletno mesto",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Oceni nas",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Povratne informacije",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Pomagajte nam izboljšati LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Vrsta povratnih informacij",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Izberite vrsto povratnih informacij, ki jih želite posredovati",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Splošne povratne informacije",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Poročilo o napaki",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Zahteva za funkcijo",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Drugo",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Vaše povratne informacije",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Povejte nam, kaj mislite ali opišite težavo, s katero se srečujete...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Vnesite vaše povratne informacije tukaj...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "E-pošta (neobvezno)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Pustite svoj e-poštni naslov, če želite, da vas kontaktiramo",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Pošlji povratne informacije",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Barva označevanja",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Izberite barvo za označevanje besedila",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "Privzeto",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Rumena",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Oranžna",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Modra",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Zelena",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Vijolična",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Roza",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Zasebnost in podatki",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Vaša zasebnost je naša prioriteta",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Brez zbiranja podatkov",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp spoštuje vašo zasebnost in odgovorno ravna z vašimi podatki.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Lokalni pomnilnik",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Vse vaše nastavitve so shranjene lokalno na vaši napravi",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Neposredna obdelava",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Besedilo se obdeluje neposredno brez shranjevanja",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Brez sledenja",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Ne sledimo vašemu brskanju ali shranjujemo osebnih podatkov",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Vaš nadzor",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Vse nastavitve in podatki ostajajo pod vašim nadzorom",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Celotna politika",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Kontakt",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Shranjevanje ni uspelo",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "Pri shranjevanju vaših nastavitev je prišlo do napake. Poskusite znova.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "Nastavitve shranjene",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "Vaše spremembe so bile shranjene pri preklapljanju razdelkov.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Zapri obvestilo",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Ustavi govor",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Preberi besedilo na glas",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Povzemi",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Razloži",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Prevedi",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Analiziraj",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Klepetaj o",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Možnosti izbire",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Dnevna uporaba",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Tema",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Izberite svojo najljubšo barvno temo za razširitev",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Temna tema",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Svetla tema",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Privzeta sistemska tema",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "Jezik spremenjen",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "Uporabniški vmesnik se bo posodobil, da bo odražal vašo izbiro jezika",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Napaka",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Sprememba jezika ni uspela",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Rob pojavnega okna",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Razdalja od robov okna v plavajočem načinu",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Nastavitve prevajanja",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Uporabi kontekst strani za boljše odgovore",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Omogoči globlji kontekst strani za boljše rezultate",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Videz",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Povratne informacije",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Razporeditev in prikaz",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Prilagodite postavitev in videz razširitve",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Način postavitve",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Plavajoče",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Stranska vrstica",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Osrednje",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Velikost pisave rezultatov",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Nadzorujte velikost besedila v podoknu z rezultati",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "Zelo majhna",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Majhna",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Srednja",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Velika",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "Zelo velika",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "Izjemno velika",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Animacija pojavnega okna",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Animacija, ko se pojavi pojavno okno",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Zbledi",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Drsi",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Poveča",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Nobena",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Način radikalnega fokusa",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Zamegli ozadje pri ogledu rezultatov",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Obvezno)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Cena:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Velikost:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "Naslov kopiran v odložišče!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Preostala omejitev hitrosti:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Ponastavi čez:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Samodejno shranjevanje ni uspelo",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Vaše spremembe niso bile samodejno shranjene. Shranite ročno.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Nalaganje ni uspelo",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Ni mogoče naložiti vaših nastavitev. Uporaba privzetih.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Nalaganje informacij o uporabi...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "Model samodejno izbran",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Samodejno izbran {0}, ker ste navedli API ključ Gemini.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Samodejno izbran {0}, ker ste navedli API ključ Grok.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Samodejno izbran {0} za vašo namestitev Ollama.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Funkcija ni prikazana)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Dinamična predloga - se spreminja glede na izbrano besedilo)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "AI-podprta spletna opomba",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Različica:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Razvijalec:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Spletno mesto:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Takojšnji povzetki",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Prevajanje v realnem času",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Napredni modeli AI",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Interaktivni klepet",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Brez zbiranja podatkov",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Lokalni pomnilnik",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Najnovejša različica z izboljšanimi zmogljivostmi in hitrejšim odzivnim časom",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Lahka različica, optimizirana za učinkovitost in hitrost",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Razmišljanje",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Eksperimentalni model, osredotočen na sklepanje in analitične naloge",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Stabilna različica z uravnoteženo zmogljivostjo",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "Hitrejši, manjši model za hitre odzive",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "8-bitna kvantizirana različica za učinkovito obdelavo",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Standardni model Grok-3",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "2,00 $ na 1M žetonov",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Lahka različica",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1,00 $ na 1M žetonov",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Grok-3, optimiziran za hitrost",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "2,50 $ na 1M žetonov",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Mini + hitra različica",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1,50 $ na 1M žetonov",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Najnovejša različica Grok-2",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1,80 $ na 1M žetonov",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Najmočnejši model Llama 2, najboljši za kompleksne naloge",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70B parametrov",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Najnovejši model DeepSeek z izboljšanimi zmogljivostmi sklepanja",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67B parametrov",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Visoko zmogljiv model mešanice strokovnjakov",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47B parametrov",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Uravnotežena zmogljivost in uporaba virov",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13B parametrov",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Učinkovit model, ki sledi navodilom",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7B parametrov",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "Optimizirano za naravne pogovore",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7B parametrov",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Lahkejša različica DeepSeek z dobrim sklepanjem",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7B parametrov",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Lahki model za osnovne naloge",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3B parametrov",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Kompakten, vendar močan za svojo velikost",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2.7B parametrov",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "Optimizirano za interakcije v klepetu",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7B parametrov",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BETA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "Splošno",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "Modeli AI",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Predloge pozivov",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Videz",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "O programu",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Splošne nastavitve",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "Konfiguracija modela AI",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Videz in prilagajanje",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Predloge pozivov",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "O LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Prikaži izbrano besedilo v rezultatih",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Prikaži ikono spletnega mesta in naslov v rezultatih",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Ohrani označeno besedilo po zaprtju pojavnega okna",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Samodejno odpri LightUp pri izbiri besedila",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Samodejno odpre LightUp, kadar izberete besedilo",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Zavedanje konteksta",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Uporabi kontekst strani za boljše, bolj relevantne odgovore",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "Izbira motorja AI",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Izberite vrsto modela AI",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Izberite, katero storitev AI želite uporabiti za ustvarjanje odgovorov",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "Osnovno (brezplačno, omejeno)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (potreben API ključ)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok by xAI (potreben API ključ)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Lokalno/Ollama (samo-gostitev)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Obvestilo o zasebnosti podatkov",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "Pri uporabi osnovnega nivoja se vaše izbrano besedilo in kontekst strani pošljejo na naše strežnike za obdelavo. Teh podatkov ne hranimo trajno.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "Za popolno zasebnost razmislite o uporabi lastnega API ključa z Google Gemini, Grok ali lokalnim modelom.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Konfiguracija Google Gemini",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "API ključ Google Gemini",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Vnesite svoj API ključ Google AI Studio",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Pridobite svoj brezplačni API ključ iz Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Izberite model Gemini",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Izberite, kateri model Google Gemini želite uporabiti za ustvarjanje odgovorov",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Konfiguracija Grok by xAI",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "API ključ xAI",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Vnesite svoj API ključ xAI",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Pridobite svoj API ključ od xAI. Obiščite {0} za začetek.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Izberite model Grok",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Izberite, kateri model Grok želite uporabiti za ustvarjanje odgovorov",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Konfiguracija lokalnega/Ollama",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "URL strežnika Ollama",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Izberite lokalni model",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Izberite, kateri model želite uporabiti iz vaše namestitve Ollama",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Nastavitve odzivov",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Maksimalna dolžina odgovora",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Največje število žetonov (besed/znakov) v odgovoru AI",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Način pozivov",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Izberite, katero vrsto pozivov želite prilagoditi",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Sistemski poziv",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Ta poziv definira, kako naj se AI obnaša in odziva",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Predloga uporabniškega poziva",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Ta predloga se uporablja za oblikovanje uporabniških zahtev za AI",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Uredi",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Shrani",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Ponastavi na privzeto",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Ponastavi pozive načina {0} na prvotne privzete vrednosti",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Ponastavi na privzeto",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "Uspešno ponastavljeno",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Ta poziv uporablja dinamično logiko in ga ni mogoče urejati",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Kako uporabiti svoje prilagojene predloge:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "Vaši prilagojeni pozivi se bodo samodejno uporabili, ko izberete besedilo in izberete ustrezni način\nSpremembe začnejo veljati takoj - ni potreben ponovni zagon\nLahko ponastavite katerikoli poziv na privzete vrednosti z uporabo gumba za ponastavitev",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Tema in videz",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Barvna tema",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Temna tema",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Svetla tema",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Privzeta sistemska tema",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Velikost pisave",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Prilagodite velikost besedila v pojavnem oknu z rezultati",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Barva označevanja",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Izberite barvo za označevanje izbranega besedila",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Izberite, kako naj se pojavno okno prikaže na strani",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Plavajoče",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Stranska vrstica",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Osrednje",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Animacijski učinek, ko se pojavi pojavno okno",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Zbledi",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Drsi",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Poveča",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Nobena",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Nastavitve animacije",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp je razširitev brskalnika, ki je podprta z umetno inteligenco in zagotavlja takojšnje povzetke, razlage, prevode in analize za katero koli besedilo na spletu.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Povezave",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Koristne povezave in viri",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Obiščite spletno mesto",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Oceni v Chrome trgovini",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Počisti vse podatke",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Razloži",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Povzemi",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Analiziraj",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Prevedi",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Prosto",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Podrobnosti poziva",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Oglejte si in prilagodite pozive, ki se uporabljajo za ta način",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Pridobite takojšnje povzetke katerega koli besedila z enim klikom",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Takoj prevede besedilo v kateri koli jezik",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Izberite med več modeli AI, vključno z GPT, Gemini in lokalnimi modeli",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Pogovorite se z AI o vsebini, ki jo berete",
+    "description": "Description for interactive chat feature"
+  }
+}

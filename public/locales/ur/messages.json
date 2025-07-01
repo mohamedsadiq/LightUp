@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "لائٹ اپ - اے آئی سے طاقت یافتہ ویب نوٹس۔ خلاصہ، ترجمہ، اور مزید",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "ویب پر ہر صفحہ کے لیے زبردست نوٹس۔ اے آئی سے طاقت یافتہ وضاحت، خلاصہ، تجزیہ، ترجمہ، اور مزید۔",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "لائٹ اپ میں خوش آمدید",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "خلاصہ کریں",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "وضاحت کریں",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "ترجمہ کریں",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "تجزیہ کریں",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "ترتیبات",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "زبان",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "اپنی پسندیدہ زبان منتخب کریں",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": " محفوظ کریں",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": " منسوخ کریں",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "فعال",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "غیر فعال",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": " رائے بھیجیں",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "لوڈ ہو رہا ہے...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "باقی مفت استعمال",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "مڈ کا انتخاب",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "مڈ کو ترتیب دیں",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "پرویمپٹس پر جائیں",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "مڈ کی ترتیب چھپائیں",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "ترتیب چھپائیں",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": " ویب سائٹ کی معلومات دکھائیں",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "نتائج میں ویب سائٹ کا فاؤیکن اور عنوان دکھائیں",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "منتخب شدہ متن دکھائیں",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "نتائج میں آپ کے منتخب کردہ متن کو دکھائیں",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": " ' فوری اے آئی ' کا بٹن دکھائیں",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "ایک تیرتا ہوا ' فوری اے آئی ' بٹن شامل کریں جو ایک کلک سے پورے صفحے کا خلاصہ یا وضاحت کرتا ہے",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": " توجہ ہٹانے سے پاک موڈ",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "غیر ضروری UI چھپاتا ہے اور لائٹ اپ کے پیچھے صفحے کو مدھم کرتا ہے تاکہ آپ اے آئی کے جواب پر توجہ مرکوز کر سکیں",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "پاپ اپ بند ہونے کے بعد نمایاں متن رکھیں",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "پاپ اپ بند کرنے کے بعد متن کو نمایاں رکھیں",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "متن کے انتخاب پر ایکشن کا بٹن دکھائیں",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "جب متن کو نمایاں کیا جاتا ہے تو ایک چھوٹا سا بٹن دکھائیں",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "متن کے انتخاب پر لائٹ اپ خود بخود کھولیں",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "جب بھی آپ متن کا انتخاب کرتے ہیں تو لائٹ اپ خود بخود کھل جاتا ہے",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "مستقل نمایاں کرنا",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "کی بورڈ شارٹ کٹس",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "لائٹ اپ کے فیچرز تک جلدی رسائی کے لیے ان شارٹ کٹس کا استعمال کریں",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "وضاحت کے موڈ پر جائیں",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "خلاصہ کے موڈ پر جائیں",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "تجزیہ کے موڈ پر جائیں",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "ترجمہ کے موڈ پر جائیں",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "فریمڈ موڈ میں پاپ اپ کھولیں",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "شارٹ کٹ کے ذریعے موڈ سیٹ کرنے کے بعد، کسی بھی متن کا انتخاب کریں اور لائٹ اپ آپ کے منتخب کردہ موڈ کے ساتھ ظاہر ہوگا۔",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "فیچر ٹوگلز",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "فیچرز کو آن اور آف کرنے کے لیے شارٹ کٹس",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "لائٹ اپ کو آن / آف کریں",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "ریڈیکلی فوکس موڈ کو آن / آف کریں",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "لائٹ / ڈارک تھیم کو آن / آف کریں",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "تمام شارٹ کٹس ری سیٹ کریں",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "تمام شارٹ کٹس کو ان کی ڈیفالٹ ویلیوز پر بحال کریں",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "ری سیٹ کریں",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "کوئی بھی سوال کریں",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "موڈ سلیکٹر کو ترتیب دیں (زیادہ سے زیادہ 4 منتخب کریں)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "یہ موڈ آپ کے موڈ سلیکٹر میں ظاہر ہوں گے۔ آن / آف کرنے کے لیے کلک کریں۔",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "موجودہ ایکشنز",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "فری",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "لائٹ اپ لوگو",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "لائٹ اپ فی الحال آف ہے",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "لائٹ اپ کو فعال کرنے اور تمام فیچرز تک رسائی حاصل کرنے کے لیے ہیڈر یا نیچے دیے گئے بٹن میں سوئچ کو ٹگل کریں۔",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "لائٹ اپ کو فعال کریں",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "خود کار → انگریزی",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "عام",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "کی بورڈ شارٹ کٹس",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": " جدید ترتیبات",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": " رازداری",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": " رازداری کا پالیسی",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": " ویب سائٹ",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "ہمیں ریٹ کریں",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": " رائے",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "ہمیں لائٹ اپ کو بہتر بنانے میں مدد کریں",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": " رائے کی قسم",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "اس رائے کی قسم کا انتخاب کریں جو آپ فراہم کرنا چاہتے ہیں",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "عام رائے",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": " بگ رپورٹ",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": " فیچر کا مطالبہ",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": " دیگر",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "آپ کی رائے",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "ہمیں بتائیں کہ آپ کیا سوچتے ہیں یا اس مسئلے کی وضاحت کریں جس کا آپ سامنا کر رہے ہیں...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "یہاں اپنی رائے ٹائپ کریں...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "ای میل (اختیاری)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "اگر آپ چاہتے ہیں کہ ہم فالو اپ کریں تو اپنا ای میل چھوڑ دیں",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "you@example.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": " رائے جمع کرائیں",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "نمایاں رنگ",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "متن کو نمایاں کرنے کے لیے رنگ منتخب کریں",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "ڈیفالٹ",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": " پیلا",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": " نارنجی",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": " نیلا",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": " سبز",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": " جامنی",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": " گلابی",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": " رازداری اور ڈیٹا",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "آپ کی رازداری ہماری ترجیح ہے",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "زیرو ڈیٹا کلیکشن",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "لائٹ اپ آپ کی رازداری کا احترام کرتا ہے اور آپ کے ڈیٹا کو ذمہ داری سے سنبھالتا ہے۔",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": " مقامی اسٹوریج",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "آپ کی تمام ترتیبات آپ کے ڈیوائس پر مقامی طور پر محفوظ کی جاتی ہیں",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": " براہ راست پروسیسنگ",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "متن کو ذخیرہ کیے بغیر براہ راست پروسیس کیا جاتا ہے",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": " کوئی ٹریکنگ نہیں",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "ہم آپ کی براؤزنگ کو ٹریک نہیں کرتے یا ذاتی ڈیٹا ذخیرہ نہیں کرتے",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "آپ کا کنٹرول",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "تمام ترتیبات اور ڈیٹا آپ کے کنٹرول میں رہتے ہیں",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": " مکمل پالیسی",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": " رابطہ کریں",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "محفوظ کرنے میں ناکامی",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "آپ کی ترتیبات کو محفوظ کرنے میں ایک غلطی ہوئی۔ براہ کرم دوبارہ کوشش کریں۔",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": " ترتیبات محفوظ ہو گئیں",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "جب آپ سیکشن تبدیل کرتے ہیں تو آپ کی تبدیلیاں محفوظ ہو جاتی ہیں۔",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": " اطلاع بند کریں",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "بولنا بند کریں",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": " متن کو زور سے پڑھیں",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "خلاصہ کریں",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "وضاحت کریں",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "ترجمہ کریں",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "تجزیہ کریں",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "کے بارے میں بات چیت کریں",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "انتخاب کے اختیارات",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": " روزانہ استعمال",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": " تھیم",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": " توسیع کے لیے اپنی پسندیدہ رنگ کا تھیم منتخب کریں",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": " ڈارک تھیم",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "لائٹ تھیم",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "سسٹم ڈیفالٹ",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "زبان تبدیل ہو گئی",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "UI آپ کی زبان کی پسند کو ظاہر کرنے کے لیے اپ ڈیٹ ہوگا",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "غلطی",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "زبان تبدیل کرنے میں ناکامی",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": " پاپ اپ مارجن",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "فلوٹنگ موڈ میں ویو پورٹ کے کناروں سے فاصلہ",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": " ترجمہ کی ترتیبات",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": " بہتر جوابات کے لیے پیج کے تناظر کا استعمال کریں",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": " بہتر نتائج کے لیے پیج کے زیادہ گہرے تناظر کو فعال کریں",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": " ظاہری شکل",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": " رائے",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "لی آؤٹ اور ڈسپلے",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": " توسیع کے لی آؤٹ اور ظاہری شکل کو حسب ضرورت بنائیں",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": " لی آؤٹ موڈ",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "فلوٹنگ",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": " سائیڈ بار",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "مرکز میں",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "نتائج کا فونٹ سائز",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "نتائج کے پینل میں متن کے سائز کو کنٹرول کریں",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": " بہت چھوٹا",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": " چھوٹا",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": " درمیانہ",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": " بڑا",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": " بہت بڑا",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": " انتہائی بڑا",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": " پاپ اپ اینیمیشن",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "جب پاپ اپ ظاہر ہوتا ہے تو اینیمیشن",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "فید",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": " سلائڈ",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": " اسکیل",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": " کوئی نہیں",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": " ریڈیکل فوکس موڈ",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "نتائج دیکھتے وقت پس منظر کو دھندلا کریں",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(ضروری)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "قیمت:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "سائز:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": " ایڈریس کلپ بورڈ پر کاپی ہو گیا ہے!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "باقی شرح کی حد:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "میں ری سیٹ کریں:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": " خود کار محفوظ کرنے میں ناکامی",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "آپ کی تبدیلیاں خود بخود محفوظ نہیں ہوئیں۔ براہ کرم دستی طور پر محفوظ کریں۔",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": " لوڈ کرنے میں ناکامی",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "آپ کی ترتیبات لوڈ نہیں ہو سکیں۔ ڈیفالٹ استعمال کر رہے ہیں۔",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "استعمال کی معلومات لوڈ ہو رہی ہیں...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": " ماڈل خود بخود منتخب ہو گیا",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "آپ کی جانب سے جیمینی اے پی آئی کی فراہمی کے باعث خود بخود {0} منتخب کر لیا گیا ہے۔",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "آپ کی جانب سے گروک اے پی آئی کی فراہمی کے باعث خود بخود {0} منتخب کر لیا گیا ہے۔",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "آپ کے اولاما سیٹ اپ کے لیے خود بخود {0} منتخب کر لیا گیا ہے۔",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(فنکشن ڈسپلے نہیں ہوا)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(ڈائنامک ٹیمپلیٹ - آپ کے منتخب کردہ متن پر منحصر ہے)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "اے آئی سے طاقت یافتہ ویب نوٹس",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "ورژن:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "ڈویلپر:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": " ویب سائٹ:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": " فوری خلاصے",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "ریئل ٹائم ترجمہ",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": " جدید اے آئی ماڈلز",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": " انٹرایکٹو چیٹ",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "زیرو ڈیٹا کلیکشن",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": " مقامی اسٹوریج",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": " جیمینی 2.0 فلیش",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": " بہتر صلاحیتوں اور تیز ردعمل کے اوقات کے ساتھ تازہ ترین ورژن",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": " جیمینی 2.0 فلیش لائٹ",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": " کارکردگی اور رفتار کے لیے بہتر بنایا گیا لائٹ ویٹ ورژن",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": " جیمینی 2.0 فلیش تھنکنگ",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": " تجرباتی ماڈل جو استدلال اور تجزیاتی کاموں پر مرکوز ہے",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": " جیمینی 1.5 پرو",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "متوازن کارکردگی کے ساتھ مستحکم ورژن",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": " جیمینی 1.5 فلیش",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": " تیز، چھوٹا ماڈل تیز جوابات کے لیے",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": " جیمینی 1.5 فلیش 8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": " موثر پروسیسنگ کے لیے 8 بٹ کوانٹائزڈ ورژن",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": " گروک 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": " اسٹینڈرڈ گروک 3 ماڈل",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": " 1M ٹوکنز فی $2.00",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": " گروک 3 مینی",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "لائٹ ویٹ ویرینٹ",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": " 1M ٹوکنز فی $1.00",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": " گروک 3 فاسٹ",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": " لیٹینسی سے مربوط گروک 3",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": " 1M ٹوکنز فی $2.50",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": " گروک 3 مینی فاسٹ",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": " مینی + فاسٹ ویرینٹ",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": " 1M ٹوکنز فی $1.50",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": " گروک 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": " تازہ ترین گروک 2 بلڈ",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": " 1M ٹوکنز فی $1.80",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": " لیما 2 70B چیٹ",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": " سب سے طاقتور لیما 2 ماڈل، پیچیدہ کاموں کے لیے بہترین",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": " 70B پیرامیٹرز",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": " ڈیپ سیک V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": " تازہ ترین ڈیپ سیک ماڈل بہتر استدلال کی صلاحیتوں کے ساتھ",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": " 67B پیرامیٹرز",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": " مکسٹریل 8x7B انسٹرکٹ",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": " ماہرین کے اعلیٰ کارکردگی والے مرکب کا ماڈل",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": " 47B پیرامیٹرز",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": " لیما 2 13B چیٹ",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": " متوازن کارکردگی اور وسائل کا استعمال",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": " 13B پیرامیٹرز",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": " مسٹریل 7B انسٹرکٹ",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": " موثر ہدایت پر عمل کرنے والا ماڈل",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": " 7B پیرامیٹرز",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": " نیورل چیٹ V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": " قدرتی گفتگو کے لیے بہتر بنایا گیا",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": " 7B پیرامیٹرز",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": " ڈیپ سیک V3 بیس",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": " اچھے استدلال کے ساتھ ڈیپ سیک کا لائٹ ورژن",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": " 7B پیرامیٹرز",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": " لیما 3.2 3B انسٹرکٹ",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": " بنیادی کاموں کے لیے لائٹ ویٹ ماڈل",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": " 3B پیرامیٹرز",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": " فائی 2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": " اپنے سائز کے لیے کمپیکٹ لیکن طاقتور",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": " 2.7B پیرامیٹرز",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": " اوپن چیٹ 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": " چیٹ انٹریکشنز کے لیے بہتر بنایا گیا",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": " 7B پیرامیٹرز",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": " بیٹا",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": " عام",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": " اے آئی ماڈلز",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": " پرویمپٹ ٹیمپلیٹس",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": " ظاہری شکل",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": " بارے میں",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": " عام ترتیبات",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": " اے آئی ماڈل کی ترتیب",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": " ظاہری شکل اور حسب ضرورت",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": " پرویمپٹ ٹیمپلیٹس",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "لائٹ اپ کے بارے میں",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "نتائج میں آپ کے منتخب کردہ متن کو دکھائیں",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "نتائج میں ویب سائٹ کا فاؤیکن اور عنوان دکھائیں",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "پاپ اپ بند کرنے کے بعد متن کو نمایاں رکھیں",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": " متن کے انتخاب پر لائٹ اپ خود بخود کھولیں",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "جب بھی آپ متن کا انتخاب کرتے ہیں تو لائٹ اپ خود بخود کھل جاتا ہے",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": " تناظر کی آگاہی",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": " بہتر، زیادہ متعلقہ جوابات فراہم کرنے کے لیے پیج کے تناظر کا استعمال کریں",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": " اے آئی انجن کا انتخاب",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": " اے آئی ماڈل کی قسم منتخب کریں",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "جوابات پیدا کرنے کے لیے آپ کس اے آئی سروس کا استعمال کرنا چاہتے ہیں اس کا انتخاب کریں",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "بنیادی (مفت، محدود)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": " گوگل جیمینی (اے پی آئی کی کلید کی ضرورت ہے)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": " ایکس اے آئی کی جانب سے گروک (اے پی آئی کی کلید کی ضرورت ہے)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": " مقامی / اولاما ( خود میزبانی)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": " ڈیٹا رازداری کی نوٹس",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "بنیادی سطح کا استعمال کرتے وقت، آپ کا منتخب کردہ متن اور پیج کا تناظر پروسیسنگ کے لیے ہمارے سرورز پر بھیجا جاتا ہے۔ ہم یہ ڈیٹا مستقل طور پر ذخیرہ نہیں کرتے۔",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": " مکمل رازداری کے لیے، گوگل جیمینی، گروک، یا مقامی ماڈل کے ساتھ اپنی اے پی آئی کی کلید کا استعمال کرنے پر غور کریں۔",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": " گوگل جیمینی کی ترتیب",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": " گوگل جیمینی اے پی آئی کی کلید",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": " اپنی گوگل اے آئی اسٹوڈیو اے پی آئی کی کلید درج کریں",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": " گوگل اے آئی اسٹوڈیو سے اپنی مفت اے پی آئی کی کلید حاصل کریں۔ {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": " جیمینی ماڈل منتخب کریں",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": " جوابات پیدا کرنے کے لیے استعمال کرنے والے گوگل جیمینی ماڈل کا انتخاب کریں",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": " ایکس اے آئی کی جانب سے گروک کی ترتیب",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": " ایکس اے آئی اے پی آئی کی کلید",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": " اپنی ایکس اے آئی اے پی آئی کی کلید درج کریں",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": " ایکس اے آئی سے اپنی اے پی آئی کی کلید حاصل کریں۔ شروع کرنے کے لیے {0} پر جائیں۔",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": " گروک ماڈل منتخب کریں",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": " جوابات پیدا کرنے کے لیے استعمال کرنے والے گروک ماڈل کا انتخاب کریں",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": " مقامی / اولاما کی ترتیب",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": " اولاما سرور یو آر ایل",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": " http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": " مقامی ماڈل منتخب کریں",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": " اپنی اولاما انسٹالیشن سے استعمال کرنے والے ماڈل کا انتخاب کریں",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": " جواب کی ترتیبات",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": " زیادہ سے زیادہ جواب کی لمبائی",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": " اے آئی کے جواب میں زیادہ سے زیادہ ٹوکنز ( الفاظ / حروف) کی تعداد",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": " پرویمپٹ موڈ",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": " جس قسم کا پرویمپٹ آپ کو حسب ضرورت بنانا ہے اس کا انتخاب کریں",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": " سسٹم پرویمپٹ",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": " یہ پرویمپٹ بیان کرتا ہے کہ اے آئی کو کیسے برتاؤ کرنا چاہیے اور جواب دینا چاہیے",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": " صارف پرویمپٹ ٹیمپلیٹ",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": " یہ ٹیمپلیٹ اے آئی کو صارف کے درخواستوں کو فارمیٹ کرنے کے لیے استعمال ہوتا ہے",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": " ایڈٹ کریں",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": " محفوظ کریں",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": " ڈیفالٹ پر ری سیٹ کریں",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": " {0} موڈ کے پرویمپٹس کو ان کے اصل ڈیفالٹس پر ری سیٹ کریں",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": " ڈیفالٹ پر ری سیٹ کریں",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": " کامیابی کے ساتھ ری سیٹ ہو گیا",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": " یہ پرویمپٹ ڈائنامک لاگک کا استعمال کرتا ہے اور اسے ایڈٹ نہیں کیا جا سکتا",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": " اپنی حسب ضرورت ٹیمپلیٹس کو کیسے لاگو کریں:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "جب آپ متن کا انتخاب کرتے ہیں اور مطابق موڈ کا انتخاب کرتے ہیں تو آپ کے حسب ضرورت پرویمپٹس خود بخود استعمال کیے جائیں گے\n تبدیلیاں فوراً اثر انداز ہوتی ہیں - دوبارہ شروع کرنے کی ضرورت نہیں\nآپ ری سیٹ بٹن کا استعمال کرتے ہوئے کسی بھی پرویمپٹ کو ڈیفالٹس پر ری سیٹ کر سکتے ہیں",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": " تھیم اور ظاہری شکل",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": " رنگ کا تھیم",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": " ڈارک تھیم",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "لائٹ تھیم",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": " سسٹم ڈیفالٹ",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": " فونٹ سائز",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": " پاپ اپ کے نتائج میں متن کے سائز کو ایڈجسٹ کریں",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": " نمایاں رنگ",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": " منتخب کردہ متن کو نمایاں کرنے کے لیے رنگ منتخب کریں",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": " منتخب کریں کہ پاپ اپ پیج پر کیسے ظاہر ہو",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": " فلوٹنگ",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": " سائیڈ بار",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": " مرکز میں",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "جب پاپ اپ ظاہر ہوتا ہے تو اینیمیشن کا اثر",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "فید",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": " سلائڈ",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": " اسکیل",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": " کوئی نہیں",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": " اینیمیشن کی ترتیبات",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "لائٹ اپ ایک اے آئی سے طاقت یافتہ براؤزر توسیع ہے جو ویب پر کسی بھی متن کے لیے فوری خلاصے، وضاحتیں، تراجم اور تجزیہ فراہم کرتی ہے۔",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": " لنکس",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": " مفید لنکس اور وسائل",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": " ویب سائٹ پر جائیں",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": " کروم اسٹور پر ریٹ کریں",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": " تمام ڈیٹا صاف کریں",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": " وضاحت کریں",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": " خلاصہ کریں",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": " تجزیہ کریں",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": " ترجمہ کریں",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": " فری",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": " پرویمپٹ کی تفصیلات",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": " اس موڈ کے لیے استعمال ہونے والے پرویمپٹس کو دیکھیں اور حسب ضرورت بنائیں",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": " ایک کلک سے کسی بھی متن کے فوری خلاصے حاصل کریں",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": " کسی بھی زبان میں فوری طور پر متن کا ترجمہ کریں",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": " جی پی ٹی، جیمینی اور مقامی ماڈلز سمیت متعدد اے آئی ماڈلز میں سے انتخاب کریں",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": " آپ جو مواد پڑھ رہے ہیں اس کے بارے میں اے آئی کے ساتھ گفتگو کریں",
+    "description": "Description for interactive chat feature"
+  }
+}

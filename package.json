@@ -1,13 +1,15 @@
 {
   "name": "lightup",
   "displayName": "LightUp",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "Genius annotations for every page on the web.",
   "author": "Moe Sadiq",
   "scripts": {
-    "dev": "plasmo dev",
-    "build": "plasmo build",
-    "package": "plasmo package"
+    "dev": "npm run copy-locales && plasmo dev",
+    "build": "npm run copy-locales && plasmo build",
+    "package": "npm run copy-locales && plasmo package",
+    "copy-locales": "cp -r locales/ public/locales/",
+    "translate-locales": "node scripts/translate_locales.mjs"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -15,18 +17,26 @@
     "@mozilla/readability": "^0.6.0",
     "@plasmohq/messaging": "^0.6.2",
     "@plasmohq/storage": "^1.12.0",
+    "@react-three/drei": "^10.3.0",
+    "@react-three/fiber": "^9.1.4",
+    "@types/three": "^0.177.0",
     "framer-motion": "^11.11.11",
     "html2canvas": "^1.4.1",
+    "lucide-react": "^0.523.0",
     "plasmo": "0.90.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-markdown": "^8.0.4",
     "react-textarea-autosize": "^8.5.9",
+    "rehype-raw": "^6.1.1",
     "rehype-sanitize": "^5.0.1",
     "remark-gfm": "^3.0.1",
-    "vfile": "5"
+    "three": "^0.178.0",
+    "vfile": "5",
+    "zustand": "^5.0.5"
   },
   "devDependencies": {
+    "@google/generative-ai": "^0.4.0",
     "@ianvs/prettier-plugin-sort-imports": "4.1.1",
     "@swc/types": "^0.1.21",
     "@types/chrome": "0.0.258",
@@ -45,9 +55,10 @@
   },
   "manifest": {
     "manifest_version": 3,
-    "name": "LightUp - AI Powered Web Annotations. summary, translate, and more",
-    "version": "0.1.14",
-    "description": "Genius annotations for every page on the web. Powered by AI to explain, summarize, analyze, translate, and more.",
+    "name": "__MSG_extensionName__",
+    "version": "0.1.15",
+    "description": "__MSG_extensionDescription__",
+    "default_locale": "en",
     "background": {
       "service_worker": "background.js",
       "type": "module"
@@ -89,7 +100,8 @@
     "web_accessible_resources": [
       {
         "resources": [
-          "assets/*"
+          "assets/*",
+          "locales/*/messages.json"
         ],
         "matches": [
           "<all_urls>"

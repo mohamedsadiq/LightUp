@@ -1,0 +1,1374 @@
+{
+  "extensionName": {
+    "message": "LightUp - AI-drevet webannotationer. Opsummering, oversættelse og mere",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Geniale annotationer til enhver side på nettet. Drevet af AI til at forklare, opsummere, analysere, oversætte og mere.",
+    "description": "Description of the extension"
+  },
+  "welcomeTitle": {
+    "message": "Velkommen til LightUp",
+    "description": "Title shown on welcome page"
+  },
+  "summarizeAction": {
+    "message": "Opsummer",
+    "description": "Action to summarize content"
+  },
+  "explainAction": {
+    "message": "Forklar",
+    "description": "Action to explain content"
+  },
+  "translateAction": {
+    "message": "Oversæt",
+    "description": "Action to translate content"
+  },
+  "analyzeAction": {
+    "message": "Analyser",
+    "description": "Action to analyze content"
+  },
+  "settingsTitle": {
+    "message": "Indstillinger",
+    "description": "Title for settings page"
+  },
+  "languageLabel": {
+    "message": "Sprog",
+    "description": "Label for language selection"
+  },
+  "languageDesc": {
+    "message": "Vælg dit foretrukne sprog",
+    "description": "Description for language selection"
+  },
+  "saveButton": {
+    "message": "Gem",
+    "description": "Save button text"
+  },
+  "cancelButton": {
+    "message": "Annuller",
+    "description": "Cancel button text"
+  },
+  "enabledLabel": {
+    "message": "Aktiveret",
+    "description": "Label for enabled toggle"
+  },
+  "disabledLabel": {
+    "message": "Deaktiveret",
+    "description": "Label for disabled toggle"
+  },
+  "feedbackLabel": {
+    "message": "Send feedback",
+    "description": "Label for feedback button"
+  },
+  "loadingText": {
+    "message": "Indlæser...",
+    "description": "Text shown when content is loading"
+  },
+  "freeUsesRemaining": {
+    "message": "Gratis brug tilbage",
+    "description": "Label for daily free uses counter"
+  },
+  "modeSelection": {
+    "message": "Tilstandsvælgelse",
+    "description": "Title for the mode selection section"
+  },
+  "configureModes": {
+    "message": "Konfigurer tilstande",
+    "description": "Button text to open mode configuration"
+  },
+  "goToPrompts": {
+    "message": "Gå til prompter",
+    "description": "Button text to navigate to Prompts page"
+  },
+  "hideModeConfig": {
+    "message": "Skjul tilstandskonfiguration",
+    "description": "Button text to hide mode configuration"
+  },
+  "hideModeConfigShort": {
+    "message": "Skjul konfiguration",
+    "description": "Shorter button text to hide mode configuration"
+  },
+  "showWebsiteInfoLabel": {
+    "message": "Vis website-info",
+    "description": "Label for the 'Show Website Info' toggle"
+  },
+  "showWebsiteInfoDesc": {
+    "message": "Vis website-favicon og titel i resultaterne",
+    "description": "Description for the 'Show Website Info' toggle"
+  },
+  "showSelectedTextLabel": {
+    "message": "Vis markeret tekst",
+    "description": "Label for the 'Show Selected Text' toggle"
+  },
+  "showSelectedTextDesc": {
+    "message": "Vis den tekst, du har markeret, i resultaterne",
+    "description": "Description for the 'Show Selected Text' toggle"
+  },
+  "showInstantAIButtonLabel": {
+    "message": "Vis knappen 'Instant AI'",
+    "description": "Label for show instant AI button toggle"
+  },
+  "showInstantAIButtonDesc": {
+    "message": "Tilføj en flydende 'Instant AI'-knap, der opsummerer eller forklarer hele siden med ét klik",
+    "description": "Description for show instant AI button toggle"
+  },
+  "distractionFreeModeLabel": {
+    "message": "Distraktionsfri tilstand",
+    "description": "Label for the 'Distraction-Free Mode' toggle"
+  },
+  "distractionFreeModeDesc": {
+    "message": "Skjuler ikke-essentiel brugerflade og dæmper siden bag LightUp, så du kan fokusere på AI-svaret",
+    "description": "Description for the 'Distraction-Free Mode' toggle"
+  },
+  "keepHighlightedTextLabel": {
+    "message": "Behold markeret tekst efter popup lukkes",
+    "description": "Label for the 'Keep Highlighted Text' toggle"
+  },
+  "keepHighlightedTextDesc": {
+    "message": "Behold tekst markeret efter lukning af popup",
+    "description": "Description for the 'Keep Highlighted Text' toggle"
+  },
+  "showActionButtonLabel": {
+    "message": "Vis handlingsknap ved tekstmarkering",
+    "description": "Label for show action button toggle"
+  },
+  "showActionButtonDesc": {
+    "message": "Vis en lille knap, når tekst er markeret",
+    "description": "Description for show action button toggle"
+  },
+  "autoOpenLabel": {
+    "message": "Åbn LightUp automatisk ved tekstmarkering",
+    "description": "Label for the 'Auto-Open LightUp' toggle"
+  },
+  "autoOpenDesc": {
+    "message": "Åbner LightUp automatisk, når du markerer tekst",
+    "description": "Description for the 'Auto-Open LightUp' toggle"
+  },
+  "persistentHighlightingLabel": {
+    "message": "Vedvarende markering",
+    "description": "Label for the 'Persistent Highlighting' toggle"
+  },
+  "keyboardShortcuts": {
+    "message": "Tastaturgenveje",
+    "description": "Title for the Keyboard Shortcuts tab"
+  },
+  "keyboardShortcutsDesc": {
+    "message": "Brug disse genveje til hurtigt at få adgang til LightUp-funktioner",
+    "description": "Description for the Keyboard Shortcuts tab"
+  },
+  "shortcutExplainMode": {
+    "message": "Skift til Forklar-tilstand",
+    "description": "Shortcut description for Explain mode"
+  },
+  "shortcutSummarizeMode": {
+    "message": "Skift til Opsummer-tilstand",
+    "description": "Shortcut description for Summarize mode"
+  },
+  "shortcutAnalyzeMode": {
+    "message": "Skift til Analyser-tilstand",
+    "description": "Shortcut description for Analyze mode"
+  },
+  "shortcutTranslateMode": {
+    "message": "Skift til Oversæt-tilstand",
+    "description": "Shortcut description for Translate mode"
+  },
+  "shortcutFreeMode": {
+    "message": "Åbn popup i Fri tilstand",
+    "description": "Shortcut description for Free mode"
+  },
+  "shortcutAfterSettingDesc": {
+    "message": "Efter at have indstillet tilstanden via genvej, skal du markere enhver tekst, og LightUp vises med din valgte tilstand.",
+    "description": "Informational text below mode switching shortcuts"
+  },
+  "featureToggles": {
+    "message": "Funktionskontakter",
+    "description": "Section title for feature toggle shortcuts"
+  },
+  "featureTogglesDesc": {
+    "message": "Genveje til at tænde og slukke for funktioner",
+    "description": "Section description for feature toggle shortcuts"
+  },
+  "shortcutToggleOnOff": {
+    "message": "Tænd/sluk for LightUp",
+    "description": "Shortcut description for toggling extension on/off"
+  },
+  "shortcutToggleFocus": {
+    "message": "Tænd/sluk for radikal fokustilstand",
+    "description": "Shortcut description for toggling focus mode"
+  },
+  "shortcutToggleTheme": {
+    "message": "Tænd/sluk for lys/mørk tema",
+    "description": "Shortcut description for toggling theme"
+  },
+  "resetAllShortcutsLabel": {
+    "message": "Nulstil alle genveje",
+    "description": "Label for resetting all keyboard shortcuts"
+  },
+  "resetAllShortcutsDesc": {
+    "message": "Gendan alle genveje til deres standardværdier",
+    "description": "Description for resetting shortcuts"
+  },
+  "resetButton": {
+    "message": "Nulstil",
+    "description": "Button text for reset actions"
+  },
+  "askAnythingAction": {
+    "message": "Spørg hvad som helst",
+    "description": "Action to ask anything"
+  },
+  "configureModeSelector": {
+    "message": "Konfigurer tilstandsvælger (Vælg op til 4)",
+    "description": "Title for configuring mode selector"
+  },
+  "modeSelectorHelp": {
+    "message": "Disse tilstande vises i din tilstandsvælger. Klik for at skifte.",
+    "description": "Help text for mode selector configuration"
+  },
+  "availableActions": {
+    "message": "Tilgængelige handlinger",
+    "description": "Title for available actions section"
+  },
+  "freeAction": {
+    "message": "Fri",
+    "description": "Action for free mode"
+  },
+  "logoAlt": {
+    "message": "LightUp-logo",
+    "description": "Alt text for the LightUp logo"
+  },
+  "extensionDisabled": {
+    "message": "LightUp er i øjeblikket slukket",
+    "description": "Message shown when extension is disabled"
+  },
+  "enableExtensionMessage": {
+    "message": "Skift kontakten i overskriften eller knappen nedenfor for at aktivere LightUp og få adgang til alle funktioner.",
+    "description": "Instructions for enabling the extension"
+  },
+  "enableButton": {
+    "message": "Aktivér LightUp",
+    "description": "Button text to enable the extension"
+  },
+  "autoTranslate": {
+    "message": "Auto → Engelsk",
+    "description": "Auto translate label"
+  },
+  "tabGeneral": {
+    "message": "Generelt",
+    "description": "Sidebar tab: General"
+  },
+  "tabKeyboard": {
+    "message": "Tastaturgenveje",
+    "description": "Sidebar tab: Keyboard Shortcuts"
+  },
+  "tabAdvanced": {
+    "message": "Avancerede indstillinger",
+    "description": "Sidebar tab: Advanced Settings"
+  },
+  "tabPrivacy": {
+    "message": "Privatliv",
+    "description": "Sidebar tab: Privacy"
+  },
+  "privacyPolicy": {
+    "message": "Privatlivspolitik",
+    "description": "Privacy policy full title"
+  },
+  "website": {
+    "message": "Website",
+    "description": "Sidebar link: Website"
+  },
+  "rateUs": {
+    "message": "Vurder os",
+    "description": "Sidebar link: Rate Us"
+  },
+  "feedbackTitle": {
+    "message": "Feedback",
+    "description": "Feedback section title"
+  },
+  "feedbackDesc": {
+    "message": "Hjælp os med at forbedre LightUp",
+    "description": "Feedback section description"
+  },
+  "feedbackTypeLabel": {
+    "message": "Feedbacktype",
+    "description": "Label for feedback type"
+  },
+  "feedbackTypeDesc": {
+    "message": "Vælg den type feedback, du vil give",
+    "description": "Description for feedback type select"
+  },
+  "feedbackTypeGeneral": {
+    "message": "Generel feedback",
+    "description": "Option for general feedback"
+  },
+  "feedbackTypeBug": {
+    "message": "Fejlrapport",
+    "description": "Option for bug report"
+  },
+  "feedbackTypeFeature": {
+    "message": "Funktionsanmodning",
+    "description": "Option for feature request"
+  },
+  "feedbackTypeOther": {
+    "message": "Andet",
+    "description": "Option for other feedback"
+  },
+  "feedbackContentLabel": {
+    "message": "Din feedback",
+    "description": "Label for feedback content field"
+  },
+  "feedbackContentDesc": {
+    "message": "Fortæl os, hvad du synes, eller beskriv det problem, du oplever...",
+    "description": "Description for feedback content"
+  },
+  "feedbackContentPlaceholder": {
+    "message": "Skriv din feedback her...",
+    "description": "Placeholder for feedback content field"
+  },
+  "feedbackEmailLabel": {
+    "message": "E-mail (valgfrit)",
+    "description": "Label for email field"
+  },
+  "feedbackEmailDesc": {
+    "message": "Efterlad din e-mail, hvis du vil have os til at følge op",
+    "description": "Description for email field"
+  },
+  "feedbackEmailPlaceholder": {
+    "message": "dig@eksempel.com",
+    "description": "Placeholder for email field"
+  },
+  "feedbackSubmit": {
+    "message": "Send feedback",
+    "description": "Button label to submit feedback"
+  },
+  "highlightColorTitle": {
+    "message": "Markeringsfarve",
+    "description": "Title for highlight color selection"
+  },
+  "highlightColorDesc": {
+    "message": "Vælg farven til tekstmarkering",
+    "description": "Description for highlight color selection"
+  },
+  "colorDefault": {
+    "message": "Standard",
+    "description": "Default color option"
+  },
+  "colorYellow": {
+    "message": "Gul",
+    "description": "Yellow color option"
+  },
+  "colorOrange": {
+    "message": "Orange",
+    "description": "Orange color option"
+  },
+  "colorBlue": {
+    "message": "Blå",
+    "description": "Blue color option"
+  },
+  "colorGreen": {
+    "message": "Grøn",
+    "description": "Green color option"
+  },
+  "colorPurple": {
+    "message": "Lilla",
+    "description": "Purple color option"
+  },
+  "colorPink": {
+    "message": "Pink",
+    "description": "Pink color option"
+  },
+  "privacyTitle": {
+    "message": "Privatliv & data",
+    "description": "Privacy section title"
+  },
+  "privacyDesc": {
+    "message": "Dit privatliv er vores prioritet",
+    "description": "Privacy section description"
+  },
+  "zeroDataCollection": {
+    "message": "Ingen dataindsamling",
+    "description": "Claim of zero data collection"
+  },
+  "privacyMainText": {
+    "message": "LightUp respekterer dit privatliv og håndterer dine data ansvarligt.",
+    "description": "Main privacy text"
+  },
+  "localStorage": {
+    "message": "Lokal lagring",
+    "description": "Local storage heading"
+  },
+  "localStorageDesc": {
+    "message": "Alle dine indstillinger gemmes lokalt på din enhed",
+    "description": "Local storage description"
+  },
+  "directProcessing": {
+    "message": "Direkte behandling",
+    "description": "Direct processing label"
+  },
+  "directProcessingDesc": {
+    "message": "Tekst behandles direkte uden lagring",
+    "description": "Direct processing description"
+  },
+  "noTracking": {
+    "message": "Ingen sporing",
+    "description": "No tracking label"
+  },
+  "noTrackingDesc": {
+    "message": "Vi sporer ikke din browsing eller gemmer personlige data",
+    "description": "No tracking description"
+  },
+  "yourControl": {
+    "message": "Din kontrol",
+    "description": "Your control label"
+  },
+  "yourControlDesc": {
+    "message": "Alle indstillinger og data forbliver under din kontrol",
+    "description": "Your control description"
+  },
+  "fullPolicy": {
+    "message": "Fuld politik",
+    "description": "Link text to full privacy policy"
+  },
+  "contact": {
+    "message": "Kontakt",
+    "description": "Contact label"
+  },
+  "saveFailedTitle": {
+    "message": "Gemning mislykkedes",
+    "description": "Title for save failed toast notification"
+  },
+  "saveFailedMessage": {
+    "message": "Der opstod en fejl under lagring af dine indstillinger. Prøv igen.",
+    "description": "Message for save failed toast notification"
+  },
+  "settingsSavedTitle": {
+    "message": "Indstillinger gemt",
+    "description": "Title for settings saved toast notification"
+  },
+  "settingsSavedMessage": {
+    "message": "Dine ændringer blev gemt ved skift af sektioner.",
+    "description": "Message for settings saved toast notification"
+  },
+  "closeNotification": {
+    "message": "Luk meddelelse",
+    "description": "Aria label for close notification button"
+  },
+  "speakerStop": {
+    "message": "Stop tale",
+    "description": "Aria label for speaker button when speaking"
+  },
+  "speakerStart": {
+    "message": "Læs tekst højt",
+    "description": "Aria label for speaker button when not speaking"
+  },
+  "actionSummarize": {
+    "message": "Opsummer",
+    "description": "Label for summarize action in text selection menu"
+  },
+  "actionExplain": {
+    "message": "Forklar",
+    "description": "Label for explain action in text selection menu"
+  },
+  "actionTranslate": {
+    "message": "Oversæt",
+    "description": "Label for translate action in text selection menu"
+  },
+  "actionAnalyze": {
+    "message": "Analyser",
+    "description": "Label for analyze action in text selection menu"
+  },
+  "actionChat": {
+    "message": "Chat om",
+    "description": "Label for chat action in text selection menu"
+  },
+  "selectionOptions": {
+    "message": "Markeringindstillinger",
+    "description": "Aria label for selection options button"
+  },
+  "dailyUsage": {
+    "message": "Daglig brug",
+    "description": "Title for daily usage section"
+  },
+  "themeTitle": {
+    "message": "Tema",
+    "description": "Title for theme selection"
+  },
+  "themeDescription": {
+    "message": "Vælg dit foretrukne farvetema til udvidelsen",
+    "description": "Description for theme selection"
+  },
+  "darkTheme": {
+    "message": "Mørkt tema",
+    "description": "Dark theme option"
+  },
+  "lightTheme": {
+    "message": "Lyst tema",
+    "description": "Light theme option"
+  },
+  "systemTheme": {
+    "message": "Systemstandard",
+    "description": "System default theme option"
+  },
+  "languageChanged": {
+    "message": "Sprog ændret",
+    "description": "Title for language change notification"
+  },
+  "languageChangeMessage": {
+    "message": "Brugergrænsefladen opdateres for at afspejle dit sprogvalg",
+    "description": "Message for language change notification"
+  },
+  "languageChangeError": {
+    "message": "Fejl",
+    "description": "Title for language change error notification"
+  },
+  "languageChangeErrorMessage": {
+    "message": "Kunne ikke ændre sprog",
+    "description": "Message for language change error notification"
+  },
+  "popupMarginLabel": {
+    "message": "Popup-margen",
+    "description": "Label for popup margin setting"
+  },
+  "popupMarginDesc": {
+    "message": "Afstand fra visningsportkanter i flydende tilstand",
+    "description": "Description for popup margin setting"
+  },
+  "translationSettings": {
+    "message": "Oversættelsesindstillinger",
+    "description": "Label for translation settings section"
+  },
+  "pageContextLabel": {
+    "message": "Brug sidekontekst for bedre svar",
+    "description": "Label for page context toggle"
+  },
+  "pageContextDesc": {
+    "message": "Aktivér dybere sidekontekst for bedre resultater",
+    "description": "Description for page context toggle"
+  },
+  "tabAppearance": {
+    "message": "Udseende",
+    "description": "Sidebar tab: Appearance"
+  },
+  "tabFeedback": {
+    "message": "Feedback",
+    "description": "Sidebar tab: Feedback"
+  },
+  "layoutDisplayTitle": {
+    "message": "Layout & visning",
+    "description": "Title for layout and display section"
+  },
+  "layoutDisplayDesc": {
+    "message": "Tilpas layoutet og udseendet af udvidelsen",
+    "description": "Description for layout and display section"
+  },
+  "layoutModeLabel": {
+    "message": "Layouttilstand",
+    "description": "Label for layout mode setting"
+  },
+  "layoutOptionFloating": {
+    "message": "Flydende",
+    "description": "Option for floating layout mode"
+  },
+  "layoutOptionSidebar": {
+    "message": "Sidebjælke",
+    "description": "Option for sidebar layout mode"
+  },
+  "layoutOptionCentered": {
+    "message": "Centreret",
+    "description": "Option for centered layout mode"
+  },
+  "resultsFontSizeLabel": {
+    "message": "Resultat skriftstørrelse",
+    "description": "Label for font size setting"
+  },
+  "resultsFontSizeDesc": {
+    "message": "Kontroller størrelsen af teksten i resultatpanelet",
+    "description": "Description for font size setting"
+  },
+  "fontSizeXSmall": {
+    "message": "Ekstra lille",
+    "description": "Extra small font size option"
+  },
+  "fontSizeSmall": {
+    "message": "Lille",
+    "description": "Small font size option"
+  },
+  "fontSizeMedium": {
+    "message": "Mellem",
+    "description": "Medium font size option"
+  },
+  "fontSizeLarge": {
+    "message": "Stor",
+    "description": "Large font size option"
+  },
+  "fontSizeXLarge": {
+    "message": "Ekstra stor",
+    "description": "Extra large font size option"
+  },
+  "fontSizeXXLarge": {
+    "message": "Dobbelt ekstra stor",
+    "description": "Extra extra large font size option"
+  },
+  "popupAnimationLabel": {
+    "message": "Popup-animation",
+    "description": "Label for popup animation setting"
+  },
+  "popupAnimationDesc": {
+    "message": "Animation, når popppen vises",
+    "description": "Description for popup animation setting"
+  },
+  "popupAnimationOptionFade": {
+    "message": "Fade",
+    "description": "Fade animation option"
+  },
+  "popupAnimationOptionSlide": {
+    "message": "Skyd",
+    "description": "Slide animation option"
+  },
+  "popupAnimationOptionScale": {
+    "message": "Skala",
+    "description": "Scale animation option"
+  },
+  "popupAnimationOptionNone": {
+    "message": "Ingen",
+    "description": "No animation option"
+  },
+  "radicalFocusLabel": {
+    "message": "Radikal fokustilstand",
+    "description": "Label for radical focus mode"
+  },
+  "radicalFocusDesc": {
+    "message": "Slør baggrunden, når du ser resultater",
+    "description": "Description for radical focus mode"
+  },
+  "requiredFieldLabel": {
+    "message": "(Påkrævet)",
+    "description": "Label for required fields"
+  },
+  "price": {
+    "message": "Pris:",
+    "description": "Price label"
+  },
+  "size": {
+    "message": "Størrelse:",
+    "description": "Size label"
+  },
+  "addressCopiedToClipboard": {
+    "message": "Adresse kopieret til udklipsholder!",
+    "description": "Message when address is copied"
+  },
+  "rateLimitRemaining": {
+    "message": "Rategrænse tilbage:",
+    "description": "Rate limit remaining label"
+  },
+  "resetIn": {
+    "message": "Nulstilles om:",
+    "description": "Rate limit reset time label"
+  },
+  "autoSaveFailedTitle": {
+    "message": "Automatisk lagring mislykkedes",
+    "description": "Title for auto-save failed notification"
+  },
+  "autoSaveFailedMessage": {
+    "message": "Dine ændringer blev ikke gemt automatisk. Gem manuelt.",
+    "description": "Message for auto-save failed notification"
+  },
+  "loadingFailedTitle": {
+    "message": "Indlæsning mislykkedes",
+    "description": "Title for loading failed notification"
+  },
+  "loadingFailedMessage": {
+    "message": "Kunne ikke indlæse dine indstillinger. Bruger standardindstillinger.",
+    "description": "Message for loading failed notification"
+  },
+  "loadingUsageInfo": {
+    "message": "Indlæser brugsinformation...",
+    "description": "Loading usage information text"
+  },
+  "modelAutoSelectedTitle": {
+    "message": "Model automatisk valgt",
+    "description": "Title for model auto-selection notification"
+  },
+  "geminiModelAutoSelectedMessage": {
+    "message": "Automatisk valgt {0}, da du har angivet en Gemini API-nøgle.",
+    "description": "Message for Gemini model auto-selection"
+  },
+  "grokModelAutoSelectedMessage": {
+    "message": "Automatisk valgt {0}, da du har angivet en Grok API-nøgle.",
+    "description": "Message for Grok model auto-selection"
+  },
+  "localModelAutoSelectedMessage": {
+    "message": "Automatisk valgt {0} til din Ollama-opsætning.",
+    "description": "Message for local model auto-selection"
+  },
+  "functionPromptPlaceholder": {
+    "message": "(Funktion vises ikke)",
+    "description": "Placeholder for function prompts"
+  },
+  "dynamicTemplatePlaceholder": {
+    "message": "(Dynamisk skabelon - varierer afhængigt af din markerede tekst)",
+    "description": "Placeholder for dynamic templates"
+  },
+  "aboutSubtitle": {
+    "message": "AI-drevne webannotationer",
+    "description": "Subtitle for about section"
+  },
+  "aboutVersion": {
+    "message": "Version:",
+    "description": "Version label in about section"
+  },
+  "aboutDeveloper": {
+    "message": "Udvikler:",
+    "description": "Developer label in about section"
+  },
+  "aboutWebsite": {
+    "message": "Website:",
+    "description": "Website label in about section"
+  },
+  "featureInstantSummaries": {
+    "message": "Øjeblikkelige opsummeringer",
+    "description": "Feature: Instant summaries"
+  },
+  "featureTranslation": {
+    "message": "Realtids oversættelse",
+    "description": "Feature: Real-time translation"
+  },
+  "featureAdvancedModels": {
+    "message": "Avancerede AI-modeller",
+    "description": "Feature: Advanced AI models"
+  },
+  "featureInteractiveChat": {
+    "message": "Interaktiv chat",
+    "description": "Feature: Interactive chat"
+  },
+  "zeroDataCollectionTitle": {
+    "message": "Ingen dataindsamling",
+    "description": "Title for zero data collection section"
+  },
+  "localStorageTitle": {
+    "message": "Lokal lagring",
+    "description": "Title for local storage section"
+  },
+  "gemini20FlashLabel": {
+    "message": "Gemini 2.0 Flash",
+    "description": "Label for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashDesc": {
+    "message": "Seneste version med forbedrede funktioner og hurtigere svartider",
+    "description": "Description for Gemini 2.0 Flash model"
+  },
+  "gemini20FlashLiteLabel": {
+    "message": "Gemini 2.0 Flash-Lite",
+    "description": "Label for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashLiteDesc": {
+    "message": "Letvægtsversion optimeret til effektivitet og hastighed",
+    "description": "Description for Gemini 2.0 Flash-Lite model"
+  },
+  "gemini20FlashThinkingLabel": {
+    "message": "Gemini 2.0 Flash Thinking",
+    "description": "Label for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini20FlashThinkingDesc": {
+    "message": "Eksperimentel model fokuseret på ræsonnement og analytiske opgaver",
+    "description": "Description for Gemini 2.0 Flash Thinking model"
+  },
+  "gemini15ProLabel": {
+    "message": "Gemini 1.5 Pro",
+    "description": "Label for Gemini 1.5 Pro model"
+  },
+  "gemini15ProDesc": {
+    "message": "Stabil version med afbalanceret ydeevne",
+    "description": "Description for Gemini 1.5 Pro model"
+  },
+  "gemini15FlashLabel": {
+    "message": "Gemini 1.5 Flash",
+    "description": "Label for Gemini 1.5 Flash model"
+  },
+  "gemini15FlashDesc": {
+    "message": "Hurtigere, mindre model til hurtige svar",
+    "description": "Description for Gemini 1.5 Flash model"
+  },
+  "gemini15Flash8BLabel": {
+    "message": "Gemini 1.5 Flash-8B",
+    "description": "Label for Gemini 1.5 Flash-8B model"
+  },
+  "gemini15Flash8BDesc": {
+    "message": "8-bit kvantiseret version til effektiv behandling",
+    "description": "Description for Gemini 1.5 Flash-8B model"
+  },
+  "grok3Label": {
+    "message": "Grok 3",
+    "description": "Label for Grok 3 model"
+  },
+  "grok3Desc": {
+    "message": "Standard Grok-3 model",
+    "description": "Description for Grok 3 model"
+  },
+  "grok3Price": {
+    "message": "2,00 $ pr. 1M tokens",
+    "description": "Price for Grok 3 model"
+  },
+  "grok3MiniLabel": {
+    "message": "Grok 3 Mini",
+    "description": "Label for Grok 3 Mini model"
+  },
+  "grok3MiniDesc": {
+    "message": "Letvægtsvariant",
+    "description": "Description for Grok 3 Mini model"
+  },
+  "grok3MiniPrice": {
+    "message": "1,00 $ pr. 1M tokens",
+    "description": "Price for Grok 3 Mini model"
+  },
+  "grok3FastLabel": {
+    "message": "Grok 3 Fast",
+    "description": "Label for Grok 3 Fast model"
+  },
+  "grok3FastDesc": {
+    "message": "Latensoptimeret Grok-3",
+    "description": "Description for Grok 3 Fast model"
+  },
+  "grok3FastPrice": {
+    "message": "2,50 $ pr. 1M tokens",
+    "description": "Price for Grok 3 Fast model"
+  },
+  "grok3MiniFastLabel": {
+    "message": "Grok 3 Mini Fast",
+    "description": "Label for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastDesc": {
+    "message": "Mini + hurtig variant",
+    "description": "Description for Grok 3 Mini Fast model"
+  },
+  "grok3MiniFastPrice": {
+    "message": "1,50 $ pr. 1M tokens",
+    "description": "Price for Grok 3 Mini Fast model"
+  },
+  "grok21212Label": {
+    "message": "Grok 2.1212",
+    "description": "Label for Grok 2.1212 model"
+  },
+  "grok21212Desc": {
+    "message": "Seneste Grok-2 build",
+    "description": "Description for Grok 2.1212 model"
+  },
+  "grok21212Price": {
+    "message": "1,80 $ pr. 1M tokens",
+    "description": "Price for Grok 2.1212 model"
+  },
+  "llama270bLabel": {
+    "message": "Llama 2 70B Chat",
+    "description": "Label for Llama 2 70B Chat model"
+  },
+  "llama270bDesc": {
+    "message": "Den mest kraftfulde Llama 2 model, bedst til komplekse opgaver",
+    "description": "Description for Llama 2 70B Chat model"
+  },
+  "llama270bSize": {
+    "message": "70B parametre",
+    "description": "Size for Llama 2 70B Chat model"
+  },
+  "deepseekV3Label": {
+    "message": "DeepSeek V3",
+    "description": "Label for DeepSeek V3 model"
+  },
+  "deepseekV3Desc": {
+    "message": "Seneste DeepSeek model med forbedrede ræsonnementsfunktioner",
+    "description": "Description for DeepSeek V3 model"
+  },
+  "deepseekV3Size": {
+    "message": "67B parametre",
+    "description": "Size for DeepSeek V3 model"
+  },
+  "mixtral8x7bLabel": {
+    "message": "Mixtral 8x7B Instruct",
+    "description": "Label for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bDesc": {
+    "message": "Højtydende blanding af eksperter model",
+    "description": "Description for Mixtral 8x7B Instruct model"
+  },
+  "mixtral8x7bSize": {
+    "message": "47B parametre",
+    "description": "Size for Mixtral 8x7B Instruct model"
+  },
+  "llama213bLabel": {
+    "message": "Llama 2 13B Chat",
+    "description": "Label for Llama 2 13B Chat model"
+  },
+  "llama213bDesc": {
+    "message": "Afbalanceret ydeevne og ressourceforbrug",
+    "description": "Description for Llama 2 13B Chat model"
+  },
+  "llama213bSize": {
+    "message": "13B parametre",
+    "description": "Size for Llama 2 13B Chat model"
+  },
+  "mistral7bLabel": {
+    "message": "Mistral 7B Instruct",
+    "description": "Label for Mistral 7B Instruct model"
+  },
+  "mistral7bDesc": {
+    "message": "Effektiv instruktionsfølgende model",
+    "description": "Description for Mistral 7B Instruct model"
+  },
+  "mistral7bSize": {
+    "message": "7B parametre",
+    "description": "Size for Mistral 7B Instruct model"
+  },
+  "neuralChatV31Label": {
+    "message": "Neural Chat V3.1",
+    "description": "Label for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Desc": {
+    "message": "Optimeret til naturlige samtaler",
+    "description": "Description for Neural Chat V3.1 model"
+  },
+  "neuralChatV31Size": {
+    "message": "7B parametre",
+    "description": "Size for Neural Chat V3.1 model"
+  },
+  "deepseekV3BaseLabel": {
+    "message": "DeepSeek V3 Base",
+    "description": "Label for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseDesc": {
+    "message": "Lighter version af DeepSeek med god ræsonnering",
+    "description": "Description for DeepSeek V3 Base model"
+  },
+  "deepseekV3BaseSize": {
+    "message": "7B parametre",
+    "description": "Size for DeepSeek V3 Base model"
+  },
+  "llama32_3bLabel": {
+    "message": "Llama 3.2 3B Instruct",
+    "description": "Label for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bDesc": {
+    "message": "Letvægtsmodel til basale opgaver",
+    "description": "Description for Llama 3.2 3B Instruct model"
+  },
+  "llama32_3bSize": {
+    "message": "3B parametre",
+    "description": "Size for Llama 3.2 3B Instruct model"
+  },
+  "phi2Label": {
+    "message": "Phi-2",
+    "description": "Label for Phi-2 model"
+  },
+  "phi2Desc": {
+    "message": "Kompakt men kraftfuld for sin størrelse",
+    "description": "Description for Phi-2 model"
+  },
+  "phi2Size": {
+    "message": "2,7B parametre",
+    "description": "Size for Phi-2 model"
+  },
+  "openchat35Label": {
+    "message": "OpenChat 3.5",
+    "description": "Label for OpenChat 3.5 model"
+  },
+  "openchat35Desc": {
+    "message": "Optimeret til chatinteraktioner",
+    "description": "Description for OpenChat 3.5 model"
+  },
+  "openchat35Size": {
+    "message": "7B parametre",
+    "description": "Size for OpenChat 3.5 model"
+  },
+  "betaBadgeLabel": {
+    "message": "BETA",
+    "description": "Beta badge label"
+  },
+  "generalTabLabel": {
+    "message": "Generelt",
+    "description": "General tab label"
+  },
+  "modelSettingsTabLabel": {
+    "message": "AI-modeller",
+    "description": "Model settings tab label"
+  },
+  "promptTemplatesTabLabel": {
+    "message": "Prompt-skabeloner",
+    "description": "Prompt templates tab label"
+  },
+  "appearanceTabLabel": {
+    "message": "Udseende",
+    "description": "Appearance tab label"
+  },
+  "aboutTabLabel": {
+    "message": "Om",
+    "description": "About tab label"
+  },
+  "generalSettingsTitle": {
+    "message": "Generelle indstillinger",
+    "description": "General settings section title"
+  },
+  "modelSettingsTitle": {
+    "message": "AI-modelkonfiguration",
+    "description": "Model settings section title"
+  },
+  "customizationTabTitle": {
+    "message": "Udseende & tilpasning",
+    "description": "Customization tab title"
+  },
+  "promptTemplatesTitle": {
+    "message": "Prompt-skabeloner",
+    "description": "Prompt templates section title"
+  },
+  "aboutTabTitle": {
+    "message": "Om LightUp",
+    "description": "About section title"
+  },
+  "showSelectedTextDescription": {
+    "message": "Vis den tekst, du har markeret, i resultaterne",
+    "description": "Description for show selected text toggle"
+  },
+  "showWebsiteInfoDescription": {
+    "message": "Vis website-favicon og titel i resultaterne",
+    "description": "Description for show website info toggle"
+  },
+  "keepHighlightedTextDescription": {
+    "message": "Behold tekst markeret efter lukning af popup",
+    "description": "Description for keep highlighted text toggle"
+  },
+  "autoOpenLightUpLabel": {
+    "message": "Åbn LightUp automatisk ved tekstmarkering",
+    "description": "Label for auto-open toggle"
+  },
+  "autoOpenLightUpDescription": {
+    "message": "Åbner LightUp automatisk, når du markerer tekst",
+    "description": "Description for auto-open toggle"
+  },
+  "contextAwarenessLabel": {
+    "message": "Kontekstudvidning",
+    "description": "Label for context awareness toggle"
+  },
+  "contextAwarenessDescription": {
+    "message": "Brug sidekontekst til at give bedre, mere relevante svar",
+    "description": "Description for context awareness toggle"
+  },
+  "aiEngineSelectionHeader": {
+    "message": "AI-motor valg",
+    "description": "Header for AI engine selection"
+  },
+  "chooseModelTypeLabel": {
+    "message": "Vælg AI-modeltype",
+    "description": "Label for model type selection"
+  },
+  "chooseModelTypeDescription": {
+    "message": "Vælg hvilken AI-tjeneste du vil bruge til at generere svar",
+    "description": "Description for model type selection"
+  },
+  "basicModelTypeOption": {
+    "message": "Basis (Gratis, begrænset)",
+    "description": "Basic model type option"
+  },
+  "geminiModelTypeOption": {
+    "message": "Google Gemini (API-nøgle krævet)",
+    "description": "Gemini model type option"
+  },
+  "grokModelTypeOption": {
+    "message": "Grok af xAI (API-nøgle krævet)",
+    "description": "Grok model type option"
+  },
+  "localModelTypeOption": {
+    "message": "Lokal/Ollama (selv-hostet)",
+    "description": "Local model type option"
+  },
+  "dataPrivacyNoticeTitle": {
+    "message": "Meddelelse om databeskyttelse",
+    "description": "Title for data privacy notice"
+  },
+  "basicTierPrivacyWarningPrimary": {
+    "message": "Når du bruger Basis-niveauet, sendes din markerede tekst og sidekontekst til vores servere til behandling. Vi gemmer ikke disse data permanent.",
+    "description": "Primary privacy warning for basic tier"
+  },
+  "basicTierPrivacyWarningSecondary": {
+    "message": "For komplet beskyttelse af personoplysninger, kan du overveje at bruge din egen API-nøgle med Google Gemini, Grok eller en lokal model.",
+    "description": "Secondary privacy warning for basic tier"
+  },
+  "geminiConfigurationHeader": {
+    "message": "Google Gemini-konfiguration",
+    "description": "Header for Gemini configuration"
+  },
+  "geminiApiKeyLabel": {
+    "message": "Google Gemini API-nøgle",
+    "description": "Label for Gemini API key"
+  },
+  "geminiApiKeyPlaceholder": {
+    "message": "Indtast din Google AI Studio API-nøgle",
+    "description": "Placeholder for Gemini API key"
+  },
+  "geminiApiKeyDescription": {
+    "message": "Hent din gratis API-nøgle fra Google AI Studio. {0}",
+    "description": "Description for Gemini API key"
+  },
+  "geminiModelLabel": {
+    "message": "Vælg Gemini-model",
+    "description": "Label for Gemini model selection"
+  },
+  "geminiModelDescription": {
+    "message": "Vælg hvilken Google Gemini-model der skal bruges til at generere svar",
+    "description": "Description for Gemini model selection"
+  },
+  "grokConfigurationHeader": {
+    "message": "Grok af xAI-konfiguration",
+    "description": "Header for Grok configuration"
+  },
+  "xaiApiKeyLabel": {
+    "message": "xAI API-nøgle",
+    "description": "Label for xAI API key"
+  },
+  "xaiApiKeyPlaceholder": {
+    "message": "Indtast din xAI API-nøgle",
+    "description": "Placeholder for xAI API key"
+  },
+  "xaiApiKeyDescription": {
+    "message": "Hent din API-nøgle fra xAI. Besøg {0} for at komme i gang.",
+    "description": "Description for xAI API key"
+  },
+  "grokModelLabel": {
+    "message": "Vælg Grok-model",
+    "description": "Label for Grok model selection"
+  },
+  "grokModelDescription": {
+    "message": "Vælg hvilken Grok-model der skal bruges til at generere svar",
+    "description": "Description for Grok model selection"
+  },
+  "ollamaConfigurationHeader": {
+    "message": "Lokal/Ollama-konfiguration",
+    "description": "Header for Ollama configuration"
+  },
+  "ollamaServerUrlLabel": {
+    "message": "Ollama server-URL",
+    "description": "Label for Ollama server URL"
+  },
+  "ollamaServerUrlPlaceholder": {
+    "message": "http://localhost:11434",
+    "description": "Placeholder for Ollama server URL"
+  },
+  "localModelLabel": {
+    "message": "Vælg lokal model",
+    "description": "Label for local model selection"
+  },
+  "localModelDescription": {
+    "message": "Vælg hvilken model der skal bruges fra din Ollama-installation",
+    "description": "Description for local model selection"
+  },
+  "responseSettingsHeader": {
+    "message": "Svarindstillinger",
+    "description": "Header for response settings"
+  },
+  "maxTokensLabel": {
+    "message": "Maks. svarlængde",
+    "description": "Label for max tokens setting"
+  },
+  "maxTokensDescription": {
+    "message": "Maksimalt antal tokens (ord/tegn) i AI-svaret",
+    "description": "Description for max tokens setting"
+  },
+  "promptModeHeader": {
+    "message": "Prompt-tilstand",
+    "description": "Header for prompt mode selection"
+  },
+  "promptModeDescription": {
+    "message": "Vælg hvilken type prompt du vil tilpasse",
+    "description": "Description for prompt mode selection"
+  },
+  "systemPromptLabel": {
+    "message": "Systemprompt",
+    "description": "Label for system prompt"
+  },
+  "systemPromptDescription": {
+    "message": "Denne prompt definerer, hvordan AI skal opføre sig og svare",
+    "description": "Description for system prompt"
+  },
+  "userPromptLabel": {
+    "message": "Brugerprompt-skabelon",
+    "description": "Label for user prompt"
+  },
+  "userPromptDescription": {
+    "message": "Denne skabelon bruges til at formatere brugerforespørgsler til AI",
+    "description": "Description for user prompt"
+  },
+  "editButtonText": {
+    "message": "Rediger",
+    "description": "Edit button text"
+  },
+  "saveButtonText": {
+    "message": "Gem",
+    "description": "Save button text"
+  },
+  "resetTemplateLabel": {
+    "message": "Nulstil til standard",
+    "description": "Label for reset template section"
+  },
+  "resetTemplateDescription": {
+    "message": "Nulstil {0}-tilstands prompter tilbage til deres originale standarder",
+    "description": "Description for reset template section"
+  },
+  "resetToDefaultButtonText": {
+    "message": "Nulstil til standard",
+    "description": "Reset to default button text"
+  },
+  "resetSuccessText": {
+    "message": "Nulstillet",
+    "description": "Reset success message"
+  },
+  "cannotEditFunctionPrompt": {
+    "message": "Denne prompt bruger dynamisk logik og kan ikke redigeres",
+    "description": "Message for function-based prompts"
+  },
+  "templateApplicationNote": {
+    "message": "Sådan anvender du dine brugerdefinerede skabeloner:",
+    "description": "Note about template application"
+  },
+  "templateApplicationInstructions": {
+    "message": "Dine brugerdefinerede prompter bruges automatisk, når du markerer tekst og vælger den tilsvarende tilstand\nÆndringer træder i kraft med det samme - ingen genstart kræves\nDu kan nulstille enhver prompt tilbage til standardværdier ved hjælp af nulstillingsknappen",
+    "description": "Instructions for template application"
+  },
+  "appearanceSectionHeader": {
+    "message": "Tema & udseende",
+    "description": "Header for appearance section"
+  },
+  "themeLabel": {
+    "message": "Farvetema",
+    "description": "Label for theme selection"
+  },
+  "darkThemeText": {
+    "message": "Mørkt tema",
+    "description": "Dark theme option text"
+  },
+  "lightThemeText": {
+    "message": "Lyst tema",
+    "description": "Light theme option text"
+  },
+  "systemDefaultThemeText": {
+    "message": "Systemstandard",
+    "description": "System default theme option text"
+  },
+  "fontSizeLabel": {
+    "message": "Skriftstørrelse",
+    "description": "Label for font size setting"
+  },
+  "fontSizeDescription": {
+    "message": "Juster tekststørrelsen i popup-resultaterne",
+    "description": "Description for font size setting"
+  },
+  "highlightColorLabel": {
+    "message": "Markeringsfarve",
+    "description": "Label for highlight color setting"
+  },
+  "highlightColorDescription": {
+    "message": "Vælg farven til markering af markeret tekst",
+    "description": "Description for highlight color setting"
+  },
+  "layoutModeDesc": {
+    "message": "Vælg hvordan popppen vises på siden",
+    "description": "Description for layout mode setting"
+  },
+  "layoutOptionFloatingLabel": {
+    "message": "Flydende",
+    "description": "Floating layout option label"
+  },
+  "layoutOptionSidebarLabel": {
+    "message": "Sidebjælke",
+    "description": "Sidebar layout option label"
+  },
+  "layoutOptionCenteredLabel": {
+    "message": "Centreret",
+    "description": "Centered layout option label"
+  },
+  "popupAnimationDescription": {
+    "message": "Animationseffekt, når popppen vises",
+    "description": "Description for popup animation setting"
+  },
+  "animationFade": {
+    "message": "Fade",
+    "description": "Fade animation option"
+  },
+  "animationSlide": {
+    "message": "Skyd",
+    "description": "Slide animation option"
+  },
+  "animationScale": {
+    "message": "Skala",
+    "description": "Scale animation option"
+  },
+  "animationNone": {
+    "message": "Ingen",
+    "description": "No animation option"
+  },
+  "animationSettingsHeader": {
+    "message": "Animationsindstillinger",
+    "description": "Header for animation settings"
+  },
+  "aboutDescription": {
+    "message": "LightUp er en AI-drevet browserudvidelse, der giver øjeblikkelige opsummeringer, forklaringer, oversættelser og analyser af enhver tekst på nettet.",
+    "description": "About section description"
+  },
+  "linksHeader": {
+    "message": "Links",
+    "description": "Header for links section"
+  },
+  "linksDescription": {
+    "message": "Nyttige links og ressourcer",
+    "description": "Description for links section"
+  },
+  "visitWebsiteButton": {
+    "message": "Besøg website",
+    "description": "Visit website button text"
+  },
+  "rateChromeStoreButton": {
+    "message": "Vurder i Chrome Store",
+    "description": "Rate on Chrome Store button text"
+  },
+  "clearAllDataButton": {
+    "message": "Ryd alle data",
+    "description": "Clear all data button text"
+  },
+  "explainButtonText": {
+    "message": "Forklar",
+    "description": "Explain mode button text"
+  },
+  "summarizeButtonText": {
+    "message": "Opsummer",
+    "description": "Summarize mode button text"
+  },
+  "analyzeButtonText": {
+    "message": "Analyser",
+    "description": "Analyze mode button text"
+  },
+  "translateButtonText": {
+    "message": "Oversæt",
+    "description": "Translate mode button text"
+  },
+  "freeButtonText": {
+    "message": "Fri",
+    "description": "Free mode button text"
+  },
+  "promptDetailsHeader": {
+    "message": "Prompt-detaljer",
+    "description": "Header for prompt details section"
+  },
+  "promptDetailsDescription": {
+    "message": "Vis og tilpas de prompter, der bruges til denne tilstand",
+    "description": "Description for prompt details section"
+  },
+  "featureInstantSummariesDesc": {
+    "message": "Få øjeblikkelige opsummeringer af enhver tekst med ét klik",
+    "description": "Description for instant summaries feature"
+  },
+  "featureTranslationDesc": {
+    "message": "Oversæt tekst til ethvert sprog øjeblikkeligt",
+    "description": "Description for translation feature"
+  },
+  "featureAdvancedModelsDesc": {
+    "message": "Vælg mellem flere AI-modeller, inklusive GPT, Gemini og lokale modeller",
+    "description": "Description for advanced models feature"
+  },
+  "featureInteractiveChatDesc": {
+    "message": "Før samtaler med AI om det indhold, du læser",
+    "description": "Description for interactive chat feature"
+  }
+}

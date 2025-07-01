@@ -88,11 +88,15 @@ export interface Settings {
     enablePDFSupport: boolean
     showTextSelectionButton: boolean // Controls visibility of the text selection button
     showWebsiteInfo?: boolean // Controls visibility of website info (favicon and title)
+    sidebarPinned?: boolean // Controls whether sidebar is pinned to the page (embedded) or overlay
   }
   translationSettings?: {
     fromLanguage: string
     toLanguage: string
   }
+  
+  // AI response language
+  aiResponseLanguage?: string // Language for AI responses (default: 'en')
   
   // Debug settings
   debug?: {

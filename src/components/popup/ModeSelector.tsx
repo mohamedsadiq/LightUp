@@ -1,5 +1,6 @@
 import { ActionButton } from "~components/buttons/ActionButton"
 import { MODES } from "~utils/constants"
+import { getMessage } from "~utils/i18n"
 import type { Mode } from "~types/settings"
 
 interface ModeSelectorProps {
@@ -18,11 +19,11 @@ export const ModeSelector: React.FC<ModeSelectorProps> = ({
   const displayModes = preferredModes.slice(0, 4)
 
   const modeNames: Record<Mode, string> = {
-    summarize: "Summarize",
-    explain: "Explain",
-    analyze: "Analyze",
-    translate: "Translate",
-    free: "Ask Anything"
+    summarize: getMessage("summarizeAction") || "Summarize",
+    explain: getMessage("explainAction") || "Explain",
+    analyze: getMessage("analyzeAction") || "Analyze",
+    translate: getMessage("translateAction") || "Translate",
+    free: getMessage("askAnythingAction") || "Ask Anything"
   }
 
   return (

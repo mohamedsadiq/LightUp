@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { getMessage } from "../utils/i18n"
 
 interface SpeakerButtonProps {
   text: string
@@ -16,7 +17,7 @@ const SpeakerButton = ({ text, className = "" }: SpeakerButtonProps) => {
     <button
       onClick={handleSpeak}
       className={`p-2 rounded-full transition-colors ${className}`}
-      aria-label={isSpeaking ? "Stop speaking" : "Read text aloud"}
+      aria-label={isSpeaking ? getMessage("speakerStop") || "Stop speaking" : getMessage("speakerStart") || "Read text aloud"}
     >
       {isSpeaking ? (
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

@@ -1,5 +1,6 @@
 import type { ProcessTextRequest } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS } from "../../utils/constants"
+import { getSelectedLocale } from "../../utils/i18n"
 
 // Enhanced error types for better error handling
 interface XAIError {
@@ -82,6 +83,11 @@ async function retryWithBackoff<T>(
 export const processXAIText = async function*(request: ProcessTextRequest) {
   const { text, mode, context, isFollowUp, settings } = request;
   
+  // Get the user's selected language for AI responses
+  // Priority: 1) aiResponseLanguage setting (from website info selector)
+  //          2) Extension UI language (from popup/options) as fallback
+  const responseLanguage = settings.aiResponseLanguage || await getSelectedLocale();
+  
   try {
     // Validate API key
     if (!settings.xaiApiKey || settings.xaiApiKey.trim() === '') {
@@ -110,19 +116,25 @@ export const processXAIText = async function*(request: ProcessTextRequest) {
 
     // Get the system prompt (custom or default)
     const getSystemPrompt = (): string => {
+      // Language instruction to add to all system prompts
+      const languageInstruction = responseLanguage !== "en" 
+        ? `\n\nIMPORTANT: Respond in ${responseLanguage} language. Adapt your response to be culturally appropriate for speakers of this language.` 
+        : "";
+        
       if (isFollowUp) {
         if (settings.customPrompts?.systemPrompts?.[mode]) {
           return `${settings.customPrompts.systemPrompts[mode]} 
 
-FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.`;
+FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.${languageInstruction}`;
         }
-        return FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
+        const basePrompt = FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
+        return basePrompt + languageInstruction;
       }
       
       if (settings.customPrompts?.systemPrompts?.[mode]) {
-        return settings.customPrompts.systemPrompts[mode];
+        return settings.customPrompts.systemPrompts[mode] + languageInstruction;
       }
-      return SYSTEM_PROMPTS[mode];
+      return SYSTEM_PROMPTS[mode] + languageInstruction;
     };
 
     // Get the user prompt (custom or default)

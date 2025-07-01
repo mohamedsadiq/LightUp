@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeSanitize from 'rehype-sanitize';
+import rehypeRaw from 'rehype-raw';
 import { getTextDirection } from "~utils/rtl";
 import type { Theme } from "~types/theme";
 import type { FontSizes } from "~contents/styles";
@@ -316,7 +317,7 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
         <ReactMarkdown
           components={components}
           remarkPlugins={[remarkGfm]}
-          rehypePlugins={[rehypeSanitize]}
+          rehypePlugins={[rehypeRaw, rehypeSanitize]}
         >
           {processedText}
         </ReactMarkdown>
