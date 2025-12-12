@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Modusselector configureren (maximaal 4 kiezen)",
+    "message": "Modusselector configureren (maximaal 3 kiezen)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

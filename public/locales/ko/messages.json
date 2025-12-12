@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "모드 선택기 구성 (최대 4개 선택)",
+    "message": "모드 선택기 구성 (최대 3개 선택)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

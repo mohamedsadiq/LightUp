@@ -314,6 +314,43 @@ const fallbackExtraction = (doc: Document, mode?: string): string => {
  * @param mode - Processing mode for extraction optimization
  * @returns Extracted text from the current page optimized for the specific mode
  */
+// Basic sanitization to strip problematic characters before sending to LLM
+const sanitizeForLLM = (content: string): string => {
+  if (!content) return "";
+  
+  // Build result character by character to properly handle surrogates
+  const result: string[] = [];
+  for (let i = 0; i < content.length; i++) {
+    const code = content.charCodeAt(i);
+    
+    // Skip surrogates (0xD800-0xDFFF) - lone surrogates cause xAI JSON parse errors
+    if (code >= 0xD800 && code <= 0xDFFF) {
+      continue;
+    }
+    
+    // Skip backslashes - they can produce \x escape issues
+    if (code === 92) {
+      continue;
+    }
+    
+    // Skip control characters except newline/tab
+    if (code < 32 && code !== 9 && code !== 10 && code !== 13) {
+      continue;
+    }
+    
+    // Skip DEL character
+    if (code === 127) {
+      continue;
+    }
+    
+    result.push(content[i]);
+  }
+  
+  return result.join('')
+    .replace(/[ \t\r\n]{2,}/g, " ")
+    .trim();
+};
+
 const getPageContent = (mode?: string): string => {
   // Get the page title for context
   const pageTitle = document.title;
@@ -345,10 +382,10 @@ const getPageContent = (mode?: string): string => {
       return mainContent;
     }
     
-    return `Page: ${pageTitle}\nURL: ${window.location.href}\n\n${mainContent}`;
+    return sanitizeForLLM(`Page: ${pageTitle}\nURL: ${window.location.href}\n\n${mainContent}`);
   }
   
-  return mainContent;
+  return sanitizeForLLM(mainContent);
 };
 
 export { getPageContent };

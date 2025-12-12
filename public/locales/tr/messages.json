@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Mod Seçiciyi Yapılandır (En fazla 4 tane seçin)",
+    "message": "Mod Seçiciyi Yapılandır (En fazla 3 tane seçin)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

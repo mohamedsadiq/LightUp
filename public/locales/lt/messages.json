@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "LightUp – AI pagalba paremtos žiniatinklio anotacijos. Santraukos, vertimai ir daugiau",
+    "message": "LightUp – AI paremtos žiniatinklio anotacijos",
     "description": "Name of the extension"
   },
   "extensionDescription": {
@@ -104,11 +104,11 @@
     "description": "Description for the 'Show Selected Text' toggle"
   },
   "showInstantAIButtonLabel": {
-    "message": "Rodyti mygtuką „Momentinis AI“",
+    "message": "Rodyti mygtuką \"Momentinis AI\"",
     "description": "Label for show instant AI button toggle"
   },
   "showInstantAIButtonDesc": {
-    "message": "Pridėti plūduriuojantį mygtuką „Momentinis AI“, kuris vienu spustelėjimu apibendrina arba paaiškina visą puslapį",
+    "message": "Pridėti plūduriuojantį mygtuką \"Momentinis AI\", kuris vienu spustelėjimu apibendrina arba paaiškina visą puslapį",
     "description": "Description for show instant AI button toggle"
   },
   "distractionFreeModeLabel": {
@@ -192,7 +192,7 @@
     "description": "Shortcut description for toggling extension on/off"
   },
   "shortcutToggleFocus": {
-    "message": "Perjungti „Radical Focus“ režimą",
+    "message": "Perjungti \"Radical Focus\" režimą",
     "description": "Shortcut description for toggling focus mode"
   },
   "shortcutToggleTheme": {
@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Konfigūruoti režimo selektorių (pasirinkite iki 4)",
+    "message": "Konfigūruoti režimo selektorių (pasirinkite iki 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "I-configure ang Mode Selector (Pumili ng hanggang 4)",
+    "message": "I-configure ang Mode Selector (Pumili ng hanggang 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

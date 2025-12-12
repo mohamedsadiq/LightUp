@@ -1,7 +1,59 @@
 import type { ProcessTextRequest } from "~types/messages"
-import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS } from "../../utils/constants"
+import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS, getMaxTokensFromPromptOrSetting } from "../../utils/constants"
 import type { Settings } from "~types/settings"
 import { getSelectedLocale } from "../../utils/i18n"
+
+/**
+ * Extract text content from Gemini streaming response
+ * Gemini returns an array of JSON objects with candidates containing text parts
+ */
+const extractTextFromGeminiResponse = (buffer: string): string => {
+  let fullText = ''
+  
+  try {
+    // Try to parse as a complete JSON array first
+    // Gemini streaming format: [{"candidates":...}, {"candidates":...}, ...]
+    let jsonStr = buffer.trim()
+    
+    // Handle incomplete array - add closing bracket if needed
+    if (jsonStr.startsWith('[') && !jsonStr.endsWith(']')) {
+      // Remove trailing comma if present
+      jsonStr = jsonStr.replace(/,\s*$/, '') + ']'
+    }
+    
+    // Try to parse the JSON
+    const parsed = JSON.parse(jsonStr)
+    
+    if (Array.isArray(parsed)) {
+      // Extract text from each candidate in the array
+      for (const item of parsed) {
+        const text = item?.candidates?.[0]?.content?.parts?.[0]?.text
+        if (text) {
+          fullText += text
+        }
+      }
+    } else if (parsed?.candidates?.[0]?.content?.parts?.[0]?.text) {
+      // Single object
+      fullText = parsed.candidates[0].content.parts[0].text
+    }
+  } catch (e) {
+    // If JSON parsing fails, try to extract text using regex
+    // This handles partial/malformed JSON during streaming
+    const textMatches = buffer.matchAll(/"text":\s*"([^"\\]*(?:\\.[^"\\]*)*)"/g)
+    for (const match of textMatches) {
+      if (match[1]) {
+        // Unescape the JSON string
+        try {
+          fullText += JSON.parse(`"${match[1]}"`)
+        } catch {
+          fullText += match[1]
+        }
+      }
+    }
+  }
+  
+  return fullText
+}
 
 export const processGeminiText = async function*(request: ProcessTextRequest) {
   const { text, mode, settings, isFollowUp } = request
@@ -84,7 +136,8 @@ Instructions: Build on your previous analysis/explanation of this content. If th
   };
   
   try {
-    const modelName = settings.geminiModel || "gemini-1.5-pro"; // Default to 1.5 Pro if not specified
+    const modelName = settings.geminiModel || "gemini-2.0-flash"; // Default to 2.0 Flash for reliability
+    console.log(`[Gemini] Using model: ${modelName}, API key present: ${!!settings.geminiApiKey}`);
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:streamGenerateContent`, {
       method: 'POST',
       headers: {
@@ -108,14 +161,41 @@ Instructions: Build on your previous analysis/explanation of this content. If th
         ],
         generationConfig: {
           temperature: 0.5,
-          maxOutputTokens: settings.maxTokens || 2048,
+          maxOutputTokens: getMaxTokensFromPromptOrSetting(mode, getSystemPrompt()) || settings.maxTokens || 2048,
           stopSequences: []
         }
       })
     })
 
     if (!response.ok) {
-      throw new Error(`Gemini API Error: ${response.statusText}`)
+      // Read the error details from response body
+      let errorMessage = `Gemini API Error (${response.status})`;
+      try {
+        const errorData = await response.text();
+        const errorJson = JSON.parse(errorData);
+        
+        if (errorJson.error?.message) {
+          errorMessage = errorJson.error.message;
+        }
+        
+        // Provide helpful messages for common errors
+        if (response.status === 400) {
+          errorMessage = `Invalid request: ${errorMessage}. Please check your API key format.`;
+        } else if (response.status === 401 || response.status === 403) {
+          errorMessage = `Authentication failed. Please check your Gemini API key is valid and has proper permissions.`;
+        } else if (response.status === 404) {
+          errorMessage = `Model not found. The model "${modelName}" may not be available. Try selecting 'Gemini 2.0 Flash' in settings.`;
+        } else if (response.status === 429) {
+          errorMessage = `Rate limit exceeded. Please wait a moment and try again, or check your API quota at Google AI Studio.`;
+        } else if (response.status >= 500) {
+          errorMessage = `Gemini server error. Please try again later.`;
+        }
+      } catch (parseError) {
+        // If we can't parse the error, use status code
+        errorMessage = `Gemini API Error: ${response.status} ${response.statusText || 'Unknown error'}`;
+      }
+      
+      throw new Error(errorMessage);
     }
 
     const reader = response.body?.getReader()
@@ -125,17 +205,22 @@ Instructions: Build on your previous analysis/explanation of this content. If th
 
     const decoder = new TextDecoder()
     let buffer = ''
+    let lastTextLength = 0  // Track cumulative text to avoid duplicates
 
     while (true) {
       const { done, value } = await reader.read()
       
       if (done) {
-        if (buffer) {
-          yield { 
-            type: 'chunk', 
-            content: buffer,
-            isFollowUp: request.isFollowUp,
-            id: request.id
+        // Try to parse any remaining buffer content
+        if (buffer.trim()) {
+          const text = extractTextFromGeminiResponse(buffer)
+          if (text && text.length > lastTextLength) {
+            yield { 
+              type: 'chunk', 
+              content: text.substring(lastTextLength),
+              isFollowUp: request.isFollowUp,
+              id: request.id
+            }
           }
         }
         yield { 
@@ -148,43 +233,18 @@ Instructions: Build on your previous analysis/explanation of this content. If th
 
       buffer += decoder.decode(value, { stream: true })
       
-      // Optimize buffer handling for faster response
-      if (buffer.length > 500) {
-        // For large chunks, process immediately without waiting for line breaks
-        yield { 
-          type: 'chunk', 
-          content: buffer,
-          isFollowUp: request.isFollowUp,
-          id: request.id
-        }
-        buffer = ''
-        continue
-      }
+      // Gemini streaming format: array of JSON objects like [{"candidates":...}, {"candidates":...}]
+      // We need to extract text from each candidate object
+      const text = extractTextFromGeminiResponse(buffer)
       
-      const lines = buffer.split('\n')
-      buffer = lines.pop() || ''
-
-      // Process multiple lines at once for faster response
-      const chunksToProcess = []
-      
-      for (const line of lines) {
-        if (line.trim() === '') continue
+      if (text && text.length > lastTextLength) {
+        // Only yield the new text (delta)
+        const newText = text.substring(lastTextLength)
+        lastTextLength = text.length
         
-        try {
-          const data = JSON.parse(line)
-          if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-            chunksToProcess.push(data.candidates[0].content.parts[0].text)
-          }
-        } catch (e) {
-          console.warn('Failed to parse line:', line)
-        }
-      }
-      
-      // Combine chunks and send in bulk for faster display
-      if (chunksToProcess.length > 0) {
         yield { 
           type: 'chunk', 
-          content: chunksToProcess.join(''),
+          content: newText,
           isFollowUp: request.isFollowUp,
           id: request.id
         }

@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "मोड सेलेक्टर कॉन्फ़िगर करें (अधिकतम 4 चुनें)",
+    "message": "मोड सेलेक्टर कॉन्फ़िगर करें (अधिकतम 3 चुनें)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

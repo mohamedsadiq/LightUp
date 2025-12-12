@@ -19,7 +19,7 @@ interface UseModeReturn {
 
 export const useMode = (): UseModeReturn => {
   const [activeMode, setActiveMode] = useState<Mode>("explain")
-  const [preferredModes, setPreferredModes] = useState<Mode[]>(["summarize", "explain", "analyze", "free"])
+  const [preferredModes, setPreferredModes] = useState<Mode[]>(["explain", "summarize", "translate"])
   const [translationSettings, setTranslationSettings] = useState({
     fromLanguage: "en",
     toLanguage: "es"
@@ -38,7 +38,7 @@ export const useMode = (): UseModeReturn => {
       // Load preferred modes
       const savedPreferredModes = await storage.get("preferredModes") as Mode[] | undefined
       if (savedPreferredModes && savedPreferredModes.length > 0) {
-        setPreferredModes(savedPreferredModes)
+        setPreferredModes(savedPreferredModes.slice(0, 3))
       }
       
       // Load translation settings
@@ -80,7 +80,7 @@ export const useMode = (): UseModeReturn => {
       const { preferredModes: newPreferredModes } = event.detail;
       
       if (newPreferredModes && newPreferredModes.length > 0) {
-        setPreferredModes(newPreferredModes);
+        setPreferredModes((newPreferredModes as Mode[]).slice(0, 3));
       }
     };
     

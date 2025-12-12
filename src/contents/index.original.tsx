@@ -2188,7 +2188,8 @@ function Content() {
                     style={{
                       flex: 1,
                       overflow: 'auto',
-                      minHeight: 0
+                      minHeight: 0,
+                     overflowX: 'hidden'
                     }}
                   >
                     {renderPopupContent()}
@@ -2250,7 +2251,8 @@ function Content() {
                 overflow: 'auto',
                 minHeight: 0,
                 WebkitOverflowScrolling: 'touch',
-                transform: 'translateZ(0)' // Force hardware acceleration
+                transform: 'translateZ(0)', // Force hardware acceleration
+                overflowX: 'hidden'
               }}>
                 {renderPopupContent()}
               </div>
@@ -2311,6 +2313,7 @@ function Content() {
                     flex: 1,
                     overflow: 'auto',
                     minHeight: 0,
+                    overflowX: 'hidden',
                     WebkitOverflowScrolling: 'touch',
                     transform: 'translateZ(0)' // Force hardware acceleration
                   }}>

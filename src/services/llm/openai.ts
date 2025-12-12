@@ -1,5 +1,5 @@
 import type { ProcessTextRequest } from "~types/messages"
-import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS } from "../../utils/constants"
+import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS, getMaxTokensFromPromptOrSetting } from "../../utils/constants"
 import { getSelectedLocale } from "../../utils/i18n"
 
 export const processOpenAIText = async function*(request: ProcessTextRequest) {
@@ -86,6 +86,8 @@ Instructions: Build on your previous analysis/explanation of this content. If th
         : USER_PROMPTS[mode] + "\n" + text;
     };
     
+    const selectedModel = settings.openaiModel || "gpt-4o";
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -93,7 +95,7 @@ Instructions: Build on your previous analysis/explanation of this content. If th
         'Authorization': `Bearer ${settings.apiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-3.5-turbo",
+        model: selectedModel,
         messages: [
           {
             role: "system",
@@ -104,14 +106,26 @@ Instructions: Build on your previous analysis/explanation of this content. If th
             content: getUserPrompt()
           }
         ],
-        max_tokens: settings.maxTokens || 2048,
+        max_tokens: getMaxTokensFromPromptOrSetting(mode, getSystemPrompt()) || settings.maxTokens || 2048,
         temperature: 0.5,
         stream: true
       }),
     })
 
     if (!response.ok) {
-      throw new Error(`OpenAI API Error: ${response.statusText}`)
+      let errorMessage = `OpenAI API Error (${response.status})`;
+      try {
+        const errorJson = await response.json();
+        const openAiError = errorJson?.error?.message;
+        if (openAiError) {
+          errorMessage = openAiError;
+        }
+      } catch (parseError) {
+        // Fallback to status text when JSON parsing fails
+        errorMessage = `OpenAI API Error: ${response.status} ${response.statusText || ''}`.trim();
+      }
+
+      throw new Error(errorMessage);
     }
 
     const reader = response.body?.getReader()

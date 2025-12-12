@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "LightUp - تعليقات الويب المدعومة بالذكاء الاصطناعي. الملخص، الترجمة، والمزيد",
+    "message": "LightUp - تعليقات ويب مدعومة بالذكاء الاصطناعي",
     "description": "Name of the extension"
   },
   "extensionDescription": {
@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "تكوين مُحدد الوضع (اختر ما يصل إلى 4)",
+    "message": "تكوين مُحدد الوضع (اختر ما يصل إلى 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

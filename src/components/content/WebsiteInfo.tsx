@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { WebsiteInfo } from "~utils/websiteInfo";
 import { getWebsiteInfo, isValidFavicon } from "~utils/websiteInfo";
@@ -45,6 +45,7 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
   const [faviconValid, setFaviconValid] = useState<boolean>(true);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isHover, setIsHover] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const { wordCount, readTimeLabel } = React.useMemo(() => {
     if (!selectedText) return { wordCount: 0, readTimeLabel: '<1 min' };
@@ -73,6 +74,7 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
     return { wordCount: words, readTimeLabel: `${label} read` };
   }, [selectedText]);
 
+
   useEffect(() => {
     const info = getWebsiteInfo();
     setWebsiteInfo(info);
@@ -87,18 +89,13 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
 
   if (!websiteInfo) return null;
 
-  // Truncate title if too long
-  const truncatedTitle = websiteInfo.title.length > 45 
-    ? `${websiteInfo.title.substring(0, 42)}...` 
-    : websiteInfo.title;
-
   const containerStyle: React.CSSProperties = {
     display: 'flex',
     alignItems: 'center',
     gap: '8px',
-    padding: '7px 10px',
+    padding: '0px 16px',
     backgroundColor: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgb(255 255 255 / 28%)',
-    borderRadius: '8px',
+    borderRadius: '20px',
     border: `1px solid ${currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '0000000f'}`,
     marginBottom: '13px',
     fontSize: fontSizes.sm,
@@ -117,15 +114,29 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
   const textStyle: React.CSSProperties = {
     fontSize: fontSizes.sm,
     fontWeight: 500,
+    display: 'block',
+    whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
+    lineHeight: 1.3,
+    maxWidth: '100%',
   };
 
   const hostnameStyle: React.CSSProperties = {
     fontSize: fontSizes.xs,
     opacity: 0.6,
     marginLeft: '4px',
+  };
+
+  const textContainerStyle: React.CSSProperties = {
+    flex: 1,
+    minWidth: 0,
+    lineHeight: '18px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    padding:12
   };
 
   // Skeleton placeholder styles
@@ -138,14 +149,11 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
 
   return (
     <motion.div
+      ref={containerRef}
       style={containerStyle}
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
-      onMouseEnter={() => setIsHover(true)}
-      onMouseLeave={() => setIsHover(false)}
-      onFocus={() => setIsHover(true)}
-      onBlur={() => setIsHover(false)}
       role="group"
       aria-label="Current page information"
     >
@@ -158,7 +166,7 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
             right: 0,
             height: '100%',
             width: '100%',
-            borderRadius: '8px',
+            borderRadius: containerStyle.borderRadius,
             overflow: 'hidden',
             pointerEvents: 'none'
           }}
@@ -173,6 +181,7 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
               right: 0,
               width: '100%',
               height: '100%',
+            
               background: currentTheme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'
             }}
           />
@@ -185,8 +194,9 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
             right: 0,
             height: '100%',
             width: '100%',
-            borderRadius: '8px',
+            borderRadius: containerStyle.borderRadius,
             overflow: 'hidden',
+            
             pointerEvents: 'none'
           }}
         >
@@ -230,7 +240,15 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
       )}
 
       {/* Website title and hostname */}
-      <div style={{ flex: 1, height: '38px', lineHeight: '18px'}}>
+      <div
+        style={textContainerStyle}
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+        onFocus={() => setIsHover(true)}
+        onBlur={() => setIsHover(false)}
+        tabIndex={0}
+        aria-label="Page title and reading statistics"
+      >
         {/* Loading placeholder */}
         {!isLoaded ? (
           <motion.div
@@ -268,7 +286,7 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
                 transition={{ duration: 0.2, ease: 'easeInOut', filter: {duration:0.1} }}
                 style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
               >
-                <span style={textStyle} title={websiteInfo.title}>{truncatedTitle}</span>
+                <span style={textStyle} title={websiteInfo.title}>{websiteInfo.title}</span>
                 <span style={hostnameStyle}>{websiteInfo.hostname}</span>
               </motion.div>
             )}
@@ -277,7 +295,14 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
       </div>
       
       {/* Action buttons - Language selector and Pin button */}
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center' }}>
+      <div 
+        style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '8px',
+          flexShrink: 0,
+        }}
+      >
         {/* Language Selector */}
         {onLanguageChange && (
           <LanguageSelectorOverlay

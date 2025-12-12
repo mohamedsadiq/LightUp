@@ -1,6 +1,6 @@
 /* Base styles for content */
 .lightup-content {
-  font-family: 'K2D', system-ui, -apple-system, sans-serif;
+  font-family: 'LightUpK2D', 'K2D', system-ui, -apple-system, sans-serif;
   line-height: 1.5;
   color: #1a1a1a;
   /* Performance optimizations */
@@ -296,7 +296,7 @@
 [data-plasmo-popup] input,
 [data-plasmo-popup] select,
 [data-plasmo-popup] textarea {
-  font-family: 'K2D', system-ui, -apple-system, sans-serif;
+  font-family: 'LightUpK2D', 'K2D', system-ui, -apple-system, sans-serif;
   font-size: 100%;
   line-height: 1.15;
   margin: 0;
@@ -344,29 +344,12 @@
   scroll-behavior: smooth;
   will-change: scroll-position;
   transform: translateZ(0); /* Force hardware acceleration */
-  
-  /* Custom scrollbar styling for better UX */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+  scrollbar-width: none; /* Hide scrollbar in Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar in legacy Edge/IE */
 }
 
 [data-plasmo-popup] .lu-scroll-container::-webkit-scrollbar {
-  width: 8px;
-}
-
-[data-plasmo-popup] .lu-scroll-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-[data-plasmo-popup] .lu-scroll-container::-webkit-scrollbar-thumb {
-  background-color: rgba(155, 155, 155, 0.5);
-  border-radius: 4px;
-  border: 2px solid transparent;
-  background-clip: content-box;
-}
-
-[data-plasmo-popup] .lu-scroll-container::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(155, 155, 155, 0.8);
+  display: none; /* Hide scrollbar in Chrome/Safari */
 }
 
 #plasmo-blur-overlay {

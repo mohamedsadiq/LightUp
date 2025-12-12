@@ -9,6 +9,20 @@ interface LoadingThinkingTextProps {
   onCycleComplete?: () => void;
 }
 
+// Inject gradient shift keyframes once
+const injectGradientKeyframes = () => {
+  const id = "lightup-gradient-keyframes";
+  if (document.getElementById(id)) return; // already added
+
+  const style = document.createElement("style");
+  style.id = id;
+  style.textContent = `@keyframes lightupGradientShift {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 100% 50%; }
+  }`;
+  document.head.appendChild(style);
+};
+
 export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycleComplete }: LoadingThinkingTextProps) => {
   const [currentWord, setCurrentWord] = useState(0);
   const [cycleCount, setCycleCount] = useState(0);
@@ -17,7 +31,12 @@ export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycl
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const completionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const fadeOutTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const words = ['Thinking', 'Generating'];
+  const words = ['Forming', 'Generating'];
+  
+  // Ensure keyframes are present
+  useEffect(() => {
+    injectGradientKeyframes();
+  }, []);
   
   useEffect(() => {
     // Clear any existing intervals/timeouts
@@ -123,7 +142,7 @@ export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycl
         marginBottom: '15px'
       }}
     >
-      <AnimatePresence mode="wait" initial={false}>
+      <AnimatePresence mode="wait">
         <motion.span
           key={`${currentWord}-${cycleCount}`}
           initial={{ 
@@ -138,7 +157,8 @@ export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycl
             filter: isFadingOut ? 'blur(12px)' : 'blur(0px)', 
             y: isFadingOut ? -8 : 0, 
             x: 0,
-            scale: isFadingOut ? 0.85 : 1
+            scale: isFadingOut ? 0.85 : 1,
+            backgroundPosition: ['0% 50%', '100% 50%']
           }}
           exit={{ 
             opacity: 0, 
@@ -151,7 +171,24 @@ export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycl
             duration: 0.3, 
             ease: 'easeInOut',
             filter: { duration: 0.15 },
-            scale: { duration: 0.2 }
+            scale: { duration: 0.2 },
+            backgroundPosition: {
+              duration: 2.5,
+              repeat: Infinity,
+              ease: 'linear'
+            }
+          }}
+          style={{
+            backgroundImage: currentTheme === "dark"
+              ? 'linear-gradient(90deg, #ffffff 0%, #505050 50%, #ffffff 100%)'
+              : 'linear-gradient(90deg, #c0c0c0 0%, #161616 50%, #c0c0c0 100%)',
+            backgroundSize: '200% 100%',
+            WebkitBackgroundClip: 'text',
+            backgroundClip: 'text',
+            color: 'transparent',
+            WebkitTextFillColor: 'transparent',
+            display: 'inline-block',
+            backgroundPosition: '0% 50%'
           }}
         >
           {words[currentWord]}

@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "LightUp - KI-gestützte Web-Annotationen. Zusammenfassung, Übersetzung und mehr",
+    "message": "LightUp - KI-gestützte Web-Annotationen",
     "description": "Name of the extension"
   },
   "extensionDescription": {
@@ -104,11 +104,11 @@
     "description": "Description for the 'Show Selected Text' toggle"
   },
   "showInstantAIButtonLabel": {
-    "message": "Schaltfläche „Sofortige KI“ anzeigen",
+    "message": "Schaltfläche \"Sofortige KI\" anzeigen",
     "description": "Label for show instant AI button toggle"
   },
   "showInstantAIButtonDesc": {
-    "message": "Eine schwebende Schaltfläche „Sofortige KI“ hinzufügen, mit der die gesamte Seite mit einem Klick zusammengefasst oder erklärt werden kann",
+    "message": "Eine schwebende Schaltfläche \"Sofortige KI\" hinzufügen, mit der die gesamte Seite mit einem Klick zusammengefasst oder erklärt werden kann",
     "description": "Description for show instant AI button toggle"
   },
   "distractionFreeModeLabel": {
@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Moduswähler konfigurieren (bis zu 4 auswählen)",
+    "message": "Moduswähler konfigurieren (bis zu 3 auswählen)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

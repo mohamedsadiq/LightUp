@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import type { MotionStyle } from "framer-motion"
 import MarkdownText from "~components/content/MarkdownText"
 import { LoadingThinkingText } from "../loading/LoadingThinkingText"
+import { textVariants } from "~contents/variants"
 import type { FontSizes } from "../../styles"
 import { SharingMenu } from "../common/SharingMenu"
 

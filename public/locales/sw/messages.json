@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "LightUp - Maelezo ya Tovuti Yenye Nguvu ya Akili Bandia. muhtasari, tafsiri, na zaidi",
+    "message": "LightUp - Maelezo ya Tovuti Yenye Nguvu ya Akili Bandia",
     "description": "Name of the extension"
   },
   "extensionDescription": {
@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Sanidi Kichaguzi cha Njia (Chagua hadi 4)",
+    "message": "Sanidi Kichaguzi cha Njia (Chagua hadi 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

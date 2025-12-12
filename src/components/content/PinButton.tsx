@@ -38,7 +38,7 @@ export const PinButton: React.FC<PinButtonProps> = ({
         marginTop: '2px',
         marginRight: '8px',
         color: iconColor,
-        opacity: isPinned ? 1 : 0.8
+        opacity: isPinned ? 1 : 0.5
       }}
       animate={{ rotate: isPinned ? -44 : 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 20 }}

@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Konfigurer tilstandsvælger (Vælg op til 4)",
+    "message": "Konfigurer tilstandsvælger (Vælg op til 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

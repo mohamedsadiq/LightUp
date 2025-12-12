@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "LightUp - adnotacje sieciowe wspomagane przez AI. Podsumowanie, tłumaczenie i więcej",
+    "message": "LightUp - adnotacje sieciowe wspomagane przez AI",
     "description": "Name of the extension"
   },
   "extensionDescription": {
@@ -104,11 +104,11 @@
     "description": "Description for the 'Show Selected Text' toggle"
   },
   "showInstantAIButtonLabel": {
-    "message": "Pokaż przycisk „Instant AI”",
+    "message": "Pokaż przycisk \"Instant AI\"",
     "description": "Label for show instant AI button toggle"
   },
   "showInstantAIButtonDesc": {
-    "message": "Dodaj pływający przycisk „Instant AI”, który jednym kliknięciem podsumowuje lub wyjaśnia całą stronę",
+    "message": "Dodaj pływający przycisk \"Instant AI\", który jednym kliknięciem podsumowuje lub wyjaśnia całą stronę",
     "description": "Description for show instant AI button toggle"
   },
   "distractionFreeModeLabel": {
@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Konfiguruj selektor trybu (wybierz do 4)",
+    "message": "Konfiguruj selektor trybu (wybierz do 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

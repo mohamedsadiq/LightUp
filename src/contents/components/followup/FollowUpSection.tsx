@@ -116,7 +116,7 @@ export const FollowUpSection = ({
             // Keep the search section visible while the Q&A list scrolls
             style={{
               position: 'sticky',
-              bottom: -21,
+              bottom: 0,
               zIndex: 15, // ensure it stays above scrolling text
               // Use the popup background so the bar looks seamless
               // background: themedStyles.popup?.background || (normalizedTheme === 'dark' ? '#1e1e1e' : '#ffffff'),

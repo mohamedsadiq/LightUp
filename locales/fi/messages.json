@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "LightUp - AI-käyttöiset verkkoannotatiit. Yhteenveto, käännös ja paljon muuta",
+    "message": "LightUp - AI-käyttöiset verkkoannotaatiot",
     "description": "Name of the extension"
   },
   "extensionDescription": {
@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Määritä tilanvalitsin (valitse enintään 4)",
+    "message": "Määritä tilanvalitsin (valitse enintään 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

@@ -9,11 +9,19 @@ export type FeedbackType = "like" | "dislike"
 
 // Grok model types
 export type GrokModel =
-  | "grok-3"            // Standard Grok-3 model
-  | "grok-3-mini"       // Lightweight variant
-  | "grok-3-fast"       // Latency-optimised Grok-3
-  | "grok-3-mini-fast" // Mini + fast variant
-  | "grok-2-1212";     // Latest Grok-2 build
+  | "grok-4-1-fast-reasoning"   // Latest reasoning-focused Grok (Nov 2025 announcement)
+  | "grok-4-1-fast-non-reasoning" // Companion non-reasoning variant
+  | "grok-4-fast-reasoning"     // Cost-efficient Grok 4 reasoning tier
+  | "grok-4-fast-non-reasoning" // Cost-efficient Grok 4 non-reasoning tier
+  | "grok-4"                    // Flagship Grok 4 model
+  | "grok-code-fast-1"          // Grok code-specialised fast model
+  | "grok-3"                    // Legacy Grok 3 (still available via API)
+  | "grok-3-mini"               // Cost-efficient Grok 3 variant
+  | "grok-3-fast"               // Latency-optimised Grok 3
+  | "grok-3-mini-fast"          // Mini + fast Grok 3
+  | "grok-2-image-1212"         // Image generation endpoint
+  | "grok-4-0709"               // Legacy Grok 4 identifier kept for backwards compatibility
+  | "grok-2-1212";              // Legacy Grok 2 identifier kept for compatibility
 
 // Local model types
 export type LocalModel = 
@@ -27,6 +35,15 @@ export type LocalModel =
   | "phi-2"
   | "neural-chat-7b-v3-1"
   | "openchat-3.5";
+
+// OpenAI model types
+export type OpenAIModel =
+  | "gpt-4o"          // Omni flagship model (text + image input)
+  | "gpt-4.1"         // Smartest non-reasoning model with 1M context
+  | "gpt-4o-mini"     // Cost-effective GPT-4o variant
+  | "o3-mini"         // Latest small reasoning model (Jan 2025 snapshot)
+  | "o1"              // Deep reasoning model (o-series)
+  | "gpt-4-turbo";    // Legacy GPT-4 Turbo kept for backwards compatibility
 
 // Rate limit interface
 export interface RateLimit {
@@ -57,8 +74,9 @@ export interface Settings {
   apiKey?: string      // Required for OpenAI
   geminiApiKey?: string // Required for Gemini
   xaiApiKey?: string   // Required for xAI
-  geminiModel?: string
-  grokModel?: string  // Add Grok model selection
+  geminiModel?: GeminiModel
+  grokModel?: GrokModel  // Add Grok model selection
+  openaiModel?: OpenAIModel
   localModel?: string
   basicModel?: "gemini-2.0-flash-lite-preview-02-05" // Only one model for basic version
   
@@ -66,7 +84,7 @@ export interface Settings {
   mode?: Mode
   temperature?: number
   customPrompt?: string
-  preferredModes?: Mode[]  // Array of modes to display in the mode selector (max 4)
+  preferredModes?: Mode[]  // Array of modes to display in the mode selector (max 3)
   customPrompts?: CustomPrompts // Custom prompt templates for each mode
   /** @deprecated Extended conversations are now enabled by default */
   extendedConversations?: boolean
@@ -89,6 +107,10 @@ export interface Settings {
     showTextSelectionButton: boolean // Controls visibility of the text selection button
     showWebsiteInfo?: boolean // Controls visibility of website info (favicon and title)
     sidebarPinned?: boolean // Controls whether sidebar is pinned to the page (embedded) or overlay
+    // Word-by-word streaming settings
+    enableWordByWordStreaming?: boolean // Enable/disable Perplexity-style word-by-word streaming
+    streamingSpeed?: "slow" | "medium" | "fast" | "custom" // Predefined speed settings
+    customWordsPerSecond?: number // Custom words per second (used when streamingSpeed is "custom")
   }
   translationSettings?: {
     fromLanguage: string
@@ -165,9 +187,10 @@ export interface TranslationSettings {
 }
 
 export type GeminiModel = 
-  | "gemini-1.5-pro" 
-  | "gemini-1.5-flash" 
-  | "gemini-1.5-flash-8b"
-  | "gemini-2.0-flash"
-  | "gemini-2.0-flash-lite-preview-02-05"
-  | "gemini-2.0-flash-thinking-exp-01-21"; 
+  | "gemini-2.0-flash"            // Recommended default - fast and reliable
+  | "gemini-2.5-flash"            // Latest gen flash model (stable)
+  | "gemini-2.5-flash-lite"       // Cost-efficient 2.5 flash-lite tier
+  | "gemini-2.5-pro"              // Advanced reasoning model
+  | "gemini-2.0-flash-lite"       // Previous-gen lite variant
+  | "gemini-3-pro-preview"        // Preview release of Gemini 3 Pro
+  | "gemini-3-pro";               // Legacy alias kept for migration handling

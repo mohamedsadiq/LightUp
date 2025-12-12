@@ -212,11 +212,11 @@
     "description": "Button text for reset actions"
   },
   "askAnythingAction": {
-    "message": "Ask Anything",
-    "description": "Action to ask anything"
+    "message": "Chat with Page",
+    "description": "Action to chat with page content"
   },
   "configureModeSelector": {
-    "message": "Configure Mode Selector (Choose up to 4)",
+    "message": "Configure Mode Selector (Choose up to 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

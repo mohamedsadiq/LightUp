@@ -86,6 +86,7 @@ import { ConnectionStatus } from "./components/status/ConnectionStatus"
 import { PopupLayoutContainer } from "./components/layout/PopupLayoutContainer"
 import { FollowUpSection } from "./components/followup/FollowUpSection"
 import { SharingMenu } from "./components/common/SharingMenu"
+import PageContextWelcome from "./components/common/PageContextWelcome"
 
 // Add message listener for settings updates
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -259,13 +260,147 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     sendResponse({ success: true });
     return true;
   }
+  
+  if (message.type === "OPEN_FREE_POPUP_WITH_CONTEXT") {
+    // Dispatch a custom event to open the popup in free mode with page context
+    // and include any current text selection so that the free-mode input can be pre-populated.
+    const currentSelection = window.getSelection()?.toString()?.trim() || "";
+    const event = new CustomEvent('openFreePopupWithContext', {
+      detail: {
+        ...message.context,
+        selectedText: currentSelection
+      }
+    });
+    window.dispatchEvent(event);
+    
+    // Send response to confirm receipt
+    sendResponse({ success: true });
+    return true;
+  }
 });
 
 // Plasmo function to inject CSS into the Shadow DOM
 export const getStyle = () => {
   const style = document.createElement("style")
-  // Combine all CSS text imports
-  style.textContent = cssText + contentStyleCssText + tailwindCssText + fontCssText
+
+  // Define local @font-face rules for LightUp's K2D font using bundled font files
+  const k2dFontCss = `
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-Thin.ttf")}') format('truetype');
+      font-weight: 100;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ExtraLight.ttf")}') format('truetype');
+      font-weight: 200;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-Light.ttf")}') format('truetype');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-Regular.ttf")}') format('truetype');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-Medium.ttf")}') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-SemiBold.ttf")}') format('truetype');
+      font-weight: 600;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-Bold.ttf")}') format('truetype');
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ExtraBold.ttf")}') format('truetype');
+      font-weight: 800;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ThinItalic.ttf")}') format('truetype');
+      font-weight: 100;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ExtraLightItalic.ttf")}') format('truetype');
+      font-weight: 200;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-LightItalic.ttf")}') format('truetype');
+      font-weight: 300;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-Italic.ttf")}') format('truetype');
+      font-weight: 400;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-MediumItalic.ttf")}') format('truetype');
+      font-weight: 500;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-SemiBoldItalic.ttf")}') format('truetype');
+      font-weight: 600;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-BoldItalic.ttf")}') format('truetype');
+      font-weight: 700;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ExtraBoldItalic.ttf")}') format('truetype');
+      font-weight: 800;
+      font-style: italic;
+      font-display: swap;
+    }
+  `;
+
+  // Combine local font faces first so they are available to the rest of our styles
+  style.textContent = k2dFontCss + cssText + contentStyleCssText + tailwindCssText + fontCssText
   return style
 }
 
@@ -321,7 +456,7 @@ if (isYouTube) {
      html[data-youtube-domain] [data-plasmo-popup],
      body [data-plasmo-popup] {
        font-size: 16px !important; /* Use absolute pixels instead of rem */
-       font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+       font-family: 'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
        line-height: 1.5 !important;
        /* Create a new font-size context to isolate from YouTube's CSS */
        zoom: 1 !important;
@@ -335,7 +470,7 @@ if (isYouTube) {
          /* Force all elements within the popup to use pixel-based sizing */
      html[data-youtube-domain] [data-plasmo-popup] *,
      body [data-plasmo-popup] * {
-       font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+       font-family: 'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
        line-height: 1.5 !important;
      }
      
@@ -439,7 +574,7 @@ if (isYouTube) {
     if (popupElement instanceof HTMLElement) {
       // Force re-apply YouTube font fixes if needed
       popupElement.style.fontSize = '16px';
-      popupElement.style.fontFamily = "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+      popupElement.style.fontFamily = "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
       
       // Ensure mode selector buttons have correct size
       const modeButtons = popupElement.querySelectorAll('button');
@@ -930,7 +1065,10 @@ ${'-'.repeat(50)}`;
           context: regenTrimmedContext,
           pageContext: regenTrimmedContext,
           mode: mode,
-          settings: settings,
+          settings: {
+            ...settings,
+            aiResponseLanguage: aiResponseLanguage
+          },
           isFollowUp: false,
           id: Date.now(),
           connectionId
@@ -1007,7 +1145,8 @@ ${'-'.repeat(50)}`;
           mode: selectedMode,
           settings: {
             ...settings,
-            translationSettings
+            translationSettings,
+            aiResponseLanguage: aiResponseLanguage
           },
           connectionId,
           id: Date.now()
@@ -1042,7 +1181,9 @@ ${'-'.repeat(50)}`;
           context: selectedText,
           pageContext: "",
           mode: mode,
-          settings: latestSettings || settings, // Use freshly loaded settings
+          settings: Object.assign({}, latestSettings || settings, {
+            aiResponseLanguage: aiResponseLanguage
+          }),
           isFollowUp: true,
           id: id,
           connectionId
@@ -1076,6 +1217,34 @@ ${'-'.repeat(50)}`;
     setActiveAnswerId,
     setIsAskingFollowUp
   } = useFollowUp();
+
+  // Pre-populate the input field in free mode with any highlighted text that was
+  // included in the openFreePopupWithContext event.
+  useEffect(() => {
+    const handlePrefillQuestion = (event: CustomEvent) => {
+      if (event.detail?.selectedText) {
+        const sel = String(event.detail.selectedText).trim();
+        if (sel.length) {
+          // Wrap the text in quotes to mimic ChatGPT's style shown in the mock-up
+          setFollowUpQuestion(`"${sel}"`);
+          // Focus the textarea after a small delay to ensure it is mounted
+          setTimeout(() => {
+            try {
+              const textarea = document.querySelector('[data-plasmo-popup] textarea') as HTMLTextAreaElement | null;
+              textarea?.focus();
+            } catch {
+              /* no-op */
+            }
+          }, 50);
+        }
+      }
+    };
+
+    window.addEventListener('openFreePopupWithContext', handlePrefillQuestion as EventListener);
+    return () => {
+      window.removeEventListener('openFreePopupWithContext', handlePrefillQuestion as EventListener);
+    };
+  }, [setFollowUpQuestion]);
 
   const {
     port,
@@ -1141,6 +1310,30 @@ ${'-'.repeat(50)}`;
   // ----- Time-based fallback progress so the bar moves right away -----
   const [fallbackProgress, setFallbackProgress] = useState(0);
   const [hasFallbackStarted, setHasFallbackStarted] = useState(false);
+  const lastToastMessageRef = useRef<string | null>(null);
+  const friendlyError = useMemo(() => {
+    if (!error) return null;
+
+    const lower = error.toLowerCase();
+    const isBasic = (settings?.modelType || "basic") === "basic";
+    const hasGeminiKey = Boolean(settings?.geminiApiKey);
+
+    if (isBasic && (lower.includes("quota") || lower.includes("rate limit") || lower.includes("429") || lower.includes("limit exceeded"))) {
+      return "Basic (free) quota is exhausted. Add your own Gemini/OpenAI key in Settings or wait a bit, then retry.";
+    }
+
+    if ((lower.includes("authentication failed") || lower.includes("invalid configuration") || lower.includes("api key")) && !hasGeminiKey) {
+      return "Gemini is selected but no API key is set. Add your Gemini API key in Settings and try again.";
+    }
+
+    return error;
+  }, [error, settings?.geminiApiKey, settings?.modelType]);
+
+  useEffect(() => {
+    if (!friendlyError || friendlyError === lastToastMessageRef.current) return;
+    lastToastMessageRef.current = friendlyError;
+    showToast(friendlyError);
+  }, [friendlyError, showToast]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | undefined;
@@ -1290,7 +1483,10 @@ ${'-'.repeat(50)}`;
           context: mode === "free" ? "" : selectedText,
           conversationContext, // Add conversation context
           mode: mode,
-          settings: settings,
+          settings: {
+            ...settings,
+            aiResponseLanguage: aiResponseLanguage
+          },
           isFollowUp: true,
           id: newId,
           connectionId
@@ -1348,6 +1544,26 @@ ${'-'.repeat(50)}`;
       setIsAskingFollowUp(false);
       setError('Failed to process question. Please try again.');
     }
+  };
+
+  // Handle question clicks from PageContextWelcome suggestions
+  const handleContextQuestionClick = async (question: string) => {
+    // Set the question as selected text and process it
+    setSelectedText(question);
+    
+    // Get page content for context
+    const pageContent = getPageContent(mode);
+    
+    // Create contextual prompt that includes both the page content and the user's question
+    const contextualPrompt = `Page content:
+${pageContent}
+
+User's question: ${question}
+
+Please provide a helpful and relevant answer based on the page content above.`;
+
+    // Process the question with page context
+    await handleSelectionBubbleProcess(contextualPrompt, mode);
   };
 
   // Get themed styles - memoized for better performance
@@ -1541,7 +1757,9 @@ ${'-'.repeat(50)}`;
                 context: "",
                 pageContext: "",
                 mode: mode,
-                settings: latestSettings || settings, // Use freshly loaded settings
+                settings: Object.assign({}, latestSettings || settings, {
+                  aiResponseLanguage: aiResponseLanguage
+                }),
                 isFollowUp: false,
                 id: Date.now(),
                 connectionId
@@ -1597,7 +1815,9 @@ ${'-'.repeat(50)}`;
           context: "",
           pageContext: "",
           mode: mode,
-          settings: latestSettings || settings, // Use freshly loaded settings to ensure custom prompts are included
+          settings: Object.assign({}, latestSettings || settings, {
+            aiResponseLanguage: aiResponseLanguage
+          }),
           isFollowUp: false,
           id: Date.now(),
           connectionId
@@ -1634,7 +1854,13 @@ ${'-'.repeat(50)}`;
         />
         <div style={themedStyles.buttonContainer}>
           <motion.button 
-            onClick={handleClose}
+            onClick={() => {
+              if (isPinned) {
+                // If the sidebar is pinned, unpin it first so the popup can be fully closed
+                handleTogglePin();
+              }
+              handleClose();
+            }}
             style={{
               ...themedStyles.button,
               marginTop: '2px',
@@ -1674,52 +1900,14 @@ ${'-'.repeat(50)}`;
         </p>
       )}
 
-      {/* Welcome Message for Free Mode */}
-      {mode === "free" && !streamingText && !error && followUpQAs.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          style={{
-            ...themedStyles.explanation,
-            textAlign: 'center',
-            padding: '20px',
-            marginBottom: '20px',
-            // background: currentTheme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
-            borderRadius: '12px',
-            border: `1px solid ${currentTheme === "dark" ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}`,
-          }}
-        >
-          <motion.div
-            style={{
-              fontSize: fontSizes.welcome.emoji,
-              marginBottom: '10px',
-              color: currentTheme === "dark" ? '#fff' : '#000'
-            }}
-          >
-            👋
-          </motion.div>
-          <motion.h2
-            style={{
-              fontSize: fontSizes.welcome.heading,
-              fontWeight: 600,
-              marginBottom: '8px',
-              color: currentTheme === "dark" ? '#fff' : '#000'
-            }}
-          >
-            Welcome to LightUp
-          </motion.h2>
-          <motion.p
-            style={{
-              fontSize: fontSizes.welcome.description,
-              color: currentTheme === "dark" ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.7)',
-              lineHeight: '1.5'
-            }}
-          >
-            Ask me anything! I'm here to help with any questions you have.
-          </motion.p>
-        </motion.div>
-      )}
+      {/* Enhanced Welcome Message for Free Mode with Page Context */}
+      <PageContextWelcome
+        currentTheme={normalizedTheme}
+        fontSizes={fontSizes}
+        themedStyles={themedStyles}
+        onQuestionClick={handleContextQuestionClick}
+        isVisible={mode === "free" && !streamingText && !error && followUpQAs.length === 0}
+      />
 
       {/* Guidance Message for Other Modes */}
       {mode !== "free" && !selectedText && !streamingText && !error && followUpQAs.length === 0 && (
@@ -1818,10 +2006,19 @@ ${'-'.repeat(50)}`;
                       >
                         <MarkdownText 
                           text={streamingText} 
+                          isStreaming={isLoading}
                           useReferences={(settings as any).enableReferences || false} 
                           theme={currentTheme === "system" ? "light" : currentTheme}
                           fontSize={settings?.customization?.fontSize}
                           fontSizes={fontSizes}
+                          enableWordByWord={settings?.customization?.enableWordByWordStreaming !== false}
+                          wordsPerSecond={
+                            settings?.customization?.streamingSpeed === "slow" ? 4 :
+                            settings?.customization?.streamingSpeed === "medium" ? 8 :
+                            settings?.customization?.streamingSpeed === "fast" ? 12 :
+                            settings?.customization?.streamingSpeed === "custom" ? 
+                              (settings?.customization?.customWordsPerSecond || 8) : 8
+                          }
                         />
                       </motion.div>
                     </div>

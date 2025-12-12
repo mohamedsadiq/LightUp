@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Konfigurovať výber režimu (vyberte až 4)",
+    "message": "Konfigurovať výber režimu (vyberte až 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

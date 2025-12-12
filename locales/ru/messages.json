@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Настроить селектор режимов (выберите до 4)",
+    "message": "Настроить селектор режимов (выберите до 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

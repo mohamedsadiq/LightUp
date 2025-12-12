@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Saita Zaɓin Yanayin (Zaɓi har zuwa 4)",
+    "message": "Saita Zaɓin Yanayin (Zaɓi har zuwa 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Konfigurasi Pemilih Mode (Pilih hingga 4)",
+    "message": "Konfigurasi Pemilih Mode (Pilih hingga 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

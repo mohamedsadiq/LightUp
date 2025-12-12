@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "設定模式選擇器（最多選擇 4 個）",
+    "message": "設定模式選擇器（最多選擇 3 個）",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

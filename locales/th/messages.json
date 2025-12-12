@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "กำหนดค่าตัวเลือกโหมด (เลือกได้สูงสุด 4 โหมด)",
+    "message": "กำหนดค่าตัวเลือกโหมด (เลือกได้สูงสุด 3 โหมด)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

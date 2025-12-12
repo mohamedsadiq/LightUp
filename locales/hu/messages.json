@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "LightUp – AI által támogatott webes annotációk. Összegzés, fordítás és még sok más",
+    "message": "LightUp – AI által támogatott webes annotációk",
     "description": "Name of the extension"
   },
   "extensionDescription": {
@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Módválasztó konfigurálása (Legfeljebb 4 választható)",
+    "message": "Módválasztó konfigurálása (Legfeljebb 3 választható)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

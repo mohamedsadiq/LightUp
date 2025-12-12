@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "லைட்அப் - AI சக்திவாய்ந்த வலை குறிப்புகள். சுருக்கம், மொழிபெயர்ப்பு மற்றும் மேலும்",
+    "message": "LightUp - AI வலை குறிப்புகள்",
     "description": "Name of the extension"
   },
   "extensionDescription": {
@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "முறை தேர்வு செலக்டரை உள்ளமை (4 வரை தேர்வு செய்யவும்)",
+    "message": "முறை தேர்வு செலக்டரை உள்ளமை (3 வரை தேர்வு செய்யவும்)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

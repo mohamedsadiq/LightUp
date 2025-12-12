@@ -4,7 +4,7 @@
 /* Scope all styles to our extension's components */
 [data-plasmo-popup] {
   /* Add any global styles for our popup here */
-  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 /* Ensure our components don't inherit styles from the webpage */

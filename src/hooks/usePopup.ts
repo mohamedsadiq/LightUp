@@ -197,15 +197,17 @@ export const usePopup = (
         const storage = new Storage();
         const translationSettings = await storage.get("translationSettings");
 
+        const settingsToSend = {
+          ...settings,
+          translationSettings
+        };
+
         port.postMessage({
           type: "PROCESS_TEXT",
           payload: {
             text,
             mode,
-            settings: {
-              ...settings,
-              translationSettings
-            },
+            settings: settingsToSend,
             connectionId,
             id: Date.now()
           }
@@ -414,10 +416,63 @@ export const usePopup = (
       storage.set("mode", "free").catch(console.error);
     };
     
+    const handleOpenFreePopupWithContext = (event: CustomEvent) => {
+      // Set mode to free
+      setMode("free");
+      
+      // Clear any existing content
+      setStreamingText?.("");
+      setFollowUpQAs?.([]);
+      setError?.(null);
+      setIsLoading?.(false);
+      setSelectedText("");
+      
+      // Position the popup based on the layout mode
+      if (settings?.customization?.layoutMode === "sidebar") {
+        // Position at the right side of the screen
+        setPosition({ x: window.innerWidth - 400, y: 0 });
+      } else if (settings?.customization?.layoutMode === "centered") {
+        // Position in the center of the screen
+        setPosition({ x: (window.innerWidth / 2) - 250, y: (window.innerHeight / 2) - 200 });
+      } else {
+        // Default floating mode - position near the center
+        if (settings?.customization?.layoutMode === "floating") {
+          const { top, left } = calculateFloatingPosition(
+            window.innerWidth / 2, 
+            window.innerHeight / 2,
+            { width: 350, height: 460 },
+            { margin: settings?.customization?.popupMargin || 8 }
+          );
+          setPosition({ x: left, y: top });
+        } else {
+          const { top, left } = calculatePosition(window.innerWidth / 2, window.innerHeight / 2);
+          setPosition({ x: left, y: top });
+        }
+      }
+      
+      // Show the popup
+      setIsVisible(true);
+      
+      // Save the mode to storage
+      const storage = new Storage();
+      storage.set("mode", "free").catch(console.error);
+      
+      // Log the page context for debugging
+      if (event.detail) {
+        console.log('🚀 Free mode opened with page context:', {
+          title: event.detail.pageTitle,
+          url: event.detail.pageUrl,
+          contentLength: event.detail.pageContent?.length || 0
+        });
+      }
+    };
+
     window.addEventListener('openFreePopup', handleOpenFreePopup);
+    window.addEventListener('openFreePopupWithContext', handleOpenFreePopupWithContext as EventListener);
     
     return () => {
       window.removeEventListener('openFreePopup', handleOpenFreePopup);
+      window.removeEventListener('openFreePopupWithContext', handleOpenFreePopupWithContext as EventListener);
     };
   }, [settings, setStreamingText, setFollowUpQAs, setIsLoading, setError]);
 

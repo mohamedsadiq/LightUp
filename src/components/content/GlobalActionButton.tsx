@@ -73,26 +73,63 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
   }, []);
   
   const handleClick = () => {
-    // Extract the main content using Readability-based content extractor with mode-aware optimization
-    const extractedContent = getPageContent(mode);
-    
-    // Check if debug mode is enabled
-    const storage = new Storage();
-    storage.get("settings").then((value) => {
-      try {
-        // Parse the value as Settings object if it's a string
-        const settings = typeof value === 'string' ? JSON.parse(value) as Settings : value as Settings;
-        
-        // If debug mode is enabled in settings, show the comparison popup
-        if (settings?.debug?.enableContentExtractionDebug) {
-          debugContentExtraction();
+    // For free mode, we want to show the popup with page context awareness
+    // without immediately sending content to AI - let the user choose what to ask
+    if (mode === "free") {
+      // Extract page content for context but don't immediately process it
+      const extractedContent = getPageContent(mode);
+      
+      // Create an event to show the free mode popup with page context
+      // Also include any currently highlighted text so the input field can be pre-populated.
+      const currentSelection = window.getSelection()?.toString()?.trim() || "";
+      const event = new CustomEvent('openFreePopupWithContext', {
+        detail: {
+          pageContent: extractedContent,
+          pageTitle: document.title,
+          pageUrl: window.location.href,
+          // Pass along the highlighted text (if any) so that the free-mode search can hold it.
+          selectedText: currentSelection
         }
-      } catch (err) {
-        console.error("Error parsing settings:", err);
-      }
-    });
-    
-    onProcess(extractedContent);
+      });
+      window.dispatchEvent(event);
+      
+      // Check if debug mode is enabled
+      const storage = new Storage();
+      storage.get("settings").then((value) => {
+        try {
+          // Parse the value as Settings object if it's a string
+          const settings = typeof value === 'string' ? JSON.parse(value) as Settings : value as Settings;
+          
+          // If debug mode is enabled in settings, show the comparison popup
+          if (settings?.debug?.enableContentExtractionDebug) {
+            debugContentExtraction();
+          }
+        } catch (err) {
+          console.error("Error parsing settings:", err);
+        }
+      });
+    } else {
+      // For other modes, extract and immediately process the content
+      const extractedContent = getPageContent(mode);
+      
+      // Check if debug mode is enabled
+      const storage = new Storage();
+      storage.get("settings").then((value) => {
+        try {
+          // Parse the value as Settings object if it's a string
+          const settings = typeof value === 'string' ? JSON.parse(value) as Settings : value as Settings;
+          
+          // If debug mode is enabled in settings, show the comparison popup
+          if (settings?.debug?.enableContentExtractionDebug) {
+            debugContentExtraction();
+          }
+        } catch (err) {
+          console.error("Error parsing settings:", err);
+        }
+      });
+      
+      onProcess(extractedContent);
+    }
   };
   
   // Add Option+Click handler to show debug info regardless of settings

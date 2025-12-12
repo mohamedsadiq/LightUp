@@ -13,7 +13,7 @@ interface PopupModeSelectorProps {
 }
 
 // Default modes if user hasn't configured any
-const DEFAULT_MODES: Mode[] = ["summarize", "analyze", "explain", "translate"]
+const DEFAULT_MODES: Mode[] = ["explain", "summarize", "translate"]
 
 // All available modes
 const ALL_MODES: Mode[] = ["summarize", "analyze", "explain", "translate", "free"]
@@ -45,8 +45,8 @@ export const PopupModeSelector = ({
         }
         
         if (savedPreferredModes && savedPreferredModes.length > 0) {
-          // Limit to 4 modes
-          setPreferredModes(savedPreferredModes.slice(0, 4))
+          // Limit to 3 modes
+          setPreferredModes(savedPreferredModes.slice(0, 3))
         }
         
         // Load translation settings
@@ -71,8 +71,8 @@ export const PopupModeSelector = ({
       const { preferredModes: newPreferredModes } = event.detail;
       
       if (newPreferredModes && newPreferredModes.length > 0) {
-        // Limit to 4 modes
-        setPreferredModes(newPreferredModes.slice(0, 4));
+        // Limit to 3 modes
+        setPreferredModes(newPreferredModes.slice(0, 3));
       }
     };
     
@@ -91,7 +91,7 @@ export const PopupModeSelector = ({
     }
   }
 
-  // Use the preferred modes or default to the first 4 modes
+  // Use the preferred modes or default to the DEFAULT_MODES list
   const displayModes = preferredModes.length > 0 ? preferredModes : DEFAULT_MODES
 
   // Dynamic styles with YouTube compensation

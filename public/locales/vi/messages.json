@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Cấu hình trình chọn chế độ (Chọn tối đa 4)",
+    "message": "Cấu hình trình chọn chế độ (Chọn tối đa 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

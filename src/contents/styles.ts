@@ -37,7 +37,7 @@ export const getStyles = (
     borderRadius: 13,
     boxShadow: "0 2px 20px rgba(0,0,0,0.15)",
     maxWidth: 500,
-    fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     // maxHeight: "400px",
     overflow: "auto",
     fontSize: fontSizes.base,
@@ -63,7 +63,7 @@ export const getStyles = (
     background: "none",
     cursor: "pointer",
     padding: 4,
-    fontFamily: "'K2D', sans-serif",
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     fontSize: fontSizes.button
   },
   text: {
@@ -71,7 +71,7 @@ export const getStyles = (
     lineHeight: 1.5,
     margin: "0 0 16px 0",
     color: THEME_COLORS[theme].text,
-    fontFamily: "'K2D', sans-serif"
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
   },
   explanation: {
     fontSize: fontSizes.base,
@@ -80,7 +80,7 @@ export const getStyles = (
     // backgroundColor: THEME_COLORS[theme].popupBackground,
     padding: "5px 9px",
     borderRadius: 8,
-    fontFamily: "'K2D', sans-serif",
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     direction: textDirection,
     textAlign: textDirection === "rtl" ? "right" : "left" as const,
     paddingTop: 13
@@ -97,10 +97,10 @@ export const getStyles = (
     color: 'red',
     fontSize: fontSizes.error,
     marginTop: 8,
-    fontFamily: "'K2D', sans-serif"
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
   },
   loadingText: {
-    fontFamily: "'K2D', sans-serif",
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     fontSize: fontSizes.loading,
     color: THEME_COLORS[theme].secondaryText,
     display: 'flex',
@@ -112,7 +112,7 @@ export const getStyles = (
     display: "flex",
     alignItems: "center",
     gap: 8,
-    fontFamily: "'K2D', sans-serif",
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     backgroundColor: theme === "light" ? "#FFFFFF" : THEME_COLORS[theme].buttonBackground,
     padding: "11px 14px",
     borderRadius: "31px",
@@ -165,7 +165,7 @@ export const getStyles = (
     padding: "8px 12px",
     border: "none",
     fontSize: fontSizes.input,
-    fontFamily: "'K2D', sans-serif",
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     backgroundColor: "transparent",
     color: THEME_COLORS[theme].text,
     outline: "none",
@@ -194,7 +194,7 @@ export const getStyles = (
     marginLeft: 'auto',
     marginBottom: '8px',
     fontSize: fontSizes.base,
-    fontFamily: "'K2D', sans-serif",
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
     direction: textDirection,
     textAlign: textDirection === "rtl" ? "right" : "left" as const,
@@ -211,7 +211,7 @@ export const getStyles = (
     marginRight: 'auto',
     fontSize: fontSizes.base,
     lineHeight: 1.6,
-    fontFamily: "'K2D', sans-serif",
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     direction: textDirection,
     textAlign: textDirection === "rtl" ? "right" : "left" as const,
     transform: 'translateZ(0)',
@@ -245,7 +245,7 @@ export const getStyles = (
     padding: 20,
     paddingBottom: 0,
     paddingTop: 0,
-    fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     overflow: 'auto',
     fontSize: fontSizes.base,
     zIndex: 3147483645,
@@ -281,7 +281,7 @@ export const getStyles = (
     border: `1px solid ${THEME_COLORS[theme].border}`,
     boxShadow: "0 8px 30px rgba(0,0,0,0.15)",
     padding: '0 25px',
-    fontFamily: "'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     overflow: 'auto',
     fontSize: fontSizes.base,
     zIndex: Z_INDEX.CENTERED_POPUP,

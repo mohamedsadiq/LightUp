@@ -1,5 +1,5 @@
 import type { ProcessTextRequest } from "~types/messages"
-import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS } from "../../utils/constants"
+import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS, getMaxTokensFromPromptOrSetting } from "../../utils/constants"
 import { getSelectedLocale } from "../../utils/i18n"
 
 // Enhanced error types for better error handling
@@ -183,12 +183,17 @@ Instructions: Build on your previous analysis/explanation of this content. If th
     ];
 
     // Enhanced request parameters with latest API features
+    // Use selected Grok model, defaulting to latest grok-4-0709. Image model not supported in chat endpoint.
+    const selectedModel = settings.grokModel === "grok-2-image-1212"
+      ? "grok-4-0709"
+      : (settings.grokModel || "grok-4-0709");
+
     const requestParams: XAIRequestParams = {
       messages,
-      model: settings.grokModel || "grok-3", // ✅ Correct: No xai/ prefix needed
+      model: selectedModel, // ✅ Correct: No xai/ prefix needed
       stream: true,
       temperature: settings.temperature ?? 0.7,
-      max_tokens: settings.maxTokens || 4096,
+      max_tokens: getMaxTokensFromPromptOrSetting(mode, getSystemPrompt()) || settings.maxTokens || 4096,
       top_p: 0.9,
       frequency_penalty: 0,
       presence_penalty: 0,
@@ -229,7 +234,9 @@ Instructions: Build on your previous analysis/explanation of this content. If th
         let errorDetails: XAIError | null = null;
         
         try {
-          errorDetails = await res.json() as XAIError;
+          // Clone response before reading to avoid "body stream already read" error
+          const errorText = await res.text();
+          errorDetails = JSON.parse(errorText) as XAIError;
           console.error('xAI Error Response:', errorDetails);
           
           // Enhanced error messages based on error type

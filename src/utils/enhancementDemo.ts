@@ -170,4 +170,82 @@ export const displayImprovements = (mode?: string) => {
   }
   
   console.groupEnd();
-}; 
+};
+
+/**
+ * Enhanced Free Mode Demo - Dia Browser Inspired Features
+ * 
+ * This file demonstrates the new features added to the free mode:
+ * 1. Page Content Awareness
+ * 2. Contextual Welcome Messages
+ * 3. Smart Question Suggestions
+ * 4. Immediate Page Context Display
+ */
+
+export interface DemoPageContext {
+  url: string;
+  title: string;
+  contentType: string;
+  features: string[];
+  improvements: string[];
+}
+
+export const demoFeatures: DemoPageContext = {
+  url: "Enhanced Free Mode",
+  title: "LightUp Free Mode - Dia Browser Inspired",
+  contentType: "Feature Enhancement",
+  features: [
+    "🤖 Page Content Awareness - Automatically analyzes page content when global action button is clicked",
+    "🎯 Smart Contextual Suggestions - Provides relevant questions based on page type and content",
+    "⚡ Immediate Context Display - Shows page summary and type detection",
+    "💬 Interactive Question Buttons - Click suggestions to instantly ask about page content",
+    "🔍 Content Type Detection - Recognizes articles, tutorials, news, products, documentation, etc.",
+    "📊 Key Topic Extraction - Identifies important topics from page content",
+    "🌐 Multi-language Support - Works with content in various languages",
+    "🎨 Theme-aware UI - Adapts to light/dark themes seamlessly"
+  ],
+  improvements: [
+    "Enhanced User Experience - No more generic 'Ask anything' - now contextual and helpful",
+    "Faster Interaction - Users can immediately engage with page content without typing",
+    "Better Content Understanding - AI gets full page context for more accurate responses",
+    "Smart Suggestions - Reduces cognitive load by providing relevant starting questions",
+    "Dia Browser Integration - Takes inspiration from Dia's 'chat with tabs' functionality",
+    "Proactive Content Analysis - Extension anticipates user needs based on page content",
+    "Seamless Workflow - From page discovery to AI interaction in one click"
+  ]
+};
+
+/**
+ * Demo function to showcase the enhanced free mode
+ */
+export const demonstrateEnhancedFreeMode = () => {
+  console.log(`
+🚀 Enhanced Free Mode Demo - Dia Browser Inspired
+=================================================
+
+✨ NEW FEATURES:
+${demoFeatures.features.map(feature => `   ${feature}`).join('\n')}
+
+🔧 IMPROVEMENTS:
+${demoFeatures.improvements.map(improvement => `   • ${improvement}`).join('\n')}
+
+🎯 HOW IT WORKS:
+   1. Click the global action button when in free mode
+   2. Extension automatically analyzes the current page content
+   3. Displays contextual welcome with page type detection
+   4. Shows smart question suggestions based on content
+   5. Click any suggestion to immediately start chatting about the page
+   6. AI receives full page context for accurate, relevant responses
+
+🌟 INSPIRED BY DIA BROWSER:
+   • Page content awareness
+   • Contextual chat suggestions
+   • Immediate content analysis
+   • Smart question generation
+   • Seamless content interaction
+
+🚀 Ready to chat with any page!
+  `);
+};
+
+export default demonstrateEnhancedFreeMode; 

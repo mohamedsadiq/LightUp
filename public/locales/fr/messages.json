@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Configurer le sélecteur de mode (choisir jusqu'à 4)",
+    "message": "Configurer le sélecteur de mode (choisir jusqu'à 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

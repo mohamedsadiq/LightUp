@@ -35,18 +35,34 @@ export interface ProcessTextRequest {
     xaiApiKey?: string;
     openaiApiKey?: string;
     geminiModel?: 
-      | "gemini-1.5-pro" 
-      | "gemini-1.5-flash" 
-      | "gemini-1.5-flash-8b"
       | "gemini-2.0-flash"
-      | "gemini-2.0-flash-lite-preview-02-05"
-      | "gemini-2.0-flash-thinking-exp-01-21";
+      | "gemini-2.5-flash"
+      | "gemini-2.5-flash-lite"
+      | "gemini-2.5-pro"
+      | "gemini-2.0-flash-lite"
+      | "gemini-3-pro-preview"
+      | "gemini-3-pro";
     grokModel?:
+      | "grok-4-1-fast-reasoning"
+      | "grok-4-1-fast-non-reasoning"
+      | "grok-4-fast-reasoning"
+      | "grok-4-fast-non-reasoning"
+      | "grok-4"
+      | "grok-code-fast-1"
       | "grok-3"
       | "grok-3-mini"
       | "grok-3-fast"
       | "grok-3-mini-fast"
+      | "grok-2-image-1212"
+      | "grok-4-0709"
       | "grok-2-1212";
+    openaiModel?:
+      | "gpt-4o"
+      | "gpt-4.1"
+      | "gpt-4o-mini"
+      | "o3-mini"
+      | "o1"
+      | "gpt-4-turbo";
     localModel?: LocalModel;
     maxTokens?: number;
     temperature?: number;

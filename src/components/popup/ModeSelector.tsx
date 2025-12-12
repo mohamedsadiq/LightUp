@@ -9,14 +9,14 @@ interface ModeSelectorProps {
   preferredModes?: Mode[]
 }
 
-const DEFAULT_MODES: Mode[] = ["summarize", "explain", "analyze", "free"]
+const DEFAULT_MODES: Mode[] = ["explain", "summarize", "translate"]
 
 export const ModeSelector: React.FC<ModeSelectorProps> = ({
   activeMode,
   onModeChange,
   preferredModes = DEFAULT_MODES
 }) => {
-  const displayModes = preferredModes.slice(0, 4)
+  const displayModes = preferredModes.slice(0, 3)
 
   const modeNames: Record<Mode, string> = {
     summarize: getMessage("summarizeAction") || "Summarize",

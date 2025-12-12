@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import type { Theme } from "~types/theme"
 import { SUPPORTED_LANGUAGES } from "~utils/i18n"
+import { opacity } from "html2canvas/dist/types/css/property-descriptors/opacity";
 
 interface LanguageSelectorOverlayProps {
   currentLanguage: string;
@@ -150,7 +151,7 @@ const LanguageFlag: React.FC<{ code: string; size?: 'S' | 'M' | 'L' }> = ({ code
 };
 
 const iconButtonVariants = {
-  hover: { scale: 1.02 },
+  hover: {  opacity:1},
   tap: { scale: 0.98 }
 }
 
@@ -203,16 +204,16 @@ export const LanguageSelectorOverlay: React.FC<LanguageSelectorOverlayProps> = (
         style={{
           ...themedStyles.button,
           marginTop: '2px',
-          marginRight: '8px',
+          marginRight: '0',
           color: themeColors.foreground,
-          opacity: 0.9,
+          opacity: 0.5,
           display: 'flex',
           alignItems: 'center',
           gap: '6px',
           fontSize: '13px',
           fontWeight: 500,
           padding: '6px 10px',
-          minWidth: '70px',
+          minWidth: '82px',
           borderRadius: '4px',
           border: `1px solid ${themeColors.border}`,
           // backgroundColor: themeColors.button.default,
@@ -233,26 +234,37 @@ export const LanguageSelectorOverlay: React.FC<LanguageSelectorOverlayProps> = (
         }}>
           {currentLang.code.toUpperCase()}
         </span>
-        <svg 
-          width="10" 
-          height="10" 
-          viewBox="0 0 24 24" 
-          fill="none" 
-          xmlns="http://www.w3.org/2000/svg"
+        <div
           style={{
-            transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-            transition: 'transform 0.2s ease',
-            opacity: 0.7
+            width: '15px',
+            height: '15',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0
           }}
         >
-          <path 
-            d="M6 9L12 15L18 9" 
-            stroke="currentColor" 
-            strokeWidth="2" 
-            strokeLinecap="round" 
-            strokeLinejoin="round"
-          />
-        </svg>
+          <svg 
+            width="20" 
+            height="20" 
+            viewBox="0 0 24 24" 
+            fill="none" 
+            xmlns="http://www.w3.org/2000/svg"
+            style={{
+              transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s ease',
+              opacity: 0.95
+            }}
+          >
+            <path 
+              d="M6 9L12 15L18 9" 
+              stroke="currentColor" 
+              strokeWidth="3.2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            />
+          </svg>
+        </div>
       </motion.button>
 
       <AnimatePresence>

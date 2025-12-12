@@ -8,12 +8,61 @@ export const MODES = {
 export const DEFAULT_MAX_TOKENS = 1024
 export const DEFAULT_TEMPERATURE = 0.5
 
+// Helper function to extract word limit from a prompt string
+// Looks for patterns like "200 words", "no more than 150 words", "max 300 words"
+export const extractWordLimitFromPrompt = (prompt: string): number | null => {
+  if (!prompt) return null;
+  
+  // Match patterns like "200 words", "no more than 200 words", "max 200 words", "~200 words"
+  const patterns = [
+    /no more than\s+(\d+)\s*words?/i,
+    /max(?:imum)?\s+(\d+)\s*words?/i,
+    /~(\d+)\s*words?/i,
+    /(\d+)\s*words?\s+(?:or less|max|limit)/i,
+    /(\d+)\s*words?/i
+  ];
+  
+  for (const pattern of patterns) {
+    const match = prompt.match(pattern);
+    if (match && match[1]) {
+      const wordLimit = parseInt(match[1], 10);
+      if (wordLimit > 0 && wordLimit < 10000) {
+        return wordLimit;
+      }
+    }
+  }
+  
+  return null;
+}
+
+// Convert word limit to approximate token limit (1 word ≈ 1.5 tokens on average)
+export const wordLimitToTokens = (wordLimit: number): number => {
+  return Math.ceil(wordLimit * 1.5) + 50; // Add buffer for formatting
+}
+
+// Get max tokens by checking prompt first, then falling back to response length setting
+export const getMaxTokensFromPromptOrSetting = (
+  _mode: string, 
+  systemPrompt?: string
+): number | undefined => {
+  // First, try to extract word limit from the system prompt
+  if (systemPrompt) {
+    const wordLimit = extractWordLimitFromPrompt(systemPrompt);
+    if (wordLimit) {
+      return wordLimitToTokens(wordLimit);
+    }
+  }
+
+  // No explicit limit detected – let downstream fall back to provider defaults
+  return undefined;
+}
+
 export const SYSTEM_PROMPTS = {
-  explain: "You are an expert educator who makes complex concepts accessible. Deliver explanations that are clear, structured, and concise—no more than 200 words. Use short paragraphs or bullet points where helpful, focus on the 'why' and 'how', and avoid unnecessary jargon.",
+  explain: "You are an expert educator who makes complex concepts accessible. Deliver explanations that are clear, structured, and concise. Use short paragraphs or bullet points where helpful, focus on the 'why' and 'how', and avoid unnecessary jargon.",
   
-  summarize: "You are a professional content summarizer. Produce a concise summary (max 150 words) in bullet points prioritising the most important concepts, key facts, and conclusions. Exclude already-filtered UI elements. Maintain the original tone.",
+  summarize: "You are a professional content summarizer. Produce a concise summary in bullet points prioritizing the most important concepts, key facts, and conclusions. Exclude already-filtered UI elements. Maintain the original tone.",
   
-  analyze: "You are an analytical expert. Provide a focused analysis (max 200 words) highlighting patterns, implications, strengths, weaknesses, and notable insights. Use concise paragraphs or bullet points, citing brief examples where necessary. Avoid restating obvious points.",
+  analyze: "You are an analytical expert. Provide a focused analysis highlighting patterns, implications, strengths, weaknesses, and notable insights. Use concise paragraphs or bullet points, citing brief examples where necessary. Avoid restating obvious points.",
   
   translate: "You are a professional translator with expertise in maintaining linguistic accuracy while preserving cultural context and tone. Focus on producing natural, fluent translations that read as if originally written in the target language. Preserve the author's voice, style, and intent while adapting cultural references and idiomatic expressions appropriately for the target audience. When encountering ambiguous phrases or cultural concepts that don't translate directly, choose the interpretation that best serves the overall meaning and context. Ensure consistency in terminology and maintain the original text's structure and formatting when possible.",
   
@@ -21,11 +70,11 @@ export const SYSTEM_PROMPTS = {
 } as const;
 
 export const USER_PROMPTS: Record<string, string | ((text: string, context?: string) => string)> = {
-  explain: (text: string) => `Explain the following content clearly and concisely (<=200 words). Break down complex ideas and provide essential context:\n\n${text}`,
+  explain: (text: string) => `Explain the following content clearly and concisely. Break down complex ideas and provide essential context:\n\n${text}`,
   
-  summarize: (text: string) => `Summarize the following content in bullet points, maximum 150 words, capturing main ideas and conclusions:\n\n${text}`,
+  summarize: (text: string) => `Summarize the following content in bullet points, capturing main ideas and conclusions:\n\n${text}`,
   
-  analyze: (text: string) => `Provide a concise analysis (<=200 words) of the following content, highlighting patterns, strengths, weaknesses, and key insights:\n\n${text}`,
+  analyze: (text: string) => `Provide a concise analysis of the following content, highlighting patterns, strengths, weaknesses, and key insights:\n\n${text}`,
   
   translate: (text: string, context?: string) => {
     const [fromLang, toLang] = (context || "en:es").split(":");

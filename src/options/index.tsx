@@ -1,10 +1,10 @@
-import { useEffect, useState, useRef, useMemo } from "react"
+import { useEffect, useState, useRef, useMemo, useCallback } from "react"
 import { Storage } from "@plasmohq/storage"
 // Animation imports removed
 import styled from "@emotion/styled"
 import { css, keyframes } from "@emotion/react"
 
-import type { Settings, ModelType, GeminiModel, GrokModel, LocalModel, Mode } from "~types/settings"
+import type { Settings, ModelType, GeminiModel, GrokModel, OpenAIModel, LocalModel, Mode } from "~types/settings"
 import { useRateLimit } from "~hooks/useRateLimit"
 import ErrorMessage from "~components/common/ErrorMessage"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "../utils/constants"
@@ -12,20 +12,14 @@ import { getMessage } from "~utils/i18n";
 import { useLocale } from "~hooks/useLocale"
 import LanguageSelector from "~components/LanguageSelector";
 import SavedSuccessIndicator from "~components/SavedSuccessIndicator";
+import { apiKeyValidator, type ApiKeyValidationResult } from "~services/validation/ApiKeyValidator"
 import {
-  type ToastNotification,
-  ToastContainer,
-  Toast,
-  ToastIcon,
-  ToastContent,
-  ToastTitle,
-  ToastMessage,
-  ToastCloseButton,
   UnsavedChangesIndicator,
   AutoSaveStatus,
   LoadingSpinner,
   EnhancedSaveButton
 } from "~components/options/NotificationComponents"
+import { useStandaloneNotification } from "~components/notifications/Notification"
 
 // Reusable component for required field labels
 const RequiredLabel = () => (
@@ -33,6 +27,8 @@ const RequiredLabel = () => (
     {getMessage("requiredFieldLabel")}
   </span>
 )
+
+
 
 // Note: SavedSuccessIndicator is now imported from components
 
@@ -47,66 +43,108 @@ import { useLocaleStore } from "~hooks/useLocaleStore";
 const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = [
   {
     value: "gemini-2.0-flash",
-    label: getMessage("gemini20FlashLabel"),
-    description: getMessage("gemini20FlashDesc")
+    label: "Gemini 2.0 Flash",
+    description: "Stable default with 1M context window"
   },
   {
-    value: "gemini-2.0-flash-lite-preview-02-05",
-    label: getMessage("gemini20FlashLiteLabel"),
-    description: getMessage("gemini20FlashLiteDesc")
+    value: "gemini-2.5-flash",
+    label: "Gemini 2.5 Flash",
+    description: "Latest price-performance balance (stable)"
   },
   {
-    value: "gemini-2.0-flash-thinking-exp-01-21",
-    label: getMessage("gemini20FlashThinkingLabel"),
-    description: getMessage("gemini20FlashThinkingDesc")
+    value: "gemini-2.5-flash-lite",
+    label: "Gemini 2.5 Flash Lite",
+    description: "Cost-efficient 2.5 flash-lite tier"
   },
   {
-    value: "gemini-1.5-pro",
-    label: getMessage("gemini15ProLabel"),
-    description: getMessage("gemini15ProDesc")
+    value: "gemini-2.5-pro",
+    label: "Gemini 2.5 Pro",
+    description: "Advanced reasoning with long context"
   },
   {
-    value: "gemini-1.5-flash",
-    label: getMessage("gemini15FlashLabel"),
-    description: getMessage("gemini15FlashDesc")
+    value: "gemini-3-pro-preview",
+    label: "Gemini 3 Pro (Preview)",
+    description: "Preview access – subject to change"
   },
   {
-    value: "gemini-1.5-flash-8b",
-    label: getMessage("gemini15Flash8BLabel"),
-    description: getMessage("gemini15Flash8BDesc")
+    value: "gemini-2.0-flash-lite",
+    label: "Gemini 2.0 Flash Lite",
+    description: "Previous-gen lite fallback"
   }
 ];
 
 const GROK_MODELS: { value: GrokModel; label: string; description: string; price: string }[] = [
   {
+    value: "grok-4-1-fast-reasoning",
+    label: "Grok 4.1 Fast (Reasoning)",
+    description: "Newest reasoning model announced Nov 2025",
+    price: "Premium"
+  },
+  {
+    value: "grok-4-1-fast-non-reasoning",
+    label: "Grok 4.1 Fast",
+    description: "Fast tier without explicit reasoning step",
+    price: "Premium"
+  },
+  {
+    value: "grok-4-fast-reasoning",
+    label: "Grok 4 Fast (Reasoning)",
+    description: "Cost-optimised Grok 4 with reasoning",
+    price: "Standard"
+  },
+  {
+    value: "grok-4-fast-non-reasoning",
+    label: "Grok 4 Fast",
+    description: "Cost-optimised Grok 4 without reasoning",
+    price: "Standard"
+  },
+  {
+    value: "grok-4",
+    label: "Grok 4",
+    description: "Flagship Grok 4 (256K context)",
+    price: "Premium"
+  },
+  {
+    value: "grok-code-fast-1",
+    label: "Grok Code Fast 1",
+    description: "Code-focused fast model",
+    price: "Standard"
+  },
+  {
     value: "grok-3",
-    label: getMessage("grok3Label"),
-    description: getMessage("grok3Desc"),
-    price: getMessage("grok3Price")
+    label: "Grok 3",
+    description: "Legacy Grok 3 (131K context)",
+    price: "Legacy"
   },
   {
     value: "grok-3-mini",
-    label: getMessage("grok3MiniLabel"),
-    description: getMessage("grok3MiniDesc"),
-    price: getMessage("grok3MiniPrice")
+    label: "Grok 3 Mini",
+    description: "Cost-efficient Grok 3 variant",
+    price: "Budget"
   },
   {
     value: "grok-3-fast",
-    label: getMessage("grok3FastLabel"),
-    description: getMessage("grok3FastDesc"),
-    price: getMessage("grok3FastPrice")
+    label: "Grok 3 Fast",
+    description: "Latency-optimised Grok 3",
+    price: "Standard"
   },
   {
     value: "grok-3-mini-fast",
-    label: getMessage("grok3MiniFastLabel"),
-    description: getMessage("grok3MiniFastDesc"),
-    price: getMessage("grok3MiniFastPrice")
+    label: "Grok 3 Mini Fast",
+    description: "Mini + fast Grok 3 combination",
+    price: "Budget"
   },
   {
-    value: "grok-2-1212",
-    label: getMessage("grok21212Label"),
-    description: getMessage("grok21212Desc"),
-    price: getMessage("grok21212Price")
+    value: "grok-2-image-1212",
+    label: "Grok 2 Image",
+    description: "Text-to-image generation endpoint",
+    price: "Per image"
+  },
+  {
+    value: "grok-4-0709",
+    label: "Grok 4 (July 2025)",
+    description: "Legacy Grok 4 identifier for compatibility",
+    price: "Legacy"
   }
 ];
 
@@ -547,6 +585,56 @@ const FormInput = styled.input`
   &::placeholder {
     color: #9CA3AF;
   }
+`;
+
+// API Key validation status components
+const ValidationStatus = styled.div<{ isValid?: boolean; isValidating?: boolean }>`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 12px;
+  
+  ${props => props.isValidating && `
+    color: #FFA500;
+  `}
+  
+  ${props => props.isValid === true && `
+    color: #10B981;
+  `}
+  
+  ${props => props.isValid === false && `
+    color: #EF4444;
+  `}
+`;
+
+const ValidationIcon = styled.div<{ isValid?: boolean; isValidating?: boolean }>`
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  ${props => props.isValidating && `
+    animation: spin 1s linear infinite;
+  `}
+  
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+`;
+
+const ApiKeyInput = styled(FormInput)<{ hasValidation?: boolean; isValid?: boolean }>`
+  ${props => props.hasValidation && props.isValid === true && `
+    border-color: #10B981 !important;
+    box-shadow: 0 0 0 1px #10B981;
+  `}
+  
+  ${props => props.hasValidation && props.isValid === false && `
+    border-color: #EF4444 !important;
+    box-shadow: 0 0 0 1px #EF4444;
+  `}
 `;
 
 const FormTextarea = styled.textarea`
@@ -1046,51 +1134,11 @@ const Logo = () => (
   </HeaderLogoWrapper>
 );
 
-// Custom hook for toast notifications
-const useToastNotifications = () => {
-  const [toasts, setToasts] = useState<ToastNotification[]>([]);
-  const [exitingToasts, setExitingToasts] = useState<Set<string>>(new Set());
-
-  const addToast = (toast: Omit<ToastNotification, 'id'>) => {
-    const id = Math.random().toString(36).substr(2, 9);
-    const newToast: ToastNotification = {
-      id,
-      duration: 5000,
-      ...toast,
-    };
-
-    setToasts(prev => [...prev, newToast]);
-
-    if (!newToast.persistent && newToast.duration) {
-      setTimeout(() => {
-        removeToast(id);
-      }, newToast.duration);
-    }
-
-    return id;
-  };
-
-  const removeToast = (id: string) => {
-    setExitingToasts(prev => new Set([...prev, id]));
-    
-    setTimeout(() => {
-      setToasts(prev => prev.filter(toast => toast.id !== id));
-      setExitingToasts(prev => {
-        const newSet = new Set(prev);
-        newSet.delete(id);
-        return newSet;
-      });
-    }, 300);
-  };
-
-  return { toasts, addToast, removeToast, exitingToasts };
-};
-
 // Auto-save hook with debouncing
 const useAutoSave = (
   settings: Settings, 
   storage: Storage, 
-  addToast: (toast: Omit<ToastNotification, 'id'>) => string
+  notifyError: (message: string) => void
 ) => {
   const [autoSaveStatus, setAutoSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -1138,12 +1186,7 @@ const useAutoSave = (
     } catch (error) {
       console.error("Auto-save failed:", error);
       setAutoSaveStatus('error');
-      addToast({
-        type: 'error',
-        title: getMessage('autoSaveFailedTitle'),
-        message: getMessage('autoSaveFailedMessage'),
-        persistent: true
-      });
+      notifyError(getMessage('autoSaveFailedTitle'));
     }
   };
 
@@ -1167,37 +1210,37 @@ function IndexOptions() {
   const messages = useLocaleStore((state) => state.messages);
 
   // Localized model option definitions – rebuilt whenever locale/messages change
-  const GEMINI_MODELS = useMemo(
+  const GEMINI_MODELS: { value: GeminiModel; label: string; description: string }[] = useMemo(
     () => [
       {
-        value: "gemini-2.0-flash",
-        label: getMessage("gemini20FlashLabel"),
-        description: getMessage("gemini20FlashDesc")
+        value: "gemini-2.0-flash" as GeminiModel,
+        label: "Gemini 2.0 Flash",
+        description: "Stable default with 1M context window"
       },
       {
-        value: "gemini-2.0-flash-lite-preview-02-05",
-        label: getMessage("gemini20FlashLiteLabel"),
-        description: getMessage("gemini20FlashLiteDesc")
+        value: "gemini-2.5-flash" as GeminiModel,
+        label: "Gemini 2.5 Flash",
+        description: "Latest price-performance balance (stable)"
       },
       {
-        value: "gemini-2.0-flash-thinking-exp-01-21",
-        label: getMessage("gemini20FlashThinkingLabel"),
-        description: getMessage("gemini20FlashThinkingDesc")
+        value: "gemini-2.5-flash-lite" as GeminiModel,
+        label: "Gemini 2.5 Flash Lite",
+        description: "Cost-efficient 2.5 flash-lite tier"
       },
       {
-        value: "gemini-1.5-pro",
-        label: getMessage("gemini15ProLabel"),
-        description: getMessage("gemini15ProDesc")
+        value: "gemini-2.5-pro" as GeminiModel,
+        label: "Gemini 2.5 Pro",
+        description: "Advanced reasoning with long context"
       },
       {
-        value: "gemini-1.5-flash",
-        label: getMessage("gemini15FlashLabel"),
-        description: getMessage("gemini15FlashDesc")
+        value: "gemini-3-pro-preview" as GeminiModel,
+        label: "Gemini 3 Pro (Preview)",
+        description: "Preview access – subject to change"
       },
       {
-        value: "gemini-1.5-flash-8b",
-        label: getMessage("gemini15Flash8BLabel"),
-        description: getMessage("gemini15Flash8BDesc")
+        value: "gemini-2.0-flash-lite" as GeminiModel,
+        label: "Gemini 2.0 Flash Lite",
+        description: "Previous-gen lite fallback"
       }
     ],
     [locale, messages]
@@ -1206,34 +1249,113 @@ function IndexOptions() {
   const GROK_MODELS = useMemo(
     () => [
       {
-        value: "grok-3",
-        label: getMessage("grok3Label"),
-        description: getMessage("grok3Desc"),
-        price: getMessage("grok3Price")
+        value: "grok-4-1-fast-reasoning" as GrokModel,
+        label: "Grok 4.1 Fast (Reasoning)",
+        description: "Newest reasoning model announced Nov 2025",
+        price: "Premium"
       },
       {
-        value: "grok-3-mini",
-        label: getMessage("grok3MiniLabel"),
-        description: getMessage("grok3MiniDesc"),
-        price: getMessage("grok3MiniPrice")
+        value: "grok-4-1-fast-non-reasoning" as GrokModel,
+        label: "Grok 4.1 Fast",
+        description: "Fast tier without explicit reasoning step",
+        price: "Premium"
       },
       {
-        value: "grok-3-fast",
-        label: getMessage("grok3FastLabel"),
-        description: getMessage("grok3FastDesc"),
-        price: getMessage("grok3FastPrice")
+        value: "grok-4-fast-reasoning" as GrokModel,
+        label: "Grok 4 Fast (Reasoning)",
+        description: "Cost-optimised Grok 4 with reasoning",
+        price: "Standard"
       },
       {
-        value: "grok-3-mini-fast",
-        label: getMessage("grok3MiniFastLabel"),
-        description: getMessage("grok3MiniFastDesc"),
-        price: getMessage("grok3MiniFastPrice")
+        value: "grok-4-fast-non-reasoning" as GrokModel,
+        label: "Grok 4 Fast",
+        description: "Cost-optimised Grok 4 without reasoning",
+        price: "Standard"
       },
       {
-        value: "grok-2-1212",
-        label: getMessage("grok21212Label"),
-        description: getMessage("grok21212Desc"),
-        price: getMessage("grok21212Price")
+        value: "grok-4" as GrokModel,
+        label: "Grok 4",
+        description: "Flagship Grok 4 (256K context)",
+        price: "Premium"
+      },
+      {
+        value: "grok-code-fast-1" as GrokModel,
+        label: "Grok Code Fast 1",
+        description: "Code-focused fast model",
+        price: "Standard"
+      },
+      {
+        value: "grok-3" as GrokModel,
+        label: "Grok 3",
+        description: "Legacy Grok 3 (131K context)",
+        price: "Legacy"
+      },
+      {
+        value: "grok-3-mini" as GrokModel,
+        label: "Grok 3 Mini",
+        description: "Cost-efficient Grok 3 variant",
+        price: "Budget"
+      },
+      {
+        value: "grok-3-fast" as GrokModel,
+        label: "Grok 3 Fast",
+        description: "Latency-optimised Grok 3",
+        price: "Standard"
+      },
+      {
+        value: "grok-3-mini-fast" as GrokModel,
+        label: "Grok 3 Mini Fast",
+        description: "Mini + fast Grok 3 combination",
+        price: "Budget"
+      },
+      {
+        value: "grok-2-image-1212" as GrokModel,
+        label: "Grok 2 Image",
+        description: "Text-to-image generation endpoint",
+        price: "Per image"
+      },
+      {
+        value: "grok-4-0709" as GrokModel,
+        label: "Grok 4 (July 2025)",
+        description: "Legacy Grok 4 identifier for compatibility",
+        price: "Legacy"
+      }
+    ],
+    [locale, messages]
+  );
+
+  // OpenAI model options
+  const OPENAI_MODELS: { value: OpenAIModel; label: string; description: string }[] = useMemo(
+    () => [
+      {
+        value: "gpt-4o" as OpenAIModel,
+        label: "GPT-4o",
+        description: "Flagship multimodal model, best overall"
+      },
+      {
+        value: "gpt-4.1" as OpenAIModel,
+        label: "GPT-4.1",
+        description: "Smartest non-reasoning model with 1M context"
+      },
+      {
+        value: "gpt-4o-mini" as OpenAIModel,
+        label: "GPT-4o Mini",
+        description: "Fast and cost-efficient"
+      },
+      {
+        value: "o3-mini" as OpenAIModel,
+        label: "o3 Mini",
+        description: "Reasoning-focused model"
+      },
+      {
+        value: "o1" as OpenAIModel,
+        label: "o1",
+        description: "Deep reasoning for complex problems"
+      },
+      {
+        value: "gpt-4-turbo" as OpenAIModel,
+        label: "GPT-4 Turbo",
+        description: "Legacy GPT-4 Turbo (backwards compatibility)"
       }
     ],
     [locale, messages]
@@ -1311,7 +1433,9 @@ function IndexOptions() {
     apiKey: "",
     geminiApiKey: "",
     xaiApiKey: "",
-    grokModel: "grok-2",
+    geminiModel: "gemini-2.0-flash",
+    grokModel: "grok-4-0709",
+    openaiModel: "gpt-4o",
     localModel: "llama-2-70b-chat",
     basicModel: "gemini-2.0-flash-lite-preview-02-05",
     customization: {
@@ -1339,11 +1463,23 @@ function IndexOptions() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [initialSettings, setInitialSettings] = useState<Settings | null>(null);
   
+  // API Key validation states
+  const [apiKeyValidation, setApiKeyValidation] = useState<{
+    gemini?: ApiKeyValidationResult;
+    xai?: ApiKeyValidationResult;
+    openai?: ApiKeyValidationResult;
+  }>({});
+  const [validatingApiKeys, setValidatingApiKeys] = useState<{
+    gemini?: boolean;
+    xai?: boolean;
+    openai?: boolean;
+  }>({});
+  
   // Enhanced notification system
-  const { toasts, addToast, removeToast, exitingToasts } = useToastNotifications();
+  const { success: notifySuccess, error: notifyError, notify, NotificationOutlet } = useStandaloneNotification();
   
   // Auto-save functionality
-  const { autoSaveStatus, debouncedAutoSave, autoSave, timeoutRef } = useAutoSave(settings, storage, addToast);
+  const { autoSaveStatus, debouncedAutoSave, autoSave, timeoutRef } = useAutoSave(settings, storage, notifyError);
 
   const [activePromptMode, setActivePromptMode] = useState<Mode>("explain");
   const [isEditingSystemPrompt, setIsEditingSystemPrompt] = useState(false);
@@ -1384,11 +1520,7 @@ function IndexOptions() {
       } catch (err) {
         console.error("Error loading settings:", err);
         setError("Failed to load settings");
-        addToast({
-          type: 'error',
-          title: getMessage('loadingFailedTitle'),
-          message: getMessage('loadingFailedMessage')
-        });
+        notifyError(getMessage('loadingFailedTitle'));
       }
     };
     
@@ -1447,12 +1579,7 @@ function IndexOptions() {
       updatedSettings.geminiModel = GEMINI_MODELS[0].value;
       needsUpdate = true;
       
-      addToast({
-        type: 'info',
-        title: getMessage('modelAutoSelectedTitle'),
-        message: getMessage('geminiModelAutoSelectedMessage', GEMINI_MODELS[0].label),
-        duration: 4000
-      });
+      notify(getMessage('modelAutoSelectedTitle'));
     }
 
     // Auto-select Grok model if API key exists but no model selected
@@ -1460,12 +1587,7 @@ function IndexOptions() {
       updatedSettings.grokModel = GROK_MODELS[0].value;
       needsUpdate = true;
       
-      addToast({
-        type: 'info',
-        title: getMessage('modelAutoSelectedTitle'),
-        message: getMessage('grokModelAutoSelectedMessage', GROK_MODELS[0].label),
-        duration: 4000
-      });
+      notify(getMessage('modelAutoSelectedTitle'));
     }
 
     // Auto-select Local model if server URL exists but no model selected
@@ -1473,12 +1595,7 @@ function IndexOptions() {
       updatedSettings.localModel = LOCAL_MODELS[0].value;
       needsUpdate = true;
       
-      addToast({
-        type: 'info',
-        title: getMessage('modelAutoSelectedTitle'),
-        message: getMessage('localModelAutoSelectedMessage', LOCAL_MODELS[0].label),
-        duration: 4000
-      });
+      notify(getMessage('modelAutoSelectedTitle'));
     }
 
     if (needsUpdate) {
@@ -1486,7 +1603,7 @@ function IndexOptions() {
       // Auto-save when we make model selections due to API key being provided
       setTimeout(() => handleSave(), 100);
     }
-  }, [settings.modelType, settings.geminiApiKey, settings.xaiApiKey, settings.serverUrl, settings.geminiModel, settings.grokModel, settings.localModel, addToast]);
+  }, [settings.modelType, settings.geminiApiKey, settings.xaiApiKey, settings.serverUrl, settings.geminiModel, settings.grokModel, settings.localModel, notify]);
 
 
 
@@ -1524,55 +1641,25 @@ function IndexOptions() {
     try {
       setIsSaving(true);
       
-      // Validate model configuration before saving
-      const validateModelConfig = () => {
-        if (settings.modelType === 'gemini') {
-          if (!settings.geminiApiKey || settings.geminiApiKey.trim().length === 0) {
-            return {
-              isValid: false,
-              error: 'Gemini API key is required. Please enter your API key from Google AI Studio.'
-            };
-          }
-        } else if (settings.modelType === 'grok') {
-          if (!settings.xaiApiKey || settings.xaiApiKey.trim().length === 0) {
-            return {
-              isValid: false,
-              error: 'xAI API key is required. Please enter your API key from x.ai.'
-            };
-          }
-        } else if (settings.modelType === 'local') {
-          if (!settings.serverUrl || settings.serverUrl.trim().length === 0) {
-            return {
-              isValid: false,
-              error: 'Ollama server URL is required. Please enter your server URL (e.g., http://localhost:11434).'
-            };
-          }
-        }
-        return { isValid: true };
-      };
-
-      // Perform validation
-      const validation = validateModelConfig();
-      if (!validation.isValid) {
-        setIsSaving(false);
-        setError(validation.error);
-        
-        addToast({
-          type: 'error',
-          title: getMessage('configurationIncompleteTitle'),
-          message: validation.error,
-          persistent: true
-        });
-        return;
-      }
-      
       const updatedSettings = { ...settings };
+      
+      // DEBUG: Log settings being saved
+      console.log('[Options] Saving settings:', JSON.stringify({
+        modelType: updatedSettings.modelType,
+        geminiApiKey: updatedSettings.geminiApiKey ? `${updatedSettings.geminiApiKey.substring(0, 10)}...` : 'EMPTY',
+        geminiModel: updatedSettings.geminiModel,
+        apiKey: updatedSettings.apiKey ? 'PRESENT' : 'EMPTY',
+        xaiApiKey: updatedSettings.xaiApiKey ? 'PRESENT' : 'EMPTY',
+      }, null, 2));
       
       await storage.set("settings", updatedSettings);
       
       // Update initial settings to reflect saved state
       setInitialSettings(updatedSettings);
       setHasUnsavedChanges(false);
+      
+      // Clear any existing errors since save was successful
+      setError("");
       
       // Notify all tabs about the settings change
       if (typeof chrome !== 'undefined' && chrome.tabs) {
@@ -1602,12 +1689,7 @@ function IndexOptions() {
       setIsSaving(false);
       
       // Show error notification
-      addToast({
-        type: 'error',
-        title: getMessage('saveFailedTitle'),
-        message: getMessage('saveFailedMessage'),
-        persistent: true
-      });
+      notifyError(getMessage('saveFailedTitle'));
     }
   };
 
@@ -1719,6 +1801,68 @@ function IndexOptions() {
     }
   };
 
+  // API Key validation functions
+  const validateApiKey = useCallback(async (apiKey: string, provider: 'gemini' | 'xai' | 'openai') => {
+    if (!apiKey || !apiKey.trim()) {
+      setApiKeyValidation(prev => ({
+        ...prev,
+        [provider]: undefined
+      }));
+      return;
+    }
+
+    setValidatingApiKeys(prev => ({ ...prev, [provider]: true }));
+
+    try {
+      const result = await apiKeyValidator.validateWithApi(apiKey.trim(), provider);
+      
+      setApiKeyValidation(prev => ({
+        ...prev,
+        [provider]: result
+      }));
+
+      // Show validation result in toast and clear any general errors
+      if (result.isValid) {
+        // Clear any existing error messages since API key is valid
+        setError("");
+        notifySuccess(`${provider.charAt(0).toUpperCase() + provider.slice(1)} API key valid`);
+      } else {
+        notifyError(result.error || 'Invalid API key');
+      }
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Validation failed';
+      setApiKeyValidation(prev => ({
+        ...prev,
+        [provider]: {
+          isValid: false,
+          error: errorMessage,
+          timestamp: Date.now()
+        }
+      }));
+
+      notifyError(errorMessage);
+    } finally {
+      setValidatingApiKeys(prev => ({ ...prev, [provider]: false }));
+    }
+  }, [notifySuccess, notifyError]);
+
+  // Debounced validation to avoid excessive API calls
+  const debouncedValidateApiKey = useCallback((() => {
+    const timeouts: { [key: string]: NodeJS.Timeout } = {};
+    
+    return (apiKey: string, provider: 'gemini' | 'xai' | 'openai') => {
+      // Clear existing timeout for this provider
+      if (timeouts[provider]) {
+        clearTimeout(timeouts[provider]);
+      }
+      
+      // Set new timeout
+      timeouts[provider] = setTimeout(() => {
+        validateApiKey(apiKey, provider);
+      }, 1000); // Wait 1 second after user stops typing
+    };
+  })(), [validateApiKey]);
+
   const [activeTab, setActiveTab] = useState("general");
 
   // Save immediately when user navigates away from a section
@@ -1735,16 +1879,11 @@ function IndexOptions() {
       // Save immediately when navigating between sections
       autoSave(settings, setInitialSettings);
       
-      addToast({
-        type: 'success',
-        title: getMessage('settingsSavedTitle'),
-        message: getMessage('settingsSavedMessage'),
-        duration: 2000
-      });
+      notifySuccess(getMessage('settingsSavedTitle'));
     }
     
     previousActiveTab.current = activeTab;
-  }, [activeTab, hasUnsavedChanges, initialSettings, settings, autoSave, addToast]);
+  }, [activeTab, hasUnsavedChanges, initialSettings, settings, autoSave, notifySuccess]);
 
   return (
     <OptionsContainer>
@@ -1752,7 +1891,7 @@ function IndexOptions() {
         <Logo />
         <VersionBadgeContainer>
           <BetaBadge>{getMessage("betaBadgeLabel")}</BetaBadge>
-          <VersionNumber>v1.1.15</VersionNumber>
+          <VersionNumber>v1.1.17</VersionNumber>
         </VersionBadgeContainer>
         {/* <CloseButton onClick={() => window.close()}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2024,6 +2163,10 @@ function IndexOptions() {
                             else if (newModelType === 'grok' && !prev.grokModel) {
                               newSettings.grokModel = GROK_MODELS[0].value;
                             }
+                            // Auto-select first model for OpenAI if none selected
+                            else if (newModelType === 'openai' && !prev.openaiModel) {
+                              newSettings.openaiModel = OPENAI_MODELS[0].value;
+                            }
                             // Auto-select first model for Local if none selected
                             else if (newModelType === 'local' && !prev.localModel) {
                               newSettings.localModel = LOCAL_MODELS[0].value;
@@ -2036,6 +2179,7 @@ function IndexOptions() {
                       >
                         <option value="basic">{getMessage("basicModelTypeOption")}</option>
                         <option value="gemini">{getMessage("geminiModelTypeOption")}</option>
+                        <option value="openai">OpenAI</option>
                         <option value="grok">{getMessage("grokModelTypeOption")}</option>
                         <option value="local">{getMessage("localModelTypeOption")}</option>
                       </FormSelect>
@@ -2106,24 +2250,64 @@ function IndexOptions() {
                           {getMessage("geminiApiKeyLabel")}
                           {!settings.geminiApiKey && <RequiredLabel />}
                         </FormLabel>
-                        <FormInput
+                        <ApiKeyInput
                           type="password"
                           id="geminiApiKey"
                           value={settings.geminiApiKey}
                           onChange={(e) => {
                             const newApiKey = e.target.value;
                             setSettings(prev => ({ ...prev, geminiApiKey: newApiKey }));
-                            // Auto-save when API key is provided (and not empty)
+                            
+                            // Trigger validation
                             if (newApiKey.trim()) {
+                              debouncedValidateApiKey(newApiKey, 'gemini');
                               setTimeout(() => handleSave(), 100);
+                            } else {
+                              // Clear validation when empty
+                              setApiKeyValidation(prev => ({ ...prev, gemini: undefined }));
                             }
                           }}
                           onBlur={handleSave}
                           placeholder={getMessage("geminiApiKeyPlaceholder")}
-                          style={{
-                            borderColor: !settings.geminiApiKey ? '#E74C3C' : undefined
-                          }}
+                          hasValidation={!!apiKeyValidation.gemini}
+                          isValid={apiKeyValidation.gemini?.isValid}
                         />
+                        
+                        {/* Validation Status */}
+                        {(validatingApiKeys.gemini || apiKeyValidation.gemini) && (
+                          <ValidationStatus 
+                            isValidating={validatingApiKeys.gemini}
+                            isValid={apiKeyValidation.gemini?.isValid}
+                          >
+                            <ValidationIcon 
+                              isValidating={validatingApiKeys.gemini}
+                              isValid={apiKeyValidation.gemini?.isValid}
+                            >
+                              {validatingApiKeys.gemini ? (
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"/>
+                                </svg>
+                              ) : apiKeyValidation.gemini?.isValid === true ? (
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                              ) : apiKeyValidation.gemini?.isValid === false ? (
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                              ) : null}
+                            </ValidationIcon>
+                            
+                            {validatingApiKeys.gemini ? (
+                              "Validating API key..."
+                            ) : apiKeyValidation.gemini?.isValid === true ? (
+                              "API key is valid"
+                            ) : apiKeyValidation.gemini?.error ? (
+                              apiKeyValidation.gemini.error
+                            ) : null}
+                          </ValidationStatus>
+                        )}
+                        
                         <FormDescription>
                           {getMessage("geminiApiKeyDescription", "<a href=\"https://ai.google.dev/\" target=\"_blank\" rel=\"noopener noreferrer\" style={{ color: '#93C5FD', textDecoration: 'none' }}>Google AI Studio</a>")}
                         </FormDescription>
@@ -2155,6 +2339,72 @@ function IndexOptions() {
                   </SectionContainer>
                 )}
 
+                {settings.modelType === "openai" && (
+                  <SectionContainer>
+                    <SectionHeader>OpenAI Configuration</SectionHeader>
+                    <SubContainer>
+                      <FormGroup>
+                        <FormLabel htmlFor="openaiApiKey">
+                          OpenAI API Key
+                          {!settings.apiKey && <RequiredLabel />}
+                        </FormLabel>
+                        <ApiKeyInput
+                          type="password"
+                          id="openaiApiKey"
+                          value={settings.apiKey}
+                          onChange={(e) => {
+                            const newApiKey = e.target.value;
+                            setSettings(prev => ({ ...prev, apiKey: newApiKey }));
+                            
+                            // Trigger validation
+                            if (newApiKey.trim()) {
+                              debouncedValidateApiKey(newApiKey, 'openai');
+                              setTimeout(() => handleSave(), 100);
+                            } else {
+                              // Clear validation when empty
+                              setApiKeyValidation(prev => ({ ...prev, openai: undefined }));
+                            }
+                          }}
+                          onBlur={handleSave}
+                          placeholder="sk-..."
+                          hasValidation={!!apiKeyValidation.openai}
+                          isValid={apiKeyValidation.openai?.isValid}
+                        />
+                        
+                        <FormDescription>
+                          Get your API key from{" "}
+                          <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer" style={{ color: '#93C5FD', textDecoration: 'none' }}>
+                            OpenAI Platform
+                          </a>
+                        </FormDescription>
+                      </FormGroup>
+                    </SubContainer>
+                    
+                    <SubContainer>
+                      <FormGroup>
+                        <FormLabel>OpenAI Model</FormLabel>
+                        <FormDescription>Select the OpenAI model to use</FormDescription>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(1, minmax(0, 1fr))', gap: '12px' }}>
+                          {OPENAI_MODELS.map((model) => (
+                            <ModelOption
+                              key={model.value}
+                              model={model}
+                              selected={settings.openaiModel === model.value}
+                              onChange={() => {
+                                setSettings(prev => ({ ...prev, openaiModel: model.value }));
+                                // Auto-save only if API key exists
+                                if (settings.apiKey) {
+                                  setTimeout(() => handleSave(), 100);
+                                }
+                              }}
+                            />
+                          ))}
+                        </div>
+                      </FormGroup>
+                    </SubContainer>
+                  </SectionContainer>
+                )}
+
                 {settings.modelType === "grok" && (
                   <SectionContainer>
                     <SectionHeader>{getMessage("grokConfigurationHeader")}</SectionHeader>
@@ -2164,24 +2414,64 @@ function IndexOptions() {
                           {getMessage("xaiApiKeyLabel")}
                           {!settings.xaiApiKey && <RequiredLabel />}
                         </FormLabel>
-                        <FormInput
+                        <ApiKeyInput
                           type="password"
                           id="xaiApiKey"
                           value={settings.xaiApiKey}
                           onChange={(e) => {
                             const newApiKey = e.target.value;
                             setSettings(prev => ({ ...prev, xaiApiKey: newApiKey }));
-                            // Auto-save when API key is provided (and not empty)
+                            
+                            // Trigger validation
                             if (newApiKey.trim()) {
+                              debouncedValidateApiKey(newApiKey, 'xai');
                               setTimeout(() => handleSave(), 100);
+                            } else {
+                              // Clear validation when empty
+                              setApiKeyValidation(prev => ({ ...prev, xai: undefined }));
                             }
                           }}
                           onBlur={handleSave}
                           placeholder={getMessage("xaiApiKeyPlaceholder")}
-                          style={{
-                            borderColor: !settings.xaiApiKey ? '#E74C3C' : undefined
-                          }}
+                          hasValidation={!!apiKeyValidation.xai}
+                          isValid={apiKeyValidation.xai?.isValid}
                         />
+                        
+                        {/* Validation Status */}
+                        {(validatingApiKeys.xai || apiKeyValidation.xai) && (
+                          <ValidationStatus 
+                            isValidating={validatingApiKeys.xai}
+                            isValid={apiKeyValidation.xai?.isValid}
+                          >
+                            <ValidationIcon 
+                              isValidating={validatingApiKeys.xai}
+                              isValid={apiKeyValidation.xai?.isValid}
+                            >
+                              {validatingApiKeys.xai ? (
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z"/>
+                                </svg>
+                              ) : apiKeyValidation.xai?.isValid === true ? (
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                                </svg>
+                              ) : apiKeyValidation.xai?.isValid === false ? (
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                                </svg>
+                              ) : null}
+                            </ValidationIcon>
+                            
+                            {validatingApiKeys.xai ? (
+                              "Validating API key..."
+                            ) : apiKeyValidation.xai?.isValid === true ? (
+                              "API key is valid"
+                            ) : apiKeyValidation.xai?.error ? (
+                              apiKeyValidation.xai.error
+                            ) : null}
+                          </ValidationStatus>
+                        )}
+                        
                         <FormDescription>
                           {getMessage("xaiApiKeyDescription", "<a href=\"https://x.ai/api\" target=\"_blank\" rel=\"noopener noreferrer\" style={{ color: '#93C5FD', textDecoration: 'none' }}>x.ai</a>")}
                         </FormDescription>
@@ -2725,23 +3015,11 @@ function IndexOptions() {
                     <div style={{ marginTop: '16px', maxWidth: '240px' }}>
                       <LanguageSelector 
                         onChange={(newLocale) => {
-                          // Change the locale using the useLocale hook
                           changeLocale(newLocale).then(() => {
-                            // Show notification that language has been changed
-                            addToast({
-                              type: 'success',
-                              title: getMessage('languageChanged'),
-                              message: getMessage('languageChangeMessage'),
-                              duration: 3000
-                            });
+                            notifySuccess(getMessage('languageChanged'));
                           }).catch(error => {
                             console.error('Error changing locale:', error);
-                            addToast({
-                              type: 'error',
-                              title: getMessage('languageChangeError'),
-                              message: getMessage('languageChangeErrorMessage'),
-                              duration: 5000
-                            });
+                            notifyError(getMessage('languageChangeError'));
                           });
                         }}
                       />
@@ -2962,7 +3240,7 @@ function IndexOptions() {
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                       <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize:'14px', fontWeight: 500, minWidth: '80px' }}>{getMessage("aboutVersion")}</span>
-                      <Badge variant="info">v0.1.13</Badge>
+                      <Badge variant="info">v0.1.17</Badge>
                     </div>
                     
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -3285,50 +3563,8 @@ function IndexOptions() {
         </ContentArea>
       </ContentWrapper>
       
-      {/* Toast Notifications */}
-      <ToastContainer>
-        {toasts.map((toast) => (
-          <Toast 
-            key={toast.id} 
-            type={toast.type}
-            isExiting={exitingToasts.has(toast.id)}
-          >
-            <ToastIcon>
-              {toast.type === 'success' && (
-                <svg viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-              )}
-              {toast.type === 'error' && (
-                <svg viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
-              )}
-              {toast.type === 'warning' && (
-                <svg viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-              )}
-              {toast.type === 'info' && (
-                <svg viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                </svg>
-              )}
-            </ToastIcon>
-            <ToastContent>
-              <ToastTitle>{toast.title}</ToastTitle>
-              {toast.message && <ToastMessage>{toast.message}</ToastMessage>}
-            </ToastContent>
-            {!toast.persistent && (
-              <ToastCloseButton onClick={() => removeToast(toast.id)}>
-                <svg width="16" height="16" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                </svg>
-              </ToastCloseButton>
-            )}
-          </Toast>
-        ))}
-      </ToastContainer>
+{/* Notification Outlet */}
+      <NotificationOutlet />
       
       {/* Unsaved Changes Indicator */}
       <UnsavedChangesIndicator visible={hasUnsavedChanges && autoSaveStatus !== 'saving'}>

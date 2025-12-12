@@ -8,6 +8,7 @@ import type { Theme } from "~types/theme";
 import type { FontSizes } from "~contents/styles";
 import ReferencesContainer from './ReferencesContainer';
 import { useReferences as useReferencesHook } from '~/hooks/useReferences';
+import { motion } from 'framer-motion';
 
 interface MarkdownTextProps {
   text: string;
@@ -17,6 +18,10 @@ interface MarkdownTextProps {
   theme?: Theme;
   fontSize?: "13px" | "14px" | "16px" | "18px" | "19px" | "21px" | "small" | "medium" | "large" | "x-large" | "xx-small" | "x-small" | "xx-large";
   fontSizes?: FontSizes;
+  // Legacy word-by-word streaming props retained for backward compatibility
+  enableWordByWord?: boolean;
+  wordsPerSecond?: number;
+  onAnimationComplete?: () => void;
 }
 
 // Create font sizes from user setting
@@ -62,12 +67,15 @@ const createFontSizesFromSetting = (fontSize: string): FontSizes => {
 
 const MarkdownText: React.FC<MarkdownTextProps> = ({ 
   text, 
-  isStreaming = false,
+  isStreaming: _isStreaming = false,
   language = 'en',
   useReferences = false,
   theme = 'light',
   fontSize = 'medium',
-  fontSizes: propFontSizes
+  fontSizes: propFontSizes,
+  enableWordByWord: _enableWordByWord,
+  wordsPerSecond: _wordsPerSecond,
+  onAnimationComplete: _onAnimationComplete
 }) => {
   const normalizedTheme: "light" | "dark" = theme === "system" ? "light" : theme;
   const fontSizes = useMemo(() => 
@@ -310,9 +318,12 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
 
   return (
     <div>
-      <div 
+      <motion.div 
         data-markdown-container
         style={containerStyle}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
       >
         <ReactMarkdown
           components={components}
@@ -321,7 +332,7 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
         >
           {processedText}
         </ReactMarkdown>
-      </div>
+      </motion.div>
       
       {useReferences && visibleReferences.length > 0 && (
         <div style={{ marginTop: '1rem' }}>

@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "تنظیم انتخابگر حالت (تا 4 مورد را انتخاب کنید)",
+    "message": "تنظیم انتخابگر حالت (تا 3 مورد را انتخاب کنید)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

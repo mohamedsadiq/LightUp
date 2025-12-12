@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "הגדר בורר מצבים (בחר עד 4)",
+    "message": "הגדר בורר מצבים (בחר עד 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {

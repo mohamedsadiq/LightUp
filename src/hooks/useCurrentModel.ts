@@ -10,10 +10,9 @@ export const useCurrentModel = () => {
   const getModelDisplay = (settings: Settings) => {
     if (!settings?.modelType) return "Not configured"
     
-    // For Basic version, show the specific model version
+    // For Basic version, show LightUp branding instead of Gemini
     if (settings.modelType === "basic") {
-      // Format the model name to be more user-friendly
-      return "Gemini 2.0 Flash"
+      return "LightUp Basic"
     }
     
     // For Gemini, show the specific model version

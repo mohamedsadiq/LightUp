@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "LightUp - AI-забезпечені веб-анотації. Стислий виклад, переклад та багато іншого",
+    "message": "LightUp - AI-забезпечені веб-анотації",
     "description": "Name of the extension"
   },
   "extensionDescription": {
@@ -176,7 +176,7 @@
     "description": "Shortcut description for Free mode"
   },
   "shortcutAfterSettingDesc": {
-    "message": "Після встановлення режиму за допомогою комбінації клавіш, виділіть будь-який текст, і LightUp з’явиться у вибраному вами режимі.",
+    "message": "Після встановлення режиму за допомогою комбінації клавіш, виділіть будь-який текст, і LightUp з'явиться у вибраному вами режимі.",
     "description": "Informational text below mode switching shortcuts"
   },
   "featureToggles": {
@@ -216,11 +216,11 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Налаштувати селектор режимів (до 4)",
+    "message": "Налаштувати селектор режимів (до 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {
-    "message": "Ці режими з’являться у вашому селекторі режимів. Клацніть, щоб переключити.",
+    "message": "Ці режими з'являться у вашому селекторі режимів. Клацніть, щоб переключити.",
     "description": "Help text for mode selector configuration"
   },
   "availableActions": {
@@ -324,11 +324,11 @@
     "description": "Placeholder for feedback content field"
   },
   "feedbackEmailLabel": {
-    "message": "Електронна пошта (необов’язково)",
+    "message": "Електронна пошта (необов'язково)",
     "description": "Label for email field"
   },
   "feedbackEmailDesc": {
-    "message": "Залишіть свій електронну пошту, якщо хочете, щоб ми зв’язалися з вами",
+    "message": "Залишіть свій електронну пошту, якщо хочете, щоб ми зв'язалися з вами",
     "description": "Description for email field"
   },
   "feedbackEmailPlaceholder": {
@@ -640,7 +640,7 @@
     "description": "Description for radical focus mode"
   },
   "requiredFieldLabel": {
-    "message": "(Обов’язкове)",
+    "message": "(Обов'язкове)",
     "description": "Label for required fields"
   },
   "price": {

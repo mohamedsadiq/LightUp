@@ -1,40 +1,7 @@
-import React from 'react';
 import styled from '@emotion/styled';
 import { css, keyframes } from '@emotion/react';
 
-// Enhanced notification types and interfaces
-export interface ToastNotification {
-  id: string;
-  type: 'success' | 'error' | 'warning' | 'info';
-  title: string;
-  message?: string;
-  duration?: number;
-  persistent?: boolean;
-}
-
-// Enhanced animations for notifications
-const slideInRight = keyframes`
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-`;
-
-const slideOutRight = keyframes`
-  from {
-    transform: translateX(0);
-    opacity: 1;
-  }
-  to {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-`;
-
+// Animation for status indicators
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -46,105 +13,6 @@ const fadeIn = keyframes`
   }
 `;
 
-// Enhanced Toast Notification Container
-export const ToastContainer = styled.div`
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 400px;
-  pointer-events: none;
-`;
-
-// Individual Toast Component
-export const Toast = styled.div<{ type: ToastNotification['type']; isExiting?: boolean }>`
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 16px;
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  border: 1px solid;
-  pointer-events: auto;
-  animation: ${props => props.isExiting ? slideOutRight : slideInRight} 0.3s ease-out;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-  min-width: 320px;
-  max-width: 400px;
-  
-  ${props => {
-    switch (props.type) {
-      case 'success':
-        return css`
-          background: rgba(45, 202, 110, 0.1);
-          border-color: rgba(45, 202, 110, 0.3);
-          color: #2DCA6E;
-        `;
-      case 'error':
-        return css`
-          background: rgba(231, 76, 60, 0.1);
-          border-color: rgba(231, 76, 60, 0.3);
-          color: #E74C3C;
-        `;
-      case 'warning':
-        return css`
-          background: rgba(255, 191, 90, 0.1);
-          border-color: rgba(255, 191, 90, 0.3);
-          color: #FFBF5A;
-        `;
-      case 'info':
-        return css`
-          background: rgba(0, 120, 212, 0.1);
-          border-color: rgba(0, 120, 212, 0.3);
-          color: #0078D4;
-        `;
-    }
-  }}
-`;
-
-export const ToastIcon = styled.div`
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  margin-top: 2px;
-`;
-
-export const ToastContent = styled.div`
-  flex: 1;
-  min-width: 0;
-`;
-
-export const ToastTitle = styled.div`
-  font-weight: 600;
-  font-size: 14px;
-  margin-bottom: 4px;
-  color: inherit;
-`;
-
-export const ToastMessage = styled.div`
-  font-size: 13px;
-  opacity: 0.8;
-  line-height: 1.4;
-  color: inherit;
-`;
-
-export const ToastCloseButton = styled.button`
-  background: none;
-  border: none;
-  color: inherit;
-  opacity: 0.6;
-  cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  
-  &:hover {
-    opacity: 1;
-    background: rgba(255, 255, 255, 0.1);
-  }
-`;
 // Unsaved changes indicator
 export const UnsavedChangesIndicator = styled.div<{ visible: boolean }>`
   display: flex;

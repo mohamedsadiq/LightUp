@@ -1,6 +1,6 @@
 import type { ProcessTextRequest } from "~types/messages"
 import { FeedbackProcessor } from "../feedback/feedbackProcessor"
-import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS } from "../../utils/constants"
+import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS, getMaxTokensFromPromptOrSetting } from "../../utils/constants"
 import { LANGUAGES } from "../../utils/constants"
 import { getCurrentLocale } from "../../utils/i18n"
 
@@ -129,7 +129,7 @@ Instructions: Build on your previous analysis/explanation of this content. If th
             content: getUserPrompt()
           }
         ],
-        max_tokens: settings.maxTokens || 2048,
+        max_tokens: getMaxTokensFromPromptOrSetting(mode, getSystemPrompt()) || settings.maxTokens || 2048,
         temperature: 0.5,
         stream: true
       }),

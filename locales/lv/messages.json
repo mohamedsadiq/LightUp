@@ -1,6 +1,6 @@
 {
   "extensionName": {
-    "message": "LightUp - AI darbinātas tīmekļa anotācijas. Kopsavilkums, tulkošana un vēl daudz kas",
+    "message": "LightUp - AI darbinātas tīmekļa anotācijas",
     "description": "Name of the extension"
   },
   "extensionDescription": {
@@ -104,11 +104,11 @@
     "description": "Description for the 'Show Selected Text' toggle"
   },
   "showInstantAIButtonLabel": {
-    "message": "Rādīt pogu “Instant AI”",
+    "message": "Rādīt pogu \"Instant AI\"",
     "description": "Label for show instant AI button toggle"
   },
   "showInstantAIButtonDesc": {
-    "message": "Pievienot peldošu pogu “Instant AI”, kas ar vienu klikšķi apkopo vai paskaidro visu lapu",
+    "message": "Pievienot peldošu pogu \"Instant AI\", kas ar vienu klikšķi apkopo vai paskaidro visu lapu",
     "description": "Description for show instant AI button toggle"
   },
   "distractionFreeModeLabel": {
@@ -216,7 +216,7 @@
     "description": "Action to ask anything"
   },
   "configureModeSelector": {
-    "message": "Konfigurēt režīma atlasītāju (izvēlēties līdz 4)",
+    "message": "Konfigurēt režīma atlasītāju (izvēlēties līdz 3)",
     "description": "Title for configuring mode selector"
   },
   "modeSelectorHelp": {
