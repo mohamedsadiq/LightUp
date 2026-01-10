@@ -11,6 +11,24 @@ export const processOpenAIText = async function*(request: ProcessTextRequest) {
   const responseLanguage = settings.aiResponseLanguage || await getSelectedLocale()
   
   try {
+    // Validate API key
+    if (!settings.apiKey || settings.apiKey.trim() === '') {
+      throw new Error('❌ OpenAI API key is missing. Please add your API key in the extension settings.');
+    }
+
+    const apiKey = settings.apiKey.trim();
+
+    if (!apiKey.startsWith('sk-')) {
+      throw new Error('❌ Invalid OpenAI API key format. OpenAI API keys must start with "sk-". Please check your API key in settings.');
+    }
+
+    if (apiKey.length < 40) {
+      throw new Error('❌ OpenAI API key appears to be incomplete. Please verify your complete API key.');
+    }
+
+    if (apiKey.includes(' ') || apiKey.includes('\n') || apiKey.includes('\t')) {
+      throw new Error('❌ OpenAI API key contains invalid characters (spaces, tabs, or line breaks). Please copy the key carefully without extra whitespace.');
+    }
     // Get the system prompt (custom or default)
     const getSystemPrompt = () => {
       // Language instruction to add to all system prompts
@@ -44,7 +62,7 @@ FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a fol
       if (isFollowUp) {
         // Include rich context for follow-ups with original content and conversation history
         const contextText = request.context || '';
-        const originalContent = contextText.length > 500 ? contextText.substring(0, 500) + "..." : contextText;
+        const originalContent = contextText.length > 400 ? contextText.substring(0, 400) + "..." : contextText;
         
         return `ORIGINAL CONTENT CONTEXT:
 ${originalContent}

@@ -94,6 +94,7 @@ const WebsiteInfoComponent: React.FC<WebsiteInfoProps> = ({
     alignItems: 'center',
     gap: '8px',
     padding: '0px 16px',
+    minHeight: '56px',
     backgroundColor: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgb(255 255 255 / 28%)',
     borderRadius: '20px',
     border: `1px solid ${currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '0000000f'}`,

@@ -103,9 +103,9 @@ export const verifyServerConnection = async (serverUrl: string): Promise<boolean
     const response = await fetch(`${serverUrl}/v1/models`, {
       signal: controller.signal
     })
-    
+
     clearTimeout(timeoutId)
-    
+
     if (!response.ok) {
       throw new Error(`Server responded with status: ${response.status}`)
     }
@@ -123,10 +123,10 @@ export const cleanupStorage = async (): Promise<void> => {
   try {
     // Get all items with null key to get everything
     const items = await storage.get(null)
-    const keysToRemove = Object.keys(items).filter(key => 
+    const keysToRemove = Object.keys(items).filter(key =>
       key.startsWith("temp_") || key.startsWith("cache_")
     )
-    
+
     const cleanupTasks = keysToRemove.map(key => storage.remove(key))
     await Promise.all(cleanupTasks)
   } catch (error) {
@@ -188,9 +188,9 @@ const getDefaultSettings = (): Settings => ({
     radicallyFocus: false,
     fontSize: "16px",
     highlightColor: "default",
-    popupAnimation: "slide",
+    popupAnimation: "none",
     persistHighlight: false,
-    layoutMode: "sidebar",
+    layoutMode: "floating",
     showGlobalActionButton: true,
     activationMode: "manual",  // Changed default from automatic to manual
     enablePDFSupport: false,

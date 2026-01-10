@@ -4,17 +4,17 @@ import { SYSTEM_PROMPTS, USER_PROMPTS, FOLLOW_UP_SYSTEM_PROMPTS, getMaxTokensFro
 import { LANGUAGES } from "../../utils/constants"
 import { getCurrentLocale } from "../../utils/i18n"
 
-export const processLocalText = async function*(request: ProcessTextRequest) {
+export const processLocalText = async function* (request: ProcessTextRequest) {
   const { text, mode, settings } = request
   const feedbackProcessor = new FeedbackProcessor()
   // Get the user's selected language for AI responses
   // Priority: 1) aiResponseLanguage setting (from website info selector)
   //          2) Extension UI language (from popup/options) as fallback
   const responseLanguage = settings.aiResponseLanguage || await getCurrentLocale()
-  
+
   try {
     const { positivePatterns, negativePatterns } = await feedbackProcessor.getFeedbackContext(text)
-    
+
     // Get the system prompt (custom or default)
     const getSystemPrompt = () => {
       // For follow-up questions, use enhanced context-aware prompts
@@ -43,7 +43,7 @@ Based on user feedback:
 - Avoid patterns like: ${negativePatterns.slice(0, 3).join(', ')}
 Keep responses under 1500 tokens.`;
       }
-      
+
       // If custom system prompt is available, use it
       const customSystemPrompt = settings.customPrompts?.systemPrompts?.[mode];
       if (customSystemPrompt) {
@@ -58,7 +58,7 @@ Keep responses under 1500 tokens.`;
           Keep responses under 1500 tokens.
         `;
       }
-      
+
       // Otherwise use default with feedback enhancement
       return `
         ${SYSTEM_PROMPTS[mode]}
@@ -77,8 +77,8 @@ Keep responses under 1500 tokens.`;
       if (request.isFollowUp) {
         // Include rich context for follow-ups with original content and conversation history
         const contextText = request.context || '';
-        const originalContent = contextText.length > 500 ? contextText.substring(0, 500) + "..." : contextText;
-        
+        const originalContent = contextText.length > 400 ? contextText.substring(0, 400) + "..." : contextText;
+
         return `ORIGINAL CONTENT CONTEXT:
 ${originalContent}
 
@@ -86,7 +86,7 @@ FOLLOW-UP QUESTION: ${text}
 
 Instructions: Build on your previous analysis/explanation of this content. If the question asks for "more" or "other" aspects (like "what else is strange/unusual/problematic"), provide genuinely new insights you haven't covered yet. Avoid repeating previous points unless directly relevant to the new question.`;
       }
-      
+
       // For translate mode
       if (mode === "translate") {
         // Use custom user prompt if available
@@ -97,17 +97,17 @@ Instructions: Build on your previous analysis/explanation of this content. If th
             .replace('${toLanguage}', settings.translationSettings?.toLanguage || "es")
             .replace('${text}', text);
         }
-        
+
         // Otherwise use default
         return `Translate to ${LANGUAGES[settings.translationSettings?.toLanguage || "es"]}:\n\n${text}`;
       }
-      
+
       // For other modes
       if (settings.customPrompts?.userPrompts?.[mode]) {
         // Use custom user prompt if available
         return settings.customPrompts.userPrompts[mode].replace('${text}', text);
       }
-      
+
       // Otherwise use default
       return `${USER_PROMPTS[mode]}\n${text}`;
     };
@@ -149,17 +149,17 @@ Instructions: Build on your previous analysis/explanation of this content. If th
 
     while (true) {
       const { done, value } = await reader.read()
-      
+
       if (done) {
         if (buffer) {
-          yield { 
-            type: 'chunk', 
+          yield {
+            type: 'chunk',
             content: buffer,
             isFollowUp: request.isFollowUp,
             id: request.id
           }
         }
-        yield { 
+        yield {
           type: 'done',
           isFollowUp: request.isFollowUp,
           id: request.id
@@ -168,12 +168,12 @@ Instructions: Build on your previous analysis/explanation of this content. If th
       }
 
       buffer += decoder.decode(value, { stream: true })
-      
+
       // Optimize buffer handling for faster response
       if (buffer.length > 500) {
         // For large chunks, process immediately without waiting for line breaks
-        yield { 
-          type: 'chunk', 
+        yield {
+          type: 'chunk',
           content: buffer,
           isFollowUp: request.isFollowUp,
           id: request.id
@@ -181,17 +181,17 @@ Instructions: Build on your previous analysis/explanation of this content. If th
         buffer = ''
         continue
       }
-      
+
       // Process complete lines from buffer
       const lines = buffer.split('\n')
       buffer = lines.pop() || ''
 
       // Process multiple lines at once for faster response
       const chunksToProcess = []
-      
+
       for (const line of lines) {
         if (line.trim() === '') continue
-        
+
         try {
           const data = JSON.parse(line.replace(/^data: /, ''))
           if (data.choices?.[0]?.delta?.content) {
@@ -201,11 +201,11 @@ Instructions: Build on your previous analysis/explanation of this content. If th
           console.warn('Failed to parse line:', line)
         }
       }
-      
+
       // Combine chunks and send in bulk for faster display
       if (chunksToProcess.length > 0) {
-        yield { 
-          type: 'chunk', 
+        yield {
+          type: 'chunk',
           content: chunksToProcess.join(''),
           isFollowUp: request.isFollowUp,
           id: request.id

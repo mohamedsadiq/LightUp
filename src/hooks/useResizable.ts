@@ -30,7 +30,7 @@ export const useResizable = ({
 
       const deltaX = e.clientX - resizeRef.current.startX;
       const deltaY = e.clientY - resizeRef.current.startY;
-      
+
       sizeRef.current = {
         width: Math.max(resizeRef.current.startWidth + deltaX, initialWidth),
         height: Math.max(resizeRef.current.startHeight + deltaY, initialHeight)
@@ -52,13 +52,13 @@ export const useResizable = ({
 
     if (isResizing) {
       document.body.style.userSelect = 'none';
-      document.addEventListener('mousemove', handleMouseMove);
-      document.addEventListener('mouseup', handleMouseUp);
+      window.addEventListener('mousemove', handleMouseMove, { capture: true });
+      window.addEventListener('mouseup', handleMouseUp, { capture: true });
     }
 
     return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
+      window.removeEventListener('mousemove', handleMouseMove, { capture: true });
+      window.removeEventListener('mouseup', handleMouseUp, { capture: true });
       document.body.style.userSelect = '';
     };
   }, [isResizing, initialWidth, initialHeight]);

@@ -174,6 +174,26 @@ Before providing your response, think through the following steps:`;
    */
   private getModeSpecificReasoningSteps(mode: string, userQuery: string): string {
     const stepTemplates = {
+      challenge: `
+1. STEELMAN THE VIEW:
+   - State the author's main thesis as charitably as possible
+   - Identify the strongest supporting reasons/evidence
+   - Clarify definitions and scope
+
+2. ASSUMPTIONS & MISSING CONTEXT:
+   - List hidden assumptions and unstated premises
+   - Identify what evidence or context would be needed to validate key claims
+   - Note potential confounders or alternative explanations
+
+3. COUNTERARGUMENTS:
+   - Provide the strongest counterarguments (avoid straw-manning)
+   - Identify edge cases where the claim may fail
+   - Highlight contradictions, logical gaps, or weak evidence
+
+4. PERSPECTIVES & SYNTHESIS:
+   - Surface other stakeholder perspectives
+   - Explain what would change your assessment
+   - End with a balanced conclusion (where the POV is strong vs. weak)`,
       analyze: `
 1. ANALYSIS STRUCTURE:
    - Break down the content into key components
@@ -286,6 +306,13 @@ Before providing your response, think through the following steps:`;
    */
   private buildOutputFormat(mode: string): string {
     const formatInstructions = {
+      challenge: `RESPONSE FORMAT:
+1. Steelman (best version of the author's POV) in 2-5 bullets.
+2. Assumptions / missing context in bullets.
+3. Strong counterarguments in bullets (with brief reasoning).
+4. Questions that would test the claims.
+5. Balanced conclusion (where the POV is strong vs. weak).
+6. Keep the response focused; rely on the prompt for any explicit length guidance.`,
       analyze: `RESPONSE FORMAT:
 1. Provide a concise executive summary highlighting the most important findings.
 2. Use bullet points or short paragraphs to present key insights, patterns, and implications.
@@ -406,6 +433,7 @@ The research identifies 2°C warming as a critical threshold beyond which impact
    */
   private getBaseSystemPrompt(mode: string): string {
     const basePrompts = {
+      challenge: `You are a critical thinking assistant. Your job is to challenge the point of view of the content fairly. Steelman the author's position first, then identify assumptions, missing context, and strong counterarguments. Be respectful, precise, and avoid straw-manning. Use clear sections and concise bullets.`,
       analyze: `You are an analytical expert. Provide focused analysis highlighting patterns, strengths, weaknesses, and key insights. Use bullet points for clarity.`,
 
       explain: `You are an expert educator. Deliver clear explanations using short paragraphs or bullet points. Focus on the 'why' and 'how'. Avoid jargon.`,

@@ -33,6 +33,8 @@ export interface SessionContext {
 export interface SessionMemoryConfig {
   maxMessages: number; // Maximum messages to keep
   maxTokens: number; // Token budget for context
+  seedPreservation: boolean; // Always keep the first message (page context)
+  tailSize: number; // Number of recent messages to keep in full
 }
 
 // ============================================================================
@@ -40,12 +42,23 @@ export interface SessionMemoryConfig {
 // ============================================================================
 
 const DEFAULT_CONFIG: SessionMemoryConfig = {
-  maxMessages: 10, // Keep only last 10 messages
+  maxMessages: 50, // Increased from 10 since we use token-based trimming now
   maxTokens: 2000, // Conservative token budget
+  seedPreservation: true,
+  tailSize: 3, // Keep last 3 messages in full
 };
 
-// Simple token estimation
-const estimateTokens = (text: string): number => Math.ceil(text.length / 4);
+// Advanced token estimation: ~4 chars per token for English, but we use 3.5 to be safe
+// Also account for non-English characters which are often 1:1 or 1:2 token-to-char
+const estimateTokens = (text: string): number => {
+  if (!text) return 0;
+  // Count non-ASCII characters (often multi-token)
+  const nonAsciiCount = (text.match(/[^\x00-\x7F]/g) || []).length;
+  const asciiCount = text.length - nonAsciiCount;
+  
+  // 3.5 chars per token for ASCII, 1.5 chars per token for non-ASCII (conservative)
+  return Math.ceil((asciiCount / 3.5) + (nonAsciiCount / 1.5));
+};
 
 // ============================================================================
 // SessionMemory Class
@@ -55,9 +68,15 @@ export class SessionMemory {
   private config: SessionMemoryConfig;
   private sessions: Map<string, SessionContext> = new Map();
   private currentDomain: string | null = null;
+  private cleanupTimer: NodeJS.Timeout | null = null;
 
   constructor(config?: Partial<SessionMemoryConfig>) {
     this.config = { ...DEFAULT_CONFIG, ...config };
+    
+    // Set up periodic cleanup every 30 minutes
+    this.cleanupTimer = setInterval(() => {
+      this.cleanupOldSessions();
+    }, 30 * 60 * 1000);
   }
 
   // --------------------------------------------------------------------------
@@ -122,7 +141,7 @@ export class SessionMemory {
   // --------------------------------------------------------------------------
 
   /**
-   * Get context string for LLM (recent messages only)
+   * Get context string for LLM using Seed-Middle-Tail prioritization
    */
   getContextString(): string {
     if (!this.currentDomain) return "";
@@ -130,29 +149,86 @@ export class SessionMemory {
     const session = this.sessions.get(this.currentDomain);
     if (!session || session.messages.length === 0) return "";
 
-    // Build simple context from recent messages
+    const messages = session.messages;
     const contextParts: string[] = [];
-    let tokenCount = 0;
+    let currentTokens = 0;
 
-    // Work backwards from most recent
-    for (let i = session.messages.length - 1; i >= 0 && tokenCount < this.config.maxTokens; i--) {
-      const msg = session.messages[i];
-      const msgTokens = estimateTokens(msg.content);
-
-      if (tokenCount + msgTokens > this.config.maxTokens) break;
-
-      const role = msg.role === "user" ? "User" : "Assistant";
-      const truncatedContent = msg.content.length > 200 
-        ? msg.content.substring(0, 200) + "..." 
-        : msg.content;
-      
-      contextParts.unshift(`${role}: ${truncatedContent}`);
-      tokenCount += msgTokens;
+    // 1. Always include the SEED (first message) if enabled
+    if (this.config.seedPreservation && messages.length > 0) {
+      const seed = messages[0];
+      const seedText = this.formatMessage(seed);
+      contextParts.push(seedText);
+      currentTokens += estimateTokens(seedText);
     }
 
-    if (contextParts.length === 0) return "";
+    // 2. Identify TAIL (most recent messages)
+    const tailStartIndex = Math.max(
+      this.config.seedPreservation ? 1 : 0,
+      messages.length - this.config.tailSize
+    );
+    const tailMessages = messages.slice(tailStartIndex);
 
-    return contextParts.join("\n\n");
+    // 3. Identify MIDDLE (everything between seed and tail)
+    const middleMessages = messages.slice(
+      this.config.seedPreservation ? 1 : 0,
+      tailStartIndex
+    );
+
+    // 4. Add TAIL messages (working backwards to fit budget)
+    const tailParts: string[] = [];
+    for (let i = tailMessages.length - 1; i >= 0; i--) {
+      const msg = tailMessages[i];
+      const formatted = this.formatMessage(msg);
+      const tokens = estimateTokens(formatted);
+
+      if (currentTokens + tokens > this.config.maxTokens) break;
+
+      tailParts.unshift(formatted);
+      currentTokens += tokens;
+    }
+
+    // 5. Add MIDDLE messages (highly compressed "Essence" mode)
+    const middleParts: string[] = [];
+    if (currentTokens < this.config.maxTokens && middleMessages.length > 0) {
+      for (let i = middleMessages.length - 1; i >= 0; i--) {
+        const msg = middleMessages[i];
+        // Distill middle messages to just the first 100 chars to save space
+        const content = msg.content.length > 100 
+          ? msg.content.substring(0, 100) + "..." 
+          : msg.content;
+        const formatted = `(Past) ${msg.role === "user" ? "User" : "AI"}: ${content}`;
+        const tokens = estimateTokens(formatted);
+
+        if (currentTokens + tokens > this.config.maxTokens) break;
+
+        middleParts.unshift(formatted);
+        currentTokens += tokens;
+      }
+    }
+
+    // Final assembly
+    const finalParts = [];
+    if (this.config.seedPreservation && contextParts.length > 0) {
+      finalParts.push(contextParts[0]);
+    }
+    if (middleParts.length > 0) {
+      finalParts.push("--- Past Conversation Essence ---");
+      finalParts.push(...middleParts);
+    }
+    if (tailParts.length > 0) {
+      finalParts.push("--- Recent Exchange ---");
+      finalParts.push(...tailParts);
+    }
+
+    return finalParts.join("\n\n");
+  }
+
+  /**
+   * Format message for context string
+   */
+  private formatMessage(msg: SessionMessage): string {
+    const role = msg.role === "user" ? "User" : "Assistant";
+    return `${role}: ${msg.content}`;
   }
 
   /**
@@ -192,6 +268,69 @@ export class SessionMemory {
   clearAll(): void {
     this.sessions.clear();
     this.currentDomain = null;
+  }
+
+  /**
+   * Clean up old sessions to prevent memory leaks
+   */
+  private cleanupOldSessions(): void {
+    const now = Date.now();
+    const TTL = 24 * 60 * 60 * 1000; // 24 hours
+    const MAX_DOMAINS = 100; // Maximum number of domains to keep
+    
+    // Remove sessions older than TTL
+    for (const [domain, session] of this.sessions.entries()) {
+      if (now - session.startedAt > TTL) {
+        this.sessions.delete(domain);
+      }
+    }
+    
+    // If we still have too many domains, remove the oldest ones
+    if (this.sessions.size > MAX_DOMAINS) {
+      const sortedSessions = Array.from(this.sessions.entries())
+        .sort((a, b) => a[1].startedAt - b[1].startedAt);
+      
+      const toRemove = sortedSessions.slice(0, this.sessions.size - MAX_DOMAINS);
+      toRemove.forEach(([domain]) => this.sessions.delete(domain));
+    }
+  }
+
+  /**
+   * Cleanup method to be called when extension is shutting down
+   */
+  destroy(): void {
+    if (this.cleanupTimer) {
+      clearInterval(this.cleanupTimer);
+      this.cleanupTimer = null;
+    }
+    this.clearAll();
+  }
+
+  /**
+   * Get current session metrics
+   */
+  getMetrics(): { usedTokens: number; totalTokens: number; isDistilled: boolean } {
+    if (!this.currentDomain) {
+      return { usedTokens: 0, totalTokens: this.config.maxTokens, isDistilled: false };
+    }
+
+    const session = this.sessions.get(this.currentDomain);
+    if (!session) {
+      return { usedTokens: 0, totalTokens: this.config.maxTokens, isDistilled: false };
+    }
+
+    // Calculate current usage of the generated context string
+    const contextString = this.getContextString();
+    const usedTokens = estimateTokens(contextString);
+    
+    // Distillation is active if we have more messages than are fully represented in the tail/seed
+    const isDistilled = session.messages.length > (this.config.tailSize + (this.config.seedPreservation ? 1 : 0));
+
+    return {
+      usedTokens,
+      totalTokens: this.config.maxTokens,
+      isDistilled
+    };
   }
 
   /**

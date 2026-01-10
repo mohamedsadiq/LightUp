@@ -56,7 +56,7 @@ async function retryWithBackoff<T>(
     return await fn();
   } catch (error) {
     if (retries <= 0) throw error;
-    
+
     // Check if error is retryable
     const isRetryable = error instanceof Error && (
       error.message.includes('rate limit') ||
@@ -65,29 +65,29 @@ async function retryWithBackoff<T>(
       error.message.includes('502') ||
       error.message.includes('500')
     );
-    
+
     if (!isRetryable) throw error;
-    
+
     const delayMs = Math.min(
       RETRY_CONFIG.baseDelay * Math.pow(RETRY_CONFIG.backoffFactor, RETRY_CONFIG.maxRetries - retries),
       RETRY_CONFIG.maxDelay
     );
-    
+
     console.warn(`xAI API request failed, retrying in ${delayMs}ms... (${retries} retries left)`);
     await delay(delayMs);
-    
+
     return retryWithBackoff(fn, retries - 1);
   }
 }
 
-export const processXAIText = async function*(request: ProcessTextRequest) {
+export const processXAIText = async function* (request: ProcessTextRequest) {
   const { text, mode, context, isFollowUp, settings } = request;
-  
+
   // Get the user's selected language for AI responses
   // Priority: 1) aiResponseLanguage setting (from website info selector)
   //          2) Extension UI language (from popup/options) as fallback
   const responseLanguage = settings.aiResponseLanguage || await getSelectedLocale();
-  
+
   try {
     // Validate API key
     if (!settings.xaiApiKey || settings.xaiApiKey.trim() === '') {
@@ -96,19 +96,19 @@ export const processXAIText = async function*(request: ProcessTextRequest) {
 
     // Enhanced API key format validation
     const apiKey = settings.xaiApiKey.trim();
-    
+
     if (!apiKey.startsWith('xai-')) {
       throw new Error('❌ Invalid xAI API key format. xAI API keys must start with "xai-". Please check your API key in settings.');
     }
-    
+
     if (apiKey.length < 50) {
       throw new Error('❌ xAI API key appears to be incomplete. xAI API keys are typically 64+ characters long. Please verify your complete API key.');
     }
-    
+
     if (apiKey.includes(' ') || apiKey.includes('\n') || apiKey.includes('\t')) {
       throw new Error('❌ xAI API key contains invalid characters (spaces, tabs, or line breaks). Please copy the key carefully without extra whitespace.');
     }
-    
+
     // Log successful validation (without exposing the key)
     console.log('✅ xAI API key format validation passed');
     console.log(`API key length: ${apiKey.length} characters`);
@@ -117,10 +117,10 @@ export const processXAIText = async function*(request: ProcessTextRequest) {
     // Get the system prompt (custom or default)
     const getSystemPrompt = (): string => {
       // Language instruction to add to all system prompts
-      const languageInstruction = responseLanguage !== "en" 
-        ? `\n\nIMPORTANT: Respond in ${responseLanguage} language. Adapt your response to be culturally appropriate for speakers of this language.` 
+      const languageInstruction = responseLanguage !== "en"
+        ? `\n\nIMPORTANT: Respond in ${responseLanguage} language. Adapt your response to be culturally appropriate for speakers of this language.`
         : "";
-        
+
       if (isFollowUp) {
         if (settings.customPrompts?.systemPrompts?.[mode]) {
           return `${settings.customPrompts.systemPrompts[mode]} 
@@ -130,7 +130,7 @@ FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a fol
         const basePrompt = FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
         return basePrompt + languageInstruction;
       }
-      
+
       if (settings.customPrompts?.systemPrompts?.[mode]) {
         return settings.customPrompts.systemPrompts[mode] + languageInstruction;
       }
@@ -141,8 +141,8 @@ FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a fol
     const getUserPrompt = (): string => {
       if (isFollowUp) {
         const contextText = context || '';
-        const originalContent = contextText.length > 500 ? contextText.substring(0, 500) + "..." : contextText;
-        
+        const originalContent = contextText.length > 400 ? contextText.substring(0, 400) + "..." : contextText;
+
         return `ORIGINAL CONTENT CONTEXT:
 ${originalContent}
 
@@ -150,7 +150,7 @@ FOLLOW-UP QUESTION: ${text}
 
 Instructions: Build on your previous analysis/explanation of this content. If the question asks for "more" or "other" aspects (like "what else is strange/unusual/problematic"), provide genuinely new insights you haven't covered yet. Avoid repeating previous points unless directly relevant to the new question.`;
       }
-      
+
       if (mode === "translate") {
         if (settings.customPrompts?.userPrompts?.[mode]) {
           const customPrompt = settings.customPrompts.userPrompts[mode];
@@ -159,14 +159,14 @@ Instructions: Build on your previous analysis/explanation of this content. If th
             .replace('${toLanguage}', settings.translationSettings?.toLanguage || "es")
             .replace('${text}', text);
         }
-        
+
         return `Translate the following text from ${settings.translationSettings?.fromLanguage || "en"} to ${settings.translationSettings?.toLanguage || "es"}:\n\n${text}`;
       }
-      
+
       if (settings.customPrompts?.userPrompts?.[mode]) {
         return settings.customPrompts.userPrompts[mode].replace('${text}', text);
       }
-      
+
       return `${typeof USER_PROMPTS[mode] === 'function' ? USER_PROMPTS[mode](text) : USER_PROMPTS[mode]}\n${text}`;
     };
 
@@ -192,7 +192,7 @@ Instructions: Build on your previous analysis/explanation of this content. If th
       messages,
       model: selectedModel, // ✅ Correct: No xai/ prefix needed
       stream: true,
-      temperature: settings.temperature ?? 0.7,
+      temperature: settings.temperature ?? 0.5,
       max_tokens: getMaxTokensFromPromptOrSetting(mode, getSystemPrompt()) || settings.maxTokens || 4096,
       top_p: 0.9,
       frequency_penalty: 0,
@@ -232,13 +232,13 @@ Instructions: Build on your previous analysis/explanation of this content. If th
       if (!res.ok) {
         let errorMessage = `xAI API Error: ${res.status} ${res.statusText}`;
         let errorDetails: XAIError | null = null;
-        
+
         try {
           // Clone response before reading to avoid "body stream already read" error
           const errorText = await res.text();
           errorDetails = JSON.parse(errorText) as XAIError;
           console.error('xAI Error Response:', errorDetails);
-          
+
           // Enhanced error messages based on error type
           if (errorDetails.error) {
             switch (errorDetails.error.type) {
@@ -264,7 +264,7 @@ Instructions: Build on your previous analysis/explanation of this content. If th
                 errorMessage = errorDetails.error.message || errorMessage;
             }
           }
-          
+
           // Special handling for 403 errors
           if (res.status === 403) {
             errorMessage = `Access Forbidden (403): ${errorDetails?.error?.message || 'Your request was denied'}. 
@@ -281,7 +281,7 @@ Please verify your API key and account status at x.ai`;
         } catch (parseError) {
           console.warn('Could not parse error response:', parseError);
         }
-        
+
         throw new Error(errorMessage);
       }
 
@@ -301,19 +301,19 @@ Please verify your API key and account status at x.ai`;
     try {
       while (true) {
         const { done, value } = await reader.read();
-        
+
         if (done) {
           // Send any remaining buffer content
           if (buffer.trim()) {
-            yield { 
-              type: 'chunk', 
+            yield {
+              type: 'chunk',
               content: buffer,
               isFollowUp: request.isFollowUp,
               id: request.id
             };
           }
-          
-          yield { 
+
+          yield {
             type: 'done',
             isFollowUp: request.isFollowUp,
             id: request.id,
@@ -323,7 +323,7 @@ Please verify your API key and account status at x.ai`;
         }
 
         buffer += decoder.decode(value, { stream: true });
-        
+
         // Process complete lines
         const lines = buffer.split('\n');
         buffer = lines.pop() || '';
@@ -331,36 +331,36 @@ Please verify your API key and account status at x.ai`;
         for (const line of lines) {
           const trimmedLine = line.trim();
           if (!trimmedLine || trimmedLine === 'data: [DONE]') continue;
-          
+
           if (trimmedLine.startsWith('data: ')) {
             try {
               const jsonStr = trimmedLine.slice(6); // Remove 'data: ' prefix
               const data = JSON.parse(jsonStr);
-              
+
               // Handle different response formats
               const delta = data.choices?.[0]?.delta;
               let content = '';
-              
+
               // Support both content and reasoning_content
               if (typeof delta?.content === 'string') {
                 content = delta.content;
               } else if (typeof delta?.reasoning_content === 'string') {
                 content = delta.reasoning_content;
               }
-              
+
               if (content) {
                 totalContent += content;
-                yield { 
-                  type: 'chunk', 
+                yield {
+                  type: 'chunk',
                   content,
                   isFollowUp: request.isFollowUp,
                   id: request.id
                 };
               }
-              
+
               // Handle completion
               if (data.choices?.[0]?.finish_reason) {
-                yield { 
+                yield {
                   type: 'done',
                   isFollowUp: request.isFollowUp,
                   id: request.id,
@@ -369,7 +369,7 @@ Please verify your API key and account status at x.ai`;
                 };
                 return;
               }
-              
+
             } catch (parseError) {
               console.warn('Failed to parse streaming response line:', trimmedLine, parseError);
               // Continue processing other lines instead of failing completely
@@ -383,7 +383,7 @@ Please verify your API key and account status at x.ai`;
 
   } catch (error) {
     console.error('xAI Processing Error:', error);
-    
+
     // Enhanced error reporting
     let errorMessage = 'Unknown error occurred';
     if (error instanceof Error) {
@@ -391,7 +391,7 @@ Please verify your API key and account status at x.ai`;
     } else if (typeof error === 'string') {
       errorMessage = error;
     }
-    
+
     yield {
       type: 'error',
       error: errorMessage,
@@ -406,9 +406,9 @@ export async function testXAIApiKey(apiKey: string): Promise<{ valid: boolean; e
   try {
     // Basic format validation first
     if (!apiKey || !apiKey.startsWith('xai-') || apiKey.length < 50) {
-      return { 
-        valid: false, 
-        error: 'Invalid API key format. xAI keys must start with "xai-" and be 50+ characters long.' 
+      return {
+        valid: false,
+        error: 'Invalid API key format. xAI keys must start with "xai-" and be 50+ characters long.'
       };
     }
 
@@ -422,7 +422,7 @@ export async function testXAIApiKey(apiKey: string): Promise<{ valid: boolean; e
       },
       body: JSON.stringify({
         messages: [{ role: 'user', content: 'Hi' }],
-        model: 'grok-3',
+        model: 'grok-4-0709',
         max_tokens: 1,
         stream: false
       })
@@ -439,9 +439,9 @@ export async function testXAIApiKey(apiKey: string): Promise<{ valid: boolean; e
       return { valid: false, error: `API test failed: ${response.status} ${errorText}` };
     }
   } catch (error) {
-    return { 
-      valid: false, 
-      error: `Connection test failed: ${error instanceof Error ? error.message : 'Unknown error'}` 
+    return {
+      valid: false,
+      error: `Connection test failed: ${error instanceof Error ? error.message : 'Unknown error'}`
     };
   }
 } 

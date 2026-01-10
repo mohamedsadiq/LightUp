@@ -2,9 +2,9 @@ import { useState, useEffect } from "react"
 import styled from "@emotion/styled"
 import { Storage } from "@plasmohq/storage"
 
-import { 
-  SUPPORTED_LANGUAGES, 
-  getSelectedLocale, 
+import {
+  SUPPORTED_LANGUAGES,
+  getSelectedLocale,
   setSelectedLocale,
   SELECTED_LOCALE_KEY
 } from "~utils/i18n"
@@ -60,7 +60,7 @@ export interface LanguageSelectorProps {
   compact?: boolean
 }
 
-const LanguageSelector: React.FC<LanguageSelectorProps> = ({ 
+const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   onChange,
   label = chrome.i18n.getMessage("languageLabel") || "Language",
   compact = false
@@ -68,7 +68,7 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   const [selectedLocale, setLocale] = useState<string>("")
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const storage = new Storage()
-  
+
   // Load the selected locale on component mount
   useEffect(() => {
     const loadSelectedLocale = async () => {
@@ -81,22 +81,22 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         setIsLoading(false)
       }
     }
-    
+
     loadSelectedLocale()
   }, [])
-  
+
   // Handle language change
   const handleLanguageChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newLocale = e.target.value
     setLocale(newLocale)
-    
+
     try {
       await setSelectedLocale(newLocale)
-      
+
       if (onChange) {
         onChange(newLocale)
       }
-      
+
       // Notify the user that they need to reload for full effect
       // In a real implementation, we might want to show a toast or notification
       console.log("Language changed to", newLocale)
@@ -104,11 +104,11 @@ const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       console.error("Error setting language:", error)
     }
   }
-  
+
   if (isLoading) {
     return <div>Loading...</div>
   }
-  
+
   return (
     <SelectContainer compact={compact}>
       <Label compact={compact} htmlFor="language-selector">{label}</Label>

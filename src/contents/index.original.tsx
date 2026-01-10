@@ -856,6 +856,9 @@ function Content() {
   
   // Create font size mapping based on user setting
   const fontSizes = useMemo(() => createFontSizeMapping(fontSize), [fontSize]);
+
+  const { toast, showToast } = useToast();
+  const { isEnabled, handleEnabledChange } = useEnabled(showToast);
   
   // Text selection bubble state from our new hook
   const {
@@ -863,7 +866,7 @@ function Content() {
     position: selectionBubblePosition,
     isVisible: isSelectionBubbleVisible,
     setIsVisible: setIsSelectionBubbleVisible
-  } = useTextSelection();
+  } = useTextSelection(3, { enabled: isEnabled });
 
   // This section will be moved after state variables are declared
 
@@ -891,8 +894,6 @@ function Content() {
     initialHeight: 460
   });
 
-  const { toast, showToast } = useToast();
-  const { isEnabled, handleEnabledChange } = useEnabled(showToast);
   const { voicesLoaded, speakingId, handleSpeak } = useSpeech();
   const { copiedId, handleCopy } = useCopy();
   const { lastResult, updateLastResult } = useLastResult();

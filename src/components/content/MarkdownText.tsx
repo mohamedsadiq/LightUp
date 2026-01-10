@@ -33,15 +33,15 @@ const createFontSizesFromSetting = (fontSize: string): FontSizes => {
     if (size === "large") return 1.15;
     if (size === "x-large") return 1.3;
     if (size === "xx-large") return 1.45;
-    
+
     const match = size.match(/^([\d.]+)rem$/);
     if (match) return parseFloat(match[1]);
-    
+
     return 1.0;
   };
 
   const baseSize = parseSize(fontSize);
-  
+
   return {
     base: `${baseSize}rem`,
     xs: `${Math.max(0.6, baseSize * 0.75)}rem`,
@@ -65,8 +65,8 @@ const createFontSizesFromSetting = (fontSize: string): FontSizes => {
   };
 };
 
-const MarkdownText: React.FC<MarkdownTextProps> = ({ 
-  text, 
+const MarkdownText: React.FC<MarkdownTextProps> = ({
+  text,
   isStreaming: _isStreaming = false,
   language = 'en',
   useReferences = false,
@@ -78,8 +78,8 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
   onAnimationComplete: _onAnimationComplete
 }) => {
   const normalizedTheme: "light" | "dark" = theme === "system" ? "light" : theme;
-  const fontSizes = useMemo(() => 
-    propFontSizes || createFontSizesFromSetting(fontSize), 
+  const fontSizes = useMemo(() =>
+    propFontSizes || createFontSizesFromSetting(fontSize),
     [propFontSizes, fontSize]
   );
 
@@ -88,20 +88,20 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
 
   const processedText = useMemo(() => {
     if (!text) return '';
-    
+
     let cleanedText = text
       .replace(/\n\s*\n/g, '\n\n')
       .replace(/<p>\s*<\/p>/g, '')
       .replace(/>\s+</g, '><')
       .trim();
-    
+
     if (useReferences) {
       cleanedText = cleanedText.replace(/\[ref:(.*?)\]/g, (match, content) => {
         const refId = addReference(content.trim());
         return `<sup data-reference-id="${refId}">${refId}</sup>`;
       });
     }
-    
+
     return cleanedText;
   }, [text, useReferences, addReference]);
 
@@ -318,7 +318,7 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
 
   return (
     <div>
-      <motion.div 
+      <motion.div
         data-markdown-container
         style={containerStyle}
         initial={{ opacity: 0 }}
@@ -333,11 +333,11 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
           {processedText}
         </ReactMarkdown>
       </motion.div>
-      
+
       {useReferences && visibleReferences.length > 0 && (
         <div style={{ marginTop: '1rem' }}>
-          <ReferencesContainer 
-            references={visibleReferences} 
+          <ReferencesContainer
+            references={visibleReferences}
             theme={theme}
           />
         </div>

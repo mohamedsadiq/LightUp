@@ -11,7 +11,7 @@ const handler: PlasmoMessaging.MessageHandler = async (req, res) => {
     const { text, mode } = req.body
   
 
-    if (!['explain', 'summarize', 'analyze', 'translate'].includes(mode)) {
+    if (!['explain', 'summarize', 'analyze', 'challenge', 'translate'].includes(mode)) {
       res.send({ error: `Invalid mode: ${mode}` })
       return
     }

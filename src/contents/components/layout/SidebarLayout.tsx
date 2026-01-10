@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 
 interface SidebarLayoutProps {
@@ -11,6 +11,7 @@ interface SidebarLayoutProps {
   renderPopupContent: () => React.ReactNode;
   sidebarScaleMotionVariants: any;
   sidebarSlideMotionVariants: any;
+  sidebarReducedMotionVariants: any;
   fadeMotionVariants: any;
   noMotionVariants: any;
   isPinned?: boolean;
@@ -26,11 +27,60 @@ export const SidebarLayout = ({
   renderPopupContent,
   sidebarScaleMotionVariants,
   sidebarSlideMotionVariants,
+  sidebarReducedMotionVariants,
   fadeMotionVariants,
   noMotionVariants,
   isPinned = false
 }: SidebarLayoutProps) => {
   // When pinned, we no longer adjust the page layout. Sidebar remains an overlay.
+
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(() => {
+    if (typeof window === "undefined" || !window.matchMedia) {
+      return false
+    }
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  })
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) {
+      return
+    }
+
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
+    const handleChange = () => setPrefersReducedMotion(mediaQuery.matches)
+
+    handleChange()
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleChange)
+    } else if (typeof mediaQuery.addListener === "function") {
+      mediaQuery.addListener(handleChange)
+    }
+
+    return () => {
+      if (typeof mediaQuery.removeEventListener === "function") {
+        mediaQuery.removeEventListener("change", handleChange)
+      } else if (typeof mediaQuery.removeListener === "function") {
+        mediaQuery.removeListener(handleChange)
+      }
+    }
+  }, [])
+
+  const animationType = settings?.customization?.popupAnimation
+  const slideVariants = prefersReducedMotion ? sidebarReducedMotionVariants : sidebarSlideMotionVariants
+  const variants =
+    animationType === "scale"
+      ? sidebarScaleMotionVariants
+      : animationType === "slide"
+        ? slideVariants
+        : animationType === "fade"
+          ? fadeMotionVariants
+          : noMotionVariants
+
+  const transitionProps =
+    animationType === "none"
+      ? { type: "tween", duration: 0 }
+      : undefined
 
   return (
     <motion.div
@@ -56,25 +106,11 @@ export const SidebarLayout = ({
       onMouseDown={(e) => e.stopPropagation()}
       onMouseEnter={() => setIsInteractingWithPopup(true)}
       onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-      initial={settings?.customization?.popupAnimation === "none" ? { x: 0, opacity: 1 } : "initial"}
-      animate={settings?.customization?.popupAnimation === "none" ? { x: 0, opacity: 1 } : "animate"}
-      exit={settings?.customization?.popupAnimation === "none" ? { x: 0, opacity: 0 } : "exit"}
-      transition={{ 
-        type: settings?.customization?.popupAnimation === "none" ? "tween" : "spring",
-        stiffness: 300,
-        damping: 25,
-        mass: 0.8,
-        duration: settings?.customization?.popupAnimation === "none" ? 0 : undefined
-      }}
-      variants={
-        settings?.customization?.popupAnimation === "scale" 
-          ? sidebarScaleMotionVariants 
-          : settings?.customization?.popupAnimation === "slide"
-            ? sidebarSlideMotionVariants
-            : settings?.customization?.popupAnimation === "fade"
-              ? fadeMotionVariants
-              : noMotionVariants
-      }
+      initial={animationType === "none" ? { x: 0, opacity: 1 } : "initial"}
+      animate={animationType === "none" ? { x: 0, opacity: 1 } : "animate"}
+      exit={animationType === "none" ? { x: 0, opacity: 1 } : "exit"}
+      transition={animationType === "none" ? { duration: 0 } : transitionProps}
+      variants={variants}
     >
       {/* Sidebar Popup Content with proper scrolling */}
       <div className="lu-scroll-container" style={{

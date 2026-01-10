@@ -22,11 +22,11 @@ import { createOpenAI } from '@ai-sdk/openai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import type { ProcessTextRequest, StreamChunk } from "~types/messages";
 import type { Settings } from "~types/settings";
-import { 
-  SYSTEM_PROMPTS, 
-  USER_PROMPTS, 
-  FOLLOW_UP_SYSTEM_PROMPTS, 
-  getMaxTokensFromPromptOrSetting 
+import {
+  SYSTEM_PROMPTS,
+  USER_PROMPTS,
+  FOLLOW_UP_SYSTEM_PROMPTS,
+  getMaxTokensFromPromptOrSetting
 } from "~utils/constants";
 import { getSelectedLocale } from "~utils/i18n";
 
@@ -57,7 +57,7 @@ interface StreamingMetrics {
  * Create AI provider instance
  * Supports OpenAI, xAI (OpenAI-compatible), and Gemini
  */
-const createProvider = (settings: Settings, provider: AISDKProvider) => {
+const createProvider = (settings: ProcessTextRequest["settings"], provider: AISDKProvider) => {
   if (provider === 'xai') {
     return createOpenAI({
       apiKey: settings.xaiApiKey || '',
@@ -65,13 +65,13 @@ const createProvider = (settings: Settings, provider: AISDKProvider) => {
       compatibility: 'compatible', // Important for xAI
     });
   }
-  
+
   if (provider === 'gemini') {
     return createGoogleGenerativeAI({
       apiKey: settings.geminiApiKey || '',
     });
   }
-  
+
   // Default OpenAI
   return createOpenAI({
     apiKey: settings.apiKey || '',
@@ -81,17 +81,17 @@ const createProvider = (settings: Settings, provider: AISDKProvider) => {
 /**
  * Get model name for provider
  */
-const getModelName = (settings: Settings, provider: AISDKProvider): string => {
+const getModelName = (settings: ProcessTextRequest["settings"], provider: AISDKProvider): string => {
   if (provider === 'xai') {
     // Handle image model fallback
-    const model = settings.grokModel || 'grok-4-0709';
-    return model === 'grok-2-image-1212' ? 'grok-4-0709' : model;
+    const model = settings.grokModel || 'grok-4';
+    return model === 'grok-2-image-1212' ? 'grok-4' : model;
   }
-  
+
   if (provider === 'gemini') {
     return settings.geminiModel || 'gemini-2.0-flash';
   }
-  
+
   return settings.openaiModel || 'gpt-4o';
 };
 
@@ -104,14 +104,14 @@ const getModelName = (settings: Settings, provider: AISDKProvider): string => {
  */
 const buildSystemPrompt = (
   mode: string,
-  settings: Settings,
+  settings: ProcessTextRequest["settings"],
   isFollowUp: boolean,
   responseLanguage: string
 ): string => {
-  const languageInstruction = responseLanguage !== "en" 
-    ? `\n\nIMPORTANT: Respond in ${responseLanguage} language. Adapt your response to be culturally appropriate for speakers of this language.` 
+  const languageInstruction = responseLanguage !== "en"
+    ? `\n\nIMPORTANT: Respond in ${responseLanguage} language. Adapt your response to be culturally appropriate for speakers of this language.`
     : "";
-    
+
   if (isFollowUp) {
     if (settings.customPrompts?.systemPrompts?.[mode]) {
       return `${settings.customPrompts.systemPrompts[mode]} 
@@ -121,11 +121,11 @@ FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a fol
     const basePrompt = FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
     return basePrompt + languageInstruction;
   }
-  
+
   if (settings.customPrompts?.systemPrompts?.[mode]) {
     return settings.customPrompts.systemPrompts[mode] + languageInstruction;
   }
-  
+
   return (SYSTEM_PROMPTS[mode] || SYSTEM_PROMPTS.free) + languageInstruction;
 };
 
@@ -135,12 +135,12 @@ FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a fol
 const buildUserPrompt = (
   text: string,
   mode: string,
-  settings: Settings,
+  settings: ProcessTextRequest["settings"],
   isFollowUp: boolean,
   context?: string
 ): string => {
   if (isFollowUp && context) {
-    const originalContent = context.length > 500 ? context.substring(0, 500) + "..." : context;
+    const originalContent = context.length > 400 ? context.substring(0, 400) + "..." : context;
     return `ORIGINAL CONTENT CONTEXT:
 ${originalContent}
 
@@ -148,7 +148,7 @@ FOLLOW-UP QUESTION: ${text}
 
 Instructions: Build on your previous analysis/explanation of this content. If the question asks for "more" or "other" aspects, provide genuinely new insights. Avoid repeating previous points unless directly relevant.`;
   }
-  
+
   if (mode === "translate") {
     if (settings.customPrompts?.userPrompts?.[mode]) {
       return settings.customPrompts.userPrompts[mode]
@@ -158,11 +158,11 @@ Instructions: Build on your previous analysis/explanation of this content. If th
     }
     return `Translate from ${settings.translationSettings?.fromLanguage || "en"} to ${settings.translationSettings?.toLanguage || "es"}:\n\n${text}`;
   }
-  
+
   if (settings.customPrompts?.userPrompts?.[mode]) {
     return settings.customPrompts.userPrompts[mode].replace('${text}', text);
   }
-  
+
   const prompt = USER_PROMPTS[mode];
   return typeof prompt === "function" ? prompt(text) : (prompt || "") + "\n" + text;
 };
@@ -186,18 +186,18 @@ export async function* processWithAISDKStreaming(
   provider: AISDKProvider = 'openai'
 ): AsyncGenerator<StreamChunk> {
   const { text, mode, settings, isFollowUp, context } = request;
-  
+
   // Initialize metrics
   const metrics: StreamingMetrics = {
     startTime: Date.now(),
     totalChunks: 0,
     totalCharacters: 0
   };
-  
+
   try {
     // Get response language
     const responseLanguage = settings.aiResponseLanguage || await getSelectedLocale();
-    
+
     // Build messages
     const messages: CoreMessage[] = [
       {
@@ -209,16 +209,16 @@ export async function* processWithAISDKStreaming(
         content: buildUserPrompt(text, mode, settings, isFollowUp || false, context)
       }
     ];
-    
+
     // Create provider and model
     const aiProvider = createProvider(settings, provider);
     const modelName = getModelName(settings, provider);
     const model = aiProvider(modelName);
-    
+
     // Get max tokens
     const systemPrompt = buildSystemPrompt(mode, settings, isFollowUp || false, responseLanguage);
     const maxTokens = getMaxTokensFromPromptOrSetting(mode, systemPrompt) || settings.maxTokens || 2048;
-    
+
     let result;
     try {
       result = await streamText({
@@ -230,7 +230,7 @@ export async function* processWithAISDKStreaming(
     } catch (streamError) {
       throw streamError;
     }
-    
+
     // Convert AI SDK stream to StreamChunk format
     let chunkCount = 0;
     for await (const delta of result.textStream) {
@@ -238,10 +238,10 @@ export async function* processWithAISDKStreaming(
       if (!metrics.firstChunkTime) {
         metrics.firstChunkTime = Date.now();
       }
-      
+
       metrics.totalChunks++;
       metrics.totalCharacters += delta.length;
-      
+
       yield {
         type: 'chunk' as const,
         content: delta,
@@ -249,7 +249,7 @@ export async function* processWithAISDKStreaming(
         id: typeof request.id === 'string' ? parseInt(request.id) || 0 : request.id
       };
     }
-    
+
     if (chunkCount === 0) {
       const fullText = await result.text;
       if (fullText && fullText.length > 0) {
@@ -261,21 +261,21 @@ export async function* processWithAISDKStreaming(
         };
       }
     }
-    
+
     const totalTime = Date.now() - metrics.startTime;
-    
+
     yield {
       type: 'done' as const,
       isFollowUp: request.isFollowUp,
       id: typeof request.id === 'string' ? parseInt(request.id) || 0 : request.id
     };
-    
+
   } catch (error) {
     // Parse error message for better UX
     let errorMessage = 'AI processing failed';
     if (error instanceof Error) {
       errorMessage = error.message;
-      
+
       // Enhance error messages
       if (errorMessage.includes('401') || errorMessage.includes('Unauthorized')) {
         errorMessage = `Invalid ${provider.toUpperCase()} API key. Please check your settings.`;
@@ -285,7 +285,7 @@ export async function* processWithAISDKStreaming(
         errorMessage = `${provider.toUpperCase()} server error. Please try again later.`;
       }
     }
-    
+
     yield {
       type: 'error' as const,
       error: errorMessage,
@@ -343,19 +343,19 @@ export async function generateTextWithAISDK(
   const aiProvider = createProvider(settings, provider);
   const modelName = getModelName(settings, provider);
   const model = aiProvider(modelName);
-  
+
   const result = await streamText({
     model,
     messages: [{ role: 'user', content: prompt }],
     maxTokens,
     temperature: 0.3, // Lower temperature for summarization
   });
-  
+
   // Collect full response
   let fullText = '';
   for await (const delta of result.textStream) {
     fullText += delta;
   }
-  
+
   return fullText;
 }

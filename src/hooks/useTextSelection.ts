@@ -21,6 +21,10 @@ interface TextSelectionState {
   selectionRange: Range | null;
 }
 
+interface UseTextSelectionOptions {
+  enabled?: boolean;
+}
+
 // Button dimensions and positioning constants
 const BUTTON_SIZE = 32; // Size of the circular button
 const BUTTON_HORIZONTAL_OFFSET = 30; // Keep button 10px to the left of selection
@@ -50,13 +54,26 @@ function calculateDocumentPosition(range: Range): Position {
  * @param minLength Minimum length of selected text to show the button
  * @returns Text selection state and functions to manage visibility
  */
-export const useTextSelection = (minLength = 3) => {
+export const useTextSelection = (minLength = 3, options: UseTextSelectionOptions = {}) => {
   const [selectionState, setSelectionState] = useState<TextSelectionState>({
     selectedText: "",
     position: { x: 0, y: 0 },
     isVisible: false,
     selectionRange: null
   });
+  const enabledRef = useRef(options.enabled ?? true);
+
+  const hideSelectionButton = useCallback(() => {
+    setSelectionState(prev => ({ ...prev, isVisible: false }));
+  }, []);
+
+  useEffect(() => {
+    enabledRef.current = options.enabled ?? true;
+
+    if (!enabledRef.current) {
+      hideSelectionButton();
+    }
+  }, [options.enabled, hideSelectionButton]);
 
   // Effect to handle selection positioning and keep it in sync with the document
   useEffect(() => {
@@ -146,6 +163,11 @@ export const useTextSelection = (minLength = 3) => {
   
   // Handle selections that might come from other sources (like keyboard)
   const handleSelectionWithFallback = useCallback(() => {
+    if (!enabledRef.current) {
+      hideSelectionButton();
+      return;
+    }
+
     const selection = window.getSelection();
     let selectedText = selection?.toString().trim() || "";
 
@@ -188,10 +210,15 @@ export const useTextSelection = (minLength = 3) => {
         selectionRange: clonedRange
       });
     }
-  }, [minLength]);
+  }, [minLength, hideSelectionButton]);
   
   // Update position when text is selected with mouse - using document coordinates
   const handleTextSelection = useCallback((e: MouseEvent) => {
+    if (!enabledRef.current) {
+      hideSelectionButton();
+      return;
+    }
+
     const selection = window.getSelection();
     let selectedText = selection?.toString().trim() || "";
 
@@ -294,10 +321,6 @@ export const useTextSelection = (minLength = 3) => {
   }, [handleTextSelection]);
 
   // Function to manually hide the button
-  const hideSelectionButton = useCallback(() => {
-    setSelectionState(prev => ({ ...prev, isVisible: false }));
-  }, []);
-
   return {
     selectedText: selectionState.selectedText,
     position: selectionState.position,

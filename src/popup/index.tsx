@@ -24,28 +24,51 @@ import "./popup-style.css"
 
 import logoUrl from '../../assets/icon.png';
 
-// Define theme colors to exactly match the reference image
+// Theme now uses CSS custom properties - see popup-style.css for light/dark values
+// This object provides fallbacks and semantic names for styled components
 const theme = {
-  dark: {
-    background: "#2A2A2A",       // Main popup background
-    foreground: "#FFFFFF",      // Text color
-    sidebar: "#2A2A2A",         // Sidebar background (darker than before)
-    sidebarActive: "#ffffff0d",   // Active sidebar item
-    content: "#2A2A2A",         // Content area background
-    border: "#3A3A3A",          // Border color
-    primary: "#0078D4",         // Primary button color
-    destructive: "#E74C3C",     // Destructive button color (delete)
-    divider: "#9d9d9d",         // Divider line color
-    button: {
-      default: "#444444",       // Default button background (gray buttons in reference)
-      text: "#FFFFFF"           // Button text color
-    },
-    toggle: {
-      active: "#2DCA6E",        // Active toggle switch (green color in reference)
-      inactive: "#6B6B6B",      // Inactive toggle
-      track: "#333333"          // Toggle track
-    },
-    card: "#333333"            // Card background color
+  // CSS variables are used for actual values, these are just semantic access points
+  background: "var(--popup-bg)",
+  foreground: "var(--popup-fg)",
+  sidebar: "var(--popup-sidebar-bg)",
+  sidebarActive: "var(--popup-sidebar-active)",
+  sidebarText: "var(--popup-sidebar-text)",
+  sidebarTextActive: "var(--popup-sidebar-text-active)",
+  content: "var(--popup-content-bg)",
+  border: "var(--popup-border)",
+  primary: "var(--popup-primary)",
+  primaryHover: "var(--popup-primary-hover)",
+  destructive: "var(--popup-destructive)",
+  destructiveHover: "var(--popup-destructive-hover)",
+  divider: "var(--popup-divider)",
+  button: {
+    default: "var(--popup-btn-default)",
+    defaultHover: "var(--popup-btn-default-hover)",
+    text: "var(--popup-btn-text)"
+  },
+  toggle: {
+    active: "var(--popup-toggle-active)",
+    inactive: "var(--popup-toggle-inactive)",
+    track: "var(--popup-toggle-track)"
+  },
+  card: "var(--popup-card)",
+  cardHover: "var(--popup-card-hover)",
+  header: "var(--popup-header)",
+  secondaryText: "var(--popup-secondary-text)",
+  input: {
+    background: "var(--popup-input-bg)",
+    border: "var(--popup-input-border)",
+    focusBorder: "var(--popup-input-focus-border)"
+  },
+  select: {
+    background: "var(--popup-select-bg)",
+    border: "var(--popup-select-border)"
+  },
+  overlay: "var(--popup-overlay-bg)",
+  version: {
+    background: "var(--popup-version-bg)",
+    color: "var(--popup-version-color)",
+    border: "var(--popup-version-border)"
   }
 }
 
@@ -66,8 +89,8 @@ const flexBetween = css`
 const PopupContainer = styled.div`
   width: 750px;
   height: 600px;
-  background: ${theme.dark.background};
-  color: ${theme.dark.foreground};
+  background: ${theme.background};
+  color: ${theme.foreground};
   overflow: hidden;
   position: relative;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
@@ -80,15 +103,15 @@ const PopupContainer = styled.div`
 const Header = styled.header`
   ${flexBetween};
   padding: 14px 20px;
-  background: #232323;
-  border-bottom: 1px solid ${theme.dark.border};
+  background: ${theme.header};
+  border-bottom: 1px solid ${theme.border};
   height: 80px;
 `
 
 const HeaderTitle = styled.h1`
         font-size: 22px; 
   font-weight: 600; 
-  color: ${theme.dark.foreground};
+  color: ${theme.foreground};
   margin: 0; 
   display: flex;
   align-items: center;
@@ -97,6 +120,32 @@ const HeaderTitle = styled.h1`
 const HeaderLogoWrapper = styled.div`
   display: flex;
   align-items: center;
+  gap: 12px;
+`;
+
+const HeaderTitleGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+const VersionBadgeRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+`;
+
+const ToggleStatusGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+`;
+
+const ToggleStatusLabel = styled.span`
+  font-size: 14px;
+  color: ${theme.secondaryText};
 `;
 
 const VersionBadgeContainer = styled.div`
@@ -108,15 +157,15 @@ const VersionBadgeContainer = styled.div`
 
 const BetaBadge = styled.span`
   position: relative;
-  background: linear-gradient(135deg, rgb(56 56 56) 0%, rgb(33 33 33) 100%);
-  color: white;
+  background: var(--popup-badge-bg, linear-gradient(135deg, rgb(56 56 56) 0%, rgb(33 33 33) 100%));
+  color: ${theme.foreground};
         font-size: 10px;
   font-weight: 700;
   padding: 3px 8px;
   border-radius: 4px;
   letter-spacing: 0.7px;
   text-transform: uppercase;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
   &:after {
     content: '';
     position: absolute;
@@ -126,7 +175,7 @@ const BetaBadge = styled.span`
     bottom: 0;
     border-radius: 4px;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+    background: var(--popup-badge-border, linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1)));
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -135,14 +184,14 @@ const BetaBadge = styled.span`
 `;
 
 const VersionNumber = styled.span`
-  color: rgba(255, 255, 255, 0.75);
+  color: ${theme.version.color};
         font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.5px;
-  background: rgba(0, 0, 0, 0.2);
+  background: ${theme.version.background};
   padding: 3px 8px;
   border-radius: 7px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid ${theme.version.border};
 `;
 
 const LogoImage = styled.img`
@@ -155,13 +204,13 @@ const LogoImage = styled.img`
 const CloseButton = styled.button`
   background: none;
   border: none;
-  color: ${theme.dark.foreground};
+  color: ${theme.foreground};
   cursor: pointer;
   padding: 8px;
   border-radius: 4px;
   
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--popup-sidebar-active);
   }
 `
 
@@ -169,7 +218,7 @@ const CloseButton = styled.button`
 const ContentWrapper = styled.div`
   display: flex;
   flex: 1;
-  padding: 20px 0 0px 18px;
+  padding: 15px 0 0px 12px;
   overflow: hidden; // Prevents the wrapper itself from scrolling
   position: relative; // For positioning the overlay
 `
@@ -181,7 +230,7 @@ const DisabledOverlay = styled(motion.div)`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color:rgb(36 36 36 / 93%);
+  background-color: ${theme.overlay};
   backdrop-filter: blur(2px);
   display: flex;
   flex-direction: column;
@@ -189,7 +238,7 @@ const DisabledOverlay = styled(motion.div)`
   justify-content: center;
   z-index: 100;
   padding: 2rem;
-  color: white;
+  color: ${theme.foreground};
   text-align: center;
   border-radius: 0 0 10px 10px;
 `
@@ -197,9 +246,10 @@ const DisabledOverlay = styled(motion.div)`
 // Sidebar
 const Sidebar = styled.nav`
   width: 192px;
-  background: ${theme.dark.sidebar};
-  padding: 0;
+  background: ${theme.sidebar};
+  padding: 0 13px 0 0;
   flex-shrink: 0; // Prevents sidebar from shrinking
+  border-right: 1px solid ${theme.border};
 `
 
 const SidebarItem = styled.button<{ active: boolean }>`
@@ -207,9 +257,9 @@ const SidebarItem = styled.button<{ active: boolean }>`
   align-items: center;
   width: 100%;
   padding: 12px 16px;
-  background: ${props => props.active ? theme.dark.sidebarActive : 'transparent'};
+  background: ${props => props.active ? theme.sidebarActive : 'transparent'};
   border: none;
-  color: ${props => props.active ? theme.dark.foreground : 'rgba(255, 255, 255, 0.7)'};
+  color: ${props => props.active ? theme.sidebarTextActive : theme.sidebarText};
   font-size: 15px;
   text-align: left;
   cursor: pointer;
@@ -218,8 +268,8 @@ const SidebarItem = styled.button<{ active: boolean }>`
   transition: all 0.2s ease;
   
   &:hover {
-    background: ${props => props.active ? theme.dark.sidebarActive : 'rgba(255, 255, 255, 0.05)'};
-    color: ${theme.dark.foreground};
+    background: ${props => props.active ? theme.sidebarActive : 'var(--popup-sidebar-active)'};
+    color: ${theme.sidebarTextActive};
   }
 `
 
@@ -233,13 +283,13 @@ const SidebarIcon = styled.div`
 
 const SidebarDivider = styled.div`
   height: 1px;
-  background: ${theme.dark.divider};
+  background: ${theme.divider};
   margin: 16px 12px;
   opacity: 0.3;
 `
 
 const SidebarSectionTitle = styled.div`
-  color: rgba(255, 255, 255, 0.5);
+  color: ${theme.secondaryText};
   font-size: 12px;
   font-weight: 500;
   text-transform: uppercase;
@@ -251,7 +301,7 @@ const SidebarSectionTitle = styled.div`
 const ContentArea = styled.div`
   flex: 1;
   padding: 9px 24px 0 35px;
-  background: ${theme.dark.background};
+  background: ${theme.background};
   overflow-y: auto;
   overflow-x: hidden;
   min-height: 0; /* Allow shrinking */
@@ -277,12 +327,12 @@ const SectionTitle = styled.h2`
   font-size: 17px;
   font-weight: 500;
   margin: 0 0 14px 0;
-  color: ${theme.dark.foreground};
+  color: ${theme.foreground};
 `
 
 const SectionDivider = styled.div`
   height: 1px;
-  background: ${theme.dark.divider};
+  background: ${theme.divider};
   margin: 18px 0;
   opacity: 0.3;
 `
@@ -311,12 +361,12 @@ const FormRow = styled.div`
 
 const Label = styled.label`
   font-size: 16px;
-  color: ${theme.dark.foreground};
+  color: ${theme.foreground};
 `
 
 const Description = styled.p`
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.6);
+  color: ${theme.secondaryText};
   margin: 4px 0 0 0;
 `
 
@@ -335,7 +385,7 @@ const ToggleInput = styled.input`
   height: 0;
   
   &:checked + span {
-    background-color: ${theme.dark.toggle.active};
+    background-color: ${theme.toggle.active};
   }
   
   &:checked + span:before {
@@ -349,7 +399,7 @@ const ToggleSlider = styled.span`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: ${theme.dark.toggle.track};
+  background-color: ${theme.toggle.track};
   transition: 0.3s;
   border-radius: 34px;
   
@@ -377,54 +427,54 @@ const Button = styled.button<{ variant?: 'primary' | 'destructive' | 'default' }
   border: none;
   
   background-color: ${props => {
-    if (props.variant === 'primary') return theme.dark.primary;
-    if (props.variant === 'destructive') return theme.dark.destructive;
-    return theme.dark.button.default;
+    if (props.variant === 'primary') return theme.primary;
+    if (props.variant === 'destructive') return theme.destructive;
+    return theme.button.default;
   }};
   
-  color: ${theme.dark.button.text};
+  color: ${props => props.variant === 'primary' || props.variant === 'destructive' ? '#FFFFFF' : theme.button.text};
   
   &:hover {
     background-color: ${props => {
-      if (props.variant === 'primary') return '#106EBE';
-      if (props.variant === 'destructive') return '#C0392B';
-      return '#505050';
-    }};
+    if (props.variant === 'primary') return theme.primaryHover;
+    if (props.variant === 'destructive') return theme.destructiveHover;
+    return theme.button.defaultHover;
+  }};
   }
 `
 
 // Dropdown/Select - Styled to match the dropdown in the image
 const Select = styled.select`
-  background-color: transparent;
-  color: ${theme.dark.foreground};
+  background-color: ${theme.select.background};
+  color: ${theme.foreground};
   padding: 6px 30px 6px 8px;
   border-radius: 4px;
-  border: 1px solid ${theme.dark.border};
+  border: 1px solid ${theme.select.border};
   font-size: 15px;
   min-width: 120px;
   appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--popup-select-arrow, white)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
   background-repeat: no-repeat;
   background-position: right 8px center;
   
   &:focus {
     outline: none;
-    border-color: ${theme.dark.primary};
+    border-color: ${theme.primary};
   }
 `
 
 const Input = styled.input`
-  background-color: ${theme.dark.content};
-  color: ${theme.dark.foreground};
+  background-color: ${theme.input.background};
+  color: ${theme.foreground};
   padding: 10px 14px;
   border-radius: 4px;
-  border: 1px solid ${theme.dark.border};
+  border: 1px solid ${theme.input.border};
   font-size: 16px;
   width: 100%;
   
   &:focus {
     outline: none;
-    border-color: ${theme.dark.primary};
+    border-color: ${theme.input.focusBorder};
   }
 `
 
@@ -443,7 +493,7 @@ const RadioLabel = styled.label`
   border-radius: 4px;
   
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--popup-sidebar-active);
   }
 `
 
@@ -459,33 +509,33 @@ const RadioText = styled.span`
 const Logo = () => (
   <svg width="30" height="30" viewBox="0 0 202 201" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_d_171_147)">
-      <circle cx="101.067" cy="101.227" r="32.1546" fill="black"/>
-      <circle cx="101.067" cy="101.227" r="31.5012" stroke="#A72D20" strokeWidth="1.30683"/>
+      <circle cx="101.067" cy="101.227" r="32.1546" fill="black" />
+      <circle cx="101.067" cy="101.227" r="31.5012" stroke="#A72D20" strokeWidth="1.30683" />
     </g>
     <g filter="url(#filter1_d_171_147)">
-      <ellipse cx="101.782" cy="101.42" rx="29.7391" ry="30.2609" fill="black"/>
+      <ellipse cx="101.782" cy="101.42" rx="29.7391" ry="30.2609" fill="black" />
     </g>
     <defs>
       <filter id="filter0_d_171_147" x="0.772979" y="0.061912" width="200.587" height="200.588" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-        <feMorphology radius="11.4783" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_171_147"/>
-        <feOffset dy="-0.871223"/>
-        <feGaussianBlur stdDeviation="28.3304"/>
-        <feComposite in2="hardAlpha" operator="out"/>
-        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.670326 0 0 0 0 0.159863 0 0 0 1 0"/>
-        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_171_147"/>
-        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_171_147" result="shape"/>
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+        <feMorphology radius="11.4783" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_171_147" />
+        <feOffset dy="-0.871223" />
+        <feGaussianBlur stdDeviation="28.3304" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.670326 0 0 0 0 0.159863 0 0 0 1 0" />
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_171_147" />
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_171_147" result="shape" />
       </filter>
       <filter id="filter1_d_171_147" x="52.8761" y="51.9923" width="97.8123" height="98.8553" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-        <feOffset/>
-        <feGaussianBlur stdDeviation="9.58345"/>
-        <feComposite in2="hardAlpha" operator="out"/>
-        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0"/>
-        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_171_147"/>
-        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_171_147" result="shape"/>
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+        <feOffset />
+        <feGaussianBlur stdDeviation="9.58345" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" />
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_171_147" />
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_171_147" result="shape" />
       </filter>
     </defs>
   </svg>
@@ -498,7 +548,7 @@ const IndexPopup = () => {
   const { remainingActions, isLoading, error, refreshRateLimit } = useRateLimit()
   const { isEnabled, handleEnabledChange } = useEnabled()
   const { locale, isLoading: isLocaleLoading, changeLocale } = useLocale()
-  
+
   const [activeTab, setActiveTab] = useState('general')
   const [activeModeConfig, setActiveModeConfig] = useState(false)
   const [activeMode, setActiveMode] = useState<string>('explain')
@@ -506,6 +556,32 @@ const IndexPopup = () => {
   const [feedbackType, setFeedbackType] = useState<"general" | "bug" | "feature" | "other">("general")
   const [feedbackContent, setFeedbackContent] = useState("")
   const [feedbackEmail, setFeedbackEmail] = useState("")
+
+  // Theme handling - set data-theme attribute based on settings
+  useEffect(() => {
+    const themeSetting = settings?.customization?.theme || 'dark';
+    let effectiveTheme: 'light' | 'dark' = 'dark';
+
+    if (themeSetting === 'system') {
+      // Check system preference
+      effectiveTheme = window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    } else {
+      effectiveTheme = themeSetting as 'light' | 'dark';
+    }
+
+    // Set the data-theme attribute on document.documentElement
+    document.documentElement.setAttribute('data-theme', effectiveTheme);
+
+    // Listen for system theme changes if in system mode
+    if (themeSetting === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const handleChange = (e: MediaQueryListEvent) => {
+        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+      };
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
+    }
+  }, [settings?.customization?.theme]);
 
   // Localized strings
   const logoAlt = useMessage("logoAlt", "LightUp Logo")
@@ -526,16 +602,16 @@ const IndexPopup = () => {
 
   // Get preferred modes from settings or use defaults (max 3)
   const preferredModes: string[] = Array.from(
-    new Set((settings?.customization as any)?.preferredModes || ['explain', 'summarize', 'translate'])
+    new Set((settings?.customization as any)?.preferredModes || ['summarize', 'explain', 'analyze'])
   ).slice(0, 3) as string[]
-  const allModes = ['summarize', 'analyze', 'explain', 'translate', 'free']
+  const allModes = ['summarize', 'analyze', 'challenge', 'explain', 'translate', 'free']
 
   const LayoutDisplaySection = () => (
     <Section>
       <SectionTitle>{getMessage("layoutDisplayTitle")}</SectionTitle>
       <Description>{getMessage("layoutDisplayDesc")}</Description>
       <div style={{ marginTop: '16px' }}>
-        <h3 style={{ fontSize: '16px', marginBottom: '16px', color: theme.dark.foreground }}>
+        <h3 style={{ fontSize: '16px', marginBottom: '16px', color: theme.foreground }}>
           {getMessage("layoutModeLabel")}
         </h3>
         <div
@@ -634,22 +710,22 @@ const IndexPopup = () => {
               key={layoutOption.value}
               onClick={() => updateSettings('layoutMode', layoutOption.value)}
               onMouseEnter={(event) => {
-                event.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'
+                event.currentTarget.style.backgroundColor = theme.cardHover
                 event.currentTarget.style.borderColor =
                   layoutOption.value === settings?.customization?.layoutMode
-                    ? '#2DCA6E'
-                    : 'rgba(255, 255, 255, 0.2)'
+                    ? theme.toggle.active
+                    : theme.border
               }}
               onMouseLeave={(event) => {
-                event.currentTarget.style.backgroundColor = '#333333'
+                event.currentTarget.style.backgroundColor = theme.card
                 event.currentTarget.style.borderColor =
                   layoutOption.value === settings?.customization?.layoutMode
-                    ? '#2DCA6E'
+                    ? theme.toggle.active
                     : 'transparent'
               }}
               style={{
                 padding: '16px',
-                background: '#333333',
+                background: theme.card,
                 borderRadius: '8px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -658,7 +734,7 @@ const IndexPopup = () => {
                 cursor: 'pointer',
                 border:
                   layoutOption.value === settings?.customization?.layoutMode
-                    ? '2px solid #2DCA6E'
+                    ? `2px solid ${theme.toggle.active}`
                     : '2px solid transparent',
                 transition: 'all 0.2s ease-in-out'
               }}
@@ -821,22 +897,22 @@ const IndexPopup = () => {
             key={themeOption.value}
             onClick={() => updateSettings('theme', themeOption.value)}
             onMouseEnter={(event) => {
-              event.currentTarget.style.backgroundColor = '#3a3a3a'
+              event.currentTarget.style.backgroundColor = theme.cardHover
               event.currentTarget.style.borderColor =
                 themeOption.value === settings?.customization?.theme
-                  ? '#2DCA6E'
-                  : 'rgba(255, 255, 255, 0.3)'
+                  ? theme.toggle.active
+                  : theme.border
             }}
             onMouseLeave={(event) => {
-              event.currentTarget.style.backgroundColor = '#333333'
+              event.currentTarget.style.backgroundColor = theme.card
               event.currentTarget.style.borderColor =
                 themeOption.value === settings?.customization?.theme
-                  ? '#2DCA6E'
+                  ? theme.toggle.active
                   : 'transparent'
             }}
             style={{
               padding: '16px',
-              background: '#333333',
+              background: theme.card,
               borderRadius: '8px',
               display: 'flex',
               flexDirection: 'column',
@@ -845,7 +921,7 @@ const IndexPopup = () => {
               cursor: 'pointer',
               border:
                 themeOption.value === settings?.customization?.theme
-                  ? '2px solid #2DCA6E'
+                  ? `2px solid ${theme.toggle.active}`
                   : '2px solid transparent',
               transition: 'all 0.2s ease-in-out'
             }}
@@ -877,7 +953,7 @@ const IndexPopup = () => {
     lines.push(trimmedContent)
 
     try {
-      const mailtoUrl = `mailto:hey@mosadiq.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`
+      const mailtoUrl = `mailto:boimaginations@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`
       window.open(mailtoUrl, '_blank')
 
       notifySuccess(getMessage('feedbackReadyToSend', undefined, 'Your feedback email is ready to send.'))
@@ -890,11 +966,11 @@ const IndexPopup = () => {
       notifyError(getMessage('feedbackError', undefined, 'Could not start an email.'))
     }
   }
-  
+
   // Handler for updating a single setting
   const updateSettings = async (key: string, value: any) => {
     if (!settings) return
-    
+
     const storage = new Storage()
     const newSettings = {
       ...settings,
@@ -903,25 +979,25 @@ const IndexPopup = () => {
         [key]: value
       }
     }
-    
+
     // Update local state
     setSettings(newSettings)
-    
+
     // Save to storage
     await storage.set("settings", newSettings)
-    
+
     // Dispatch event for other components in the same window
     window.dispatchEvent(
       new CustomEvent('settingsUpdated', { detail: { settings: newSettings } })
     )
-    
+
     // Notify all tabs about the settings change for real-time updates
     if (typeof chrome !== 'undefined' && chrome.tabs) {
       chrome.tabs.query({}, (tabs) => {
         tabs.forEach(tab => {
           if (tab.id) {
-            chrome.tabs.sendMessage(tab.id, { 
-              type: "SETTINGS_UPDATED", 
+            chrome.tabs.sendMessage(tab.id, {
+              type: "SETTINGS_UPDATED",
               settings: newSettings,
               updatedKey: key
             }).catch(err => {
@@ -933,11 +1009,11 @@ const IndexPopup = () => {
       });
     }
   }
-  
+
   // Function to update multiple settings at once
   const updateMultipleSettings = async (updates: Record<string, any>) => {
     if (!settings) return
-    
+
     const storage = new Storage()
     const newSettings = {
       ...settings,
@@ -946,25 +1022,25 @@ const IndexPopup = () => {
         ...updates
       }
     }
-    
+
     // Update local state
     setSettings(newSettings)
-    
+
     // Save to storage
     await storage.set("settings", newSettings)
-    
+
     // Dispatch event for other components in the same window
     window.dispatchEvent(
       new CustomEvent('settingsUpdated', { detail: { settings: newSettings } })
     )
-    
+
     // Notify all tabs about the settings change for real-time updates
     if (typeof chrome !== 'undefined' && chrome.tabs) {
       chrome.tabs.query({}, (tabs) => {
         tabs.forEach(tab => {
           if (tab.id) {
-            chrome.tabs.sendMessage(tab.id, { 
-              type: "SETTINGS_UPDATED", 
+            chrome.tabs.sendMessage(tab.id, {
+              type: "SETTINGS_UPDATED",
               settings: newSettings,
               updatedKeys: Object.keys(updates)
             }).catch(err => {
@@ -976,13 +1052,13 @@ const IndexPopup = () => {
       });
     }
   }
-  
+
   // Handler for toggling modes in preferences
   const togglePreferredMode = async (mode: string) => {
     // Use Set to ensure no duplicates in the current modes
     const currentModes: string[] = [...new Set((settings?.customization as any)?.preferredModes || preferredModes)] as string[]
     let newModes: string[]
-    
+
     if (currentModes.includes(mode)) {
       // Don't allow removing all modes - keep at least one
       if (currentModes.length <= 1) return
@@ -992,17 +1068,17 @@ const IndexPopup = () => {
       if (currentModes.length >= 3) return
       newModes = [...currentModes, mode]
     }
-    
+
     // Update settings
     updateSettings('preferredModes', newModes)
-    
+
     // Also notify all tabs about the mode configuration changes specifically
     if (typeof chrome !== 'undefined' && chrome.tabs) {
       chrome.tabs.query({}, (tabs) => {
         tabs.forEach(tab => {
           if (tab.id) {
-            chrome.tabs.sendMessage(tab.id, { 
-              type: "MODES_UPDATED", 
+            chrome.tabs.sendMessage(tab.id, {
+              type: "MODES_UPDATED",
               preferredModes: newModes
             }).catch(err => {
               // Ignore errors for tabs that don't have the content script running
@@ -1013,12 +1089,12 @@ const IndexPopup = () => {
       });
     }
   }
-  
+
   // Set active mode and save to settings
   const handleModeChange = async (mode: string) => {
     setActiveMode(mode)
     await updateSettings('defaultMode', mode)
-    
+
     const existingPreferred: string[] = ((settings?.customization as any)?.preferredModes || preferredModes) as string[]
 
     if (!existingPreferred.includes(mode)) {
@@ -1033,21 +1109,21 @@ const IndexPopup = () => {
 
       await updateSettings('preferredModes', updatedModes)
     }
-    
+
     const storage = new Storage()
-    
+
     // If the mode is translate, also save translation settings
     if (mode === "translate" && settings?.translationSettings) {
       await storage.set("translationSettings", settings.translationSettings);
     }
-    
+
     // Additional notification for mode change specifically
     if (typeof chrome !== 'undefined' && chrome.tabs) {
       chrome.tabs.query({}, (tabs) => {
         tabs.forEach(tab => {
           if (tab.id) {
-            chrome.tabs.sendMessage(tab.id, { 
-              type: "MODE_CHANGED", 
+            chrome.tabs.sendMessage(tab.id, {
+              type: "MODE_CHANGED",
               mode,
               translationSettings: mode === "translate" ? settings?.translationSettings : undefined,
               reprocessExisting: true // Add this flag to indicate we want to reprocess existing text
@@ -1060,37 +1136,44 @@ const IndexPopup = () => {
       });
     }
   }
-  
+
   // Initialize active mode from settings
   useEffect(() => {
     if ((settings?.customization as any)?.defaultMode) {
       setActiveMode((settings?.customization as any).defaultMode)
     }
   }, [(settings?.customization as any)?.defaultMode])
-  
+
   // We're using the useEnabled hook instead of a custom implementation
   // This hook handles loading the current state from storage and provides
   // the handleEnabledChange function to toggle the state
-  
+
   // Use the handleEnabledChange function from the useEnabled hook
   // This function handles all the necessary storage updates and event notifications
-  
+
   // Icons for the different modes
   const modeIcons = {
     summarize: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M4 4h16v16H4V4z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        <path d="M4 8h16M8 4v16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M4 4h16v16H4V4z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M4 8h16M8 4v16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
     analyze: (
       <svg width="20" height="20" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" className="size-6">
-        <path d="M35.9064 0.109375C16.194 0.109375 0.136719 16.1667 0.136719 35.8791C0.136719 55.5914 16.194 71.6487 35.9064 71.6487C44.44 71.6487 52.2816 68.6328 58.4391 63.6205L83.5695 95.1014C83.5695 95.1014 89.0738 95.9195 92.4913 92.358C95.9325 88.7694 95.1254 83.5488 95.1254 83.5488L63.6478 58.4117C68.6602 52.2543 71.6761 44.4127 71.6761 35.8791C71.6761 16.1667 55.6188 0.109375 35.9064 0.109375ZM35.9064 7.26397C51.7528 7.26397 64.5215 20.0327 64.5215 35.8791C64.5215 51.7254 51.7528 64.4941 35.9064 64.4941C20.06 64.4941 7.29132 51.7254 7.29132 35.8791C7.29132 20.0327 20.06 7.26397 35.9064 7.26397Z" fill="currentColor"/>
+        <path d="M35.9064 0.109375C16.194 0.109375 0.136719 16.1667 0.136719 35.8791C0.136719 55.5914 16.194 71.6487 35.9064 71.6487C44.44 71.6487 52.2816 68.6328 58.4391 63.6205L83.5695 95.1014C83.5695 95.1014 89.0738 95.9195 92.4913 92.358C95.9325 88.7694 95.1254 83.5488 95.1254 83.5488L63.6478 58.4117C68.6602 52.2543 71.6761 44.4127 71.6761 35.8791C71.6761 16.1667 55.6188 0.109375 35.9064 0.109375ZM35.9064 7.26397C51.7528 7.26397 64.5215 20.0327 64.5215 35.8791C64.5215 51.7254 51.7528 64.4941 35.9064 64.4941C20.06 64.4941 7.29132 51.7254 7.29132 35.8791C7.29132 20.0327 20.06 7.26397 35.9064 7.26397Z" fill="currentColor" />
+      </svg>
+    ),
+    challenge: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M12 17h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
     explain: (
       <svg width="20" height="20" viewBox="0 0 89 99" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M2.55007 23.009C0.994225 23.8875 0.0273438 25.5563 0.0273438 27.3624V71.2893C0.0273438 73.1053 0.994225 74.7642 2.55007 75.6427C10.3882 80.0649 34.2363 93.503 41.8389 97.7877C42.5849 98.2049 43.4045 98.416 44.2291 98.416C45.034 98.416 45.8389 98.2147 46.5702 97.8123C54.1727 93.6159 77.9325 80.5213 85.805 76.1777C87.3903 75.309 88.3719 73.6304 88.3719 71.8046V27.3624C88.3719 25.5563 87.405 23.8875 85.8443 23.009C78.0159 18.5967 54.2169 5.18303 46.5849 0.883599C45.8438 0.466416 45.0193 0.255371 44.1996 0.255371C43.3751 0.255371 42.5554 0.466416 41.8143 0.883599C34.1823 5.18303 10.3784 18.5967 2.55007 23.009ZM81.0098 33.3895V70.3224L47.8806 88.5901V51.397L81.0098 33.3895ZM11.0017 26.7931L44.1996 8.07877L77.5791 26.8962L44.1996 45.1344L11.0017 26.7931Z" fill="currentColor"/>
+        <path d="M2.55007 23.009C0.994225 23.8875 0.0273438 25.5563 0.0273438 27.3624V71.2893C0.0273438 73.1053 0.994225 74.7642 2.55007 75.6427C10.3882 80.0649 34.2363 93.503 41.8389 97.7877C42.5849 98.2049 43.4045 98.416 44.2291 98.416C45.034 98.416 45.8389 98.2147 46.5702 97.8123C54.1727 93.6159 77.9325 80.5213 85.805 76.1777C87.3903 75.309 88.3719 73.6304 88.3719 71.8046V27.3624C88.3719 25.5563 87.405 23.8875 85.8443 23.009C78.0159 18.5967 54.2169 5.18303 46.5849 0.883599C45.8438 0.466416 45.0193 0.255371 44.1996 0.255371C43.3751 0.255371 42.5554 0.466416 41.8143 0.883599C34.1823 5.18303 10.3784 18.5967 2.55007 23.009ZM81.0098 33.3895V70.3224L47.8806 88.5901V51.397L81.0098 33.3895ZM11.0017 26.7931L44.1996 8.07877L77.5791 26.8962L44.1996 45.1344L11.0017 26.7931Z" fill="currentColor" />
       </svg>
     ),
     translate: (
@@ -1100,60 +1183,59 @@ const IndexPopup = () => {
     ),
     free: (
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8 12h8M12 8v8M12 21a9 9 0 100-18 9 9 0 000 18z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        <path d="M8 12h8M12 8v8M12 21a9 9 0 100-18 9 9 0 000 18z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     )
   }
-  
+
   return (
     <PopupContainer>
-{/* Notification outlet */}
+      {/* Notification outlet */}
       <NotificationOutlet />
       <Header>
         <HeaderLogoWrapper>
-                              <LogoImage src={logoUrl} alt={logoAlt} />
-                              <HeaderTitle>{extensionName}</HeaderTitle>
+          <LogoImage src={logoUrl} alt={logoAlt} />
+          <HeaderTitleGroup>
+            <HeaderTitle>{extensionName}</HeaderTitle>
+            <VersionBadgeRow>
+              <BetaBadge>{betaLabel}</BetaBadge>
+              <VersionNumber>v0.1.18</VersionNumber>
+            </VersionBadgeRow>
+          </HeaderTitleGroup>
         </HeaderLogoWrapper>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)' }}>
-                                          {isEnabled ? turnOffText : turnOnText}
-            </span>
-            <ToggleContainer 
-              onClick={async (e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                try {
-                  // Update the state optimistically for instant feedback
-                  const newState = !isEnabled;
-                  // Call the handler to update the state in storage and notify other components
-                  await handleEnabledChange(newState);
-                } catch (error) {
-                  console.error('Failed to update enabled state:', error);
-                }
-              }} 
-              style={{ cursor: 'pointer' }}
-                                          aria-label={isEnabled ? turnOffText : turnOnText}
-              role="switch"
-              aria-checked={isEnabled}
-            >
-              <ToggleInput 
-                type="checkbox" 
-                checked={isEnabled}
-                onChange={() => {}} // Empty onChange to avoid React warning about readonly input with no handler
-                aria-hidden="true"
-                tabIndex={-1}
-              />
-              <ToggleSlider />
-            </ToggleContainer>
-          </div>
-          
-          <VersionBadgeContainer>
-                                    <BetaBadge>{betaLabel}</BetaBadge>
-            <VersionNumber>v1.1.17</VersionNumber>
-          </VersionBadgeContainer>
-        </div>
+
+        <ToggleStatusGroup>
+          <ToggleStatusLabel>
+            {isEnabled ? turnOffText : turnOnText}
+          </ToggleStatusLabel>
+          <ToggleContainer
+            onClick={async (e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              try {
+                // Update the state optimistically for instant feedback
+                const newState = !isEnabled;
+                // Call the handler to update the state in storage and notify other components
+                await handleEnabledChange(newState);
+              } catch (error) {
+                console.error('Failed to update enabled state:', error);
+              }
+            }}
+            style={{ cursor: 'pointer' }}
+            aria-label={isEnabled ? turnOffText : turnOnText}
+            role="switch"
+            aria-checked={isEnabled}
+          >
+            <ToggleInput
+              type="checkbox"
+              checked={isEnabled}
+              onChange={() => { }} // Empty onChange to avoid React warning about readonly input with no handler
+              aria-hidden="true"
+              tabIndex={-1}
+            />
+            <ToggleSlider />
+          </ToggleContainer>
+        </ToggleStatusGroup>
       </Header>
       <ContentWrapper>
         {/* Overlay when extension is disabled */}
@@ -1166,15 +1248,15 @@ const IndexPopup = () => {
               transition={{ duration: 0.3 }}
             >
               <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 9V11M12 15H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0378 2.66667 10.268 4L3.33978 16C2.56998 17.3333 3.53223 19 5.07183 19Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 9V11M12 15H12.01M5.07183 19H18.9282C20.4678 19 21.4301 17.3333 20.6603 16L13.7321 4C12.9623 2.66667 11.0378 2.66667 10.268 4L3.33978 16C2.56998 17.3333 3.53223 19 5.07183 19Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               <h2 style={{ fontSize: '24px', marginTop: '0', marginBottom: '0', fontWeight: 'bold' }}>
-                                                {extensionDisabledText}
+                {extensionDisabledText}
               </h2>
               <p style={{ fontSize: '16px', opacity: 0.8, maxWidth: '400px', lineHeight: '1.5' }}>
-                                                {enableExtensionMessage}
+                {enableExtensionMessage}
               </p>
-              <button 
+              <button
                 onClick={async () => {
                   try {
                     await handleEnabledChange(true);
@@ -1184,7 +1266,7 @@ const IndexPopup = () => {
                 }}
                 style={{
                   marginTop: '0.5rem',
-                  backgroundColor: "#46b875",
+                  backgroundColor: theme.toggle.active,
                   border: 'none',
                   color: 'white',
                   padding: '0.75rem 1.5rem',
@@ -1196,12 +1278,12 @@ const IndexPopup = () => {
                   gap: '0.5rem'
                 }}
               >
-                <svg  width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-</svg>
+                <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                </svg>
 
-                
-                                                {enableButtonText}
+
+                {enableButtonText}
               </button>
             </DisabledOverlay>
           )}
@@ -1210,21 +1292,21 @@ const IndexPopup = () => {
           {/* Main Navigation */}
           <SidebarItem active={activeTab === 'general'} onClick={() => setActiveTab('general')}>
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-</svg>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+              </svg>
 
 
             </SidebarIcon>
-                                    {tabGeneral}
+            {tabGeneral}
           </SidebarItem>
           <SidebarItem active={activeTab === 'appearance'} onClick={() => setActiveTab('appearance')}>
             <SidebarIcon>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" />
-</svg>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" />
+              </svg>
             </SidebarIcon>
-                                    {tabAppearance}
+            {tabAppearance}
           </SidebarItem>
 
           <SidebarItem active={activeTab === 'language'} onClick={() => setActiveTab('language')}>
@@ -1236,23 +1318,23 @@ const IndexPopup = () => {
           <SidebarItem active={activeTab === 'keyboard'} onClick={() => setActiveTab('keyboard')}>
             <SidebarIcon>
               <svg width="80" height="80" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg" transform="rotate(0 0 0)">
-<path d="M6.44141 7.95293C5.99958 7.95293 5.64141 8.3111 5.64141 8.75293C5.64141 9.19476 5.99958 9.55293 6.44141 9.55293H6.45141C6.89323 9.55293 7.25141 9.19476 7.25141 8.75293C7.25141 8.3111 6.89323 7.95293 6.45141 7.95293H6.44141Z" fill="currentColor"/>
-<path d="M5.63945 12.1279C5.63945 11.6861 5.99763 11.3279 6.43945 11.3279H6.44945C6.89128 11.3279 7.24945 11.6861 7.24945 12.1279C7.24945 12.5698 6.89128 12.9279 6.44945 12.9279H6.43945C5.99763 12.9279 5.63945 12.5698 5.63945 12.1279Z" fill="currentColor"/>
-<path d="M10.1445 7.95293C9.7027 7.95293 9.34453 8.3111 9.34453 8.75293C9.34453 9.19476 9.7027 9.55293 10.1445 9.55293H10.1545C10.5964 9.55293 10.9545 9.19476 10.9545 8.75293C10.9545 8.3111 10.5964 7.95293 10.1545 7.95293H10.1445Z" fill="currentColor"/>
-<path d="M9.3582 12.1279C9.3582 11.6861 9.71638 11.3279 10.1582 11.3279H10.1682C10.61 11.3279 10.9682 11.6861 10.9682 12.1279C10.9682 12.5698 10.61 12.9279 10.1682 12.9279H10.1582C9.71638 12.9279 9.3582 12.5698 9.3582 12.1279Z" fill="currentColor"/>
-<path d="M8 14.7529C7.58579 14.7529 7.25 15.0887 7.25 15.5029C7.25 15.9171 7.58579 16.2529 8 16.2529H16C16.4142 16.2529 16.75 15.9171 16.75 15.5029C16.75 15.0887 16.4142 14.7529 16 14.7529H8Z" fill="#343C54"/>
-<path d="M13.0457 8.75293C13.0457 8.3111 13.4039 7.95293 13.8457 7.95293H13.8557C14.2975 7.95293 14.6557 8.3111 14.6557 8.75293C14.6557 9.19476 14.2975 9.55293 13.8557 9.55293H13.8457C13.4039 9.55293 13.0457 9.19476 13.0457 8.75293Z" fill="currentColor"/>
-<path d="M17.5479 7.95293C17.106 7.95293 16.7479 8.3111 16.7479 8.75293C16.7479 9.19476 17.106 9.55293 17.5479 9.55293H17.5579C17.9997 9.55293 18.3579 9.19476 18.3579 8.75293C18.3579 8.3111 17.9997 7.95293 17.5579 7.95293H17.5479Z" fill="currentColor"/>
-<path d="M13.0369 12.1279C13.0369 11.6861 13.3951 11.3279 13.8369 11.3279H13.8469C14.2887 11.3279 14.6469 11.6861 14.6469 12.1279C14.6469 12.5698 14.2887 12.9279 13.8469 12.9279H13.8369C13.3951 12.9279 13.0369 12.5698 13.0369 12.1279Z" fill="currentColor"/>
-<path d="M17.5557 11.3279C17.1138 11.3279 16.7557 11.6861 16.7557 12.1279C16.7557 12.5698 17.1138 12.9279 17.5557 12.9279H17.5657C18.0075 12.9279 18.3657 12.5698 18.3657 12.1279C18.3657 11.6861 18.0075 11.3279 17.5657 11.3279H17.5557Z" fill="currentColor"/>
-<path fillRule="evenodd" clipRule="evenodd" d="M4.25 4.62793C3.00736 4.62793 2 5.63529 2 6.87793V17.3779C2 18.6206 3.00736 19.6279 4.25 19.6279H19.7501C20.9927 19.6279 22.0001 18.6206 22.0001 17.3779V6.87793C22.0001 5.63529 20.9927 4.62793 19.7501 4.62793H4.25ZM3.5 6.87793C3.5 6.46372 3.83579 6.12793 4.25 6.12793H19.7501C20.1643 6.12793 20.5001 6.46372 20.5001 6.87793V17.3779C20.5001 17.7921 20.1643 18.1279 19.7501 18.1279H4.25C3.83579 18.1279 3.5 17.7921 3.5 17.3779V6.87793Z" fill="currentColor"/>
-</svg>
+                <path d="M6.44141 7.95293C5.99958 7.95293 5.64141 8.3111 5.64141 8.75293C5.64141 9.19476 5.99958 9.55293 6.44141 9.55293H6.45141C6.89323 9.55293 7.25141 9.19476 7.25141 8.75293C7.25141 8.3111 6.89323 7.95293 6.45141 7.95293H6.44141Z" fill="currentColor" />
+                <path d="M5.63945 12.1279C5.63945 11.6861 5.99763 11.3279 6.43945 11.3279H6.44945C6.89128 11.3279 7.24945 11.6861 7.24945 12.1279C7.24945 12.5698 6.89128 12.9279 6.44945 12.9279H6.43945C5.99763 12.9279 5.63945 12.5698 5.63945 12.1279Z" fill="currentColor" />
+                <path d="M10.1445 7.95293C9.7027 7.95293 9.34453 8.3111 9.34453 8.75293C9.34453 9.19476 9.7027 9.55293 10.1445 9.55293H10.1545C10.5964 9.55293 10.9545 9.19476 10.9545 8.75293C10.9545 8.3111 10.5964 7.95293 10.1545 7.95293H10.1445Z" fill="currentColor" />
+                <path d="M9.3582 12.1279C9.3582 11.6861 9.71638 11.3279 10.1582 11.3279H10.1682C10.61 11.3279 10.9682 11.6861 10.9682 12.1279C10.9682 12.5698 10.61 12.9279 10.1682 12.9279H10.1582C9.71638 12.9279 9.3582 12.5698 9.3582 12.1279Z" fill="currentColor" />
+                <path d="M8 14.7529C7.58579 14.7529 7.25 15.0887 7.25 15.5029C7.25 15.9171 7.58579 16.2529 8 16.2529H16C16.4142 16.2529 16.75 15.9171 16.75 15.5029C16.75 15.0887 16.4142 14.7529 16 14.7529H8Z" fill="currentColor" />
+                <path d="M13.0457 8.75293C13.0457 8.3111 13.4039 7.95293 13.8457 7.95293H13.8557C14.2975 7.95293 14.6557 8.3111 14.6557 8.75293C14.6557 9.19476 14.2975 9.55293 13.8557 9.55293H13.8457C13.4039 9.55293 13.0457 9.19476 13.0457 8.75293Z" fill="currentColor" />
+                <path d="M17.5479 7.95293C17.106 7.95293 16.7479 8.3111 16.7479 8.75293C16.7479 9.19476 17.106 9.55293 17.5479 9.55293H17.5579C17.9997 9.55293 18.3579 9.19476 18.3579 8.75293C18.3579 8.3111 17.9997 7.95293 17.5579 7.95293H17.5479Z" fill="currentColor" />
+                <path d="M13.0369 12.1279C13.0369 11.6861 13.3951 11.3279 13.8369 11.3279H13.8469C14.2887 11.3279 14.6469 11.6861 14.6469 12.1279C14.6469 12.5698 14.2887 12.9279 13.8469 12.9279H13.8369C13.3951 12.9279 13.0369 12.5698 13.0369 12.1279Z" fill="currentColor" />
+                <path d="M17.5557 11.3279C17.1138 11.3279 16.7557 11.6861 16.7557 12.1279C16.7557 12.5698 17.1138 12.9279 17.5557 12.9279H17.5657C18.0075 12.9279 18.3657 12.5698 18.3657 12.1279C18.3657 11.6861 18.0075 11.3279 17.5657 11.3279H17.5557Z" fill="currentColor" />
+                <path fillRule="evenodd" clipRule="evenodd" d="M4.25 4.62793C3.00736 4.62793 2 5.63529 2 6.87793V17.3779C2 18.6206 3.00736 19.6279 4.25 19.6279H19.7501C20.9927 19.6279 22.0001 18.6206 22.0001 17.3779V6.87793C22.0001 5.63529 20.9927 4.62793 19.7501 4.62793H4.25ZM3.5 6.87793C3.5 6.46372 3.83579 6.12793 4.25 6.12793H19.7501C20.1643 6.12793 20.5001 6.46372 20.5001 6.87793V17.3779C20.5001 17.7921 20.1643 18.1279 19.7501 18.1279H4.25C3.83579 18.1279 3.5 17.7921 3.5 17.3779V6.87793Z" fill="currentColor" />
+              </svg>
 
             </SidebarIcon>
-                                    {tabKeyboard}
+            {tabKeyboard}
           </SidebarItem>
-          <SidebarItem 
-            active={false} 
+          <SidebarItem
+            active={false}
             onClick={() => {
               if (typeof chrome !== 'undefined' && chrome.runtime) {
                 chrome.runtime.openOptionsPage();
@@ -1260,10 +1342,10 @@ const IndexPopup = () => {
             }}
           >
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
-  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-</svg>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+              </svg>
 
             </SidebarIcon>
             {getMessage("tabAdvanced")}
@@ -1285,8 +1367,8 @@ const IndexPopup = () => {
           <SidebarItem active={activeTab === 'feedback'} onClick={() => setActiveTab('feedback')}>
             <SidebarIcon>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
-</svg>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+              </svg>
 
             </SidebarIcon>
             {getMessage("tabFeedback")}
@@ -1294,79 +1376,79 @@ const IndexPopup = () => {
           <SidebarItem active={activeTab === 'privacy'} onClick={() => setActiveTab('privacy')}>
             <SidebarIcon>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
-</svg>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
+              </svg>
 
             </SidebarIcon>
             {getMessage("tabPrivacy")}
           </SidebarItem>
-          
 
-          
+
+
           <SidebarDivider />
-          
-          <SidebarItem 
+
+          <SidebarItem
             onClick={() => window.open('https://www.boimaginations.com/lightup', '_blank')}
             active={false}
           >
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="m20.893 13.393-1.135-1.135a2.252 2.252 0 0 1-.421-.585l-1.08-2.16a.414.414 0 0 0-.663-.107.827.827 0 0 1-.812.21l-1.273-.363a.89.89 0 0 0-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.212.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 0 1-1.81 1.025 1.055 1.055 0 0 1-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.655-.261a2.25 2.25 0 0 1-1.383-2.46l.007-.042a2.25 2.25 0 0 1 .29-.787l.09-.15a2.25 2.25 0 0 1 2.37-1.048l1.178.236a1.125 1.125 0 0 0 1.302-.795l.208-.73a1.125 1.125 0 0 0-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 0 1-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 0 1-1.458-1.137l1.411-2.353a2.25 2.25 0 0 0 .286-.76m11.928 9.869A9 9 0 0 0 8.965 3.525m11.928 9.868A9 9 0 1 1 8.965 3.525" />
-</svg>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m20.893 13.393-1.135-1.135a2.252 2.252 0 0 1-.421-.585l-1.08-2.16a.414.414 0 0 0-.663-.107.827.827 0 0 1-.812.21l-1.273-.363a.89.89 0 0 0-.738 1.595l.587.39c.59.395.674 1.23.172 1.732l-.2.2c-.212.212-.33.498-.33.796v.41c0 .409-.11.809-.32 1.158l-1.315 2.191a2.11 2.11 0 0 1-1.81 1.025 1.055 1.055 0 0 1-1.055-1.055v-1.172c0-.92-.56-1.747-1.414-2.089l-.655-.261a2.25 2.25 0 0 1-1.383-2.46l.007-.042a2.25 2.25 0 0 1 .29-.787l.09-.15a2.25 2.25 0 0 1 2.37-1.048l1.178.236a1.125 1.125 0 0 0 1.302-.795l.208-.73a1.125 1.125 0 0 0-.578-1.315l-.665-.332-.091.091a2.25 2.25 0 0 1-1.591.659h-.18c-.249 0-.487.1-.662.274a.931.931 0 0 1-1.458-1.137l1.411-2.353a2.25 2.25 0 0 0 .286-.76m11.928 9.869A9 9 0 0 0 8.965 3.525m11.928 9.868A9 9 0 1 1 8.965 3.525" />
+              </svg>
 
             </SidebarIcon>
             {getMessage("website")}
           </SidebarItem>
-          
-          <SidebarItem 
+
+          <SidebarItem
             onClick={() => window.open('https://chromewebstore.google.com/detail/lightup-ai-powered-web-an/pncapgeoeedlfppkohlbelelkkihikel/reviews', '_blank')}
             active={false}
           >
             <SidebarIcon>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
-</svg>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z" />
+              </svg>
 
             </SidebarIcon>
             {getMessage("rateUs")}
           </SidebarItem>
         </Sidebar>
-        
+
         <ContentArea>
           {/* General Settings */}
           {activeTab === 'general' && (
             <>
-           
-              
+
+
               <Section>
                 <SectionTitle>{getMessage("dailyUsage")}</SectionTitle>
                 {isLoading ? (
-                  <div style={{ padding: '16px', background: '#333333', borderRadius: '8px', marginTop: '12px' }}>
-                    <span style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px' }}>{getMessage("loadingUsageInfo")}</span>
+                  <div style={{ padding: '16px', background: theme.card, borderRadius: '8px', marginTop: '12px' }}>
+                    <span style={{ color: theme.secondaryText, fontSize: '14px' }}>{getMessage("loadingUsageInfo")}</span>
                   </div>
                 ) : error ? (
-                  <div style={{ padding: '16px', background: '#333333', borderRadius: '8px', marginTop: '12px', borderLeft: '4px solid #E74C3C' }}>
-                    <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px' }}>{error}</span>
+                  <div style={{ padding: '16px', background: theme.card, borderRadius: '8px', marginTop: '12px', borderLeft: '4px solid #E74C3C' }}>
+                    <span style={{ color: theme.secondaryText, fontSize: '14px' }}>{error}</span>
                   </div>
                 ) : (
-                  <div style={{ padding: '16px', background: '#333333', borderRadius: '8px', marginTop: '12px' }}>
+                  <div style={{ padding: '16px', background: theme.card, borderRadius: '8px', marginTop: '12px' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                      <span style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '14px' }}>{getMessage("freeUsesRemaining")}</span>
+                      <span style={{ color: theme.secondaryText, fontSize: '14px' }}>{getMessage("freeUsesRemaining")}</span>
                       <span style={{ fontWeight: 500, fontSize: '14px' }}>
-                        {remainingActions} / {(settings?.rateLimit as any)?.dailyLimit ?? 30}
+                        {remainingActions} / {(settings?.rateLimit as any)?.dailyLimit ?? 80}
                       </span>
                     </div>
-                    <div style={{ width: '100%', height: '8px', backgroundColor: '#444444', borderRadius: '4px', overflow: 'hidden' }}>
-                      <div 
-                        style={{ 
-                          width: `${Math.min(100, (remainingActions / ((settings?.rateLimit as any)?.dailyLimit ?? 30)) * 100)}%`, 
-                          height: '100%', 
-                          backgroundColor: theme.dark.toggle.active, 
-                          borderRadius: '4px' 
+                    <div style={{ width: '100%', height: '8px', backgroundColor: theme.button.default, borderRadius: '4px', overflow: 'hidden' }}>
+                      <div
+                        style={{
+                          width: `${Math.min(100, (remainingActions / ((settings?.rateLimit as any)?.dailyLimit ?? 80)) * 100)}%`,
+                          height: '100%',
+                          backgroundColor: theme.toggle.active,
+                          borderRadius: '4px'
                         }}
                       ></div>
                     </div>
-                   
+
                   </div>
                 )}
               </Section>
@@ -1375,17 +1457,17 @@ const IndexPopup = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                   <SectionTitle>{getMessage("modeSelection")}</SectionTitle>
                   <div style={{ display: 'flex', gap: '8px' }}>
-                    <Button 
-                      onClick={() => setActiveModeConfig(!activeModeConfig)} 
+                    <Button
+                      onClick={() => setActiveModeConfig(!activeModeConfig)}
                       style={{
                         display: 'flex',
                         alignItems: 'center',
                         gap: '8px',
                         borderRadius: '12px',
                         padding: '8px 14px',
-                        border: `1px solid ${theme.dark.border}`,
-                        background: activeModeConfig ? theme.dark.card : 'transparent',
-                        color: theme.dark.foreground,
+                        border: `1px solid ${theme.border}`,
+                        background: activeModeConfig ? theme.card : 'transparent',
+                        color: theme.foreground,
                         fontWeight: 500,
                         transition: 'background-color 0.2s ease-in-out, border-color 0.2s ease-in-out',
                         cursor: 'pointer',
@@ -1395,11 +1477,11 @@ const IndexPopup = () => {
                     >
                       {activeModeConfig ? getMessage("hideModeConfigShort") : getMessage("configureModes")}
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 6v12m-6-6h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" 
-                          transform={activeModeConfig ? "rotate(45, 12, 12)" : ""}/>
+                        <path d="M12 6v12m-6-6h12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                          transform={activeModeConfig ? "rotate(45, 12, 12)" : ""} />
                       </svg>
                     </Button>
-                    <Button 
+                    <Button
                       onClick={() => {
                         if (typeof chrome !== 'undefined' && chrome.runtime) {
                           chrome.runtime.openOptionsPage();
@@ -1411,9 +1493,9 @@ const IndexPopup = () => {
                         gap: '8px',
                         borderRadius: '12px',
                         padding: '8px 14px',
-                        border: `1px solid ${theme.dark.border}`,
+                        border: `1px solid ${theme.border}`,
                         background: 'transparent',
-                        color: theme.dark.foreground,
+                        color: theme.foreground,
                         fontWeight: 500,
                         transition: 'background-color 0.2s ease-in-out, border-color 0.2s ease-in-out',
                         cursor: 'pointer',
@@ -1428,10 +1510,10 @@ const IndexPopup = () => {
                     </Button>
                   </div>
                 </div>
-              
+
                 {activeModeConfig ? (
-                  <div style={{ marginBottom: '20px', padding: '16px', background: '#333333', borderRadius: '8px' }}>
-                    <h3 style={{ fontSize: '16px', marginBottom: '12px', color: theme.dark.foreground }}>{getMessage("configureModeSelector")}</h3>
+                  <div style={{ marginBottom: '20px', padding: '16px', background: theme.card, borderRadius: '8px' }}>
+                    <h3 style={{ fontSize: '16px', marginBottom: '12px', color: theme.foreground }}>{getMessage("configureModeSelector")}</h3>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '8px' }}>
                       {allModes.map((mode) => (
                         <Button
@@ -1442,7 +1524,7 @@ const IndexPopup = () => {
                         >
                           {preferredModes.includes(mode) && (
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M5 12l5 5 9-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M5 12l5 5 9-9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                           )}
                           {modeIcons[mode as keyof typeof modeIcons]}
@@ -1450,8 +1532,8 @@ const IndexPopup = () => {
                             <span>{mode.charAt(0).toUpperCase() + mode.slice(1)}</span>
                             {mode === 'translate' && (
                               <span style={{ fontSize: '10px', opacity: 0.8 }}>
-                                {settings?.translationSettings?.fromLanguage ? 
-                                  `${LANGUAGES[settings.translationSettings.fromLanguage] || LANGUAGES['auto']} → ${LANGUAGES[settings.translationSettings.toLanguage] || LANGUAGES['en']}` : 
+                                {settings?.translationSettings?.fromLanguage ?
+                                  `${LANGUAGES[settings.translationSettings.fromLanguage] || LANGUAGES['auto']} → ${LANGUAGES[settings.translationSettings.toLanguage] || LANGUAGES['en']}` :
                                   getMessage("autoTranslate")}
                               </span>
                             )}
@@ -1459,7 +1541,7 @@ const IndexPopup = () => {
                         </Button>
                       ))}
                     </div>
-                    <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)' }}>{getMessage("modeSelectorHelp")}</p>
+                    <p style={{ fontSize: '14px', color: theme.secondaryText }}>{getMessage("modeSelectorHelp")}</p>
                   </div>
                 ) : (
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '20px' }}>
@@ -1475,8 +1557,8 @@ const IndexPopup = () => {
                           <span>{mode.charAt(0).toUpperCase() + mode.slice(1)}</span>
                           {mode === 'translate' && (
                             <span style={{ fontSize: '10px', opacity: 0.8 }}>
-                              {settings?.translationSettings?.fromLanguage ? 
-                                `${LANGUAGES[settings.translationSettings.fromLanguage] || LANGUAGES['auto']} → ${LANGUAGES[settings.translationSettings.toLanguage] || LANGUAGES['en']}` : 
+                              {settings?.translationSettings?.fromLanguage ?
+                                `${LANGUAGES[settings.translationSettings.fromLanguage] || LANGUAGES['auto']} → ${LANGUAGES[settings.translationSettings.toLanguage] || LANGUAGES['en']}` :
                                 'Auto → English'}
                             </span>
                           )}
@@ -1486,9 +1568,9 @@ const IndexPopup = () => {
                   </div>
                 )}
               </Section>
-              
+
               <SectionDivider />
-              
+
               <Section>
                 {/* <SectionTitle>General Settings</SectionTitle>
                 <Description>Configure the basic settings for your extension</Description> */}
@@ -1505,7 +1587,7 @@ const IndexPopup = () => {
                       minWidth: 0
                     }}
                   >
-                    <Select 
+                    <Select
                       value={settings?.translationSettings?.fromLanguage}
                       onChange={async (e) => {
                         const translationSettings = {
@@ -1517,25 +1599,25 @@ const IndexPopup = () => {
                           ...settings,
                           translationSettings
                         }
-                        
+
                         console.log('Translation settings updated:', translationSettings)
-                        
+
                         // Update local state immediately for instant UI feedback
                         setSettings(newSettings)
-                        
+
                         const storage = new Storage()
                         await storage.set("settings", newSettings)
-                        
+
                         // Also save dedicated translationSettings
                         await storage.set("translationSettings", translationSettings)
-                        
+
                         // Notify all tabs about the translation settings change
                         if (typeof chrome !== 'undefined' && chrome.tabs) {
                           chrome.tabs.query({}, (tabs) => {
                             tabs.forEach(tab => {
                               if (tab.id) {
-                                chrome.tabs.sendMessage(tab.id, { 
-                                  type: "TRANSLATION_SETTINGS_UPDATED", 
+                                chrome.tabs.sendMessage(tab.id, {
+                                  type: "TRANSLATION_SETTINGS_UPDATED",
                                   translationSettings: translationSettings
                                 }).catch(err => {
                                   // Ignore errors for tabs that don't have the content script running
@@ -1545,7 +1627,7 @@ const IndexPopup = () => {
                             });
                           });
                         }
-                        
+
                         // Dispatch event for other components in the same window
                         window.dispatchEvent(
                           new CustomEvent('settingsUpdated', { detail: { settings: newSettings } })
@@ -1557,14 +1639,14 @@ const IndexPopup = () => {
                         <option key={lang.code} value={lang.code}>{lang.nativeName} ({lang.name})</option>
                       ))}
                     </Select>
-                    
+
                     <div style={{ display: 'flex', alignItems: 'center', margin: '0 4px', flex: '0 0 auto' }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
-                    
-                    <Select 
+
+                    <Select
                       value={settings?.translationSettings?.toLanguage}
                       onChange={async (e) => {
                         const translationSettings = {
@@ -1576,25 +1658,25 @@ const IndexPopup = () => {
                           ...settings,
                           translationSettings
                         }
-                        
+
                         console.log('Translation settings updated (toLanguage):', translationSettings)
-                        
+
                         // Update local state immediately for instant UI feedback
                         setSettings(newSettings)
-                        
+
                         const storage = new Storage()
                         await storage.set("settings", newSettings)
-                        
+
                         // Also save dedicated translationSettings
                         await storage.set("translationSettings", translationSettings)
-                        
+
                         // Notify all tabs about the translation settings change
                         if (typeof chrome !== 'undefined' && chrome.tabs) {
                           chrome.tabs.query({}, (tabs) => {
                             tabs.forEach(tab => {
                               if (tab.id) {
-                                chrome.tabs.sendMessage(tab.id, { 
-                                  type: "TRANSLATION_SETTINGS_UPDATED", 
+                                chrome.tabs.sendMessage(tab.id, {
+                                  type: "TRANSLATION_SETTINGS_UPDATED",
                                   translationSettings: translationSettings
                                 }).catch(err => {
                                   // Ignore errors for tabs that don't have the content script running
@@ -1604,7 +1686,7 @@ const IndexPopup = () => {
                             });
                           });
                         }
-                        
+
                         // Dispatch event for other components in the same window
                         window.dispatchEvent(
                           new CustomEvent('settingsUpdated', { detail: { settings: newSettings } })
@@ -1632,33 +1714,33 @@ const IndexPopup = () => {
                     <Description>{getMessage("pageContextDesc")}</Description>
                   </div>
                   <ToggleContainer>
-                    <ToggleInput 
-                      type="checkbox" 
+                    <ToggleInput
+                      type="checkbox"
                       checked={settings?.customization?.contextAwareness === true}
                       onChange={(e) => updateSettings('contextAwareness', e.target.checked)}
                     />
                     <ToggleSlider />
                   </ToggleContainer>
                 </FormRow>
-                
-                
+
+
                 <SectionDivider />
-                
+
                 <FormRow>
                   <div>
                     <Label>{getMessage("showWebsiteInfoLabel")}</Label>
                     <Description>{getMessage("showWebsiteInfoDesc")}</Description>
                   </div>
                   <ToggleContainer>
-                    <ToggleInput 
-                      type="checkbox" 
+                    <ToggleInput
+                      type="checkbox"
                       checked={settings?.customization?.showWebsiteInfo !== false}
                       onChange={(e) => updateSettings('showWebsiteInfo', e.target.checked)}
                     />
                     <ToggleSlider />
                   </ToggleContainer>
                 </FormRow>
-                
+
                 <SectionDivider />
                 <FormRow>
                   <div>
@@ -1666,8 +1748,8 @@ const IndexPopup = () => {
                     <Description>{getMessage("showSelectedTextDesc")}</Description>
                   </div>
                   <ToggleContainer>
-                    <ToggleInput 
-                      type="checkbox" 
+                    <ToggleInput
+                      type="checkbox"
                       checked={settings?.customization?.showSelectedText !== false}
                       onChange={(e) => updateSettings('showSelectedText', e.target.checked)}
                     />
@@ -1675,83 +1757,83 @@ const IndexPopup = () => {
                   </ToggleContainer>
                 </FormRow>
                 <SectionDivider />
-                
-                                     <FormRow>
-                       <div>
-                         <Label>{getMessage("showInstantAIButtonLabel")}</Label>
-                         <Description>{getMessage("showInstantAIButtonDesc")}</Description>
-                       </div>
+
+                <FormRow>
+                  <div>
+                    <Label>{getMessage("showInstantAIButtonLabel")}</Label>
+                    <Description>{getMessage("showInstantAIButtonDesc")}</Description>
+                  </div>
                   <ToggleContainer>
-                    <ToggleInput 
-                      type="checkbox" 
+                    <ToggleInput
+                      type="checkbox"
                       checked={settings?.customization?.showGlobalActionButton !== false}
                       onChange={(e) => updateSettings('showGlobalActionButton', e.target.checked)}
                     />
                     <ToggleSlider />
                   </ToggleContainer>
                 </FormRow>
-                
+
                 <SectionDivider />
-                
+
                 <FormRow>
                   <div>
                     <Label>{getMessage("distractionFreeModeLabel")}</Label>
                     <Description>{getMessage("distractionFreeModeDesc")}</Description>
                   </div>
                   <ToggleContainer>
-                    <ToggleInput 
-                      type="checkbox" 
+                    <ToggleInput
+                      type="checkbox"
                       checked={settings?.customization?.radicallyFocus === true}
                       onChange={(e) => updateSettings('radicallyFocus', e.target.checked)}
                     />
                     <ToggleSlider />
                   </ToggleContainer>
                 </FormRow>
-                
+
                 <SectionDivider />
-                
+
                 <FormRow>
                   <div>
                     <Label>{getMessage("keepHighlightedTextLabel")}</Label>
                     <Description>{getMessage("keepHighlightedTextDesc")}</Description>
                   </div>
                   <ToggleContainer>
-                    <ToggleInput 
-                      type="checkbox" 
+                    <ToggleInput
+                      type="checkbox"
                       checked={settings?.customization?.persistHighlight === true}
                       onChange={(e) => updateSettings('persistHighlight', e.target.checked)}
                     />
                     <ToggleSlider />
                   </ToggleContainer>
                 </FormRow>
-                
+
                 <SectionDivider />
-                
+
                 <FormRow>
                   <div>
                     <Label>{getMessage("showActionButtonLabel")}</Label>
                     <Description>{getMessage("showActionButtonDesc")}</Description>
                   </div>
                   <ToggleContainer>
-                    <ToggleInput 
-                      type="checkbox" 
+                    <ToggleInput
+                      type="checkbox"
                       checked={settings?.customization?.showTextSelectionButton !== false}
                       onChange={(e) => updateSettings('showTextSelectionButton', e.target.checked)}
                     />
                     <ToggleSlider />
                   </ToggleContainer>
                 </FormRow>
-                
+
                 <SectionDivider />
-                
+
                 <FormRow>
                   <div>
                     <Label>{getMessage("autoOpenLabel")}</Label>
                     <Description>{getMessage("autoOpenDesc")}</Description>
                   </div>
                   <ToggleContainer>
-                    <ToggleInput 
-                      type="checkbox" 
+                    <ToggleInput
+                      type="checkbox"
                       checked={settings?.customization?.automaticActivation === true}
                       onChange={(e) => {
                         // Update both settings to ensure consistency with options page
@@ -1765,23 +1847,23 @@ const IndexPopup = () => {
                     <ToggleSlider />
                   </ToggleContainer>
                 </FormRow>
-                
-               
-             
+
+
+
               </Section>
-              
-              
+
+
             </>
           )}
-          
+
           {/* Keyboard Shortcuts */}
           {activeTab === 'keyboard' && (
             <>
               <Section>
                 <SectionTitle>{getMessage("keyboardShortcuts")}</SectionTitle>
                 <Description>{getMessage("keyboardShortcutsDesc")}</Description>
-                
-                <div style={{ background: '#333333', borderRadius: '8px', padding: '16px', marginTop: '16px' }}>
+
+                <div style={{ background: theme.card, borderRadius: '8px', padding: '16px', marginTop: '16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
                     <div>
                       {/* <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '8px' }}>Mode Switching</h3>
@@ -1793,7 +1875,7 @@ const IndexPopup = () => {
                       </Button> */}
                     </div>
                   </div>
-                  
+
                   <div style={{ marginBottom: '20px' }}>
                     {[
                       { key: "Ctrl+Shift+Z", description: getMessage("shortcutExplainMode") },
@@ -1802,22 +1884,22 @@ const IndexPopup = () => {
                       { key: "Ctrl+Shift+T", description: getMessage("shortcutTranslateMode") },
                       { key: "Ctrl+Shift+F", description: getMessage("shortcutFreeMode") }
                     ].map((shortcut, index) => (
-                      <div key={index} className="shortcut-row" style={{ 
-                        display: 'flex', 
-                        justifyContent: 'space-between', 
+                      <div key={index} className="shortcut-row" style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
                         alignItems: 'center',
                         padding: '10px 0',
-                        borderBottom: index === 4 ? 'none' : `1px solid ${theme.dark.divider}`,
+                        borderBottom: index === 4 ? 'none' : `1px solid ${theme.divider}`,
                       }}>
-                        <span style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.8)' }}>{shortcut.description}</span>
-                        <div style={{ 
+                        <span style={{ fontSize: '15px', color: theme.secondaryText }}>{shortcut.description}</span>
+                        <div style={{
                           padding: '5px 10px',
-                          backgroundColor: '#444444',
+                          backgroundColor: theme.button.default,
                           borderRadius: '4px',
                           fontSize: '14px',
                           fontFamily: 'monospace',
-                          color: theme.dark.foreground,
-                          border: `1px solid ${theme.dark.border}`
+                          color: theme.foreground,
+                          border: `1px solid ${theme.border}`
                         }}>
                           {shortcut.key}
                         </div>
@@ -1826,35 +1908,35 @@ const IndexPopup = () => {
                   </div>
                 </div>
               </Section>
-              
+
               <SectionDivider />
-              
+
               <Section>
                 <SectionTitle>{getMessage("featureToggles")}</SectionTitle>
                 <Description>{getMessage("featureTogglesDesc")}</Description>
-                
-                <div style={{ background: '#333333', borderRadius: '8px', padding: '16px', marginTop: '16px' }}>
+
+                <div style={{ background: theme.card, borderRadius: '8px', padding: '16px', marginTop: '16px' }}>
                   {[
                     { key: "Ctrl+Shift+X", description: getMessage("shortcutToggleOnOff") },
                     { key: "Ctrl+Shift+R", description: getMessage("shortcutToggleFocus") },
                     { key: "Ctrl+Shift+D", description: getMessage("shortcutToggleTheme") }
                   ].map((shortcut, index) => (
-                    <div key={index} className="shortcut-row" style={{ 
-                      display: 'flex', 
-                      justifyContent: 'space-between', 
+                    <div key={index} className="shortcut-row" style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
                       alignItems: 'center',
                       padding: '10px 0',
-                      borderBottom: index === 2 ? 'none' : `1px solid ${theme.dark.divider}`,
+                      borderBottom: index === 2 ? 'none' : `1px solid ${theme.divider}`,
                     }}>
-                      <span style={{ fontSize: '15px', color: 'rgba(255, 255, 255, 0.8)' }}>{shortcut.description}</span>
-                      <div style={{ 
+                      <span style={{ fontSize: '15px', color: theme.secondaryText }}>{shortcut.description}</span>
+                      <div style={{
                         padding: '5px 10px',
-                        backgroundColor: '#444444',
+                        backgroundColor: theme.button.default,
                         borderRadius: '4px',
                         fontSize: '14px',
                         fontFamily: 'monospace',
-                        color: theme.dark.foreground,
-                        border: `1px solid ${theme.dark.border}`
+                        color: theme.foreground,
+                        border: `1px solid ${theme.border}`
                       }}>
                         {shortcut.key}
                       </div>
@@ -1862,9 +1944,9 @@ const IndexPopup = () => {
                   ))}
                 </div>
               </Section>
-              
+
               <SectionDivider />
-              
+
               <Section>
                 <Description style={{ marginTop: '8px' }}>
                   {getMessage("shortcutAfterSettingDesc")}
@@ -1879,7 +1961,7 @@ const IndexPopup = () => {
               </Section>
             </>
           )}
-          
+
           {/* Appearance */}
           {activeTab === 'appearance' && (
             <>
@@ -1891,7 +1973,7 @@ const IndexPopup = () => {
               <Section>
                 <SectionTitle>{getMessage("highlightColorTitle")}</SectionTitle>
                 <Description>{getMessage("highlightColorDesc")}</Description>
-                
+
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginTop: '16px' }}>
                   {[
                     { value: 'default', label: getMessage("colorDefault"), color: 'linear-gradient(45deg, rgb(211, 232, 255), rgb(197, 225, 255))' },
@@ -1902,7 +1984,7 @@ const IndexPopup = () => {
                     { value: 'purple', label: getMessage("colorPurple"), color: '#C4B5FD' },
                     { value: 'pink', label: getMessage("colorPink"), color: '#FDA4AF' }
                   ].map(colorOption => (
-                    <div 
+                    <div
                       key={colorOption.value}
                       style={{
                         width: '75px',
@@ -1912,7 +1994,7 @@ const IndexPopup = () => {
                         gap: '8px'
                       }}
                     >
-                      <div 
+                      <div
                         onClick={() => updateSettings('highlightColor', colorOption.value)}
                         style={{
                           width: '36px',
@@ -1920,7 +2002,7 @@ const IndexPopup = () => {
                           borderRadius: '50%',
                           background: colorOption.color,
                           backgroundColor: colorOption.value === 'default' ? undefined : colorOption.color,
-                          border: colorOption.value === (settings?.customization?.highlightColor) ? `2px solid ${theme.dark.primary}` : '2px solid transparent',
+                          border: colorOption.value === (settings?.customization?.highlightColor) ? `2px solid ${theme.primary}` : '2px solid transparent',
                           cursor: 'pointer',
                           display: 'flex',
                           alignItems: 'center',
@@ -1930,16 +2012,16 @@ const IndexPopup = () => {
                       >
                         {colorOption.value === (settings?.customization?.highlightColor) && (
                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M5 13l4 4L19 7" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M5 13l4 4L19 7" stroke="#333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                           </svg>
                         )}
                       </div>
-                      <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.8)' }}>{colorOption.label}</span>
+                      <span style={{ fontSize: '12px', color: theme.secondaryText }}>{colorOption.label}</span>
                     </div>
                   ))}
                 </div>
               </Section>
-              
+
               <SectionDivider />
 
               {/* Layout & Display options are also available in the Appearance tab */}
@@ -1953,8 +2035,8 @@ const IndexPopup = () => {
                   <Description>{getMessage("radicalFocusDesc")}</Description>
                 </div>
                 <ToggleContainer>
-                  <ToggleInput 
-                    type="checkbox" 
+                  <ToggleInput
+                    type="checkbox"
                     checked={settings?.customization?.radicallyFocus === true}
                     onChange={(e) => updateSettings('radicallyFocus', e.target.checked)}
                     aria-label={getMessage("radicalFocusLabel")}
@@ -1971,8 +2053,8 @@ const IndexPopup = () => {
                   <Description>{getMessage("keepHighlightedTextDesc")}</Description>
                 </div>
                 <ToggleContainer>
-                  <ToggleInput 
-                    type="checkbox" 
+                  <ToggleInput
+                    type="checkbox"
                     checked={settings?.customization?.persistHighlight === true}
                     onChange={(e) => updateSettings('persistHighlight', e.target.checked)}
                     aria-label={getMessage("persistentHighlightingLabel")}
@@ -1984,13 +2066,13 @@ const IndexPopup = () => {
               <SectionDivider />
             </>
           )}
-          
+
           {/* Language */}
           {activeTab === 'language' && (
             <Section>
               <SectionTitle>{getMessage("languageLabel")}</SectionTitle>
               <Description>{getMessage("languageDesc")}</Description>
-              
+
               <div style={{ marginTop: '20px', maxWidth: '420px' }}>
                 <div
                   style={{
@@ -1999,19 +2081,19 @@ const IndexPopup = () => {
                     justifyContent: 'space-between',
                     padding: '12px 16px',
                     borderRadius: '10px',
-                    background: '#333333',
-                    border: `1px solid ${theme.dark.border}`,
+                    background: theme.card,
+                    border: `1px solid ${theme.border}`,
                     gap: '12px'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <Globe size={20} color="currentColor" />
-                    <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.9)' }}>
+                    <span style={{ fontSize: '14px', color: theme.foreground }}>
                       {getMessage("languageLabel")}
                     </span>
                   </div>
                   <div style={{ width: '200px' }}>
-                    <LanguageSelector 
+                    <LanguageSelector
                       onChange={(newLocale) => {
                         // Change the locale using the useLocale hook
                         changeLocale(newLocale).then(() => {
@@ -2020,7 +2102,7 @@ const IndexPopup = () => {
                           console.error('Error changing locale:', error);
                           notifyError(getMessage('languageChangeError'));
                         });
-                      }} 
+                      }}
                       compact={true}
                     />
                   </div>
@@ -2034,18 +2116,18 @@ const IndexPopup = () => {
             <Section>
               <SectionTitle>{getMessage("feedbackTitle")}</SectionTitle>
               <Description>{getMessage("feedbackDesc")}</Description>
-              
+
               {/* Feedback Type Cards */}
-              <div style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(4, 1fr)', 
-                gap: '10px', 
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(4, 1fr)',
+                gap: '10px',
                 marginTop: '20px',
                 marginBottom: '20px'
               }}>
                 {[
-                  { 
-                    value: 'general', 
+                  {
+                    value: 'general',
                     label: getMessage("feedbackTypeGeneral", undefined, "General"),
                     icon: (
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -2054,8 +2136,8 @@ const IndexPopup = () => {
                     ),
                     color: '#3B82F6'
                   },
-                  { 
-                    value: 'bug', 
+                  {
+                    value: 'bug',
                     label: getMessage("feedbackTypeBug", undefined, "Bug Report"),
                     icon: (
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -2066,8 +2148,8 @@ const IndexPopup = () => {
                     ),
                     color: '#EF4444'
                   },
-                  { 
-                    value: 'feature', 
+                  {
+                    value: 'feature',
                     label: getMessage("feedbackTypeFeature", undefined, "Feature"),
                     icon: (
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -2076,8 +2158,8 @@ const IndexPopup = () => {
                     ),
                     color: '#F59E0B'
                   },
-                  { 
-                    value: 'other', 
+                  {
+                    value: 'other',
                     label: getMessage("feedbackTypeOther", undefined, "Other"),
                     icon: (
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -2108,7 +2190,7 @@ const IndexPopup = () => {
                       alignItems: 'center',
                       justifyContent: 'center',
                       padding: '14px 8px',
-                      background: feedbackType === type.value ? `${type.color}15` : '#333333',
+                      background: feedbackType === type.value ? `${type.color}15` : theme.card,
                       borderRadius: '10px',
                       cursor: 'pointer',
                       border: feedbackType === type.value ? `2px solid ${type.color}` : '2px solid transparent',
@@ -2117,24 +2199,24 @@ const IndexPopup = () => {
                     }}
                     onMouseEnter={(e) => {
                       if (feedbackType !== type.value) {
-                        e.currentTarget.style.background = '#3a3a3a'
-                        e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)'
+                        e.currentTarget.style.background = theme.cardHover
+                        e.currentTarget.style.borderColor = theme.divider
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (feedbackType !== type.value) {
-                        e.currentTarget.style.background = '#333333'
+                        e.currentTarget.style.background = theme.card
                         e.currentTarget.style.borderColor = 'transparent'
                       }
                     }}
                   >
-                    <div style={{ color: feedbackType === type.value ? type.color : 'rgba(255,255,255,0.7)' }}>
+                    <div style={{ color: feedbackType === type.value ? type.color : theme.secondaryText }}>
                       {type.icon}
                     </div>
-                    <span style={{ 
-                      fontSize: '12px', 
+                    <span style={{
+                      fontSize: '12px',
                       fontWeight: 500,
-                      color: feedbackType === type.value ? type.color : 'rgba(255,255,255,0.8)',
+                      color: feedbackType === type.value ? type.color : theme.foreground,
                       textAlign: 'center'
                     }}>
                       {type.label}
@@ -2144,43 +2226,43 @@ const IndexPopup = () => {
               </div>
 
               {/* Feedback Form Card */}
-              <div style={{ background: '#333333', borderRadius: '12px', padding: '20px' }}>
+              <div style={{ background: theme.card, borderRadius: '12px', padding: '20px' }}>
                 {/* Contextual hint based on feedback type */}
                 <div style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: '10px',
                   padding: '12px 14px',
-                  background: 'rgba(255,255,255,0.05)',
+                  background: theme.button.default,
                   borderRadius: '8px',
                   marginBottom: '16px'
                 }}>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={theme.secondaryText} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="12" cy="12" r="10" />
                     <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
                     <line x1="12" y1="17" x2="12.01" y2="17" />
                   </svg>
-                  <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>
+                  <span style={{ fontSize: '13px', color: theme.secondaryText }}>
                     {feedbackType === 'bug' && "Please describe what happened, what you expected, and steps to reproduce."}
                     {feedbackType === 'feature' && "Describe the feature you'd like and how it would help your workflow."}
                     {feedbackType === 'general' && "Share your thoughts, suggestions, or general experience with LightUp."}
                     {feedbackType === 'other' && "Tell us anything else on your mind about LightUp."}
                   </span>
                 </div>
-                
+
                 <FormGroup>
                   <Label htmlFor="feedback-content" style={{ marginBottom: '8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <span>{getMessage("feedbackContentLabel")}</span>
                   </Label>
                   <div style={{ position: 'relative' }}>
-                    <textarea 
-                      id="feedback-content" 
+                    <textarea
+                      id="feedback-content"
                       placeholder={
-                        feedbackType === 'bug' 
-                          ? "I encountered an issue when...\n\nExpected behavior:\nActual behavior:\nSteps to reproduce:" 
+                        feedbackType === 'bug'
+                          ? "I encountered an issue when...\n\nExpected behavior:\nActual behavior:\nSteps to reproduce:"
                           : feedbackType === 'feature'
-                          ? "I would love to see...\n\nThis would help me because..."
-                          : getMessage("feedbackContentPlaceholder")
+                            ? "I would love to see...\n\nThis would help me because..."
+                            : getMessage("feedbackContentPlaceholder")
                       }
                       value={feedbackContent}
                       onChange={(event) => setFeedbackContent(event.target.value)}
@@ -2189,9 +2271,9 @@ const IndexPopup = () => {
                         width: "100%",
                         maxWidth: "100%",
                         boxSizing: "border-box",
-                        backgroundColor: '#2a2a2a',
-                        color: theme.dark.foreground,
-                        border: `1px solid ${theme.dark.border}`,
+                        backgroundColor: theme.background,
+                        color: theme.foreground,
+                        border: `1px solid ${theme.border}`,
                         borderRadius: '8px',
                         padding: '12px',
                         paddingBottom: '28px',
@@ -2201,25 +2283,25 @@ const IndexPopup = () => {
                         lineHeight: '1.5',
                         transition: 'border-color 0.2s ease'
                       }}
-                      onFocus={(e) => e.currentTarget.style.borderColor = theme.dark.primary}
-                      onBlur={(e) => e.currentTarget.style.borderColor = theme.dark.border}
+                      onFocus={(e) => e.currentTarget.style.borderColor = theme.primary}
+                      onBlur={(e) => e.currentTarget.style.borderColor = theme.border}
                     />
                     <span style={{
                       position: 'absolute',
                       bottom: '8px',
                       right: '12px',
                       fontSize: '11px',
-                      color: feedbackContent.length > 1800 ? '#EF4444' : 'rgba(255,255,255,0.4)'
+                      color: feedbackContent.length > 1800 ? '#EF4444' : theme.secondaryText
                     }}>
                       {feedbackContent.length}/2000
                     </span>
                   </div>
                 </FormGroup>
-                
+
                 <FormGroup style={{ marginTop: '16px' }}>
                   <Label htmlFor="feedback-email" style={{ marginBottom: '6px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                     {getMessage("feedbackEmailLabel")}
-                    <span style={{ fontSize: '11px', color: 'rgba(255,255,255,0.4)', fontWeight: 400 }}>(optional)</span>
+                    <span style={{ fontSize: '11px', color: theme.secondaryText, fontWeight: 400 }}>(optional)</span>
                   </Label>
                   <Description style={{ marginBottom: '8px', fontSize: '13px' }}>{getMessage("feedbackEmailDesc")}</Description>
                   <Input
@@ -2228,21 +2310,21 @@ const IndexPopup = () => {
                     placeholder={getMessage("feedbackEmailPlaceholder")}
                     value={feedbackEmail}
                     onChange={(event) => setFeedbackEmail(event.target.value)}
-                    style={{ backgroundColor: '#2a2a2a', width: '100%', boxSizing: 'border-box' }}
+                    style={{ backgroundColor: theme.background, width: '100%', boxSizing: 'border-box' }}
                   />
                 </FormGroup>
-                
+
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '20px' }}>
-                  <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.4)' }}>
+                  <span style={{ fontSize: '12px', color: theme.secondaryText }}>
                     Opens your email client
                   </span>
                   <Button
                     variant="primary"
                     type="button"
                     onClick={handleFeedbackSubmit}
-                    style={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
                       gap: '8px',
                       padding: '10px 20px'
                     }}
@@ -2262,56 +2344,57 @@ const IndexPopup = () => {
               </div>
 
               {/* Direct contact option */}
-              <div style={{ 
-                marginTop: '16px', 
-                padding: '14px 16px', 
-                background: 'rgba(255,255,255,0.03)', 
+              <div style={{
+                marginTop: '16px',
+                padding: '14px 16px',
+                background: theme.button.default,
                 borderRadius: '10px',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
+                border: `1px solid ${theme.border}`
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={theme.secondaryText} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                     <polyline points="22,6 12,13 2,6" />
                   </svg>
-                  <span style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)' }}>
+                  <span style={{ fontSize: '13px', color: theme.secondaryText }}>
                     Or email us directly at
                   </span>
                 </div>
-                <a 
-                  href="mailto:hey@mosadiq.com" 
-                  style={{ 
-                    fontSize: '13px', 
-                    color: theme.dark.primary, 
+                <a
+                  href="mailto:boimaginations@gmail.com"
+                  style={{
+                    fontSize: '13px',
+                    color: theme.primary,
                     textDecoration: 'none',
                     fontWeight: 500
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
                   onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
                 >
-                  hey@mosadiq.com
+                  boimaginations@gmail.com
                 </a>
               </div>
             </Section>
           )}
-          
+
           {/* Privacy Policy */}
           {activeTab === 'privacy' && (
             <Section>
               <SectionTitle>{getMessage("privacyTitle")}</SectionTitle>
               <Description>{getMessage("privacyDesc")}</Description>
-              
-              <div style={{ background: '#333333', borderRadius: '8px', padding: '20px', marginTop: '16px' }}>
+
+              <div style={{ background: theme.card, borderRadius: '8px', padding: '20px', marginTop: '16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" strokeWidth="1.5" stroke="currentColor" style={{ marginRight: '12px', color: '#2DCA6E' }}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 0 0 1.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.451 10.451 0 0 1 12 4.5c4.756 0 8.773 3.162 10.065 7.498a10.522 10.522 0 0 1-4.293 5.774M6.228 6.228 3 3m3.228 3.228 3.65 3.65m7.894 7.894L21 21m-3.228-3.228-3.65-3.65m0 0a3 3 0 1 0-4.243-4.243m4.242 4.242L9.88 9.88" />
                   </svg>
-                  <h3 style={{ fontSize: '18px', fontWeight: 600, margin: 0, color: '#FFFFFF' }}>{getMessage("zeroDataCollection")}</h3>
+                  <h3 style={{ fontSize: '18px', fontWeight: 600, margin: 0, color: theme.foreground }}>{getMessage("zeroDataCollection")}</h3>
                 </div>
-                
-                <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.8)', lineHeight: '1.6', marginBottom: '24px' }}>
+
+                <div style={{ fontSize: '14px', color: theme.secondaryText, lineHeight: '1.6', marginBottom: '24px' }}>
                   <p style={{ margin: '0 0 16px 0' }}>
                     {getMessage("privacyMainText")}
                   </p>
@@ -2321,11 +2404,11 @@ const IndexPopup = () => {
                   <div style={{ padding: '16px', background: 'rgba(45, 202, 110, 0.1)', borderRadius: '8px', border: '1px solid rgba(45, 202, 110, 0.2)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#2DCA6E' }}>
-                        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
-                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>{getMessage("localStorage")}</span>
+                      <span style={{ fontWeight: 500, color: theme.foreground, fontSize: '14px' }}>{getMessage("localStorage")}</span>
                     </div>
-                    <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                    <p style={{ margin: 0, fontSize: '13px', color: theme.secondaryText }}>
                       {getMessage("localStorageDesc")}
                     </p>
                   </div>
@@ -2333,11 +2416,11 @@ const IndexPopup = () => {
                   <div style={{ padding: '16px', background: 'rgba(0, 120, 212, 0.1)', borderRadius: '8px', border: '1px solid rgba(0, 120, 212, 0.2)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#0078D4' }}>
-                        <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
-                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>{getMessage("directProcessing")}</span>
+                      <span style={{ fontWeight: 500, color: theme.foreground, fontSize: '14px' }}>{getMessage("directProcessing")}</span>
                     </div>
-                    <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                    <p style={{ margin: 0, fontSize: '13px', color: theme.secondaryText }}>
                       {getMessage("directProcessingDesc")}
                     </p>
                   </div>
@@ -2345,12 +2428,12 @@ const IndexPopup = () => {
                   <div style={{ padding: '16px', background: 'rgba(156, 39, 176, 0.1)', borderRadius: '8px', border: '1px solid rgba(156, 39, 176, 0.2)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#9C27B0' }}>
-                        <path d="M18.364 5.636L16.95 7.05A7 7 0 1019 12h2a9 9 0 11-2.636-6.364z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M18.364 5.636L16.95 7.05A7 7 0 1019 12h2a9 9 0 11-2.636-6.364z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M12 6v6l4 2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
-                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>{getMessage("noTracking")}</span>
+                      <span style={{ fontWeight: 500, color: theme.foreground, fontSize: '14px' }}>{getMessage("noTracking")}</span>
                     </div>
-                    <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                    <p style={{ margin: 0, fontSize: '13px', color: theme.secondaryText }}>
                       {getMessage("noTrackingDesc")}
                     </p>
                   </div>
@@ -2358,36 +2441,36 @@ const IndexPopup = () => {
                   <div style={{ padding: '16px', background: 'rgba(255, 193, 7, 0.1)', borderRadius: '8px', border: '1px solid rgba(255, 193, 7, 0.2)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
                       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ marginRight: '8px', color: '#FFC107' }}>
-                        <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" stroke="currentColor" strokeWidth="2" fill="none"/>
+                        <path d="M16 4h2a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2h2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1" stroke="currentColor" strokeWidth="2" fill="none" />
                       </svg>
-                      <span style={{ fontWeight: 500, color: '#FFFFFF', fontSize: '14px' }}>{getMessage("yourControl")}</span>
+                      <span style={{ fontWeight: 500, color: theme.foreground, fontSize: '14px' }}>{getMessage("yourControl")}</span>
                     </div>
-                    <p style={{ margin: 0, fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                    <p style={{ margin: 0, fontSize: '13px', color: theme.secondaryText }}>
                       {getMessage("yourControlDesc")}
                     </p>
                   </div>
                 </div>
-                
+
                 <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
-                  <Button 
-                    variant="primary" 
+                  <Button
+                    variant="primary"
                     onClick={() => window.open('https://www.boimaginations.com/lightup/privacy-policy', '_blank')}
                     style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6m4-3h6v6m-11 5L21 3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     {getMessage("fullPolicy")}
                   </Button>
-                  <Button 
-                    variant="default" 
+                  <Button
+                    variant="default"
                     onClick={() => window.open('mailto:boimaginations@gmail.com?subject=Privacy Inquiry - LightUp', '_blank')}
                     style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <polyline points="22,6 12,13 2,6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     {getMessage("contact")}
                   </Button>
@@ -2395,39 +2478,39 @@ const IndexPopup = () => {
               </div>
             </Section>
           )}
-          
+
 
           {/* Advanced Settings */}
           {activeTab === 'advanced' && (
             <Section>
               <SectionTitle>{getMessage("advancedSettingsTitle")}</SectionTitle>
               <Description>{getMessage("advancedSettingsDesc")}</Description>
-              
-              <div style={{ background: '#333333', borderRadius: '8px', padding: '20px', marginTop: '16px' }}>
+
+              <div style={{ background: theme.card, borderRadius: '8px', padding: '20px', marginTop: '16px' }}>
                 <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '16px' }}>{getMessage("apiConfigTitle")}</h3>
-                
+
                 <FormGroup>
                   <Label htmlFor="api-key" style={{ marginBottom: '8px' }}>{getMessage("apiKeyLabel")}</Label>
                   <Description style={{ marginBottom: '8px' }}>{getMessage("apiKeyDesc")}</Description>
                   <Input id="api-key" type="password" placeholder={getMessage("apiKeyPlaceholder")} />
                 </FormGroup>
-                
+
                 <FormGroup style={{ marginTop: '16px' }}>
                   <Label htmlFor="api-endpoint" style={{ marginBottom: '8px' }}>{getMessage("apiEndpointLabel")}</Label>
                   <Description style={{ marginBottom: '8px' }}>{getMessage("apiEndpointDesc")}</Description>
                   <Input id="api-endpoint" type="text" placeholder={getMessage("apiEndpointPlaceholder")} />
                 </FormGroup>
-                
+
                 <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '20px' }}>
                   <Button variant="primary">{getMessage("saveApiSettings")}</Button>
                 </div>
               </div>
-              
+
               <SectionDivider />
-              
+
               <div style={{ marginTop: '16px' }}>
                 <h3 style={{ fontSize: '16px', fontWeight: 500, marginBottom: '16px' }}>{getMessage("advancedOptionsTitle")}</h3>
-                
+
                 <FormRow>
                   <div>
                     <Label>{getMessage("pageContextLabel")}</Label>
@@ -2438,9 +2521,9 @@ const IndexPopup = () => {
                     <ToggleSlider />
                   </ToggleContainer>
                 </FormRow>
-                
+
                 <SectionDivider />
-                
+
                 <FormRow>
                   <div>
                     <Label>{getMessage("maxCharsLabel")}</Label>
@@ -2453,19 +2536,19 @@ const IndexPopup = () => {
                     <option value="16000">{getMessage("chars16000")}</option>
                   </Select>
                 </FormRow>
-                
+
                 <SectionDivider />
-                
+
                 <div style={{ display: 'flex', gap: '12px', marginTop: '20px' }}>
                   <Button variant="primary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     {getMessage("promptTemplates")}
                   </Button>
                   <Button variant="default" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                     {getMessage("exportSettings")}
                   </Button>

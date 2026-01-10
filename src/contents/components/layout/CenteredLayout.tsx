@@ -47,7 +47,7 @@ export const CenteredLayout = ({
         transition={{ duration: 0.2 }}
         onClick={() => setIsVisible(false)}
       />
-      
+
       {/* Centered popup */}
       <div style={{
         position: 'fixed',
@@ -82,15 +82,15 @@ export const CenteredLayout = ({
           onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
           initial={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "initial"}
           animate={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "animate"}
-          exit={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 0 } : "exit"}
-          transition={{ 
-            duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2, 
-            ease: "easeOut" 
+          exit={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "exit"}
+          transition={{
+            duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2,
+            ease: "easeOut"
           }}
           variants={
-            settings?.customization?.popupAnimation === "scale" 
-              ? scaleMotionVariants 
-              : settings?.customization?.popupAnimation === "scale"
+            settings?.customization?.popupAnimation === "scale"
+              ? scaleMotionVariants
+              : settings?.customization?.popupAnimation === "slide"
                 ? slideMotionVariants
                 : settings?.customization?.popupAnimation === "fade"
                   ? fadeMotionVariants
@@ -107,7 +107,7 @@ export const CenteredLayout = ({
           }}>
             {renderPopupContent()}
           </div>
-          
+
           {/* Resize handle - smaller and less visible */}
           <div
             style={{

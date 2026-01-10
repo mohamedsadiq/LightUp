@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from "react"
 import type { PlasmoCSConfig } from "plasmo"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion, AnimatePresence, useDragControls } from "framer-motion"
 import type { MotionStyle } from "framer-motion"
 import type { CSSProperties } from "react"
 import MarkdownText from "../components/content/MarkdownText"
@@ -26,15 +26,16 @@ import { getStyles } from "./styles"
 import type { FontSizes } from "./styles"
 import { getTextDirection } from "~utils/rtl"
 import { truncateText } from "~utils/textProcessing"
-import { 
-  flexMotionStyle, 
-  scaleMotionVariants, 
+import {
+  flexMotionStyle,
+  scaleMotionVariants,
   slideMotionVariants,
-  fadeMotionVariants, 
-  noMotionVariants, 
+  fadeMotionVariants,
+  noMotionVariants,
   toastMotionVariants,
   sidebarScaleMotionVariants,
-  sidebarSlideMotionVariants
+  sidebarSlideMotionVariants,
+  sidebarReducedMotionVariants
 } from "~styles/motionStyles"
 import type { Theme } from "~types/theme"
 import { applyHighlightColor } from "~utils/highlight"
@@ -42,14 +43,14 @@ import { calculatePosition, needsRepositioning } from "~utils/position"
 import { Storage } from "@plasmohq/storage"
 import { Z_INDEX } from "~utils/constants"
 import { THEME_COLORS } from "~utils/constants"
-import { 
-  loadingSkeletonVariants, 
-  shimmerVariants, 
-  loadingVariants, 
-  skeletonLineVariants, 
-  enhancedShimmerVariants, 
+import {
+  loadingSkeletonVariants,
+  shimmerVariants,
+  loadingVariants,
+  skeletonLineVariants,
+  enhancedShimmerVariants,
   loadingDotsVariants,
-  pulseVariants 
+  pulseVariants
 } from "~contents/variants"
 import { getHighlightColor } from "~utils/highlight"
 import ErrorMessage from "~components/common/ErrorMessage"
@@ -70,6 +71,7 @@ import { useCurrentModel } from "~hooks/useCurrentModel"
 import { useConversation } from "~hooks/useConversation"
 import { useMode } from "~hooks/useMode"
 import { createRoot } from "react-dom/client";
+import { unifiedAIService } from "~services/llm/UnifiedAIService";
 // Add import for page content extraction utility
 import getPageContent from "~utils/contentExtractor"
 
@@ -92,21 +94,21 @@ import PageContextWelcome from "./components/common/PageContextWelcome"
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "EXTENSION_STATE_CHANGED") {
     console.log('Content script received EXTENSION_STATE_CHANGED message:', message.enabled);
-    
+
     // Immediately dispatch event to update UI components
     window.dispatchEvent(
-      new CustomEvent('isEnabledChanged', { 
-        detail: { isEnabled: message.enabled } 
+      new CustomEvent('isEnabledChanged', {
+        detail: { isEnabled: message.enabled }
       })
     );
-    
+
     // Also dispatch the extensionStateChanged event for consistency
     window.dispatchEvent(
-      new CustomEvent('extensionStateChanged', { 
-        detail: { enabled: message.enabled } 
+      new CustomEvent('extensionStateChanged', {
+        detail: { enabled: message.enabled }
       })
     );
-    
+
     // Update storage asynchronously
     const storage = new Storage();
     storage.set("isEnabled", message.enabled.toString()).then(() => {
@@ -115,98 +117,98 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       console.error('Failed to update isEnabled in storage:', error);
       sendResponse({ success: false, error: error.message });
     });
-    
+
     return true; // Indicate we'll respond asynchronously
   }
-  
+
   if (message.type === "SETTINGS_UPDATED") {
     // Force a refresh of the settings in the content script
     const storage = new Storage();
     storage.set("settings", message.settings).then(() => {
       // Dispatch a custom event that our hooks can listen for
-      const event = new CustomEvent('settingsUpdated', { 
-        detail: { 
+      const event = new CustomEvent('settingsUpdated', {
+        detail: {
           key: message.key,
           value: message.value,
           settings: message.settings
-        } 
+        }
       });
       window.dispatchEvent(event);
-      
+
       // Send response to confirm receipt
       sendResponse({ success: true });
     });
-    
+
     // Return true to indicate we'll send a response asynchronously
     return true;
   }
-  
+
   if (message.type === "MODES_UPDATED") {
     // Force a refresh of the settings and preferred modes in the content script
     const storage = new Storage();
-    
+
     // Update settings with new preferred modes
     storage.set("settings", message.settings).then(() => {
       // Also update the preferredModes in storage
       return storage.set("preferredModes", message.preferredModes);
     }).then(() => {
       // Dispatch a custom event that our hooks can listen for
-      const event = new CustomEvent('modesUpdated', { 
-        detail: { 
+      const event = new CustomEvent('modesUpdated', {
+        detail: {
           preferredModes: message.preferredModes,
           settings: message.settings
-        } 
+        }
       });
       window.dispatchEvent(event);
-      
+
       // Send response to confirm receipt
       sendResponse({ success: true });
     });
-    
+
     // Return true to indicate we'll send a response asynchronously
     return true;
   }
-  
+
   if (message.type === "EXTENSION_STATE_CHANGED") {
     console.log("Extension state changed to:", message.enabled);
     // Update the isEnabled state in storage
     const storage = new Storage();
     storage.set("isEnabled", message.enabled.toString()).then(() => {
       // Dispatch a custom event that our hooks can listen for
-      const event = new CustomEvent('extensionStateChanged', { 
-        detail: { 
+      const event = new CustomEvent('extensionStateChanged', {
+        detail: {
           enabled: message.enabled
-        } 
+        }
       });
       window.dispatchEvent(event);
-      
+
       // Also dispatch the isEnabledChanged event for consistency
-      const enabledEvent = new CustomEvent('isEnabledChanged', { 
-        detail: { 
+      const enabledEvent = new CustomEvent('isEnabledChanged', {
+        detail: {
           isEnabled: message.enabled
-        } 
+        }
       });
       window.dispatchEvent(enabledEvent);
-      
+
       // Handle UI visibility in real-time when extension is disabled
       if (!message.enabled) {
         // Force any active LightUp UIs to close immediately
         // This will immediately hide any visible UI elements
         document.dispatchEvent(new CustomEvent('lightup-force-hide'));
       }
-      
+
       // Send response to confirm receipt
       sendResponse({ success: true });
     });
-    
+
     // Return true to indicate we'll send a response asynchronously
     return true;
   }
-  
+
   if (message.type === "MODE_CHANGED") {
     // Update the active mode in storage
     const storage = new Storage();
-    
+
     // Update the mode
     storage.set("mode", message.mode).then(() => {
       // If it's translate mode, also update translation settings
@@ -216,23 +218,23 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       return Promise.resolve();
     }).then(() => {
       // Dispatch a custom event that our hooks can listen for
-      const event = new CustomEvent('modeChanged', { 
-        detail: { 
+      const event = new CustomEvent('modeChanged', {
+        detail: {
           mode: message.mode,
           translationSettings: message.translationSettings,
           reprocessExisting: message.reprocessExisting
-        } 
+        }
       });
       window.dispatchEvent(event);
-      
+
       // Send response to confirm receipt
       sendResponse({ success: true });
     });
-    
+
     // Return true to indicate we'll send a response asynchronously
     return true;
   }
-  
+
   if (message.type === "PROCESS_SELECTED_TEXT") {
     // This is triggered by the context menu
     // Create and dispatch a custom event for the context menu selection
@@ -245,22 +247,22 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       }
     });
     window.dispatchEvent(event);
-    
+
     // Send response to confirm receipt
     sendResponse({ success: true });
     return true;
   }
-  
+
   if (message.type === "OPEN_FREE_POPUP") {
     // Dispatch a custom event to open the popup in free mode
     const event = new CustomEvent('openFreePopup');
     window.dispatchEvent(event);
-    
+
     // Send response to confirm receipt
     sendResponse({ success: true });
     return true;
   }
-  
+
   if (message.type === "OPEN_FREE_POPUP_WITH_CONTEXT") {
     // Dispatch a custom event to open the popup in free mode with page context
     // and include any current text selection so that the free-mode input can be pre-populated.
@@ -272,7 +274,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       }
     });
     window.dispatchEvent(event);
-    
+
     // Send response to confirm receipt
     sendResponse({ success: true });
     return true;
@@ -422,7 +424,7 @@ if (isReddit) {
     }
   `;
   document.head.appendChild(redditFixStyle);
-  
+
   // Add a MutationObserver to ensure our elements remain visible
   // even if Reddit's DOM changes
   const observer = new MutationObserver((mutations) => {
@@ -433,11 +435,11 @@ if (isReddit) {
       }
     });
   });
-  
+
   // Start observing the document with the configured parameters
-  observer.observe(document.body, { 
-    childList: true, 
-    subtree: true 
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true
   });
 }
 
@@ -447,7 +449,7 @@ if (isYouTube) {
   console.log('LightUp: YouTube detected, applying font compensation fixes');
   // Add a data attribute to the HTML tag for more specific CSS targeting
   document.documentElement.setAttribute('data-youtube-domain', 'true');
-  
+
   // Create a style element to override YouTube's CSS
   const youtubeFixStyle = document.createElement('style');
   youtubeFixStyle.id = 'lightup-youtube-font-fix';
@@ -566,7 +568,7 @@ if (isYouTube) {
      }
   `;
   document.head.appendChild(youtubeFixStyle);
-  
+
   // Add a MutationObserver to ensure our font sizing remains correct
   // even if YouTube's DOM changes
   const observer = new MutationObserver(() => {
@@ -575,15 +577,15 @@ if (isYouTube) {
       // Force re-apply YouTube font fixes if needed
       popupElement.style.fontSize = '16px';
       popupElement.style.fontFamily = "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-      
+
       // Ensure mode selector buttons have correct size
       const modeButtons = popupElement.querySelectorAll('button');
       modeButtons.forEach(button => {
         if (button instanceof HTMLElement) {
           // Check if this is a mode selector button based on content or context
-          const isSmallButton = button.textContent && 
+          const isSmallButton = button.textContent &&
             ['summarize', 'analyze', 'explain', 'translate', 'free'].includes(button.textContent.toLowerCase());
-          
+
           if (isSmallButton) {
             button.style.fontSize = '16px';
           } else {
@@ -591,9 +593,9 @@ if (isYouTube) {
           }
         }
       });
-      
-             // Fix main content areas
-       const contentAreas = popupElement.querySelectorAll(`
+
+      // Fix main content areas
+      const contentAreas = popupElement.querySelectorAll(`
          [data-markdown-container], 
          .lu-explanation, 
          .lu-text,
@@ -602,25 +604,25 @@ if (isYouTube) {
          div[style*="textAlign"],
          p[style*="fontSize"]
        `);
-       contentAreas.forEach(area => {
-         if (area instanceof HTMLElement) {
-           area.style.fontSize = '24px';
-         }
-       });
-       
-       // Fix input and textarea elements
-       const inputElements = popupElement.querySelectorAll('input, textarea');
-       inputElements.forEach(input => {
-         if (input instanceof HTMLElement) {
-           input.style.fontSize = '16px';
-         }
-       });
+      contentAreas.forEach(area => {
+        if (area instanceof HTMLElement) {
+          area.style.fontSize = '24px';
+        }
+      });
+
+      // Fix input and textarea elements
+      const inputElements = popupElement.querySelectorAll('input, textarea');
+      inputElements.forEach(input => {
+        if (input instanceof HTMLElement) {
+          input.style.fontSize = '16px';
+        }
+      });
     }
   });
-  
+
   // Start observing the document with the configured parameters
-  observer.observe(document.body, { 
-    childList: true, 
+  observer.observe(document.body, {
+    childList: true,
     subtree: true,
     attributes: true,
     attributeFilter: ['style', 'class']
@@ -692,34 +694,34 @@ function Content() {
   // Generate a stable connection ID
   const [connectionId] = useState(() => uuidv4());
   const [highlightedRanges, setHighlightedRanges] = useState<Range[]>([]);
-  
+
   // Add ref for the input element
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  
+
   // State for search visibility - default to visible
   const [isSearchVisible, setIsSearchVisible] = useState(true);
 
   // Use our custom hooks
   const { settings, setSettings, isConfigured, currentTheme, targetLanguage, fontSize } = useSettings();
   const { activeMode, preferredModes, translationSettings } = useMode();
-  
+
   // Create font size mapping based on user setting
   const fontSizes = useMemo(() => createFontSizeMapping(fontSize), [fontSize]);
-  
+
   // Calculate layout mode from settings
-  const layoutMode = settings?.customization?.layoutMode || "popup";
-  
+  const layoutMode = settings?.customization?.layoutMode || "floating";
+
   // Pin state for sidebar mode
   const [isPinned, setIsPinned] = useState(settings?.customization?.sidebarPinned || false);
-  
+
   // Sync pin state with settings changes
   useEffect(() => {
     setIsPinned(settings?.customization?.sidebarPinned || false);
   }, [settings?.customization?.sidebarPinned]);
-  
+
   // AI response language state - defaults to extension UI language if not set
   const [aiResponseLanguage, setAiResponseLanguage] = useState<string>("en");
-  
+
   // Sync language state with settings changes and extension locale
   useEffect(() => {
     const initializeLanguage = async () => {
@@ -733,47 +735,47 @@ function Content() {
         setAiResponseLanguage(extensionLocale);
       }
     };
-    
+
     initializeLanguage();
   }, [settings?.aiResponseLanguage]);
-  
+
+  const { toast, showToast } = useToast();
+  const { isEnabled, handleEnabledChange } = useEnabled(showToast);
+
   // Text selection bubble state from our new hook
   const {
     selectedText: selectionBubbleText,
     position: selectionBubblePosition,
     isVisible: isSelectionBubbleVisible,
     setIsVisible: setIsSelectionBubbleVisible
-  } = useTextSelection();
+  } = useTextSelection(3, { enabled: isEnabled });
 
   // Initialize all our hooks
   const { width, height, handleResizeStart } = useResizable({
     initialWidth: 350,
     initialHeight: 460
   });
-
-  const { toast, showToast } = useToast();
-  const { isEnabled, handleEnabledChange } = useEnabled(showToast);
   const { voicesLoaded, speakingId, handleSpeak } = useSpeech();
   const { copiedId, imageCopiedId, handleCopy, handleCopyAsImage, isImageCopySupported } = useCopy();
-  
+
   // Export states
   const [exportingDocId, setExportingDocId] = useState<string | null>(null);
   const [exportingMdId, setExportingMdId] = useState<string | null>(null);
-  
+
   // Rich copy state
   const [richCopiedId, setRichCopiedId] = useState<string | null>(null);
-  
+
   // Export functions
   const handleExportAsDoc = useCallback(async (text: string, id: string, filename: string = 'lightup-export.txt') => {
     try {
       setExportingDocId(id);
-      
+
       // Format text with rich formatting (similar to print function)
       const formatTextForDocument = async (text: string) => {
         // Convert HTML to clean plain text first if needed
         const { stripHtml } = await import("~utils/textProcessing");
         let cleanText = text.includes('<') ? stripHtml(text) : text;
-        
+
         return cleanText
           // Enhanced bold formatting - keep asterisks for emphasis
           .replace(/\*\*(.*?)\*\*/g, '**$1**')
@@ -794,9 +796,9 @@ function Content() {
           .replace(/\n\n\n+/g, '\n\n')
           .trim();
       };
-      
+
       const formattedText = await formatTextForDocument(text);
-      
+
       // Create a professional document with header
       const documentHeader = `
 ╔════════════════════════════════════════╗
@@ -817,13 +819,13 @@ Generated by LightUp - AI-Powered Web Enhancement
 Website: boimaginations.com/lightup
 
 ${'-'.repeat(50)}`;
-      
+
       const finalContent = documentHeader + formattedText + documentFooter;
-      
-      const blob = new Blob([finalContent], { 
-        type: 'text/plain;charset=utf-8' 
+
+      const blob = new Blob([finalContent], {
+        type: 'text/plain;charset=utf-8'
       });
-      
+
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
@@ -834,24 +836,24 @@ ${'-'.repeat(50)}`;
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      
+
       setTimeout(() => setExportingDocId(null), 2000);
     } catch (err) {
       console.error('Failed to export as TXT:', err);
       setExportingDocId(null);
     }
   }, []);
-  
+
   const handleExportAsMd = useCallback(async (text: string, id: string, filename: string = 'lightup-export.md') => {
     try {
       setExportingMdId(id);
-      
+
       // Format text for markdown with enhanced formatting
       const formatTextForMarkdown = async (text: string) => {
         // If text contains HTML, we need to clean it for markdown
         const { stripHtml } = await import("~utils/textProcessing");
         let cleanText = text.includes('<') ? stripHtml(text) : text;
-        
+
         return cleanText
           // Preserve and enhance bold formatting
           .replace(/\*\*(.*?)\*\*/g, '**$1**')
@@ -867,9 +869,9 @@ ${'-'.repeat(50)}`;
           .replace(/(^- .*\n)(^- )/gm, '$1\n$2')
           .trim();
       };
-      
+
       const formattedContent = await formatTextForMarkdown(text);
-      
+
       // Create a professional markdown document with header
       const markdownHeader = `# LightUp AI Response
 
@@ -885,9 +887,9 @@ ${'-'.repeat(50)}`;
 
 *Generated by **LightUp** - AI-Powered Web Enhancement*  
 *Website: [boimaginations.com/lightup](https://boimaginations.com/lightup)*`;
-      
+
       const finalMarkdown = markdownHeader + formattedContent + markdownFooter;
-      
+
       const blob = new Blob([finalMarkdown], { type: 'text/markdown' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -897,14 +899,14 @@ ${'-'.repeat(50)}`;
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      
+
       setTimeout(() => setExportingMdId(null), 2000);
     } catch (err) {
       console.error('Failed to export as MD:', err);
       setExportingMdId(null);
     }
   }, []);
-  
+
   // Rich copy function with feedback
   const handleRichCopy = useCallback(async (text: string, id: string) => {
     try {
@@ -912,7 +914,7 @@ ${'-'.repeat(50)}`;
       const formattedText = text
         .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold asterisks
         .replace(/^\s*\*\s+/gm, '• '); // Convert to bullet points
-      
+
       await navigator.clipboard.writeText(formattedText);
       setRichCopiedId(id);
       setTimeout(() => setRichCopiedId(null), 2000);
@@ -920,12 +922,12 @@ ${'-'.repeat(50)}`;
       console.error('Failed to copy rich text:', err);
     }
   }, []);
-  
+
   // Pin toggle function
   const handleTogglePin = useCallback(async () => {
     const newPinnedState = !isPinned;
     setIsPinned(newPinnedState);
-    
+
     // Update settings storage
     if (settings) {
       const storage = new Storage();
@@ -936,27 +938,27 @@ ${'-'.repeat(50)}`;
           sidebarPinned: newPinnedState
         }
       };
-      
+
       await storage.set("settings", updatedSettings);
       setSettings(updatedSettings);
-      
+
       // Notify other components of the change
       window.dispatchEvent(
-        new CustomEvent('settingsUpdated', { 
-          detail: { 
+        new CustomEvent('settingsUpdated', {
+          detail: {
             settings: updatedSettings,
             key: 'sidebarPinned',
             value: newPinnedState
-          } 
+          }
         })
       );
     }
   }, [isPinned, settings, setSettings]);
-  
+
   // AI response language change function (does NOT affect extension UI language)
   const handleLanguageChange = useCallback(async (language: string) => {
     setAiResponseLanguage(language);
-    
+
     // Update settings storage - this only affects AI response language, not extension UI
     if (settings) {
       const storage = new Storage();
@@ -964,26 +966,26 @@ ${'-'.repeat(50)}`;
         ...settings,
         aiResponseLanguage: language
       };
-      
+
       await storage.set("settings", updatedSettings);
       setSettings(updatedSettings);
-      
+
       // Notify other components of the change
       window.dispatchEvent(
-        new CustomEvent('settingsUpdated', { 
-          detail: { 
+        new CustomEvent('settingsUpdated', {
+          detail: {
             settings: updatedSettings,
             key: 'aiResponseLanguage',
             value: language
-          } 
+          }
         })
       );
     }
   }, [settings, setSettings]);
-  
+
   const { lastResult, updateLastResult } = useLastResult();
   const currentModel = useCurrentModel();
-  
+
   // Add a ref for the popup element
   const popupRef = useRef<HTMLDivElement>(null);
   // Ref to capture main AI response content for image copying
@@ -998,7 +1000,7 @@ ${'-'.repeat(50)}`;
         if (scrollContainer) {
           // Check if already at bottom to avoid unnecessary scrolling
           const isAtBottom = scrollContainer.scrollTop + scrollContainer.clientHeight >= scrollContainer.scrollHeight - 10; // Increased threshold
-          
+
           if (!isAtBottom) {
             // Use scrollTo with smooth behavior for a better user experience
             scrollContainer.scrollTo({
@@ -1016,27 +1018,30 @@ ${'-'.repeat(50)}`;
     updateConversation,
     clearConversation
   } = useConversation();
-  
+
   // Add effect to listen for force-hide events (for real-time extension disabling)
   useEffect(() => {
     const handleForceHide = () => {
+      // Clear memory when extension is disabled
+      unifiedAIService.clearContext();
+      
       // Immediately hide all UI elements when extension is toggled off
       if (setIsVisible) setIsVisible(false);
       if (setIsInteractingWithPopup) setIsInteractingWithPopup(false);
       if (setIsInputFocused) setIsInputFocused(false);
-      
+
       // Reset any other UI states as needed
       if (setIsLoading) setIsLoading(false);
       if (setError) setError(null);
       if (setStreamingText) setStreamingText('');
-      if (setFollowUpQAs) setFollowUpQAs([]);
-      
+      if (setFollowUpQAs) setFollowUpQAs?.([]);
+
       console.log('LightUp UI forcibly hidden due to extension disable');
     };
-    
+
     // Listen for the custom force-hide event
     document.addEventListener('lightup-force-hide', handleForceHide);
-    
+
     return () => {
       document.removeEventListener('lightup-force-hide', handleForceHide);
     };
@@ -1044,7 +1049,7 @@ ${'-'.repeat(50)}`;
 
   const handleRegenerate = async () => {
     if (!selectedText || isLoading) return;
-    
+
     setIsLoading(true);
     setStreamingText('');
     setError(null);
@@ -1079,47 +1084,47 @@ ${'-'.repeat(50)}`;
       setIsLoading(false);
     }
   };
-  
+
 
   // Handler for processing text selected via the selection bubble
   const handleSelectionBubbleProcess = async (text: string, selectedMode: string) => {
     // Import the cleaning function
     const { cleanTextForMode } = await import("~utils/textProcessing");
-    
+
     // Apply text cleaning based on the selected mode
     const cleanedText = cleanTextForMode(text, selectedMode);
     if (!cleanedText) {
       setError?.('Selected text appears to contain only technical content and cannot be processed.');
       return;
     }
-    
+
     // Clear previous results
     setStreamingText?.("");
     setFollowUpQAs?.([]);
     setError?.(null);
-    
+
     // Set position for the floating popup based on the TextSelectionButton position
     // Use the selectionBubblePosition to position the popup near the button
     if (settings?.customization?.layoutMode === "floating") {
       // Use viewport-aware positioning with actual popup dimensions
       calculateViewportAwarePosition?.(
-        selectionBubblePosition.x + 20, 
+        selectionBubblePosition.x + 20,
         selectionBubblePosition.y + 40,
         { width, height }
       );
     }
-    
+
     // Hide the selection bubble
     setIsSelectionBubbleVisible(false);
-    
+
     // Show the main popup
     setSelectedText(cleanedText);
     setIsVisible(true);
     setIsLoading(true);
-    
+
     // Set the mode to the one selected in the bubble
     handleModeChange(selectedMode as Mode);
-    
+
     // Process the text
     try {
       if (!port) {
@@ -1160,10 +1165,10 @@ ${'-'.repeat(50)}`;
 
   const handleRegenerateFollowUp = async (question: string, id: number) => {
     if (isAskingFollowUp) return;
-    
+
     setIsAskingFollowUp(true);
     setActiveAnswerId(id);
-    
+
     // Clear the previous answer
     setFollowUpQAs(prev => prev.map(qa =>
       qa.id === id ? { ...qa, answer: '', isComplete: false } : qa
@@ -1173,7 +1178,7 @@ ${'-'.repeat(50)}`;
       // Make sure we have the latest settings with custom prompts
       const storage = new Storage();
       const latestSettings = await storage.get("settings");
-      
+
       port.postMessage({
         type: "PROCESS_TEXT",
         payload: {
@@ -1199,10 +1204,10 @@ ${'-'.repeat(50)}`;
     }
   };
 
- 
+
   // Remove context refresh effect and add simple mount effect
   useEffect(() => {
-    
+
   }, [isEnabled]);
 
   // Initialize followUpQAs state first
@@ -1269,7 +1274,7 @@ ${'-'.repeat(50)}`;
       ));
       setActiveAnswerId(null);
       setIsAskingFollowUp(false);
-      
+
       // The new intelligent scroll logic is now handled inside the FollowUpQAItem component
       // via a useEffect hook that triggers on `isComplete`.
 
@@ -1300,13 +1305,13 @@ ${'-'.repeat(50)}`;
   }, [isLoading, streamingText]);
 
   // -------- Progress for AI streaming --------
-   const currentWordCount = useMemo(() => {
-     if (!streamingText) return 0;
-     const trimmed = streamingText.trim();
-     if (!trimmed) return 0;
-     return trimmed.split(/\s+/).filter(word => word.length > 0).length;
-   }, [streamingText]);
- 
+  const currentWordCount = useMemo(() => {
+    if (!streamingText) return 0;
+    const trimmed = streamingText.trim();
+    if (!trimmed) return 0;
+    return trimmed.split(/\s+/).filter(word => word.length > 0).length;
+  }, [streamingText]);
+
   // ----- Time-based fallback progress so the bar moves right away -----
   const [fallbackProgress, setFallbackProgress] = useState(0);
   const [hasFallbackStarted, setHasFallbackStarted] = useState(false);
@@ -1367,7 +1372,7 @@ ${'-'.repeat(50)}`;
     : hasFallbackStarted
       ? fallbackProgress
       : 0;
- 
+
   const {
     isVisible,
     position,
@@ -1385,8 +1390,8 @@ ${'-'.repeat(50)}`;
     setSelectedText,
     calculateViewportAwarePosition
   } = usePopup(
-    port, 
-    connectionId, 
+    port,
+    connectionId,
     settings?.customization?.radicallyFocus,
     isEnabled,
     settings,
@@ -1405,6 +1410,30 @@ ${'-'.repeat(50)}`;
     setSettings,
     showToast
   });
+
+  // Drag controls for floating mode
+  const dragControls = useDragControls();
+
+  const handleDragEnd = (_: any, info: any) => {
+    if (layoutMode === "floating") {
+      // Calculate the new position from the drag offset
+      let newX = position.x + info.offset.x;
+      let newY = position.y + info.offset.y;
+
+      // Clamp to viewport bounds with a margin to keep popup fully visible
+      const margin = 20;
+      const minX = margin;
+      const minY = margin;
+      const maxX = window.innerWidth - width - margin;
+      const maxY = window.innerHeight - height - margin;
+
+      newX = Math.max(minX, Math.min(newX, maxX));
+      newY = Math.max(minY, Math.min(newY, maxY));
+
+      setPosition({ x: newX, y: newY });
+    }
+  };
+
 
   // Auto-adjust floating popup position when dimensions change
   useEffect(() => {
@@ -1429,7 +1458,7 @@ ${'-'.repeat(50)}`;
 
         calculateViewportAwarePosition?.(clientX, clientY, { width, height });
       }, 50);
-      
+
       return () => clearTimeout(adjustmentTimer);
     }
   }, [width, height, isVisible, settings?.customization?.layoutMode, position.x, position.y, calculateViewportAwarePosition]);
@@ -1453,14 +1482,14 @@ ${'-'.repeat(50)}`;
 
     setIsAskingFollowUp(true);
     const newId = Date.now();
-    
+
     setActiveAnswerId(newId);
-    
+
     setFollowUpQAs(prev => [
       ...prev,
-      { 
-        question: trimmedQuestion, 
-        answer: '', 
+      {
+        question: trimmedQuestion,
+        answer: '',
         id: newId,
         isComplete: false,
         historyUpdated: false
@@ -1499,11 +1528,11 @@ ${'-'.repeat(50)}`;
           if (!port) {
             throw new Error("No connection available");
           }
-          
+
           port.postMessage(message);
-          
+
           setFollowUpQuestion("");
-          
+
           // Keep focus on the input field after submitting
           setTimeout(() => {
             if (inputRef.current) {
@@ -1512,17 +1541,17 @@ ${'-'.repeat(50)}`;
           }, 100);
         } catch (postError) {
           console.error("Error posting message:", postError);
-          
+
           // Try one more time with a fresh connection
           reconnect();
-          
+
           setTimeout(() => {
             if (port) {
               try {
                 port.postMessage(message);
-                
+
                 setFollowUpQuestion("");
-                
+
                 // Keep focus on the input field after submitting
                 if (inputRef.current) {
                   inputRef.current.focus();
@@ -1550,10 +1579,10 @@ ${'-'.repeat(50)}`;
   const handleContextQuestionClick = async (question: string) => {
     // Set the question as selected text and process it
     setSelectedText(question);
-    
+
     // Get page content for context
     const pageContent = getPageContent(mode);
-    
+
     // Create contextual prompt that includes both the page content and the user's question
     const contextualPrompt = `Page content:
 ${pageContent}
@@ -1569,7 +1598,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
   // Get themed styles - memoized for better performance
   const textDirection = getTextDirection(targetLanguage);
   const normalizedTheme: "light" | "dark" = currentTheme === "system" ? "light" : currentTheme;
-  const themedStyles = useMemo(() => 
+  const themedStyles = useMemo(() =>
     getStyles(normalizedTheme, textDirection, fontSizes),
     [normalizedTheme, textDirection, fontSizes]
   );
@@ -1614,6 +1643,8 @@ Please provide a helpful and relevant answer based on the page content above.`;
       const popup = document.querySelector('[data-plasmo-popup]');
       // Only close if clicking outside the popup
       if (popup && !popup.contains(event.target as Node)) {
+        // Clear memory before closing
+        unifiedAIService.clearContext();
         setIsVisible(false);
         setIsInteractingWithPopup(false);
         setIsInputFocused(false);
@@ -1668,6 +1699,8 @@ Please provide a helpful and relevant answer based on the page content above.`;
   useEffect(() => {
     return () => {
       removeHighlights();
+      // Clear session memory when component unmounts (page navigation)
+      unifiedAIService.clearContext();
     };
   }, []);
 
@@ -1675,11 +1708,11 @@ Please provide a helpful and relevant answer based on the page content above.`;
   useEffect(() => {
     const handleHighlightEvent = (event: CustomEvent) => {
       if (!settings?.customization?.persistHighlight) return;
-      
+
       try {
         const { selection, color } = event.detail;
         if (!selection) return;
-        
+
         // Apply highlight to each range in the selection
         const ranges = [];
         for (let i = 0; i < selection.rangeCount; i++) {
@@ -1687,14 +1720,14 @@ Please provide a helpful and relevant answer based on the page content above.`;
           const span = applyHighlightToRange(range, color);
           ranges.push({ range, span });
         }
-        
+
         // Store the highlighted ranges
         setHighlightedRanges([...highlightedRanges, ...ranges]);
       } catch (e) {
         console.error("Failed to apply highlight:", e);
       }
     };
-    
+
     window.addEventListener('applyHighlight', handleHighlightEvent as EventListener);
     return () => window.removeEventListener('applyHighlight', handleHighlightEvent as EventListener);
   }, [settings?.customization?.persistHighlight, highlightedRanges]);
@@ -1714,14 +1747,14 @@ Please provide a helpful and relevant answer based on the page content above.`;
         const historyContext = conversationContext.history.find(
           (h) => h.content === qa.question && h.role === 'user'
         );
-        
+
         // Update conversation with the full Q&A
         if (historyContext) {
           updateConversation(qa.question, qa.answer);
         }
 
         // Mark as updated
-        setFollowUpQAs(prev => prev.map(item => 
+        setFollowUpQAs(prev => prev.map(item =>
           item.id === qa.id ? { ...item, historyUpdated: true } : item
         ));
       }
@@ -1739,7 +1772,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
   const handleReconnect = () => {
     setError(null);
     reconnect();
-    
+
     // If we were in the middle of processing text, retry
     if (selectedText && mode) {
       setIsLoading(true);
@@ -1749,7 +1782,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
             // Make sure we have the latest settings with custom prompts
             const storage = new Storage();
             const latestSettings = await storage.get("settings");
-            
+
             port.postMessage({
               type: "PROCESS_TEXT",
               payload: {
@@ -1779,33 +1812,33 @@ Please provide a helpful and relevant answer based on the page content above.`;
   // Function to process the entire page content
   const handleProcessEntirePage = async (pageContent: string) => {
     if (!isEnabled || !port) return;
-    
+
     // Set loading state and reset previous results
     setIsLoading(true);
     setStreamingText("");
     setFollowUpQAs([]);
     setError(null);
-    
+
     // Position the popup in a fixed position (center or side)
     let popupPosition = { x: 0, y: 0 };
-    
+
     if (layoutMode === "sidebar") {
       popupPosition = { x: window.innerWidth - 400, y: 0 };
     } else { // Center popup
-      popupPosition = { 
-        x: window.innerWidth / 2 - 300,  
+      popupPosition = {
+        x: window.innerWidth / 2 - 300,
         y: window.innerHeight / 4
       };
     }
-    
+
     setSelectedText(pageContent);
     setPosition(popupPosition);
     setIsVisible(true);
-    
+
     // Make sure we have the latest settings with custom prompts
     const storage = new Storage();
     const latestSettings = await storage.get("settings");
-    
+
     // Process the content with the current mode
     try {
       port.postMessage({
@@ -1833,27 +1866,39 @@ Please provide a helpful and relevant answer based on the page content above.`;
   const renderPopupContent = () => (
     <>
       <div style={{ position: 'relative' }}>
-        <ConnectionStatus 
+        <ConnectionStatus
           connectionStatus={connectionStatus}
           currentTheme={normalizedTheme}
           fontSizes={fontSizes}
           handleReconnect={handleReconnect}
         />
       </div>
-      
+
       {/* Header */}
-      <div style={themedStyles.buttonContainerParent} data-header>
-        <motion.div style={{boxShadow: 'none !important' }} >
+      <div
+        style={{
+          ...themedStyles.buttonContainerParent,
+          cursor: layoutMode === "floating" ? 'grab' : 'default',
+          touchAction: 'none'
+        }}
+        data-header
+        onPointerDown={(e) => {
+          if (layoutMode === "floating") {
+            dragControls.start(e);
+          }
+        }}
+      >
+        <motion.div style={{ boxShadow: 'none !important' }} >
           {Logo(normalizedTheme)}
         </motion.div>
-        <PopupModeSelector 
+        <PopupModeSelector
           activeMode={mode}
           onModeChange={handleModeChange}
           isLoading={isLoading}
           theme={normalizedTheme}
         />
         <div style={themedStyles.buttonContainer}>
-          <motion.button 
+          <motion.button
             onClick={() => {
               if (isPinned) {
                 // If the sidebar is pinned, unpin it first so the popup can be fully closed
@@ -1895,7 +1940,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
 
       {/* Selected Text */}
       {settings?.customization?.showSelectedText !== false && mode !== "free" && (
-        <p style={{...themedStyles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline'}}>
+        <p style={{ ...themedStyles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline' }}>
           {truncateText(selectedText)}
         </p>
       )}
@@ -1985,7 +2030,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
                 style={{
                   ...themedStyles.explanation,
                   textAlign: textDirection === "rtl" ? "right" : "left",
-                  paddingBottom:"12px"
+                  paddingBottom: "12px"
                 }}
                 initial={{ y: 50 }}
                 animate={{ y: 0 }}
@@ -1997,27 +2042,27 @@ Please provide a helpful and relevant answer based on the page content above.`;
                       ...themedStyles.explanation,
                       textAlign: themedStyles.explanation.textAlign as "left" | "right"
                     }} className="">
-                      <motion.div 
-                        initial={{ filter: "blur(8px)" }} 
-                        animate={{ filter: "blur(0px)" }} 
+                      <motion.div
+                        initial={{ filter: "blur(8px)" }}
+                        animate={{ filter: "blur(0px)" }}
                         transition={{ duration: 0.1, delay: 0.1 }}
                         data-lightup-response-content
                         ref={responseContentRef}
                       >
-                        <MarkdownText 
-                          text={streamingText} 
+                        <MarkdownText
+                          text={streamingText}
                           isStreaming={isLoading}
-                          useReferences={(settings as any).enableReferences || false} 
+                          useReferences={(settings as any).enableReferences || false}
                           theme={currentTheme === "system" ? "light" : currentTheme}
                           fontSize={settings?.customization?.fontSize}
                           fontSizes={fontSizes}
                           enableWordByWord={settings?.customization?.enableWordByWordStreaming !== false}
                           wordsPerSecond={
                             settings?.customization?.streamingSpeed === "slow" ? 4 :
-                            settings?.customization?.streamingSpeed === "medium" ? 8 :
-                            settings?.customization?.streamingSpeed === "fast" ? 12 :
-                            settings?.customization?.streamingSpeed === "custom" ? 
-                              (settings?.customization?.customWordsPerSecond || 8) : 8
+                              settings?.customization?.streamingSpeed === "medium" ? 8 :
+                                settings?.customization?.streamingSpeed === "fast" ? 12 :
+                                  settings?.customization?.streamingSpeed === "custom" ?
+                                    (settings?.customization?.customWordsPerSecond || 8) : 8
                           }
                         />
                       </motion.div>
@@ -2049,31 +2094,31 @@ Please provide a helpful and relevant answer based on the page content above.`;
                       title={copiedId === 'initial' ? "Copied!" : "Copy text"}
                     >
                       {copiedId === 'initial' ? (
-                        <motion.svg 
-                          width="15" 
-                          height="15" 
-                          viewBox="0 0 24 24" 
+                        <motion.svg
+                          width="15"
+                          height="15"
+                          viewBox="0 0 24 24"
                           fill="currentColor"
-                          // initial={{ scale: 0 }}
-                          // animate={{ scale: 1 }}
-                          // transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                        // initial={{ scale: 0 }}
+                        // animate={{ scale: 1 }}
+                        // transition={{ type: "spring", stiffness: 200, damping: 10 }}
                         >
-                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor" />
                         </motion.svg>
                       ) : (
-                        <motion.svg 
-                          width="15" 
-                          height="15" 
-                          viewBox="0 0 24 24" 
-                          fill="none" 
-                          stroke="currentColor" 
-                          strokeWidth="2" 
-                          strokeLinecap="round" 
+                        <motion.svg
+                          width="15"
+                          height="15"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
                           strokeLinejoin="round"
-                         
+
                         >
-                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                         </motion.svg>
                       )}
                     </motion.button>
@@ -2106,19 +2151,19 @@ Please provide a helpful and relevant answer based on the page content above.`;
                         }}
                         whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
                         whileTap={{ scale: 0.9 }}
-                        
+
                         transition={{ type: "spring", stiffness: 400, damping: 17 }}
                         title={imageCopiedId === 'initial-image' ? "Copied as image!" : "Copy as image"}
                       >
                         {imageCopiedId === 'initial-image' ? (
                           <svg width="13" height="15" viewBox="0 0 24 24" fill="none">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor" />
                           </svg>
                         ) : (
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                            <circle cx="9" cy="9" r="2"/>
-                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <circle cx="9" cy="9" r="2" />
+                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
                           </svg>
                         )}
                       </motion.button>
@@ -2159,7 +2204,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
                         };
 
                         const formattedContent = formatTextForPrint(streamingText);
-                        
+
                         const printWindow = window.open('', '_blank');
                         printWindow?.document.write(`
                           <html>
@@ -2243,11 +2288,11 @@ Please provide a helpful and relevant answer based on the page content above.`;
                     >
                       {speakingId === 'main' ? (
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                          <path d="M6 6h4v12H6V6zm8 0h4v12h-4V6z" fill="currentColor"/>
+                          <path d="M6 6h4v12H6V6zm8 0h4v12h-4V6z" fill="currentColor" />
                         </svg>
                       ) : (
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor"/>
+                          <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="currentColor" />
                         </svg>
                       )}
                     </motion.button>
@@ -2274,7 +2319,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
                       disabled={isLoading}
                     >
                       <svg width="14" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                        <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/>
+                        <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3" />
                       </svg>
                     </motion.button>
 
@@ -2289,7 +2334,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
                         justifyContent: 'center'
                       }}
                     >
-                      <span style={{ 
+                      <span style={{
                         textTransform: 'capitalize',
                         fontWeight: 500,
                         color: currentTheme === 'dark' ? 'rgb(132, 132, 132)' : 'rgb(102, 102, 102)',
@@ -2298,18 +2343,18 @@ Please provide a helpful and relevant answer based on the page content above.`;
                         padding: '2px 10px',
                         borderRadius: '11px',
                       }}
-                      title={currentModel ? `AI Model: ${currentModel}` : 'Loading AI model...'}
+                        title={currentModel ? `AI Model: ${currentModel}` : 'Loading AI model...'}
                       >
                         {currentModel || 'Loading...'}
                       </span>
                     </motion.div>
-                    
+
                     {/* Search Toggle Button - Far Right */}
-                    <motion.button 
+                    <motion.button
                       onClick={() => {
                         // Toggle search visibility
                         setIsSearchVisible(!isSearchVisible);
-                        
+
                         // If showing the search input, focus and scroll
                         if (!isSearchVisible) {
                           // First scroll to make sure the input is visible
@@ -2320,7 +2365,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
                                 behavior: 'smooth'
                               });
                             }
-                            
+
                             // Then focus the input with slight delay to ensure it's rendered
                             setTimeout(() => {
                               if (inputRef.current) {
@@ -2471,6 +2516,8 @@ Please provide a helpful and relevant answer based on the page content above.`;
         slideMotionVariants={slideMotionVariants}
         fadeMotionVariants={fadeMotionVariants}
         noMotionVariants={noMotionVariants}
+        dragControls={dragControls}
+        onDragEnd={handleDragEnd}
         sidebarScaleMotionVariants={sidebarScaleMotionVariants}
         sidebarSlideMotionVariants={sidebarSlideMotionVariants}
         isPinned={isPinned}
@@ -2485,8 +2532,8 @@ Please provide a helpful and relevant answer based on the page content above.`;
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: currentTheme === 'dark' 
-              ? 'rgba(0, 0, 0, 0.7)' 
+            backgroundColor: currentTheme === 'dark'
+              ? 'rgba(0, 0, 0, 0.7)'
               : 'rgba(255, 255, 255, 0.7)',
             backdropFilter: 'blur(5px)',
             zIndex: Z_INDEX.BLUR_OVERLAY,
@@ -2497,17 +2544,17 @@ Please provide a helpful and relevant answer based on the page content above.`;
 
       {/* Add GlobalActionButton if enabled */}
       {isEnabled && settings?.customization?.showGlobalActionButton !== false && (
-        <GlobalActionButton 
+        <GlobalActionButton
           onProcess={handleProcessEntirePage}
           mode={mode}
           isPopupVisible={isVisible}
           currentTheme={currentTheme === "system" ? "dark" : currentTheme}
         />
       )}
-      
-      {/* Add the macOS Notes-style text selection button */}
+
+      {/* Add the macOS Notes-style text selection button - hide when main popup is visible */}
       <AnimatePresence>
-        {isSelectionBubbleVisible && settings?.customization?.showTextSelectionButton !== false && (
+        {isSelectionBubbleVisible && !isVisible && settings?.customization?.showTextSelectionButton !== false && (
           <TextSelectionButton
             onProcess={handleSelectionBubbleProcess}
             position={selectionBubblePosition}

@@ -1,7 +1,7 @@
 {
   "name": "lightup",
   "displayName": "LightUp",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "Genius annotations for every page on the web.",
   "author": "Moe Sadiq",
   "scripts": {
@@ -23,9 +23,6 @@
     "@mozilla/readability": "^0.6.0",
     "@plasmohq/messaging": "^0.6.2",
     "@plasmohq/storage": "^1.12.0",
-    "@react-three/drei": "^10.3.0",
-    "@react-three/fiber": "^9.1.4",
-    "@types/three": "^0.177.0",
     "ai": "5.0.0-canary.24",
     "framer-motion": "^11.11.11",
     "html2canvas": "^1.4.1",
@@ -39,7 +36,6 @@
     "rehype-raw": "^6.1.1",
     "rehype-sanitize": "^5.0.1",
     "remark-gfm": "^3.0.1",
-    "three": "^0.178.0",
     "vfile": "5",
     "zustand": "^5.0.5"
   },
@@ -64,7 +60,7 @@
   "manifest": {
     "manifest_version": 3,
     "name": "__MSG_extensionName__",
-    "version": "0.1.17",
+    "version": "0.1.18",
     "description": "__MSG_extensionDescription__",
     "default_locale": "en",
     "background": {

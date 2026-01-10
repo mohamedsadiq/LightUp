@@ -53,8 +53,10 @@ export const PopupLayoutContainer = ({
   noMotionVariants,
   sidebarScaleMotionVariants,
   sidebarSlideMotionVariants,
-  isPinned = false
-}: PopupLayoutContainerProps) => {
+  isPinned = false,
+  dragControls,
+  onDragEnd
+}: PopupLayoutContainerProps & { dragControls?: any; onDragEnd?: any }) => {
   return (
     <AnimatePresence mode="sync">
       {((isVisible && isEnabled && isConfigured) || (isPinned && layoutMode === "sidebar" && isEnabled && isConfigured)) && (
@@ -75,6 +77,8 @@ export const PopupLayoutContainer = ({
             slideMotionVariants={slideMotionVariants}
             fadeMotionVariants={fadeMotionVariants}
             noMotionVariants={noMotionVariants}
+            dragControls={dragControls}
+            onDragEnd={onDragEnd}
           />
         ) : layoutMode === "sidebar" ? (
           <SidebarLayout

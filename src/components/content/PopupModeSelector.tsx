@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Storage } from "@plasmohq/storage"
 import { LanguageSelector } from "./LanguageSelector"
 import type { Mode, TranslationSettings } from "~types/settings"
@@ -18,9 +18,9 @@ const DEFAULT_MODES: Mode[] = ["explain", "summarize", "translate"]
 // All available modes
 const ALL_MODES: Mode[] = ["summarize", "analyze", "explain", "translate", "free"]
 
-export const PopupModeSelector = ({ 
-  activeMode, 
-  onModeChange, 
+export const PopupModeSelector = ({
+  activeMode,
+  onModeChange,
   isLoading = false,
   theme = "light"
 }: PopupModeSelectorProps) => {
@@ -34,21 +34,21 @@ export const PopupModeSelector = ({
     const loadPreferredModes = async () => {
       try {
         const storage = new Storage()
-        
+
         // Check settings first (newer way)
         const settings = await storage.get("settings") as any
         let savedPreferredModes = settings?.customization?.preferredModes as Mode[] | undefined
-        
+
         // Fallback to direct storage key (older way)
         if (!savedPreferredModes || savedPreferredModes.length === 0) {
           savedPreferredModes = await storage.get("preferredModes") as Mode[] | undefined
         }
-        
+
         if (savedPreferredModes && savedPreferredModes.length > 0) {
           // Limit to 3 modes
           setPreferredModes(savedPreferredModes.slice(0, 3))
         }
-        
+
         // Load translation settings
         const translationSettings = settings?.translationSettings || await storage.get("translationSettings") as any
         if (translationSettings) {
@@ -63,21 +63,21 @@ export const PopupModeSelector = ({
         console.error("Error loading preferred modes:", error)
       }
     }
-    
+
     loadPreferredModes()
-    
+
     // Listen for updates to preferred modes
     const handleModesUpdated = (event: CustomEvent) => {
       const { preferredModes: newPreferredModes } = event.detail;
-      
+
       if (newPreferredModes && newPreferredModes.length > 0) {
         // Limit to 3 modes
         setPreferredModes(newPreferredModes.slice(0, 3));
       }
     };
-    
+
     window.addEventListener('modesUpdated', handleModesUpdated as EventListener);
-    
+
     return () => {
       window.removeEventListener('modesUpdated', handleModesUpdated as EventListener);
     };
@@ -91,15 +91,22 @@ export const PopupModeSelector = ({
     }
   }
 
-  // Use the preferred modes or default to the DEFAULT_MODES list
-  const displayModes = preferredModes.length > 0 ? preferredModes : DEFAULT_MODES
+  // Use the preferred modes or default to the DEFAULT_MODES list, but always include the active mode
+  const displayModes = useMemo(() => {
+    const baseModes = preferredModes.length > 0 ? preferredModes : DEFAULT_MODES
+    if (baseModes.includes(activeMode)) {
+      return baseModes
+    }
+    const mergedModes = [activeMode, ...baseModes.filter((mode) => mode !== activeMode)]
+    return mergedModes.slice(0, 3)
+  }, [preferredModes, activeMode])
 
   // Dynamic styles with YouTube compensation
   const getModeSelectorStyles = () => {
     // Detect if we're on YouTube and need font size compensation
     const isYouTube = window.location.hostname.includes('youtube.com');
     const baseFontSize = isYouTube ? "11px" : "11px"; // Use pixels consistently
-    
+
     return {
       container: {
         display: "flex",
@@ -164,38 +171,18 @@ export const PopupModeSelector = ({
   return (
     <>
       <style>{GlobalStyles}</style>
-      <motion.div 
+      <div
         style={styles.container}
-        initial={{ scale: 0.5 }}
-        animate={{ scale: 1 }}
-        exit={{ scale: 1.3, opacity: 0}}
-        transition={{
-          type: "spring",
-          bounce: 0.1,
-          duration: 0.3
-        }}
-        layout
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
-        <motion.div 
+        <div
           style={{
             ...styles.modeContainer,
             backgroundColor: theme === "dark" ? "#FFFFFF10" : "#2c2c2c10",
           }}
-          initial={{ filter: "blur(8px)" }}
-          animate={{ filter: "blur(0)" }}
-          exit={{ scale: 1, opacity: 0 }}
-          transition={{
-            type: "spring",
-            stiffness: 400,
-            damping: 50,
-            mass: 0.8,
-          }}
-          layout="preserve-aspect"
-          layoutId="mode-container"
         >
-          <AnimatePresence mode="popLayout" initial={false}>
+          <AnimatePresence mode="sync">
             {displayModes.map((mode) => (
               (mode === activeMode || isHovered) && (
                 <motion.button
@@ -203,28 +190,22 @@ export const PopupModeSelector = ({
                   onClick={() => handleModeClick(mode)}
                   style={{
                     ...styles.modeButton,
-                    backgroundColor: mode === activeMode 
+                    backgroundColor: mode === activeMode
                       ? (theme === "dark" ? "#FFFFFF" : "#2c2c2c")
                       : "transparent",
                     color: mode === activeMode
                       ? (theme === "dark" ? "#2c2c2c" : "white")
                       : (theme === "dark" ? "#FFFFFF80" : "#2c2c2c80"),
                   }}
-                  initial={mode === activeMode ? { scale: 1, y: 0 } : { scale: 0.9, y: 0, opacity: 0}}
-                  animate={{ scale: 1, y: 0, opacity: 1 }}
-                  exit={{ scale: 0.9, y: 0, opacity: 0 }}
+                  initial={mode === activeMode ? { scale: 1, opacity: 1 } : { scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
                   transition={{
                     type: "spring",
                     stiffness: 400,
                     damping: 30,
-                    mass: 0.8,
-                    exit: {
-                      duration: 0.4,
-                      mass: 0.2,
-                    }
+                    mass: 0.8
                   }}
-                  layout="position"
-                  layoutId={`mode-button-${mode}`}
                   whileHover={mode !== activeMode ? {
                     backgroundColor: theme === "dark" ? "#FFFFFF20" : "#2c2c2c20",
                     color: theme === "dark" ? "#FFFFFF" : "#2c2c2c",
@@ -233,27 +214,27 @@ export const PopupModeSelector = ({
                       duration: 0.2
                     }
                   } : {}}
-                
+
                 >
-                  <motion.span >
+                  <span >
                     {mode.charAt(0).toUpperCase() + mode.slice(1)}
-                  </motion.span>
+                  </span>
 
                   {mode === activeMode && isLoading && (
                     <motion.div
                       key={`loading-${mode}-${isLoading}`}
                       style={styles.loadingIndicator}
                       initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ 
-                        opacity: 1, 
+                      animate={{
+                        opacity: 1,
                         scale: 1
                       }}
-                      exit={{ 
+                      exit={{
                         opacity: 0,
                         scale: 0.5,
                         transition: { duration: 0.2 }
                       }}
-                      transition={{ 
+                      transition={{
                         opacity: { duration: 0.2 },
                         scale: { duration: 0.2 }
                       }}
@@ -266,8 +247,8 @@ export const PopupModeSelector = ({
               )
             ))}
           </AnimatePresence>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </>
   )
 }

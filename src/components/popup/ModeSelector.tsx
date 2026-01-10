@@ -22,6 +22,7 @@ export const ModeSelector: React.FC<ModeSelectorProps> = ({
     summarize: getMessage("summarizeAction") || "Summarize",
     explain: getMessage("explainAction") || "Explain",
     analyze: getMessage("analyzeAction") || "Analyze",
+    challenge: getMessage("challengeAction") || "Challenge",
     translate: getMessage("translateAction") || "Translate",
     free: getMessage("askAnythingAction") || "Ask Anything"
   }

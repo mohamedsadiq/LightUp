@@ -24,8 +24,8 @@ export interface FontSizes {
 }
 
 export const getStyles = (
-  theme: "light" | "dark", 
-  textDirection: "ltr" | "rtl" = "ltr", 
+  theme: "light" | "dark",
+  textDirection: "ltr" | "rtl" = "ltr",
   fontSizes: FontSizes
 ) => ({
   popup: {
@@ -288,7 +288,7 @@ export const getStyles = (
     borderRadius: 12,
     minWidth: "600px",
     maxWidth: "80%",
-    minHeight: "400px", 
+    minHeight: "400px",
     maxHeight: "80vh",
     margin: 0,
     resize: "both" as const,
@@ -330,7 +330,7 @@ const createDefaultFontSizes = (fontSize: string = "16px"): FontSizes => {
   };
 
   const baseSize = parseSize(fontSize);
-  
+
   return {
     base: `${baseSize}px`,
     xs: `${Math.max(10, Math.round(baseSize * 0.75))}px`,

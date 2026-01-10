@@ -39,7 +39,7 @@ export const isUIElement = (element: Element): boolean => {
 
 /**
  * Get mode-specific extraction configuration
- * @param mode - The processing mode (explain, summarize, analyze, translate, free)
+ * @param mode - The processing mode (explain, summarize, analyze, translate, free, challenge)
  * @returns Configuration object for enhanced extraction
  */
 const getModeExtractionConfig = (mode?: string) => {
@@ -57,6 +57,18 @@ const getModeExtractionConfig = (mode?: string) => {
       ]
     },
     analyze: {
+      includeHeadings: true,
+      includeMetadata: true,
+      preserveStructure: true,
+      includeTitle: true,
+      removeDataAttributes: true,
+      removeEmptyNodes: true,
+      additionalSelectors: [
+        '.data', '.statistics', '.chart', '.graph', '.table',
+        '.analysis', '.findings', '.results', '.insights'
+      ]
+    },
+    challenge: {
       includeHeadings: true,
       includeMetadata: true,
       preserveStructure: true,
@@ -262,6 +274,10 @@ const postProcessContent = (content: string, mode?: string): string => {
       // Keep the content as-is since structure is important for analysis
       break;
       
+    case 'challenge':
+      // For challenge mode, preserve structure and data points (similar needs to analysis)
+      break;
+      
     case 'explain':
       // For explanation, preserve clear structure but clean up formatting
       processed = processed
@@ -359,7 +375,7 @@ const getPageContent = (mode?: string): string => {
   let mainContent = extractWithReadability(document, mode);
   
   // Apply advanced content processing if mode is specified
-  if (mode && ['explain', 'summarize', 'analyze', 'translate', 'free'].includes(mode)) {
+  if (mode && ['explain', 'summarize', 'analyze', 'challenge', 'translate', 'free'].includes(mode)) {
     const { content: enhancedContent, metadata } = processContent(mainContent, mode as ProcessingMode);
     
     // Log processing information for debugging

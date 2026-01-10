@@ -5,7 +5,7 @@ import { getSelectedLocale } from "../../utils/i18n"
 
 // The proxy endpoint URL for the basic version
 const PROXY_URL = "https://www.boimaginations.com/api/v1/basic/generate";
-const BASIC_GROK_MODEL = "grok-4-fast"; // Grok 4 Fast - optimized for low latency
+const BASIC_GROK_MODEL = "grok-4-1-fast-non-reasoning"; // Grok 4.1 Fast - fastest and cheapest xAI model as of late 2025
 const BASIC_MAX_TOKENS = 260; // Allow moderately detailed responses while staying affordable
 const CHUNK_SIZE = 200;
 const FLUSH_INTERVAL_MS = 50;
@@ -79,18 +79,18 @@ const logEscapeDiagnostics = (label: string, value: string) => {
 // This is aggressive but prevents ALL escape sequence issues with xAI
 const sanitizeContent = (content: string): string => {
   if (!content) return "";
-  
+
   // Convert to array of char codes and filter
   const result: string[] = [];
   for (let i = 0; i < content.length; i++) {
     const code = content.charCodeAt(i);
-    
+
     // SKIP surrogate pairs (0xD800-0xDFFF) - these cause xAI JSON parse errors
     // Lone surrogates are invalid and paired surrogates (emojis) can cause issues
     if (code >= 0xD800 && code <= 0xDFFF) {
       continue; // Skip ALL surrogates
     }
-    
+
     // Allow: space (32), printable ASCII (33-126), and common extended chars
     if (code === 32 || (code >= 33 && code <= 126)) {
       // For backslash (92), skip it entirely to prevent escape sequence issues
@@ -130,7 +130,7 @@ const sanitizeContent = (content: string): string => {
     }
     // All other characters (control chars, surrogates, etc) are dropped
   }
-  
+
   return result.join('')
     // Collapse multiple spaces
     .replace(/ {2,}/g, ' ')
@@ -182,20 +182,20 @@ const fetchWithRetry = async (url: string, options: RequestInit, retryCount = 0)
       ...options,
       body: options.body ? '[redacted]' : undefined
     });
-    
+
     const response = await fetch(url, options);
     logDebug(`Response status: ${response.status}`);
-    
+
     // Don't read response body here for logging - it can only be read once!
     // The body will be read later in the main function
-    
+
     if (response.status === 503 && retryCount < MAX_RETRIES) {
       const delay = INITIAL_RETRY_DELAY * Math.pow(2, retryCount);
       logDebug(`Server overloaded, retrying in ${delay}ms...`);
       await sleep(delay);
       return fetchWithRetry(url, options, retryCount + 1);
     }
-    
+
     return response;
   } catch (error) {
     logDebug('Fetch error:', error);
@@ -209,20 +209,20 @@ const fetchWithRetry = async (url: string, options: RequestInit, retryCount = 0)
   }
 };
 
-export const processBasicText = async function*(request: ProcessTextRequest) {
+export const processBasicText = async function* (request: ProcessTextRequest) {
   const { text, mode, settings, isFollowUp } = request
   const sanitizedText = sanitizeContent(text || "");
   const sanitizedContext = sanitizeContent(request.context || "");
-  
+
   // Parallelize pre-request operations for faster startup
   const rateLimitService = new RateLimitService()
-  
+
   // Run rate limit check and locale fetch in parallel to reduce latency
   const [actionsAvailable, responseLanguage] = await Promise.all([
     rateLimitService.checkActionAvailable(),
     settings.aiResponseLanguage ? Promise.resolve(settings.aiResponseLanguage) : getSelectedLocale()
   ]);
-  
+
   logDebug('Processing text with settings:', {
     mode,
     responseLanguage,
@@ -231,26 +231,26 @@ export const processBasicText = async function*(request: ProcessTextRequest) {
     contextLength: (request.context || '').length,
     modelType: settings?.modelType
   });
-  
+
   try {
     if (!actionsAvailable) {
       throw new Error("Daily action limit reached. Please try again tomorrow. Or use your API key.");
     }
-    
+
     // Use action without waiting - fire and forget to reduce latency
     rateLimitService.useAction().then(remaining => {
       logDebug(`Actions remaining: ${remaining}`);
     }).catch(() => { /* ignore errors */ })
-    
+
     // Get the system prompt (custom or default)
-    const brevityHint = "Keep responses under 110 words. Prefer 3-4 concise bullets, each under 18 words, minimal fluff.";
+    const brevityHint = "Keep responses under 120 words. Use concise, natural paragraphs. Avoid fluff and be direct.";
 
     const getSystemPrompt = () => {
       // Language instruction to add to all system prompts
-      const languageInstruction = responseLanguage !== "en" 
-        ? `\n\nIMPORTANT: Respond in ${responseLanguage} language. Adapt your response to be culturally appropriate for speakers of this language.` 
+      const languageInstruction = responseLanguage !== "en"
+        ? `\n\nIMPORTANT: Respond in ${responseLanguage} language. Adapt your response to be culturally appropriate for speakers of this language.`
         : "";
-        
+
       // For follow-up questions, use enhanced context-aware prompts
       if (isFollowUp) {
         // If custom system prompt is available for follow-ups, use it
@@ -267,7 +267,7 @@ FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a fol
 
 ${brevityHint}${languageInstruction}`;
       }
-      
+
       // If custom system prompt is available, use it
       if (settings.customPrompts?.systemPrompts?.[mode]) {
         return `${settings.customPrompts.systemPrompts[mode]}
@@ -283,8 +283,8 @@ ${brevityHint}${languageInstruction}`;
     const getUserPrompt = () => {
       if (isFollowUp) {
         // Include rich context for follow-ups with original content and conversation history
-        const originalContent = sanitizedContext.length > 300 ? sanitizedContext.substring(0, 300) + "..." : sanitizedContext;
-        
+        const originalContent = sanitizedContext.length > 400 ? sanitizedContext.substring(0, 400) + "..." : sanitizedContext;
+
         return `ORIGINAL CONTENT CONTEXT:
 ${originalContent}
 
@@ -292,7 +292,7 @@ FOLLOW-UP QUESTION: ${sanitizedText}
 
 Instructions: Build on your previous analysis/explanation of this content. If the question asks for "more" or "other" aspects (like "what else is strange/unusual/problematic"), provide genuinely new insights you haven't covered yet. Avoid repeating previous points unless directly relevant to the new question.`;
       }
-      
+
       // For translate mode
       if (mode === "translate") {
         // Use custom user prompt if available
@@ -303,7 +303,7 @@ Instructions: Build on your previous analysis/explanation of this content. If th
             .replace('${toLanguage}', settings.translationSettings?.toLanguage || "es")
             .replace('${text}', sanitizedText);
         }
-        
+
         // Otherwise use default
         const translateFn = USER_PROMPTS.translate as (fromLang: string, toLang: string) => string
         return translateFn(
@@ -311,18 +311,18 @@ Instructions: Build on your previous analysis/explanation of this content. If th
           settings.translationSettings?.toLanguage || "es"
         ) + "\n" + sanitizedText;
       }
-      
+
       // For other modes
       if (settings.customPrompts?.userPrompts?.[mode]) {
         // Use custom user prompt if available
         return settings.customPrompts.userPrompts[mode].replace('${text}', sanitizedText);
       }
-      
+
       // Otherwise use default
       const prompt = USER_PROMPTS[mode];
       return typeof prompt === "function" ? prompt(sanitizedText) : prompt + "\n" + sanitizedText;
     };
-    
+
     const messages = [
       {
         role: "system" as const,
@@ -398,20 +398,20 @@ Instructions: Build on your previous analysis/explanation of this content. If th
 
     while (true) {
       const { done, value } = await reader.read();
-      
+
       if (done) {
         if (buffer.trim()) {
           const chunks = chunkContent(buffer);
           for (const chunk of chunks) {
-            yield { 
-              type: 'chunk', 
+            yield {
+              type: 'chunk',
               content: chunk,
               isFollowUp: request.isFollowUp,
               id: request.id
             };
           }
         }
-        yield { 
+        yield {
           type: 'done',
           isFollowUp: request.isFollowUp,
           id: request.id,
@@ -480,7 +480,7 @@ Instructions: Build on your previous analysis/explanation of this content. If th
                   };
                 }
               }
-              yield { 
+              yield {
                 type: 'done',
                 isFollowUp: request.isFollowUp,
                 id: request.id,

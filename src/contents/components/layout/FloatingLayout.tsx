@@ -1,5 +1,5 @@
-import React from "react"
-import { motion } from "framer-motion"
+import React, { useEffect } from "react"
+import { motion, useMotionValue } from "framer-motion"
 
 interface FloatingLayoutProps {
   position: { x: number; y: number };
@@ -34,41 +34,80 @@ export const FloatingLayout = ({
   scaleMotionVariants,
   slideMotionVariants,
   fadeMotionVariants,
-  noMotionVariants
-}: FloatingLayoutProps) => {
+  noMotionVariants,
+  dragControls,
+  onDragEnd
+}: FloatingLayoutProps & { dragControls?: any; onDragEnd?: any }) => {
+  // Use motion values for direct, synchronous control over drag transforms
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  // Reset motion values to 0 whenever position changes (after drag ends)
+  // This ensures no residual transform remains
+  useEffect(() => {
+    x.set(0);
+    y.set(0);
+  }, [position.x, position.y, x, y]);
+
+  // Calculate drag constraints to keep popup within window bounds with safe margin
+  const margin = 20;
+  const draggingConstraints = {
+    left: -position.x + margin,
+    right: typeof window !== 'undefined' ? window.innerWidth - width - position.x - margin : 0,
+    top: -position.y + margin,
+    bottom: typeof window !== 'undefined' ? window.innerHeight - height - position.y - margin : 0
+  };
+
+  // Internal drag end handler that resets motion values immediately
+  const handleDragEndInternal = (event: any, info: any) => {
+    // Call the parent handler first (this triggers position state update)
+    if (onDragEnd) {
+      onDragEnd(event, info);
+    }
+    // Immediately reset transforms to 0 - the position state now holds the final coords
+    x.set(0);
+    y.set(0);
+  };
+
   return (
     <motion.div
       style={{
         position: 'fixed',
-        left: `${position.x}px`,
-        top: `${position.y}px`,
+        left: position.x,
+        top: position.y,
         zIndex: Z_INDEX.POPUP,
-        pointerEvents: 'none'
+        pointerEvents: 'none',
+        x,
+        y
       }}
-      initial={settings?.customization?.popupAnimation === "none" ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: 0, y: 0 }}
-      animate={{ 
-        opacity: 1,
-        x: 0, 
-        y: 0,
-        transition: {
-          duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2,
-          ease: "easeOut"
-        }
+      drag
+      dragControls={dragControls}
+      dragListener={false}
+      dragMomentum={false}
+      dragElastic={0}
+      dragConstraints={draggingConstraints}
+      onDragEnd={handleDragEndInternal}
+      initial={{ opacity: settings?.customization?.popupAnimation === "none" ? 1 : 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: settings?.customization?.popupAnimation === "none" ? 1 : 0 }}
+      transition={{
+        opacity: { duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2 }
       }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2 }}
     >
       <div style={{
         ...themedStyles.popupPositioner,
+        maxHeight: '100vh',
         pointerEvents: 'auto'
       }}>
-        <motion.div 
+        <motion.div
           ref={popupRef}
           style={{
             ...themedStyles.popup,
             width: `${width}px`,
             height: `${height}px`,
-            overflow: 'hidden', // Changed from 'auto' to 'hidden'
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            overflow: 'hidden',
             position: 'relative',
             scrollBehavior: 'smooth',
             display: 'flex',
@@ -84,10 +123,10 @@ export const FloatingLayout = ({
           initial={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "initial"}
           animate={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "animate"}
           exit={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 0 } : "exit"}
-          layout={false} // Disable layout animations for better performance
+          layout={false}
           variants={
-            settings?.customization?.popupAnimation === "scale" 
-              ? scaleMotionVariants 
+            settings?.customization?.popupAnimation === "scale"
+              ? scaleMotionVariants
               : settings?.customization?.popupAnimation === "slide"
                 ? slideMotionVariants
                 : settings?.customization?.popupAnimation === "fade"
@@ -96,7 +135,7 @@ export const FloatingLayout = ({
           }
         >
           {/* Popup Content with proper scrolling container */}
-          <div 
+          <div
             className="lu-scroll-container"
             style={{
               flex: 1,
@@ -106,17 +145,18 @@ export const FloatingLayout = ({
           >
             {renderPopupContent()}
           </div>
-          
+
           {/* Resize handle */}
           <div
             style={{
               position: 'absolute',
               bottom: 0,
               right: 0,
-              width: '15px',
-              height: '15px',
+              width: '20px',
+              height: '20px',
               cursor: 'se-resize',
-              background: 'transparent'
+              background: 'transparent',
+              zIndex: 50
             }}
             onMouseDown={handleResizeStart}
             className="lu-resize-handle"
@@ -127,4 +167,4 @@ export const FloatingLayout = ({
   );
 };
 
-FloatingLayout.displayName = 'FloatingLayout'; 
+FloatingLayout.displayName = 'FloatingLayout';

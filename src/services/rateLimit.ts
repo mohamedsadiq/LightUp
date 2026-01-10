@@ -2,7 +2,7 @@ import { Storage } from "@plasmohq/storage"
 import type { Settings, RateLimit } from "~types/settings"
 
 // Default maximum number of actions allowed per day
-const DEFAULT_DAILY_LIMIT = 30
+const DEFAULT_DAILY_LIMIT = 80
 
 export class RateLimitService {
   private storage: Storage

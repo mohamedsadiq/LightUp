@@ -1,0 +1,1032 @@
+/**
+ * OnboardingWizard - First-run setup experience for LightUp
+ * 
+ * Steps:
+ * 1. Language & Theme selection
+ * 2. AI Provider selection
+ * 3. Essential controls (toggles)
+ * 4. Review & finish
+ */
+
+import React from "react";
+import styled from "@emotion/styled";
+import { keyframes } from "@emotion/react";
+import type { Settings, ModelType } from "~types/settings";
+
+// Import the actual LightUp logo
+import logoUrl from "../../../assets/icon.png";
+
+// ============================================================================
+// Types
+// ============================================================================
+
+interface OnboardingWizardProps {
+  step: number;
+  totalSteps: number;
+  settings: Settings;
+  locale: string;
+  onUpdateSettings: (updates: Partial<Settings>) => void;
+  onUpdateCustomization: (key: string, value: any) => void;
+  onUpdateLocale: (locale: string) => void;
+  onNext: () => void;
+  onBack: () => void;
+  onSkip: () => void;
+  onComplete: () => void;
+  isLoading?: boolean;
+  isCompleting?: boolean;
+  supportedLanguages: Array<{ code: string; name: string; nativeName: string }>;
+  providerOptions: Array<{
+    id: ModelType;
+    title: string;
+    subtitle: string;
+    body: string;
+    badge?: string;
+  }>;
+  toggleOptions: Array<{
+    key: keyof Settings["customization"];
+    label: string;
+    description: string;
+  }>;
+  stepCopy: Array<{
+    title: string;
+    description: string;
+  }>;
+}
+
+// ============================================================================
+// Animations
+// ============================================================================
+
+const fadeIn = keyframes`
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+`;
+
+const slideIn = keyframes`
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+`;
+
+const pulse = keyframes`
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+`;
+
+const shimmer = keyframes`
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+`;
+
+// ============================================================================
+// Styled Components - Matching LightUp Brand
+// ============================================================================
+
+const Overlay = styled.div`
+  position: fixed;
+  inset: 0;
+  background: var(--popup-overlay-bg, rgba(0, 0, 0, 0.7));
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 20px;
+`;
+
+const WizardContainer = styled.div`
+  background: var(--popup-bg);
+  border-radius: 16px;
+  border: 1px solid var(--popup-border);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  max-width: 580px;
+  width: 100%;
+  max-height: 90vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  animation: ${fadeIn} 0.3s ease-out;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+`;
+
+const Header = styled.div`
+  padding: 28px 28px 20px;
+  background: var(--popup-header);
+  border-bottom: 1px solid var(--popup-border);
+  text-align: center;
+`;
+
+const LogoImage = styled.img`
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 16px;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+`;
+
+const Title = styled.h1`
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--popup-fg);
+  margin: 0 0 6px;
+  letter-spacing: -0.3px;
+`;
+
+const Subtitle = styled.p`
+  font-size: 14px;
+  color: var(--popup-secondary-text);
+  margin: 0;
+  line-height: 1.5;
+`;
+
+const ProgressContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 18px;
+`;
+
+const ProgressDot = styled.div<{ active: boolean; completed: boolean }>`
+  width: ${props => props.active ? '22px' : '8px'};
+  height: 8px;
+  border-radius: 4px;
+  background: ${props => 
+    props.completed ? 'var(--popup-toggle-active)' : 
+    props.active ? 'var(--popup-primary)' : 
+    'var(--popup-border)'};
+  transition: all 0.3s ease;
+`;
+
+const StepIndicator = styled.div`
+  font-size: 12px;
+  color: var(--popup-secondary-text);
+  margin-top: 10px;
+  font-weight: 500;
+`;
+
+const Content = styled.div`
+  padding: 24px 28px;
+  overflow-y: auto;
+  flex: 1;
+  animation: ${slideIn} 0.3s ease-out;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: var(--popup-scrollbar-thumb);
+    border-radius: 3px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+`;
+
+const StepTitle = styled.h2`
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--popup-fg);
+  margin: 0 0 6px;
+`;
+
+const StepDescription = styled.p`
+  font-size: 13px;
+  color: var(--popup-secondary-text);
+  margin: 0 0 20px;
+  line-height: 1.5;
+`;
+
+const OptionsGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+`;
+
+const OptionCard = styled.button<{ selected: boolean }>`
+  background: ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-subcontainer-bg)'};
+  color: ${props => props.selected ? 'white' : 'var(--popup-fg)'};
+  border: 1.5px solid ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-border)'};
+  border-radius: 12px;
+  padding: 16px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  box-shadow: ${props => props.selected ? '0 10px 30px rgba(0,0,0,0.25)' : '0 6px 18px rgba(0,0,0,0.18)'};
+
+  &:hover {
+    border-color: var(--popup-primary);
+    background: ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-model-option-hover)'};
+    transform: translateY(-1px) scale(1.01);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--popup-primary);
+    outline-offset: 2px;
+  }
+
+  &:active {
+    transform: scale(0.99);
+  }
+`;
+
+const OptionTitle = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 2px;
+`;
+
+const OptionSubtitle = styled.div<{ selected: boolean }>`
+  font-size: 11px;
+  opacity: ${props => props.selected ? 0.9 : 0.65};
+  line-height: 1.4;
+`;
+
+const Badge = styled.span`
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--popup-toggle-active);
+  color: white;
+  font-size: 9px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+`;
+
+const ProviderCard = styled.button<{ selected: boolean }>`
+  background: ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-subcontainer-bg)'};
+  color: ${props => props.selected ? 'white' : 'var(--popup-fg)'};
+  border: 1.5px solid ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-border)'};
+  border-radius: 12px;
+  padding: 18px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  width: 100%;
+  box-shadow: ${props => props.selected ? '0 12px 32px rgba(0,0,0,0.25)' : '0 8px 20px rgba(0,0,0,0.16)'};
+
+  &:hover {
+    border-color: var(--popup-primary);
+    background: ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-model-option-hover)'};
+    transform: translateY(-1px) scale(1.01);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--popup-primary);
+    outline-offset: 2px;
+  }
+`;
+
+const ProviderTitle = styled.div`
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 3px;
+`;
+
+const ProviderSubtitle = styled.div<{ selected: boolean }>`
+  font-size: 12px;
+  opacity: ${props => props.selected ? 0.9 : 0.6};
+  margin-bottom: 6px;
+`;
+
+const ProviderBody = styled.div<{ selected: boolean }>`
+  font-size: 12px;
+  opacity: ${props => props.selected ? 0.85 : 0.65};
+  line-height: 1.4;
+`;
+
+const ProviderDetailsCard = styled.div`
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid var(--popup-subcontainer-border);
+  background: var(--popup-subcontainer-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const FieldGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+const FieldLabel = styled.label`
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--popup-fg);
+`;
+
+const FieldInput = styled.input`
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--popup-border);
+  background: var(--popup-input-bg, #11151c);
+  color: var(--popup-fg);
+  font-size: 13px;
+
+  &:focus {
+    outline: none;
+    border-color: var(--popup-primary);
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+  }
+`;
+
+const FieldHelper = styled.div`
+  font-size: 12px;
+  color: var(--popup-secondary-text);
+  line-height: 1.4;
+`;
+
+const ToggleRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: var(--popup-subcontainer-bg);
+  border: 1px solid var(--popup-subcontainer-border);
+  border-radius: 10px;
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const ToggleInfo = styled.div`
+  flex: 1;
+  margin-right: 14px;
+`;
+
+const ToggleLabel = styled.div`
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--popup-fg);
+  margin-bottom: 2px;
+`;
+
+const ToggleDescription = styled.div`
+  font-size: 12px;
+  color: var(--popup-secondary-text);
+  line-height: 1.4;
+`;
+
+const Toggle = styled.label`
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  flex-shrink: 0;
+`;
+
+const ToggleInput = styled.input`
+  opacity: 0;
+  width: 0;
+  height: 0;
+
+  &:checked + span {
+    background-color: var(--popup-toggle-active);
+  }
+
+  &:checked + span:before {
+    transform: translateX(20px);
+  }
+`;
+
+const ToggleSlider = styled.span`
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background-color: var(--popup-toggle-track);
+  transition: 0.3s;
+  border-radius: 24px;
+
+  &:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+const ReviewSection = styled.div`
+  background: var(--popup-subcontainer-bg);
+  border: 1px solid var(--popup-subcontainer-border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+`;
+
+const ReviewLabel = styled.div`
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--popup-secondary-text);
+  margin-bottom: 6px;
+  font-weight: 500;
+`;
+
+const ReviewValue = styled.div`
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--popup-fg);
+`;
+
+const Footer = styled.div`
+  padding: 16px 28px 20px;
+  border-top: 1px solid var(--popup-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--popup-header);
+`;
+
+const SkipButton = styled.button`
+  background: none;
+  border: none;
+  color: var(--popup-secondary-text);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  font-family: inherit;
+
+  &:hover {
+    background: var(--popup-btn-default);
+    color: var(--popup-fg);
+  }
+`;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+const ButtonColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+`;
+
+const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
+  background: ${props => props.variant === 'primary' ? 'var(--popup-primary)' : 'var(--popup-btn-default)'};
+  color: ${props => props.variant === 'primary' ? 'white' : 'var(--popup-btn-text)'};
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: inherit;
+
+  &:hover {
+    background: ${props => props.variant === 'primary' ? 'var(--popup-primary-hover)' : 'var(--popup-btn-default-hover)'};
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+`;
+
+const CompleteButton = styled(Button)`
+  background: linear-gradient(135deg, var(--popup-primary) 0%, var(--popup-toggle-active) 100%);
+  background-size: 120% 100%;
+  border: 1px solid var(--popup-primary);
+
+  &:hover {
+    filter: brightness(1.08);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--popup-primary);
+    outline-offset: 2px;
+  }
+`;
+
+const ThemePreview = styled.div<{ themeType: string; selected: boolean }>`
+  width: 100%;
+  height: 52px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  background: ${props => {
+    switch (props.themeType) {
+      case 'light': return 'linear-gradient(135deg, #ffffff 0%, #f7f7f7 100%)';
+      case 'dark': return 'linear-gradient(135deg, #1f1f27 0%, #11141c 100%)';
+      default: return 'linear-gradient(135deg, #0ea5e9 0%, #22c55e 100%)';
+    }
+  }};
+  border: 1.5px solid ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-border)'};
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  &::after {
+    content: '${props => props.themeType === 'light' ? '☀️' : props.themeType === 'dark' ? '🌙' : '🌓'}';
+    font-size: 20px;
+  }
+`;
+
+const CTAHelper = styled.div`
+  font-size: 12px;
+  color: var(--popup-secondary-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-align: right;
+`;
+
+// ============================================================================
+// Component
+// ============================================================================
+
+const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
+  step,
+  totalSteps,
+  settings,
+  locale,
+  onUpdateSettings,
+  onUpdateCustomization,
+  onUpdateLocale,
+  onNext,
+  onBack,
+  onSkip,
+  onComplete,
+  isLoading,
+  isCompleting,
+  supportedLanguages,
+  providerOptions,
+  toggleOptions,
+  stepCopy,
+}) => {
+  const currentStepCopy = stepCopy[step - 1] || { title: '', description: '' };
+
+  const renderStep1 = () => (
+    <>
+      <StepTitle>{currentStepCopy.title}</StepTitle>
+      <StepDescription>{currentStepCopy.description}</StepDescription>
+
+      <div style={{ marginBottom: '24px' }}>
+        <div style={{ fontSize: '14px', fontWeight: '500', marginBottom: '12px', color: 'var(--popup-fg)' }}>
+          Language
+        </div>
+        <OptionsGrid>
+          {supportedLanguages.slice(0, 8).map((lang) => (
+            <OptionCard
+              key={lang.code}
+              selected={locale === lang.code}
+              onClick={() => onUpdateLocale(lang.code)}
+            >
+              <OptionTitle>{lang.nativeName}</OptionTitle>
+              <OptionSubtitle selected={locale === lang.code}>{lang.name}</OptionSubtitle>
+            </OptionCard>
+          ))}
+        </OptionsGrid>
+      </div>
+
+      <div>
+        <div style={{ fontSize: '14px', fontWeight: '500', marginBottom: '12px', color: 'var(--popup-fg)' }}>
+          Theme
+        </div>
+        <OptionsGrid>
+          {[
+            { value: 'system', label: 'System', icon: '🌗', subtitle: 'Match your device' },
+            { value: 'light', label: 'Light', icon: '☀️', subtitle: 'Bright UI' },
+            { value: 'dark', label: 'Dark', icon: '🌙', subtitle: 'Dim UI' },
+          ].map((theme) => (
+            <OptionCard
+              key={theme.value}
+              selected={settings.customization?.theme === theme.value}
+              onClick={() => onUpdateCustomization('theme', theme.value)}
+            >
+              <ThemePreview themeType={theme.value} selected={settings.customization?.theme === theme.value} />
+              <OptionTitle>{theme.label}</OptionTitle>
+              <OptionSubtitle selected={settings.customization?.theme === theme.value}>
+                {theme.subtitle}
+              </OptionSubtitle>
+            </OptionCard>
+          ))}
+        </OptionsGrid>
+      </div>
+    </>
+  );
+
+  const renderStep2 = () => (
+    <>
+      <StepTitle>{currentStepCopy.title}</StepTitle>
+      <StepDescription>{currentStepCopy.description}</StepDescription>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        {providerOptions.map((provider) => (
+          <ProviderCard
+            key={provider.id}
+            selected={settings.modelType === provider.id}
+            onClick={() => onUpdateSettings({ modelType: provider.id })}
+          >
+            <ProviderTitle>{provider.title}</ProviderTitle>
+            <ProviderSubtitle selected={settings.modelType === provider.id}>
+              {provider.subtitle}
+            </ProviderSubtitle>
+            <ProviderBody selected={settings.modelType === provider.id}>
+              {provider.body}
+            </ProviderBody>
+
+            {settings.modelType === provider.id && ["openai", "gemini", "grok", "local"].includes(provider.id) && (
+              <ProviderDetailsCard>
+                {provider.id === "openai" && (
+                  <FieldGroup>
+                    <FieldLabel htmlFor="onboarding-openai-key">OpenAI API key</FieldLabel>
+                    <FieldInput
+                      id="onboarding-openai-key"
+                      type="password"
+                      placeholder="sk-..."
+                      value={settings.apiKey || ""}
+                      onChange={(e) => onUpdateSettings({ apiKey: e.target.value })}
+                    />
+                    <FieldHelper>
+                      Required to use OpenAI models. Get your key from
+                      {" "}
+                      <a
+                        href="https://platform.openai.com/api-keys"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "var(--popup-primary)", textDecoration: "none" }}
+                      >
+                        OpenAI Platform
+                      </a>
+                      .
+                    </FieldHelper>
+                  </FieldGroup>
+                )}
+
+                {provider.id === "gemini" && (
+                  <FieldGroup>
+                    <FieldLabel htmlFor="onboarding-gemini-key">Gemini API key</FieldLabel>
+                    <FieldInput
+                      id="onboarding-gemini-key"
+                      type="password"
+                      placeholder="AIz..."
+                      value={settings.geminiApiKey || ""}
+                      onChange={(e) => onUpdateSettings({ geminiApiKey: e.target.value })}
+                    />
+                    <FieldHelper>
+                      Provide your Google AI Studio key. Create one at
+                      {" "}
+                      <a
+                        href="https://ai.google.dev/gemini-api/docs/api-key"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "var(--popup-primary)", textDecoration: "none" }}
+                      >
+                        Google AI Studio
+                      </a>
+                      .
+                    </FieldHelper>
+                  </FieldGroup>
+                )}
+
+                {provider.id === "grok" && (
+                  <FieldGroup>
+                    <FieldLabel htmlFor="onboarding-xai-key">xAI API key</FieldLabel>
+                    <FieldInput
+                      id="onboarding-xai-key"
+                      type="password"
+                      placeholder="xai-..."
+                      value={settings.xaiApiKey || ""}
+                      onChange={(e) => onUpdateSettings({ xaiApiKey: e.target.value })}
+                    />
+                    <FieldHelper>
+                      Use your personal xAI key. Request access via
+                      {" "}
+                      <a
+                        href="https://x.ai/api"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "var(--popup-primary)", textDecoration: "none" }}
+                      >
+                        xAI API portal
+                      </a>
+                      .
+                    </FieldHelper>
+                  </FieldGroup>
+                )}
+
+                {provider.id === "local" && (
+                  <>
+                    <FieldGroup>
+                      <FieldLabel htmlFor="onboarding-local-url">Local server URL</FieldLabel>
+                      <FieldInput
+                        id="onboarding-local-url"
+                        type="text"
+                        placeholder="http://localhost:11434"
+                        value={settings.serverUrl || ""}
+                        onChange={(e) => onUpdateSettings({ serverUrl: e.target.value })}
+                      />
+                      <FieldHelper>
+                        Point to your self-hosted endpoint. Follow the
+                        {" "}
+                        <a
+                          href="https://docs.ollama.ai/getting-started/installation"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "var(--popup-primary)", textDecoration: "none" }}
+                        >
+                          Ollama setup guide
+                        </a>
+                        {" "}
+                        or your provider’s instructions.
+                      </FieldHelper>
+                    </FieldGroup>
+                    <FieldGroup>
+                      <FieldLabel htmlFor="onboarding-local-model">Model name</FieldLabel>
+                      <FieldInput
+                        id="onboarding-local-model"
+                        type="text"
+                        placeholder="llama-3.2-3b-instruct"
+                        value={settings.localModel || ""}
+                        onChange={(e) => onUpdateSettings({ localModel: e.target.value })}
+                      />
+                      <FieldHelper>
+                        Use the exact model identifier. Browse available models on
+                        {" "}
+                        <a
+                          href="https://docs.ollama.ai/models"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "var(--popup-primary)", textDecoration: "none" }}
+                        >
+                          Ollama’s model catalog
+                        </a>
+                        .
+                      </FieldHelper>
+                    </FieldGroup>
+                  </>
+                )}
+              </ProviderDetailsCard>
+            )}
+          </ProviderCard>
+        ))}
+      </div>
+    </>
+  );
+
+  const renderStep3 = () => (
+    <>
+      <StepTitle>{currentStepCopy.title}</StepTitle>
+      <StepDescription>{currentStepCopy.description}</StepDescription>
+
+      {toggleOptions.map((toggle) => (
+        <ToggleRow key={toggle.key}>
+          <ToggleInfo>
+            <ToggleLabel>{toggle.label}</ToggleLabel>
+            <ToggleDescription>{toggle.description}</ToggleDescription>
+          </ToggleInfo>
+          <Toggle>
+            <ToggleInput
+              type="checkbox"
+              checked={!!settings.customization?.[toggle.key]}
+              onChange={(e) => onUpdateCustomization(toggle.key, e.target.checked)}
+            />
+            <ToggleSlider />
+          </Toggle>
+        </ToggleRow>
+      ))}
+
+      <ToggleRow>
+        <ToggleInfo>
+          <ToggleLabel>Instant AI tray</ToggleLabel>
+          <ToggleDescription>
+            Pin inline answers right on the page.
+          </ToggleDescription>
+        </ToggleInfo>
+        <Toggle>
+          <ToggleInput
+            type="checkbox"
+            checked={!!settings.customization?.quickView}
+            onChange={(e) => onUpdateCustomization("quickView", e.target.checked)}
+          />
+          <ToggleSlider />
+        </Toggle>
+      </ToggleRow>
+
+      <ToggleRow>
+        <ToggleInfo>
+          <ToggleLabel>Keep selection bubble</ToggleLabel>
+          <ToggleDescription>Keep the floating action bubble near highlights.</ToggleDescription>
+        </ToggleInfo>
+        <Toggle>
+          <ToggleInput
+            type="checkbox"
+            checked={settings.customization?.showTextSelectionButton !== false}
+            onChange={(e) => onUpdateCustomization("showTextSelectionButton", e.target.checked)}
+          />
+          <ToggleSlider />
+        </Toggle>
+      </ToggleRow>
+
+      <ToggleRow>
+        <ToggleInfo>
+          <ToggleLabel>Keep highlighted text</ToggleLabel>
+          <ToggleDescription>
+            Leave highlights until you clear them.
+          </ToggleDescription>
+        </ToggleInfo>
+        <Toggle>
+          <ToggleInput
+            type="checkbox"
+            checked={!!settings.customization?.persistHighlight}
+            onChange={(e) => onUpdateCustomization("persistHighlight", e.target.checked)}
+          />
+          <ToggleSlider />
+        </Toggle>
+      </ToggleRow>
+
+      <div style={{ marginTop: "18px", display: "flex", flexDirection: "column", gap: "12px" }}>
+        <ToggleLabel style={{ fontSize: "14px" }}>Layout mode</ToggleLabel>
+        <div style={{ display: "flex", gap: "12px" }}>
+          {["floating", "sidebar", "centered"].map((mode) => (
+            <ProviderCard
+              key={mode}
+              selected={settings.customization?.layoutMode === mode}
+              onClick={() => onUpdateCustomization("layoutMode", mode)}
+            >
+              <ProviderTitle style={{ fontSize: "13px" }}>
+                {mode === "floating" ? "Floating" : mode === "sidebar" ? "Sidebar" : "Centered"}
+              </ProviderTitle>
+              <ProviderBody selected={settings.customization?.layoutMode === mode}>
+                {mode === "floating" && "Popover near your selection."}
+                {mode === "sidebar" && "Pinned to the page edge."}
+                {mode === "centered" && "Modal focus in the center."}
+              </ProviderBody>
+            </ProviderCard>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+
+  const renderStep4 = () => {
+    const selectedProvider = providerOptions.find(p => p.id === settings.modelType);
+    const selectedLang = supportedLanguages.find(l => l.code === locale);
+    const enabledToggles = toggleOptions.filter(t => settings.customization?.[t.key]);
+
+    return (
+      <>
+        <StepTitle>{currentStepCopy.title}</StepTitle>
+        <StepDescription>{currentStepCopy.description}</StepDescription>
+
+        <ReviewSection>
+          <ReviewLabel>Language & Theme</ReviewLabel>
+          <ReviewValue>
+            {selectedLang?.nativeName || 'English'} • {settings.customization?.theme || 'System'} theme
+          </ReviewValue>
+        </ReviewSection>
+
+        <ReviewSection>
+          <ReviewLabel>AI Provider</ReviewLabel>
+          <ReviewValue>{selectedProvider?.title || 'LightUp Basic'}</ReviewValue>
+        </ReviewSection>
+
+        <ReviewSection>
+          <ReviewLabel>Enabled Features</ReviewLabel>
+          <ReviewValue>
+            {enabledToggles.length > 0 
+              ? enabledToggles.map(t => t.label).join(', ')
+              : 'None selected'}
+          </ReviewValue>
+        </ReviewSection>
+
+        <div style={{ 
+          marginTop: '24px', 
+          padding: '16px', 
+          background: 'rgba(59, 130, 246, 0.1)', 
+          borderRadius: '12px',
+          textAlign: 'center'
+        }}>
+          <div style={{ fontSize: '14px', color: 'var(--popup-fg)', marginBottom: '4px' }}>
+            🎉 You're all set!
+          </div>
+          <div style={{ fontSize: '13px', color: 'var(--popup-secondary-text)' }}>
+            You can always change these settings later in the options page.
+          </div>
+        </div>
+      </>
+    );
+  };
+
+  const renderStepContent = () => {
+    switch (step) {
+      case 1: return renderStep1();
+      case 2: return renderStep2();
+      case 3: return renderStep3();
+      case 4: return renderStep4();
+      default: return null;
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <Overlay>
+        <WizardContainer>
+          <div style={{ padding: '60px', textAlign: 'center' }}>
+            <div style={{ fontSize: '24px', marginBottom: '16px' }}>⏳</div>
+            <div style={{ color: 'var(--popup-secondary-text)' }}>Loading...</div>
+          </div>
+        </WizardContainer>
+      </Overlay>
+    );
+  }
+
+  return (
+    <Overlay>
+      <WizardContainer>
+        <Header>
+          <LogoImage src={logoUrl} alt="LightUp" />
+          <Title>Welcome to LightUp</Title>
+          <Subtitle>Let’s get you set up in just a few steps</Subtitle>
+          
+          <ProgressContainer>
+            {Array.from({ length: totalSteps }).map((_, i) => (
+              <ProgressDot 
+                key={i} 
+                active={i + 1 === step} 
+                completed={i + 1 < step} 
+              />
+            ))}
+          </ProgressContainer>
+          <StepIndicator>Step {step} of {totalSteps}</StepIndicator>
+        </Header>
+
+        <Content key={step}>
+          {renderStepContent()}
+        </Content>
+
+        <Footer>
+          <SkipButton onClick={onSkip}>Skip setup</SkipButton>
+          
+          <ButtonColumn>
+            <ButtonGroup>
+              {step > 1 && (
+                <Button variant="secondary" onClick={onBack}>
+                  ← Back
+                </Button>
+              )}
+              
+              {step < totalSteps ? (
+                <Button variant="primary" onClick={onNext}>
+                  Next →
+                </Button>
+              ) : (
+                <CompleteButton 
+                  variant="primary" 
+                  onClick={onComplete}
+                  disabled={isCompleting}
+                >
+                  {isCompleting ? 'Finishing...' : 'Finish setup'}
+                </CompleteButton>
+              )}
+            </ButtonGroup>
+            {step === totalSteps && (
+              <CTAHelper>
+                ⏱ Takes ~30 seconds. You can tweak everything later.
+              </CTAHelper>
+            )}
+          </ButtonColumn>
+        </Footer>
+      </WizardContainer>
+    </Overlay>
+  );
+};
+
+export default OnboardingWizard;

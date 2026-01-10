@@ -2,64 +2,126 @@
 export type ModelType = "local" | "openai" | "gemini" | "xai" | "basic" | "grok"
 
 // Available modes for text processing
-export type Mode = "explain" | "summarize" | "analyze" | "translate" | "free"
+export type Mode =
+  | "explain"
+  | "summarize"
+  | "analyze"
+  | "challenge"
+  | "translate"
+  | "free"
 
 // Feedback types
 export type FeedbackType = "like" | "dislike"
 
 // Grok model types
 export type GrokModel =
-  | "grok-4-1-fast-reasoning"   // Latest reasoning-focused Grok (Nov 2025 announcement)
-  | "grok-4-1-fast-non-reasoning" // Companion non-reasoning variant
-  | "grok-4-fast-reasoning"     // Cost-efficient Grok 4 reasoning tier
-  | "grok-4-fast-non-reasoning" // Cost-efficient Grok 4 non-reasoning tier
-  | "grok-4"                    // Flagship Grok 4 model
-  | "grok-code-fast-1"          // Grok code-specialised fast model
-  | "grok-3"                    // Legacy Grok 3 (still available via API)
-  | "grok-3-mini"               // Cost-efficient Grok 3 variant
-  | "grok-3-fast"               // Latency-optimised Grok 3
-  | "grok-3-mini-fast"          // Mini + fast Grok 3
-  | "grok-2-image-1212"         // Image generation endpoint
-  | "grok-4-0709"               // Legacy Grok 4 identifier kept for backwards compatibility
-  | "grok-2-1212";              // Legacy Grok 2 identifier kept for compatibility
+  | "grok-4-1-fast-reasoning"
+  | "grok-4-1-fast-non-reasoning"
+  | "grok-4-fast-reasoning"
+  | "grok-4-fast-non-reasoning"
+  | "grok-4"
+  | "grok-4-0709"
+  | "grok-code-fast-1"
+  | "grok-3"
+  | "grok-3-mini"
+  | "grok-3-fast"
+  | "grok-3-mini-fast"
+  | "grok-2-image-1212"
+  | "grok-2-vision"
+  | "grok-2-1212"
 
 // Local model types
-export type LocalModel = 
+export type LocalModel =
+  | "llama-4-70b"
+  | "llama-4-40b"
+  | "llama-3.3-70b"
+  | "llama-3.3-8b"
   | "llama-3.2-3b-instruct"
-  | "deepseek-v3"
-  | "deepseek-v3-base"
+  | "llama-3.2-1b"
+  | "llama-3.1-405b"
+  | "llama-3.1-70b"
+  | "llama-3.1-8b"
   | "llama-2-70b-chat"
   | "llama-2-13b-chat"
-  | "mistral-7b-instruct"
+  | "deepseek-r1-distill-llama-70b"
+  | "deepseek-r1-distill-llama-8b"
+  | "deepseek-r1-distill-qwen-32b"
+  | "deepseek-r1-distill-qwen-14b"
+  | "deepseek-r1-distill-qwen-7b"
+  | "deepseek-r1-distill-qwen-1.5b"
+  | "deepseek-v3.1"
+  | "deepseek-v3"
+  | "deepseek-v3-base"
+  | "deepseek-coder-v2"
+  | "deepseek-coder-33b"
+  | "deepseek-coder-6.7b"
+  | "qwen3-32b"
+  | "qwen3-14b"
+  | "qwen2.5-72b"
+  | "qwen2.5-32b"
+  | "qwen2.5-14b"
+  | "qwen2.5-7b"
+  | "qwen2.5-3b"
+  | "qwen2.5-coder-32b"
+  | "qwen2.5-coder-7b"
+  | "qwen2.5-math-72b"
+  | "qwen2.5-math-7b"
+  | "mistral-large-240b"
+  | "mixtral-8x22b"
   | "mixtral-8x7b-instruct"
-  | "phi-2"
+  | "mistral-7b-instruct-v0.3"
+  | "codestral-22b"
+  | "phi-3-mini-4k"
+  | "phi-3-mini-128k"
+  | "phi-3-medium-128k"
+  | "phi-4"
+  | "gemma3-27b"
+  | "gemma3-9b"
+  | "gemma3-4b"
+  | "gemma2-27b"
+  | "gemma2-9b"
   | "neural-chat-7b-v3-1"
-  | "openchat-3.5";
+  | "openchat-3.5"
 
 // OpenAI model types
 export type OpenAIModel =
-  | "gpt-4o"          // Omni flagship model (text + image input)
-  | "gpt-4.1"         // Smartest non-reasoning model with 1M context
-  | "gpt-4o-mini"     // Cost-effective GPT-4o variant
-  | "o3-mini"         // Latest small reasoning model (Jan 2025 snapshot)
-  | "o1"              // Deep reasoning model (o-series)
-  | "gpt-4-turbo";    // Legacy GPT-4 Turbo kept for backwards compatibility
+  | "gpt-5.2"
+  | "gpt-5.2-pro"
+  | "gpt-5.2-codex"
+  | "gpt-5.1"
+  | "gpt-5"
+  | "gpt-5-mini"
+  | "gpt-5-nano"
+  | "gpt-4.1"
+  | "gpt-4o"
+  | "gpt-4o-mini"
+  | "o4-mini"
+  | "o3"
+  | "o3-pro"
+  | "o3-mini"
+  | "o3-deep-research"
+  | "o1"
+  | "o1-pro"
+  | "o1-mini"
+  | "gpt-oss-120b"
+  | "gpt-oss-20b"
+  | "gpt-4-turbo"
 
 // Rate limit interface
 export interface RateLimit {
-  actionsRemaining: number;  // Number of actions remaining for the day
-  lastResetDate: string;     // ISO string of when the count was last reset
-  dailyLimit: number;        // Maximum number of actions per day (default 10)
+  actionsRemaining: number // Number of actions remaining for the day
+  lastResetDate: string // ISO string of when the count was last reset
+  dailyLimit: number // Maximum number of actions per day (default 80)
 }
 
 // Add a new interface for custom prompts
 export interface CustomPrompts {
   systemPrompts: {
-    [key in Mode]?: string;
-  };
+    [key in Mode]?: string
+  }
   userPrompts: {
-    [key in Mode]?: string;
-  };
+    [key in Mode]?: string
+  }
 }
 
 // Main settings interface
@@ -68,23 +130,23 @@ export interface Settings {
   modelType: ModelType
   maxTokens?: number
   rateLimit?: RateLimit
-  
+
   // Optional fields depending on model type
-  serverUrl?: string    // Required for local model
-  apiKey?: string      // Required for OpenAI
+  serverUrl?: string // Required for local model
+  apiKey?: string // Required for OpenAI
   geminiApiKey?: string // Required for Gemini
-  xaiApiKey?: string   // Required for xAI
+  xaiApiKey?: string // Required for xAI
   geminiModel?: GeminiModel
-  grokModel?: GrokModel  // Add Grok model selection
+  grokModel?: GrokModel // Add Grok model selection
   openaiModel?: OpenAIModel
   localModel?: string
-  basicModel?: "gemini-2.0-flash-lite-preview-02-05" // Only one model for basic version
-  
+  basicModel?: "grok-4-1-fast-non-reasoning" // xAI Grok 4.1 Fast - fastest and cheapest for basic version
+
   // User preferences
   mode?: Mode
   temperature?: number
   customPrompt?: string
-  preferredModes?: Mode[]  // Array of modes to display in the mode selector (max 3)
+  preferredModes?: Mode[] // Array of modes to display in the mode selector (max 3)
   customPrompts?: CustomPrompts // Custom prompt templates for each mode
   /** @deprecated Extended conversations are now enabled by default */
   extendedConversations?: boolean
@@ -92,8 +154,28 @@ export interface Settings {
     showSelectedText: boolean
     theme: "light" | "dark" | "system"
     radicallyFocus: boolean
-    fontSize: "13px" | "14px" | "16px" | "18px" | "19px" | "21px" | "small" | "medium" | "large" | "x-large" | "xx-small" | "x-small" | "xx-large"
-    highlightColor: "default" | "yellow" | "orange" | "blue" | "green" | "purple" | "pink"
+    fontSize:
+      | "13px"
+      | "14px"
+      | "16px"
+      | "18px"
+      | "19px"
+      | "21px"
+      | "small"
+      | "medium"
+      | "large"
+      | "x-large"
+      | "xx-small"
+      | "x-small"
+      | "xx-large"
+    highlightColor:
+      | "default"
+      | "yellow"
+      | "orange"
+      | "blue"
+      | "green"
+      | "purple"
+      | "pink"
     popupAnimation: "none" | "scale" | "fade" | "slide"
     persistHighlight: boolean
     layoutMode: "floating" | "sidebar" | "centered"
@@ -116,10 +198,10 @@ export interface Settings {
     fromLanguage: string
     toLanguage: string
   }
-  
+
   // AI response language
   aiResponseLanguage?: string // Language for AI responses (default: 'en')
-  
+
   // Debug settings
   debug?: {
     enableContentExtractionDebug?: boolean // Enables debug visualization of content extraction
@@ -186,11 +268,15 @@ export interface TranslationSettings {
   toLanguage: string
 }
 
-export type GeminiModel = 
-  | "gemini-2.0-flash"            // Recommended default - fast and reliable
-  | "gemini-2.5-flash"            // Latest gen flash model (stable)
-  | "gemini-2.5-flash-lite"       // Cost-efficient 2.5 flash-lite tier
-  | "gemini-2.5-pro"              // Advanced reasoning model
-  | "gemini-2.0-flash-lite"       // Previous-gen lite variant
-  | "gemini-3-pro-preview"        // Preview release of Gemini 3 Pro
-  | "gemini-3-pro";               // Legacy alias kept for migration handling
+export type GeminiModel =
+  | "gemini-2.0-flash"
+  | "gemini-2.0-flash-lite"
+  | "gemini-2.5-flash"
+  | "gemini-2.5-flash-lite"
+  | "gemini-2.5-pro"
+  | "gemini-2.5-flash-image"
+  | "gemini-2.5-flash-live"
+  | "gemini-3-pro-preview"
+  | "gemini-3-flash-preview"
+  | "gemini-3-pro-image-preview"
+  | "gemini-3-flash"

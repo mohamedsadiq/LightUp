@@ -5,6 +5,7 @@ import type { Mode, Settings } from '~types/settings';
 import { getHighlightColor } from '~utils/highlight';
 import type { FollowUpQA } from "~types/followup";
 import { cleanTextForMode } from '~utils/textProcessing';
+import { unifiedAIService } from '~services/llm/UnifiedAIService';
 
 // Check if we're on Reddit
 const isReddit = typeof window !== 'undefined' && window.location.hostname.includes('reddit.com');
@@ -477,6 +478,9 @@ export const usePopup = (
   }, [settings, setStreamingText, setFollowUpQAs, setIsLoading, setError]);
 
   const handleClose = () => {
+    // Clear session memory to ensure privacy
+    unifiedAIService.clearContext();
+    
     if (port) {
       try {
         port.postMessage({
@@ -499,6 +503,14 @@ export const usePopup = (
     setError?.(null);
     setIsLoading?.(false);
   };
+
+  // Add effect to clear memory when popup is hidden
+  useEffect(() => {
+    if (!isVisible) {
+      // Clear memory when popup becomes invisible
+      unifiedAIService.clearContext();
+    }
+  }, [isVisible]);
 
   // Add effect to maintain connection while popup is visible
   useEffect(() => {

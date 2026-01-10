@@ -2,8 +2,6 @@ import { Storage } from "@plasmohq/storage"
 import { verifyServerConnection } from "~utils/storage"
 import type { ProcessTextRequest, StreamChunk, ConversationContext } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "~utils/constants"
-// Legacy router (kept for fallback)
-import { enhancedMultiProviderRouter } from "~services/llm/enhanced-multi-provider"
 // New unified AI service (preferred)
 import { unifiedAIService } from "~services/llm/UnifiedAIService"
 import type { Mode, Settings, CustomPrompts } from "~types/settings"
@@ -32,19 +30,26 @@ const DEFAULT_CUSTOM_PROMPTS: CustomPrompts = {
 // Default settings for new installations
 const DEFAULT_SETTINGS: Settings = {
   modelType: "basic",
-  basicModel: "gemini-2.0-flash-lite-preview-02-05",
-  preferredModes: ["summarize", "explain", "analyze", "free"],
+  basicModel: "grok-4-1-fast-non-reasoning",
+  openaiModel: "gpt-5.2",
+  geminiModel: "gemini-3-flash",
+  grokModel: "grok-4",
+  preferredModes: ["explain", "summarize", "translate"],
   maxTokens: 2000,
   customPrompts: DEFAULT_CUSTOM_PROMPTS,
+  translationSettings: {
+    fromLanguage: "en",
+    toLanguage: "es"
+  },
   customization: {
     showSelectedText: false,
     theme: "system",
     radicallyFocus: false,
-    fontSize: "16px",
+    fontSize: "medium",
     highlightColor: "default",
-    popupAnimation: "slide",
+    popupAnimation: "none",
     persistHighlight: false,
-    layoutMode: "sidebar",
+    layoutMode: "floating",
     showGlobalActionButton: true,
     contextAwareness: false,
     activationMode: "manual",
@@ -61,10 +66,11 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === "install") {
     const storage = new Storage()
     const existingSettings = await storage.get("settings")
-    
+    const onboardingComplete = await storage.get("onboardingComplete")
+
     if (!existingSettings) {
       await storage.set("settings", DEFAULT_SETTINGS)
-    
+
     }
   }
 })
@@ -102,7 +108,7 @@ setInterval(rateLimiter.clean, 5 * 60 * 1000); // Every 5 minutes
 const checkRateLimit = (apiKey: string): boolean => {
   const now = Date.now();
   const timestamps = rateLimiter.requests.get(apiKey) || [];
-  
+
   // Clean old timestamps
   const recentTimestamps = timestamps.filter(t => now - t < 60 * 60 * 1000);
   const lastMinuteTimestamps = recentTimestamps.filter(t => now - t < 60 * 1000);
@@ -134,9 +140,9 @@ const isConfigurationValid = (settings: Settings): boolean => {
       case "openai": {
         const openaiKey = settings.apiKey;
         return !!openaiKey && (
-          openaiKey.startsWith('sk-') || 
-          openaiKey.startsWith('org-') || 
-          openaiKey.length >= 32 
+          openaiKey.startsWith('sk-') ||
+          openaiKey.startsWith('org-') ||
+          openaiKey.length >= 32
         );
       }
       case "gemini":
@@ -148,25 +154,25 @@ const isConfigurationValid = (settings: Settings): boolean => {
           console.error('xAI API key is missing or empty');
           return false;
         }
-        
+
         // Check if API key has the correct format
         if (!xaiKey.startsWith('xai-')) {
           console.error('xAI API key must start with "xai-"');
           return false;
         }
-        
+
         // Check minimum length (xAI keys are typically 64+ characters)
         if (xaiKey.length < 50) {
           console.error('xAI API key appears to be too short');
           return false;
         }
-        
+
         // Check for common formatting issues
         if (xaiKey.includes(' ') || xaiKey.includes('\n') || xaiKey.includes('\t')) {
           console.error('xAI API key contains invalid whitespace characters');
           return false;
         }
-        
+
         console.log('xAI API key validation passed');
         return true;
       }
@@ -183,7 +189,7 @@ const isConfigurationValid = (settings: Settings): boolean => {
 
 const waitForSettings = async (maxAttempts = 3, delayMs = 1000): Promise<Settings | null> => {
   const storage = new Storage();
-  
+
   for (let i = 0; i < maxAttempts; i++) {
     const settings = await storage.get("settings") as Settings;
     if (settings && isConfigurationValid(settings)) {
@@ -197,7 +203,7 @@ const waitForSettings = async (maxAttempts = 3, delayMs = 1000): Promise<Setting
 export async function handleProcessText(request: ProcessTextRequest, port: chrome.runtime.Port) {
   const connectionId = port.name.split('text-processing-')[1];
   const abortController = new AbortController();
-  
+
   try {
     const settings = await waitForSettings();
     if (!settings) {
@@ -216,7 +222,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     }
 
     let { mode, text, context, isFollowUp, settings: requestSettings, conversationContext } = request;
-    
+
     // Apply text cleaning for translate mode
     if (mode === 'translate' && text) {
       text = text
@@ -240,23 +246,23 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         .replace(/[ \t]+/g, ' ')
         .replace(/^\s+|\s+$/gm, '')
         .trim();
-      
+
       if (!text || text.length < 3) {
         throw new Error("Selected text appears to contain only technical content and cannot be translated.");
       }
     }
-    
+
     // Enhanced context handling
     let enhancedContext = conversationContext;
     if (isFollowUp && conversationContext) {
       const storage = new Storage();
       const storedContext = await storage.get<ConversationContext>("conversationContext");
-      
+
       if (storedContext) {
         enhancedContext = {
           ...storedContext,
           history: [...storedContext.history, ...conversationContext.history],
-          entities: [...storedContext.entities, ...conversationContext.entities.filter(e => 
+          entities: [...storedContext.entities, ...conversationContext.entities.filter(e =>
             !storedContext.entities.some(se => se.name === e.name)
           )],
           activeEntity: conversationContext.activeEntity || storedContext.activeEntity
@@ -288,7 +294,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         automaticActivation: false
       }
     };
-    
+
     if (!isConfigurationValid(validationSettings)) {
       throw new Error(
         `Invalid configuration for ${requestSettings?.modelType?.toUpperCase() || 'AI model'}.\n` +
@@ -303,14 +309,14 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     }
 
     // Get domain from sender for conversation isolation
-    const domain = port.sender?.tab?.url 
-      ? new URL(port.sender.tab.url).hostname 
+    const domain = port.sender?.tab?.url
+      ? new URL(port.sender.tab.url).hostname
       : 'unknown';
 
     if (USE_UNIFIED_AI_SERVICE) {
       // New unified AI service with persistent context
       const mergedSettings = { ...settings, ...requestSettings } as Settings;
-      
+
       if (!unifiedAIService.isInitialized() || unifiedAIService.getCurrentDomain() !== domain) {
         await unifiedAIService.initialize(domain, mergedSettings);
       }
@@ -328,26 +334,20 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
         port.postMessage(chunk);
       }
     } else {
-      // Legacy router (fallback)
-      for await (const chunk of enhancedMultiProviderRouter.processTextEnhanced({
-        ...request,
-        conversationContext: enhancedContext
-      })) {
-        port.postMessage(chunk);
-      }
+      throw new Error("Legacy AI service is no longer available. Please enable USE_UNIFIED_AI_SERVICE.");
     }
 
   } catch (error) {
     console.error('Error in handleProcessText:', error);
-    
+
     // Clean up connection
     if (activeConnections.has(connectionId)) {
       activeConnections.delete(connectionId);
     }
-    
+
     // Send user-friendly error message
     let userMessage = "An error occurred while processing your request. Please try again.";
-    
+
     if (error.message?.includes("rate limit")) {
       userMessage = error.message;
     } else if (error.message?.includes("Server responded with")) {
@@ -369,8 +369,6 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     activeConnections.delete(connectionId);
   }
 }
-
-const ONBOARDING_URL = "https://www.boimaginations.com/lightup/welcome" // Replace with your actual onboarding URL
 
 // Create context menu item for manual activation
 const createContextMenu = () => {
@@ -401,9 +399,9 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 // Listen for extension installation
 chrome.runtime.onInstalled.addListener((details) => {
   if (details.reason === "install") {
-    // Open onboarding page in a new tab
-    chrome.tabs.create({ url: ONBOARDING_URL });
-    
+    // Open options page with onboarding on first install
+    chrome.runtime.openOptionsPage();
+
     // Create context menu
     createContextMenu();
   } else {
@@ -429,7 +427,7 @@ chrome.action.onClicked.addListener((tab) => {
 // Listen for commands
 chrome.commands.onCommand.addListener((command) => {
   if (command === "open-welcome") {
-    chrome.tabs.create({ url: ONBOARDING_URL })
+    chrome.runtime.openOptionsPage()
   } else if (command === "open-free-popup") {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       const activeTab = tabs[0]
@@ -448,7 +446,7 @@ chrome.runtime.onConnect.addListener((port) => {
   if (port.name.startsWith('text-processing-')) {
     // Store the port callback reference to prevent garbage collection
     const connectionId = port.name.split('text-processing-')[1];
-    
+
     // Set up message listener
     port.onMessage.addListener(async (request) => {
       if (request.type === "PROCESS_TEXT") {
@@ -470,7 +468,7 @@ chrome.runtime.onConnect.addListener((port) => {
       // Return true to indicate we'll handle the request asynchronously
       return true;
     });
-    
+
     // Handle port disconnect
     port.onDisconnect.addListener(() => {
       // If we have an active generation for this connection, abort it

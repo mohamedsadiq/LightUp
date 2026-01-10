@@ -14,37 +14,37 @@ interface GlobalActionButtonProps {
   currentTheme: "light" | "dark";
 }
 
-const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({ 
-  onProcess, 
-  mode, 
+const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
+  onProcess,
+  mode,
   isPopupVisible = false,
   currentTheme
 }) => {
   const [buttonVisible, setButtonVisible] = useState(true);
   const [isEnabled, setIsEnabled] = useState(true);
-  
+
   // Load button visibility settings and enabled state from storage
   useEffect(() => {
     const loadSettings = async () => {
       const storage = new Storage();
       const settings = await storage.get("settings") as Settings | undefined;
       const enabledState = await storage.get("isEnabled");
-      
+
       // Load button visibility (default to true if not set)
       const showButton = settings?.customization?.showGlobalActionButton !== false;
       setButtonVisible(showButton);
-      
+
       // Load enabled state (default to true if not set)
       setIsEnabled(enabledState === undefined ? true : enabledState === "true");
     };
-    
+
     loadSettings();
-    
+
     // Listen for settings updates
     const handleSettingsChange = () => {
       loadSettings();
     };
-    
+
     // Listen for enabled state changes
     const handleEnabledChange = (event: CustomEvent) => {
       if (event.detail?.isEnabled !== undefined) {
@@ -52,7 +52,7 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
         setIsEnabled(event.detail.isEnabled);
       }
     };
-    
+
     // Listen for extension state changes (alternative event)
     const handleExtensionStateChange = (event: CustomEvent) => {
       if (event.detail?.enabled !== undefined) {
@@ -60,25 +60,25 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
         setIsEnabled(event.detail.enabled);
       }
     };
-    
+
     window.addEventListener("settingsUpdated", handleSettingsChange);
     window.addEventListener('isEnabledChanged', handleEnabledChange as EventListener);
     window.addEventListener('extensionStateChanged', handleExtensionStateChange as EventListener);
-    
+
     return () => {
       window.removeEventListener("settingsUpdated", handleSettingsChange);
       window.removeEventListener('isEnabledChanged', handleEnabledChange as EventListener);
       window.removeEventListener('extensionStateChanged', handleExtensionStateChange as EventListener);
     };
   }, []);
-  
+
   const handleClick = () => {
     // For free mode, we want to show the popup with page context awareness
     // without immediately sending content to AI - let the user choose what to ask
     if (mode === "free") {
       // Extract page content for context but don't immediately process it
       const extractedContent = getPageContent(mode);
-      
+
       // Create an event to show the free mode popup with page context
       // Also include any currently highlighted text so the input field can be pre-populated.
       const currentSelection = window.getSelection()?.toString()?.trim() || "";
@@ -92,14 +92,14 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
         }
       });
       window.dispatchEvent(event);
-      
+
       // Check if debug mode is enabled
       const storage = new Storage();
       storage.get("settings").then((value) => {
         try {
           // Parse the value as Settings object if it's a string
           const settings = typeof value === 'string' ? JSON.parse(value) as Settings : value as Settings;
-          
+
           // If debug mode is enabled in settings, show the comparison popup
           if (settings?.debug?.enableContentExtractionDebug) {
             debugContentExtraction();
@@ -111,14 +111,14 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
     } else {
       // For other modes, extract and immediately process the content
       const extractedContent = getPageContent(mode);
-      
+
       // Check if debug mode is enabled
       const storage = new Storage();
       storage.get("settings").then((value) => {
         try {
           // Parse the value as Settings object if it's a string
           const settings = typeof value === 'string' ? JSON.parse(value) as Settings : value as Settings;
-          
+
           // If debug mode is enabled in settings, show the comparison popup
           if (settings?.debug?.enableContentExtractionDebug) {
             debugContentExtraction();
@@ -127,11 +127,11 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
           console.error("Error parsing settings:", err);
         }
       });
-      
+
       onProcess(extractedContent);
     }
   };
-  
+
   // Add Option+Click handler to show debug info regardless of settings
   // Using altKey which is Option key on Mac
   const handleAltClick = (e: React.MouseEvent) => {
@@ -146,10 +146,11 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
 
   // Define the aria label text based on the current mode
   const getAriaLabel = () => {
-    switch(mode) {
+    switch (mode) {
       case "summarize": return "Smart summarize page content";
       case "explain": return "Explain entire page";
       case "analyze": return "Analyze entire page";
+      case "challenge": return "Challenge point of view of entire page";
       case "translate": return "Translate entire page";
       case "free": return "Chat about entire page";
       default: return "Process entire page";
@@ -161,8 +162,8 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
     return {
       backgroundColor: currentTheme === "dark" ? "#383838" : "#f5f5f5",
       color: currentTheme === "dark" ? "#FFFFFF" : "#000000",
-      boxShadow: currentTheme === "dark" 
-        ? "0 4px 14px rgba(0, 0, 0, 0.4)" 
+      boxShadow: currentTheme === "dark"
+        ? "0 4px 14px rgba(0, 0, 0, 0.4)"
         : "0 4px 14px rgba(0, 0, 0, 0.15)"
     };
   };

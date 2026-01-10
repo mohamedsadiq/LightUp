@@ -6,34 +6,34 @@ import type { Settings } from "~types/settings"
 const Logo = () => (
   <svg width="50" height="50" viewBox="0 0 202 201" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g filter="url(#filter0_d_171_147)">
-      <circle cx="101.067" cy="101.227" r="32.1546" fill="black"/>
-      <circle cx="101.067" cy="101.227" r="31.5012" stroke="#A72D20" strokeWidth="1.30683"/>
+      <circle cx="101.067" cy="101.227" r="32.1546" fill="black" />
+      <circle cx="101.067" cy="101.227" r="31.5012" stroke="#A72D20" strokeWidth="1.30683" />
     </g>
     <g filter="url(#filter1_d_171_147)">
-      <ellipse cx="101.782" cy="101.42" rx="29.7391" ry="30.2609" fill="black"/>
+      <ellipse cx="101.782" cy="101.42" rx="29.7391" ry="30.2609" fill="black" />
     </g>
     <defs>
       <filter id="filter0_d_171_147" x="0.772979" y="0.061912" width="200.587" height="200.588" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-        <feMorphology radius="11.4783" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_171_147"/>
-        <feOffset dy="-0.871223"/>
-        <feGaussianBlur stdDeviation="28.3304"/>
-        <feComposite in2="hardAlpha" operator="out"/>
-        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.670326 0 0 0 0 0.159863 0 0 0 1 0"/>
-        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_171_147"/>
-        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_171_147" result="shape"/>
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+        <feMorphology radius="11.4783" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_171_147" />
+        <feOffset dy="-0.871223" />
+        <feGaussianBlur stdDeviation="28.3304" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.670326 0 0 0 0 0.159863 0 0 0 1 0" />
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_171_147" />
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_171_147" result="shape" />
       </filter>
       <filter id="filter1_d_171_147" x="3.90283" y="3.01889" width="195.759" height="196.803" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
-        <feMorphology radius="11.4783" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_171_147"/>
-        <feOffset dy="-0.871223"/>
-        <feGaussianBlur stdDeviation="28.3304"/>
-        <feComposite in2="hardAlpha" operator="out"/>
-        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.670326 0 0 0 0 0.159863 0 0 0 1 0"/>
-        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_171_147"/>
-        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_171_147" result="shape"/>
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
+        <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+        <feMorphology radius="11.4783" operator="dilate" in="SourceAlpha" result="effect1_dropShadow_171_147" />
+        <feOffset dy="-0.871223" />
+        <feGaussianBlur stdDeviation="28.3304" />
+        <feComposite in2="hardAlpha" operator="out" />
+        <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 0.670326 0 0 0 0 0.159863 0 0 0 1 0" />
+        <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_171_147" />
+        <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_171_147" result="shape" />
       </filter>
     </defs>
   </svg>
@@ -42,20 +42,26 @@ const Logo = () => (
 function Welcome() {
   const [currentStep, setCurrentStep] = useState(1)
   const [settings, setSettings] = useState<Settings>({
-    modelType: "openai",
+    modelType: "basic",
     maxTokens: 2048,
     apiKey: "",
     geminiApiKey: "",
     xaiApiKey: "",
+    translationSettings: {
+      fromLanguage: "en",
+      toLanguage: "es"
+    },
     customization: {
       showSelectedText: false,
-      theme: "light",
+      theme: "system",
       radicallyFocus: false,
-      fontSize: "16px",
+      fontSize: "medium",
       highlightColor: "default",
-      popupAnimation: "scale",
+      popupAnimation: "none",
       persistHighlight: false,
-      layoutMode: "sidebar"
+      layoutMode: "floating",
+      enablePDFSupport: false,
+      showTextSelectionButton: true
     }
   })
 
@@ -96,7 +102,7 @@ function Welcome() {
         {/* Progress bar */}
         <div className="welcome-progress">
           <div className="progress-bar">
-            <div 
+            <div
               className="progress-fill"
               style={{ width: `${(currentStep / 4) * 100}%` }}
             />
@@ -170,8 +176,8 @@ function Welcome() {
                   placeholder="Enter your API key"
                   value={
                     settings.modelType === "openai" ? settings.apiKey :
-                    settings.modelType === "gemini" ? settings.geminiApiKey :
-                    settings.xaiApiKey
+                      settings.modelType === "gemini" ? settings.geminiApiKey :
+                        settings.xaiApiKey
                   }
                   onChange={(e) => {
                     const value = e.target.value
@@ -197,7 +203,7 @@ function Welcome() {
           {currentStep === 3 && (
             <div className="space-y-6">
               <h2 className="text-2xl font-semibold mb-8 text-center">Choose your style</h2>
-              
+
               <div className="grid grid-cols-2 gap-6">
                 {/* Light Theme Option */}
                 <button

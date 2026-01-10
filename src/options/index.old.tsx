@@ -1584,7 +1584,7 @@ function IndexOptions() {
         <Logo />
         <VersionBadgeContainer>
           <BetaBadge>{getMessage("betaBadgeLabel") || "BETA"}</BetaBadge>
-          <VersionNumber>v1.1.17</VersionNumber>
+          <VersionNumber>v0.1.18</VersionNumber>
         </VersionBadgeContainer>
         {/* <CloseButton onClick={() => window.close()}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

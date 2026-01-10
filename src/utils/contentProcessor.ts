@@ -3,7 +3,7 @@
  * This module provides specialized processing for different action modes to improve AI output quality
  */
 
-export type ProcessingMode = 'explain' | 'summarize' | 'analyze' | 'translate' | 'free';
+export type ProcessingMode = 'explain' | 'summarize' | 'analyze' | 'challenge' | 'translate' | 'free';
 
 export interface ContentMetadata {
   mode: ProcessingMode;
@@ -90,6 +90,9 @@ export class ContentProcessor {
         processedContent = this.processForExplanation(processedContent);
         break;
       case 'analyze':
+        processedContent = this.processForAnalysis(processedContent);
+        break;
+      case 'challenge':
         processedContent = this.processForAnalysis(processedContent);
         break;
       case 'translate':
