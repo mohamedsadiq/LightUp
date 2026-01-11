@@ -78,7 +78,7 @@ type OnboardingProviderOption = {
 
 const ONBOARDING_TOTAL_STEPS = 4
 
-const ONBOARDING_PROVIDER_OPTIONS: OnboardingProviderOption[] = [
+const getOnboardingProviderOptions = (theme: "light" | "dark"): OnboardingProviderOption[] => [
   {
     id: "basic",
     title: "LightUp Basic",
@@ -105,7 +105,7 @@ const ONBOARDING_PROVIDER_OPTIONS: OnboardingProviderOption[] = [
     title: "OpenAI",
     subtitle: "Best overall quality",
     body: "Add your OpenAI key for GPT-4o, GPT-4.1, and reasoning models.",
-    icon: <OpenAIIcon />
+    icon: <OpenAIIcon theme={theme} alt="OpenAI" />
   },
   {
     id: "local",
@@ -870,6 +870,29 @@ const FormDescription = styled.p`
   font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `
 
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 10px 14px;
+  background-color: ${theme.input.background};
+  color: ${theme.foreground};
+  border: 1px solid ${theme.input.border};
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: all 0.2s ease;
+  margin-bottom: 12px;
+
+  &:focus {
+    outline: none;
+    border-color: ${theme.primary};
+    box-shadow: 0 0 0 2px ${theme.primary}22;
+  }
+
+  &::placeholder {
+    color: ${theme.secondaryText};
+  }
+`
+
 const FormSelect = styled.select`
   background-color: ${theme.select.background};
   color: ${theme.foreground};
@@ -921,8 +944,8 @@ const ValidationStatus = styled.div<{
 }>`
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-top: 8px;
+  gap: 6px;
+  margin-top: 6px;
   font-size: 12px;
 
   ${(props) =>
@@ -953,21 +976,6 @@ const ValidationIcon = styled.div<{
   display: flex;
   align-items: center;
   justify-content: center;
-
-  ${(props) =>
-    props.isValidating &&
-    `
-    animation: spin 1s linear infinite;
-  `}
-
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
 `
 
 const ApiKeyInput = styled(FormInput)<{
@@ -978,16 +986,14 @@ const ApiKeyInput = styled(FormInput)<{
     props.hasValidation &&
     props.isValid === true &&
     `
-    border-color: ${theme.validation.success} !important;
-    box-shadow: 0 0 0 1px ${theme.validation.success};
+    border-color: ${theme.validation.success};
   `}
 
   ${(props) =>
     props.hasValidation &&
     props.isValid === false &&
     `
-    border-color: ${theme.validation.error} !important;
-    box-shadow: 0 0 0 1px ${theme.validation.error};
+    border-color: ${theme.validation.error};
   `}
 `
 
@@ -1235,6 +1241,7 @@ const ContentWrapper = styled.div`
   display: flex;
   flex: 1;
   padding: 22px 14px 0 14px;
+  column-gap: 20px;
   overflow: hidden; // Prevents the wrapper itself from scrolling
 `
 
@@ -1245,6 +1252,7 @@ const Sidebar = styled.nav`
   padding: 0;
   flex-shrink: 0;
   border-right: 1px solid ${theme.border};
+  padding-right: 14px;
 `
 
 const SidebarItem = styled.button<{ active: boolean }>`
@@ -1295,7 +1303,7 @@ const SidebarDivider = styled.div`
 // Content area - minimalist
 const ContentArea = styled.div`
   flex: 1;
-  padding: 8px 16px;
+  padding: 8px 32px;
   background: ${theme.content};
   overflow-y: auto;
   overflow-x: hidden;
@@ -2486,11 +2494,25 @@ function IndexOptions() {
   const { autoSaveStatus, debouncedAutoSave, autoSave, timeoutRef } =
     useAutoSave(settings, storage, notifyError)
 
+  // Calculate effective theme for use throughout the component
+  const effectiveTheme = useMemo((): "light" | "dark" => {
+    const themeSetting = settings?.customization?.theme || "dark"
+    if (themeSetting === "system") {
+      return window.matchMedia?.("(prefers-color-scheme: dark)")
+        .matches
+        ? "dark"
+        : "light"
+    }
+    return themeSetting as "light" | "dark"
+  }, [settings?.customization?.theme])
+
   const [activePromptMode, setActivePromptMode] = useState<Mode>("explain")
   const [isEditingSystemPrompt, setIsEditingSystemPrompt] = useState(false)
   const [isEditingUserPrompt, setIsEditingUserPrompt] = useState(false)
   const [editedSystemPrompt, setEditedSystemPrompt] = useState("")
   const [editedUserPrompt, setEditedUserPrompt] = useState("")
+
+  const [modelSearchQuery, setModelSearchQuery] = useState("")
 
   const onboardingSelectedLanguage = useMemo(
     () =>
@@ -2501,10 +2523,50 @@ function IndexOptions() {
 
   const onboardingSelectedProvider = useMemo(
     () =>
-      ONBOARDING_PROVIDER_OPTIONS.find(
+      getOnboardingProviderOptions(effectiveTheme).find(
         (option) => option.id === settings.modelType
       ),
-    [settings.modelType]
+    [settings.modelType, effectiveTheme]
+  )
+
+  const filteredGeminiModels = useMemo(
+    () =>
+      GEMINI_MODELS.filter(
+        (model) =>
+          model.label.toLowerCase().includes(modelSearchQuery.toLowerCase()) ||
+          model.description.toLowerCase().includes(modelSearchQuery.toLowerCase())
+      ),
+    [GEMINI_MODELS, modelSearchQuery]
+  )
+
+  const filteredOpenAIModels = useMemo(
+    () =>
+      OPENAI_MODELS.filter(
+        (model) =>
+          model.label.toLowerCase().includes(modelSearchQuery.toLowerCase()) ||
+          model.description.toLowerCase().includes(modelSearchQuery.toLowerCase())
+      ),
+    [OPENAI_MODELS, modelSearchQuery]
+  )
+
+  const filteredGrokModels = useMemo(
+    () =>
+      GROK_MODELS.filter(
+        (model) =>
+          model.label.toLowerCase().includes(modelSearchQuery.toLowerCase()) ||
+          model.description.toLowerCase().includes(modelSearchQuery.toLowerCase())
+      ),
+    [GROK_MODELS, modelSearchQuery]
+  )
+
+  const filteredLocalModels = useMemo(
+    () =>
+      LOCAL_MODELS.filter(
+        (model) =>
+          model.label.toLowerCase().includes(modelSearchQuery.toLowerCase()) ||
+          model.description.toLowerCase().includes(modelSearchQuery.toLowerCase())
+      ),
+    [LOCAL_MODELS, modelSearchQuery]
   )
 
   // Load settings from storage when component mounts
@@ -2636,24 +2698,10 @@ function IndexOptions() {
 
   // Theme handling - set data-theme attribute based on settings
   useEffect(() => {
-    const themeSetting = settings?.customization?.theme || "dark"
-    let effectiveTheme: "light" | "dark" = "dark"
-
-    if (themeSetting === "system") {
-      // Check system preference
-      effectiveTheme = window.matchMedia?.("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light"
-    } else {
-      effectiveTheme = themeSetting as "light" | "dark"
-    }
-
-    // Set the data-theme attribute on document.documentElement
     document.documentElement.setAttribute("data-theme", effectiveTheme)
 
     // Listen for system theme changes if in system mode
-    if (themeSetting === "system") {
+    if (settings?.customization?.theme === "system") {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
       const handleChange = (e: MediaQueryListEvent) => {
         document.documentElement.setAttribute(
@@ -2664,8 +2712,8 @@ function IndexOptions() {
       mediaQuery.addEventListener("change", handleChange)
       return () => mediaQuery.removeEventListener("change", handleChange)
     }
-    rememberTheme(themeSetting as "light" | "dark" | "system")
-  }, [settings?.customization?.theme])
+    rememberTheme(settings?.customization?.theme || "dark")
+  }, [settings?.customization?.theme, effectiveTheme])
 
   // Track unsaved changes
   useEffect(() => {
@@ -3116,7 +3164,7 @@ function IndexOptions() {
           isLoading={isOnboardingLoading}
           isCompleting={isCompletingOnboarding}
           supportedLanguages={SUPPORTED_LANGUAGES}
-          providerOptions={ONBOARDING_PROVIDER_OPTIONS}
+          providerOptions={getOnboardingProviderOptions(effectiveTheme)}
           toggleOptions={ONBOARDING_TOGGLES}
           stepCopy={[...ONBOARDING_STEP_COPY]}
         />
@@ -3596,7 +3644,7 @@ function IndexOptions() {
                         {getMessage("chooseModelTypeDescription")}
                       </FormDescription>
                       <ProviderGrid>
-                        {ONBOARDING_PROVIDER_OPTIONS.map((provider) => (
+                        {getOnboardingProviderOptions(effectiveTheme).map((provider) => (
                           <ProviderCard
                             key={provider.id}
                             selected={settings.modelType === provider.id}
@@ -3792,24 +3840,24 @@ function IndexOptions() {
                               isValid={apiKeyValidation.gemini?.isValid}>
                               {validatingApiKeys.gemini ? (
                                 <svg
-                                  width="16"
-                                  height="16"
+                                  width="14"
+                                  height="14"
                                   viewBox="0 0 24 24"
                                   fill="currentColor">
                                   <path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z" />
                                 </svg>
                               ) : apiKeyValidation.gemini?.isValid === true ? (
                                 <svg
-                                  width="16"
-                                  height="16"
+                                  width="14"
+                                  height="14"
                                   viewBox="0 0 24 24"
                                   fill="currentColor">
                                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                                 </svg>
                               ) : apiKeyValidation.gemini?.isValid === false ? (
                                 <svg
-                                  width="16"
-                                  height="16"
+                                  width="14"
+                                  height="14"
                                   viewBox="0 0 24 24"
                                   fill="currentColor">
                                   <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
@@ -3818,9 +3866,9 @@ function IndexOptions() {
                             </ValidationIcon>
 
                             {validatingApiKeys.gemini
-                              ? "Validating API key..."
+                              ? "Validating..."
                               : apiKeyValidation.gemini?.isValid === true
-                                ? "API key is valid"
+                                ? "Valid"
                                 : apiKeyValidation.gemini?.error
                                   ? apiKeyValidation.gemini.error
                                   : null}
@@ -3842,13 +3890,19 @@ function IndexOptions() {
                         <FormDescription>
                           {getMessage("geminiModelDescription")}
                         </FormDescription>
+                        <SearchInput
+                          type="text"
+                          placeholder="Search models..."
+                          value={modelSearchQuery}
+                          onChange={(e) => setModelSearchQuery(e.target.value)}
+                        />
                         <div
                           style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(1, minmax(0, 1fr))",
                             gap: "12px"
                           }}>
-                          {GEMINI_MODELS.map((model) => (
+                          {filteredGeminiModels.map((model) => (
                             <ModelOption
                               key={model.value}
                               model={model}
@@ -3865,6 +3919,17 @@ function IndexOptions() {
                               }}
                             />
                           ))}
+                          {filteredGeminiModels.length === 0 && (
+                            <div
+                              style={{
+                                padding: "20px",
+                                textAlign: "center",
+                                color: theme.secondaryText,
+                                fontSize: "14px"
+                              }}>
+                              No models found matching "{modelSearchQuery}"
+                            </div>
+                          )}
                         </div>
                       </FormGroup>
                     </SubContainer>
@@ -3909,6 +3974,52 @@ function IndexOptions() {
                           isValid={apiKeyValidation.openai?.isValid}
                         />
 
+                        {/* Validation Status */}
+                        {(validatingApiKeys.openai ||
+                          apiKeyValidation.openai) && (
+                          <ValidationStatus
+                            isValidating={validatingApiKeys.openai}
+                            isValid={apiKeyValidation.openai?.isValid}>
+                            <ValidationIcon
+                              isValidating={validatingApiKeys.openai}
+                              isValid={apiKeyValidation.openai?.isValid}>
+                              {validatingApiKeys.openai ? (
+                                <svg
+                                  width="14"
+                                  height="14"
+                                  viewBox="0 0 24 24"
+                                  fill="currentColor">
+                                  <path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z" />
+                                </svg>
+                              ) : apiKeyValidation.openai?.isValid === true ? (
+                                <svg
+                                  width="14"
+                                  height="14"
+                                  viewBox="0 0 24 24"
+                                  fill="currentColor">
+                                  <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
+                                </svg>
+                              ) : apiKeyValidation.openai?.isValid === false ? (
+                                <svg
+                                  width="14"
+                                  height="14"
+                                  viewBox="0 0 24 24"
+                                  fill="currentColor">
+                                  <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                                </svg>
+                              ) : null}
+                            </ValidationIcon>
+
+                            {validatingApiKeys.openai
+                              ? "Validating..."
+                              : apiKeyValidation.openai?.isValid === true
+                                ? "Valid"
+                                : apiKeyValidation.openai?.error
+                                  ? apiKeyValidation.openai.error
+                                  : null}
+                          </ValidationStatus>
+                        )}
+
                         <FormDescription>
                           Get your API key from{" "}
                           <a
@@ -3931,13 +4042,19 @@ function IndexOptions() {
                         <FormDescription>
                           Select the OpenAI model to use
                         </FormDescription>
+                        <SearchInput
+                          type="text"
+                          placeholder="Search models..."
+                          value={modelSearchQuery}
+                          onChange={(e) => setModelSearchQuery(e.target.value)}
+                        />
                         <div
                           style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(1, minmax(0, 1fr))",
                             gap: "12px"
                           }}>
-                          {OPENAI_MODELS.map((model) => (
+                          {filteredOpenAIModels.map((model) => (
                             <ModelOption
                               key={model.value}
                               model={model}
@@ -3954,6 +4071,17 @@ function IndexOptions() {
                               }}
                             />
                           ))}
+                          {filteredOpenAIModels.length === 0 && (
+                            <div
+                              style={{
+                                padding: "20px",
+                                textAlign: "center",
+                                color: theme.secondaryText,
+                                fontSize: "14px"
+                              }}>
+                              No models found matching "{modelSearchQuery}"
+                            </div>
+                          )}
                         </div>
                       </FormGroup>
                     </SubContainer>
@@ -4010,24 +4138,24 @@ function IndexOptions() {
                               isValid={apiKeyValidation.xai?.isValid}>
                               {validatingApiKeys.xai ? (
                                 <svg
-                                  width="16"
-                                  height="16"
+                                  width="14"
+                                  height="14"
                                   viewBox="0 0 24 24"
                                   fill="currentColor">
                                   <path d="M12,4a8,8,0,0,1,7.89,6.7A1.53,1.53,0,0,0,21.38,12h0a1.5,1.5,0,0,0,1.48-1.75,11,11,0,0,0-21.72,0A1.5,1.5,0,0,0,2.62,12h0a1.53,1.53,0,0,0,1.49-1.3A8,8,0,0,1,12,4Z" />
                                 </svg>
                               ) : apiKeyValidation.xai?.isValid === true ? (
                                 <svg
-                                  width="16"
-                                  height="16"
+                                  width="14"
+                                  height="14"
                                   viewBox="0 0 24 24"
                                   fill="currentColor">
                                   <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                                 </svg>
                               ) : apiKeyValidation.xai?.isValid === false ? (
                                 <svg
-                                  width="16"
-                                  height="16"
+                                  width="14"
+                                  height="14"
                                   viewBox="0 0 24 24"
                                   fill="currentColor">
                                   <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
@@ -4036,9 +4164,9 @@ function IndexOptions() {
                             </ValidationIcon>
 
                             {validatingApiKeys.xai
-                              ? "Validating API key..."
+                              ? "Validating..."
                               : apiKeyValidation.xai?.isValid === true
-                                ? "API key is valid"
+                                ? "Valid"
                                 : apiKeyValidation.xai?.error
                                   ? apiKeyValidation.xai.error
                                   : null}
@@ -4060,13 +4188,19 @@ function IndexOptions() {
                         <FormDescription>
                           {getMessage("grokModelDescription")}
                         </FormDescription>
+                        <SearchInput
+                          type="text"
+                          placeholder="Search models..."
+                          value={modelSearchQuery}
+                          onChange={(e) => setModelSearchQuery(e.target.value)}
+                        />
                         <div
                           style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(1, minmax(0, 1fr))",
                             gap: "12px"
                           }}>
-                          {GROK_MODELS.map((model) => (
+                          {filteredGrokModels.map((model) => (
                             <ModelOption
                               key={model.value}
                               model={model}
@@ -4084,6 +4218,17 @@ function IndexOptions() {
                               showPrice={true}
                             />
                           ))}
+                          {filteredGrokModels.length === 0 && (
+                            <div
+                              style={{
+                                padding: "20px",
+                                textAlign: "center",
+                                color: theme.secondaryText,
+                                fontSize: "14px"
+                              }}>
+                              No models found matching "{modelSearchQuery}"
+                            </div>
+                          )}
                         </div>
                       </FormGroup>
                     </SubContainer>
@@ -4129,13 +4274,19 @@ function IndexOptions() {
                         <FormDescription>
                           {getMessage("localModelDescription")}
                         </FormDescription>
+                        <SearchInput
+                          type="text"
+                          placeholder="Search models..."
+                          value={modelSearchQuery}
+                          onChange={(e) => setModelSearchQuery(e.target.value)}
+                        />
                         <div
                           style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(1, minmax(0, 1fr))",
                             gap: "12px"
                           }}>
-                          {LOCAL_MODELS.map((model) => (
+                          {filteredLocalModels.map((model) => (
                             <ModelOption
                               key={model.value}
                               model={model}
@@ -4153,6 +4304,17 @@ function IndexOptions() {
                               showSize={true}
                             />
                           ))}
+                          {filteredLocalModels.length === 0 && (
+                            <div
+                              style={{
+                                padding: "20px",
+                                textAlign: "center",
+                                color: theme.secondaryText,
+                                fontSize: "14px"
+                              }}>
+                              No models found matching "{modelSearchQuery}"
+                            </div>
+                          )}
                         </div>
                       </FormGroup>
                     </SubContainer>
