@@ -84,7 +84,7 @@ const shimmer = keyframes`
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
-  background: var(--popup-overlay-bg, rgba(0, 0, 0, 0.7));
+  background: var(--popup-overlay-bg, rgba(0, 0, 0, 0.5));
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -97,8 +97,8 @@ const WizardContainer = styled.div`
   background: var(--popup-bg);
   border-radius: 16px;
   border: 1px solid var(--popup-border);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
-  max-width: 580px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  max-width: 540px;
   width: 100%;
   max-height: 90vh;
   overflow: hidden;
@@ -109,7 +109,7 @@ const WizardContainer = styled.div`
 `;
 
 const Header = styled.div`
-  padding: 28px 28px 20px;
+  padding: 24px 24px 16px;
   background: var(--popup-header);
   border-bottom: 1px solid var(--popup-border);
   text-align: center;
@@ -120,19 +120,19 @@ const LogoImage = styled.img`
   height: 64px;
   margin: 0 auto 16px;
   border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h1`
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
   color: var(--popup-fg);
   margin: 0 0 6px;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
 `;
 
 const Subtitle = styled.p`
-  font-size: 14px;
+  font-size: 13px;
   color: var(--popup-secondary-text);
   margin: 0;
   line-height: 1.5;
@@ -147,14 +147,16 @@ const ProgressContainer = styled.div`
 `;
 
 const ProgressDot = styled.div<{ active: boolean; completed: boolean }>`
-  width: ${props => props.active ? '22px' : '8px'};
+  width: ${props => props.active ? '20px' : '8px'};
   height: 8px;
   border-radius: 4px;
-  background: ${props => 
-    props.completed ? 'var(--popup-toggle-active)' : 
-    props.active ? 'var(--popup-primary)' : 
-    'var(--popup-border)'};
-  transition: all 0.3s ease;
+  background: ${props =>
+    props.completed
+      ? 'var(--popup-toggle-active)'
+      : props.active
+      ? 'var(--popup-primary)'
+      : 'var(--popup-border)'};
+  transition: all 0.25s ease;
 `;
 
 const StepIndicator = styled.div`
@@ -165,7 +167,7 @@ const StepIndicator = styled.div`
 `;
 
 const Content = styled.div`
-  padding: 24px 28px;
+  padding: 20px 24px 24px;
   overflow-y: auto;
   flex: 1;
   animation: ${slideIn} 0.3s ease-out;
@@ -185,7 +187,7 @@ const Content = styled.div`
 `;
 
 const StepTitle = styled.h2`
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 600;
   color: var(--popup-fg);
   margin: 0 0 6px;
@@ -194,7 +196,7 @@ const StepTitle = styled.h2`
 const StepDescription = styled.p`
   font-size: 13px;
   color: var(--popup-secondary-text);
-  margin: 0 0 20px;
+  margin: 0 0 16px;
   line-height: 1.5;
 `;
 
@@ -205,21 +207,20 @@ const OptionsGrid = styled.div`
 `;
 
 const OptionCard = styled.button<{ selected: boolean }>`
-  background: ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-subcontainer-bg)'};
-  color: ${props => props.selected ? 'white' : 'var(--popup-fg)'};
-  border: 1.5px solid ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-border)'};
+  background: ${props => props.selected ? 'var(--popup-subcontainer-bg)' : 'transparent'};
+  color: ${props => props.selected ? 'var(--popup-fg)' : 'var(--popup-secondary-text)'};
+  border: 1px solid ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-border)'};
   border-radius: 12px;
   padding: 16px;
   text-align: left;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
-  box-shadow: ${props => props.selected ? '0 10px 30px rgba(0,0,0,0.25)' : '0 6px 18px rgba(0,0,0,0.18)'};
+  box-shadow: ${props => props.selected ? '0 4px 12px rgba(0, 0, 0, 0.1)' : 'none'};
 
   &:hover {
     border-color: var(--popup-primary);
-    background: ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-model-option-hover)'};
-    transform: translateY(-1px) scale(1.01);
+    background: ${props => props.selected ? 'var(--popup-subcontainer-bg)' : 'var(--popup-model-option-hover)'};
   }
 
   &:focus-visible {
@@ -234,13 +235,13 @@ const OptionCard = styled.button<{ selected: boolean }>`
 
 const OptionTitle = styled.div`
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 2px;
 `;
 
 const OptionSubtitle = styled.div<{ selected: boolean }>`
   font-size: 11px;
-  opacity: ${props => props.selected ? 0.9 : 0.65};
+  opacity: ${props => props.selected ? 0.8 : 0.6};
   line-height: 1.4;
 `;
 
@@ -259,9 +260,9 @@ const Badge = styled.span`
 `;
 
 const ProviderCard = styled.button<{ selected: boolean }>`
-  background: ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-subcontainer-bg)'};
-  color: ${props => props.selected ? 'white' : 'var(--popup-fg)'};
-  border: 1.5px solid ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-border)'};
+  background: ${props => props.selected ? 'var(--popup-subcontainer-bg)' : 'transparent'};
+  color: ${props => props.selected ? 'var(--popup-fg)' : 'var(--popup-secondary-text)'};
+  border: 1px solid ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-border)'};
   border-radius: 12px;
   padding: 18px;
   text-align: left;
@@ -269,12 +270,11 @@ const ProviderCard = styled.button<{ selected: boolean }>`
   transition: all 0.2s ease;
   position: relative;
   width: 100%;
-  box-shadow: ${props => props.selected ? '0 12px 32px rgba(0,0,0,0.25)' : '0 8px 20px rgba(0,0,0,0.16)'};
+  box-shadow: ${props => props.selected ? '0 4px 12px rgba(0, 0, 0, 0.1)' : 'none'};
 
   &:hover {
     border-color: var(--popup-primary);
-    background: ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-model-option-hover)'};
-    transform: translateY(-1px) scale(1.01);
+    background: ${props => props.selected ? 'var(--popup-subcontainer-bg)' : 'var(--popup-model-option-hover)'};
   }
 
   &:focus-visible {
@@ -285,26 +285,26 @@ const ProviderCard = styled.button<{ selected: boolean }>`
 
 const ProviderTitle = styled.div`
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 3px;
 `;
 
 const ProviderSubtitle = styled.div<{ selected: boolean }>`
   font-size: 12px;
-  opacity: ${props => props.selected ? 0.9 : 0.6};
+  opacity: ${props => props.selected ? 0.8 : 0.6};
   margin-bottom: 6px;
 `;
 
 const ProviderBody = styled.div<{ selected: boolean }>`
   font-size: 12px;
-  opacity: ${props => props.selected ? 0.85 : 0.65};
+  opacity: ${props => props.selected ? 0.75 : 0.55};
   line-height: 1.4;
 `;
 
 const ProviderDetailsCard = styled.div`
   margin-top: 14px;
   padding: 14px;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 1px solid var(--popup-subcontainer-border);
   background: var(--popup-subcontainer-bg);
   display: flex;
@@ -320,7 +320,7 @@ const FieldGroup = styled.div`
 
 const FieldLabel = styled.label`
   font-size: 13px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--popup-fg);
 `;
 
@@ -329,7 +329,7 @@ const FieldInput = styled.input`
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid var(--popup-border);
-  background: var(--popup-input-bg, #11151c);
+  background: var(--popup-input-bg);
   color: var(--popup-fg);
   font-size: 13px;
 
@@ -451,7 +451,7 @@ const ReviewValue = styled.div`
 `;
 
 const Footer = styled.div`
-  padding: 16px 28px 20px;
+  padding: 16px 24px 20px;
   border-top: 1px solid var(--popup-border);
   display: flex;
   align-items: center;
@@ -467,7 +467,7 @@ const SkipButton = styled.button`
   font-size: 13px;
   cursor: pointer;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: 6px;
   transition: all 0.2s;
   font-family: inherit;
 
@@ -520,12 +520,11 @@ const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
 `;
 
 const CompleteButton = styled(Button)`
-  background: linear-gradient(135deg, var(--popup-primary) 0%, var(--popup-toggle-active) 100%);
-  background-size: 120% 100%;
+  background: var(--popup-primary);
   border: 1px solid var(--popup-primary);
 
   &:hover {
-    filter: brightness(1.08);
+    background: var(--popup-primary-hover);
   }
 
   &:focus-visible {
@@ -872,6 +871,57 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
         </Toggle>
       </ToggleRow>
 
+      <ToggleRow>
+        <ToggleInfo>
+          <ToggleLabel>Show website info</ToggleLabel>
+          <ToggleDescription>
+            Display website favicon and title in popup.
+          </ToggleDescription>
+        </ToggleInfo>
+        <Toggle>
+          <ToggleInput
+            type="checkbox"
+            checked={settings.customization?.showWebsiteInfo !== false}
+            onChange={(e) => onUpdateCustomization("showWebsiteInfo", e.target.checked)}
+          />
+          <ToggleSlider />
+        </Toggle>
+      </ToggleRow>
+
+      <ToggleRow>
+        <ToggleInfo>
+          <ToggleLabel>Show 'Instant AI' button</ToggleLabel>
+          <ToggleDescription>
+            Display floating button for instant page content processing.
+          </ToggleDescription>
+        </ToggleInfo>
+        <Toggle>
+          <ToggleInput
+            type="checkbox"
+            checked={settings.customization?.quickView !== false}
+            onChange={(e) => onUpdateCustomization("quickView", e.target.checked)}
+          />
+          <ToggleSlider />
+        </Toggle>
+      </ToggleRow>
+
+      <ToggleRow>
+        <ToggleInfo>
+          <ToggleLabel>Distraction-Free Mode</ToggleLabel>
+          <ToggleDescription>
+            Blur background when viewing results for better focus.
+          </ToggleDescription>
+        </ToggleInfo>
+        <Toggle>
+          <ToggleInput
+            type="checkbox"
+            checked={!!settings.customization?.radicallyFocus}
+            onChange={(e) => onUpdateCustomization("radicallyFocus", e.target.checked)}
+          />
+          <ToggleSlider />
+        </Toggle>
+      </ToggleRow>
+
       <div style={{ marginTop: "18px", display: "flex", flexDirection: "column", gap: "12px" }}>
         <ToggleLabel style={{ fontSize: "14px" }}>Layout mode</ToggleLabel>
         <div style={{ display: "flex", gap: "12px" }}>
@@ -957,7 +1007,9 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
 
   if (isLoading) {
     return (
-      <Overlay>
+      <Overlay data-theme={settings.customization?.theme === 'system' 
+        ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+        : settings.customization?.theme || 'dark'}>
         <WizardContainer>
           <div style={{ padding: '60px', textAlign: 'center' }}>
             <div style={{ fontSize: '24px', marginBottom: '16px' }}>⏳</div>
@@ -968,8 +1020,12 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     );
   }
 
+  const currentTheme = settings.customization?.theme === 'system'
+    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    : settings.customization?.theme || 'dark';
+
   return (
-    <Overlay>
+    <Overlay data-theme={currentTheme}>
       <WizardContainer>
         <Header>
           <LogoImage src={logoUrl} alt="LightUp" />

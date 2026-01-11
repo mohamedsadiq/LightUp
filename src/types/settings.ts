@@ -15,20 +15,36 @@ export type FeedbackType = "like" | "dislike"
 
 // Grok model types
 export type GrokModel =
-  | "grok-4-1-fast-reasoning"
-  | "grok-4-1-fast-non-reasoning"
-  | "grok-4-fast-reasoning"
-  | "grok-4-fast-non-reasoning"
+  | "grok-4-1-fast"
   | "grok-4"
-  | "grok-4-0709"
-  | "grok-code-fast-1"
+  | "grok-4-fast"
   | "grok-3"
-  | "grok-3-mini"
-  | "grok-3-fast"
-  | "grok-3-mini-fast"
-  | "grok-2-image-1212"
-  | "grok-2-vision"
-  | "grok-2-1212"
+  | "grok-2"
+  | "grok-2-vision-1212"
+  | "grok-code-fast-1"
+  | "grok-beta"
+  | "grok-vision-beta"
+
+// Local model categories
+export type LocalModelCategory =
+  | "general"
+  | "coding"
+  | "reasoning"
+  | "vision"
+  | "compact"
+
+// Local model metadata
+export interface LocalModelMetadata {
+  category: LocalModelCategory
+  parameters: number // in billions
+  vramRequired: string // e.g., "8GB VRAM"
+  speed: "fast" | "medium" | "slow"
+  quality: "excellent" | "good" | "fair"
+  contextWindow: number // in tokens
+  privacy: "100% offline" | "offline"
+  recommendedFor: string[] // use cases
+  hardwareTier: "low" | "mid" | "high" | "ultra"
+}
 
 // Local model types
 export type LocalModel =
@@ -43,6 +59,7 @@ export type LocalModel =
   | "llama-3.1-8b"
   | "llama-2-70b-chat"
   | "llama-2-13b-chat"
+  | "deepseek-r1"
   | "deepseek-r1-distill-llama-70b"
   | "deepseek-r1-distill-llama-8b"
   | "deepseek-r1-distill-qwen-32b"
@@ -57,6 +74,7 @@ export type LocalModel =
   | "deepseek-coder-6.7b"
   | "qwen3-32b"
   | "qwen3-14b"
+  | "qwen3-coder"
   | "qwen2.5-72b"
   | "qwen2.5-32b"
   | "qwen2.5-14b"
@@ -66,7 +84,7 @@ export type LocalModel =
   | "qwen2.5-coder-7b"
   | "qwen2.5-math-72b"
   | "qwen2.5-math-7b"
-  | "mistral-large-240b"
+  | "mistral-large-3"
   | "mixtral-8x22b"
   | "mixtral-8x7b-instruct"
   | "mistral-7b-instruct-v0.3"
@@ -75,6 +93,8 @@ export type LocalModel =
   | "phi-3-mini-128k"
   | "phi-3-medium-128k"
   | "phi-4"
+  | "phi-4-mini"
+  | "phi-4-reasoning"
   | "gemma3-27b"
   | "gemma3-9b"
   | "gemma3-4b"
@@ -82,30 +102,26 @@ export type LocalModel =
   | "gemma2-9b"
   | "neural-chat-7b-v3-1"
   | "openchat-3.5"
+  | "openthinker"
+  | "qwq"
 
 // OpenAI model types
 export type OpenAIModel =
-  | "gpt-5.2"
-  | "gpt-5.2-pro"
-  | "gpt-5.2-codex"
-  | "gpt-5.1"
   | "gpt-5"
   | "gpt-5-mini"
   | "gpt-5-nano"
-  | "gpt-4.1"
+  | "gpt-5.2"
+  | "gpt-5.2-pro"
+  | "gpt-5.1"
   | "gpt-4o"
   | "gpt-4o-mini"
+  | "gpt-4.1"
+  | "gpt-4.1-mini"
+  | "gpt-4.1-nano"
   | "o4-mini"
   | "o3"
-  | "o3-pro"
   | "o3-mini"
-  | "o3-deep-research"
   | "o1"
-  | "o1-pro"
-  | "o1-mini"
-  | "gpt-oss-120b"
-  | "gpt-oss-20b"
-  | "gpt-4-turbo"
 
 // Rate limit interface
 export interface RateLimit {
@@ -140,7 +156,7 @@ export interface Settings {
   grokModel?: GrokModel // Add Grok model selection
   openaiModel?: OpenAIModel
   localModel?: string
-  basicModel?: "grok-4-1-fast-non-reasoning" // xAI Grok 4.1 Fast - fastest and cheapest for basic version
+  basicModel?: "grok-4-1-fast" // xAI Grok 4.1 Fast - fastest and cheapest for basic version
 
   // User preferences
   mode?: Mode
@@ -269,14 +285,13 @@ export interface TranslationSettings {
 }
 
 export type GeminiModel =
-  | "gemini-2.0-flash"
-  | "gemini-2.0-flash-lite"
-  | "gemini-2.5-flash"
-  | "gemini-2.5-flash-lite"
-  | "gemini-2.5-pro"
-  | "gemini-2.5-flash-image"
-  | "gemini-2.5-flash-live"
+  | "gemini-3-pro"
+  | "gemini-3-flash"
   | "gemini-3-pro-preview"
   | "gemini-3-flash-preview"
   | "gemini-3-pro-image-preview"
-  | "gemini-3-flash"
+  | "gemini-2.5-pro"
+  | "gemini-2.5-flash"
+  | "gemini-2.5-flash-lite"
+  | "gemini-2.0-flash"
+  | "gemini-2.0-flash-lite"

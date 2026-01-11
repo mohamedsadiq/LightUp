@@ -4,8 +4,9 @@
    CSS Custom Properties for Theming
    ============================================================================= */
 
-/* Dark theme (default) */
-:root,
+/* No default theme - colors are only set when data-theme is explicitly set */
+
+/* Explicit dark theme override */
 [data-theme="dark"] {
   /* Core colors */
   --popup-bg: #2A2A2A;

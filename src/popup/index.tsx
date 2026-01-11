@@ -12,6 +12,8 @@ import { useRateLimit } from "~hooks/useRateLimit"
 import { useEnabled } from "~hooks/useEnabled"
 import { useLocale } from "~hooks/useLocale"
 import { getMessage, SUPPORTED_LANGUAGES } from "~utils/i18n"
+import "~utils/themePreload"
+import { rememberTheme } from "~utils/themePreload"
 import { useMessage } from "~hooks/useMessage"
 import LanguageSelector from "~components/LanguageSelector"
 import { Globe } from "lucide-react"
@@ -571,6 +573,7 @@ const IndexPopup = () => {
 
     // Set the data-theme attribute on document.documentElement
     document.documentElement.setAttribute('data-theme', effectiveTheme);
+    rememberTheme(themeSetting as 'light' | 'dark' | 'system');
 
     // Listen for system theme changes if in system mode
     if (themeSetting === 'system') {
@@ -785,34 +788,7 @@ const IndexPopup = () => {
           </Select>
         </FormRow>
 
-        {settings?.customization?.layoutMode === 'floating' && (
-          <>
-            <SectionDivider />
-
-            <FormRow>
-              <div>
-                <Label>{getMessage("popupMarginLabel")}</Label>
-                <Description>{getMessage("popupMarginDesc")}</Description>
-              </div>
-              <Select
-                value={settings?.customization?.popupMargin}
-                onChange={(event) =>
-                  updateSettings('popupMargin', parseInt(event.target.value, 10))
-                }
-                style={{ width: '120px' }}
-              >
-                <option value="4">4px</option>
-                <option value="8">8px</option>
-                <option value="12">12px</option>
-                <option value="16">16px</option>
-                <option value="20">20px</option>
-                <option value="24">24px</option>
-              </Select>
-            </FormRow>
-          </>
-        )}
-
-      </div>
+        </div>
     </Section>
   )
 

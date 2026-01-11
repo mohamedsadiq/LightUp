@@ -16,6 +16,13 @@ import {
   UnsavedChangesIndicator
 } from "~components/options/NotificationComponents"
 import SavedSuccessIndicator from "~components/SavedSuccessIndicator"
+import {
+  LightUpIcon,
+  GeminiIcon,
+  GrokIcon,
+  OpenAIIcon,
+  LocalIcon
+} from "~components/icons"
 import { useLocale } from "~hooks/useLocale"
 import { useRateLimit } from "~hooks/useRateLimit"
 import {
@@ -29,10 +36,14 @@ import type {
   Mode,
   ModelType,
   OpenAIModel,
-  Settings
+  Settings,
+  LocalModelMetadata
 } from "~types/settings"
 import { getMessage, SUPPORTED_LANGUAGES } from "~utils/i18n"
+import { LOCAL_MODELS_METADATA } from "~config/localModels"
 
+import "~utils/themePreload"
+import { rememberTheme } from "~utils/themePreload"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "../utils/constants"
 // Note: SavedSuccessIndicator is now imported from components
 
@@ -48,7 +59,7 @@ import logoUrl from "../../assets/icon.png"
 const RequiredLabel = () => (
   <span
     style={{
-      color: "var(--popup-destructive)",
+      color: theme.destructive,
       fontSize: "12px",
       marginLeft: "8px"
     }}>
@@ -62,6 +73,7 @@ type OnboardingProviderOption = {
   subtitle: string
   body: string
   badge?: string
+  icon: React.ReactNode
 }
 
 const ONBOARDING_TOTAL_STEPS = 4
@@ -71,31 +83,36 @@ const ONBOARDING_PROVIDER_OPTIONS: OnboardingProviderOption[] = [
     id: "basic",
     title: "LightUp Basic",
     subtitle: "Fast Grok proxy",
-    body: "Default pick. No API key needed, tuned prompts included."
+    body: "Default pick. No API key needed, tuned prompts included.",
+    icon: <img src={logoUrl} alt="LightUp" style={{ width: '36px', height: '36px' }} />
   },
   {
     id: "gemini",
     title: "Google Gemini",
     subtitle: "Long context + multimedia",
-    body: "Use your Gemini key for long context and multimodal support."
+    body: "Use your Gemini key for long context and multimodal support.",
+    icon: <GeminiIcon />
   },
   {
     id: "grok",
     title: "xAI Grok",
     subtitle: "Web-native reasoning",
-    body: "Use Grok reasoning with your xAI key for fast, web-native replies."
+    body: "Use Grok reasoning with your xAI key for fast, web-native replies.",
+    icon: <GrokIcon />
   },
   {
     id: "openai",
     title: "OpenAI",
     subtitle: "Best overall quality",
-    body: "Add your OpenAI key for GPT-4o, GPT-4.1, and reasoning models."
+    body: "Add your OpenAI key for GPT-4o, GPT-4.1, and reasoning models.",
+    icon: <OpenAIIcon />
   },
   {
     id: "local",
     title: "Custom / Local",
     subtitle: "Self-host anything",
-    body: "Point to your self-hosted or remote model server for full control."
+    body: "Point to your self-hosted or remote model server for full control.",
+    icon: <LocalIcon />
   }
 ]
 
@@ -147,44 +164,19 @@ const GEMINI_MODELS: {
   description: string
 }[] = [
   {
-    value: "gemini-2.0-flash",
-    label: "Gemini 2.0 Flash",
-    description: "Stable default with 1M context window"
+    value: "gemini-3-pro",
+    label: "Gemini 3 Pro",
+    description: "Best multimodal understanding, agentic coding"
   },
   {
-    value: "gemini-2.0-flash-lite",
-    label: "Gemini 2.0 Flash Lite",
-    description: "Previous-gen lite fallback"
-  },
-  {
-    value: "gemini-2.5-flash",
-    label: "Gemini 2.5 Flash",
-    description: "Latest price-performance balance (stable)"
-  },
-  {
-    value: "gemini-2.5-flash-lite",
-    label: "Gemini 2.5 Flash Lite",
-    description: "Cost-efficient 2.5 flash-lite tier"
-  },
-  {
-    value: "gemini-2.5-pro",
-    label: "Gemini 2.5 Pro",
-    description: "Advanced reasoning with long context"
-  },
-  {
-    value: "gemini-2.5-flash-image",
-    label: "Gemini 2.5 Flash Image",
-    description: "Multimodal model with image input"
-  },
-  {
-    value: "gemini-2.5-flash-live",
-    label: "Gemini 2.5 Flash Live",
-    description: "Real-time streaming capabilities"
+    value: "gemini-3-flash",
+    label: "Gemini 3 Flash",
+    description: "Fast multimodal model with frontier intelligence"
   },
   {
     value: "gemini-3-pro-preview",
     label: "Gemini 3 Pro (Preview)",
-    description: "Latest preview model with enhanced reasoning"
+    description: "Preview model with enhanced reasoning"
   },
   {
     value: "gemini-3-flash-preview",
@@ -197,9 +189,29 @@ const GEMINI_MODELS: {
     description: "Preview multimodal model with vision"
   },
   {
-    value: "gemini-3-flash",
-    label: "Gemini 3 Flash",
-    description: "Latest flash model (if available)"
+    value: "gemini-2.5-pro",
+    label: "Gemini 2.5 Pro",
+    description: "State-of-the-art thinking, long context"
+  },
+  {
+    value: "gemini-2.5-flash",
+    label: "Gemini 2.5 Flash",
+    description: "Best price-performance, 1M context"
+  },
+  {
+    value: "gemini-2.5-flash-lite",
+    label: "Gemini 2.5 Flash Lite",
+    description: "Most balanced, optimized for low latency"
+  },
+  {
+    value: "gemini-2.0-flash",
+    label: "Gemini 2.0 Flash",
+    description: "Stable default with 1M context window (retiring Mar 2026)"
+  },
+  {
+    value: "gemini-2.0-flash-lite",
+    label: "Gemini 2.0 Flash Lite",
+    description: "Previous-gen lite fallback (retiring Mar 2026)"
   }
 ]
 
@@ -210,28 +222,10 @@ const GROK_MODELS: {
   price: string
 }[] = [
   {
-    value: "grok-4-1-fast-reasoning",
-    label: "Grok 4.1 Fast (Reasoning)",
-    description: "Newest reasoning model announced Nov 2025",
-    price: "Premium"
-  },
-  {
-    value: "grok-4-1-fast-non-reasoning",
+    value: "grok-4-1-fast",
     label: "Grok 4.1 Fast",
-    description: "Fast tier without explicit reasoning step",
+    description: "Newest fast model (Nov 2025), 2M context, reasoning can be enabled/disabled",
     price: "Premium"
-  },
-  {
-    value: "grok-4-fast-reasoning",
-    label: "Grok 4 Fast (Reasoning)",
-    description: "Cost-optimised Grok 4 with reasoning",
-    price: "Standard"
-  },
-  {
-    value: "grok-4-fast-non-reasoning",
-    label: "Grok 4 Fast",
-    description: "Cost-optimised Grok 4 without reasoning",
-    price: "Standard"
   },
   {
     value: "grok-4",
@@ -240,9 +234,9 @@ const GROK_MODELS: {
     price: "Premium"
   },
   {
-    value: "grok-code-fast-1",
-    label: "Grok Code Fast 1",
-    description: "Code-focused fast model",
+    value: "grok-4-fast",
+    label: "Grok 4 Fast",
+    description: "Unified architecture with reasoning/non-reasoning modes",
     price: "Standard"
   },
   {
@@ -252,34 +246,34 @@ const GROK_MODELS: {
     price: "Legacy"
   },
   {
-    value: "grok-3-mini",
-    label: "Grok 3 Mini",
-    description: "Cost-efficient Grok 3 variant",
-    price: "Budget"
+    value: "grok-2",
+    label: "Grok 2",
+    description: "Previous generation Grok 2",
+    price: "Legacy"
   },
   {
-    value: "grok-3-fast",
-    label: "Grok 3 Fast",
-    description: "Latency-optimised Grok 3",
-    price: "Standard"
-  },
-  {
-    value: "grok-3-mini-fast",
-    label: "Grok 3 Mini Fast",
-    description: "Mini + fast Grok 3 combination",
-    price: "Budget"
-  },
-  {
-    value: "grok-2-image-1212",
-    label: "Grok 2 Image",
-    description: "Text-to-image generation endpoint",
+    value: "grok-2-vision-1212",
+    label: "Grok 2 Vision",
+    description: "Vision model with image support (32K context)",
     price: "Per image"
   },
   {
-    value: "grok-4-0709",
-    label: "Grok 4 (July 2025)",
-    description: "Legacy Grok 4 identifier for compatibility",
-    price: "Legacy"
+    value: "grok-code-fast-1",
+    label: "Grok Code Fast 1",
+    description: "Code-focused fast model",
+    price: "Standard"
+  },
+  {
+    value: "grok-beta",
+    label: "Grok Beta",
+    description: "Beta access model (legacy)",
+    price: "Beta"
+  },
+  {
+    value: "grok-vision-beta",
+    label: "Grok Vision Beta",
+    description: "Vision Beta model (8K context)",
+    price: "Beta"
   }
 ]
 
@@ -431,14 +425,14 @@ const theme = {
 
 // Animation variants removed
 
-// Form row - matching popup page screenshot exactly
+// Form row - minimalist design
 const FormRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 0;
-  min-height: 48px;
-  gap: 20px;
+  padding: 12px 0;
+  min-height: 40px;
+  gap: 16px;
 
   > div:first-child {
     flex: 1;
@@ -450,28 +444,32 @@ const FormRow = styled.div`
   }
 `
 
-// Label and description - matching popup screenshot exactly
+// Label and description - minimalist design
 const Label = styled.label`
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: ${theme.foreground};
   display: block;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `
 
 const Description = styled.p`
-  font-size: 14px;
+  font-size: 12px;
   color: ${theme.secondaryText};
-  margin: 4px 0 0 0;
-  line-height: 1.4;
-  // margin-bottom: 10px;
+  margin: 3px 0 0 0;
+  line-height: 1.5;
+  letter-spacing: -0.01em;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `
 
-// Toggle components - matching green toggles from the popup screenshot
+// Toggle components - minimalist design
 const ToggleContainer = styled.label`
   position: relative;
   display: inline-block;
-  width: 46px;
-  height: 22px;
+  width: 40px;
+  height: 20px;
   cursor: pointer;
 `
 
@@ -481,11 +479,11 @@ const ToggleInput = styled.input`
   height: 0;
 
   &:checked + span {
-    background-color: var(--popup-toggle-active);
+    background-color: ${theme.toggle.active};
   }
 
   &:checked + span:before {
-    transform: translateX(24px);
+    transform: translateX(20px);
   }
 `
 
@@ -495,19 +493,19 @@ const ToggleSlider = styled.span`
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: var(--popup-toggle-track);
-  transition: 0.3s;
-  border-radius: 34px;
+  background-color: ${theme.toggle.track};
+  transition: 0.2s;
+  border-radius: 20px;
 
   &:before {
     position: absolute;
     content: "";
-    height: 16px;
-    width: 16px;
+    height: 14px;
+    width: 14px;
     left: 3px;
     bottom: 3px;
     background-color: white;
-    transition: 0.3s;
+    transition: 0.2s;
     border-radius: 50%;
   }
 `
@@ -532,6 +530,93 @@ const Switch = ({ id, checked, onChange, label, description = undefined }) => (
   </FormRow>
 )
 
+// Provider selection cards for AI Engine Selection - Prompt Templates-inspired
+const ProviderCard = styled.button<{ selected: boolean }>`
+  background: transparent;
+  color: ${theme.foreground};
+  border: 1px solid
+    ${props => (props.selected ? theme.accent : theme.border)};
+  border-radius: 8px;
+  padding: 18px 20px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+
+  &:hover {
+    border-color: ${theme.accent};
+  }
+
+  &:focus-visible {
+    outline: 2px solid ${theme.primary};
+    outline-offset: 2px;
+  }
+`
+
+const ProviderIconWrapper = styled.div`
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+`
+
+const ProviderCheckBadge = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: ${theme.accent};
+`
+
+const ProviderContent = styled.div`
+  flex: 1;
+  min-width: 0;
+`
+
+const ProviderTitle = styled.div<{ selected: boolean }>`
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: ${theme.foreground};
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+`
+
+const ProviderSubtitle = styled.div`
+  font-size: 14px;
+  color: ${theme.secondaryText};
+  margin-bottom: 6px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+`
+
+const ProviderBody = styled.div`
+  font-size: 14px;
+  color: ${theme.secondaryText};
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  letter-spacing: -0.01em;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+`
+
+const ProviderGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+  margin-top: 8px;
+`
+
 const RateLimitDisplay = ({ rateLimitRemaining, rateLimitReset }) => {
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60)
@@ -551,19 +636,18 @@ const RateLimitDisplay = ({ rateLimitRemaining, rateLimitReset }) => {
   )
 }
 
-// Styled components for the SettingsCard
+// Styled components for the SettingsCard - minimalist
 const CardContainer = styled.div`
-  border-radius: 10px;
-  padding: 0 24px;
-  margin-bottom: 24px;
+  border-radius: 8px;
+  padding: 0 20px;
+  margin-bottom: 16px;
   background-color: ${theme.background};
-  transition: all 0.2s ease;
 `
 
 const CardHeader = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 `
 
 const CardIcon = styled.div`
@@ -575,9 +659,13 @@ const CardIcon = styled.div`
 `
 
 const CardTitle = styled.h3`
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 600;
   color: ${theme.foreground};
+  margin: 0 0 8px 0;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `
 
 // SettingsCard component using styled components
@@ -604,34 +692,33 @@ const BadgeContainer = styled.span<{ variant?: string }>`
   border-radius: 9999px;
   font-size: 12px;
   font-weight: 500;
+  background-color: ${theme.card};
+  color: ${theme.foreground};
 
   ${(props) => {
     switch (props.variant) {
       case "success":
-        return `
+        return css`
           background-color: rgba(45, 202, 110, 0.14);
           color: ${theme.validation.success};
         `
       case "warning":
-        return `
+        return css`
           background-color: rgba(255, 165, 0, 0.14);
           color: ${theme.validation.warning};
         `
       case "danger":
-        return `
+        return css`
           background-color: rgba(239, 68, 68, 0.14);
           color: ${theme.validation.error};
         `
       case "info":
-        return `
+        return css`
           background-color: rgba(0, 120, 212, 0.14);
           color: ${theme.primary};
         `
       default:
-        return `
-          background-color: ${theme.card};
-          color: ${theme.foreground};
-        `
+        return css``
     }
   }}
 `
@@ -644,56 +731,69 @@ const Badge = ({ children, variant = "default", className = "" }) => {
   )
 }
 
-// Styled components for ModelOption
-const ModelOptionLabel = styled.label`
+// Styled components for ModelOption - Prompt Templates-inspired with selection badge
+const ModelOptionCard = styled.button<{ selected: boolean }>`
   display: flex;
-  align-items: center;
-  padding: 12px;
-  border-radius: 6px;
+  align-items: flex-start;
+  padding: 18px 20px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  background-color: ${theme.modelOption.background};
-  border: 1px solid transparent;
+  transition: all 0.15s ease;
+  background: transparent;
+  border: 1px solid
+    ${props => (props.selected ? theme.accent : theme.border)};
+  color: ${theme.foreground};
+  text-align: left;
+  width: 100%;
+  position: relative;
 
   &:hover {
-    background-color: ${theme.modelOption.hover};
-    border-color: ${theme.modelOption.borderHover};
+    border-color: ${theme.accent};
   }
-`
 
-const ModelRadioInput = styled.input`
-  height: 16px;
-  width: 16px;
-  color: ${theme.primary};
-  transition: all 0.2s ease-in-out;
-  background-color: ${theme.background};
-  border: 1px solid ${theme.border};
-
-  &:focus {
-    box-shadow: 0 0 0 2px rgba(0, 120, 212, 0.2);
+  &:focus-visible {
+    outline: 2px solid ${theme.primary};
+    outline-offset: 2px;
   }
 `
 
 const ModelContentContainer = styled.div`
-  margin-left: 12px;
+  flex: 1;
 `
 
-const ModelTitle = styled.p`
-  font-size: 14px;
-  font-weight: 500;
+const ModelTitle = styled.p<{ selected: boolean }>`
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 6px 0;
   color: ${theme.foreground};
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `
 
 const ModelDescription = styled.p`
-  font-size: 12px;
+  font-size: 13px;
+  margin: 0 0 6px 0;
+  line-height: 1.5;
   color: ${theme.secondaryText};
+  letter-spacing: -0.01em;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `
 
 const ModelMetadata = styled.p`
   font-size: 12px;
-  color: ${theme.primary};
   font-weight: 500;
-  margin-top: 4px;
+  margin: 0;
+  color: ${theme.secondaryText};
+  letter-spacing: -0.01em;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+`
+
+const ModelCheckBadge = styled.div`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: ${theme.accent};
 `
 
 // ModelOption component using styled components
@@ -704,16 +804,31 @@ const ModelOption = ({
   showPrice = false,
   showSize = false
 }) => (
-  <ModelOptionLabel>
-    <ModelRadioInput
-      type="radio"
-      name="model"
-      value={model.value}
-      checked={selected}
-      onChange={onChange}
-    />
+  <ModelOptionCard
+    selected={selected}
+    onClick={onChange}
+    type="button"
+  >
+    {selected && (
+      <ModelCheckBadge aria-label="Selected model">
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M20 6L9 17L4 12"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </ModelCheckBadge>
+    )}
     <ModelContentContainer>
-      <ModelTitle>{model.label}</ModelTitle>
+      <ModelTitle selected={selected}>{model.label}</ModelTitle>
       <ModelDescription>{model.description}</ModelDescription>
       {showPrice && model.price && (
         <ModelMetadata>
@@ -722,48 +837,52 @@ const ModelOption = ({
       )}
       {showSize && model.size && (
         <ModelMetadata>
-          {getMessage("size")}
-          {model.size}
+          {getMessage("size")} {model.size}
         </ModelMetadata>
       )}
     </ModelContentContainer>
-  </ModelOptionLabel>
+  </ModelOptionCard>
 )
 
-// Styled components for form elements - Exactly matching popup component
+// Styled components for form elements - minimalist
 const FormGroup = styled.div`
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 `
 
 const FormLabel = styled.label`
   display: block;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 500;
   color: ${theme.foreground};
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `
 
 const FormDescription = styled.p`
-  font-size: 14px;
+  font-size: 12px;
   color: ${theme.secondaryText};
-  margin: 4px 0 0 0;
-  line-height: 1.4;
-  margin-bottom: 10px;
+  margin: 3px 0 0 0;
+  line-height: 1.5;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `
 
 const FormSelect = styled.select`
   background-color: ${theme.select.background};
   color: ${theme.foreground};
-  padding: 8px 30px 8px 12px;
+  padding: 7px 28px 7px 10px;
   border-radius: 6px;
   border: 1px solid ${theme.select.border};
-  font-size: 15px;
-  min-width: 180px;
+  font-size: 14px;
+  min-width: 160px;
   appearance: none;
   background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
   background-repeat: no-repeat;
-  background-position: right 12px center;
-  transition: all 0.2s ease;
+  background-position: right 10px center;
+  transition: all 0.15s ease;
 
   &:focus {
     outline: none;
@@ -779,10 +898,10 @@ const FormSelect = styled.select`
 const FormInput = styled.input`
   background-color: ${theme.input.background};
   color: ${theme.foreground};
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 4px;
   border: 1px solid ${theme.input.border};
-  font-size: 16px;
+  font-size: 14px;
   width: 100%;
 
   &:focus {
@@ -892,51 +1011,44 @@ const FormTextarea = styled.textarea`
 `
 
 const SectionHeader = styled.h4`
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 500;
   margin: 0;
+  margin-top: 18px;
   color: ${theme.foreground};
-  /* padding-bottom: 8px; */
-  margin-top: 23px;
-  // border-bottom: 1px solid rgba(157, 157, 157, 0.3);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `
 
 const SectionContainer = styled.div`
-  margin-bottom: 21px;
+  margin-bottom: 16px;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 `
 
 const SubContainer = styled.div`
-  background-color: ${theme.subcontainer.background};
-  border-radius: 8px;
-  padding: 18px;
-  border: 1px solid ${theme.subcontainer.border};
-  margin-bottom: 16px;
-  // box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
-
-  &:hover {
-    // box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
+  background-color: transparent;
+  border-radius: 6px;
+  padding: 14px;
+  margin-bottom: 12px;
 `
 
 const StyledPromptDisplay = styled.div`
-  margin-top: 10px;
-  padding: 14px;
+  margin-top: 8px;
+  padding: 12px;
   background-color: ${theme.subcontainer.background};
   border: 1px solid ${theme.subcontainer.border};
-  border-radius: 8px;
+  border-radius: 6px;
   font-family: "Roboto Mono", monospace;
-  font-size: 14px;
+  font-size: 13px;
   color: ${theme.foreground};
   white-space: pre-wrap;
   overflow-x: auto;
-  max-height: 200px;
+  max-height: 180px;
   overflow-y: auto;
-  box-shadow: inset 0 1px 5px rgba(0, 0, 0, 0.2);
-  line-height: 1.5;
+  line-height: 1.4;
 `
 
 // Common styling
@@ -970,19 +1082,22 @@ const OptionsContainer = styled.div`
   flex-direction: column;
 `
 
-// Header - Matches the popup component exactly
+// Header - minimalist
 const Header = styled.header`
   ${flexBetween};
-  padding: 14px 20px;
+  padding: 12px 18px;
   background: ${theme.headerBackground};
   border-bottom: 1px solid ${theme.border};
-  height: 80px;
+  height: 70px;
 `
 
 const HeaderTitle = styled.h1`
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 600;
   color: ${theme.foreground};
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   margin: 0;
   display: flex;
   align-items: center;
@@ -1042,10 +1157,10 @@ const VersionNumber = styled.span`
 `
 
 const LogoImage = styled.img`
-  height: 3.5rem; /* 24px */
-  width: 3.5rem; /* 24px */
-  margin-right: 0.5rem; /* 8px */
-  border-radius: 9px;
+  height: 3rem;
+  width: 3rem;
+  margin-right: 0.4rem;
+  border-radius: 8px;
 `
 
 const CloseButton = styled.button`
@@ -1057,7 +1172,7 @@ const CloseButton = styled.button`
   border-radius: 4px;
 
   &:hover {
-    background: var(--popup-sidebar-active);
+    background: ${theme.sidebarActive};
   }
 `
 
@@ -1123,12 +1238,12 @@ const ContentWrapper = styled.div`
   overflow: hidden; // Prevents the wrapper itself from scrolling
 `
 
-// Sidebar - Matching popup component
+// Sidebar - minimalist
 const Sidebar = styled.nav`
-  width: 192px;
+  width: 180px;
   background: ${theme.sidebar};
   padding: 0;
-  flex-shrink: 0; // Prevents sidebar from shrinking
+  flex-shrink: 0;
   border-right: 1px solid ${theme.border};
 `
 
@@ -1136,30 +1251,30 @@ const SidebarItem = styled.button<{ active: boolean }>`
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 12px 16px;
+  padding: 10px 14px;
   background: ${(props) =>
     props.active ? theme.sidebarActive : "transparent"};
   border: none;
   color: ${(props) =>
     props.active ? theme.sidebarTextActive : theme.sidebarText};
-  font-size: 15px;
+  font-size: 14px;
   text-align: left;
   cursor: pointer;
-  border-radius: 7px;
-  margin-bottom: 4px;
-  transition: all 0.2s ease;
+  border-radius: 6px;
+  margin-bottom: 3px;
+  transition: all 0.15s ease;
 
   &:hover {
     background: ${(props) =>
-      props.active ? theme.sidebarActive : "var(--popup-sidebar-active)"};
+      props.active ? theme.sidebarActive : theme.sidebarActive};
     color: ${theme.sidebarTextActive};
   }
 `
 
 const SidebarIcon = styled.div`
-  width: 18px;
-  height: 18px;
-  margin-right: 10px;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
   opacity: 0.9;
   color: ${theme.foreground};
   ${flexCenter};
@@ -1173,30 +1288,33 @@ const SidebarIcon = styled.div`
 const SidebarDivider = styled.div`
   height: 1px;
   background: ${theme.border};
-  margin: 16px 12px;
+  margin: 12px 10px;
   opacity: 0.3;
 `
 
-// Content area - Exactly matching popup component
+// Content area - minimalist
 const ContentArea = styled.div`
   flex: 1;
-  padding: 10px 20px;
+  padding: 8px 16px;
   background: ${theme.content};
-  overflow-y: auto; // Enables vertical scrolling
-  overflow-x: hidden; // Prevents horizontal scrolling
-  padding-bottom: 58px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 48px;
 `
 
-// Section styling - Exactly matching popup component
+// Section styling - minimalist
 const Section = styled.section`
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 `
 
 const SectionTitle = styled.h2`
-  font-size: 17px;
-  font-weight: 500;
-  margin: 0 0 14px 0;
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 10px 0;
   color: ${theme.foreground};
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `
 
 const SectionDivider = styled.div`
@@ -1211,23 +1329,27 @@ const ThemeButton = styled.button<{ selected: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: ${theme.card};
+  background-color: transparent;
   border: 2px solid ${(props) => (props.selected ? theme.accent : theme.border)};
   color: ${theme.foreground};
   border-radius: 8px;
-  padding: 16px;
-  min-width: 120px;
+  padding: 12px;
+  min-width: 100px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+
+  ${props => props.selected && `
+    background: ${theme.subcontainer.background};
+  `}
 
   &:hover {
-    background-color: ${theme.cardHover};
+    background-color: ${theme.subcontainer.background};
     border-color: ${(props) => (props.selected ? theme.accent : theme.primary)};
   }
 
   div {
-    margin-top: 8px;
-    font-size: 14px;
+    margin-top: 6px;
+    font-size: 13px;
     font-weight: 500;
   }
 `
@@ -1236,13 +1358,13 @@ const ThemeIcon = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 28px;
+  height: 28px;
 `
 
 const ColorButton = styled.button<{ color: string; selected: boolean }>`
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   border: 2px solid ${(props) => (props.selected ? theme.accent : theme.border)};
   background-color: ${(props) => props.color};
@@ -1250,7 +1372,7 @@ const ColorButton = styled.button<{ color: string; selected: boolean }>`
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
   padding: 0;
   outline: none;
 
@@ -1260,11 +1382,11 @@ const ColorButton = styled.button<{ color: string; selected: boolean }>`
 
   svg {
     opacity: ${(props) => (props.selected ? 1 : 0)};
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 3px;
+    right: 3px;
     color: ${theme.accent};
   }
 `
@@ -1310,26 +1432,31 @@ const FontSizeButton = styled.button<{ selected: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: ${theme.card};
+  background-color: transparent;
   border: 2px solid ${(props) => (props.selected ? theme.accent : theme.border)};
   color: ${theme.foreground};
   border-radius: 8px;
-  padding: 12px 16px;
-  min-width: 100px;
+  padding: 10px 14px;
+  min-width: 90px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease;
+
+  ${props => props.selected && `
+    background: ${theme.subcontainer.background};
+  `}
 
   &:hover {
-    background-color: ${theme.cardHover};
+    background-color: ${theme.subcontainer.background};
     border-color: ${(props) => (props.selected ? theme.accent : theme.primary)};
   }
 
   .size-preview {
     font-weight: 500;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
   }
 
   .size-label {
+    font-size: 12px;
   }
 `
 
@@ -1339,27 +1466,30 @@ const LayoutButton = styled.button<{ selected?: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: ${(props) =>
-    props.selected ? "rgba(45, 202, 110, 0.1)" : "var(--popup-sidebar-active)"};
+  background: transparent;
   border: 1px solid ${(props) => (props.selected ? theme.accent : theme.border)};
   color: ${theme.foreground};
-  padding: 12px 16px;
+  padding: 10px 14px;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 150px;
+  transition: all 0.15s ease;
+  min-width: 130px;
+
+  ${props => props.selected && `
+    background: ${theme.subcontainer.background};
+  `}
 
   .layout-icon {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .layout-label {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
   }
 
   &:hover {
-    background: var(--popup-card-hover);
+    background: ${theme.subcontainer.background};
     border-color: ${(props) => (props.selected ? theme.accent : theme.border)};
   }
 `
@@ -1370,19 +1500,22 @@ const ActionButton = styled.button<{ selected?: boolean }>`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: ${(props) =>
-    props.selected ? "rgba(45, 202, 110, 0.1)" : "var(--popup-sidebar-active)"};
+  background: transparent;
   border: 1px solid ${(props) => (props.selected ? theme.accent : theme.border)};
   color: ${theme.foreground};
-  padding: 12px 20px;
+  padding: 10px 16px;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  min-width: 95px;
-  min-height: 95px;
+  transition: all 0.15s ease;
+  min-width: 85px;
+  min-height: 85px;
+
+  ${props => props.selected && `
+    background: ${theme.subcontainer.background};
+  `}
 
   &:hover {
-    background: var(--popup-card-hover);
+    background: ${theme.subcontainer.background};
     border-color: ${(props) => (props.selected ? theme.accent : theme.border)};
   }
 `
@@ -1523,28 +1656,10 @@ function IndexOptions() {
   const GROK_MODELS = useMemo(
     () => [
       {
-        value: "grok-4-1-fast-reasoning" as GrokModel,
-        label: "Grok 4.1 Fast (Reasoning)",
-        description: "Newest reasoning model announced Nov 2025",
-        price: "Premium"
-      },
-      {
-        value: "grok-4-1-fast-non-reasoning" as GrokModel,
+        value: "grok-4-1-fast" as GrokModel,
         label: "Grok 4.1 Fast",
-        description: "Fast tier without explicit reasoning step",
+        description: "Newest fast model (Nov 2025), 2M context, reasoning can be enabled/disabled",
         price: "Premium"
-      },
-      {
-        value: "grok-4-fast-reasoning" as GrokModel,
-        label: "Grok 4 Fast (Reasoning)",
-        description: "Cost-optimised Grok 4 with reasoning",
-        price: "Standard"
-      },
-      {
-        value: "grok-4-fast-non-reasoning" as GrokModel,
-        label: "Grok 4 Fast",
-        description: "Cost-optimised Grok 4 without reasoning",
-        price: "Standard"
       },
       {
         value: "grok-4" as GrokModel,
@@ -1553,9 +1668,9 @@ function IndexOptions() {
         price: "Premium"
       },
       {
-        value: "grok-code-fast-1" as GrokModel,
-        label: "Grok Code Fast 1",
-        description: "Code-focused fast model",
+        value: "grok-4-fast" as GrokModel,
+        label: "Grok 4 Fast",
+        description: "Unified architecture with reasoning/non-reasoning modes",
         price: "Standard"
       },
       {
@@ -1565,34 +1680,34 @@ function IndexOptions() {
         price: "Legacy"
       },
       {
-        value: "grok-3-mini" as GrokModel,
-        label: "Grok 3 Mini",
-        description: "Cost-efficient Grok 3 variant",
-        price: "Budget"
+        value: "grok-2" as GrokModel,
+        label: "Grok 2",
+        description: "Previous generation Grok 2",
+        price: "Legacy"
       },
       {
-        value: "grok-3-fast" as GrokModel,
-        label: "Grok 3 Fast",
-        description: "Latency-optimised Grok 3",
-        price: "Standard"
-      },
-      {
-        value: "grok-3-mini-fast" as GrokModel,
-        label: "Grok 3 Mini Fast",
-        description: "Mini + fast Grok 3 combination",
-        price: "Budget"
-      },
-      {
-        value: "grok-2-image-1212" as GrokModel,
-        label: "Grok 2 Image",
-        description: "Text-to-image generation endpoint",
+        value: "grok-2-vision-1212" as GrokModel,
+        label: "Grok 2 Vision",
+        description: "Vision model with image support (32K context)",
         price: "Per image"
       },
       {
-        value: "grok-4-0709" as GrokModel,
-        label: "Grok 4 (July 2025)",
-        description: "Legacy Grok 4 identifier for compatibility",
-        price: "Legacy"
+        value: "grok-code-fast-1" as GrokModel,
+        label: "Grok Code Fast 1",
+        description: "Code-focused fast model",
+        price: "Standard"
+      },
+      {
+        value: "grok-beta" as GrokModel,
+        label: "Grok Beta",
+        description: "Beta access model (legacy)",
+        price: "Beta"
+      },
+      {
+        value: "grok-vision-beta" as GrokModel,
+        label: "Grok Vision Beta",
+        description: "Vision Beta model (8K context)",
+        price: "Beta"
       }
     ],
     [locale, messages]
@@ -1606,6 +1721,36 @@ function IndexOptions() {
   }[] = useMemo(
     () => [
       {
+        value: "gpt-5.2" as OpenAIModel,
+        label: "GPT-5.2",
+        description: "Most advanced frontier model for professional work"
+      },
+      {
+        value: "gpt-5.2-pro" as OpenAIModel,
+        label: "GPT-5.2 Pro",
+        description: "GPT-5.2 with reasoning effort support (medium, high, xhigh)"
+      },
+      {
+        value: "gpt-5.1" as OpenAIModel,
+        label: "GPT-5.1",
+        description: "Advanced GPT-5.1 model"
+      },
+      {
+        value: "gpt-5" as OpenAIModel,
+        label: "GPT-5",
+        description: "Latest flagship model"
+      },
+      {
+        value: "gpt-5-mini" as OpenAIModel,
+        label: "GPT-5 Mini",
+        description: "Compact GPT-5 variant"
+      },
+      {
+        value: "gpt-5-nano" as OpenAIModel,
+        label: "GPT-5 Nano",
+        description: "Ultra-lightweight GPT-5"
+      },
+      {
         value: "gpt-4o" as OpenAIModel,
         label: "GPT-4o",
         description: "Flagship multimodal model, best overall"
@@ -1616,24 +1761,39 @@ function IndexOptions() {
         description: "Smartest non-reasoning model with 1M context"
       },
       {
+        value: "gpt-4.1-mini" as OpenAIModel,
+        label: "GPT-4.1 Mini",
+        description: "Smaller, faster version of GPT-4.1"
+      },
+      {
+        value: "gpt-4.1-nano" as OpenAIModel,
+        label: "GPT-4.1 Nano",
+        description: "Fastest, most cost-efficient version of GPT-4.1"
+      },
+      {
         value: "gpt-4o-mini" as OpenAIModel,
         label: "GPT-4o Mini",
         description: "Fast and cost-efficient"
       },
       {
+        value: "o4-mini" as OpenAIModel,
+        label: "o4 Mini",
+        description: "Efficient reasoning model"
+      },
+      {
+        value: "o3" as OpenAIModel,
+        label: "o3",
+        description: "Advanced reasoning model"
+      },
+      {
         value: "o3-mini" as OpenAIModel,
         label: "o3 Mini",
-        description: "Reasoning-focused model"
+        description: "Compact reasoning model"
       },
       {
         value: "o1" as OpenAIModel,
         label: "o1",
         description: "Deep reasoning for complex problems"
-      },
-      {
-        value: "gpt-4-turbo" as OpenAIModel,
-        label: "GPT-4 Turbo",
-        description: "Legacy GPT-4 Turbo (backwards compatibility)"
       }
     ],
     [locale, messages]
@@ -1644,303 +1804,618 @@ function IndexOptions() {
       {
         value: "llama-4-70b" as LocalModel,
         label: "Llama 4 70B",
-        description: "Meta's latest open-source model (70B parameters)",
-        size: "Large"
+        description: "Meta's latest open-source model - Excellent for complex tasks",
+        size: "Extra Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "40GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "llama-4-40b" as LocalModel,
         label: "Llama 4 40B",
-        description: "Meta's latest open-source model (40B parameters)",
-        size: "Medium"
+        description: "Meta's latest open-source model - Professional grade",
+        size: "Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "24GB+ VRAM",
+        speed: "medium",
+        quality: "excellent"
       },
       {
         value: "llama-3.3-70b" as LocalModel,
         label: "Llama 3.3 70B",
-        description: "Improved Llama 3.3 with better reasoning",
-        size: "Large"
+        description: "Improved reasoning with 128K context window",
+        size: "Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "40GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "llama-3.3-8b" as LocalModel,
         label: "Llama 3.3 8B",
-        description: "Efficient model for edge devices",
-        size: "Small"
+        description: "Efficient model for edge devices with 128K context",
+        size: "Small",
+        category: "general",
+        privacy: "100% offline",
+        vram: "8GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "llama-3.1-405b" as LocalModel,
         label: "Llama 3.1 405B",
-        description: "Largest open-source model with 128K context",
-        size: "Extra Large"
+        description: "Largest open-source model - Enterprise grade",
+        size: "Extra Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "200GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "llama-3.1-70b" as LocalModel,
         label: "Llama 3.1 70B",
         description: "High-performance model with 128K context",
-        size: "Large"
+        size: "Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "40GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "llama-3.1-8b" as LocalModel,
         label: "Llama 3.1 8B",
-        description: "Balanced performance and efficiency",
-        size: "Small"
+        description: "Balanced performance and efficiency with 128K context",
+        size: "Small",
+        category: "general",
+        privacy: "100% offline",
+        vram: "8GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "llama-3.2-3b-instruct" as LocalModel,
         label: "Llama 3.2 3B",
-        description: "Small model optimized for mobile/edge",
-        size: "Tiny"
+        description: "Small model optimized for mobile/edge devices",
+        size: "Tiny",
+        category: "compact",
+        privacy: "100% offline",
+        vram: "4GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "llama-3.2-1b" as LocalModel,
         label: "Llama 3.2 1B",
         description: "Ultra-lightweight for resource-constrained devices",
-        size: "Tiny"
+        size: "Tiny",
+        category: "compact",
+        privacy: "100% offline",
+        vram: "2GB VRAM",
+        speed: "fast",
+        quality: "fair"
       },
       {
         value: "llama-2-70b-chat" as LocalModel,
         label: "Llama 2 70B",
-        description: "Legacy Llama 2 model",
-        size: "Large"
+        description: "Legacy Llama 2 model - For compatibility",
+        size: "Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "40GB+ VRAM",
+        speed: "slow",
+        quality: "good"
       },
       {
         value: "llama-2-13b-chat" as LocalModel,
         label: "Llama 2 13B",
-        description: "Legacy Llama 2 model",
-        size: "Medium"
+        description: "Legacy Llama 2 model - For compatibility",
+        size: "Medium",
+        category: "general",
+        privacy: "100% offline",
+        vram: "10GB VRAM",
+        speed: "medium",
+        quality: "good"
+      },
+      {
+        value: "deepseek-r1" as LocalModel,
+        label: "DeepSeek R1",
+        description: "Top reasoning model of 2025 - Complex problem solving",
+        size: "Extra Large",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "400GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "deepseek-r1-distill-llama-70b" as LocalModel,
         label: "DeepSeek R1 Distill Llama 70B",
         description: "Distilled reasoning model based on Llama",
-        size: "Large"
+        size: "Large",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "40GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "deepseek-r1-distill-llama-8b" as LocalModel,
         label: "DeepSeek R1 Distill Llama 8B",
         description: "Efficient distilled reasoning model",
-        size: "Small"
+        size: "Small",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "8GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "deepseek-r1-distill-qwen-32b" as LocalModel,
         label: "DeepSeek R1 Distill Qwen 32B",
         description: "Distilled reasoning model based on Qwen",
-        size: "Medium"
+        size: "Medium",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "20GB VRAM",
+        speed: "medium",
+        quality: "excellent"
       },
       {
         value: "deepseek-r1-distill-qwen-14b" as LocalModel,
         label: "DeepSeek R1 Distill Qwen 14B",
         description: "Balanced distilled reasoning model",
-        size: "Medium"
+        size: "Medium",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "10GB VRAM",
+        speed: "medium",
+        quality: "good"
       },
       {
         value: "deepseek-r1-distill-qwen-7b" as LocalModel,
         label: "DeepSeek R1 Distill Qwen 7B",
         description: "Efficient distilled reasoning model",
-        size: "Small"
+        size: "Small",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "6GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "deepseek-r1-distill-qwen-1.5b" as LocalModel,
         label: "DeepSeek R1 Distill Qwen 1.5B",
         description: "Lightweight distilled reasoning model",
-        size: "Tiny"
+        size: "Tiny",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "2GB VRAM",
+        speed: "fast",
+        quality: "fair"
       },
       {
         value: "deepseek-v3.1" as LocalModel,
         label: "DeepSeek V3.1",
-        description:
-          "Latest DeepSeek model with enhanced reasoning (128K context)",
-        size: "Extra Large"
+        description: "Latest DeepSeek model with enhanced reasoning (128K context)",
+        size: "Extra Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "400GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "deepseek-v3" as LocalModel,
         label: "DeepSeek V3",
-        description: "General-purpose DeepSeek model",
-        size: "Extra Large"
+        description: "General-purpose DeepSeek model (128K context)",
+        size: "Extra Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "400GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "deepseek-v3-base" as LocalModel,
         label: "DeepSeek V3 Base",
-        description: "Base DeepSeek V3 model",
-        size: "Extra Large"
+        description: "Base DeepSeek V3 model for fine-tuning",
+        size: "Extra Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "400GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "deepseek-coder-v2" as LocalModel,
         label: "DeepSeek Coder V2",
-        description: "Code-focused DeepSeek model",
-        size: "Large"
+        description: "Code-focused DeepSeek model (87 languages)",
+        size: "Medium",
+        category: "coding",
+        privacy: "100% offline",
+        vram: "12GB VRAM",
+        speed: "medium",
+        quality: "excellent"
       },
       {
         value: "deepseek-coder-33b" as LocalModel,
         label: "DeepSeek Coder 33B",
         description: "Code generation model (33B parameters)",
-        size: "Medium"
+        size: "Medium",
+        category: "coding",
+        privacy: "100% offline",
+        vram: "20GB VRAM",
+        speed: "medium",
+        quality: "excellent"
       },
       {
         value: "deepseek-coder-6.7b" as LocalModel,
         label: "DeepSeek Coder 6.7B",
         description: "Efficient code generation model",
-        size: "Small"
+        size: "Small",
+        category: "coding",
+        privacy: "100% offline",
+        vram: "6GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "qwen3-32b" as LocalModel,
         label: "Qwen 3 32B",
         description: "Alibaba's latest Qwen 3 model",
-        size: "Medium"
+        size: "Medium",
+        category: "general",
+        privacy: "100% offline",
+        vram: "20GB VRAM",
+        speed: "medium",
+        quality: "excellent"
       },
       {
         value: "qwen3-14b" as LocalModel,
         label: "Qwen 3 14B",
         description: "Alibaba's Qwen 3 model",
-        size: "Medium"
+        size: "Medium",
+        category: "general",
+        privacy: "100% offline",
+        vram: "10GB VRAM",
+        speed: "fast",
+        quality: "good"
+      },
+      {
+        value: "qwen3-coder" as LocalModel,
+        label: "Qwen 3 Coder",
+        description: "Code-focused Qwen 3 model",
+        size: "Medium",
+        category: "coding",
+        privacy: "100% offline",
+        vram: "10GB VRAM",
+        speed: "fast",
+        quality: "excellent"
       },
       {
         value: "qwen2.5-72b" as LocalModel,
         label: "Qwen 2.5 72B",
         description: "High-performance Qwen 2.5 model",
-        size: "Large"
+        size: "Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "40GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "qwen2.5-32b" as LocalModel,
         label: "Qwen 2.5 32B",
         description: "Balanced Qwen 2.5 model",
-        size: "Medium"
+        size: "Medium",
+        category: "general",
+        privacy: "100% offline",
+        vram: "20GB VRAM",
+        speed: "medium",
+        quality: "excellent"
       },
       {
         value: "qwen2.5-14b" as LocalModel,
         label: "Qwen 2.5 14B",
         description: "Efficient Qwen 2.5 model",
-        size: "Medium"
+        size: "Medium",
+        category: "general",
+        privacy: "100% offline",
+        vram: "10GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "qwen2.5-7b" as LocalModel,
         label: "Qwen 2.5 7B",
         description: "Compact Qwen 2.5 model",
-        size: "Small"
+        size: "Small",
+        category: "general",
+        privacy: "100% offline",
+        vram: "6GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "qwen2.5-3b" as LocalModel,
         label: "Qwen 2.5 3B",
         description: "Lightweight Qwen 2.5 model",
-        size: "Tiny"
+        size: "Tiny",
+        category: "compact",
+        privacy: "100% offline",
+        vram: "4GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "qwen2.5-coder-32b" as LocalModel,
         label: "Qwen 2.5 Coder 32B",
         description: "Code-focused Qwen model",
-        size: "Medium"
+        size: "Medium",
+        category: "coding",
+        privacy: "100% offline",
+        vram: "20GB VRAM",
+        speed: "medium",
+        quality: "excellent"
       },
       {
         value: "qwen2.5-coder-7b" as LocalModel,
         label: "Qwen 2.5 Coder 7B",
         description: "Efficient code generation model",
-        size: "Small"
+        size: "Small",
+        category: "coding",
+        privacy: "100% offline",
+        vram: "6GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "qwen2.5-math-72b" as LocalModel,
         label: "Qwen 2.5 Math 72B",
         description: "Mathematics-focused model",
-        size: "Large"
+        size: "Large",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "40GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "qwen2.5-math-7b" as LocalModel,
         label: "Qwen 2.5 Math 7B",
         description: "Efficient mathematics model",
-        size: "Small"
+        size: "Small",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "6GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
-        value: "mistral-large-240b" as LocalModel,
-        label: "Mistral Large 240B",
-        description: "Mistral's flagship model",
-        size: "Extra Large"
+        value: "mistral-large-3" as LocalModel,
+        label: "Mistral Large 3",
+        description: "Mistral's latest flagship model",
+        size: "Extra Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "70GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "mixtral-8x22b" as LocalModel,
         label: "Mixtral 8x22B",
         description: "MoE model with 8 experts",
-        size: "Large"
+        size: "Extra Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "80GB+ VRAM",
+        speed: "slow",
+        quality: "excellent"
       },
       {
         value: "mixtral-8x7b-instruct" as LocalModel,
         label: "Mixtral 8x7B",
         description: "MoE model with 8 experts",
-        size: "Medium"
+        size: "Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "30GB VRAM",
+        speed: "medium",
+        quality: "excellent"
       },
       {
         value: "mistral-7b-instruct-v0.3" as LocalModel,
         label: "Mistral 7B v0.3",
         description: "Updated Mistral 7B model",
-        size: "Small"
+        size: "Small",
+        category: "general",
+        privacy: "100% offline",
+        vram: "6GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "codestral-22b" as LocalModel,
         label: "Codestral 22B",
         description: "Code-focused Mistral model",
-        size: "Medium"
+        size: "Medium",
+        category: "coding",
+        privacy: "100% offline",
+        vram: "14GB VRAM",
+        speed: "medium",
+        quality: "excellent"
       },
       {
         value: "phi-3-mini-4k" as LocalModel,
         label: "Phi-3 Mini 4K",
         description: "Microsoft's lightweight model (4K context)",
-        size: "Tiny"
+        size: "Tiny",
+        category: "compact",
+        privacy: "100% offline",
+        vram: "4GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "phi-3-mini-128k" as LocalModel,
         label: "Phi-3 Mini 128K",
         description: "Microsoft's lightweight model (128K context)",
-        size: "Tiny"
+        size: "Tiny",
+        category: "compact",
+        privacy: "100% offline",
+        vram: "4GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "phi-3-medium-128k" as LocalModel,
         label: "Phi-3 Medium 128K",
         description: "Microsoft's medium model with long context",
-        size: "Medium"
+        size: "Medium",
+        category: "general",
+        privacy: "100% offline",
+        vram: "10GB VRAM",
+        speed: "medium",
+        quality: "good"
       },
       {
         value: "phi-4" as LocalModel,
         label: "Phi-4",
         description: "Microsoft's latest Phi model",
-        size: "Medium"
+        size: "Medium",
+        category: "general",
+        privacy: "100% offline",
+        vram: "10GB VRAM",
+        speed: "medium",
+        quality: "excellent"
+      },
+      {
+        value: "phi-4-mini" as LocalModel,
+        label: "Phi-4 Mini",
+        description: "Microsoft's compact Phi-4 model",
+        size: "Tiny",
+        category: "compact",
+        privacy: "100% offline",
+        vram: "4GB VRAM",
+        speed: "fast",
+        quality: "good"
+      },
+      {
+        value: "phi-4-reasoning" as LocalModel,
+        label: "Phi-4 Reasoning",
+        description: "Phi-4 with enhanced reasoning",
+        size: "Medium",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "10GB VRAM",
+        speed: "medium",
+        quality: "excellent"
       },
       {
         value: "gemma3-27b" as LocalModel,
         label: "Gemma 3 27B",
         description: "Google's Gemma 3 model",
-        size: "Large"
+        size: "Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "18GB VRAM",
+        speed: "medium",
+        quality: "excellent"
       },
       {
         value: "gemma3-9b" as LocalModel,
         label: "Gemma 3 9B",
         description: "Google's Gemma 3 model",
-        size: "Medium"
+        size: "Small",
+        category: "general",
+        privacy: "100% offline",
+        vram: "8GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "gemma3-4b" as LocalModel,
         label: "Gemma 3 4B",
         description: "Google's compact Gemma 3 model",
-        size: "Small"
+        size: "Tiny",
+        category: "compact",
+        privacy: "100% offline",
+        vram: "4GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "gemma2-27b" as LocalModel,
         label: "Gemma 2 27B",
         description: "Google's Gemma 2 model",
-        size: "Large"
+        size: "Large",
+        category: "general",
+        privacy: "100% offline",
+        vram: "18GB VRAM",
+        speed: "medium",
+        quality: "good"
       },
       {
         value: "gemma2-9b" as LocalModel,
         label: "Gemma 2 9B",
         description: "Google's Gemma 2 model",
-        size: "Medium"
+        size: "Small",
+        category: "general",
+        privacy: "100% offline",
+        vram: "8GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "neural-chat-7b-v3-1" as LocalModel,
         label: "Neural Chat 7B v3.1",
         description: "Neural chat model",
-        size: "Small"
+        size: "Small",
+        category: "general",
+        privacy: "100% offline",
+        vram: "6GB VRAM",
+        speed: "fast",
+        quality: "good"
       },
       {
         value: "openchat-3.5" as LocalModel,
         label: "OpenChat 3.5",
         description: "Open-source chat model",
-        size: "Small"
+        size: "Small",
+        category: "general",
+        privacy: "100% offline",
+        vram: "6GB VRAM",
+        speed: "fast",
+        quality: "good"
+      },
+      {
+        value: "openthinker" as LocalModel,
+        label: "OpenThinker",
+        description: "Open reasoning model",
+        size: "Small",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "6GB VRAM",
+        speed: "fast",
+        quality: "good"
+      },
+      {
+        value: "qwq" as LocalModel,
+        label: "QwQ",
+        description: "Qwen reasoning model",
+        size: "Medium",
+        category: "reasoning",
+        privacy: "100% offline",
+        vram: "20GB VRAM",
+        speed: "medium",
+        quality: "excellent"
       }
     ],
     [locale, messages]
@@ -1953,10 +2428,10 @@ function IndexOptions() {
     geminiApiKey: "",
     xaiApiKey: "",
     geminiModel: "gemini-2.0-flash",
-    grokModel: "grok-4-0709",
+    grokModel: "grok-4-1-fast",
     openaiModel: "gpt-4o",
     localModel: "llama-2-70b-chat",
-    basicModel: "grok-4-1-fast-non-reasoning",
+    basicModel: "grok-4-1-fast",
     customization: {
       showSelectedText: false,
       theme: "light",
@@ -2148,6 +2623,9 @@ function IndexOptions() {
       setIsOnboardingActive(false)
       setHasCompletedOnboarding(true)
       notifySuccess(getMessage("onboardingCompleteToast") || "Setup complete!")
+      
+      // Redirect to LightUp home page
+      chrome.tabs.create({ url: "https://www.boimaginations.com/lightup" })
     } catch (error) {
       console.error("Error completing onboarding:", error)
       notifyError(getMessage("onboardingCompleteError") || "Setup failed")
@@ -2186,6 +2664,7 @@ function IndexOptions() {
       mediaQuery.addEventListener("change", handleChange)
       return () => mediaQuery.removeEventListener("change", handleChange)
     }
+    rememberTheme(themeSetting as "light" | "dark" | "system")
   }, [settings?.customization?.theme])
 
   // Track unsaved changes
@@ -3110,70 +3589,93 @@ function IndexOptions() {
                   </SectionHeader>
                   <SubContainer>
                     <FormGroup>
-                      <FormLabel htmlFor="modelType">
+                      <FormLabel>
                         {getMessage("chooseModelTypeLabel")}
                       </FormLabel>
                       <FormDescription>
                         {getMessage("chooseModelTypeDescription")}
                       </FormDescription>
-                      <FormSelect
-                        id="modelType"
-                        value={settings.modelType}
-                        onChange={(e) => {
-                          const newModelType = e.target.value as ModelType
-                          setSettings((prev) => {
-                            const newSettings = {
-                              ...prev,
-                              modelType: newModelType
-                            }
+                      <ProviderGrid>
+                        {ONBOARDING_PROVIDER_OPTIONS.map((provider) => (
+                          <ProviderCard
+                            key={provider.id}
+                            selected={settings.modelType === provider.id}
+                            onClick={() => {
+                              const newModelType = provider.id
+                              setSettings((prev) => {
+                                const newSettings = {
+                                  ...prev,
+                                  modelType: newModelType
+                                }
 
-                            // Auto-select first model for Gemini if none selected
-                            if (
-                              newModelType === "gemini" &&
-                              !prev.geminiModel
-                            ) {
-                              newSettings.geminiModel = GEMINI_MODELS[0].value
-                            }
-                            // Auto-select first model for Grok if none selected
-                            else if (
-                              newModelType === "grok" &&
-                              !prev.grokModel
-                            ) {
-                              newSettings.grokModel = GROK_MODELS[0].value
-                            }
-                            // Auto-select first model for OpenAI if none selected
-                            else if (
-                              newModelType === "openai" &&
-                              !prev.openaiModel
-                            ) {
-                              newSettings.openaiModel = OPENAI_MODELS[0].value
-                            }
-                            // Auto-select first model for Local if none selected
-                            else if (
-                              newModelType === "local" &&
-                              !prev.localModel
-                            ) {
-                              newSettings.localModel = LOCAL_MODELS[0].value
-                            }
+                                // Auto-select first model for Gemini if none selected
+                                if (
+                                  newModelType === "gemini" &&
+                                  !prev.geminiModel
+                                ) {
+                                  newSettings.geminiModel = GEMINI_MODELS[0].value
+                                }
+                                // Auto-select first model for Grok if none selected
+                                else if (
+                                  newModelType === "grok" &&
+                                  !prev.grokModel
+                                ) {
+                                  newSettings.grokModel = GROK_MODELS[0].value
+                                }
+                                // Auto-select first model for OpenAI if none selected
+                                else if (
+                                  newModelType === "openai" &&
+                                  !prev.openaiModel
+                                ) {
+                                  newSettings.openaiModel = OPENAI_MODELS[0].value
+                                }
+                                // Auto-select first model for Local if none selected
+                                else if (
+                                  newModelType === "local" &&
+                                  !prev.localModel
+                                ) {
+                                  newSettings.localModel = LOCAL_MODELS[0].value
+                                }
 
-                            return newSettings
-                          })
-                          // Note: No auto-save here - wait for API key to be provided
-                        }}>
-                        <option value="basic">
-                          {getMessage("basicModelTypeOption")}
-                        </option>
-                        <option value="gemini">
-                          {getMessage("geminiModelTypeOption")}
-                        </option>
-                        <option value="openai">OpenAI</option>
-                        <option value="grok">
-                          {getMessage("grokModelTypeOption")}
-                        </option>
-                        <option value="local">
-                          {getMessage("localModelTypeOption")}
-                        </option>
-                      </FormSelect>
+                                return newSettings
+                              })
+                            }}
+                          >
+                            {settings.modelType === provider.id && (
+                              <ProviderCheckBadge aria-label="Selected provider">
+                                <svg
+                                  width="16"
+                                  height="16"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg">
+                                  <path
+                                    d="M20 6L9 17L4 12"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </ProviderCheckBadge>
+                            )}
+                            <ProviderIconWrapper>
+                              {provider.icon}
+                            </ProviderIconWrapper>
+                            <ProviderContent>
+                              <ProviderTitle selected={settings.modelType === provider.id}>
+                                {provider.title}
+                              </ProviderTitle>
+                              <ProviderSubtitle>
+                                {provider.subtitle}
+                              </ProviderSubtitle>
+                              <ProviderBody>
+                                {provider.body}
+                              </ProviderBody>
+                            </ProviderContent>
+                          </ProviderCard>
+                        ))}
+                      </ProviderGrid>
                     </FormGroup>
                   </SubContainer>
                 </SectionContainer>

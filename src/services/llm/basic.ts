@@ -5,12 +5,12 @@ import { getSelectedLocale } from "../../utils/i18n"
 
 // The proxy endpoint URL for the basic version
 const PROXY_URL = "https://www.boimaginations.com/api/v1/basic/generate";
-const BASIC_GROK_MODEL = "grok-4-1-fast-non-reasoning"; // Grok 4.1 Fast - fastest and cheapest xAI model as of late 2025
+const BASIC_GROK_MODEL = "grok-4-1-fast"; // Grok 4.1 Fast - fastest and cheapest xAI model as of late 2025
 const BASIC_MAX_TOKENS = 260; // Allow moderately detailed responses while staying affordable
 const CHUNK_SIZE = 200;
-const FLUSH_INTERVAL_MS = 50;
-const FIRST_FLUSH_MIN_CHARS = 24;
-const CONTINUOUS_FLUSH_MIN_CHARS = 140;
+const FLUSH_INTERVAL_MS = 30;
+const FIRST_FLUSH_MIN_CHARS = 15;
+const CONTINUOUS_FLUSH_MIN_CHARS = 90;
 
 // Add debug logging (enabled for debugging the hex escape issue)
 const logDebug = (message: string, data?: any) => {
@@ -148,25 +148,6 @@ const sanitizeJsonBody = (json: string): string => {
     .replace(/\\u(?![0-9a-fA-F]{4})/g, "")
     // Remove other problematic escapes
     .replace(/\\[^"\\/bfnrtu]/g, "");
-};
-
-const chunkContent = (content: string, size: number = CHUNK_SIZE): string[] => {
-  const chunks: string[] = [];
-  let remaining = content;
-
-  while (remaining.length > size) {
-    // Try to break on the last space before size to avoid mid-word cuts
-    const breakpoint = remaining.lastIndexOf(' ', size);
-    const splitAt = breakpoint > size * 0.6 ? breakpoint : size;
-    chunks.push(remaining.slice(0, splitAt));
-    remaining = remaining.slice(splitAt);
-  }
-
-  if (remaining) {
-    chunks.push(remaining);
-  }
-
-  return chunks;
 };
 
 // Retry configuration
@@ -392,24 +373,18 @@ Instructions: Build on your previous analysis/explanation of this content. If th
     const decoder = new TextDecoder();
     let buffer = '';
     let totalContent = '';
-    let pendingContent = '';
-    let lastFlushAt = Date.now();
-    let hasEmittedAny = false;
 
     while (true) {
       const { done, value } = await reader.read();
 
       if (done) {
         if (buffer.trim()) {
-          const chunks = chunkContent(buffer);
-          for (const chunk of chunks) {
-            yield {
-              type: 'chunk',
-              content: chunk,
-              isFollowUp: request.isFollowUp,
-              id: request.id
-            };
-          }
+          yield {
+            type: 'chunk',
+            content: buffer.trim(),
+            isFollowUp: request.isFollowUp,
+            id: request.id
+          };
         }
         yield {
           type: 'done',
@@ -443,43 +418,15 @@ Instructions: Build on your previous analysis/explanation of this content. If th
 
             if (content) {
               totalContent += content;
-              pendingContent += content;
-
-              const now = Date.now();
-              const firstFlushReady = !hasEmittedAny && (pendingContent.length >= FIRST_FLUSH_MIN_CHARS || /\s/.test(pendingContent));
-              const continuousFlushReady = hasEmittedAny && (pendingContent.length >= CONTINUOUS_FLUSH_MIN_CHARS || (now - lastFlushAt) >= FLUSH_INTERVAL_MS);
-              const shouldFlush = firstFlushReady || continuousFlushReady;
-
-              if (shouldFlush) {
-                const chunks = chunkContent(pendingContent, CHUNK_SIZE);
-                pendingContent = '';
-                lastFlushAt = now;
-                hasEmittedAny = true;
-
-                for (const chunk of chunks) {
-                  yield {
-                    type: 'chunk',
-                    content: chunk,
-                    isFollowUp: request.isFollowUp,
-                    id: request.id
-                  };
-                }
-              }
+              yield {
+                type: 'chunk',
+                content: content,
+                isFollowUp: request.isFollowUp,
+                id: request.id
+              };
             }
 
             if (data.choices?.[0]?.finish_reason) {
-              if (pendingContent) {
-                const chunks = chunkContent(pendingContent, CHUNK_SIZE);
-                pendingContent = '';
-                for (const chunk of chunks) {
-                  yield {
-                    type: 'chunk',
-                    content: chunk,
-                    isFollowUp: request.isFollowUp,
-                    id: request.id
-                  };
-                }
-              }
               yield {
                 type: 'done',
                 isFollowUp: request.isFollowUp,
