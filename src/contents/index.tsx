@@ -756,7 +756,26 @@ function Content() {
     initialHeight: 460
   });
   const { voicesLoaded, speakingId, handleSpeak } = useSpeech();
-  const { copiedId, imageCopiedId, handleCopy, handleCopyAsImage, isImageCopySupported } = useCopy();
+  const { copiedId, handleCopy } = useCopy();
+
+  // Animation variants for smooth transitions
+  const contentVariants = {
+    enter: { 
+      opacity: 0, 
+      y: -20,
+      transition: { duration: 0.2, ease: "easeOut" }
+    },
+    center: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.2, ease: "easeOut" }
+    },
+    exit: { 
+      opacity: 0, 
+      y: -20,
+      transition: { duration: 0.15, ease: "easeIn" }
+    }
+  };
 
   // Export states
   const [exportingDocId, setExportingDocId] = useState<string | null>(null);
@@ -764,6 +783,33 @@ function Content() {
 
   // Rich copy state
   const [richCopiedId, setRichCopiedId] = useState<string | null>(null);
+
+  // Prompt editor state
+  const [showPromptEditor, setShowPromptEditor] = useState(false);
+  const [customSystemPrompt, setCustomSystemPrompt] = useState<string>("");
+  const [customUserPrompt, setCustomUserPrompt] = useState<string>("");
+  const [isSavingPrompt, setIsSavingPrompt] = useState(false);
+
+  // Load custom prompts on mount
+  useEffect(() => {
+    const loadCustomPrompts = async () => {
+      const storage = new Storage();
+      const savedSystemPrompt = await storage.get(`customSystemPrompt_${activeMode}`);
+      const savedUserPrompt = await storage.get(`customUserPrompt_${activeMode}`);
+      if (savedSystemPrompt) setCustomSystemPrompt(savedSystemPrompt);
+      if (savedUserPrompt) setCustomUserPrompt(savedUserPrompt);
+    };
+    loadCustomPrompts();
+  }, [activeMode]);
+
+  // Auto-save custom prompts with debounce
+  const saveCustomPrompts = useCallback(async (systemPrompt: string, userPrompt: string) => {
+    setIsSavingPrompt(true);
+    const storage = new Storage();
+    await storage.set(`customSystemPrompt_${activeMode}`, systemPrompt);
+    await storage.set(`customUserPrompt_${activeMode}`, userPrompt);
+    setTimeout(() => setIsSavingPrompt(false), 500);
+  }, [activeMode]);
 
   // Export functions
   const handleExportAsDoc = useCallback(async (text: string, id: string, filename: string = 'lightup-export.txt') => {
@@ -1063,6 +1109,21 @@ ${'-'.repeat(50)}`;
         regenPayloadText = `${selectedText}\n\n----\nContext:\n${regenTrimmedContext}`
       }
 
+      // Load custom prompts for the current mode
+      const storage = new Storage();
+      const customSystemPrompt = await storage.get(`customSystemPrompt_${mode}`);
+      const customUserPrompt = await storage.get(`customUserPrompt_${mode}`);
+
+      // Build settings with custom prompts
+      const settingsWithCustomPrompts = {
+        ...settings,
+        aiResponseLanguage: aiResponseLanguage,
+        customPrompts: (customSystemPrompt || customUserPrompt) ? {
+          systemPrompts: customSystemPrompt ? { [mode]: customSystemPrompt } : undefined,
+          userPrompts: customUserPrompt ? { [mode]: customUserPrompt } : undefined
+        } : undefined
+      };
+
       port.postMessage({
         type: "PROCESS_TEXT",
         payload: {
@@ -1070,10 +1131,7 @@ ${'-'.repeat(50)}`;
           context: regenTrimmedContext,
           pageContext: regenTrimmedContext,
           mode: mode,
-          settings: {
-            ...settings,
-            aiResponseLanguage: aiResponseLanguage
-          },
+          settings: settingsWithCustomPrompts,
           isFollowUp: false,
           id: Date.now(),
           connectionId
@@ -1142,17 +1200,28 @@ ${'-'.repeat(50)}`;
       const storage = new Storage();
       const translationSettings = await storage.get("translationSettings");
 
+      // Load custom prompts for the current mode
+      const customSystemPrompt = await storage.get(`customSystemPrompt_${selectedMode}`);
+      const customUserPrompt = await storage.get(`customUserPrompt_${selectedMode}`);
+
+      // Build settings with custom prompts
+      const settingsWithCustomPrompts = {
+        ...settings,
+        translationSettings,
+        aiResponseLanguage,
+        customPrompts: (customSystemPrompt || customUserPrompt) ? {
+          systemPrompts: customSystemPrompt ? { [selectedMode]: customSystemPrompt } : undefined,
+          userPrompts: customUserPrompt ? { [selectedMode]: customUserPrompt } : undefined
+        } : undefined
+      };
+
       port.postMessage({
         type: "PROCESS_TEXT",
         payload: {
           text: payloadText,
           context: trimmedContext,
           mode: selectedMode,
-          settings: {
-            ...settings,
-            translationSettings,
-            aiResponseLanguage: aiResponseLanguage
-          },
+          settings: settingsWithCustomPrompts,
           connectionId,
           id: Date.now()
         }
@@ -1179,6 +1248,19 @@ ${'-'.repeat(50)}`;
       const storage = new Storage();
       const latestSettings = await storage.get("settings");
 
+      // Load custom prompts for the current mode
+      const customSystemPrompt = await storage.get(`customSystemPrompt_${mode}`);
+      const customUserPrompt = await storage.get(`customUserPrompt_${mode}`);
+
+      // Build settings with custom prompts
+      const settingsWithCustomPrompts = Object.assign({}, latestSettings || settings, {
+        aiResponseLanguage: aiResponseLanguage,
+        customPrompts: (customSystemPrompt || customUserPrompt) ? {
+          systemPrompts: customSystemPrompt ? { [mode]: customSystemPrompt } : undefined,
+          userPrompts: customUserPrompt ? { [mode]: customUserPrompt } : undefined
+        } : undefined
+      });
+
       port.postMessage({
         type: "PROCESS_TEXT",
         payload: {
@@ -1186,9 +1268,7 @@ ${'-'.repeat(50)}`;
           context: selectedText,
           pageContext: "",
           mode: mode,
-          settings: Object.assign({}, latestSettings || settings, {
-            aiResponseLanguage: aiResponseLanguage
-          }),
+          settings: settingsWithCustomPrompts,
           isFollowUp: true,
           id: id,
           connectionId
@@ -1920,103 +2000,115 @@ Please provide a helpful and relevant answer based on the page content above.`;
         </div>
       </div>
 
-      {/* Website Info */}
-      {settings?.customization?.showWebsiteInfo !== false && mode !== "free" && selectedText && (
-        <WebsiteInfoComponent
-          currentTheme={normalizedTheme}
-          fontSizes={fontSizes}
-          selectedText={streamingText || selectedText}
-          loading={isLoading}
-          progress={progress}
-          requestId={requestId}
-          layoutMode={layoutMode}
-          isPinned={isPinned}
-          onTogglePin={handleTogglePin}
-          themedStyles={themedStyles}
-          currentLanguage={aiResponseLanguage}
-          onLanguageChange={handleLanguageChange}
-        />
-      )}
-
-      {/* Selected Text */}
-      {settings?.customization?.showSelectedText !== false && mode !== "free" && (
-        <p style={{ ...themedStyles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline' }}>
-          {truncateText(selectedText)}
-        </p>
-      )}
-
-      {/* Enhanced Welcome Message for Free Mode with Page Context */}
-      <PageContextWelcome
-        currentTheme={normalizedTheme}
-        fontSizes={fontSizes}
-        themedStyles={themedStyles}
-        onQuestionClick={handleContextQuestionClick}
-        isVisible={mode === "free" && !streamingText && !error && followUpQAs.length === 0}
-      />
-
-      {/* Guidance Message for Other Modes */}
-      {mode !== "free" && !selectedText && !streamingText && !error && followUpQAs.length === 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          style={{
-            ...themedStyles.explanation,
-            textAlign: 'center',
-            padding: '20px',
-            marginBottom: '20px',
-            // background: currentTheme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
-            borderRadius: '12px',
-            border: `1px solid ${currentTheme === "dark" ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}`,
-          }}
-        >
-          <motion.div
-            style={{
-              fontSize: fontSizes.welcome.emoji,
-              marginBottom: '10px',
-              color: currentTheme === "dark" ? '#fff' : '#000'
-            }}
-          >
-            {mode === "explain" ? "📝" : mode === "summarize" ? "📋" : mode === "analyze" ? "🔍" : "🌐"}
-          </motion.div>
-          <motion.h2
-            style={{
-              fontSize: fontSizes.welcome.heading,
-              fontWeight: 600,
-              marginBottom: '8px',
-              color: currentTheme === "dark" ? '#fff' : '#000'
-            }}
-          >
-            Select Text to {mode.charAt(0).toUpperCase() + mode.slice(1)}
-          </motion.h2>
-          <motion.p
-            style={{
-              fontSize: fontSizes.welcome.description,
-              color: currentTheme === "dark" ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.7)',
-              lineHeight: '1.5'
-            }}
-          >
-            {mode === "explain" && "Select any text you'd like me to explain in detail."}
-            {mode === "summarize" && "Select any text you'd like me to summarize for you."}
-            {mode === "analyze" && "Select any text you'd like me to analyze in depth."}
-            {mode === "translate" && "Select any text you'd like me to translate."}
-          </motion.p>
-        </motion.div>
-      )}
-
-      {/* Main Content */}
+      {/* Dynamic Content Container */}
       <AnimatePresence mode="wait">
-        {isLoading && !streamingText ? (
-          <LoadingSkeletonContainer
-            normalizedTheme={normalizedTheme}
-            popupRef={popupRef}
-            fontSizes={fontSizes}
-            flexMotionStyle={flexMotionStyle}
-            loadingSkeletonVariants={loadingSkeletonVariants}
-            pulseVariants={pulseVariants}
-          />
-        ) : error ? (
-          <ErrorMessage message={error} />
+        {!showPromptEditor ? (
+          <motion.div
+            key="content"
+            initial="enter"
+            animate="center"
+            exit="exit"
+            variants={contentVariants}
+            style={{
+              width: '100%'
+            }}
+          >
+            {/* Website Info */}
+            {settings?.customization?.showWebsiteInfo !== false && mode !== "free" && selectedText && (
+              <WebsiteInfoComponent
+                currentTheme={normalizedTheme}
+                fontSizes={fontSizes}
+                selectedText={streamingText || selectedText}
+                loading={isLoading}
+                progress={progress}
+                requestId={requestId}
+                layoutMode={layoutMode}
+                isPinned={isPinned}
+                onTogglePin={handleTogglePin}
+                themedStyles={themedStyles}
+                currentLanguage={aiResponseLanguage}
+                onLanguageChange={handleLanguageChange}
+              />
+            )}
+
+            {/* Selected Text */}
+            {settings?.customization?.showSelectedText !== false && mode !== "free" && (
+              <p style={{ ...themedStyles.text, fontWeight: '500', fontStyle: 'italic', textDecoration: 'underline' }}>
+                {truncateText(selectedText)}
+              </p>
+            )}
+
+            {/* Enhanced Welcome Message for Free Mode with Page Context */}
+            <PageContextWelcome
+              currentTheme={normalizedTheme}
+              fontSizes={fontSizes}
+              themedStyles={themedStyles}
+              onQuestionClick={handleContextQuestionClick}
+              isVisible={mode === "free" && !streamingText && !error && followUpQAs.length === 0}
+            />
+
+            {/* Guidance Message for Other Modes */}
+            {mode !== "free" && !selectedText && !streamingText && !error && followUpQAs.length === 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                style={{
+                  ...themedStyles.explanation,
+                  textAlign: 'center',
+                  padding: '20px',
+                  marginBottom: '20px',
+                  // background: currentTheme === "dark" ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
+                  borderRadius: '12px',
+                  border: `1px solid ${currentTheme === "dark" ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)'}`,
+                }}
+              >
+                <motion.div
+                  style={{
+                    fontSize: fontSizes.welcome.emoji,
+                    marginBottom: '10px',
+                    color: currentTheme === "dark" ? '#fff' : '#000'
+                  }}
+                >
+                  {mode === "explain" ? "📝" : mode === "summarize" ? "📋" : mode === "analyze" ? "🔍" : "🌐"}
+                </motion.div>
+                <motion.h2
+                  style={{
+                    fontSize: fontSizes.welcome.heading,
+                    fontWeight: 600,
+                    marginBottom: '8px',
+                    color: currentTheme === "dark" ? '#fff' : '#000'
+                  }}
+                >
+                  Select Text to {mode.charAt(0).toUpperCase() + mode.slice(1)}
+                </motion.h2>
+                <motion.p
+                  style={{
+                    fontSize: fontSizes.welcome.description,
+                    color: currentTheme === "dark" ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.7)',
+                    lineHeight: '1.5'
+                  }}
+                >
+                  {mode === "explain" && "Select any text you'd like me to explain in detail."}
+                  {mode === "summarize" && "Select any text you'd like me to summarize for you."}
+                  {mode === "analyze" && "Select any text you'd like me to analyze in depth."}
+                  {mode === "translate" && "Select any text you'd like me to translate."}
+                </motion.p>
+              </motion.div>
+            )}
+
+            {/* Main Content */}
+            {isLoading && !streamingText ? (
+              <LoadingSkeletonContainer
+                normalizedTheme={normalizedTheme}
+                popupRef={popupRef}
+                fontSizes={fontSizes}
+                flexMotionStyle={flexMotionStyle}
+                loadingSkeletonVariants={loadingSkeletonVariants}
+                pulseVariants={pulseVariants}
+              />
+            ) : error ? (
+              <ErrorMessage message={error} />
         ) : (
           <motion.div
             variants={textVariants}
@@ -2123,51 +2215,6 @@ Please provide a helpful and relevant answer based on the page content above.`;
                       )}
                     </motion.button>
 
-                    {/* Copy as image button */}
-                    {isImageCopySupported && (
-                      <motion.button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          // Use setTimeout to defer execution and prevent performance violations
-                          setTimeout(() => {
-                            if (responseContentRef.current) {
-                              handleCopyAsImage(responseContentRef.current, 'initial-image');
-                            } else {
-                              handleCopyAsImage('[data-lightup-response-content]', 'initial-image');
-                            }
-                          }, 0);
-                        }}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          cursor: 'pointer',
-                          width: '24px',
-                          height: '24px',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          borderRadius: '4px',
-                          color: '#666'
-                        }}
-                        whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
-                        whileTap={{ scale: 0.9 }}
-
-                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                        title={imageCopiedId === 'initial-image' ? "Copied as image!" : "Copy as image"}
-                      >
-                        {imageCopiedId === 'initial-image' ? (
-                          <svg width="13" height="15" viewBox="0 0 24 24" fill="none">
-                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor" />
-                          </svg>
-                        ) : (
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                            <circle cx="9" cy="9" r="2" />
-                            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-                          </svg>
-                        )}
-                      </motion.button>
-                    )}
 
                     {/* Sharing menu for exports */}
                     <SharingMenu
@@ -2323,7 +2370,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
                       </svg>
                     </motion.button>
 
-                    {/* Model display */}
+                    {/* Model display with edit button */}
                     <motion.div
                       style={{
                         fontSize: "0.75rem",
@@ -2347,6 +2394,32 @@ Please provide a helpful and relevant answer based on the page content above.`;
                       >
                         {currentModel || 'Loading...'}
                       </span>
+                      <motion.button
+                        onClick={() => {
+                          setShowPromptEditor(!showPromptEditor);
+                        }}
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          cursor: 'pointer',
+                          width: '20px',
+                          height: '20px',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderRadius: '4px',
+                          color: currentTheme === 'dark' ? '#999' : '#666',
+                          padding: '2px'
+                        }}
+                        whileHover={{ scale: 1.1, backgroundColor: currentTheme === 'dark' ? '#FFFFFF10' : '#2c2c2c10' }}
+                        whileTap={{ scale: 0.95 }}
+                        title="Edit prompt template"
+                      >
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                        </svg>
+                      </motion.button>
                     </motion.div>
 
                     {/* Search Toggle Button - Far Right */}
@@ -2425,9 +2498,6 @@ Please provide a helpful and relevant answer based on the page content above.`;
               fontSizes={fontSizes}
               handleCopy={handleCopy}
               copiedId={copiedId}
-              handleCopyAsImage={handleCopyAsImage}
-              imageCopiedId={imageCopiedId}
-              isImageCopySupported={isImageCopySupported}
               handleSpeak={handleSpeak}
               speakingId={speakingId}
               handleRegenerateFollowUp={handleRegenerateFollowUp}
@@ -2446,6 +2516,269 @@ Please provide a helpful and relevant answer based on the page content above.`;
               richCopiedId={richCopiedId}
             />
 
+            </motion.div>
+          )}
+          </motion.div>
+        ) : (
+          <motion.div
+            key="promptEditor"
+            initial="enter"
+            animate="center"
+            exit="exit"
+            variants={contentVariants}
+            style={{
+              width: '100%'
+            }}
+          >
+            {/* Prompt Editor */}
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              style={{
+                paddingBottom: '16px',
+                marginBottom: '16px',
+                overflow: 'hidden',
+                width: '100%',
+                boxSizing: 'border-box'
+              }}
+            >
+              <div style={{
+                padding: '0 16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '12px',
+                width: '100%',
+                boxSizing: 'border-box'
+              }}>
+                <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '16px'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '0 4px'
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px'
+                  }}>
+                    <motion.button
+                      onClick={() => setShowPromptEditor(false)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        width: '32px',
+                        height: '32px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        borderRadius: '8px',
+                        color: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                        transition: 'all 0.2s ease',
+                        flexShrink: 0
+                      }}
+                      whileHover={{ 
+                        scale: 1.05, 
+                        backgroundColor: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)' 
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                      title="Back to AI result"
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                      </svg>
+                    </motion.button>
+                  </div>
+                  {isSavingPrompt && (
+                    <span style={{
+                      fontSize: fontSizes.sm || '14px',
+                      color: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
+                      fontFamily: "K2D, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px'
+                    }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                      </svg>
+                      Saving...
+                    </span>
+                  )}
+                </div>
+                <div style={{
+                  paddingLeft: '3px'
+                }}>
+                  <span style={{
+                    fontSize: fontSizes.md || '16px',
+                    fontWeight: 600,
+                    color: currentTheme === 'dark' ? '#fff' : '#000',
+                    fontFamily: "K2D, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
+                    letterSpacing: '0.1px'
+                  }}>
+                    Edit Prompt Template
+                  </span>
+                </div>
+
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px'
+                }}>
+                  <div style={{
+                    backgroundColor: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(255, 255, 255, 0.28)',
+                    borderRadius: '16px',
+                    border: `1px solid ${currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
+                    padding: '16px',
+                    transition: 'all 0.2s ease'
+                  }}>
+                    <label style={{
+                      fontSize: fontSizes.sm || '14px',
+                      fontWeight: 600,
+                      color: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.9)',
+                      fontFamily: "K2D, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
+                      letterSpacing: '0.1px',
+                      display: 'block',
+                      marginBottom: '12px'
+                    }}>
+                      System Prompt
+                    </label>
+                    <textarea
+                      value={customSystemPrompt}
+                      onChange={(e) => {
+                        setCustomSystemPrompt(e.target.value);
+                        saveCustomPrompts(e.target.value, customUserPrompt);
+                      }}
+                      placeholder="Enter custom system prompt..."
+                      style={{
+                        width: '100%',
+                        minHeight: '120px',
+                        padding: '0 0',
+                        backgroundColor: 'transparent',
+                        border: 'none',
+                        color: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+                        fontSize: fontSizes.sm || '14px',
+                        fontFamily: "K2D, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
+                        resize: 'vertical',
+                        outline: 'none',
+                        boxSizing: 'border-box',
+                        maxWidth: '100%',
+                        lineHeight: '1.6',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.color = currentTheme === 'dark' ? '#fff' : '#000';
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.color = currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)';
+                      }}
+                    />
+                  </div>
+
+                  <div style={{
+                    backgroundColor: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(255, 255, 255, 0.28)',
+                    borderRadius: '16px',
+                    border: `1px solid ${currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
+                    padding: '16px',
+                    transition: 'all 0.2s ease'
+                  }}>
+                    <label style={{
+                      fontSize: fontSizes.sm || '14px',
+                      fontWeight: 600,
+                      color: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.9)',
+                      fontFamily: "K2D, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
+                      letterSpacing: '0.1px',
+                      display: 'block',
+                      marginBottom: '12px'
+                    }}>
+                      User Prompt Template
+                    </label>
+                    <textarea
+                      value={customUserPrompt}
+                      onChange={(e) => {
+                        setCustomUserPrompt(e.target.value);
+                        saveCustomPrompts(customSystemPrompt, e.target.value);
+                      }}
+                      placeholder="Enter custom user prompt template... Use {text} as placeholder for selected text"
+                      style={{
+                        width: '100%',
+                        minHeight: '120px',
+                        padding: '12px 0',
+                        backgroundColor: 'transparent',
+                        border: 'none',
+                        color: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+                        fontSize: fontSizes.sm || '14px',
+                        fontFamily: "K2D, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
+                        resize: 'vertical',
+                        outline: 'none',
+                        boxSizing: 'border-box',
+                        maxWidth: '100%',
+                        lineHeight: '1.6',
+                        transition: 'all 0.2s ease'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.color = currentTheme === 'dark' ? '#fff' : '#000';
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.color = currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)';
+                      }}
+                    />
+                  </div>
+
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginTop: '8px'
+                  }}>
+                    <button
+                      onClick={async () => {
+                        const storage = new Storage();
+                        await storage.remove(`customSystemPrompt_${activeMode}`);
+                        await storage.remove(`customUserPrompt_${activeMode}`);
+                        setCustomSystemPrompt("");
+                        setCustomUserPrompt("");
+                      }}
+                      style={{
+                        padding: '8px 20px',
+                        backgroundColor: 'transparent',
+                        border: `1px solid ${currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'}`,
+                        borderRadius: '20px',
+                        color: currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
+                        fontSize: fontSizes.sm || '14px',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        fontFamily: "K2D, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif",
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)';
+                        e.currentTarget.style.borderColor = currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.borderColor = currentTheme === 'dark' ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)';
+                      }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                      </svg>
+                      Reset to Default
+                    </button>
+                  </div>
+                </div>
+              </div>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

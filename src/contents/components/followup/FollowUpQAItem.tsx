@@ -23,9 +23,6 @@ interface FollowUpQAItemProps {
   fontSizes: FontSizes;
   handleCopy: (text: string, id: string) => void;
   copiedId: string | null;
-  handleCopyAsImage: (target: HTMLElement | string, id: string) => Promise<void>;
-  imageCopiedId: string | null;
-  isImageCopySupported: boolean;
   handleSpeak: (text: string, id: string) => void;
   speakingId: string | null;
   handleRegenerateFollowUp: (question: string, id: number) => void;
@@ -81,7 +78,7 @@ const answerBubbleVariants = {
   exit: { x: -60, opacity: 0, scale: 0.95 }
 };
 
-export const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentTheme, targetLanguage, settings, fontSizes, handleCopy, copiedId, handleCopyAsImage, imageCopiedId, isImageCopySupported, handleSpeak, speakingId, handleRegenerateFollowUp, activeAnswerId, isAskingFollowUp, popupRef, currentModel, handleExportAsDoc, handleExportAsMd, handleRichCopy, exportingDocId, exportingMdId, richCopiedId }: FollowUpQAItemProps) => {
+export const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentTheme, targetLanguage, settings, fontSizes, handleCopy, copiedId, handleSpeak, speakingId, handleRegenerateFollowUp, activeAnswerId, isAskingFollowUp, popupRef, currentModel, handleExportAsDoc, handleExportAsMd, handleRichCopy, exportingDocId, exportingMdId, richCopiedId }: FollowUpQAItemProps) => {
   const { question, answer, id, isComplete } = qa;
   const answerRef = useRef<HTMLDivElement>(null);
   const [animationCycleComplete, setAnimationCycleComplete] = useState(false);
@@ -296,84 +293,6 @@ export const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, cur
                 )}
               </motion.button>
 
-              {/* Copy as image button */}
-              {isImageCopySupported && (
-                <motion.button
-                  onClick={async (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    try {
-                      // Use answerRef.current directly since we have access to it
-                      if (answerRef.current) {
-                        console.log('Copying follow-up answer as image using ref...');
-                        await handleCopyAsImage(answerRef.current, `followup-image-${id}`);
-                        console.log('Copy as image successful');
-                      } else {
-                        console.log('answerRef.current not available, using selector');
-                        await handleCopyAsImage(`#qa-answer-${id}`, `followup-image-${id}`);
-                      }
-                    } catch (error) {
-                      console.error('Copy as image failed:', error);
-                      // Fallback to text copy
-                      try {
-                        await handleCopy(answer, `followup-${id}`);
-                        console.log('Fallback to text copy successful');
-                      } catch (textError) {
-                        console.error('Text copy fallback also failed:', textError);
-                      }
-                    }
-                  }}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    width: '24px',
-                    height: '24px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    borderRadius: '4px',
-                    color: '#666'
-                  }}
-                  whileHover={{ scale: 0.9, backgroundColor: currentTheme === "dark" ? "#FFFFFF10" : "#2c2c2c10" }}
-                  whileTap={{ scale: 0.9 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                  title={imageCopiedId === `followup-image-${id}` ? "Copied as image!" : "Copy as image"}
-                >
-                  {imageCopiedId === `followup-image-${id}` ? (
-                    <motion.svg 
-                      width="13" 
-                      height="15" 
-                      viewBox="0 0 24 24" 
-                      fill="currentColor"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                    >
-                      <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
-                    </motion.svg>
-                  ) : (
-                    <motion.svg 
-                      width="14" 
-                      height="14" 
-                      viewBox="0 0 24 24" 
-                      fill="none" 
-                      stroke="currentColor" 
-                      strokeWidth="2" 
-                      strokeLinecap="round" 
-                      strokeLinejoin="round"
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: "spring", stiffness: 200, damping: 10 }}
-                    >
-                      <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
-                      <circle cx="9" cy="9" r="2"/>
-                      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
-                    </motion.svg>
-                  )}
-                </motion.button>
-              )}
 
               {/* Sharing menu for exports */}
               <SharingMenu

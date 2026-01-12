@@ -16,9 +16,6 @@ interface FollowUpSectionProps {
   fontSizes: any;
   handleCopy: (text: string, id: string) => void;
   copiedId: string | null;
-  handleCopyAsImage: (target: HTMLElement | string, id: string) => Promise<void>;
-  imageCopiedId: string | null;
-  isImageCopySupported: boolean;
   handleSpeak: (text: string, id: string) => void;
   speakingId: string | null;
   handleRegenerateFollowUp: (question: string, id: number) => void;
@@ -51,9 +48,6 @@ export const FollowUpSection = ({
   fontSizes,
   handleCopy,
   copiedId,
-  handleCopyAsImage,
-  imageCopiedId,
-  isImageCopySupported,
   handleSpeak,
   speakingId,
   handleRegenerateFollowUp,
@@ -86,9 +80,6 @@ export const FollowUpSection = ({
           fontSizes={fontSizes}
           handleCopy={handleCopy}
           copiedId={copiedId}
-          handleCopyAsImage={handleCopyAsImage}
-          imageCopiedId={imageCopiedId}
-          isImageCopySupported={isImageCopySupported}
           handleSpeak={handleSpeak}
           speakingId={speakingId}
           handleRegenerateFollowUp={handleRegenerateFollowUp}

@@ -1,0 +1,217 @@
+import React from 'react';
+import styled from '@emotion/styled';
+import { motion, AnimatePresence } from 'framer-motion';
+import { X, Sparkles, ArrowRight } from 'lucide-react';
+import type { ChangelogEntry } from '~config/changelog';
+
+interface UpdateBannerProps {
+  changelog: ChangelogEntry;
+  onDismiss: () => void;
+  onViewChangelog?: () => void;
+}
+
+const BannerContainer = styled(motion.div)`
+  background: linear-gradient(135deg, rgba(167, 45, 32, 0.15) 0%, rgba(167, 45, 32, 0.05) 100%);
+  border: 1px solid rgba(167, 45, 32, 0.3);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+`;
+
+const BannerHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+`;
+
+const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(167, 45, 32, 0.2);
+  border-radius: 8px;
+  color: #A72D20;
+`;
+
+const TitleSection = styled.div`
+  flex: 1;
+`;
+
+const Title = styled.h3`
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: var(--popup-fg, #e5e5e5);
+`;
+
+const VersionBadge = styled.span`
+  font-size: 11px;
+  font-weight: 500;
+  color: #A72D20;
+  background: rgba(167, 45, 32, 0.15);
+  padding: 2px 8px;
+  border-radius: 4px;
+`;
+
+const DismissButton = styled.button`
+  background: none;
+  border: none;
+  color: var(--popup-secondary-text, #a3a3a3);
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--popup-fg, #e5e5e5);
+  }
+`;
+
+const ChangesList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const ChangeSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+`;
+
+const ChangeLabel = styled.span`
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--popup-secondary-text, #a3a3a3);
+`;
+
+const ChangeItems = styled.ul`
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: disc;
+`;
+
+const ChangeItem = styled.li`
+  font-size: 13px;
+  color: var(--popup-fg, #e5e5e5);
+  line-height: 1.5;
+  margin-bottom: 2px;
+`;
+
+const ActionButton = styled.button`
+  background: rgba(167, 45, 32, 0.2);
+  border: 1px solid rgba(167, 45, 32, 0.3);
+  color: #A72D20;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  margin-top: 12px;
+
+  &:hover {
+    background: rgba(167, 45, 32, 0.3);
+    border-color: rgba(167, 45, 32, 0.5);
+  }
+`;
+
+const EmptySection = styled.div`
+  font-size: 13px;
+  color: var(--popup-secondary-text, #a3a3a3);
+  font-style: italic;
+`;
+
+export const UpdateBanner: React.FC<UpdateBannerProps> = ({
+  changelog,
+  onDismiss,
+  onViewChangelog
+}) => {
+  const hasFeatures = changelog.features.length > 0;
+  const hasImprovements = changelog.improvements.length > 0;
+  const hasFixes = changelog.fixes.length > 0;
+
+  return (
+    <BannerContainer
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <BannerContent>
+        <BannerHeader>
+          <IconWrapper>
+            <Sparkles size={18} />
+          </IconWrapper>
+          <TitleSection>
+            <Title>What's New</Title>
+            <VersionBadge>Version {changelog.version}</VersionBadge>
+          </TitleSection>
+          <DismissButton onClick={onDismiss} aria-label="Dismiss update notification">
+            <X size={16} />
+          </DismissButton>
+        </BannerHeader>
+
+      <ChangesList>
+        {hasFeatures && (
+          <ChangeSection>
+            <ChangeLabel>New Features</ChangeLabel>
+            <ChangeItems>
+              {changelog.features.map((feature, index) => (
+                <ChangeItem key={`feature-${index}`}>{feature}</ChangeItem>
+              ))}
+            </ChangeItems>
+          </ChangeSection>
+        )}
+
+        {hasImprovements && (
+          <ChangeSection>
+            <ChangeLabel>Improvements</ChangeLabel>
+            <ChangeItems>
+              {changelog.improvements.map((improvement, index) => (
+                <ChangeItem key={`improvement-${index}`}>{improvement}</ChangeItem>
+              ))}
+            </ChangeItems>
+          </ChangeSection>
+        )}
+
+        {hasFixes && (
+          <ChangeSection>
+            <ChangeLabel>Bug Fixes</ChangeLabel>
+            <ChangeItems>
+              {changelog.fixes.map((fix, index) => (
+                <ChangeItem key={`fix-${index}`}>{fix}</ChangeItem>
+              ))}
+            </ChangeItems>
+          </ChangeSection>
+        )}
+      </ChangesList>
+
+      {onViewChangelog && (
+        <ActionButton onClick={onViewChangelog}>
+          View Full Changelog
+          <ArrowRight size={14} />
+        </ActionButton>
+      )}
+    </BannerContainer>
+  );
+};
+
+export default UpdateBanner;
