@@ -187,7 +187,7 @@ const isConfigurationValid = (settings: Settings): boolean => {
   }
 };
 
-const waitForSettings = async (maxAttempts = 3, delayMs = 1000): Promise<Settings | null> => {
+const waitForSettings = async (maxAttempts = 3, delayMs = 100): Promise<Settings | null> => {
   const storage = new Storage();
 
   for (let i = 0; i < maxAttempts; i++) {
@@ -195,7 +195,10 @@ const waitForSettings = async (maxAttempts = 3, delayMs = 1000): Promise<Setting
     if (settings && isConfigurationValid(settings)) {
       return settings;
     }
-    await new Promise(resolve => setTimeout(resolve, delayMs));
+    // Only wait on retry, not first attempt - use short delay for faster recovery
+    if (i < maxAttempts - 1) {
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+    }
   }
   return null;
 };

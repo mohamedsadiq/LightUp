@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 
 interface SharingMenuProps {
@@ -15,7 +15,7 @@ interface SharingMenuProps {
   richCopyId: string;
 }
 
-export const SharingMenu: React.FC<SharingMenuProps> = ({
+export const SharingMenu = React.memo<SharingMenuProps>(({
   onExportTxt,
   onExportMd,
   onCopyFormatted,
@@ -340,4 +340,6 @@ export const SharingMenu: React.FC<SharingMenuProps> = ({
       </AnimatePresence>
     </div>
   );
-}; 
+});
+
+SharingMenu.displayName = 'SharingMenu'; 

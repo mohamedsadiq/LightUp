@@ -1,11 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import React from "react";
 import { Z_INDEX } from "~utils/constants";
 import { Logo } from "../icons";
 import { Storage } from "@plasmohq/storage";
 import type { Settings } from "~types/settings";
 import { getPageContent } from "~utils/contentExtractor";
 import { debugContentExtraction } from "~utils/debugExtraction";
+import { sanitizeWebContentFast } from "~utils/fastContentSanitizer";
 
 interface GlobalActionButtonProps {
   onProcess: (text: string) => void;
@@ -14,7 +16,7 @@ interface GlobalActionButtonProps {
   currentTheme: "light" | "dark";
 }
 
-const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
+const GlobalActionButton = React.memo<GlobalActionButtonProps>(({
   onProcess,
   mode,
   isPopupVisible = false,
@@ -81,7 +83,7 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
 
       // Create an event to show the free mode popup with page context
       // Also include any currently highlighted text so the input field can be pre-populated.
-      const currentSelection = window.getSelection()?.toString()?.trim() || "";
+      const currentSelection = sanitizeWebContentFast(window.getSelection()?.toString()?.trim() || "");
       const event = new CustomEvent('openFreePopupWithContext', {
         detail: {
           pageContent: extractedContent,
@@ -217,6 +219,8 @@ const GlobalActionButton: React.FC<GlobalActionButtonProps> = ({
       </motion.div>
     </AnimatePresence>
   );
-};
+});
+
+GlobalActionButton.displayName = 'GlobalActionButton';
 
 export default GlobalActionButton; 

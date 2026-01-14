@@ -1,5 +1,4 @@
 import React from "react"
-import { motion } from "framer-motion"
 import type { FontSizes } from "../../styles"
 
 interface ConnectionStatusProps {
@@ -9,7 +8,7 @@ interface ConnectionStatusProps {
   handleReconnect: () => void;
 }
 
-export const ConnectionStatus = ({ 
+export const ConnectionStatus = React.memo(({ 
   connectionStatus, 
   currentTheme, 
   fontSizes, 
@@ -18,15 +17,13 @@ export const ConnectionStatus = ({
   if (connectionStatus === 'connected') return null;
   
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -10 }}
+    <div
       style={{
         position: 'absolute',
         top: '8px',
         right: '8px',
-        zIndex: 50
+        zIndex: 50,
+        animation: 'fadeInSlideDown 0.2s ease-out'
       }}
     >
       <div style={{
@@ -71,8 +68,8 @@ export const ConnectionStatus = ({
           </button>
         )}
       </div>
-    </motion.div>
+    </div>
   );
-};
+});
 
 ConnectionStatus.displayName = 'ConnectionStatus'; 

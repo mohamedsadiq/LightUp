@@ -1,5 +1,6 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import { motion, useMotionValue } from "framer-motion"
+import { useReducedMotion, getReducedMotionVariants } from "~hooks/useReducedMotion"
 
 interface FloatingLayoutProps {
   position: { x: number; y: number };
@@ -38,9 +39,23 @@ export const FloatingLayout = ({
   dragControls,
   onDragEnd
 }: FloatingLayoutProps & { dragControls?: any; onDragEnd?: any }) => {
+  // Check for reduced motion preference (system + user setting)
+  const reducedMotion = useReducedMotion(settings?.customization?.popupAnimation);
+  
   // Use motion values for direct, synchronous control over drag transforms
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+  
+  // Memoize variants selection to avoid recalculation
+  const activeVariants = useMemo(() => {
+    if (reducedMotion) return getReducedMotionVariants();
+    
+    const animation = settings?.customization?.popupAnimation;
+    if (animation === "scale") return scaleMotionVariants;
+    if (animation === "slide") return slideMotionVariants;
+    if (animation === "fade") return fadeMotionVariants;
+    return noMotionVariants;
+  }, [reducedMotion, settings?.customization?.popupAnimation, scaleMotionVariants, slideMotionVariants, fadeMotionVariants, noMotionVariants]);
 
   // Reset motion values to 0 whenever position changes (after drag ends)
   // This ensures no residual transform remains
@@ -87,11 +102,11 @@ export const FloatingLayout = ({
       dragElastic={0}
       dragConstraints={draggingConstraints}
       onDragEnd={handleDragEndInternal}
-      initial={{ opacity: settings?.customization?.popupAnimation === "none" ? 1 : 0 }}
+      initial={{ opacity: reducedMotion ? 1 : 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: settings?.customization?.popupAnimation === "none" ? 1 : 0 }}
+      exit={{ opacity: reducedMotion ? 1 : 0 }}
       transition={{
-        opacity: { duration: settings?.customization?.popupAnimation === "none" ? 0 : 0.2 }
+        opacity: { duration: reducedMotion ? 0 : 0.2 }
       }}
     >
       <div style={{
@@ -120,19 +135,11 @@ export const FloatingLayout = ({
           onMouseDown={(e) => e.stopPropagation()}
           onMouseEnter={() => setIsInteractingWithPopup(true)}
           onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
-          initial={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "initial"}
-          animate={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 1 } : "animate"}
-          exit={settings?.customization?.popupAnimation === "none" ? { scale: 1, opacity: 0 } : "exit"}
+          initial={reducedMotion ? { scale: 1, opacity: 1 } : "initial"}
+          animate={reducedMotion ? { scale: 1, opacity: 1 } : "animate"}
+          exit={reducedMotion ? { scale: 1, opacity: 0 } : "exit"}
           layout={false}
-          variants={
-            settings?.customization?.popupAnimation === "scale"
-              ? scaleMotionVariants
-              : settings?.customization?.popupAnimation === "slide"
-                ? slideMotionVariants
-                : settings?.customization?.popupAnimation === "fade"
-                  ? fadeMotionVariants
-                  : noMotionVariants
-          }
+          variants={activeVariants}
         >
           {/* Popup Content with proper scrolling container */}
           <div

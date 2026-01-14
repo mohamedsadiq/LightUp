@@ -27,7 +27,7 @@ interface TextSelectionButtonProps {
  * TextSelectionButton - Enhanced version with theme-aware styling
  * and smooth Framer Motion animations with hover-to-show menu
  */
-const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
+const TextSelectionButton = React.memo<TextSelectionButtonProps>(({
   onProcess,
   position,
   selectedText,
@@ -502,6 +502,8 @@ const TextSelectionButton: React.FC<TextSelectionButtonProps> = ({
       )}
     </AnimatePresence>
   );
-};
+});
+
+TextSelectionButton.displayName = 'TextSelectionButton';
 
 export default TextSelectionButton;

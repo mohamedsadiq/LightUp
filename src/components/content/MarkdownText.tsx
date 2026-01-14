@@ -8,7 +8,10 @@ import type { Theme } from "~types/theme";
 import type { FontSizes } from "~contents/styles";
 import ReferencesContainer from './ReferencesContainer';
 import { useReferences as useReferencesHook } from '~/hooks/useReferences';
-import { motion } from 'framer-motion';
+
+// Memoize rehype plugins array to avoid recreation on every render
+const REHYPE_PLUGINS = [rehypeRaw, rehypeSanitize];
+const REMARK_PLUGINS = [remarkGfm];
 
 interface MarkdownTextProps {
   text: string;
@@ -67,7 +70,7 @@ const createFontSizesFromSetting = (fontSize: string): FontSizes => {
 
 const MarkdownText: React.FC<MarkdownTextProps> = ({
   text,
-  isStreaming: _isStreaming = false,
+  isStreaming = false,
   language = 'en',
   useReferences = false,
   theme = 'light',
@@ -316,23 +319,45 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
 
   const visibleReferences = references;
 
+  // During streaming: render plain text for performance (avoids O(n²) markdown parsing)
+  // After streaming: render full markdown with all formatting
+  if (isStreaming) {
+    return (
+      <div>
+        <div
+          data-markdown-container
+          style={containerStyle}
+        >
+          <p style={{
+            lineHeight: '1.625',
+            margin: 0,
+            fontSize: fontSizes.base,
+            color: normalizedTheme === 'light' ? '#333' : '#f5f5f5',
+            whiteSpace: 'pre-wrap',
+            wordBreak: 'break-word'
+          }}>
+            {text}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Streaming complete: render full markdown (no motion wrapper for better performance)
   return (
     <div>
-      <motion.div
+      <div
         data-markdown-container
         style={containerStyle}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
       >
         <ReactMarkdown
           components={components}
-          remarkPlugins={[remarkGfm]}
-          rehypePlugins={[rehypeRaw, rehypeSanitize]}
+          remarkPlugins={REMARK_PLUGINS}
+          rehypePlugins={REHYPE_PLUGINS}
         >
           {processedText}
         </ReactMarkdown>
-      </motion.div>
+      </div>
 
       {useReferences && visibleReferences.length > 0 && (
         <div style={{ marginTop: '1rem' }}>

@@ -4,6 +4,11 @@ import type { Settings, RateLimit } from "~types/settings"
 // Default maximum number of actions allowed per day
 const DEFAULT_DAILY_LIMIT = 80
 
+// In-memory cache to avoid repeated storage reads (cache expires after 5 seconds)
+let cachedRateLimit: RateLimit | null = null
+let cacheTimestamp = 0
+const CACHE_TTL_MS = 5000
+
 export class RateLimitService {
   private storage: Storage
 
@@ -12,6 +17,12 @@ export class RateLimitService {
   }
 
   private async getRateLimit(): Promise<RateLimit> {
+    // Return cached value if fresh (within 5 seconds)
+    const now = Date.now()
+    if (cachedRateLimit && (now - cacheTimestamp) < CACHE_TTL_MS) {
+      return cachedRateLimit
+    }
+
     const settings = await this.storage.get("settings") as Settings
     if (!settings?.rateLimit) {
       // Initialize rate limit if it doesn't exist
@@ -24,8 +35,14 @@ export class RateLimitService {
         ...settings,
         rateLimit
       })
+      // Update cache
+      cachedRateLimit = rateLimit
+      cacheTimestamp = Date.now()
       return rateLimit
     }
+    // Update cache
+    cachedRateLimit = settings.rateLimit
+    cacheTimestamp = Date.now()
     return settings.rateLimit
   }
 
@@ -73,6 +90,10 @@ export class RateLimitService {
       rateLimit: updatedRateLimit
     })
     
+    // Invalidate cache after mutation
+    cachedRateLimit = updatedRateLimit
+    cacheTimestamp = Date.now()
+    
     return updatedRateLimit.actionsRemaining
   }
 
@@ -96,6 +117,10 @@ export class RateLimitService {
       ...settings,
       rateLimit: updatedRateLimit
     })
+    
+    // Update cache after reset
+    cachedRateLimit = updatedRateLimit
+    cacheTimestamp = Date.now()
   }
 
   public async getRemainingActions(): Promise<number> {

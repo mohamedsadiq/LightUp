@@ -99,15 +99,6 @@ export class UnifiedAIService {
     async* processText(request: AIServiceRequest): AsyncGenerator<StreamChunk> {
         const { text, mode, settings, isFollowUp, context } = request;
 
-        // DEBUG: Log incoming request settings
-        console.log('[UnifiedAIService] processText called with settings:', JSON.stringify({
-            modelType: settings?.modelType,
-            geminiApiKey: settings?.geminiApiKey ? `${settings.geminiApiKey.substring(0, 10)}...` : 'EMPTY',
-            geminiModel: settings?.geminiModel,
-            apiKey: settings?.apiKey ? 'PRESENT' : 'EMPTY',
-            xaiApiKey: settings?.xaiApiKey ? 'PRESENT' : 'EMPTY',
-        }, null, 2));
-
         try {
             // 1. Add user message to session memory (not persisted)
             if (this.config.enableSessionMemory && this.initialized) {

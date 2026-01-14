@@ -82,6 +82,7 @@ export const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, cur
   const { question, answer, id, isComplete } = qa;
   const answerRef = useRef<HTMLDivElement>(null);
   const [animationCycleComplete, setAnimationCycleComplete] = useState(false);
+  const isStreamingActive = activeAnswerId === id && !isComplete;
   
   // Reset animation cycle when this item becomes active
   useEffect(() => {
@@ -135,7 +136,7 @@ export const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, cur
   return (
     <motion.div
       key={id}
-      layout="position"
+      layout={isStreamingActive ? false : "position"}
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ 
         opacity: 1, 
@@ -181,14 +182,39 @@ export const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, cur
           textAlign: textDirection === "rtl" ? "right" : "left"
         }}>
           <AnimatePresence mode="wait">
-          {activeAnswerId === id && !isComplete && (answer === '' || !animationCycleComplete) ? (
-
+          {isStreamingActive && (answer === '' || !animationCycleComplete) ? (
               <LoadingThinkingText 
                 key="loading"
                 currentTheme={currentTheme}
                 fontSizes={fontSizes}
                 onCycleComplete={() => setAnimationCycleComplete(true)}
               />
+            ) : isStreamingActive ? (
+              <motion.div
+                key="streaming"
+                initial={{ opacity: 0.9, scale: 0.995 }}
+                animate={{ 
+                  opacity: [0.82, 1, 0.82],
+                  scale: [0.995, 1, 0.995],
+                  transition: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }
+                }}
+                exit={{ opacity: 0.9, scale: 0.995 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+                style={{
+                  minHeight: '24px',
+                  whiteSpace: 'pre-wrap',
+                  lineHeight: '1.5',
+                  color: currentTheme === "dark" ? '#e5e7eb' : '#1f2937',
+                  background: currentTheme === "dark"
+                    ? 'linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.12), rgba(255,255,255,0.05))'
+                    : 'linear-gradient(90deg, rgba(0,0,0,0.03), rgba(0,0,0,0.08), rgba(0,0,0,0.03))',
+                  backgroundSize: '200% 100%',
+                  padding: '6px 8px',
+                  borderRadius: '10px'
+                }}
+              >
+                {answer}
+              </motion.div>
             ) : (
               <motion.div
                 key="content"
@@ -218,7 +244,7 @@ export const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, cur
               >
                 <MarkdownText
                   text={answer}
-                  isStreaming={activeAnswerId === id && !isComplete}
+                  isStreaming={false}
                   language={targetLanguage}
                   theme={currentTheme === "system" ? "light" : currentTheme}
                   fontSize={settings?.customization?.fontSize}

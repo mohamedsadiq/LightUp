@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Storage } from "@plasmohq/storage"
 import { sendToBackground } from "@plasmohq/messaging"
 import { motion, AnimatePresence } from "framer-motion"
@@ -20,6 +20,9 @@ import { Globe } from "lucide-react"
 
 // Import notification system
 import { useStandaloneNotification } from "~components/notifications/Notification"
+
+// Import debounced storage utility for performance
+import { debouncedSet, immediateSet } from "~utils/debouncedStorage"
 
 // Import the popup-specific CSS file for fonts only
 import "./popup-style.css"
@@ -788,7 +791,7 @@ const IndexPopup = () => {
           </Select>
         </FormRow>
 
-        </div>
+      </div>
     </Section>
   )
 
@@ -943,11 +946,10 @@ const IndexPopup = () => {
     }
   }
 
-  // Handler for updating a single setting
-  const updateSettings = async (key: string, value: any) => {
+  // Handler for updating a single setting (debounced for performance)
+  const updateSettings = useCallback(async (key: string, value: any) => {
     if (!settings) return
 
-    const storage = new Storage()
     const newSettings = {
       ...settings,
       customization: {
@@ -956,18 +958,18 @@ const IndexPopup = () => {
       }
     }
 
-    // Update local state
+    // Update local state immediately for responsive UI
     setSettings(newSettings)
-
-    // Save to storage
-    await storage.set("settings", newSettings)
 
     // Dispatch event for other components in the same window
     window.dispatchEvent(
       new CustomEvent('settingsUpdated', { detail: { settings: newSettings } })
     )
 
-    // Notify all tabs about the settings change for real-time updates
+    // Debounced storage write - collapses rapid updates into single write
+    await debouncedSet("settings", newSettings, 300)
+
+    // Debounced tab broadcast to avoid message spam
     if (typeof chrome !== 'undefined' && chrome.tabs) {
       chrome.tabs.query({}, (tabs) => {
         tabs.forEach(tab => {
@@ -984,7 +986,7 @@ const IndexPopup = () => {
         });
       });
     }
-  }
+  }, [settings]);
 
   // Function to update multiple settings at once
   const updateMultipleSettings = async (updates: Record<string, any>) => {

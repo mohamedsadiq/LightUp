@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import type { FontSizes } from "../../styles"
 
@@ -9,99 +9,93 @@ interface LoadingThinkingTextProps {
   onCycleComplete?: () => void;
 }
 
-// Inject gradient shift keyframes once
+// Inject gradient shift keyframes once (cached)
+let keyframesInjected = false;
 const injectGradientKeyframes = () => {
-  const id = "lightup-gradient-keyframes";
-  if (document.getElementById(id)) return; // already added
-
+  if (keyframesInjected) return;
+  
   const style = document.createElement("style");
-  style.id = id;
+  style.id = "lightup-gradient-keyframes";
   style.textContent = `@keyframes lightupGradientShift {
     0% { background-position: 0% 50%; }
     100% { background-position: 100% 50%; }
   }`;
   document.head.appendChild(style);
+  keyframesInjected = true;
 };
 
 export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycleComplete }: LoadingThinkingTextProps) => {
   const [currentWord, setCurrentWord] = useState(0);
-  const [cycleCount, setCycleCount] = useState(0);
   const [isCompleting, setIsCompleting] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const completionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const fadeOutTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const rafRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
+  const cycleCountRef = useRef(0);
+  const onCycleCompleteRef = useRef(onCycleComplete);
   const words = ['Forming', 'Generating'];
   
-  // Ensure keyframes are present
+  // Keep callback ref updated
+  useEffect(() => {
+    onCycleCompleteRef.current = onCycleComplete;
+  }, [onCycleComplete]);
+  
+  // Ensure keyframes are present (runs once)
   useEffect(() => {
     injectGradientKeyframes();
   }, []);
   
+  // Use requestAnimationFrame for word cycling instead of setInterval
   useEffect(() => {
-    // Clear any existing intervals/timeouts
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    if (completionTimeoutRef.current) {
-      clearTimeout(completionTimeoutRef.current);
-    }
-    if (fadeOutTimeoutRef.current) {
-      clearTimeout(fadeOutTimeoutRef.current);
-    }
+    const wordDuration = 1800; // ms per word
+    const fadeOutDelay = 600;
+    const fadeOutDuration = 400;
     
-    intervalRef.current = setInterval(() => {
+    const animate = (timestamp: number) => {
+      if (!startTimeRef.current) startTimeRef.current = timestamp;
+      const elapsed = timestamp - startTimeRef.current;
+      
+      // Calculate which word to show based on elapsed time
+      const wordIndex = Math.floor(elapsed / wordDuration) % words.length;
+      const cycleNumber = Math.floor(elapsed / (wordDuration * words.length));
+      
+      // Update word if changed
       setCurrentWord(prev => {
-        const nextWord = (prev + 1) % words.length;
-        
-        // If we're going back to the first word, increment cycle count
-        if (nextWord === 0) {
-          setCycleCount(prevCount => {
-            const newCount = prevCount + 1;
-            
-            // Start completion process after first full rotation
-            if (newCount === 1) {
-              setIsCompleting(true);
-              
-              // Clear the interval to stop word switching
-              if (intervalRef.current) {
-                clearInterval(intervalRef.current);
-                intervalRef.current = null;
-              }
-              
-              // Wait for the current word to display, then start fade out
-              completionTimeoutRef.current = setTimeout(() => {
-                setIsFadingOut(true);
-                
-                // Wait for fade out animation to complete, then call onCycleComplete
-                fadeOutTimeoutRef.current = setTimeout(() => {
-                  if (onCycleComplete) {
-                    onCycleComplete();
-                  }
-                }, 400); // Fade out duration
-              }, 600); // Display final word duration
-            }
-            
-            return newCount;
-          });
-        }
-        
-        return nextWord;
+        if (prev !== wordIndex) return wordIndex;
+        return prev;
       });
-    }, 1800); // Slightly longer interval for better readability
-    
-    return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current);
+      
+      // Check if we completed first cycle
+      if (cycleNumber >= 1 && cycleCountRef.current === 0) {
+        cycleCountRef.current = 1;
+        setIsCompleting(true);
+        
+        // Schedule fade out
+        setTimeout(() => {
+          setIsFadingOut(true);
+          setTimeout(() => {
+            onCycleCompleteRef.current?.();
+          }, fadeOutDuration);
+        }, fadeOutDelay);
+        
+        return; // Stop animation loop
       }
-      if (completionTimeoutRef.current) {
-        clearTimeout(completionTimeoutRef.current);
-      }
-      if (fadeOutTimeoutRef.current) {
-        clearTimeout(fadeOutTimeoutRef.current);
+      
+      // Continue animation if not completing
+      if (cycleCountRef.current === 0) {
+        rafRef.current = requestAnimationFrame(animate);
       }
     };
-  }, [onCycleComplete]);
+    
+    rafRef.current = requestAnimationFrame(animate);
+    
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      startTimeRef.current = null;
+      cycleCountRef.current = 0;
+    };
+  }, []);
   
   return (
     <motion.div
@@ -144,7 +138,7 @@ export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycl
     >
       <AnimatePresence mode="wait">
         <motion.span
-          key={`${currentWord}-${cycleCount}`}
+          key={`${currentWord}-${cycleCountRef.current}`}
           initial={{ 
             opacity: 0, 
             filter: 'blur(6px)', 

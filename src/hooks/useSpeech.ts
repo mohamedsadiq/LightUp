@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface UseSpeechReturn {
   voicesLoaded: boolean;
@@ -15,6 +15,7 @@ const stripHtml = (html: string) => {
 export const useSpeech = (): UseSpeechReturn => {
   const [voicesLoaded, setVoicesLoaded] = useState(false);
   const [speakingId, setSpeakingId] = useState<string | null>(null);
+  const keepAliveRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const loadVoices = () => {
@@ -27,19 +28,39 @@ export const useSpeech = (): UseSpeechReturn => {
     loadVoices();
     window.speechSynthesis.onvoiceschanged = loadVoices;
 
-    // Chrome bug workaround
-    const keepAlive = setInterval(() => {
-      if (window.speechSynthesis.speaking) {
-        window.speechSynthesis.pause();
-        window.speechSynthesis.resume();
-      }
-    }, 5000);
-
     return () => {
-      clearInterval(keepAlive);
+      if (keepAliveRef.current) {
+        clearInterval(keepAliveRef.current);
+      }
       window.speechSynthesis.cancel();
     };
   }, []);
+
+  // Optimized Chrome bug workaround - only run keepAlive when actually speaking
+  useEffect(() => {
+    if (speakingId) {
+      // Start keepAlive only when speaking
+      keepAliveRef.current = setInterval(() => {
+        if (window.speechSynthesis.speaking) {
+          window.speechSynthesis.pause();
+          window.speechSynthesis.resume();
+        }
+      }, 5000);
+    } else {
+      // Stop keepAlive when not speaking
+      if (keepAliveRef.current) {
+        clearInterval(keepAliveRef.current);
+        keepAliveRef.current = null;
+      }
+    }
+
+    return () => {
+      if (keepAliveRef.current) {
+        clearInterval(keepAliveRef.current);
+        keepAliveRef.current = null;
+      }
+    };
+  }, [speakingId]);
 
   const handleSpeak = async (text: string, id: string) => {
     try {

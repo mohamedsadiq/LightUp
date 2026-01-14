@@ -90,6 +90,9 @@ import { FollowUpSection } from "./components/followup/FollowUpSection"
 import { SharingMenu } from "./components/common/SharingMenu"
 import PageContextWelcome from "./components/common/PageContextWelcome"
 
+// Import debounced storage utility for performance
+import { debouncedSet } from "~utils/debouncedStorage"
+
 // Add message listener for settings updates
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "EXTENSION_STATE_CHANGED") {
@@ -282,32 +285,13 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 // Plasmo function to inject CSS into the Shadow DOM
+// Performance optimized: only load essential font weights initially, defer the rest
 export const getStyle = () => {
   const style = document.createElement("style")
 
-  // Define local @font-face rules for LightUp's K2D font using bundled font files
-  const k2dFontCss = `
-    @font-face {
-      font-family: 'LightUpK2D';
-      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-Thin.ttf")}') format('truetype');
-      font-weight: 100;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'LightUpK2D';
-      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ExtraLight.ttf")}') format('truetype');
-      font-weight: 200;
-      font-style: normal;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'LightUpK2D';
-      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-Light.ttf")}') format('truetype');
-      font-weight: 300;
-      font-style: normal;
-      font-display: swap;
-    }
+  // Essential font weights loaded immediately (400, 500, 600, 700)
+  // These cover 95%+ of use cases in the UI
+  const essentialFontCss = `
     @font-face {
       font-family: 'LightUpK2D';
       src: url('${chrome.runtime.getURL("fonts/K2D/K2D-Regular.ttf")}') format('truetype');
@@ -336,32 +320,43 @@ export const getStyle = () => {
       font-style: normal;
       font-display: swap;
     }
+  `;
+
+  // Combine essential fonts with styles
+  style.textContent = essentialFontCss + cssText + contentStyleCssText + tailwindCssText + fontCssText
+  return style
+}
+
+// Deferred font loading - load additional weights when browser is idle
+// This prevents blocking the main thread during initial render
+const loadDeferredFonts = () => {
+  const deferredFontCss = `
     @font-face {
       font-family: 'LightUpK2D';
-      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ExtraBold.ttf")}') format('truetype');
-      font-weight: 800;
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-Thin.ttf")}') format('truetype');
+      font-weight: 100;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'LightUpK2D';
-      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ThinItalic.ttf")}') format('truetype');
-      font-weight: 100;
-      font-style: italic;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'LightUpK2D';
-      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ExtraLightItalic.ttf")}') format('truetype');
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ExtraLight.ttf")}') format('truetype');
       font-weight: 200;
-      font-style: italic;
+      font-style: normal;
       font-display: swap;
     }
     @font-face {
       font-family: 'LightUpK2D';
-      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-LightItalic.ttf")}') format('truetype');
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-Light.ttf")}') format('truetype');
       font-weight: 300;
-      font-style: italic;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'LightUpK2D';
+      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ExtraBold.ttf")}') format('truetype');
+      font-weight: 800;
+      font-style: normal;
       font-display: swap;
     }
     @font-face {
@@ -373,37 +368,25 @@ export const getStyle = () => {
     }
     @font-face {
       font-family: 'LightUpK2D';
-      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-MediumItalic.ttf")}') format('truetype');
-      font-weight: 500;
-      font-style: italic;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'LightUpK2D';
-      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-SemiBoldItalic.ttf")}') format('truetype');
-      font-weight: 600;
-      font-style: italic;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'LightUpK2D';
       src: url('${chrome.runtime.getURL("fonts/K2D/K2D-BoldItalic.ttf")}') format('truetype');
       font-weight: 700;
       font-style: italic;
       font-display: swap;
     }
-    @font-face {
-      font-family: 'LightUpK2D';
-      src: url('${chrome.runtime.getURL("fonts/K2D/K2D-ExtraBoldItalic.ttf")}') format('truetype');
-      font-weight: 800;
-      font-style: italic;
-      font-display: swap;
-    }
   `;
+  
+  const deferredStyle = document.createElement('style');
+  deferredStyle.id = 'lightup-deferred-fonts';
+  deferredStyle.textContent = deferredFontCss;
+  document.head.appendChild(deferredStyle);
+};
 
-  // Combine local font faces first so they are available to the rest of our styles
-  style.textContent = k2dFontCss + cssText + contentStyleCssText + tailwindCssText + fontCssText
-  return style
+// Schedule deferred font loading when browser is idle
+if (typeof requestIdleCallback !== 'undefined') {
+  requestIdleCallback(() => loadDeferredFonts(), { timeout: 3000 });
+} else {
+  // Fallback for browsers without requestIdleCallback
+  setTimeout(loadDeferredFonts, 1000);
 }
 
 // Plasmo config
@@ -426,17 +409,39 @@ if (isReddit) {
   document.head.appendChild(redditFixStyle);
 
   // Add a MutationObserver to ensure our elements remain visible
-  // even if Reddit's DOM changes
-  const observer = new MutationObserver((mutations) => {
-    const plasmoElements = document.querySelectorAll('plasmo-csui, [data-plasmo-popup]');
-    plasmoElements.forEach(element => {
-      if (element instanceof HTMLElement) {
-        element.style.visibility = 'visible';
+  // Optimized: throttle callbacks and auto-disconnect after successful fix
+  let redditObserverFixCount = 0;
+  const maxRedditFixes = 3; // Disconnect after 3 successful fixes
+  let redditObserverPending = false;
+  
+  const observer = new MutationObserver(() => {
+    // Throttle: skip if a check is already scheduled
+    if (redditObserverPending) return;
+    redditObserverPending = true;
+    
+    requestAnimationFrame(() => {
+      redditObserverPending = false;
+      const plasmoElements = document.querySelectorAll('plasmo-csui, [data-plasmo-popup]');
+      let foundElements = false;
+      
+      plasmoElements.forEach(element => {
+        if (element instanceof HTMLElement) {
+          element.style.visibility = 'visible';
+          foundElements = true;
+        }
+      });
+      
+      // Auto-disconnect after enough successful fixes
+      if (foundElements) {
+        redditObserverFixCount++;
+        if (redditObserverFixCount >= maxRedditFixes) {
+          observer.disconnect();
+        }
       }
     });
   });
 
-  // Start observing the document with the configured parameters
+  // Start observing with minimal scope
   observer.observe(document.body, {
     childList: true,
     subtree: true
@@ -570,62 +575,69 @@ if (isYouTube) {
   document.head.appendChild(youtubeFixStyle);
 
   // Add a MutationObserver to ensure our font sizing remains correct
-  // even if YouTube's DOM changes
-  const observer = new MutationObserver(() => {
-    const popupElement = document.querySelector('[data-plasmo-popup]');
-    if (popupElement instanceof HTMLElement) {
-      // Force re-apply YouTube font fixes if needed
-      popupElement.style.fontSize = '16px';
-      popupElement.style.fontFamily = "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+  // Optimized: throttle with rAF, only observe our popup element, and auto-disconnect
+  let ytObserverPending = false;
+  let ytObserverFixCount = 0;
+  const maxYtFixes = 5; // Disconnect after 5 successful fixes
+  
+  const applyYouTubeFontFixes = (popupElement: HTMLElement) => {
+    // Force re-apply YouTube font fixes if needed
+    popupElement.style.fontSize = '16px';
+    popupElement.style.fontFamily = "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
 
-      // Ensure mode selector buttons have correct size
-      const modeButtons = popupElement.querySelectorAll('button');
-      modeButtons.forEach(button => {
-        if (button instanceof HTMLElement) {
-          // Check if this is a mode selector button based on content or context
-          const isSmallButton = button.textContent &&
-            ['summarize', 'analyze', 'explain', 'translate', 'free'].includes(button.textContent.toLowerCase());
+    // Ensure mode selector buttons have correct size
+    const modeButtons = popupElement.querySelectorAll('button');
+    modeButtons.forEach(button => {
+      if (button instanceof HTMLElement) {
+        const isSmallButton = button.textContent &&
+          ['summarize', 'analyze', 'explain', 'translate', 'free'].includes(button.textContent.toLowerCase());
+        button.style.fontSize = isSmallButton ? '16px' : '14px';
+      }
+    });
 
-          if (isSmallButton) {
-            button.style.fontSize = '16px';
-          } else {
-            button.style.fontSize = '14px';
-          }
+    // Fix main content areas
+    const contentAreas = popupElement.querySelectorAll(
+      '[data-markdown-container], .lu-explanation, .lu-text, [data-markdown-text], .markdown-content'
+    );
+    contentAreas.forEach(area => {
+      if (area instanceof HTMLElement) {
+        area.style.fontSize = '24px';
+      }
+    });
+
+    // Fix input and textarea elements
+    const inputElements = popupElement.querySelectorAll('input, textarea');
+    inputElements.forEach(input => {
+      if (input instanceof HTMLElement) {
+        input.style.fontSize = '16px';
+      }
+    });
+  };
+  
+  const ytObserver = new MutationObserver(() => {
+    // Throttle: skip if a check is already scheduled
+    if (ytObserverPending) return;
+    ytObserverPending = true;
+    
+    requestAnimationFrame(() => {
+      ytObserverPending = false;
+      const popupElement = document.querySelector('[data-plasmo-popup]');
+      if (popupElement instanceof HTMLElement) {
+        applyYouTubeFontFixes(popupElement);
+        ytObserverFixCount++;
+        
+        // Auto-disconnect after enough fixes
+        if (ytObserverFixCount >= maxYtFixes) {
+          ytObserver.disconnect();
         }
-      });
-
-      // Fix main content areas
-      const contentAreas = popupElement.querySelectorAll(`
-         [data-markdown-container], 
-         .lu-explanation, 
-         .lu-text,
-         [data-markdown-text],
-         .markdown-content,
-         div[style*="textAlign"],
-         p[style*="fontSize"]
-       `);
-      contentAreas.forEach(area => {
-        if (area instanceof HTMLElement) {
-          area.style.fontSize = '24px';
-        }
-      });
-
-      // Fix input and textarea elements
-      const inputElements = popupElement.querySelectorAll('input, textarea');
-      inputElements.forEach(input => {
-        if (input instanceof HTMLElement) {
-          input.style.fontSize = '16px';
-        }
-      });
-    }
+      }
+    });
   });
 
-  // Start observing the document with the configured parameters
-  observer.observe(document.body, {
+  // Start observing with reduced scope - only childList changes, no attribute monitoring
+  ytObserver.observe(document.body, {
     childList: true,
-    subtree: true,
-    attributes: true,
-    attributeFilter: ['style', 'class']
+    subtree: true
   });
 }
 
@@ -802,12 +814,16 @@ function Content() {
     loadCustomPrompts();
   }, [activeMode]);
 
-  // Auto-save custom prompts with debounce
+  // Auto-save custom prompts with debounce (performance optimized)
   const saveCustomPrompts = useCallback(async (systemPrompt: string, userPrompt: string) => {
     setIsSavingPrompt(true);
-    const storage = new Storage();
-    await storage.set(`customSystemPrompt_${activeMode}`, systemPrompt);
-    await storage.set(`customUserPrompt_${activeMode}`, userPrompt);
+    
+    // Use debounced storage to collapse rapid writes while typing
+    await Promise.all([
+      debouncedSet(`customSystemPrompt_${activeMode}`, systemPrompt, 500),
+      debouncedSet(`customUserPrompt_${activeMode}`, userPrompt, 500)
+    ]);
+    
     setTimeout(() => setIsSavingPrompt(false), 500);
   }, [activeMode]);
 
@@ -1303,6 +1319,51 @@ ${'-'.repeat(50)}`;
     setIsAskingFollowUp
   } = useFollowUp();
 
+  // Buffer follow-up streaming to reduce render churn
+  const followUpBufferRef = useRef<Record<number, string>>({});
+  const followUpFlushTimerRef = useRef<Record<number, ReturnType<typeof setTimeout>>>({});
+
+  const flushBufferedFollowUp = useCallback((id: number) => {
+    const buffered = followUpBufferRef.current[id];
+    if (!buffered) return;
+    delete followUpBufferRef.current[id];
+
+    // Clear pending timer if exists
+    const timer = followUpFlushTimerRef.current[id];
+    if (timer) {
+      clearTimeout(timer);
+      delete followUpFlushTimerRef.current[id];
+    }
+
+    setFollowUpQAs(prev => {
+      const index = prev.findIndex(qa => qa.id === id);
+      if (index === -1) return prev;
+      const next = [...prev];
+      const target = next[index];
+      next[index] = { ...target, answer: `${target.answer}${buffered}` };
+      return next;
+    });
+  }, [setFollowUpQAs]);
+
+  const handleFollowUpStream = useCallback((id: number, content: string) => {
+    followUpBufferRef.current[id] = (followUpBufferRef.current[id] || "") + content;
+
+    if (followUpFlushTimerRef.current[id]) return;
+
+    followUpFlushTimerRef.current[id] = setTimeout(() => {
+      flushBufferedFollowUp(id);
+    }, 80);
+  }, [flushBufferedFollowUp]);
+
+  // Cleanup any pending buffers on unmount
+  useEffect(() => {
+    return () => {
+      Object.values(followUpFlushTimerRef.current).forEach(timer => clearTimeout(timer));
+      followUpBufferRef.current = {};
+      followUpFlushTimerRef.current = {};
+    };
+  }, []);
+
   // Pre-populate the input field in free mode with any highlighted text that was
   // included in the openFreePopupWithContext event.
   useEffect(() => {
@@ -1343,11 +1404,7 @@ ${'-'.repeat(50)}`;
     reconnect
   } = usePort(
     connectionId,
-    (id, content) => {
-      setFollowUpQAs(prev => prev.map(qa =>
-        qa.id === id ? { ...qa, answer: qa.answer + content } : qa
-      ));
-    },
+    handleFollowUpStream,
     (id) => {
       setFollowUpQAs(prev => prev.map(qa =>
         qa.id === id ? { ...qa, isComplete: true } : qa
@@ -1421,25 +1478,36 @@ ${'-'.repeat(50)}`;
   }, [friendlyError, showToast]);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout | undefined;
+    let rafId: number | undefined;
+    let startTime: number | undefined;
 
     if (isLoading) {
       // New request → reset to 0
       setFallbackProgress(0);
       setHasFallbackStarted(false);
 
-      timer = setInterval(() => {
-        setFallbackProgress(prev => {
-          const next = Math.min(prev + 0.01, 0.85); // advance ~1 % every 120 ms
-          if (!hasFallbackStarted) setHasFallbackStarted(true);
-          if (next >= 0.85 && timer) clearInterval(timer); // stop at 85 %
-          return next;
-        });
-      }, 120);
+      // Use requestAnimationFrame for smoother, more efficient progress
+      const animate = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const elapsed = timestamp - startTime;
+        
+        // Progress ~1% every 120ms, cap at 85%
+        const progress = Math.min((elapsed / 120) * 0.01, 0.85);
+        setFallbackProgress(progress);
+        
+        if (!hasFallbackStarted) setHasFallbackStarted(true);
+        
+        // Continue animation until we reach 85%
+        if (progress < 0.85) {
+          rafId = requestAnimationFrame(animate);
+        }
+      };
+      
+      rafId = requestAnimationFrame(animate);
     }
 
     return () => {
-      if (timer) clearInterval(timer);
+      if (rafId) cancelAnimationFrame(rafId);
       if (!isLoading) {
         setHasFallbackStarted(false);
       }
@@ -2135,9 +2203,9 @@ Please provide a helpful and relevant answer based on the page content above.`;
                       textAlign: themedStyles.explanation.textAlign as "left" | "right"
                     }} className="">
                       <motion.div
-                        initial={{ filter: "blur(8px)" }}
-                        animate={{ filter: "blur(0px)" }}
-                        transition={{ duration: 0.1, delay: 0.1 }}
+                        initial={{ opacity: 0.7 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.05 }}
                         data-lightup-response-content
                         ref={responseContentRef}
                       >

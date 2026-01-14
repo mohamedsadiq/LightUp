@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
+import { sanitizeWebContentFast } from "~utils/fastContentSanitizer";
 
 // Simple debounce utility function
 function debounce(func: Function, wait: number) {
@@ -171,16 +172,9 @@ export const useTextSelection = (minLength = 3, options: UseTextSelectionOptions
     const selection = window.getSelection();
     let selectedText = selection?.toString().trim() || "";
 
-    // Apply basic cleaning to remove obvious non-content
+    // Sanitize content immediately at extraction point
     if (selectedText) {
-      selectedText = selectedText
-        // Remove script content that might be accidentally selected
-        .replace(/window\.dataLayer[\s\S]*?;/g, '')
-        .replace(/gtag\([^)]*\)\s*;?/g, '')
-        .replace(/function\s+gtag\(\)[\s\S]*?\}/g, '')
-        // Clean up whitespace
-        .replace(/\s+/g, ' ')
-        .trim();
+      selectedText = sanitizeWebContentFast(selectedText);
     }
 
     if (selectedText.length >= minLength) {
@@ -222,16 +216,9 @@ export const useTextSelection = (minLength = 3, options: UseTextSelectionOptions
     const selection = window.getSelection();
     let selectedText = selection?.toString().trim() || "";
 
-    // Apply basic cleaning to remove obvious non-content
+    // Sanitize content immediately at extraction point
     if (selectedText) {
-      selectedText = selectedText
-        // Remove script content that might be accidentally selected
-        .replace(/window\.dataLayer[\s\S]*?;/g, '')
-        .replace(/gtag\([^)]*\)\s*;?/g, '')
-        .replace(/function\s+gtag\(\)[\s\S]*?\}/g, '')
-        // Clean up whitespace
-        .replace(/\s+/g, ' ')
-        .trim();
+      selectedText = sanitizeWebContentFast(selectedText);
     }
 
     // Only proceed if there's sufficient text selected
