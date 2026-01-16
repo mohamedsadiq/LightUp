@@ -29,6 +29,11 @@ import "./popup-style.css"
 
 import logoUrl from '../../assets/icon.png';
 
+// Import Radix UI components
+import { Toggle } from "~components/ui/radix/Switch"
+import { Divider } from "~components/ui/radix/Separator"
+import { SelectDropdown } from "~components/ui/radix/Select"
+
 // Theme now uses CSS custom properties - see popup-style.css for light/dark values
 // This object provides fallbacks and semantic names for styled components
 const theme = {
@@ -286,7 +291,7 @@ const SidebarIcon = styled.div`
   ${flexCenter};
 `
 
-const SidebarDivider = styled.div`
+const SidebarDivider = styled(Divider)`
   height: 1px;
   background: ${theme.divider};
   margin: 16px 12px;
@@ -335,7 +340,7 @@ const SectionTitle = styled.h2`
   color: ${theme.foreground};
 `
 
-const SectionDivider = styled.div`
+const SectionDivider = styled(Divider)`
   height: 1px;
   background: ${theme.divider};
   margin: 18px 0;
@@ -375,52 +380,6 @@ const Description = styled.p`
   margin: 4px 0 0 0;
 `
 
-// Toggle switch - Styled to exactly match the green toggle in the reference image
-const ToggleContainer = styled.label`
-  position: relative;
-  display: inline-block;
-  width: 46px;
-  height: 22px;
-  cursor: pointer;
-`
-
-const ToggleInput = styled.input`
-  opacity: 0;
-  width: 0;
-  height: 0;
-  
-  &:checked + span {
-    background-color: ${theme.toggle.active};
-  }
-  
-  &:checked + span:before {
-    transform: translateX(24px);
-  }
-`
-
-const ToggleSlider = styled.span`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: ${theme.toggle.track};
-  transition: 0.3s;
-  border-radius: 34px;
-  
-  &:before {
-    position: absolute;
-    content: "";
-    height: 16px;
-    width: 16px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: 0.3s;
-    border-radius: 50%;
-  }
-`
-
 // Button styles - Styled to exactly match the reference image
 const Button = styled.button<{ variant?: 'primary' | 'destructive' | 'default' }>`
   padding: 8px 16px;
@@ -445,26 +404,6 @@ const Button = styled.button<{ variant?: 'primary' | 'destructive' | 'default' }
     if (props.variant === 'destructive') return theme.destructiveHover;
     return theme.button.defaultHover;
   }};
-  }
-`
-
-// Dropdown/Select - Styled to match the dropdown in the image
-const Select = styled.select`
-  background-color: ${theme.select.background};
-  color: ${theme.foreground};
-  padding: 6px 30px 6px 8px;
-  border-radius: 4px;
-  border: 1px solid ${theme.select.border};
-  font-size: 15px;
-  min-width: 120px;
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--popup-select-arrow, white)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 8px center;
-  
-  &:focus {
-    outline: none;
-    border-color: ${theme.primary};
   }
 `
 
@@ -758,18 +697,20 @@ const IndexPopup = () => {
             <Label>{getMessage("resultsFontSizeLabel")}</Label>
             <Description>{getMessage("resultsFontSizeDesc")}</Description>
           </div>
-          <Select
-            value={settings?.customization?.fontSize}
-            onChange={(event) => updateSettings('fontSize', event.target.value)}
+          <SelectDropdown
+            value={settings?.customization?.fontSize || "medium"}
+            onChange={(value) => updateSettings('fontSize', value)}
+            options={[
+              { value: "x-small", label: getMessage("fontSizeXSmall") },
+              { value: "small", label: getMessage("fontSizeSmall") },
+              { value: "medium", label: getMessage("fontSizeMedium") },
+              { value: "large", label: getMessage("fontSizeLarge") },
+              { value: "x-large", label: getMessage("fontSizeXLarge") },
+              { value: "xx-large", label: getMessage("fontSizeXXLarge") }
+            ]}
+            ariaLabel={getMessage("resultsFontSizeLabel")}
             style={{ width: '120px' }}
-          >
-            <option value="x-small">{getMessage("fontSizeXSmall")}</option>
-            <option value="small">{getMessage("fontSizeSmall")}</option>
-            <option value="medium">{getMessage("fontSizeMedium")}</option>
-            <option value="large">{getMessage("fontSizeLarge")}</option>
-            <option value="x-large">{getMessage("fontSizeXLarge")}</option>
-            <option value="xx-large">{getMessage("fontSizeXXLarge")}</option>
-          </Select>
+          />
         </FormRow>
 
         <SectionDivider />
@@ -779,16 +720,18 @@ const IndexPopup = () => {
             <Label>{getMessage("popupAnimationLabel")}</Label>
             <Description>{getMessage("popupAnimationDesc")}</Description>
           </div>
-          <Select
-            value={settings?.customization?.popupAnimation}
-            onChange={(event) => updateSettings('popupAnimation', event.target.value)}
+          <SelectDropdown
+            value={settings?.customization?.popupAnimation || "fade"}
+            onChange={(value) => updateSettings('popupAnimation', value)}
+            options={[
+              { value: "fade", label: getMessage("popupAnimationOptionFade") },
+              { value: "slide", label: getMessage("popupAnimationOptionSlide") },
+              { value: "scale", label: getMessage("popupAnimationOptionScale") },
+              { value: "none", label: getMessage("popupAnimationOptionNone") }
+            ]}
+            ariaLabel={getMessage("popupAnimationLabel")}
             style={{ width: '120px' }}
-          >
-            <option value="fade">{getMessage("popupAnimationOptionFade")}</option>
-            <option value="slide">{getMessage("popupAnimationOptionSlide")}</option>
-            <option value="scale">{getMessage("popupAnimationOptionScale")}</option>
-            <option value="none">{getMessage("popupAnimationOptionNone")}</option>
-          </Select>
+          />
         </FormRow>
 
       </div>
@@ -1186,33 +1129,17 @@ const IndexPopup = () => {
           <ToggleStatusLabel>
             {isEnabled ? turnOffText : turnOnText}
           </ToggleStatusLabel>
-          <ToggleContainer
-            onClick={async (e) => {
-              e.preventDefault()
-              e.stopPropagation()
+          <Toggle
+            checked={isEnabled}
+            onCheckedChange={async (checked) => {
               try {
-                // Update the state optimistically for instant feedback
-                const newState = !isEnabled;
-                // Call the handler to update the state in storage and notify other components
-                await handleEnabledChange(newState);
+                await handleEnabledChange(checked);
               } catch (error) {
                 console.error('Failed to update enabled state:', error);
               }
             }}
-            style={{ cursor: 'pointer' }}
             aria-label={isEnabled ? turnOffText : turnOnText}
-            role="switch"
-            aria-checked={isEnabled}
-          >
-            <ToggleInput
-              type="checkbox"
-              checked={isEnabled}
-              onChange={() => { }} // Empty onChange to avoid React warning about readonly input with no handler
-              aria-hidden="true"
-              tabIndex={-1}
-            />
-            <ToggleSlider />
-          </ToggleContainer>
+          />
         </ToggleStatusGroup>
       </Header>
       <ContentWrapper>
@@ -1565,12 +1492,12 @@ const IndexPopup = () => {
                       minWidth: 0
                     }}
                   >
-                    <Select
-                      value={settings?.translationSettings?.fromLanguage}
-                      onChange={async (e) => {
+                    <SelectDropdown
+                      value={settings?.translationSettings?.fromLanguage || "en"}
+                      onChange={async (value) => {
                         const translationSettings = {
                           ...(settings?.translationSettings || {}),
-                          fromLanguage: e.target.value,
+                          fromLanguage: value,
                           toLanguage: settings?.translationSettings?.toLanguage
                         }
                         const newSettings = {
@@ -1611,12 +1538,13 @@ const IndexPopup = () => {
                           new CustomEvent('settingsUpdated', { detail: { settings: newSettings } })
                         )
                       }}
+                      options={SUPPORTED_LANGUAGES.map((lang) => ({
+                        value: lang.code,
+                        label: `${lang.nativeName} (${lang.name})`
+                      }))}
+                      ariaLabel={getMessage("fromLanguageLabel")}
                       style={{ flex: 1, minWidth: 0 }}
-                    >
-                      {SUPPORTED_LANGUAGES.map((lang) => (
-                        <option key={lang.code} value={lang.code}>{lang.nativeName} ({lang.name})</option>
-                      ))}
-                    </Select>
+                    />
 
                     <div style={{ display: 'flex', alignItems: 'center', margin: '0 4px', flex: '0 0 auto' }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1624,13 +1552,13 @@ const IndexPopup = () => {
                       </svg>
                     </div>
 
-                    <Select
-                      value={settings?.translationSettings?.toLanguage}
-                      onChange={async (e) => {
+                    <SelectDropdown
+                      value={settings?.translationSettings?.toLanguage || "en"}
+                      onChange={async (value) => {
                         const translationSettings = {
                           ...(settings?.translationSettings || {}),
                           fromLanguage: settings?.translationSettings?.fromLanguage,
-                          toLanguage: e.target.value
+                          toLanguage: value
                         }
                         const newSettings = {
                           ...settings,
@@ -1670,12 +1598,13 @@ const IndexPopup = () => {
                           new CustomEvent('settingsUpdated', { detail: { settings: newSettings } })
                         )
                       }}
+                      options={SUPPORTED_LANGUAGES.filter((lang) => lang.code !== 'auto').map((lang) => ({
+                        value: lang.code,
+                        label: `${lang.nativeName} (${lang.name})`
+                      }))}
+                      ariaLabel={getMessage("toLanguageLabel")}
                       style={{ flex: 1, minWidth: 0 }}
-                    >
-                      {SUPPORTED_LANGUAGES.filter((lang) => lang.code !== 'auto').map((lang) => (
-                        <option key={lang.code} value={lang.code}>{lang.nativeName} ({lang.name})</option>
-                      ))}
-                    </Select>
+                    />
                   </div>
                 </FormRow>
 
@@ -1691,14 +1620,11 @@ const IndexPopup = () => {
                     <Label>{getMessage("pageContextLabel")}</Label>
                     <Description>{getMessage("pageContextDesc")}</Description>
                   </div>
-                  <ToggleContainer>
-                    <ToggleInput
-                      type="checkbox"
-                      checked={settings?.customization?.contextAwareness === true}
-                      onChange={(e) => updateSettings('contextAwareness', e.target.checked)}
-                    />
-                    <ToggleSlider />
-                  </ToggleContainer>
+                  <Toggle
+                    checked={settings?.customization?.contextAwareness === true}
+                    onCheckedChange={(checked) => updateSettings('contextAwareness', checked)}
+                    aria-label={getMessage("pageContextLabel")}
+                  />
                 </FormRow>
 
 
@@ -1709,14 +1635,11 @@ const IndexPopup = () => {
                     <Label>{getMessage("showWebsiteInfoLabel")}</Label>
                     <Description>{getMessage("showWebsiteInfoDesc")}</Description>
                   </div>
-                  <ToggleContainer>
-                    <ToggleInput
-                      type="checkbox"
-                      checked={settings?.customization?.showWebsiteInfo !== false}
-                      onChange={(e) => updateSettings('showWebsiteInfo', e.target.checked)}
-                    />
-                    <ToggleSlider />
-                  </ToggleContainer>
+                  <Toggle
+                    checked={settings?.customization?.showWebsiteInfo !== false}
+                    onCheckedChange={(checked) => updateSettings('showWebsiteInfo', checked)}
+                    aria-label={getMessage("showWebsiteInfoLabel")}
+                  />
                 </FormRow>
 
                 <SectionDivider />
@@ -1725,14 +1648,11 @@ const IndexPopup = () => {
                     <Label>{getMessage("showSelectedTextLabel")}</Label>
                     <Description>{getMessage("showSelectedTextDesc")}</Description>
                   </div>
-                  <ToggleContainer>
-                    <ToggleInput
-                      type="checkbox"
-                      checked={settings?.customization?.showSelectedText !== false}
-                      onChange={(e) => updateSettings('showSelectedText', e.target.checked)}
-                    />
-                    <ToggleSlider />
-                  </ToggleContainer>
+                  <Toggle
+                    checked={settings?.customization?.showSelectedText !== false}
+                    onCheckedChange={(checked) => updateSettings('showSelectedText', checked)}
+                    aria-label={getMessage("showSelectedTextLabel")}
+                  />
                 </FormRow>
                 <SectionDivider />
 
@@ -1741,14 +1661,11 @@ const IndexPopup = () => {
                     <Label>{getMessage("showInstantAIButtonLabel")}</Label>
                     <Description>{getMessage("showInstantAIButtonDesc")}</Description>
                   </div>
-                  <ToggleContainer>
-                    <ToggleInput
-                      type="checkbox"
-                      checked={settings?.customization?.showGlobalActionButton !== false}
-                      onChange={(e) => updateSettings('showGlobalActionButton', e.target.checked)}
-                    />
-                    <ToggleSlider />
-                  </ToggleContainer>
+                  <Toggle
+                    checked={settings?.customization?.showGlobalActionButton !== false}
+                    onCheckedChange={(checked) => updateSettings('showGlobalActionButton', checked)}
+                    aria-label={getMessage("showInstantAIButtonLabel")}
+                  />
                 </FormRow>
 
                 <SectionDivider />
@@ -1758,14 +1675,11 @@ const IndexPopup = () => {
                     <Label>{getMessage("distractionFreeModeLabel")}</Label>
                     <Description>{getMessage("distractionFreeModeDesc")}</Description>
                   </div>
-                  <ToggleContainer>
-                    <ToggleInput
-                      type="checkbox"
-                      checked={settings?.customization?.radicallyFocus === true}
-                      onChange={(e) => updateSettings('radicallyFocus', e.target.checked)}
-                    />
-                    <ToggleSlider />
-                  </ToggleContainer>
+                  <Toggle
+                    checked={settings?.customization?.radicallyFocus === true}
+                    onCheckedChange={(checked) => updateSettings('radicallyFocus', checked)}
+                    aria-label={getMessage("distractionFreeModeLabel")}
+                  />
                 </FormRow>
 
                 <SectionDivider />
@@ -1775,14 +1689,11 @@ const IndexPopup = () => {
                     <Label>{getMessage("keepHighlightedTextLabel")}</Label>
                     <Description>{getMessage("keepHighlightedTextDesc")}</Description>
                   </div>
-                  <ToggleContainer>
-                    <ToggleInput
-                      type="checkbox"
-                      checked={settings?.customization?.persistHighlight === true}
-                      onChange={(e) => updateSettings('persistHighlight', e.target.checked)}
-                    />
-                    <ToggleSlider />
-                  </ToggleContainer>
+                  <Toggle
+                    checked={settings?.customization?.persistHighlight === true}
+                    onCheckedChange={(checked) => updateSettings('persistHighlight', checked)}
+                    aria-label={getMessage("keepHighlightedTextLabel")}
+                  />
                 </FormRow>
 
                 <SectionDivider />
@@ -1792,14 +1703,11 @@ const IndexPopup = () => {
                     <Label>{getMessage("showActionButtonLabel")}</Label>
                     <Description>{getMessage("showActionButtonDesc")}</Description>
                   </div>
-                  <ToggleContainer>
-                    <ToggleInput
-                      type="checkbox"
-                      checked={settings?.customization?.showTextSelectionButton !== false}
-                      onChange={(e) => updateSettings('showTextSelectionButton', e.target.checked)}
-                    />
-                    <ToggleSlider />
-                  </ToggleContainer>
+                  <Toggle
+                    checked={settings?.customization?.showTextSelectionButton !== false}
+                    onCheckedChange={(checked) => updateSettings('showTextSelectionButton', checked)}
+                    aria-label={getMessage("showActionButtonLabel")}
+                  />
                 </FormRow>
 
                 <SectionDivider />
@@ -1809,21 +1717,18 @@ const IndexPopup = () => {
                     <Label>{getMessage("autoOpenLabel")}</Label>
                     <Description>{getMessage("autoOpenDesc")}</Description>
                   </div>
-                  <ToggleContainer>
-                    <ToggleInput
-                      type="checkbox"
-                      checked={settings?.customization?.automaticActivation === true}
-                      onChange={(e) => {
-                        // Update both settings to ensure consistency with options page
-                        const newValue = e.target.checked;
-                        updateMultipleSettings({
-                          'automaticActivation': newValue,
-                          'activationMode': newValue ? "automatic" : "manual"
-                        });
-                      }}
-                    />
-                    <ToggleSlider />
-                  </ToggleContainer>
+                  <Toggle
+                    checked={settings?.customization?.automaticActivation === true}
+                    onCheckedChange={(checked) => {
+                      // Update both settings to ensure consistency with options page
+                      const newValue = checked;
+                      updateMultipleSettings({
+                        'automaticActivation': newValue,
+                        'activationMode': newValue ? "automatic" : "manual"
+                      });
+                    }}
+                    aria-label={getMessage("autoOpenLabel")}
+                  />
                 </FormRow>
 
 
@@ -2009,18 +1914,35 @@ const IndexPopup = () => {
 
               <FormRow>
                 <div>
+                  <Label>{getMessage("autoOpenLabel")}</Label>
+                  <Description>{getMessage("autoOpenDesc")}</Description>
+                </div>
+                <Toggle
+                  checked={settings?.customization?.automaticActivation === true}
+                  onCheckedChange={(checked) => {
+                    // Update both settings to ensure consistency with options page
+                    const newValue = checked;
+                    updateMultipleSettings({
+                      'automaticActivation': newValue,
+                      'activationMode': newValue ? "automatic" : "manual"
+                    });
+                  }}
+                  aria-label={getMessage("autoOpenLabel")}
+                />
+              </FormRow>
+
+              <SectionDivider />
+
+              <FormRow>
+                <div>
                   <Label>{getMessage("radicalFocusLabel")}</Label>
                   <Description>{getMessage("radicalFocusDesc")}</Description>
                 </div>
-                <ToggleContainer>
-                  <ToggleInput
-                    type="checkbox"
-                    checked={settings?.customization?.radicallyFocus === true}
-                    onChange={(e) => updateSettings('radicallyFocus', e.target.checked)}
-                    aria-label={getMessage("radicalFocusLabel")}
-                  />
-                  <ToggleSlider />
-                </ToggleContainer>
+                <Toggle
+                  checked={settings?.customization?.radicallyFocus === true}
+                  onCheckedChange={(checked) => updateSettings('radicallyFocus', checked)}
+                  aria-label={getMessage("radicalFocusLabel")}
+                />
               </FormRow>
 
               <SectionDivider />
@@ -2030,15 +1952,11 @@ const IndexPopup = () => {
                   <Label>{getMessage("persistentHighlightingLabel")}</Label>
                   <Description>{getMessage("keepHighlightedTextDesc")}</Description>
                 </div>
-                <ToggleContainer>
-                  <ToggleInput
-                    type="checkbox"
-                    checked={settings?.customization?.persistHighlight === true}
-                    onChange={(e) => updateSettings('persistHighlight', e.target.checked)}
-                    aria-label={getMessage("persistentHighlightingLabel")}
-                  />
-                  <ToggleSlider />
-                </ToggleContainer>
+                <Toggle
+                  checked={settings?.customization?.persistHighlight === true}
+                  onCheckedChange={(checked) => updateSettings('persistHighlight', checked)}
+                  aria-label={getMessage("persistentHighlightingLabel")}
+                />
               </FormRow>
 
               <SectionDivider />
@@ -2494,10 +2412,11 @@ const IndexPopup = () => {
                     <Label>{getMessage("pageContextLabel")}</Label>
                     <Description>{getMessage("pageContextDesc")}</Description>
                   </div>
-                  <ToggleContainer>
-                    <ToggleInput type="checkbox" />
-                    <ToggleSlider />
-                  </ToggleContainer>
+                  <Toggle
+                    checked={settings?.customization?.contextAwareness === true}
+                    onCheckedChange={(checked) => updateSettings('contextAwareness', checked)}
+                    aria-label={getMessage("pageContextLabel")}
+                  />
                 </FormRow>
 
                 <SectionDivider />
@@ -2507,12 +2426,18 @@ const IndexPopup = () => {
                     <Label>{getMessage("maxCharsLabel")}</Label>
                     <Description>{getMessage("maxCharsDesc")}</Description>
                   </div>
-                  <Select defaultValue="4000" style={{ width: '120px' }}>
-                    <option value="2000">{getMessage("chars2000")}</option>
-                    <option value="4000">{getMessage("chars4000")}</option>
-                    <option value="8000">{getMessage("chars8000")}</option>
-                    <option value="16000">{getMessage("chars16000")}</option>
-                  </Select>
+                  <SelectDropdown
+                    value="4000"
+                    onChange={(value) => console.log('maxChars changed:', value)}
+                    options={[
+                      { value: "2000", label: getMessage("chars2000") },
+                      { value: "4000", label: getMessage("chars4000") },
+                      { value: "8000", label: getMessage("chars8000") },
+                      { value: "16000", label: getMessage("chars16000") }
+                    ]}
+                    ariaLabel={getMessage("maxCharsLabel")}
+                    style={{ width: '120px' }}
+                  />
                 </FormRow>
 
                 <SectionDivider />

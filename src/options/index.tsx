@@ -55,6 +55,12 @@ import { useLocaleStore } from "~hooks/useLocaleStore"
 
 import logoUrl from "../../assets/icon.png"
 
+// Import Radix UI components
+import { Toggle } from "~components/ui/radix/Switch"
+import { Divider } from "~components/ui/radix/Separator"
+import { SelectDropdown } from "~components/ui/radix/Select"
+import { RadioGroupComponent } from "~components/ui/radix/RadioGroup"
+
 // Reusable component for required field labels
 const RequiredLabel = () => (
   <span
@@ -464,72 +470,6 @@ const Description = styled.p`
   font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `
 
-// Toggle components - minimalist design
-const ToggleContainer = styled.label`
-  position: relative;
-  display: inline-block;
-  width: 40px;
-  height: 20px;
-  cursor: pointer;
-`
-
-const ToggleInput = styled.input`
-  opacity: 0;
-  width: 0;
-  height: 0;
-
-  &:checked + span {
-    background-color: ${theme.toggle.active};
-  }
-
-  &:checked + span:before {
-    transform: translateX(20px);
-  }
-`
-
-const ToggleSlider = styled.span`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: ${theme.toggle.track};
-  transition: 0.2s;
-  border-radius: 20px;
-
-  &:before {
-    position: absolute;
-    content: "";
-    height: 14px;
-    width: 14px;
-    left: 3px;
-    bottom: 3px;
-    background-color: white;
-    transition: 0.2s;
-    border-radius: 50%;
-  }
-`
-
-// Toggle switch component using styled components - exactly matching popup component
-const Switch = ({ id, checked, onChange, label, description = undefined }) => (
-  <FormRow>
-    <div>
-      <Label htmlFor={id}>{label}</Label>
-      {description && <Description>{description}</Description>}
-    </div>
-    <ToggleContainer>
-      <ToggleInput
-        type="checkbox"
-        id={id}
-        checked={checked}
-        onChange={onChange}
-        aria-checked={checked}
-      />
-      <ToggleSlider />
-    </ToggleContainer>
-  </FormRow>
-)
-
 // Provider selection cards for AI Engine Selection - Prompt Templates-inspired
 const ProviderCard = styled.button<{ selected: boolean }>`
   background: transparent;
@@ -890,31 +830,6 @@ const SearchInput = styled.input`
 
   &::placeholder {
     color: ${theme.secondaryText};
-  }
-`
-
-const FormSelect = styled.select`
-  background-color: ${theme.select.background};
-  color: ${theme.foreground};
-  padding: 7px 28px 7px 10px;
-  border-radius: 6px;
-  border: 1px solid ${theme.select.border};
-  font-size: 14px;
-  min-width: 160px;
-  appearance: none;
-  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  transition: all 0.15s ease;
-
-  &:focus {
-    outline: none;
-    border-color: ${theme.primary};
-    box-shadow: 0 0 0 1px ${theme.primary}33;
-  }
-
-  &:hover {
-    border-color: ${theme.primary};
   }
 `
 
@@ -3306,19 +3221,16 @@ function IndexOptions() {
                           {getMessage("showSelectedTextDescription")}
                         </Description>
                       </div>
-                      <ToggleContainer>
-                        <ToggleInput
-                          type="checkbox"
-                          checked={settings.customization?.showSelectedText}
-                          onChange={(e) =>
-                            handleImmediateSettingUpdate(
-                              "showSelectedText",
-                              e.target.checked
-                            )
-                          }
-                        />
-                        <ToggleSlider />
-                      </ToggleContainer>
+                      <Toggle
+                        checked={settings.customization?.showSelectedText}
+                        onCheckedChange={(checked) =>
+                          handleImmediateSettingUpdate(
+                            "showSelectedText",
+                            checked
+                          )
+                        }
+                        aria-label={getMessage("showSelectedTextLabel")}
+                      />
                     </FormRow>
 
                     <SectionDivider />
@@ -3330,21 +3242,18 @@ function IndexOptions() {
                           {getMessage("showWebsiteInfoDescription")}
                         </Description>
                       </div>
-                      <ToggleContainer>
-                        <ToggleInput
-                          type="checkbox"
-                          checked={
-                            settings.customization?.showWebsiteInfo !== false
-                          }
-                          onChange={(e) =>
-                            handleImmediateSettingUpdate(
-                              "showWebsiteInfo",
-                              e.target.checked
-                            )
-                          }
-                        />
-                        <ToggleSlider />
-                      </ToggleContainer>
+                      <Toggle
+                        checked={
+                          settings.customization?.showWebsiteInfo !== false
+                        }
+                        onCheckedChange={(checked) =>
+                          handleImmediateSettingUpdate(
+                            "showWebsiteInfo",
+                            checked
+                          )
+                        }
+                        aria-label={getMessage("showWebsiteInfoLabel")}
+                      />
                     </FormRow>
 
                     <SectionDivider />
@@ -3356,19 +3265,16 @@ function IndexOptions() {
                           {getMessage("keepHighlightedTextDescription")}
                         </Description>
                       </div>
-                      <ToggleContainer>
-                        <ToggleInput
-                          type="checkbox"
-                          checked={settings.customization?.persistHighlight}
-                          onChange={(e) =>
-                            handleImmediateSettingUpdate(
-                              "persistHighlight",
-                              e.target.checked
-                            )
-                          }
-                        />
-                        <ToggleSlider />
-                      </ToggleContainer>
+                      <Toggle
+                        checked={settings.customization?.persistHighlight}
+                        onCheckedChange={(checked) =>
+                          handleImmediateSettingUpdate(
+                            "persistHighlight",
+                            checked
+                          )
+                        }
+                        aria-label={getMessage("keepHighlightedTextLabel")}
+                      />
                     </FormRow>
 
                     <SectionDivider />
@@ -3380,21 +3286,18 @@ function IndexOptions() {
                           {getMessage("autoOpenLightUpDescription")}
                         </Description>
                       </div>
-                      <ToggleContainer>
-                        <ToggleInput
-                          type="checkbox"
-                          checked={settings.customization?.automaticActivation}
-                          onChange={(e) => {
-                            // Update both settings to ensure consistency in a single operation
-                            const newValue = e.target.checked
-                            handleMultipleSettingsUpdate({
-                              automaticActivation: newValue,
-                              activationMode: newValue ? "automatic" : "manual"
-                            })
-                          }}
-                        />
-                        <ToggleSlider />
-                      </ToggleContainer>
+                      <Toggle
+                        checked={settings.customization?.automaticActivation}
+                        onCheckedChange={(checked) => {
+                          // Update both settings to ensure consistency in a single operation
+                          const newValue = checked
+                          handleMultipleSettingsUpdate({
+                            automaticActivation: newValue,
+                            activationMode: newValue ? "automatic" : "manual"
+                          })
+                        }}
+                        aria-label={getMessage("autoOpenLightUpLabel")}
+                      />
                     </FormRow>
 
                     <SectionDivider />
@@ -3406,19 +3309,16 @@ function IndexOptions() {
                           {getMessage("contextAwarenessDescription")}
                         </Description>
                       </div>
-                      <ToggleContainer>
-                        <ToggleInput
-                          type="checkbox"
-                          checked={settings.customization?.contextAwareness}
-                          onChange={(e) =>
-                            handleImmediateSettingUpdate(
-                              "contextAwareness",
-                              e.target.checked
-                            )
-                          }
-                        />
-                        <ToggleSlider />
-                      </ToggleContainer>
+                      <Toggle
+                        checked={settings.customization?.contextAwareness}
+                        onCheckedChange={(checked) =>
+                          handleImmediateSettingUpdate(
+                            "contextAwareness",
+                            checked
+                          )
+                        }
+                        aria-label={getMessage("contextAwarenessLabel")}
+                      />
                     </FormRow>
 
                     <SectionDivider />
@@ -3430,19 +3330,16 @@ function IndexOptions() {
                           {getMessage("showInstantAIButtonDesc")}
                         </Description>
                       </div>
-                      <ToggleContainer>
-                        <ToggleInput
-                          type="checkbox"
-                          checked={settings.customization?.quickView}
-                          onChange={(e) =>
-                            handleImmediateSettingUpdate(
-                              "quickView",
-                              e.target.checked
-                            )
-                          }
-                        />
-                        <ToggleSlider />
-                      </ToggleContainer>
+                      <Toggle
+                        checked={settings.customization?.quickView}
+                        onCheckedChange={(checked) =>
+                          handleImmediateSettingUpdate(
+                            "quickView",
+                            checked
+                          )
+                        }
+                        aria-label={getMessage("showInstantAIButtonLabel")}
+                      />
                     </FormRow>
 
                     <SectionDivider />
@@ -3454,22 +3351,19 @@ function IndexOptions() {
                           {getMessage("showActionButtonDesc")}
                         </Description>
                       </div>
-                      <ToggleContainer>
-                        <ToggleInput
-                          type="checkbox"
-                          checked={
-                            settings.customization?.showTextSelectionButton !==
-                            false
-                          }
-                          onChange={(e) =>
-                            handleImmediateSettingUpdate(
-                              "showTextSelectionButton",
-                              e.target.checked
-                            )
-                          }
-                        />
-                        <ToggleSlider />
-                      </ToggleContainer>
+                      <Toggle
+                        checked={
+                          settings.customization?.showTextSelectionButton !==
+                          false
+                        }
+                        onCheckedChange={(checked) =>
+                          handleImmediateSettingUpdate(
+                            "showTextSelectionButton",
+                            checked
+                          )
+                        }
+                        aria-label={getMessage("showActionButtonLabel")}
+                      />
                     </FormRow>
                     <SectionDivider />
                     <div style={{ marginTop: "0", marginBottom: "16px" }}>
@@ -3505,28 +3399,28 @@ function IndexOptions() {
                                 width="16"
                                 height="16"
                                 rx="2"
-                                stroke="white"
+                                stroke="currentColor"
                                 strokeWidth="2"
                               />
                               <circle
                                 cx="12"
                                 cy="12"
                                 r="1"
-                                stroke="white"
+                                stroke="currentColor"
                                 strokeWidth="2"
                               />
                               <circle
                                 cx="12"
                                 cy="8"
                                 r="1"
-                                stroke="white"
+                                stroke="currentColor"
                                 strokeWidth="2"
                               />
                               <circle
                                 cx="12"
                                 cy="16"
                                 r="1"
-                                stroke="white"
+                                stroke="currentColor"
                                 strokeWidth="2"
                               />
                             </svg>
@@ -3559,7 +3453,7 @@ function IndexOptions() {
                                 width="18"
                                 height="18"
                                 rx="2"
-                                stroke="white"
+                                stroke="currentColor"
                                 strokeWidth="2"
                               />
                               <line
@@ -3567,7 +3461,7 @@ function IndexOptions() {
                                 y1="3"
                                 x2="15"
                                 y2="21"
-                                stroke="white"
+                                stroke="currentColor"
                                 strokeWidth="2"
                               />
                             </svg>
@@ -3600,7 +3494,7 @@ function IndexOptions() {
                                 width="20"
                                 height="16"
                                 rx="2"
-                                stroke="white"
+                                stroke="currentColor"
                                 strokeWidth="2"
                               />
                               <rect
@@ -3609,7 +3503,7 @@ function IndexOptions() {
                                 width="12"
                                 height="8"
                                 rx="1"
-                                stroke="white"
+                                stroke="currentColor"
                                 strokeWidth="2"
                               />
                             </svg>
@@ -5067,11 +4961,11 @@ function IndexOptions() {
                             xmlns="http://www.w3.org/2000/svg">
                             <path
                               d="M12 17C14.7614 17 17 14.7614 17 12C17 9.23858 14.7614 7 12 7C9.23858 7 7 9.23858 7 12C7 14.7614 9.23858 17 12 17Z"
-                              fill="white"
+                              fill="currentColor"
                             />
                             <path
                               d="M12 1V3M12 21V23M4.22 4.22L5.64 5.64M18.36 18.36L19.78 19.78M1 12H3M21 12H23M4.22 19.78L5.64 18.36M18.36 5.64L19.78 4.22"
-                              stroke="white"
+                              stroke="currentColor"
                               strokeWidth="2"
                               strokeLinecap="round"
                               strokeLinejoin="round"
@@ -5389,29 +5283,23 @@ function IndexOptions() {
                       <FormLabel htmlFor="popupAnimation">
                         {getMessage("popupAnimationLabel")}
                       </FormLabel>
-                      <FormSelect
-                        id="popupAnimation"
-                        value={settings.customization?.popupAnimation}
-                        onChange={(e) =>
+                      <SelectDropdown
+                        value={settings.customization?.popupAnimation || "fade"}
+                        onChange={(value) =>
                           handleImmediateSettingUpdate(
                             "popupAnimation",
-                            e.target.value
+                            value
                           )
                         }
-                        style={{ minWidth: "140px" }}>
-                        <option value="fade">
-                          {getMessage("animationFade")}
-                        </option>
-                        <option value="slide">
-                          {getMessage("animationSlide")}
-                        </option>
-                        <option value="scale">
-                          {getMessage("animationScale")}
-                        </option>
-                        <option value="none">
-                          {getMessage("animationNone")}
-                        </option>
-                      </FormSelect>
+                        options={[
+                          { value: "fade", label: getMessage("animationFade") },
+                          { value: "slide", label: getMessage("animationSlide") },
+                          { value: "scale", label: getMessage("animationScale") },
+                          { value: "none", label: getMessage("animationNone") }
+                        ]}
+                        ariaLabel={getMessage("popupAnimationLabel")}
+                        style={{ minWidth: "140px" }}
+                      />
                     </div>
                     <FormDescription>
                       {getMessage("popupAnimationDescription")}
