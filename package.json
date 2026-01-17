@@ -99,7 +99,7 @@
           "default": "Ctrl+Shift+W",
           "mac": "Command+Shift+W"
         },
-        "description": "Open welcome page"
+        "description": "Open options page with onboarding"
       },
       "open-free-popup": {
         "suggested_key": {

@@ -890,23 +890,6 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
 
       <ToggleRow>
         <ToggleInfo>
-          <ToggleLabel>Show 'Instant AI' button</ToggleLabel>
-          <ToggleDescription>
-            Display floating button for instant page content processing.
-          </ToggleDescription>
-        </ToggleInfo>
-        <Toggle>
-          <ToggleInput
-            type="checkbox"
-            checked={settings.customization?.quickView !== false}
-            onChange={(e) => onUpdateCustomization("quickView", e.target.checked)}
-          />
-          <ToggleSlider />
-        </Toggle>
-      </ToggleRow>
-
-      <ToggleRow>
-        <ToggleInfo>
           <ToggleLabel>Distraction-Free Mode</ToggleLabel>
           <ToggleDescription>
             Blur background when viewing results for better focus.
@@ -980,7 +963,8 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
         <div style={{ 
           marginTop: '24px', 
           padding: '16px', 
-          background: 'rgba(59, 130, 246, 0.1)', 
+          background: 'var(--popup-subcontainer-bg)', 
+          border: '1px solid var(--popup-primary)',
           borderRadius: '12px',
           textAlign: 'center'
         }}>
