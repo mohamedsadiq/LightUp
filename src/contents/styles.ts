@@ -78,12 +78,12 @@ export const getStyles = (
     lineHeight: 1.6,
     color: THEME_COLORS[theme].text,
     // backgroundColor: THEME_COLORS[theme].popupBackground,
-    padding: "5px 9px",
+    padding: "0",
     borderRadius: 8,
     fontFamily: "'LightUpK2D', 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
     direction: textDirection,
     textAlign: textDirection === "rtl" ? "right" : "left" as const,
-    paddingTop: 13
+    
   },
   followUpQA: {
     display: 'flex',
@@ -204,7 +204,7 @@ export const getStyles = (
   followUpAnswer: {
     backgroundColor: 'transparent',
     color: THEME_COLORS[theme].text,
-    padding: '12px 16px',
+    padding: '12px 0',
     borderRadius: '18px',
     borderBottomLeftRadius: '4px',
     maxWidth: '85%',

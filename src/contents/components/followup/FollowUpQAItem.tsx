@@ -81,15 +81,7 @@ const answerBubbleVariants = {
 export const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, currentTheme, targetLanguage, settings, fontSizes, handleCopy, copiedId, handleSpeak, speakingId, handleRegenerateFollowUp, activeAnswerId, isAskingFollowUp, popupRef, currentModel, handleExportAsDoc, handleExportAsMd, handleRichCopy, exportingDocId, exportingMdId, richCopiedId }: FollowUpQAItemProps) => {
   const { question, answer, id, isComplete } = qa;
   const answerRef = useRef<HTMLDivElement>(null);
-  const [animationCycleComplete, setAnimationCycleComplete] = useState(false);
   const isStreamingActive = activeAnswerId === id && !isComplete;
-  
-  // Reset animation cycle when this item becomes active
-  useEffect(() => {
-    if (activeAnswerId === id && !isComplete && answer === '') {
-      setAnimationCycleComplete(false);
-    }
-  }, [activeAnswerId, id, isComplete, answer]);
 
   // Unified scroll effect – triggers once answer is complete
   useEffect(() => {
@@ -181,51 +173,26 @@ export const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, cur
           ...themedStyles.followUpAnswer,
           textAlign: textDirection === "rtl" ? "right" : "left"
         }}>
-          <AnimatePresence mode="wait">
-          {isStreamingActive && (answer === '' || !animationCycleComplete) ? (
-              <LoadingThinkingText 
+          <AnimatePresence mode="sync">
+          {isStreamingActive ? (
+              <LoadingThinkingText
                 key="loading"
                 currentTheme={currentTheme}
                 fontSizes={fontSizes}
-                onCycleComplete={() => setAnimationCycleComplete(true)}
+                persist={true}
               />
-            ) : isStreamingActive ? (
-              <motion.div
-                key="streaming"
-                initial={{ opacity: 0.9, scale: 0.995 }}
-                animate={{ 
-                  opacity: [0.82, 1, 0.82],
-                  scale: [0.995, 1, 0.995],
-                  transition: { duration: 1.2, repeat: Infinity, ease: 'easeInOut' }
-                }}
-                exit={{ opacity: 0.9, scale: 0.995 }}
-                transition={{ duration: 0.2, ease: 'easeOut' }}
-                style={{
-                  minHeight: '24px',
-                  whiteSpace: 'pre-wrap',
-                  lineHeight: '1.5',
-                  color: currentTheme === "dark" ? '#e5e7eb' : '#1f2937',
-                  background: currentTheme === "dark"
-                    ? 'linear-gradient(90deg, rgba(255,255,255,0.05), rgba(255,255,255,0.12), rgba(255,255,255,0.05))'
-                    : 'linear-gradient(90deg, rgba(0,0,0,0.03), rgba(0,0,0,0.08), rgba(0,0,0,0.03))',
-                  backgroundSize: '200% 100%',
-                  padding: '6px 8px',
-                  borderRadius: '10px'
-                }}
-              >
-                {answer}
-              </motion.div>
-            ) : (
+            ) : null}
+          {isComplete ? (
               <motion.div
                 key="content"
                 initial={{ opacity: 0, filter: 'blur(4px)', y: 5, scale: 0.98 }}
-                animate={{ 
-                  opacity: 1, 
-                  filter: 'blur(0px)', 
-                  y: 0, 
+                animate={{
+                  opacity: 1,
+                  filter: 'blur(0px)',
+                  y: 0,
                   scale: 1,
                   transition: {
-                    delay: 0.1, // Small delay to ensure loading exits first
+                    delay: 0.1,
                     duration: 0.5,
                     ease: 'easeInOut',
                     filter: { duration: 0.3, delay: 0.15 },
@@ -233,13 +200,13 @@ export const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, cur
                   }
                 }}
                 exit={{ opacity: 0, filter: 'blur(4px)', y: -5, scale: 0.98 }}
-                transition={{ 
-                  duration: 0.4, 
+                transition={{
+                  duration: 0.4,
                   ease: 'easeInOut',
                   filter: { duration: 0.3 }
                 }}
                 style={{
-                  minHeight: '24px' // Prevent layout shift
+                  minHeight: '24px'
                 }}
               >
                 <MarkdownText
@@ -251,7 +218,7 @@ export const FollowUpQAItem = React.memo(({ qa, themedStyles, textDirection, cur
                   fontSizes={fontSizes}
                 />
               </motion.div>
-            )}
+            ) : null}
           </AnimatePresence>
           
           {isComplete && (

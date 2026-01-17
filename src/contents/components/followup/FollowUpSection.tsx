@@ -1,7 +1,6 @@
 import React from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { FollowUpQAItem } from "./FollowUpQAItem"
-import { FollowUpInput } from "./FollowUpInput"
+import { QASearchSection } from "./QASearchSection"
+import { SearchFollowUpInput } from "./SearchFollowUpInput"
 
 interface FollowUpSectionProps {
   followUpQAs: any[];
@@ -67,72 +66,45 @@ export const FollowUpSection = ({
 }: FollowUpSectionProps) => {
   return (
     <>
-      {/* Follow-up QAs */}
-      {followUpQAs.map((qa) => (
-        <FollowUpQAItem
-          key={qa.id}
-          qa={qa}
-          themedStyles={themedStyles}
-          textDirection={textDirection}
-          currentTheme={normalizedTheme}
-          targetLanguage={targetLanguage}
-          settings={settings}
-          fontSizes={fontSizes}
-          handleCopy={handleCopy}
-          copiedId={copiedId}
-          handleSpeak={handleSpeak}
-          speakingId={speakingId}
-          handleRegenerateFollowUp={handleRegenerateFollowUp}
-          activeAnswerId={activeAnswerId}
-          isAskingFollowUp={isAskingFollowUp}
-          popupRef={popupRef}
-          currentModel={currentModel}
-          handleExportAsDoc={handleExportAsDoc}
-          handleExportAsMd={handleExportAsMd}
-          handleRichCopy={handleRichCopy}
-          exportingDocId={exportingDocId}
-          exportingMdId={exportingMdId}
-          richCopiedId={richCopiedId}
-        />
-      ))}
+      {/* Q&A Section */}
+      <QASearchSection
+        followUpQAs={followUpQAs}
+        themedStyles={themedStyles}
+        textDirection={textDirection}
+        normalizedTheme={normalizedTheme}
+        targetLanguage={targetLanguage}
+        settings={settings}
+        fontSizes={fontSizes}
+        handleCopy={handleCopy}
+        copiedId={copiedId}
+        handleSpeak={handleSpeak}
+        speakingId={speakingId}
+        handleRegenerateFollowUp={handleRegenerateFollowUp}
+        activeAnswerId={activeAnswerId}
+        isAskingFollowUp={isAskingFollowUp}
+        popupRef={popupRef}
+        currentModel={currentModel}
+        handleExportAsDoc={handleExportAsDoc}
+        handleExportAsMd={handleExportAsMd}
+        handleRichCopy={handleRichCopy}
+        exportingDocId={exportingDocId}
+        exportingMdId={exportingMdId}
+        richCopiedId={richCopiedId}
+      />
 
-      {/* Sticky input section pinned to the bottom of the scrollable area */}
-      <AnimatePresence>
-        {isSearchVisible && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.2 }}
-            // Keep the search section visible while the Q&A list scrolls
-            style={{
-              position: 'sticky',
-              bottom: 0,
-              zIndex: 15, // ensure it stays above scrolling text
-              // Use the popup background so the bar looks seamless
-              // background: themedStyles.popup?.background || (normalizedTheme === 'dark' ? '#1e1e1e' : '#ffffff'),
-              // Add a subtle backdrop blur for better readability when it overlays content
-              // backdropFilter: 'blur(6px)',
-              // Small negative margin to visually tighten spacing with the previous element
-              marginTop: 'auto',
-              paddingTop: '8px',
-              paddingBottom: '8px'
-            }}
-          >
-            <FollowUpInput
-              inputRef={inputRef}
-              followUpQuestion={followUpQuestion}
-              handleFollowUpQuestion={handleFollowUpQuestion}
-              handleAskFollowUpWrapper={handleAskFollowUpWrapper}
-              isAskingFollowUp={isAskingFollowUp}
-              setIsInputFocused={setIsInputFocused}
-              themedStyles={themedStyles}
-              currentTheme={normalizedTheme}
-              fontSizes={fontSizes}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Search Input Section */}
+      <SearchFollowUpInput
+        isSearchVisible={isSearchVisible}
+        inputRef={inputRef}
+        followUpQuestion={followUpQuestion}
+        themedStyles={themedStyles}
+        normalizedTheme={normalizedTheme}
+        fontSizes={fontSizes}
+        handleFollowUpQuestion={handleFollowUpQuestion}
+        handleAskFollowUpWrapper={handleAskFollowUpWrapper}
+        isAskingFollowUp={isAskingFollowUp}
+        setIsInputFocused={setIsInputFocused}
+      />
     </>
   );
 };

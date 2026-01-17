@@ -41,7 +41,7 @@ export const useReducedMotion = (popupAnimationSetting?: string): boolean => {
 export const getReducedMotionVariants = () => ({
   initial: { opacity: 1, scale: 1, x: 0, y: 0 },
   animate: { opacity: 1, scale: 1, x: 0, y: 0 },
-  exit: { opacity: 0, scale: 1, x: 0, y: 0 }
+  exit: { opacity: 1, scale: 1, x: 0, y: 0 }
 });
 
 /**

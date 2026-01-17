@@ -98,7 +98,7 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
       .replace(/>\s+</g, '><')
       .trim();
 
-    if (useReferences) {
+    if (useReferences && !isStreaming) {
       cleanedText = cleanedText.replace(/\[ref:(.*?)\]/g, (match, content) => {
         const refId = addReference(content.trim());
         return `<sup data-reference-id="${refId}">${refId}</sup>`;
@@ -106,7 +106,7 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
     }
 
     return cleanedText;
-  }, [text, useReferences, addReference]);
+  }, [text, useReferences, addReference, isStreaming]);
 
   const components = useMemo(() => ({
     p: ({ children, ...props }: any) => (
@@ -183,7 +183,7 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
         }}
         onMouseEnter={(e) => {
           const target = e.currentTarget as HTMLAnchorElement;
-          target.style.backgroundColor = normalizedTheme === 'light' ? '#eff6ff' : '#1e3a8a';
+          target.style.backgroundColor = 'transparent';
           target.style.borderBottomColor = normalizedTheme === 'light' ? '#2563eb' : '#60a5fa';
         }}
         onMouseLeave={(e) => {
@@ -201,7 +201,7 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
         return (
           <code
             style={{
-              backgroundColor: normalizedTheme === 'light' ? '#f1f5f9' : '#334155',
+              backgroundColor: 'transparent',
               color: normalizedTheme === 'light' ? '#e11d48' : '#fbbf24',
               padding: '0.125rem 0.375rem',
               borderRadius: '0.25rem',
@@ -231,7 +231,7 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
     pre: ({ children, ...props }: any) => (
       <pre
         style={{
-          backgroundColor: normalizedTheme === 'light' ? '#f8fafc' : '#1e293b',
+          backgroundColor: 'transparent',
           color: normalizedTheme === 'light' ? '#334155' : '#e2e8f0',
           padding: '1rem',
           borderRadius: '0.5rem',
@@ -254,7 +254,7 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
           fontStyle: 'italic',
           margin: '1rem 0',
           color: normalizedTheme === 'light' ? '#6b7280' : '#9ca3af',
-          backgroundColor: normalizedTheme === 'light' ? '#f8fafc' : '#1f2937',
+          backgroundColor: 'transparent',
           padding: '1rem',
           borderRadius: '0 0.5rem 0.5rem 0'
         }}
@@ -299,6 +299,146 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
       >
         {children}
       </li>
+    ),
+    table: ({ children, ...props }: any) => (
+      <table
+        style={{
+          width: '100%',
+          borderCollapse: 'collapse',
+          marginBottom: '1rem',
+          backgroundColor: 'transparent'
+        }}
+        {...props}
+      >
+        {children}
+      </table>
+    ),
+    thead: ({ children, ...props }: any) => (
+      <thead
+        style={{
+          backgroundColor: 'transparent'
+        }}
+        {...props}
+      >
+        {children}
+      </thead>
+    ),
+    tbody: ({ children, ...props }: any) => (
+      <tbody
+        style={{
+          backgroundColor: 'transparent'
+        }}
+        {...props}
+      >
+        {children}
+      </tbody>
+    ),
+    tr: ({ children, ...props }: any) => (
+      <tr
+        style={{
+          backgroundColor: 'transparent'
+        }}
+        {...props}
+      >
+        {children}
+      </tr>
+    ),
+    th: ({ children, ...props }: any) => (
+      <th
+        style={{
+          padding: '0.75rem',
+          textAlign: 'left',
+          borderBottom: `2px solid ${normalizedTheme === 'light' ? '#e5e7eb' : '#374151'}`,
+          fontWeight: '600',
+          backgroundColor: 'transparent',
+          color: normalizedTheme === 'light' ? '#1a1a1a' : '#ffffff'
+        }}
+        {...props}
+      >
+        {children}
+      </th>
+    ),
+    td: ({ children, ...props }: any) => (
+      <td
+        style={{
+          padding: '0.75rem',
+          borderBottom: `1px solid ${normalizedTheme === 'light' ? '#e5e7eb' : '#374151'}`,
+          backgroundColor: 'transparent',
+          color: normalizedTheme === 'light' ? '#333' : '#f5f5f5'
+        }}
+        {...props}
+      >
+        {children}
+      </td>
+    ),
+    strong: ({ children, ...props }: any) => (
+      <strong
+        style={{
+          fontWeight: 'bold',
+          backgroundColor: 'transparent'
+        }}
+        {...props}
+      >
+        {children}
+      </strong>
+    ),
+    em: ({ children, ...props }: any) => (
+      <em
+        style={{
+          fontStyle: 'italic',
+          backgroundColor: 'transparent'
+        }}
+        {...props}
+      >
+        {children}
+      </em>
+    ),
+    mark: ({ children, ...props }: any) => (
+      <mark
+        style={{
+          backgroundColor: 'transparent',
+          color: normalizedTheme === 'light' ? '#e11d48' : '#fbbf24',
+          padding: '0.125rem 0.25rem',
+          borderRadius: '0.25rem'
+        }}
+        {...props}
+      >
+        {children}
+      </mark>
+    ),
+    del: ({ children, ...props }: any) => (
+      <del
+        style={{
+          textDecoration: 'line-through',
+          backgroundColor: 'transparent',
+          color: normalizedTheme === 'light' ? '#9ca3af' : '#6b7280'
+        }}
+        {...props}
+      >
+        {children}
+      </del>
+    ),
+    ins: ({ children, ...props }: any) => (
+      <ins
+        style={{
+          textDecoration: 'underline',
+          backgroundColor: 'transparent',
+          color: normalizedTheme === 'light' ? '#059669' : '#34d399'
+        }}
+        {...props}
+      >
+        {children}
+      </ins>
+    ),
+    hr: ({ ...props }: any) => (
+      <hr
+        style={{
+          border: 'none',
+          borderTop: `1px solid ${normalizedTheme === 'light' ? '#e5e7eb' : '#374151'}`,
+          margin: '1.5rem 0'
+        }}
+        {...props}
+      />
     )
   }), [normalizedTheme, fontSizes]);
 
@@ -312,10 +452,9 @@ const MarkdownText: React.FC<MarkdownTextProps> = ({
   }), [textDirection, fontSizes.base, normalizedTheme]);
 
   React.useEffect(() => {
-    if (useReferences) {
-      clearReferences();
-    }
-  }, [text, useReferences, clearReferences]);
+    if (!useReferences || isStreaming) return;
+    clearReferences();
+  }, [text, useReferences, clearReferences, isStreaming]);
 
   const visibleReferences = references;
 

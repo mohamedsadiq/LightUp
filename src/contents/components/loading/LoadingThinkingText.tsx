@@ -7,6 +7,8 @@ interface LoadingThinkingTextProps {
   currentTheme: 'light' | 'dark' | 'system';
   fontSizes: FontSizes;
   onCycleComplete?: () => void;
+  persist?: boolean; // If true, keep looping without auto-fade
+  shouldFadeOut?: boolean; // If true, fade out controlled by parent
 }
 
 // Inject gradient shift keyframes once (cached)
@@ -24,7 +26,7 @@ const injectGradientKeyframes = () => {
   keyframesInjected = true;
 };
 
-export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycleComplete }: LoadingThinkingTextProps) => {
+export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycleComplete, persist = false, shouldFadeOut = false }: LoadingThinkingTextProps) => {
   const [currentWord, setCurrentWord] = useState(0);
   const [isCompleting, setIsCompleting] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
@@ -33,42 +35,48 @@ export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycl
   const cycleCountRef = useRef(0);
   const onCycleCompleteRef = useRef(onCycleComplete);
   const words = ['Forming', 'Generating'];
-  
+
   // Keep callback ref updated
   useEffect(() => {
     onCycleCompleteRef.current = onCycleComplete;
   }, [onCycleComplete]);
-  
+
   // Ensure keyframes are present (runs once)
   useEffect(() => {
     injectGradientKeyframes();
   }, []);
-  
+
   // Use requestAnimationFrame for word cycling instead of setInterval
   useEffect(() => {
     const wordDuration = 1800; // ms per word
     const fadeOutDelay = 600;
     const fadeOutDuration = 400;
-    
+
     const animate = (timestamp: number) => {
       if (!startTimeRef.current) startTimeRef.current = timestamp;
       const elapsed = timestamp - startTimeRef.current;
-      
+
       // Calculate which word to show based on elapsed time
       const wordIndex = Math.floor(elapsed / wordDuration) % words.length;
       const cycleNumber = Math.floor(elapsed / (wordDuration * words.length));
-      
+
       // Update word if changed
       setCurrentWord(prev => {
         if (prev !== wordIndex) return wordIndex;
         return prev;
       });
-      
-      // Check if we completed first cycle
+
+      // If persist is true, keep looping forever without auto-fade
+      if (persist) {
+        rafRef.current = requestAnimationFrame(animate);
+        return;
+      }
+
+      // Check if we completed first cycle (only when persist is false)
       if (cycleNumber >= 1 && cycleCountRef.current === 0) {
         cycleCountRef.current = 1;
         setIsCompleting(true);
-        
+
         // Schedule fade out
         setTimeout(() => {
           setIsFadingOut(true);
@@ -76,18 +84,18 @@ export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycl
             onCycleCompleteRef.current?.();
           }, fadeOutDuration);
         }, fadeOutDelay);
-        
+
         return; // Stop animation loop
       }
-      
+
       // Continue animation if not completing
       if (cycleCountRef.current === 0) {
         rafRef.current = requestAnimationFrame(animate);
       }
     };
-    
+
     rafRef.current = requestAnimationFrame(animate);
-    
+
     return () => {
       if (rafRef.current) {
         cancelAnimationFrame(rafRef.current);
@@ -95,7 +103,14 @@ export const LoadingThinkingText = React.memo(({ currentTheme, fontSizes, onCycl
       startTimeRef.current = null;
       cycleCountRef.current = 0;
     };
-  }, []);
+  }, [persist]);
+
+  // Handle controlled fade out from parent
+  useEffect(() => {
+    if (shouldFadeOut && !isFadingOut) {
+      setIsFadingOut(true);
+    }
+  }, [shouldFadeOut, isFadingOut]);
   
   return (
     <motion.div

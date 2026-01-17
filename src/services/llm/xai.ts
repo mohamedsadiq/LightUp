@@ -116,24 +116,28 @@ export const processXAIText = async function* (request: ProcessTextRequest) {
 
     // Get the system prompt (custom or default)
     const getSystemPrompt = (): string => {
-      // Language instruction to add to all system prompts
+      // Language instruction to add to all system prompts (only for default prompts)
       const languageInstruction = responseLanguage !== "en"
         ? `\n\nIMPORTANT: Respond in ${responseLanguage} language. Adapt your response to be culturally appropriate for speakers of this language.`
         : "";
 
       if (isFollowUp) {
+        // If custom system prompt is available for follow-ups, use it WITHOUT language instruction
         if (settings.customPrompts?.systemPrompts?.[mode]) {
-          return `${settings.customPrompts.systemPrompts[mode]} 
+          return `${settings.customPrompts.systemPrompts[mode]}
 
-FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.${languageInstruction}`;
+FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.`;
         }
+        // Otherwise use enhanced follow-up prompt with language instruction
         const basePrompt = FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
         return basePrompt + languageInstruction;
       }
 
+      // If custom system prompt is available, use it WITHOUT language instruction
       if (settings.customPrompts?.systemPrompts?.[mode]) {
-        return settings.customPrompts.systemPrompts[mode] + languageInstruction;
+        return settings.customPrompts.systemPrompts[mode];
       }
+      // Otherwise use default with language instruction
       return SYSTEM_PROMPTS[mode] + languageInstruction;
     };
 

@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 
+const STREAM_FLUSH_INTERVAL_MS = 80;
+
 interface PortMessage {
   type: string;
   content?: string;
@@ -39,6 +41,26 @@ export const usePort = (
   const [error, setError] = useState<string | null>(null);
   const [connectionStatus, setConnectionStatus] = useState<'connected' | 'connecting' | 'disconnected'>('connecting');
   const portRef = useRef<chrome.runtime.Port | null>(null);
+  const streamingBufferRef = useRef<string>('');
+  const streamingFlushTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const flushStreamingBuffer = () => {
+    if (!streamingBufferRef.current) return;
+    const bufferedText = streamingBufferRef.current;
+    streamingBufferRef.current = '';
+    if (streamingFlushTimerRef.current) {
+      clearTimeout(streamingFlushTimerRef.current);
+      streamingFlushTimerRef.current = null;
+    }
+    setStreamingText(prev => prev + bufferedText);
+  };
+
+  const scheduleStreamingFlush = () => {
+    if (streamingFlushTimerRef.current) return;
+    streamingFlushTimerRef.current = setTimeout(() => {
+      flushStreamingBuffer();
+    }, STREAM_FLUSH_INTERVAL_MS);
+  };
 
   const connect = () => {
     try {
@@ -184,6 +206,14 @@ export const usePort = (
     };
   }, [connectionId]);
 
+  useEffect(() => () => {
+    if (streamingFlushTimerRef.current) {
+      clearTimeout(streamingFlushTimerRef.current);
+      streamingFlushTimerRef.current = null;
+    }
+    streamingBufferRef.current = '';
+  }, []);
+
   const handleStreamResponse = (msg: PortMessage) => {
     switch (msg.type) {
       case 'chunk':
@@ -191,12 +221,14 @@ export const usePort = (
           if (msg.isFollowUp && msg.id && onFollowUpUpdate) {
             onFollowUpUpdate(msg.id, msg.content);
           } else {
-            setStreamingText(prev => prev + msg.content);
+            streamingBufferRef.current += msg.content;
+            scheduleStreamingFlush();
           }
         }
         break;
 
       case 'done':
+        flushStreamingBuffer();
         if (msg.isFollowUp && msg.id && onFollowUpComplete) {
           onFollowUpComplete(msg.id);
         }
@@ -204,6 +236,7 @@ export const usePort = (
         break;
 
       case 'error':
+        flushStreamingBuffer();
         setError(msg.error || 'An unknown error occurred');
         setIsLoading(false);
         break;

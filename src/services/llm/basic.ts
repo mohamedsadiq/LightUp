@@ -66,35 +66,35 @@ export const processBasicText = async function* (request: ProcessTextRequest) {
     const brevityHint = "Keep responses under 120 words. Use concise, natural paragraphs. Avoid fluff and be direct.";
 
     const getSystemPrompt = () => {
-      // Language instruction to add to all system prompts
+      // Language instruction to add to all system prompts (only for default prompts)
       const languageInstruction = responseLanguage !== "en"
         ? `\n\nIMPORTANT: Respond in ${responseLanguage} language. Adapt your response to be culturally appropriate for speakers of this language.`
         : "";
 
       // For follow-up questions, use enhanced context-aware prompts
       if (isFollowUp) {
-        // If custom system prompt is available for follow-ups, use it
+        // If custom system prompt is available for follow-ups, use it WITHOUT language instruction
         if (settings.customPrompts?.systemPrompts?.[mode]) {
-          return `${settings.customPrompts.systemPrompts[mode]} 
+          return `${settings.customPrompts.systemPrompts[mode]}
 
 ${brevityHint}
 
-FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.${languageInstruction}`;
+FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.`;
         }
-        // Otherwise use enhanced follow-up prompt
+        // Otherwise use enhanced follow-up prompt with language instruction
         const basePrompt = FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
         return `${basePrompt}
 
 ${brevityHint}${languageInstruction}`;
       }
 
-      // If custom system prompt is available, use it
+      // If custom system prompt is available, use it WITHOUT language instruction
       if (settings.customPrompts?.systemPrompts?.[mode]) {
         return `${settings.customPrompts.systemPrompts[mode]}
 
-${brevityHint}${languageInstruction}`;
+${brevityHint}`;
       }
-      // Otherwise use default
+      // Otherwise use default with language instruction
       return `${SYSTEM_PROMPTS[mode]}
 
 ${brevityHint}${languageInstruction}`;

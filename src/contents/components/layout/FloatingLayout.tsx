@@ -104,7 +104,7 @@ export const FloatingLayout = ({
       onDragEnd={handleDragEndInternal}
       initial={{ opacity: reducedMotion ? 1 : 0 }}
       animate={{ opacity: 1 }}
-      exit={{ opacity: reducedMotion ? 1 : 0 }}
+      exit={reducedMotion ? undefined : { opacity: 0 }}
       transition={{
         opacity: { duration: reducedMotion ? 0 : 0.2 }
       }}
@@ -137,7 +137,7 @@ export const FloatingLayout = ({
           onMouseLeave={() => !isInputFocused && setIsInteractingWithPopup(false)}
           initial={reducedMotion ? { scale: 1, opacity: 1 } : "initial"}
           animate={reducedMotion ? { scale: 1, opacity: 1 } : "animate"}
-          exit={reducedMotion ? { scale: 1, opacity: 0 } : "exit"}
+          exit={reducedMotion ? undefined : "exit"}
           layout={false}
           variants={activeVariants}
         >

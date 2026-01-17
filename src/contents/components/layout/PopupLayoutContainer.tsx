@@ -27,6 +27,7 @@ interface PopupLayoutContainerProps {
   noMotionVariants: any;
   sidebarScaleMotionVariants: any;
   sidebarSlideMotionVariants: any;
+  sidebarReducedMotionVariants: any;
   isPinned?: boolean;
 }
 
@@ -53,6 +54,7 @@ export const PopupLayoutContainer = ({
   noMotionVariants,
   sidebarScaleMotionVariants,
   sidebarSlideMotionVariants,
+  sidebarReducedMotionVariants,
   isPinned = false,
   dragControls,
   onDragEnd
@@ -91,6 +93,7 @@ export const PopupLayoutContainer = ({
             renderPopupContent={renderPopupContent}
             sidebarScaleMotionVariants={sidebarScaleMotionVariants}
             sidebarSlideMotionVariants={sidebarSlideMotionVariants}
+            sidebarReducedMotionVariants={sidebarReducedMotionVariants}
             fadeMotionVariants={fadeMotionVariants}
             noMotionVariants={noMotionVariants}
             isPinned={isPinned}

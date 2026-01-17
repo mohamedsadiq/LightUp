@@ -19,20 +19,18 @@ export const processLocalText = async function* (request: ProcessTextRequest) {
     const getSystemPrompt = () => {
       // For follow-up questions, use enhanced context-aware prompts
       if (request.isFollowUp) {
-        // If custom system prompt is available for follow-ups, use it
+        // If custom system prompt is available for follow-ups, use it WITHOUT language instruction
         if (settings.customPrompts?.systemPrompts?.[mode]) {
-          return `${settings.customPrompts.systemPrompts[mode]} 
+          return `${settings.customPrompts.systemPrompts[mode]}
 
 FOLLOW-UP CONTEXT: You are continuing the conversation. The user is asking a follow-up question about the same content. Maintain your expertise and perspective while providing fresh insights.
-
-USER LANGUAGE: ${responseLanguage}
 
 Based on user feedback:
 - Include patterns like: ${positivePatterns.slice(0, 3).join(', ')}
 - Avoid patterns like: ${negativePatterns.slice(0, 3).join(', ')}
 Keep responses under 1500 tokens.`;
         }
-        // Otherwise use enhanced follow-up prompt with feedback context
+        // Otherwise use enhanced follow-up prompt with feedback context and language instruction
         const basePrompt = FOLLOW_UP_SYSTEM_PROMPTS[mode] || FOLLOW_UP_SYSTEM_PROMPTS.free;
         return `${basePrompt}
 
@@ -44,14 +42,13 @@ Based on user feedback:
 Keep responses under 1500 tokens.`;
       }
 
-      // If custom system prompt is available, use it
+      // If custom system prompt is available, use it WITHOUT language instruction
       const customSystemPrompt = settings.customPrompts?.systemPrompts?.[mode];
       if (customSystemPrompt) {
-        // We still enhance with feedback context
+        // We still enhance with feedback context but NOT language instruction
         return `
           ${customSystemPrompt}
-          USER LANGUAGE: ${responseLanguage}
-          
+
           Based on user feedback:
           - Include patterns like: ${positivePatterns.slice(0, 3).join(', ')}
           - Avoid patterns like: ${negativePatterns.slice(0, 3).join(', ')}
@@ -59,11 +56,11 @@ Keep responses under 1500 tokens.`;
         `;
       }
 
-      // Otherwise use default with feedback enhancement
+      // Otherwise use default with feedback enhancement and language instruction
       return `
         ${SYSTEM_PROMPTS[mode]}
         USER LANGUAGE: ${responseLanguage}
-        
+
         Based on user feedback:
         - Include patterns like: ${positivePatterns.slice(0, 3).join(', ')}
         - Avoid patterns like: ${negativePatterns.slice(0, 3).join(', ')}

@@ -772,19 +772,16 @@ function Content() {
 
   // Animation variants for smooth transitions
   const contentVariants = {
-    enter: { 
-      opacity: 0, 
-      y: -20,
+    enter: {
+      opacity: 0,
       transition: { duration: 0.2, ease: "easeOut" }
     },
-    center: { 
-      opacity: 1, 
-      y: 0,
+    center: {
+      opacity: 1,
       transition: { duration: 0.2, ease: "easeOut" }
     },
-    exit: { 
-      opacity: 0, 
-      y: -20,
+    exit: {
+      opacity: 0,
       transition: { duration: 0.15, ease: "easeIn" }
     }
   };
@@ -805,27 +802,43 @@ function Content() {
   // Load custom prompts on mount
   useEffect(() => {
     const loadCustomPrompts = async () => {
-      const storage = new Storage();
-      const savedSystemPrompt = await storage.get(`customSystemPrompt_${activeMode}`);
-      const savedUserPrompt = await storage.get(`customUserPrompt_${activeMode}`);
+      // Read from settings.customPrompts instead of separate storage keys
+      const savedSystemPrompt = settings?.customPrompts?.systemPrompts?.[activeMode as keyof typeof settings.customPrompts.systemPrompts];
+      const savedUserPrompt = settings?.customPrompts?.userPrompts?.[activeMode as keyof typeof settings.customPrompts.userPrompts];
       if (savedSystemPrompt) setCustomSystemPrompt(savedSystemPrompt);
       if (savedUserPrompt) setCustomUserPrompt(savedUserPrompt);
     };
     loadCustomPrompts();
-  }, [activeMode]);
+  }, [activeMode, settings?.customPrompts]);
 
   // Auto-save custom prompts with debounce (performance optimized)
   const saveCustomPrompts = useCallback(async (systemPrompt: string, userPrompt: string) => {
     setIsSavingPrompt(true);
-    
-    // Use debounced storage to collapse rapid writes while typing
-    await Promise.all([
-      debouncedSet(`customSystemPrompt_${activeMode}`, systemPrompt, 500),
-      debouncedSet(`customUserPrompt_${activeMode}`, userPrompt, 500)
-    ]);
-    
+
+    // Save to settings.customPrompts instead of separate storage keys
+    if (settings) {
+      const storage = new Storage();
+      const updatedSettings = {
+        ...settings,
+        customPrompts: {
+          ...settings.customPrompts,
+          systemPrompts: {
+            ...settings.customPrompts?.systemPrompts,
+            [activeMode]: systemPrompt || undefined
+          },
+          userPrompts: {
+            ...settings.customPrompts?.userPrompts,
+            [activeMode]: userPrompt || undefined
+          }
+        }
+      };
+
+      await storage.set("settings", updatedSettings);
+      setSettings(updatedSettings);
+    }
+
     setTimeout(() => setIsSavingPrompt(false), 500);
-  }, [activeMode]);
+  }, [activeMode, settings, setSettings]);
 
   // Export functions
   const handleExportAsDoc = useCallback(async (text: string, id: string, filename: string = 'lightup-export.txt') => {
@@ -1125,19 +1138,10 @@ ${'-'.repeat(50)}`;
         regenPayloadText = `${selectedText}\n\n----\nContext:\n${regenTrimmedContext}`
       }
 
-      // Load custom prompts for the current mode
-      const storage = new Storage();
-      const customSystemPrompt = await storage.get(`customSystemPrompt_${mode}`);
-      const customUserPrompt = await storage.get(`customUserPrompt_${mode}`);
-
-      // Build settings with custom prompts
+      // Use settings.customPrompts directly
       const settingsWithCustomPrompts = {
         ...settings,
-        aiResponseLanguage: aiResponseLanguage,
-        customPrompts: (customSystemPrompt || customUserPrompt) ? {
-          systemPrompts: customSystemPrompt ? { [mode]: customSystemPrompt } : undefined,
-          userPrompts: customUserPrompt ? { [mode]: customUserPrompt } : undefined
-        } : undefined
+        aiResponseLanguage: aiResponseLanguage
       };
 
       port.postMessage({
@@ -1216,19 +1220,11 @@ ${'-'.repeat(50)}`;
       const storage = new Storage();
       const translationSettings = await storage.get("translationSettings");
 
-      // Load custom prompts for the current mode
-      const customSystemPrompt = await storage.get(`customSystemPrompt_${selectedMode}`);
-      const customUserPrompt = await storage.get(`customUserPrompt_${selectedMode}`);
-
-      // Build settings with custom prompts
+      // Use settings.customPrompts directly
       const settingsWithCustomPrompts = {
         ...settings,
         translationSettings,
-        aiResponseLanguage,
-        customPrompts: (customSystemPrompt || customUserPrompt) ? {
-          systemPrompts: customSystemPrompt ? { [selectedMode]: customSystemPrompt } : undefined,
-          userPrompts: customUserPrompt ? { [selectedMode]: customUserPrompt } : undefined
-        } : undefined
+        aiResponseLanguage
       };
 
       port.postMessage({
@@ -1260,21 +1256,14 @@ ${'-'.repeat(50)}`;
     ));
 
     try {
-      // Make sure we have the latest settings with custom prompts
+      // Make sure we have the latest settings
       const storage = new Storage();
       const latestSettings = await storage.get("settings");
 
-      // Load custom prompts for the current mode
-      const customSystemPrompt = await storage.get(`customSystemPrompt_${mode}`);
-      const customUserPrompt = await storage.get(`customUserPrompt_${mode}`);
-
-      // Build settings with custom prompts
+      // Use settings.customPrompts directly
       const settingsWithCustomPrompts = Object.assign({}, latestSettings || settings, {
         aiResponseLanguage: aiResponseLanguage,
-        customPrompts: (customSystemPrompt || customUserPrompt) ? {
-          systemPrompts: customSystemPrompt ? { [mode]: customSystemPrompt } : undefined,
-          userPrompts: customUserPrompt ? { [mode]: customUserPrompt } : undefined
-        } : undefined
+        customPrompts: settings.customPrompts
       });
 
       port.postMessage({
@@ -1291,12 +1280,9 @@ ${'-'.repeat(50)}`;
         }
       });
     } catch (err) {
-      setFollowUpQAs(prev => prev.map(qa =>
-        qa.id === id ? { ...qa, isComplete: true } : qa
-      ));
-      setActiveAnswerId(null);
+      console.error("Failed to regenerate follow-up:", err);
       setIsAskingFollowUp(false);
-      setError('Failed to regenerate follow-up response');
+      setActiveAnswerId(null);
     }
   };
 
@@ -1401,7 +1387,8 @@ ${'-'.repeat(50)}`;
     setStreamingText,
     setIsLoading,
     setError,
-    reconnect
+    reconnect,
+    sendMessage
   } = usePort(
     connectionId,
     handleFollowUpStream,
@@ -1648,7 +1635,6 @@ ${'-'.repeat(50)}`;
     updateConversation(trimmedQuestion);
 
     try {
-      // Check if we need to reconnect
       if (!port || connectionStatus !== 'connected') {
         reconnect();
       }
@@ -1658,7 +1644,7 @@ ${'-'.repeat(50)}`;
         payload: {
           text: trimmedQuestion,
           context: mode === "free" ? "" : selectedText,
-          conversationContext, // Add conversation context
+          conversationContext,
           mode: mode,
           settings: {
             ...settings,
@@ -1670,48 +1656,16 @@ ${'-'.repeat(50)}`;
         }
       };
 
-      // Use a small delay to ensure reconnection completes if needed
+      const didSend = sendMessage(message);
+      if (!didSend) {
+        throw new Error("Failed to send follow-up message");
+      }
+
+      setFollowUpQuestion("");
+
       setTimeout(() => {
-        try {
-          if (!port) {
-            throw new Error("No connection available");
-          }
-
-          port.postMessage(message);
-
-          setFollowUpQuestion("");
-
-          // Keep focus on the input field after submitting
-          setTimeout(() => {
-            if (inputRef.current) {
-              inputRef.current.focus();
-            }
-          }, 100);
-        } catch (postError) {
-          console.error("Error posting message:", postError);
-
-          // Try one more time with a fresh connection
-          reconnect();
-
-          setTimeout(() => {
-            if (port) {
-              try {
-                port.postMessage(message);
-
-                setFollowUpQuestion("");
-
-                // Keep focus on the input field after submitting
-                if (inputRef.current) {
-                  inputRef.current.focus();
-                }
-              } catch (retryError) {
-                console.error("Failed after reconnection:", retryError);
-                throw new Error("Failed to send message after reconnection");
-              }
-            } else {
-              throw new Error("Failed to reconnect");
-            }
-          }, 500); // Wait a bit longer for reconnection
+        if (inputRef.current) {
+          inputRef.current.focus();
         }
       }, 100);
     } catch (error) {
@@ -2059,8 +2013,8 @@ Please provide a helpful and relevant answer based on the page content above.`;
               marginTop: '2px',
               marginRight: '10px'
             }}
-            variants={iconButtonVariants}
-            whileHover="hover"
+            variants={settings?.customization?.popupAnimation === "none" ? undefined : iconButtonVariants}
+            whileHover={settings?.customization?.popupAnimation === "none" ? undefined : "hover"}
             title="Close LightUp"
           >
             <CloseIcon theme={normalizedTheme} />
@@ -2190,7 +2144,8 @@ Please provide a helpful and relevant answer based on the page content above.`;
                 style={{
                   ...themedStyles.explanation,
                   textAlign: textDirection === "rtl" ? "right" : "left",
-                  paddingBottom: "12px"
+                  paddingBottom: "0"
+                  
                 }}
                 initial={{ y: 50 }}
                 animate={{ y: 0 }}
@@ -2490,8 +2445,8 @@ Please provide a helpful and relevant answer based on the page content above.`;
                       </motion.button>
                     </motion.div>
 
-                    {/* Search Toggle Button - Far Right */}
-                    <motion.button
+                    {/* Search Toggle Button - Far Right - HIDDEN */}
+                    {/* <motion.button
                       onClick={() => {
                         // Toggle search visibility
                         setIsSearchVisible(!isSearchVisible);
@@ -2546,7 +2501,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
                           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
                       )}
-                    </motion.button>
+                    </motion.button> */}
                   </motion.div>
                 )}
               </motion.div>
@@ -2921,6 +2876,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
         onDragEnd={handleDragEnd}
         sidebarScaleMotionVariants={sidebarScaleMotionVariants}
         sidebarSlideMotionVariants={sidebarSlideMotionVariants}
+        sidebarReducedMotionVariants={sidebarReducedMotionVariants}
         isPinned={isPinned}
       />
 
