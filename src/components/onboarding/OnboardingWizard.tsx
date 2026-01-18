@@ -8,10 +8,18 @@
  * 4. Review & finish
  */
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "@emotion/styled";
-import { keyframes } from "@emotion/react";
+import { motion, AnimatePresence } from "framer-motion";
 import type { Settings, ModelType } from "~types/settings";
+import {
+  FAMILY_SPRINGS,
+  prefersReducedMotion,
+  getSafeTransition,
+  fadeSlideVariants,
+  staggerContainer,
+  staggerItem
+} from "~animations/familyWalletConfig";
 
 // Import the actual LightUp logo
 import logoUrl from "../../../assets/icon.png";
@@ -54,30 +62,6 @@ interface OnboardingWizardProps {
 }
 
 // ============================================================================
-// Animations
-// ============================================================================
-
-const fadeIn = keyframes`
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-`;
-
-const slideIn = keyframes`
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
-`;
-
-const pulse = keyframes`
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.02); }
-`;
-
-const shimmer = keyframes`
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-`;
-
-// ============================================================================
 // Styled Components - Matching LightUp Brand
 // ============================================================================
 
@@ -97,14 +81,12 @@ const WizardContainer = styled.div`
   background: var(--popup-bg);
   border-radius: 16px;
   border: 1px solid var(--popup-border);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   max-width: 540px;
   width: 100%;
   max-height: 90vh;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  animation: ${fadeIn} 0.3s ease-out;
   font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `;
 
@@ -120,7 +102,6 @@ const LogoImage = styled.img`
   height: 64px;
   margin: 0 auto 16px;
   border-radius: 14px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 `;
 
 const Title = styled.h1`
@@ -152,9 +133,9 @@ const ProgressDot = styled.div<{ active: boolean; completed: boolean }>`
   border-radius: 4px;
   background: ${props =>
     props.completed
-      ? 'var(--popup-toggle-active)'
+      ? '#fba928'
       : props.active
-      ? 'var(--popup-primary)'
+      ? '#fba928'
       : 'var(--popup-border)'};
   transition: all 0.25s ease;
 `;
@@ -170,7 +151,6 @@ const Content = styled.div`
   padding: 20px 24px 24px;
   overflow-y: auto;
   flex: 1;
-  animation: ${slideIn} 0.3s ease-out;
   
   &::-webkit-scrollbar {
     width: 6px;
@@ -202,47 +182,38 @@ const StepDescription = styled.p`
 
 const OptionsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+  width: 100%;
 `;
 
 const OptionCard = styled.button<{ selected: boolean }>`
   background: ${props => props.selected ? 'var(--popup-subcontainer-bg)' : 'transparent'};
   color: ${props => props.selected ? 'var(--popup-fg)' : 'var(--popup-secondary-text)'};
-  border: 1px solid ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-border)'};
-  border-radius: 12px;
-  padding: 16px;
+  border: 1px solid ${props => props.selected ? 'var(--popup-toggle-active)' : 'var(--popup-border)'};
+  border-radius: 8px;
+  padding: 8px;
   text-align: left;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
-  box-shadow: ${props => props.selected ? '0 4px 12px rgba(0, 0, 0, 0.1)' : 'none'};
-
-  &:hover {
-    border-color: var(--popup-primary);
-    background: ${props => props.selected ? 'var(--popup-subcontainer-bg)' : 'var(--popup-model-option-hover)'};
-  }
 
   &:focus-visible {
-    outline: 2px solid var(--popup-primary);
+    outline: 2px solid var(--popup-toggle-active);
     outline-offset: 2px;
-  }
-
-  &:active {
-    transform: scale(0.99);
   }
 `;
 
 const OptionTitle = styled.div`
-  font-size: 14px;
+  font-size: 11px;
   font-weight: 500;
   margin-bottom: 2px;
 `;
 
 const OptionSubtitle = styled.div<{ selected: boolean }>`
-  font-size: 11px;
+  font-size: 9px;
   opacity: ${props => props.selected ? 0.8 : 0.6};
-  line-height: 1.4;
+  line-height: 1.2;
 `;
 
 const Badge = styled.span`
@@ -262,43 +233,43 @@ const Badge = styled.span`
 const ProviderCard = styled.button<{ selected: boolean }>`
   background: ${props => props.selected ? 'var(--popup-subcontainer-bg)' : 'transparent'};
   color: ${props => props.selected ? 'var(--popup-fg)' : 'var(--popup-secondary-text)'};
-  border: 1px solid ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-border)'};
+  border: 1px solid ${props => props.selected ? '#22c55e' : 'var(--popup-border)'};
   border-radius: 12px;
-  padding: 18px;
+  padding: 20px;
   text-align: left;
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
   width: 100%;
-  box-shadow: ${props => props.selected ? '0 4px 12px rgba(0, 0, 0, 0.1)' : 'none'};
-
-  &:hover {
-    border-color: var(--popup-primary);
-    background: ${props => props.selected ? 'var(--popup-subcontainer-bg)' : 'var(--popup-model-option-hover)'};
-  }
 
   &:focus-visible {
-    outline: 2px solid var(--popup-primary);
+    outline: 2px solid #22c55e;
     outline-offset: 2px;
   }
 `;
 
 const ProviderTitle = styled.div`
-  font-size: 15px;
-  font-weight: 500;
-  margin-bottom: 3px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  line-height: 1.3;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `;
 
 const ProviderSubtitle = styled.div<{ selected: boolean }>`
-  font-size: 12px;
-  opacity: ${props => props.selected ? 0.8 : 0.6};
-  margin-bottom: 6px;
+  font-size: 13px;
+  opacity: ${props => props.selected ? 0.9 : 0.7};
+  margin-bottom: 8px;
+  line-height: 1.4;
+  font-weight: 500;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `;
 
 const ProviderBody = styled.div<{ selected: boolean }>`
-  font-size: 12px;
-  opacity: ${props => props.selected ? 0.75 : 0.55};
-  line-height: 1.4;
+  font-size: 13px;
+  opacity: ${props => props.selected ? 0.8 : 0.6};
+  line-height: 1.5;
+  font-family: 'K2D', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 `;
 
 const ProviderDetailsCard = styled.div`
@@ -335,8 +306,7 @@ const FieldInput = styled.input`
 
   &:focus {
     outline: none;
-    border-color: var(--popup-primary);
-    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.15);
+    border-color: #22c55e;
   }
 `;
 
@@ -346,19 +316,22 @@ const FieldHelper = styled.div`
   line-height: 1.4;
 `;
 
-const ToggleRow = styled.div`
+const MotionOptionsGrid = motion(OptionsGrid);
+
+const ToggleList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+`;
+
+const ToggleRow = styled.div<{ active?: boolean }>`
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 14px 16px;
   background: var(--popup-subcontainer-bg);
-  border: 1px solid var(--popup-subcontainer-border);
   border-radius: 10px;
-  margin-bottom: 10px;
-
-  &:last-child {
-    margin-bottom: 0;
-  }
+  transition: all 0.2s ease;
 `;
 
 const ToggleInfo = styled.div`
@@ -419,7 +392,6 @@ const ToggleSlider = styled.span`
     background-color: white;
     transition: 0.3s;
     border-radius: 50%;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
 `;
 
@@ -428,11 +400,12 @@ const ReviewSection = styled.div`
   border: 1px solid var(--popup-subcontainer-border);
   border-radius: 10px;
   padding: 16px;
-  margin-bottom: 12px;
+`;
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+const ReviewList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 `;
 
 const ReviewLabel = styled.div`
@@ -468,13 +441,7 @@ const SkipButton = styled.button`
   cursor: pointer;
   padding: 8px 12px;
   border-radius: 6px;
-  transition: all 0.2s;
   font-family: inherit;
-
-  &:hover {
-    background: var(--popup-btn-default);
-    color: var(--popup-fg);
-  }
 `;
 
 const ButtonGroup = styled.div`
@@ -490,8 +457,8 @@ const ButtonColumn = styled.div`
 `;
 
 const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
-  background: ${props => props.variant === 'primary' ? 'var(--popup-primary)' : 'var(--popup-btn-default)'};
-  color: ${props => props.variant === 'primary' ? 'white' : 'var(--popup-btn-text)'};
+  background: ${props => props.variant === 'primary' ? '#fba928' : 'var(--popup-btn-default)'};
+  color: ${props => props.variant === 'primary' ? '#000000' : 'var(--popup-btn-text)'};
   border: none;
   font-size: 13px;
   font-weight: 500;
@@ -504,14 +471,6 @@ const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   gap: 6px;
   font-family: inherit;
 
-  &:hover {
-    background: ${props => props.variant === 'primary' ? 'var(--popup-primary-hover)' : 'var(--popup-btn-default-hover)'};
-  }
-
-  &:active {
-    transform: scale(0.98);
-  }
-
   &:disabled {
     opacity: 0.5;
     cursor: not-allowed;
@@ -519,42 +478,35 @@ const Button = styled.button<{ variant?: 'primary' | 'secondary' }>`
   }
 `;
 
-const CompleteButton = styled(Button)`
-  background: var(--popup-primary);
-  border: 1px solid var(--popup-primary);
+const MotionWizardContainer = motion(WizardContainer);
 
-  &:hover {
-    background: var(--popup-primary-hover);
-  }
+const MotionButton = motion(Button);
+
+const CompleteButton = styled(Button)`
+  background: #fba928;
+  color: #000000;
+  border: 1px solid #fba928;
 
   &:focus-visible {
-    outline: 2px solid var(--popup-primary);
+    outline: 2px solid #fba928;
     outline-offset: 2px;
   }
 `;
 
+const MotionCompleteButton = motion(CompleteButton);
+
 const ThemePreview = styled.div<{ themeType: string; selected: boolean }>`
   width: 100%;
-  height: 52px;
-  border-radius: 12px;
-  margin-bottom: 10px;
-  background: ${props => {
-    switch (props.themeType) {
-      case 'light': return 'linear-gradient(135deg, #ffffff 0%, #f7f7f7 100%)';
-      case 'dark': return 'linear-gradient(135deg, #1f1f27 0%, #11141c 100%)';
-      default: return 'linear-gradient(135deg, #0ea5e9 0%, #22c55e 100%)';
-    }
-  }};
-  border: 1.5px solid ${props => props.selected ? 'var(--popup-primary)' : 'var(--popup-border)'};
+  height: 24px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  background: transparent;
+  
   transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  
-  &::after {
-    content: '${props => props.themeType === 'light' ? '☀️' : props.themeType === 'dark' ? '🌙' : '🌓'}';
-    font-size: 20px;
-  }
+  color: var(--popup-fg);
 `;
 
 const CTAHelper = styled.div`
@@ -565,6 +517,64 @@ const CTAHelper = styled.div`
   gap: 6px;
   text-align: right;
 `;
+
+// ============================================================================
+// Minimal Theme Icon Components
+// ============================================================================
+
+const DarkThemeIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const LightThemeIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
+
+const SystemThemeIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 
 // ============================================================================
 // Component
@@ -589,14 +599,31 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
   toggleOptions,
   stepCopy,
 }) => {
+  const [direction, setDirection] = useState(0);
+  const [previousStep, setPreviousStep] = useState(step);
+
+  useEffect(() => {
+    if (step !== previousStep) {
+      setDirection(step > previousStep ? 1 : -1);
+      setPreviousStep(step);
+    }
+  }, [step, previousStep]);
+
   const currentStepCopy = stepCopy[step - 1] || { title: '', description: '' };
 
   const renderStep1 = () => (
-    <>
-      <StepTitle>{currentStepCopy.title}</StepTitle>
-      <StepDescription>{currentStepCopy.description}</StepDescription>
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+    >
+      <motion.div variants={staggerItem}>
+        <StepTitle>{currentStepCopy.title}</StepTitle>
+        <StepDescription>{currentStepCopy.description}</StepDescription>
+      </motion.div>
 
-      <div style={{ marginBottom: '24px' }}>
+      <motion.div style={{ marginBottom: '24px' }} variants={staggerItem}>
         <div style={{ fontSize: '14px', fontWeight: '500', marginBottom: '12px', color: 'var(--popup-fg)' }}>
           Language
         </div>
@@ -612,24 +639,26 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             </OptionCard>
           ))}
         </OptionsGrid>
-      </div>
+      </motion.div>
 
-      <div>
+      <motion.div variants={staggerItem}>
         <div style={{ fontSize: '14px', fontWeight: '500', marginBottom: '12px', color: 'var(--popup-fg)' }}>
           Theme
         </div>
         <OptionsGrid>
           {[
-            { value: 'system', label: 'System', icon: '🌗', subtitle: 'Match your device' },
-            { value: 'light', label: 'Light', icon: '☀️', subtitle: 'Bright UI' },
-            { value: 'dark', label: 'Dark', icon: '🌙', subtitle: 'Dim UI' },
+            { value: 'system', label: 'System', icon: <SystemThemeIcon />, subtitle: 'Match your device' },
+            { value: 'light', label: 'Light', icon: <LightThemeIcon />, subtitle: 'Bright UI' },
+            { value: 'dark', label: 'Dark', icon: <DarkThemeIcon />, subtitle: 'Dim UI' },
           ].map((theme) => (
             <OptionCard
               key={theme.value}
               selected={settings.customization?.theme === theme.value}
               onClick={() => onUpdateCustomization('theme', theme.value)}
             >
-              <ThemePreview themeType={theme.value} selected={settings.customization?.theme === theme.value} />
+              <ThemePreview themeType={theme.value} selected={settings.customization?.theme === theme.value}>
+                {theme.icon}
+              </ThemePreview>
               <OptionTitle>{theme.label}</OptionTitle>
               <OptionSubtitle selected={settings.customization?.theme === theme.value}>
                 {theme.subtitle}
@@ -637,32 +666,45 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
             </OptionCard>
           ))}
         </OptionsGrid>
-      </div>
-    </>
+      </motion.div>
+    </motion.div>
   );
 
   const renderStep2 = () => (
-    <>
-      <StepTitle>{currentStepCopy.title}</StepTitle>
-      <StepDescription>{currentStepCopy.description}</StepDescription>
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+    >
+      <motion.div variants={staggerItem}>
+        <StepTitle>{currentStepCopy.title}</StepTitle>
+        <StepDescription>{currentStepCopy.description}</StepDescription>
+      </motion.div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+      <motion.div variants={staggerContainer} initial="hidden" animate="visible">
         {providerOptions.map((provider) => (
-          <ProviderCard
-            key={provider.id}
-            selected={settings.modelType === provider.id}
-            onClick={() => onUpdateSettings({ modelType: provider.id })}
-          >
-            <ProviderTitle>{provider.title}</ProviderTitle>
-            <ProviderSubtitle selected={settings.modelType === provider.id}>
-              {provider.subtitle}
-            </ProviderSubtitle>
-            <ProviderBody selected={settings.modelType === provider.id}>
-              {provider.body}
-            </ProviderBody>
+          <motion.div key={provider.id} variants={staggerItem}>
+            <div style={{ marginBottom: '20px' }}>
+              <ProviderCard
+                selected={settings.modelType === provider.id}
+                onClick={() => onUpdateSettings({ modelType: provider.id })}
+              >
+              <ProviderTitle>{provider.title}</ProviderTitle>
+              <ProviderSubtitle selected={settings.modelType === provider.id}>
+                {provider.subtitle}
+              </ProviderSubtitle>
+              <ProviderBody selected={settings.modelType === provider.id}>
+                {provider.body}
+              </ProviderBody>
 
-            {settings.modelType === provider.id && ["openai", "gemini", "grok", "local"].includes(provider.id) && (
-              <ProviderDetailsCard>
+              {settings.modelType === provider.id && ["openai", "gemini", "grok", "local"].includes(provider.id) && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: "auto", opacity: 1 }}
+                  transition={FAMILY_SPRINGS.smooth}
+                >
+                  <ProviderDetailsCard>
                 {provider.id === "openai" && (
                   <FieldGroup>
                     <FieldLabel htmlFor="onboarding-openai-key">OpenAI API key</FieldLabel>
@@ -793,140 +835,166 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                   </>
                 )}
               </ProviderDetailsCard>
-            )}
-          </ProviderCard>
+                </motion.div>
+              )}
+            </ProviderCard>
+            </div>
+          </motion.div>
         ))}
-      </div>
-    </>
+      </motion.div>
+    </motion.div>
   );
 
   const renderStep3 = () => (
-    <>
-      <StepTitle>{currentStepCopy.title}</StepTitle>
-      <StepDescription>{currentStepCopy.description}</StepDescription>
+    <motion.div
+      variants={staggerContainer}
+      initial="hidden"
+      animate="visible"
+      exit="hidden"
+    >
+      <motion.div variants={staggerItem}>
+        <StepTitle>{currentStepCopy.title}</StepTitle>
+        <StepDescription>{currentStepCopy.description}</StepDescription>
+      </motion.div>
 
-      {toggleOptions.map((toggle) => (
-        <ToggleRow key={toggle.key}>
-          <ToggleInfo>
-            <ToggleLabel>{toggle.label}</ToggleLabel>
-            <ToggleDescription>{toggle.description}</ToggleDescription>
-          </ToggleInfo>
-          <Toggle>
-            <ToggleInput
-              type="checkbox"
-              checked={!!settings.customization?.[toggle.key]}
-              onChange={(e) => onUpdateCustomization(toggle.key, e.target.checked)}
-            />
-            <ToggleSlider />
-          </Toggle>
-        </ToggleRow>
-      ))}
-
-      <ToggleRow>
-        <ToggleInfo>
-          <ToggleLabel>Instant AI tray</ToggleLabel>
-          <ToggleDescription>
-            Pin inline answers right on the page.
-          </ToggleDescription>
-        </ToggleInfo>
-        <Toggle>
-          <ToggleInput
-            type="checkbox"
-            checked={!!settings.customization?.quickView}
-            onChange={(e) => onUpdateCustomization("quickView", e.target.checked)}
-          />
-          <ToggleSlider />
-        </Toggle>
-      </ToggleRow>
-
-      <ToggleRow>
-        <ToggleInfo>
-          <ToggleLabel>Keep selection bubble</ToggleLabel>
-          <ToggleDescription>Keep the floating action bubble near highlights.</ToggleDescription>
-        </ToggleInfo>
-        <Toggle>
-          <ToggleInput
-            type="checkbox"
-            checked={settings.customization?.showTextSelectionButton !== false}
-            onChange={(e) => onUpdateCustomization("showTextSelectionButton", e.target.checked)}
-          />
-          <ToggleSlider />
-        </Toggle>
-      </ToggleRow>
-
-      <ToggleRow>
-        <ToggleInfo>
-          <ToggleLabel>Keep highlighted text</ToggleLabel>
-          <ToggleDescription>
-            Leave highlights until you clear them.
-          </ToggleDescription>
-        </ToggleInfo>
-        <Toggle>
-          <ToggleInput
-            type="checkbox"
-            checked={!!settings.customization?.persistHighlight}
-            onChange={(e) => onUpdateCustomization("persistHighlight", e.target.checked)}
-          />
-          <ToggleSlider />
-        </Toggle>
-      </ToggleRow>
-
-      <ToggleRow>
-        <ToggleInfo>
-          <ToggleLabel>Show website info</ToggleLabel>
-          <ToggleDescription>
-            Display website favicon and title in popup.
-          </ToggleDescription>
-        </ToggleInfo>
-        <Toggle>
-          <ToggleInput
-            type="checkbox"
-            checked={settings.customization?.showWebsiteInfo !== false}
-            onChange={(e) => onUpdateCustomization("showWebsiteInfo", e.target.checked)}
-          />
-          <ToggleSlider />
-        </Toggle>
-      </ToggleRow>
-
-      <ToggleRow>
-        <ToggleInfo>
-          <ToggleLabel>Distraction-Free Mode</ToggleLabel>
-          <ToggleDescription>
-            Blur background when viewing results for better focus.
-          </ToggleDescription>
-        </ToggleInfo>
-        <Toggle>
-          <ToggleInput
-            type="checkbox"
-            checked={!!settings.customization?.radicallyFocus}
-            onChange={(e) => onUpdateCustomization("radicallyFocus", e.target.checked)}
-          />
-          <ToggleSlider />
-        </Toggle>
-      </ToggleRow>
-
-      <div style={{ marginTop: "18px", display: "flex", flexDirection: "column", gap: "12px" }}>
-        <ToggleLabel style={{ fontSize: "14px" }}>Layout mode</ToggleLabel>
-        <div style={{ display: "flex", gap: "12px" }}>
-          {["floating", "sidebar", "centered"].map((mode) => (
-            <ProviderCard
-              key={mode}
-              selected={settings.customization?.layoutMode === mode}
-              onClick={() => onUpdateCustomization("layoutMode", mode)}
-            >
-              <ProviderTitle style={{ fontSize: "13px" }}>
-                {mode === "floating" ? "Floating" : mode === "sidebar" ? "Sidebar" : "Centered"}
-              </ProviderTitle>
-              <ProviderBody selected={settings.customization?.layoutMode === mode}>
-                {mode === "floating" && "Popover near your selection."}
-                {mode === "sidebar" && "Pinned to the page edge."}
-                {mode === "centered" && "Modal focus in the center."}
-              </ProviderBody>
-            </ProviderCard>
+      <motion.div variants={staggerContainer} initial="hidden" animate="visible">
+        <ToggleList>
+          {toggleOptions.map((toggle) => (
+            <motion.div key={toggle.key} variants={staggerItem}>
+              <ToggleRow active={!!settings.customization?.[toggle.key]}>
+                <ToggleInfo>
+                  <ToggleLabel>{toggle.label}</ToggleLabel>
+                  <ToggleDescription>{toggle.description}</ToggleDescription>
+                </ToggleInfo>
+                <Toggle>
+                  <ToggleInput
+                    type="checkbox"
+                    checked={!!settings.customization?.[toggle.key]}
+                    onChange={(e) => onUpdateCustomization(toggle.key, e.target.checked)}
+                  />
+                  <ToggleSlider />
+                </Toggle>
+              </ToggleRow>
+            </motion.div>
           ))}
-        </div>
-      </div>
-    </>
+
+          <motion.div variants={staggerItem}>
+            <ToggleRow active={!!settings.customization?.quickView}>
+              <ToggleInfo>
+                <ToggleLabel>Instant AI tray</ToggleLabel>
+                <ToggleDescription>
+                  Pin inline answers right on the page.
+                </ToggleDescription>
+              </ToggleInfo>
+              <Toggle>
+                <ToggleInput
+                  type="checkbox"
+                  checked={!!settings.customization?.quickView}
+                  onChange={(e) => onUpdateCustomization("quickView", e.target.checked)}
+                />
+                <ToggleSlider />
+              </Toggle>
+            </ToggleRow>
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <ToggleRow active={settings.customization?.showTextSelectionButton !== false}>
+              <ToggleInfo>
+                <ToggleLabel>Keep selection bubble</ToggleLabel>
+                <ToggleDescription>Keep the floating action bubble near highlights.</ToggleDescription>
+              </ToggleInfo>
+              <Toggle>
+                <ToggleInput
+                  type="checkbox"
+                  checked={settings.customization?.showTextSelectionButton !== false}
+                  onChange={(e) => onUpdateCustomization("showTextSelectionButton", e.target.checked)}
+                />
+                <ToggleSlider />
+              </Toggle>
+            </ToggleRow>
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <ToggleRow active={!!settings.customization?.persistHighlight}>
+              <ToggleInfo>
+                <ToggleLabel>Keep highlighted text</ToggleLabel>
+                <ToggleDescription>
+                  Leave highlights until you clear them.
+                </ToggleDescription>
+              </ToggleInfo>
+              <Toggle>
+                <ToggleInput
+                  type="checkbox"
+                  checked={!!settings.customization?.persistHighlight}
+                  onChange={(e) => onUpdateCustomization("persistHighlight", e.target.checked)}
+                />
+                <ToggleSlider />
+              </Toggle>
+            </ToggleRow>
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <ToggleRow active={settings.customization?.showWebsiteInfo !== false}>
+              <ToggleInfo>
+                <ToggleLabel>Show website info</ToggleLabel>
+                <ToggleDescription>
+                  Display website favicon and title in popup.
+                </ToggleDescription>
+              </ToggleInfo>
+              <Toggle>
+                <ToggleInput
+                  type="checkbox"
+                  checked={settings.customization?.showWebsiteInfo !== false}
+                  onChange={(e) => onUpdateCustomization("showWebsiteInfo", e.target.checked)}
+                />
+                <ToggleSlider />
+              </Toggle>
+            </ToggleRow>
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <ToggleRow active={!!settings.customization?.radicallyFocus}>
+              <ToggleInfo>
+                <ToggleLabel>Distraction-Free Mode</ToggleLabel>
+                <ToggleDescription>
+                  Blur background when viewing results for better focus.
+                </ToggleDescription>
+              </ToggleInfo>
+              <Toggle>
+                <ToggleInput
+                  type="checkbox"
+                  checked={!!settings.customization?.radicallyFocus}
+                  onChange={(e) => onUpdateCustomization("radicallyFocus", e.target.checked)}
+                />
+                <ToggleSlider />
+              </Toggle>
+            </ToggleRow>
+          </motion.div>
+        </ToggleList>
+
+        <motion.div variants={staggerItem} style={{ marginTop: "18px", display: "flex", flexDirection: "column", gap: "12px" }}>
+          <ToggleLabel style={{ fontSize: "14px" }}>Layout mode</ToggleLabel>
+          <div style={{ display: "flex", gap: "12px" }}>
+            {["floating", "sidebar", "centered"].map((mode) => (
+              <ProviderCard
+                key={mode}
+                selected={settings.customization?.layoutMode === mode}
+                onClick={() => onUpdateCustomization("layoutMode", mode)}
+              >
+                <ProviderTitle style={{ fontSize: "13px" }}>
+                  {mode === "floating" ? "Floating" : mode === "sidebar" ? "Sidebar" : "Centered"}
+                </ProviderTitle>
+                <ProviderBody selected={settings.customization?.layoutMode === mode}>
+                  {mode === "floating" && "Popover near your selection."}
+                  {mode === "sidebar" && "Pinned to the page edge."}
+                  {mode === "centered" && "Modal focus in the center."}
+                </ProviderBody>
+              </ProviderCard>
+            ))}
+          </div>
+        </motion.div>
+      </motion.div>
+    </motion.div>
   );
 
   const renderStep4 = () => {
@@ -935,51 +1003,66 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     const enabledToggles = toggleOptions.filter(t => settings.customization?.[t.key]);
 
     return (
-      <>
-        <StepTitle>{currentStepCopy.title}</StepTitle>
-        <StepDescription>{currentStepCopy.description}</StepDescription>
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        animate="visible"
+        exit="hidden"
+      >
+        <ReviewList>
+          <motion.div variants={staggerItem}>
+            <ReviewSection>
+              <ReviewLabel>Language & Theme</ReviewLabel>
+              <ReviewValue>
+                {selectedLang?.nativeName || 'English'} • {settings.customization?.theme || 'System'} theme
+              </ReviewValue>
+            </ReviewSection>
+          </motion.div>
 
-        <ReviewSection>
-          <ReviewLabel>Language & Theme</ReviewLabel>
-          <ReviewValue>
-            {selectedLang?.nativeName || 'English'} • {settings.customization?.theme || 'System'} theme
-          </ReviewValue>
-        </ReviewSection>
+          <motion.div variants={staggerItem}>
+            <ReviewSection>
+              <ReviewLabel>AI Provider</ReviewLabel>
+              <ReviewValue>{selectedProvider?.title || 'LightUp Basic'}</ReviewValue>
+            </ReviewSection>
+          </motion.div>
 
-        <ReviewSection>
-          <ReviewLabel>AI Provider</ReviewLabel>
-          <ReviewValue>{selectedProvider?.title || 'LightUp Basic'}</ReviewValue>
-        </ReviewSection>
-
-        <ReviewSection>
-          <ReviewLabel>Enabled Features</ReviewLabel>
-          <ReviewValue>
-            {enabledToggles.length > 0 
-              ? enabledToggles.map(t => t.label).join(', ')
-              : 'None selected'}
-          </ReviewValue>
-        </ReviewSection>
-
-        <div style={{ 
-          marginTop: '24px', 
-          padding: '16px', 
-          background: 'var(--popup-subcontainer-bg)', 
-          border: '1px solid var(--popup-primary)',
-          borderRadius: '12px',
-          textAlign: 'center'
-        }}>
-          <div style={{ fontSize: '14px', color: 'var(--popup-fg)', marginBottom: '4px' }}>
-            🎉 You're all set!
-          </div>
-          <div style={{ fontSize: '13px', color: 'var(--popup-secondary-text)' }}>
-            You can always change these settings later in the options page.
-          </div>
-        </div>
-      </>
+          <motion.div variants={staggerItem}>
+            <ReviewSection>
+              <ReviewLabel>Enabled Features</ReviewLabel>
+              <ReviewValue>
+                {enabledToggles.length > 0 
+                  ? enabledToggles.map(t => t.label).join(', ')
+                  : 'None selected'}
+              </ReviewValue>
+            </ReviewSection>
+            <div style={{ fontSize: '13px', color: 'var(--popup-secondary-text)', marginTop: '8px' }}>
+              You can always change these settings later in the options page.
+            </div>
+          </motion.div>
+        </ReviewList>
+      </motion.div>
     );
   };
 
   const renderStepContent = () => {
+    const transition = {
+      x: direction > 0 ? 20 : -20,
+      opacity: 0,
+      transition: getSafeTransition(FAMILY_SPRINGS.smooth)
+    };
+    
+    const enter = {
+      x: 0,
+      opacity: 1,
+      transition: getSafeTransition(FAMILY_SPRINGS.smooth)
+    };
+
+    const exit = {
+      x: direction > 0 ? -20 : 20,
+      opacity: 0,
+      transition: getSafeTransition(FAMILY_SPRINGS.instant)
+    };
+
     switch (step) {
       case 1: return renderStep1();
       case 2: return renderStep2();
@@ -994,12 +1077,16 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
       <Overlay data-theme={settings.customization?.theme === 'system' 
         ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
         : settings.customization?.theme || 'dark'}>
-        <WizardContainer>
+        <MotionWizardContainer
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={getSafeTransition(FAMILY_SPRINGS.smooth)}
+        >
           <div style={{ padding: '60px', textAlign: 'center' }}>
             <div style={{ fontSize: '24px', marginBottom: '16px' }}>⏳</div>
             <div style={{ color: 'var(--popup-secondary-text)' }}>Loading...</div>
           </div>
-        </WizardContainer>
+        </MotionWizardContainer>
       </Overlay>
     );
   }
@@ -1008,63 +1095,113 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
     ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
     : settings.customization?.theme || 'dark';
 
+  const stepVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 20 : -20,
+      opacity: 0,
+      transition: getSafeTransition(FAMILY_SPRINGS.smooth)
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      transition: getSafeTransition(FAMILY_SPRINGS.smooth)
+    },
+    exit: (direction: number) => ({
+      x: direction > 0 ? -20 : 20,
+      opacity: 0,
+      transition: getSafeTransition(FAMILY_SPRINGS.instant)
+    })
+  };
+
   return (
     <Overlay data-theme={currentTheme}>
-      <WizardContainer>
+      <MotionWizardContainer
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={getSafeTransition(FAMILY_SPRINGS.smooth)}
+        layout
+      >
         <Header>
-          <LogoImage src={logoUrl} alt="LightUp" />
-          <Title>Welcome to LightUp</Title>
-          <Subtitle>Let’s get you set up in just a few steps</Subtitle>
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={getSafeTransition(FAMILY_SPRINGS.smooth)}
+          >
+            <LogoImage src={logoUrl} alt="LightUp" />
+            <Title>Welcome to LightUp</Title>
+            <Subtitle>Let's get you set up in just a few steps</Subtitle>
+          </motion.div>
           
           <ProgressContainer>
             {Array.from({ length: totalSteps }).map((_, i) => (
-              <ProgressDot 
-                key={i} 
-                active={i + 1 === step} 
-                completed={i + 1 < step} 
-              />
+              <motion.div
+                key={i}
+                initial={{ width: '8px' }}
+                animate={{ width: i + 1 === step ? '20px' : '8px' }}
+                transition={getSafeTransition(FAMILY_SPRINGS.smooth)}
+              >
+                <ProgressDot 
+                  active={i + 1 === step} 
+                  completed={i + 1 < step} 
+                />
+              </motion.div>
             ))}
           </ProgressContainer>
           <StepIndicator>Step {step} of {totalSteps}</StepIndicator>
         </Header>
 
-        <Content key={step}>
-          {renderStepContent()}
+        <Content>
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={step}
+              custom={direction}
+              variants={stepVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+            >
+              {renderStepContent()}
+            </motion.div>
+          </AnimatePresence>
         </Content>
 
         <Footer>
-          <SkipButton onClick={onSkip}>Skip setup</SkipButton>
+          <MotionButton
+            onClick={onSkip}
+          >
+            Skip setup
+          </MotionButton>
           
           <ButtonColumn>
             <ButtonGroup>
               {step > 1 && (
-                <Button variant="secondary" onClick={onBack}>
+                <MotionButton
+                  variant="secondary"
+                  onClick={onBack}
+                >
                   ← Back
-                </Button>
+                </MotionButton>
               )}
               
               {step < totalSteps ? (
-                <Button variant="primary" onClick={onNext}>
+                <MotionButton
+                  variant="primary"
+                  onClick={onNext}
+                >
                   Next →
-                </Button>
+                </MotionButton>
               ) : (
-                <CompleteButton 
-                  variant="primary" 
+                <MotionCompleteButton
                   onClick={onComplete}
                   disabled={isCompleting}
                 >
                   {isCompleting ? 'Finishing...' : 'Finish setup'}
-                </CompleteButton>
+                </MotionCompleteButton>
               )}
             </ButtonGroup>
-            {step === totalSteps && (
-              <CTAHelper>
-                ⏱ Takes ~30 seconds. You can tweak everything later.
-              </CTAHelper>
-            )}
           </ButtonColumn>
         </Footer>
-      </WizardContainer>
+      </MotionWizardContainer>
     </Overlay>
   );
 };

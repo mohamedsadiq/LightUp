@@ -27,8 +27,9 @@ export const getOnboardingProviderOptions = (
   {
     id: "basic",
     title: "LightUp Basic",
-    subtitle: "Fast Grok proxy",
-    body: "Default pick. No API key needed, tuned prompts included.",
+    subtitle: "Fast Grok proxy • Free",
+    body: "No API key needed. Includes tuned prompts and basic quota. Perfect to get started.",
+    badge: "Free",
     icon: React.createElement("img", {
       src: logoUrl,
       alt: "LightUp",

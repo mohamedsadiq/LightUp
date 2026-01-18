@@ -56,7 +56,7 @@ const DEFAULT_SETTINGS: Settings = {
     enablePDFSupport: false,
     showTextSelectionButton: true,
     automaticActivation: false,
-    showWebsiteInfo: true,
+    showWebsiteInfo: false,
     sidebarPinned: false
   }
 }

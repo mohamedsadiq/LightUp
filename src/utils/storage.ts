@@ -195,7 +195,7 @@ const getDefaultSettings = (): Settings => ({
     activationMode: "manual",  // Changed default from automatic to manual
     enablePDFSupport: false,
     showTextSelectionButton: true,
-    showWebsiteInfo: true,
+    showWebsiteInfo: false,
     sidebarPinned: false  // Default to unpinned
   }
 }) 

@@ -1318,7 +1318,7 @@ function IndexOptions() {
               showTextSelectionButton:
                 savedSettings.customization?.showTextSelectionButton ?? true,
               showWebsiteInfo:
-                savedSettings.customization?.showWebsiteInfo ?? true,
+                savedSettings.customization?.showWebsiteInfo ?? false,
               sidebarPinned: savedSettings.customization?.sidebarPinned ?? false
             }
           }
