@@ -330,6 +330,7 @@ const ToggleRow = styled.div<{ active?: boolean }>`
   justify-content: space-between;
   padding: 14px 16px;
   background: var(--popup-subcontainer-bg);
+  border: 1px solid var(--popup-subcontainer-border);
   border-radius: 10px;
   transition: all 0.2s ease;
 `;
@@ -870,106 +871,27 @@ const OnboardingWizard: React.FC<OnboardingWizardProps> = ({
                   <ToggleInput
                     type="checkbox"
                     checked={!!settings.customization?.[toggle.key]}
-                    onChange={(e) => onUpdateCustomization(toggle.key, e.target.checked)}
+                    onChange={(e) => {
+                      const newValue = e.target.checked;
+                      
+                      // If Auto-open LightUp is turned on, turn off Selection bubble
+                      if (toggle.key === "automaticActivation" && newValue) {
+                        onUpdateCustomization("showTextSelectionButton", false);
+                      }
+                      
+                      // If Selection bubble is turned on, turn off Auto-open LightUp
+                      if (toggle.key === "showTextSelectionButton" && newValue) {
+                        onUpdateCustomization("automaticActivation", false);
+                      }
+                      
+                      onUpdateCustomization(toggle.key, newValue);
+                    }}
                   />
                   <ToggleSlider />
                 </Toggle>
               </ToggleRow>
             </motion.div>
           ))}
-
-          <motion.div variants={staggerItem}>
-            <ToggleRow active={!!settings.customization?.quickView}>
-              <ToggleInfo>
-                <ToggleLabel>Instant AI tray</ToggleLabel>
-                <ToggleDescription>
-                  Pin inline answers right on the page.
-                </ToggleDescription>
-              </ToggleInfo>
-              <Toggle>
-                <ToggleInput
-                  type="checkbox"
-                  checked={!!settings.customization?.quickView}
-                  onChange={(e) => onUpdateCustomization("quickView", e.target.checked)}
-                />
-                <ToggleSlider />
-              </Toggle>
-            </ToggleRow>
-          </motion.div>
-
-          <motion.div variants={staggerItem}>
-            <ToggleRow active={settings.customization?.showTextSelectionButton !== false}>
-              <ToggleInfo>
-                <ToggleLabel>Keep selection bubble</ToggleLabel>
-                <ToggleDescription>Keep the floating action bubble near highlights.</ToggleDescription>
-              </ToggleInfo>
-              <Toggle>
-                <ToggleInput
-                  type="checkbox"
-                  checked={settings.customization?.showTextSelectionButton !== false}
-                  onChange={(e) => onUpdateCustomization("showTextSelectionButton", e.target.checked)}
-                />
-                <ToggleSlider />
-              </Toggle>
-            </ToggleRow>
-          </motion.div>
-
-          <motion.div variants={staggerItem}>
-            <ToggleRow active={!!settings.customization?.persistHighlight}>
-              <ToggleInfo>
-                <ToggleLabel>Keep highlighted text</ToggleLabel>
-                <ToggleDescription>
-                  Leave highlights until you clear them.
-                </ToggleDescription>
-              </ToggleInfo>
-              <Toggle>
-                <ToggleInput
-                  type="checkbox"
-                  checked={!!settings.customization?.persistHighlight}
-                  onChange={(e) => onUpdateCustomization("persistHighlight", e.target.checked)}
-                />
-                <ToggleSlider />
-              </Toggle>
-            </ToggleRow>
-          </motion.div>
-
-          <motion.div variants={staggerItem}>
-            <ToggleRow active={settings.customization?.showWebsiteInfo !== false}>
-              <ToggleInfo>
-                <ToggleLabel>Show website info</ToggleLabel>
-                <ToggleDescription>
-                  Display website favicon and title in popup.
-                </ToggleDescription>
-              </ToggleInfo>
-              <Toggle>
-                <ToggleInput
-                  type="checkbox"
-                  checked={settings.customization?.showWebsiteInfo !== false}
-                  onChange={(e) => onUpdateCustomization("showWebsiteInfo", e.target.checked)}
-                />
-                <ToggleSlider />
-              </Toggle>
-            </ToggleRow>
-          </motion.div>
-
-          <motion.div variants={staggerItem}>
-            <ToggleRow active={!!settings.customization?.radicallyFocus}>
-              <ToggleInfo>
-                <ToggleLabel>Distraction-Free Mode</ToggleLabel>
-                <ToggleDescription>
-                  Blur background when viewing results for better focus.
-                </ToggleDescription>
-              </ToggleInfo>
-              <Toggle>
-                <ToggleInput
-                  type="checkbox"
-                  checked={!!settings.customization?.radicallyFocus}
-                  onChange={(e) => onUpdateCustomization("radicallyFocus", e.target.checked)}
-                />
-                <ToggleSlider />
-              </Toggle>
-            </ToggleRow>
-          </motion.div>
         </ToggleList>
 
         <motion.div variants={staggerItem} style={{ marginTop: "18px", display: "flex", flexDirection: "column", gap: "12px" }}>

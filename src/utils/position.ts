@@ -19,6 +19,7 @@ interface PositionOptions {
   margin?: number;
   preferredX?: number;
   preferredY?: number;
+  coordinateSpace?: "document" | "viewport";
 }
 
 // Get current viewport bounds including scroll position
@@ -91,8 +92,10 @@ export const calculatePosition = (
   dimensions: PopupDimensions = { width: 350, height: 460 },
   options: PositionOptions = {}
 ): Position => {
-  const { margin = 8, preferredX, preferredY } = options;
+  const { margin = 8, preferredX, preferredY, coordinateSpace = "document" } = options;
   const viewport = getViewportBounds();
+  const scrollX = coordinateSpace === "viewport" ? 0 : viewport.scrollX;
+  const scrollY = coordinateSpace === "viewport" ? 0 : viewport.scrollY;
   
   let proposedPosition: Position;
   
@@ -109,23 +112,23 @@ export const calculatePosition = (
       // If we have a valid selection rectangle, use it instead of mouse position
       if (rect && rect.width > 0 && rect.height > 0) {
         // Position the popup at the bottom right of the selection by default
-        let top = rect.bottom + viewport.scrollY + margin;
-        let left = rect.right + viewport.scrollX - dimensions.width / 2;
+        let top = rect.bottom + scrollY + margin;
+        let left = rect.right + scrollX - dimensions.width / 2;
         
         // Try different positions if selection-based positioning doesn't fit
         const positions = [
           // Below and centered
-          { left: rect.right + viewport.scrollX - dimensions.width / 2, top: rect.bottom + viewport.scrollY + margin },
+          { left: rect.right + scrollX - dimensions.width / 2, top: rect.bottom + scrollY + margin },
           // Above and centered
-          { left: rect.right + viewport.scrollX - dimensions.width / 2, top: rect.top + viewport.scrollY - dimensions.height - margin },
+          { left: rect.right + scrollX - dimensions.width / 2, top: rect.top + scrollY - dimensions.height - margin },
           // To the right
-          { left: rect.right + viewport.scrollX + margin, top: rect.top + viewport.scrollY },
+          { left: rect.right + scrollX + margin, top: rect.top + scrollY },
           // To the left
-          { left: rect.left + viewport.scrollX - dimensions.width - margin, top: rect.top + viewport.scrollY },
+          { left: rect.left + scrollX - dimensions.width - margin, top: rect.top + scrollY },
           // Below and aligned left
-          { left: rect.left + viewport.scrollX, top: rect.bottom + viewport.scrollY + margin },
+          { left: rect.left + scrollX, top: rect.bottom + scrollY + margin },
           // Above and aligned left
-          { left: rect.left + viewport.scrollX, top: rect.top + viewport.scrollY - dimensions.height - margin }
+          { left: rect.left + scrollX, top: rect.top + scrollY - dimensions.height - margin }
         ];
         
         // Find the first position that fits
@@ -144,15 +147,15 @@ export const calculatePosition = (
       } else {
         // Fallback to mouse position
         proposedPosition = {
-          left: clientX + viewport.scrollX,
-          top: clientY + viewport.scrollY + margin
+          left: clientX + scrollX,
+          top: clientY + scrollY + margin
         };
       }
     } else {
       // Fallback to mouse position
       proposedPosition = {
-        left: clientX + viewport.scrollX,
-        top: clientY + viewport.scrollY + margin
+        left: clientX + scrollX,
+        top: clientY + scrollY + margin
       };
     }
   }
@@ -170,7 +173,10 @@ export const calculateFloatingPosition = (
   actualDimensions: PopupDimensions,
   options: PositionOptions = {}
 ): Position => {
-  return calculatePosition(clientX, clientY, actualDimensions, options);
+  return calculatePosition(clientX, clientY, actualDimensions, {
+    ...options,
+    coordinateSpace: "viewport"
+  });
 };
 
 // Utility to check if a position needs adjustment

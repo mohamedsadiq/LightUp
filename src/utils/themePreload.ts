@@ -26,13 +26,19 @@ const getInitialTheme = (): "light" | "dark" => {
     : "light"
 }
 
-const applyInitialTheme = () => {
+export const applyTheme = (theme: "light" | "dark") => {
   if (typeof document === "undefined") {
     return
   }
 
+  document.documentElement.setAttribute("data-theme", theme)
+  document.body?.setAttribute("data-theme", theme)
+  document.documentElement.style.colorScheme = theme
+}
+
+const applyInitialTheme = () => {
   const initialTheme = getInitialTheme()
-  document.documentElement.setAttribute("data-theme", initialTheme)
+  applyTheme(initialTheme)
   document.documentElement.classList.add("no-transitions")
 
   requestAnimationFrame(() => {

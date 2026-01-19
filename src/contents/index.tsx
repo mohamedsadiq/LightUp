@@ -2434,8 +2434,9 @@ Please provide a helpful and relevant answer based on the page content above.`;
                           color: currentTheme === 'dark' ? '#999' : '#666',
                           padding: '2px'
                         }}
-                        whileHover={{ scale: 1.1, backgroundColor: currentTheme === 'dark' ? '#FFFFFF10' : '#2c2c2c10' }}
-                        whileTap={{ scale: 0.95 }}
+                        whileHover={{ scale: 0.9, backgroundColor: currentTheme === 'dark' ? '#FFFFFF10' : '#2c2c2c10' }}
+                        whileTap={{ scale: 0.9 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 17 }}
                         title="Edit prompt template"
                       >
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

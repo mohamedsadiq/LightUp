@@ -13,7 +13,7 @@ import { useEnabled } from "~hooks/useEnabled"
 import { useLocale } from "~hooks/useLocale"
 import { getMessage, SUPPORTED_LANGUAGES } from "~utils/i18n"
 import "~utils/themePreload"
-import { rememberTheme } from "~utils/themePreload"
+import { applyTheme, rememberTheme } from "~utils/themePreload"
 import { useMessage } from "~hooks/useMessage"
 import LanguageSelector from "~components/LanguageSelector"
 import { Globe } from "lucide-react"
@@ -496,6 +496,20 @@ const IndexPopup = () => {
   const [activeTab, setActiveTab] = useState('general')
   const [activeModeConfig, setActiveModeConfig] = useState(false)
   const [activeMode, setActiveMode] = useState<string>('explain')
+  const [popupTheme, setPopupTheme] = useState<'light' | 'dark'>(() => {
+    if (typeof document === "undefined") {
+      return "dark"
+    }
+
+    const currentTheme = document.documentElement.getAttribute("data-theme")
+    if (currentTheme === "light" || currentTheme === "dark") {
+      return currentTheme
+    }
+
+    return window.matchMedia?.("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light"
+  })
   const { success: notifySuccess, error: notifyError, NotificationOutlet } = useStandaloneNotification()
   const [feedbackType, setFeedbackType] = useState<"general" | "bug" | "feature" | "other">("general")
   const [feedbackContent, setFeedbackContent] = useState("")
@@ -517,15 +531,18 @@ const IndexPopup = () => {
       effectiveTheme = themeSetting as 'light' | 'dark';
     }
 
-    // Set the data-theme attribute on document.documentElement
-    document.documentElement.setAttribute('data-theme', effectiveTheme);
+    // Apply theme consistently to document + native controls
+    applyTheme(effectiveTheme)
+    setPopupTheme(effectiveTheme)
     rememberTheme(themeSetting as 'light' | 'dark' | 'system');
 
     // Listen for system theme changes if in system mode
     if (themeSetting === 'system') {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
       const handleChange = (e: MediaQueryListEvent) => {
-        document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+        const nextTheme = e.matches ? 'dark' : 'light'
+        applyTheme(nextTheme)
+        setPopupTheme(nextTheme)
       };
       mediaQuery.addEventListener('change', handleChange);
       return () => mediaQuery.removeEventListener('change', handleChange);
@@ -1114,7 +1131,7 @@ const IndexPopup = () => {
   }
 
   return (
-    <PopupContainer>
+    <PopupContainer data-theme={popupTheme}>
       {/* Notification outlet */}
       <NotificationOutlet />
       <Header>

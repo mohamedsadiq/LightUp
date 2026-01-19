@@ -77,7 +77,7 @@ export const ONBOARDING_STEP_COPY = [
   },
   {
     title: "Essential controls",
-    description: "Decide which automation and privacy controls should be on."
+    description: "Customize how LightUp appears and interacts with web pages."
   },
   {
     title: "Review & finish",
@@ -93,16 +93,16 @@ export const ONBOARDING_TOGGLES: {
   {
     key: "showTextSelectionButton",
     label: "Selection bubble",
-    description: "Keep the floating action button near highlighted text."
+    description: "Show floating action button when you highlight text."
   },
   {
     key: "automaticActivation",
     label: "Auto-open LightUp",
-    description: "Launch the assistant automatically when text is selected."
+    description: "Automatically open when you select text on any page."
   },
   {
     key: "contextAwareness",
-    label: "Context awareness",
-    description: "Allow LightUp to use surrounding page info for better answers."
+    label: "Smart context",
+    description: "Use page content to give more relevant answers."
   }
 ]
