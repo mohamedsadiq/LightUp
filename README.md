@@ -3,7 +3,13 @@
 ![LightUp Preview](https://pbs.twimg.com/media/GgxiXUPXoAAVQWP?format=jpg&name=medium)
 
 <div align="center">
-  <a href="https://boimaginations.com/lightup">🌐 Website</a> | <a href="https://x.com/sadiq_moo">𝕏 Follow us on X</a> | <a href="https://www.boimaginations.com/lightup/getting-started">🚀 Getting Started</a> | <a href="https://github.com/mohamedsadiq/LightUp/releases">📥 Release Page</a> |  <a href="https://chromewebstore.google.com/detail/lightup-ai-powered-web-an/pncapgeoeedlfppkohlbelelkkihikel?authuser=5&hl=en-GB">📥 Download on Chrome</a>
+
+[![Website](https://img.shields.io/badge/🌐-Website-blue)](https://boimaginations.com/lightup)
+[![X Follow](https://img.shields.io/badge/𝕏-Follow-black)](https://x.com/sadiq_moo)
+[![Getting Started](https://img.shields.io/badge/🚀-Getting_Started-green)](https://www.boimaginations.com/lightup/getting-started)
+[![Releases](https://img.shields.io/badge/📥-Release_Page-orange)](https://github.com/mohamedsadiq/LightUp/releases)
+[![Chrome Web Store](https://img.shields.io/badge/📥-Download_on_Chrome-brightgreen)](https://chromewebstore.google.com/detail/lightup-ai-powered-web-an/pncapgeoeedlfppkohlbelelkkihikel?authuser=5&hl=en-GB)
+
 </div>
 
 **LightUp lets you highlight any text and get instant AI explanations, summaries, translations, and more—right on the page. No tab switching, no broken flow.**
@@ -13,8 +19,7 @@
 - 🎨 **Flexible UI**: Floating, sidebar, or centered layouts
 - ⚡ **Fast**: Keyboard shortcuts and instant follow-up questions
 - 🌐 **Multi-provider**: OpenAI, Gemini, xAI/Grok, or local models
-
-**Featured on Chrome Web Store** • 4.2/5 stars • 40+ languages
+- 🛠️ **Custom prompts**: Create your own actions and workflows
 
 ---
 
@@ -52,11 +57,11 @@
 
 ### Supported providers
 
-- **OpenAI**: GPT models (requires API key)
-- **Google Gemini**: 1.0 Pro, 1.5 Pro/Flash (requires API key)
-- **xAI/Grok**: Grok models (requires API key starting with `xai-`)
-- **Local LLM**: Ollama/LM Studio/Text Generation WebUI via `http://127.0.0.1:1234` or custom URL
-- **Basic**: Free tier (no API key)
+- **OpenAI**: GPT-4, GPT-4o, GPT-5 (requires API key)
+- **Google Gemini**: Gemini 1.0 Pro, Gemini 1.5 Pro, Gemini 1.5 Flash (requires API key)
+- **xAI/Grok**: Grok, Grok-2 (requires API key starting with `xai-`)
+- **Local LLM**: Ollama, LM Studio, Text Generation WebUI via `http://127.0.0.1:1234` or custom URL
+- **Basic**: Free tier (no API key) — currently uses Grok
 
 ### Local LLM setup
 
@@ -66,6 +71,20 @@
   - Ollama: `http://127.0.0.1:11434`
   - LM Studio: `http://127.0.0.1:1234`
 
+#### Supported local models
+
+LightUp supports a wide range of local models, including:
+
+- **Llama**: Llama 4 (70B/40B), Llama 3.3 (70B/8B), Llama 3.2 (3B/1B), Llama 3.1 (405B/70B/8B), Llama 2 (70B/13B)
+- **DeepSeek**: DeepSeek R1 series, DeepSeek V3, DeepSeek Coder series
+- **Qwen**: Qwen 3 (32B/14B), Qwen 3 Coder
+- **Mistral**: Mistral Large 3, Mixtral (8x22B/8x7B), Codestral 22B, Mistral 7B
+- **Phi**: Phi 4 series (14B/3.8B), Phi 3 series, Phi 4 Reasoning
+- **Gemma**: Gemma 3 (27B/9B/4B), Gemma 2 (27B/9B)
+- **Other**: Neural Chat, OpenThinker, QWQ
+
+Models are categorized by hardware requirements (from 2GB VRAM to 400GB+ VRAM) and use case (general, reasoning, coding, compact).
+
 ### UI layouts
 
 - **Floating**: Compact popup near your selection
@@ -74,10 +93,14 @@
 
 ### Privacy details
 
-- Session-only memory (no persistent conversation history)
-- Optional local processing keeps data on-device
-- API keys are encrypted in storage
-- See [PRIVACY.md](./docs/PRIVACY.md) for details
+- **Session-only memory**: Conversations are kept in memory only and cleared when you close the popup or navigate away. No history is saved to disk.
+- **Local processing option**: Use a local LLM to keep all text processing on your machine—nothing leaves your device.
+- **Encrypted storage**: API keys are encrypted in browser storage.
+- **No tracking**: LightUp does not track users or send usage data to third parties.
+- **Cloud providers**: If you use OpenAI, Gemini, or xAI/Grok, your selected text is sent to their APIs for processing. We recommend reviewing their privacy policies.
+- **Open source**: All code is public on GitHub for transparency.
+
+See [PRIVACY.md](./docs/PRIVACY.md) for a deeper technical breakdown.
 
 ## 🔧 Usage
 
