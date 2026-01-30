@@ -1,6 +1,6 @@
 ## LightUp — AI annotations without leaving the page
 
-![LightUp Preview](https://pbs.twimg.com/media/GgxiXUPXoAAVQWP?format=jpg&name=medium)
+![LightUp Preview](https://www.boimaginations.com/_next/image?url=https%3A%2F%2Fyjvcqtizkqupugstyqak.supabase.co%2Fstorage%2Fv1%2Fobject%2Fpublic%2Flightup%2F%2FImage%25202880x2160.webp&w=1200&q=75)
 
 <div align="center">
 
