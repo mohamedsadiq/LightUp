@@ -11,15 +11,6 @@ Welcome to the LightUp documentation hub. This repo contains the **LightUp brows
 - [Troubleshooting](./TROUBLESHOOTING.md)
 - [Releasing](./RELEASING.md)
 
-## Internal Design Notes
-
-These are internal design audits and UI/animation guides:
-
-- [Family Wallet Animation Guide](./animation-guide-family-wallet.md)
-- [Radix UI Component Audit](./radix-ui-component-audit.md)
-- [Radix UI Mapping](./radix-ui-mapping.md)
-- [Radix UI Progress](./radix-ui-progress.md)
-
 ## Repo Quick Map
 
 - `src/contents/` → Content scripts injected into pages
