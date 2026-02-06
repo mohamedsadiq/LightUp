@@ -26,7 +26,7 @@ export interface SessionMessage {
 
 export interface SessionContext {
   messages: SessionMessage[];
-  domain: string;
+  sessionKey: string;
   startedAt: number;
 }
 
@@ -88,16 +88,14 @@ export class SessionMemory {
    */
   getSession(domain: string): SessionContext {
     this.currentDomain = domain;
+    return this.getOrCreateSession(domain);
+  }
 
-    if (!this.sessions.has(domain)) {
-      this.sessions.set(domain, {
-        messages: [],
-        domain,
-        startedAt: Date.now(),
-      });
-    }
-
-    return this.sessions.get(domain)!;
+  /**
+   * Start or get session for a specific key without mutating currentDomain
+   */
+  getSessionByKey(sessionKey: string): SessionContext {
+    return this.getOrCreateSession(sessionKey);
   }
 
   /**
@@ -107,6 +105,38 @@ export class SessionMemory {
     if (!this.currentDomain) return;
 
     const session = this.sessions.get(this.currentDomain);
+    if (!session) return;
+
+    session.messages.push({
+      role: "user",
+      content,
+      timestamp: Date.now(),
+    });
+
+    this.trimIfNeeded(session);
+  }
+
+  /**
+   * Add assistant response to a specific session key
+   */
+  addAssistantMessageForKey(sessionKey: string, content: string): void {
+    const session = this.sessions.get(sessionKey);
+    if (!session) return;
+
+    session.messages.push({
+      role: "assistant",
+      content,
+      timestamp: Date.now(),
+    });
+
+    this.trimIfNeeded(session);
+  }
+
+  /**
+   * Add user message to a specific session key
+   */
+  addUserMessageForKey(sessionKey: string, content: string): void {
+    const session = this.sessions.get(sessionKey);
     if (!session) return;
 
     session.messages.push({
@@ -149,6 +179,23 @@ export class SessionMemory {
     const session = this.sessions.get(this.currentDomain);
     if (!session || session.messages.length === 0) return "";
 
+    return this.buildContextString(session);
+  }
+
+  /**
+   * Get context string for a specific session key
+   */
+  getContextStringForKey(sessionKey: string): string {
+    const session = this.sessions.get(sessionKey);
+    if (!session || session.messages.length === 0) return "";
+
+    return this.buildContextString(session);
+  }
+
+  /**
+   * Build context string from a session
+   */
+  private buildContextString(session: SessionContext): string {
     const messages = session.messages;
     const contextParts: string[] = [];
     let currentTokens = 0;
@@ -241,11 +288,27 @@ export class SessionMemory {
   }
 
   /**
+   * Check if there's any context for a specific session key
+   */
+  hasContextForKey(sessionKey: string): boolean {
+    const session = this.sessions.get(sessionKey);
+    return session !== undefined && session.messages.length > 0;
+  }
+
+  /**
    * Get message count
    */
   getMessageCount(): number {
     if (!this.currentDomain) return 0;
     const session = this.sessions.get(this.currentDomain);
+    return session?.messages.length || 0;
+  }
+
+  /**
+   * Get message count for a specific session key
+   */
+  getMessageCountForKey(sessionKey: string): number {
+    const session = this.sessions.get(sessionKey);
     return session?.messages.length || 0;
   }
 
@@ -260,6 +323,13 @@ export class SessionMemory {
     if (this.currentDomain) {
       this.sessions.delete(this.currentDomain);
     }
+  }
+
+  /**
+   * Clear a specific session key
+   */
+  clearSessionByKey(sessionKey: string): void {
+    this.sessions.delete(sessionKey);
   }
 
   /**
@@ -279,9 +349,9 @@ export class SessionMemory {
     const MAX_DOMAINS = 100; // Maximum number of domains to keep
     
     // Remove sessions older than TTL
-    for (const [domain, session] of this.sessions.entries()) {
+    for (const [sessionKey, session] of this.sessions.entries()) {
       if (now - session.startedAt > TTL) {
-        this.sessions.delete(domain);
+        this.sessions.delete(sessionKey);
       }
     }
     
@@ -291,7 +361,7 @@ export class SessionMemory {
         .sort((a, b) => a[1].startedAt - b[1].startedAt);
       
       const toRemove = sortedSessions.slice(0, this.sessions.size - MAX_DOMAINS);
-      toRemove.forEach(([domain]) => this.sessions.delete(domain));
+      toRemove.forEach(([sessionKey]) => this.sessions.delete(sessionKey));
     }
   }
 
@@ -319,10 +389,22 @@ export class SessionMemory {
       return { usedTokens: 0, totalTokens: this.config.maxTokens, isDistilled: false };
     }
 
+    return this.getMetricsForKey(this.currentDomain);
+  }
+
+  /**
+   * Get session metrics for a specific key
+   */
+  getMetricsForKey(sessionKey: string): { usedTokens: number; totalTokens: number; isDistilled: boolean } {
+    const session = this.sessions.get(sessionKey);
+    if (!session) {
+      return { usedTokens: 0, totalTokens: this.config.maxTokens, isDistilled: false };
+    }
+
     // Calculate current usage of the generated context string
-    const contextString = this.getContextString();
+    const contextString = this.getContextStringForKey(sessionKey);
     const usedTokens = estimateTokens(contextString);
-    
+
     // Distillation is active if we have more messages than are fully represented in the tail/seed
     const isDistilled = session.messages.length > (this.config.tailSize + (this.config.seedPreservation ? 1 : 0));
 
@@ -352,6 +434,21 @@ export class SessionMemory {
     if (session.messages.length > this.config.maxMessages) {
       session.messages = session.messages.slice(-this.config.maxMessages);
     }
+  }
+
+  /**
+   * Create or retrieve a session for a given key
+   */
+  private getOrCreateSession(sessionKey: string): SessionContext {
+    if (!this.sessions.has(sessionKey)) {
+      this.sessions.set(sessionKey, {
+        messages: [],
+        sessionKey,
+        startedAt: Date.now(),
+      });
+    }
+
+    return this.sessions.get(sessionKey)!;
   }
 }
 

@@ -1,0 +1,11 @@
+{
+  "id": "bpmn-plugin",
+  "name": "BPMN",
+  "version": "7.3.3",
+  "minAppVersion": "0.15.0",
+  "description": "This plugin enables viewing/editing/simulating BPMNs using bpmn-js.",
+  "author": "JoLeaf",
+  "authorUrl": "https://github.com/JoLeaf",
+  "fundingUrl": "https://ko-fi.com/joleaf",
+  "isDesktopOnly": false
+}

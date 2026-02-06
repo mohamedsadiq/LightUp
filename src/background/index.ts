@@ -1,6 +1,6 @@
 import { Storage } from "@plasmohq/storage"
 import { verifyServerConnection } from "~utils/storage"
-import type { ProcessTextRequest, StreamChunk, ConversationContext } from "~types/messages"
+import type { ProcessTextRequest, StreamChunk } from "~types/messages"
 import { SYSTEM_PROMPTS, USER_PROMPTS } from "~utils/constants"
 // New unified AI service (preferred)
 import { unifiedAIService } from "~services/llm/UnifiedAIService"
@@ -224,7 +224,7 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
       throw new Error("Connection lost");
     }
 
-    let { mode, text, context, isFollowUp, settings: requestSettings, conversationContext } = request;
+    let { mode, text, context, isFollowUp, settings: requestSettings } = request;
 
     // Apply text cleaning for translate mode
     if (mode === 'translate' && text) {
@@ -252,24 +252,6 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
 
       if (!text || text.length < 3) {
         throw new Error("Selected text appears to contain only technical content and cannot be translated.");
-      }
-    }
-
-    // Enhanced context handling
-    let enhancedContext = conversationContext;
-    if (isFollowUp && conversationContext) {
-      const storage = new Storage();
-      const storedContext = await storage.get<ConversationContext>("conversationContext");
-
-      if (storedContext) {
-        enhancedContext = {
-          ...storedContext,
-          history: [...storedContext.history, ...conversationContext.history],
-          entities: [...storedContext.entities, ...conversationContext.entities.filter(e =>
-            !storedContext.entities.some(se => se.name === e.name)
-          )],
-          activeEntity: conversationContext.activeEntity || storedContext.activeEntity
-        };
       }
     }
 
@@ -315,20 +297,25 @@ export async function handleProcessText(request: ProcessTextRequest, port: chrom
     const domain = port.sender?.tab?.url
       ? new URL(port.sender.tab.url).hostname
       : 'unknown';
+    const tabId = port.sender?.tab?.id;
+    const sessionKey = tabId !== undefined
+      ? `${domain}:${tabId}`
+      : `${domain}:unknown:${connectionId}`;
 
     if (USE_UNIFIED_AI_SERVICE) {
       // New unified AI service with persistent context
       const mergedSettings = { ...settings, ...requestSettings } as Settings;
 
-      if (!unifiedAIService.isInitialized() || unifiedAIService.getCurrentDomain() !== domain) {
-        await unifiedAIService.initialize(domain, mergedSettings);
+      if (!unifiedAIService.isInitialized() || unifiedAIService.getCurrentSessionKey() !== sessionKey) {
+        await unifiedAIService.initialize(sessionKey, mergedSettings);
       }
 
       for await (const chunk of unifiedAIService.processText({
         text,
         mode,
         settings: { ...settings, ...requestSettings } as Settings,
-        domain,
+        domain: sessionKey,
+        sessionKey,
         isFollowUp,
         context,
         connectionId,

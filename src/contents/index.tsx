@@ -68,7 +68,6 @@ import { usePopup } from "~hooks/usePopup"
 import { useCopy } from "~hooks/useCopy"
 import { useLastResult } from "~hooks/useLastResult"
 import { useCurrentModel } from "~hooks/useCurrentModel"
-import { useConversation } from "~hooks/useConversation"
 import { useMode } from "~hooks/useMode"
 import { createRoot } from "react-dom/client";
 import { unifiedAIService } from "~services/llm/UnifiedAIService";
@@ -1088,12 +1087,6 @@ ${'-'.repeat(50)}`;
     });
   }, []);
 
-  const {
-    conversationContext,
-    updateConversation,
-    clearConversation
-  } = useConversation();
-
   // Add effect to listen for force-hide events (for real-time extension disabling)
   useEffect(() => {
     const handleForceHide = () => {
@@ -1631,9 +1624,6 @@ ${'-'.repeat(50)}`;
       }
     ]);
 
-    // Update conversation context with the new question
-    updateConversation(trimmedQuestion);
-
     try {
       if (!port || connectionStatus !== 'connected') {
         reconnect();
@@ -1644,7 +1634,6 @@ ${'-'.repeat(50)}`;
         payload: {
           text: trimmedQuestion,
           context: mode === "free" ? "" : selectedText,
-          conversationContext,
           mode: mode,
           settings: {
             ...settings,
@@ -1833,42 +1822,6 @@ Please provide a helpful and relevant answer based on the page content above.`;
     window.addEventListener('applyHighlight', handleHighlightEvent as EventListener);
     return () => window.removeEventListener('applyHighlight', handleHighlightEvent as EventListener);
   }, [settings?.customization?.persistHighlight, highlightedRanges]);
-
-  // Update conversation when receiving response
-  useEffect(() => {
-    if (streamingText && !isLoading) {
-      updateConversation(selectedText, streamingText);
-    }
-  }, [streamingText, isLoading, selectedText, updateConversation]);
-
-  // Add an effect to update conversation history from follow-ups
-  useEffect(() => {
-    followUpQAs.forEach((qa) => {
-      if (qa.isComplete && !qa.historyUpdated) {
-        // Find the user message that corresponds to this answer
-        const historyContext = conversationContext.history.find(
-          (h) => h.content === qa.question && h.role === 'user'
-        );
-
-        // Update conversation with the full Q&A
-        if (historyContext) {
-          updateConversation(qa.question, qa.answer);
-        }
-
-        // Mark as updated
-        setFollowUpQAs(prev => prev.map(item =>
-          item.id === qa.id ? { ...item, historyUpdated: true } : item
-        ));
-      }
-    });
-  }, [followUpQAs, updateConversation, conversationContext.history, setFollowUpQAs]);
-
-  // Clear conversation when closing popup
-  useEffect(() => {
-    if (!isVisible) {
-      clearConversation();
-    }
-  }, [isVisible, clearConversation]);
 
   // Add a function to handle reconnection
   const handleReconnect = () => {

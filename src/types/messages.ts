@@ -9,24 +9,9 @@ export interface Entity {
     relationships?: { [key: string]: string };
 }
 
-export interface ConversationContext {
-    topic?: string;
-    lastQuestion?: string;
-    lastAnswer?: string;
-    entities: Entity[];
-    activeEntity: Entity | null;
-    currentTopic: Entity | null;
-    history: {
-        role: "user" | "assistant";
-        content: string;
-        timestamp: number;
-    }[];
-}
-
 export interface ProcessTextRequest {
     text: string;
     context?: string;
-    conversationContext?: ConversationContext;
     mode: Mode;
     settings: {
         serverUrl: string;

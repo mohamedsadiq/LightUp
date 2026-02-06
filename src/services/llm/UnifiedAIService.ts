@@ -40,6 +40,7 @@ export interface AIServiceRequest {
     mode: Mode;
     settings: Settings;
     domain?: string; // For conversation isolation
+    sessionKey?: string; // Explicit session key (domain:tabId)
     isFollowUp?: boolean;
     context?: string; // Additional context (e.g., selected text)
     connectionId?: string;
@@ -65,7 +66,7 @@ const DEFAULT_CONFIG: AIServiceConfig = {
 export class UnifiedAIService {
     private config: AIServiceConfig;
     private initialized: boolean = false;
-    private currentDomain: string | null = null;
+    private currentSessionKey: string | null = null;
 
     constructor(config?: Partial<AIServiceConfig>) {
         this.config = { ...DEFAULT_CONFIG, ...config };
@@ -76,16 +77,16 @@ export class UnifiedAIService {
     // --------------------------------------------------------------------------
 
     /**
-     * Initialize service for a domain
+     * Initialize service for a session (domain:tabId)
      * Session-only: no data persisted to disk
      */
-    async initialize(domain: string, _settings: Settings): Promise<void> {
+    async initialize(sessionKey: string, _settings: Settings): Promise<void> {
         if (this.config.enableSessionMemory) {
-            sessionMemory.getSession(domain);
+            sessionMemory.getSessionByKey(sessionKey);
         }
-        this.currentDomain = domain;
+        this.currentSessionKey = sessionKey;
         this.initialized = true;
-        console.log(`[UnifiedAIService] Session started for: ${domain} (no data persisted)`);
+        console.log(`[UnifiedAIService] Session started for: ${sessionKey} (no data persisted)`);
     }
 
     // --------------------------------------------------------------------------
@@ -98,11 +99,12 @@ export class UnifiedAIService {
      */
     async* processText(request: AIServiceRequest): AsyncGenerator<StreamChunk> {
         const { text, mode, settings, isFollowUp, context } = request;
+        const sessionKey = this.getSessionKey(request);
 
         try {
             // 1. Add user message to session memory (not persisted)
-            if (this.config.enableSessionMemory && this.initialized) {
-                sessionMemory.addUserMessage(text);
+            if (this.config.enableSessionMemory && this.initialized && sessionKey) {
+                sessionMemory.addUserMessageForKey(sessionKey, text);
             }
 
             // 2. Build enhanced request with context
@@ -121,8 +123,8 @@ export class UnifiedAIService {
             }
 
             // 5. Store assistant response in session (not persisted)
-            if (this.config.enableSessionMemory && this.initialized && fullResponse) {
-                sessionMemory.addAssistantMessage(fullResponse);
+            if (this.config.enableSessionMemory && this.initialized && fullResponse && sessionKey) {
+                sessionMemory.addAssistantMessageForKey(sessionKey, fullResponse);
             }
 
         } catch (error) {
@@ -143,11 +145,12 @@ export class UnifiedAIService {
      */
     private buildEnhancedRequest(request: AIServiceRequest): ProcessTextRequest {
         const { text, mode, settings, isFollowUp, context, connectionId, id } = request;
+        const sessionKey = this.getSessionKey(request);
 
         // Get session context (not persisted, privacy-first)
         let conversationContext = "";
-        if (this.config.enableSessionMemory && this.initialized) {
-            conversationContext = sessionMemory.getContextString();
+        if (this.config.enableSessionMemory && this.initialized && sessionKey) {
+            conversationContext = sessionMemory.getContextStringForKey(sessionKey);
         }
 
         // Build enhanced text with context
@@ -280,24 +283,26 @@ IMPORTANT INSTRUCTIONS:
      * Clear session memory (user-triggered)
      */
     clearContext(): void {
-        if (this.config.enableSessionMemory) {
-            sessionMemory.clearCurrentSession();
-            console.log("[UnifiedAIService] Session memory cleared");
-        }
+        if (!this.config.enableSessionMemory || !this.currentSessionKey) return;
+
+        sessionMemory.clearSessionByKey(this.currentSessionKey);
+        console.log("[UnifiedAIService] Session memory cleared");
     }
 
     /**
      * Check if session has context
      */
     hasContext(): boolean {
-        return this.config.enableSessionMemory && sessionMemory.hasContext();
+        if (!this.config.enableSessionMemory || !this.currentSessionKey) return false;
+        return sessionMemory.hasContextForKey(this.currentSessionKey);
     }
 
     /**
      * Get message count in current session
      */
     getMessageCount(): number {
-        return sessionMemory.getMessageCount();
+        if (!this.currentSessionKey) return 0;
+        return sessionMemory.getMessageCountForKey(this.currentSessionKey);
     }
 
     /**
@@ -305,7 +310,10 @@ IMPORTANT INSTRUCTIONS:
      * Returns { usedTokens: number, totalTokens: number, isDistilled: boolean }
      */
     getContextMetrics(): { usedTokens: number; totalTokens: number; isDistilled: boolean } {
-        return sessionMemory.getMetrics();
+        if (!this.currentSessionKey) {
+            return { usedTokens: 0, totalTokens: 0, isDistilled: false };
+        }
+        return sessionMemory.getMetricsForKey(this.currentSessionKey);
     }
 
     // --------------------------------------------------------------------------
@@ -320,10 +328,17 @@ IMPORTANT INSTRUCTIONS:
     }
 
     /**
-     * Get current domain
+     * Get current session key
      */
-    getCurrentDomain(): string | null {
-        return this.currentDomain;
+    getCurrentSessionKey(): string | null {
+        return this.currentSessionKey;
+    }
+
+    /**
+     * Resolve session key from request or current state
+     */
+    private getSessionKey(request: AIServiceRequest): string | null {
+        return request.sessionKey || request.domain || this.currentSessionKey || null;
     }
 
     /**
@@ -355,8 +370,9 @@ export async function* processWithUnifiedAI(
     const service = unifiedAIService;
 
     // Auto-initialize if needed
-    if (!service.isInitialized() && request.domain) {
-        await service.initialize(request.domain, request.settings);
+    const sessionKey = request.domain;
+    if (!service.isInitialized() && sessionKey) {
+        await service.initialize(sessionKey, request.settings);
     }
 
     yield* service.processText(request);
