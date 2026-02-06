@@ -290,6 +290,19 @@ IMPORTANT INSTRUCTIONS:
     }
 
     /**
+     * Clear session memory for a specific session key
+     */
+    clearContextForKey(sessionKey: string): void {
+        if (!this.config.enableSessionMemory) return;
+        sessionMemory.clearSessionByKey(sessionKey);
+        if (this.currentSessionKey === sessionKey) {
+            console.log("[UnifiedAIService] Session memory cleared (current session)");
+        } else {
+            console.log(`[UnifiedAIService] Session memory cleared for: ${sessionKey}`);
+        }
+    }
+
+    /**
      * Check if session has context
      */
     hasContext(): boolean {

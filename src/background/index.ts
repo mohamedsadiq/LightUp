@@ -468,4 +468,22 @@ chrome.runtime.onConnect.addListener((port) => {
       }
     });
   }
-}); 
+});
+
+// Handle one-off messages (e.g., clear session memory on popup close)
+chrome.runtime.onMessage.addListener((message, sender) => {
+  if (message?.type !== "CLEAR_SESSION_CONTEXT") return;
+
+  try {
+    const url = sender.tab?.url;
+    const tabId = sender.tab?.id;
+
+    if (!url || tabId === undefined) return;
+
+    const domain = new URL(url).hostname;
+    const sessionKey = `${domain}:${tabId}`;
+    unifiedAIService.clearContextForKey(sessionKey);
+  } catch (error) {
+    console.warn("Failed to clear session context:", error);
+  }
+});

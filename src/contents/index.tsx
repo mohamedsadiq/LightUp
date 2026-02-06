@@ -70,7 +70,6 @@ import { useLastResult } from "~hooks/useLastResult"
 import { useCurrentModel } from "~hooks/useCurrentModel"
 import { useMode } from "~hooks/useMode"
 import { createRoot } from "react-dom/client";
-import { unifiedAIService } from "~services/llm/UnifiedAIService";
 // Add import for page content extraction utility
 import getPageContent from "~utils/contentExtractor"
 
@@ -1060,6 +1059,14 @@ ${'-'.repeat(50)}`;
   const { lastResult, updateLastResult } = useLastResult();
   const currentModel = useCurrentModel();
 
+  const requestClearSession = useCallback(() => {
+    try {
+      chrome.runtime?.sendMessage({ type: "CLEAR_SESSION_CONTEXT" });
+    } catch (error) {
+      console.warn("Failed to request session clear:", error);
+    }
+  }, []);
+
   // Add a ref for the popup element
   const popupRef = useRef<HTMLDivElement>(null);
   // Ref to capture main AI response content for image copying
@@ -1091,7 +1098,7 @@ ${'-'.repeat(50)}`;
   useEffect(() => {
     const handleForceHide = () => {
       // Clear memory when extension is disabled
-      unifiedAIService.clearContext();
+      requestClearSession();
       
       // Immediately hide all UI elements when extension is toggled off
       if (setIsVisible) setIsVisible(false);
@@ -1735,7 +1742,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
       // Only close if clicking outside the popup
       if (popup && !popup.contains(event.target as Node)) {
         // Clear memory before closing
-        unifiedAIService.clearContext();
+        requestClearSession();
         setIsVisible(false);
         setIsInteractingWithPopup(false);
         setIsInputFocused(false);
@@ -1791,7 +1798,7 @@ Please provide a helpful and relevant answer based on the page content above.`;
     return () => {
       removeHighlights();
       // Clear session memory when component unmounts (page navigation)
-      unifiedAIService.clearContext();
+      requestClearSession();
     };
   }, []);
 
